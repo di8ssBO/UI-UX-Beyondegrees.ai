@@ -12,6 +12,42 @@
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="./style.css">
+<style>
+/* ══ Constellation Sky ══════════════════════════════════════════════ */
+.cst-section {
+  padding: 8px 16px 4px;
+}
+.cst-sky-wrap {
+  background: radial-gradient(ellipse at 28% 28%, #0d1b4a 0%, #070d2a 55%, #020510 100%);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.07);
+  overflow: hidden;
+  position: relative;
+}
+.cst-sky-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 75% 80%, rgba(24,99,220,0.1) 0%, transparent 55%);
+  pointer-events: none;
+}
+.cst-caption {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  padding: 6px 12px 10px;
+  font-style: italic;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.02em;
+}
+@keyframes cst-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes cst-twinkle {
+  0%, 100% { opacity: 1;    r: var(--sr); }
+  50%       { opacity: 0.3; r: calc(var(--sr) * 0.6); }
+}
+</style>
 </head>
 <body>
 <div class="breadcrumb"><a href="#" class="breadcrumb-item">BeyonDegrees-UI</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-item active">Discipline Match</span></div>
@@ -32,6 +68,13 @@
         </div>
       </div>
       <div class="ds-body">
+        <!-- ░░ CONSTELLATION SKY ░░ -->
+        <div class="cst-section">
+          <div class="cst-sky-wrap">
+            <div id="cstContainer"></div>
+          </div>
+          <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your academic sky ✨</p>
+        </div>
         <div class="ai-chip">&#10022; AI Powered Curation</div>
         <div class="ds-hl">Your Perfect<br><span class="ac">Disciplines</span></div>
         <p class="ds-sub">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
@@ -136,6 +179,147 @@
     </div>
   </div>
 </div>
+<script>
+/* ══ Constellation Sky Engine ═══════════════════════════════════════ */
+(function () {
+  const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+
+  /* ── Discipline data: star positions in 320×240 SVG space ── */
+  const DISC = {
+    kt: { name: 'Engineering & Tech', color: '#4da6ff',
+          stars: [[242,28],[258,48],[235,55],[268,72],[250,82]], pct: 94 },
+    tn: { name: 'Natural Sciences',   color: '#22d3ee',
+          stars: [[45,22],[62,14],[72,35],[52,42],[30,38]],     pct: 89 },
+    yt: { name: 'Medical & Health',   color: '#fb7185',
+          stars: [[210,110],[228,98],[245,115],[220,128],[238,132]], pct: 64 },
+    nn: { name: 'Agricultural Sci',   color: '#86efac',
+          stars: [[260,185],[278,170],[285,192],[268,205],[252,196]], pct: 62 },
+    xh: { name: 'Social Sciences',    color: '#c084fc',
+          stars: [[55,130],[72,118],[80,140],[62,152],[45,145]], pct: 34 },
+    nv: { name: 'Humanities',         color: '#fdba74',
+          stars: [[42,210],[58,198],[68,215],[52,228],[35,220]], pct: 32 },
+  };
+
+  /* ── How many constellations "form" based on progress ── */
+  const sorted     = Object.entries(DISC).sort((a, b) => b[1].pct - a[1].pct);
+  const formedCount = progress >= 30 ? 6 : progress >= 20 ? 4 : progress >= 10 ? 2 : 0;
+  const formed      = new Set(sorted.slice(0, formedCount).map(([k]) => k));
+
+  /* ── Build SVG ── */
+  const NS  = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 320 240');
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('style', 'display:block;');
+
+  /* Glow filters */
+  const defs = document.createElementNS(NS, 'defs');
+  Object.entries(DISC).forEach(([k, d]) => {
+    const f = document.createElementNS(NS, 'filter');
+    f.setAttribute('id', 'g-' + k);
+    f.setAttribute('x', '-80%'); f.setAttribute('y', '-80%');
+    f.setAttribute('width', '260%'); f.setAttribute('height', '260%');
+    const blur = document.createElementNS(NS, 'feGaussianBlur');
+    blur.setAttribute('stdDeviation', '2.8'); blur.setAttribute('result', 'cb');
+    const merge = document.createElementNS(NS, 'feMerge');
+    ['cb', 'SourceGraphic'].forEach(inp => {
+      const n = document.createElementNS(NS, 'feMergeNode');
+      n.setAttribute('in', inp);
+      merge.appendChild(n);
+    });
+    f.appendChild(blur); f.appendChild(merge);
+    defs.appendChild(f);
+  });
+  svg.appendChild(defs);
+
+  /* Ambient background micro-stars */
+  [[15,35],[95,8],[140,15],[185,5],[300,40],[310,120],[295,200],
+   [175,230],[85,225],[20,185],[160,110],[230,155],[115,65],[200,75]
+  ].forEach(([x, y]) => {
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y);
+    c.setAttribute('r', '0.7');
+    c.setAttribute('fill', 'rgba(255,255,255,0.25)');
+    svg.appendChild(c);
+  });
+
+  /* Render each discipline constellation */
+  Object.entries(DISC).forEach(([k, d]) => {
+    const isFormed = formed.has(k);
+    const opacity  = progress === 0 ? 0.12 : isFormed ? 1 : 0.22;
+    const starR    = isFormed ? (1.8 + d.pct / 50) : 1.4;
+
+    const g = document.createElementNS(NS, 'g');
+    g.setAttribute('opacity', opacity);
+
+    /* Connection lines (only when formed) */
+    if (isFormed) {
+      for (let i = 0; i < d.stars.length - 1; i++) {
+        const [x1, y1] = d.stars[i];
+        const [x2, y2] = d.stars[i + 1];
+        const line = document.createElementNS(NS, 'line');
+        line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+        line.setAttribute('stroke', d.color);
+        line.setAttribute('stroke-width', '0.7');
+        line.setAttribute('stroke-opacity', '0.45');
+        const len = Math.hypot(x2 - x1, y2 - y1);
+        line.style.cssText = `stroke-dasharray:${len};stroke-dashoffset:${len};`
+          + `animation:cst-draw .7s ease forwards ${0.15 * i + 0.2}s`;
+        g.appendChild(line);
+      }
+    }
+
+    /* Stars */
+    d.stars.forEach(([cx, cy], i) => {
+      const c = document.createElementNS(NS, 'circle');
+      c.setAttribute('cx', cx); c.setAttribute('cy', cy);
+      c.setAttribute('r', starR);
+      c.setAttribute('fill', isFormed ? d.color : 'rgba(255,255,255,0.65)');
+      if (isFormed) {
+        c.setAttribute('filter', 'url(#g-' + k + ')');
+        c.style.cssText = `animation:cst-twinkle ${2.2 + i * 0.35}s ease-in-out `
+          + `infinite ${i * 0.45}s;--sr:${starR}`;
+      }
+      g.appendChild(c);
+    });
+
+    /* Label (only when formed) */
+    if (isFormed) {
+      const cx  = d.stars.reduce((s, [x]) => s + x, 0) / d.stars.length;
+      const maxY = Math.max(...d.stars.map(([, y]) => y));
+      const lbl = document.createElementNS(NS, 'text');
+      lbl.setAttribute('x', cx);
+      lbl.setAttribute('y', maxY + 13);
+      lbl.setAttribute('fill', d.color);
+      lbl.setAttribute('font-size', '6.5');
+      lbl.setAttribute('font-weight', '700');
+      lbl.setAttribute('text-anchor', 'middle');
+      lbl.setAttribute('opacity', '0.9');
+      lbl.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
+      lbl.textContent = d.name + ' ' + d.pct + '%';
+      g.appendChild(lbl);
+    }
+
+    svg.appendChild(g);
+  });
+
+  /* Insert SVG */
+  const container = document.getElementById('cstContainer');
+  if (container) container.appendChild(svg);
+
+  /* Caption */
+  const captions = {
+    0:  'Complete the quiz to reveal your academic sky ✨',
+    10: 'Your top 2 constellations are forming... keep going 🔥',
+    20: '4 constellations revealed — 1 stage left to complete your sky ⚡',
+    30: 'Your complete academic sky map 🌌',
+  };
+  const capKey = progress >= 30 ? 30 : progress >= 20 ? 20 : progress >= 10 ? 10 : 0;
+  const cap = document.getElementById('cstCaption');
+  if (cap) cap.textContent = captions[capKey];
+})();
+</script>
 <script src="../../../features/discipline/discipline-nav.js"></script>
 
 <script>

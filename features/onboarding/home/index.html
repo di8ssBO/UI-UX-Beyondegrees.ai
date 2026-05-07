@@ -297,6 +297,36 @@
 /* Disable transition for SVG / animations */
 svg *, canvas, video, img { transition: none !important; }
 
+/* ── Progress Ring ──────────────────────────────── */
+.hero-ring-wrap {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-fill {
+  stroke-dasharray: 201.1;
+  stroke-dashoffset: 201.1;
+  transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), stroke .5s ease;
+}
+#heroEmoji {
+  font-size: 30px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
 </style>
 </head>
 <body>
@@ -341,10 +371,18 @@ svg *, canvas, video, img { transition: none !important; }
         <section class="hero-section">
           <div class="hero-gradient"></div>
           <div class="hero-content">
-            <div class="hero-emoji">🚀</div>
-            <p class="mobile-tagline">Discover your ideal major</p>
-            <h2>What major are you interested in?</h2>
-            <p>By answering a few simple questions, we help you discover the right field of study.</p>
+            <!-- Progress Ring -->
+            <div class="hero-ring-wrap">
+              <svg class="hero-ring-svg" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+                <circle id="heroRingFill" cx="38" cy="38" r="32" class="ring-fill"
+                  stroke="#1863DC" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+              <span id="heroEmoji">🚀</span>
+            </div>
+            <p class="mobile-tagline" id="heroTagline">Discover your academic identity</p>
+            <h2 id="heroTitle">What major are you interested in?</h2>
+            <p id="heroSub">Answer 30 questions and let AI find your perfect match.</p>
           </div>
         </section>
 
@@ -381,12 +419,8 @@ svg *, canvas, video, img { transition: none !important; }
 
         <!-- CTA Buttons -->
         <section class="cta-section">
-          <button class="btn btn-primary" style="width: 100%;" onclick="window.location.href='../../quiz/quiz-card/'">
-            Start Quiz →
-          </button>
-          <button class="btn btn-secondary" style="width: 100%;">
-            Find out more
-          </button>
+          <button class="btn btn-primary" id="ctaPrimary" style="width:100%;">Start Quiz →</button>
+          <button class="btn btn-secondary" id="ctaSecondary" style="width:100%;display:none;"></button>
         </section>
 
         <!-- ░░ PRESS-GLOW FLOATING TAB BAR ░░ -->
@@ -816,7 +850,6 @@ window.PageTransition = PageTransition;
 
 document.addEventListener('DOMContentLoaded', () => {
   const disciplineCards = document.querySelectorAll('.discipline-card');
-  const ctaButton = document.querySelector('.cta-section .btn-primary');
 
   // Toggle discipline selection
   disciplineCards.forEach(card => {
@@ -831,15 +864,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // CTA button click
-  if (ctaButton) {
-    ctaButton.addEventListener('click', () => {
-      var _hp = parseInt(localStorage.getItem('quizProgress') || '0', 10);
-      window.location.href = _hp > 0
-        ? '../../quiz/quiz-card/?start=' + (_hp + 1)
-        : '../../quiz/quiz-card/';
-    });
-  }
+  // ── Progress-based state init ──────────────────────────────────────
+  (function initProgress() {
+    const p   = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    const key = p >= 30 ? 30 : p >= 20 ? 20 : p >= 10 ? 10 : 0;
+    const $   = id => document.getElementById(id);
+
+    // Ring fill
+    const C    = 201.1; // 2π × 32
+    const pcts = { 0: 0, 10: 0.333, 20: 0.667, 30: 1 };
+    const ring = $('heroRingFill');
+    if (ring) {
+      ring.style.strokeDasharray  = C;
+      ring.style.strokeDashoffset = C * (1 - pcts[key]);
+      if (key === 30) ring.style.stroke = '#f59e0b'; // gold = complete
+    }
+
+    // Hero text
+    const STATES = {
+      0:  { emoji: '🚀', tagline: 'Discover your academic identity',
+            title: 'What major are you interested in?',
+            sub:   'Answer 30 questions and let AI find your perfect match.' },
+      10: { emoji: '🔥', tagline: 'Quiz Stage 1 complete!',
+            title: 'Your top discipline is revealed 🔥',
+            sub:   'Keep going! 20 more questions to unlock your Major matches.' },
+      20: { emoji: '⚡', tagline: 'Quiz Stage 2 complete!',
+            title: 'AI found your Major matches ⚡',
+            sub:   '10 more questions to unlock your University matches.' },
+      30: { emoji: '✨', tagline: 'Profile complete!',
+            title: 'Your academic identity is complete ✨',
+            sub:   'BeyonDegrees has found your perfect university matches.' },
+    };
+    const s = STATES[key];
+    if ($('heroEmoji'))   $('heroEmoji').textContent   = s.emoji;
+    if ($('heroTagline')) $('heroTagline').textContent = s.tagline;
+    if ($('heroTitle'))   $('heroTitle').textContent   = s.title;
+    if ($('heroSub'))     $('heroSub').textContent     = s.sub;
+
+    // Buttons
+    const BTNS = {
+      0:  { b1: 'Start Quiz →',    u1: '../../quiz/quiz-card/',          b2: null },
+      10: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/?start=11',
+            b2: { t: 'View Discipline Results ›', u: '../../discipline/match/' } },
+      20: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/?start=21',
+            b2: { t: 'View Major Results ›',      u: '../../major/recommendations/' } },
+      30: { b1: 'View Match →',    u1: '../../university/matches/',
+            b2: { t: 'View University Results ›', u: '../../university/matches/' } },
+    };
+    const b    = BTNS[key];
+    const btn1 = $('ctaPrimary');
+    const btn2 = $('ctaSecondary');
+    if (btn1) { btn1.textContent = b.b1; btn1.onclick = () => location.href = b.u1; }
+    if (btn2) {
+      if (b.b2) {
+        btn2.style.display = 'block';
+        btn2.textContent   = b.b2.t;
+        btn2.onclick       = () => location.href = b.b2.u;
+      } else {
+        btn2.style.display = 'none';
+      }
+    }
+  })();
 
   // ── Orange Pill Tab Bar interaction ──
   const tabBar = document.getElementById('floatTabBar');
