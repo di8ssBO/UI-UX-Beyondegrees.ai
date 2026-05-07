@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Account Settings — BeyonDegrees.ai</title>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+<style>
+:root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
+:root[data-theme="light"]{--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#1863DC;--violet-300:#4A90E2;--violet-200:#93BBFF;--violet-100:#EEF4FB;--neutral-950:#FFFFFF;--neutral-900:#F2F7FD;--neutral-800:#E0ECFA;--neutral-700:#C5D5E8;--neutral-600:#A8BDD8;--neutral-500:#808DAA;--neutral-400:#5A6580;--neutral-300:#3A3A4A;--neutral-200:#1A1A2E;--neutral-100:#0D0D1A;--neutral-50:#060610;--bg-base:#FFFFFF;--bg-surface:#F2F7FD;--bg-elevated:#E0ECFA;--bg-overlay:#C5D5E8;--text-primary:#1A1A2E;--text-secondary:#3A3A4A;--text-muted:#808285;--text-disabled:#C0C0D0;--mint-500:#059669;--mint-400:#10B981}
+[data-theme="light"] body{background:#0f1020!important;color:#1A1A2E!important}
+*,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
+svg *,canvas,video,img{transition:none!important}
+
+body { background: #06060f; }
+
+.mobile-viewport {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+  position: relative; background: var(--bg-base);
+  scrollbar-width: none;
+}
+.mobile-viewport::-webkit-scrollbar { display: none; }
+[data-theme="light"] .mobile-viewport { background: #f2f7fd; }
+
+/* Top bar */
+.top-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px 14px;
+  background: rgba(6,6,15,0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+[data-theme="light"] .top-bar { background: rgba(255,255,255,0.94)!important; border-bottom-color: rgba(24,99,220,0.10)!important; }
+
+.back-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-primary); cursor: pointer; text-decoration: none;
+  transition: background 0.18s; flex-shrink: 0;
+}
+.back-btn:hover { background: rgba(255,255,255,0.10); }
+[data-theme="light"] .back-btn { background: rgba(24,99,220,0.08)!important; border-color: rgba(24,99,220,0.15)!important; }
+.page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+
+/* Page content */
+.page-content { position: relative; z-index: 1; padding: 20px 16px 24px; }
+
+/* Settings group */
+.settings-group {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px; overflow: hidden; margin-bottom: 12px;
+}
+[data-theme="light"] .settings-group { background: rgba(255,255,255,0.88)!important; border-color: rgba(24,99,220,0.12)!important; box-shadow: 0 2px 12px rgba(24,99,220,0.06); }
+
+.settings-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px; cursor: pointer;
+  transition: background 0.18s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  text-decoration: none;
+}
+.settings-row:last-child { border-bottom: none; }
+.settings-row:hover { background: rgba(255,255,255,0.04); }
+[data-theme="light"] .settings-row { border-bottom-color: rgba(24,99,220,0.07)!important; }
+[data-theme="light"] .settings-row:hover { background: rgba(24,99,220,0.04)!important; }
+
+.row-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: rgba(24,99,220,0.12);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: var(--violet-400);
+}
+[data-theme="light"] .row-icon { background: rgba(24,99,220,0.10)!important; }
+.row-body { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.row-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+[data-theme="light"] .row-label { color: #1A1A2E!important; }
+.row-right { display: flex; align-items: center; gap: 6px; }
+.row-value { font-size: 13px; color: var(--text-muted); }
+.row-chevron { color: var(--text-muted); display: flex; align-items: center; }
+
+/* Toggle */
+.toggle-wrap { display: flex; align-items: center; }
+.toggle { position: relative; width: 46px; height: 26px; cursor: pointer; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-track { position: absolute; inset: 0; border-radius: 100px; background: var(--neutral-600); transition: background 0.25s ease; }
+.toggle input:checked ~ .toggle-track { background: #1863DC; }
+.toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+.toggle input:checked ~ .toggle-thumb { transform: translateX(20px); }
+
+/* Destructive */
+.row-destructive .row-icon { background: rgba(255,71,87,0.12); color: #ff4757; }
+.row-destructive .row-label { color: #ff4757; }
+[data-theme="light"] .row-destructive .row-icon { background: rgba(255,71,87,0.10)!important; }
+
+/* ── Bottom sheet scoped to device-frame ── */
+.sheet-overlay {
+  position: absolute; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.55);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+.sheet-overlay.open { opacity: 1; pointer-events: all; }
+
+.bottom-sheet {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 201;
+  background: var(--bg-elevated);
+  border-top-left-radius: 24px; border-top-right-radius: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.34,1.2,0.64,1);
+  box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
+}
+.bottom-sheet.open { transform: translateY(0); }
+[data-theme="light"] .bottom-sheet { background: #FFFFFF!important; border-color: rgba(24,99,220,0.12)!important; }
+
+.sheet-handle { width: 36px; height: 4px; border-radius: 100px; background: rgba(255,255,255,0.15); margin: 10px auto 0; }
+[data-theme="light"] .sheet-handle { background: rgba(0,0,0,0.12)!important; }
+
+.sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 10px; }
+.sheet-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.sheet-close { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.08); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: background 0.18s; }
+.sheet-close:hover { background: rgba(255,255,255,0.14); }
+[data-theme="light"] .sheet-close { background: rgba(0,0,0,0.06)!important; }
+
+.sheet-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0 20px; }
+[data-theme="light"] .sheet-divider { background: rgba(24,99,220,0.08)!important; }
+
+.sheet-options { padding: 6px 0 20px; }
+.sheet-option {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 15px 20px; cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background 0.18s; color: var(--text-primary);
+  font-size: 15px; font-weight: 500;
+}
+.sheet-option:last-child { border-bottom: none; }
+.sheet-option:hover { background: rgba(255,255,255,0.04); }
+[data-theme="light"] .sheet-option { color: #1A1A2E!important; }
+[data-theme="light"] .sheet-option:hover { background: rgba(24,99,220,0.04)!important; }
+
+.sheet-option-left { display: flex; align-items: center; gap: 12px; }
+.sheet-opt-icon { width: 30px; height: 30px; border-radius: 8px; background: rgba(24,99,220,0.10); display: flex; align-items: center; justify-content: center; color: var(--violet-400); flex-shrink: 0; }
+.sheet-option[data-selected="true"] .sheet-opt-icon { background: rgba(24,99,220,0.18); }
+[data-theme="light"] .sheet-opt-icon { background: rgba(24,99,220,0.08)!important; }
+[data-theme="light"] .sheet-option[data-selected="true"] .sheet-opt-icon { background: rgba(24,99,220,0.15)!important; }
+
+.sheet-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+.sheet-option[data-selected="true"] .sheet-check { opacity: 1; color: #1863DC; }
+</style>
+</head>
+
+<body>
+<div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
+  <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <span class="breadcrumb-separator">/</span>
+  <a href="../../profile/overview/" class="breadcrumb-item">Profile</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-item active">Account Settings</span>
+</div>
+
+<div class="desktop-container">
+  <div class="device-frame">
+    <div class="device-notch"></div>
+
+    <div class="mobile-viewport">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px 4px;font-size:12px;font-weight:600;color:var(--text-secondary);position:relative;z-index:2">
+          <span>9:41</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+          </div>
+        </div>
+
+      <!-- Top bar -->
+      <div class="top-bar">
+        <a href="../../profile/overview/" class="back-btn" aria-label="Back">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+        </a>
+        <span class="page-title">Account Settings</span>
+      </div>
+
+      <!-- Content -->
+      <div class="page-content">
+
+        <!-- Preferences -->
+        <div class="settings-group">
+          <div class="settings-row">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            </div>
+            <div class="row-body"><span class="row-label">Language</span></div>
+            <div class="row-right">
+              <span class="row-value">English</span>
+              <div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div>
+            </div>
+          </div>
+
+          <div class="settings-row" onclick="openThemeSheet()">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            </div>
+            <div class="row-body"><span class="row-label">Theme</span></div>
+            <div class="row-right">
+              <span class="row-value" id="theme-row-value">Dark</span>
+              <div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div>
+            </div>
+          </div>
+
+          <div class="settings-row" style="cursor:default;">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            </div>
+            <div class="row-body"><span class="row-label">Notifications</span></div>
+            <div class="toggle-wrap">
+              <label class="toggle">
+                <input type="checkbox" checked id="notif-toggle">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="settings-group">
+          <div class="settings-row row-destructive">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </div>
+            <span class="row-label">Log Out</span>
+            <div class="row-right"><div class="row-chevron" style="color:#ff4757"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-row row-destructive">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </div>
+            <span class="row-label">Delete Account</span>
+            <div class="row-right"><div class="row-chevron" style="color:#ff4757"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+          </div>
+        </div>
+
+      </div><!-- /page-content -->
+    </div><!-- /mobile-viewport -->
+
+    <!-- ── THEME BOTTOM SHEET (scoped inside device-frame) ── -->
+    <div class="sheet-overlay" id="sheetOverlay" onclick="closeThemeSheet()"></div>
+    <div class="bottom-sheet" id="themeSheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title">Select Theme</span>
+        <button class="sheet-close" onclick="closeThemeSheet()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-divider"></div>
+      <div class="sheet-options">
+        <div class="sheet-option" data-pref="light" onclick="selectTheme('light')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            </div>
+            <span>Light</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-pref="dark" onclick="selectTheme('dark')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            </div>
+            <span>Dark</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-pref="system" onclick="selectTheme('system')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <span>System</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /device-frame -->
+</div><!-- /desktop-container -->
+
+<script>
+/* ── Apply theme immediately (prevents flash, no DOM needed) ── */
+(function(){
+  var p='dark';try{p=localStorage.getItem('bd-theme')||'dark'}catch(e){}
+  var r=p==='system'?(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):p;
+  document.documentElement.setAttribute('data-theme',r);
+  document.documentElement.setAttribute('data-theme-pref',p);
+})();
+
+/* ── Theme logic (single source of truth, no naming conflicts) ── */
+var _currentPref='dark';
+
+function bdApplyTheme(r){document.documentElement.setAttribute('data-theme',r);}
+
+function updateThemeUI(pref){
+  var labels={dark:'Dark',light:'Light',system:'System'};
+  var el=document.getElementById('theme-row-value');
+  if(el) el.textContent=labels[pref]||'Dark';
+  document.querySelectorAll('.sheet-option').forEach(function(o){
+    o.setAttribute('data-selected', o.dataset.pref===pref?'true':'false');
+  });
+}
+
+function bdSetTheme(p){
+  var r=p==='system'?(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):p;
+  bdApplyTheme(r);
+  document.documentElement.setAttribute('data-theme-pref',p);
+  _currentPref=p;
+  try{localStorage.setItem('bd-theme',p);}catch(e){}
+  updateThemeUI(p);
+}
+window.bdSetTheme=bdSetTheme;
+
+function openThemeSheet(){
+  document.getElementById('themeSheet').classList.add('open');
+  document.getElementById('sheetOverlay').classList.add('open');
+}
+function closeThemeSheet(){
+  document.getElementById('themeSheet').classList.remove('open');
+  document.getElementById('sheetOverlay').classList.remove('open');
+}
+function selectTheme(pref){
+  bdSetTheme(pref);
+  setTimeout(closeThemeSheet,320);
+}
+
+/* ── Init UI labels once DOM is ready ── */
+document.addEventListener('DOMContentLoaded',function(){
+  var saved='dark';try{saved=localStorage.getItem('bd-theme')||'dark';}catch(e){}
+  _currentPref=saved;
+  updateThemeUI(saved);
+});
+
+window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',function(){
+  var pref=document.documentElement.getAttribute('data-theme-pref')||'dark';
+  if(pref==='system') bdSetTheme('system');
+});
+</script>
+</body>
+</html>

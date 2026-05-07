@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Edit Profile — BeyonDegrees.ai</title>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+<style>
+:root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
+:root[data-theme="light"]{--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#1863DC;--violet-300:#4A90E2;--violet-200:#93BBFF;--violet-100:#EEF4FB;--neutral-950:#FFFFFF;--neutral-900:#F2F7FD;--neutral-800:#E0ECFA;--neutral-700:#C5D5E8;--neutral-600:#A8BDD8;--neutral-500:#808DAA;--neutral-400:#5A6580;--neutral-300:#3A3A4A;--neutral-200:#1A1A2E;--neutral-100:#0D0D1A;--neutral-50:#060610;--bg-base:#FFFFFF;--bg-surface:#F2F7FD;--bg-elevated:#E0ECFA;--bg-overlay:#C5D5E8;--text-primary:#1A1A2E;--text-secondary:#3A3A4A;--text-muted:#808285;--text-disabled:#C0C0D0;--mint-500:#059669;--mint-400:#10B981}
+[data-theme="light"] body{background:#0f1020!important;color:#1A1A2E!important}
+*,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
+svg *,canvas,video,img{transition:none!important}
+
+body { background: #06060f; }
+
+.mobile-viewport {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  display: flex; flex-direction: column;
+  position: relative; background: var(--bg-base);
+  scrollbar-width: none;
+}
+.mobile-viewport::-webkit-scrollbar { display: none; }
+[data-theme="light"] .mobile-viewport { background: #f2f7fd; }
+
+/* Top bar */
+.top-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px 14px;
+  background: rgba(6,6,15,0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+[data-theme="light"] .top-bar { background: rgba(255,255,255,0.94)!important; border-bottom-color: rgba(24,99,220,0.10)!important; }
+.back-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-primary); cursor: pointer; text-decoration: none;
+  transition: background 0.18s; flex-shrink: 0;
+}
+.back-btn:hover { background: rgba(255,255,255,0.10); }
+[data-theme="light"] .back-btn { background: rgba(24,99,220,0.08)!important; border-color: rgba(24,99,220,0.15)!important; }
+.page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); flex: 1; }
+
+/* Page content */
+.page-content { padding: 20px 16px 32px; }
+
+/* Avatar section */
+.avatar-section {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 0 24px; gap: 10px;
+}
+.avatar-wrap { position: relative; width: 80px; height: 80px; }
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -1px;
+  border: 3px solid rgba(24,99,220,0.35);
+  box-shadow: 0 0 0 4px rgba(24,99,220,0.12);
+}
+.avatar-edit-btn {
+  position: absolute; bottom: 0; right: 0;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #1863DC; border: 2px solid var(--bg-base);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white;
+}
+.archetype-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-muted);
+}
+.archetype-chip a {
+  color: #1863DC; font-weight: 600; text-decoration: none;
+}
+.archetype-chip a:hover { text-decoration: underline; }
+
+/* Form card */
+.form-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px; overflow: hidden; margin-bottom: 12px;
+}
+[data-theme="light"] .form-card {
+  background: rgba(255,255,255,0.92)!important;
+  border-color: rgba(24,99,220,0.12)!important;
+  box-shadow: 0 2px 16px rgba(24,99,220,0.07);
+}
+
+/* Field row */
+.field-row {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.field-row:last-child { border-bottom: none; }
+[data-theme="light"] .field-row { border-bottom-color: rgba(24,99,220,0.07)!important; }
+
+.field-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.field-input {
+  width: 100%;
+  background: transparent;
+  border: none; outline: none;
+  font-size: 14px; font-weight: 500;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  padding: 0;
+}
+.field-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+[data-theme="light"] .field-input { color: #1A1A2E; }
+[data-theme="light"] .field-input::placeholder { color: #808285; }
+
+.field-input-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.field-prefix-icon { color: var(--text-muted); flex-shrink: 0; }
+
+/* Read-only field */
+.field-readonly .field-input { color: var(--text-muted); cursor: default; }
+.field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; opacity: 0.7; }
+
+/* Select field */
+.field-select {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 14px; font-weight: 500; color: var(--text-primary);
+  font-family: var(--font-body); cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  padding: 0;
+}
+.field-select option { background: #0d0d1a; color: #fff; }
+[data-theme="light"] .field-select { color: #1A1A2E; }
+[data-theme="light"] .field-select option { background: #fff; color: #1A1A2E; }
+
+.field-select-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.select-chevron { color: var(--text-muted); flex-shrink: 0; }
+
+/* Checkbox */
+.checkbox-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px; margin-bottom: 12px;
+  cursor: pointer;
+}
+[data-theme="light"] .checkbox-row { background: rgba(24,99,220,0.04)!important; border-color: rgba(24,99,220,0.10)!important; }
+.custom-checkbox {
+  width: 20px; height: 20px; border-radius: 6px;
+  border: 2px solid rgba(255,255,255,0.20);
+  background: transparent; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.checkbox-row input { display: none; }
+.checkbox-row input:checked ~ .custom-checkbox {
+  background: #1863DC; border-color: #1863DC;
+}
+[data-theme="light"] .custom-checkbox { border-color: rgba(0,0,0,0.20)!important; }
+.checkbox-label { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+[data-theme="light"] .checkbox-label { color: #1A1A2E!important; }
+
+/* Save button */
+.btn-save {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: white;
+  cursor: pointer; letter-spacing: 0.01em;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 20px rgba(24,99,220,0.35);
+  margin-bottom: 10px;
+}
+.btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-save:active { transform: scale(0.98); }
+
+/* Secondary buttons */
+.btn-secondary {
+  width: 100%; padding: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s; margin-bottom: 10px;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.08); }
+[data-theme="light"] .btn-secondary { background: rgba(24,99,220,0.06)!important; border-color: rgba(24,99,220,0.15)!important; color: #1A1A2E!important; }
+
+.btn-reset {
+  width: 100%; padding: 13px;
+  background: rgba(249,115,22,0.10);
+  border: 1px solid rgba(249,115,22,0.20); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: #f97316;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s; margin-bottom: 10px;
+}
+.btn-reset:hover { background: rgba(249,115,22,0.15); }
+
+.btn-logout {
+  display: block; text-align: center;
+  font-size: 13px; color: var(--text-muted); cursor: pointer;
+  padding: 8px; margin-top: 4px;
+  text-decoration: none; transition: color 0.18s;
+}
+.btn-logout:hover { color: #ff4757; }
+
+/* ── Reset Confirm Modal ─────────────────────────────────────── */
+.modal-backdrop {
+  position: absolute; inset: 0; z-index: 200;
+  background: rgba(6,6,15,0.72);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.modal-backdrop.open {
+  opacity: 1; pointer-events: all;
+}
+.modal-sheet {
+  width: 100%;
+  background: var(--bg-surface, #0d0d1a);
+  border-radius: 24px 24px 0 0;
+  padding: 0 16px 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
+}
+[data-theme="light"] .modal-sheet {
+  background: #fff !important;
+  border-top-color: rgba(24,99,220,0.10) !important;
+}
+.modal-backdrop.open .modal-sheet {
+  transform: translateY(0);
+}
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  margin: 12px auto 20px;
+}
+[data-theme="light"] .modal-handle { background: rgba(0,0,0,0.12) !important; }
+.modal-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(249,115,22,0.12);
+  border: 1.5px solid rgba(249,115,22,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+}
+.modal-title {
+  font-size: 17px; font-weight: 800; color: var(--text-primary);
+  text-align: center; margin-bottom: 8px;
+}
+.modal-body {
+  font-size: 13px; color: var(--text-muted); text-align: center;
+  line-height: 1.55; margin-bottom: 22px; padding: 0 4px;
+}
+.modal-body strong { color: var(--text-secondary); }
+.modal-actions { display: flex; flex-direction: column; gap: 10px; }
+.btn-modal-danger {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg,#ea580c,#f97316);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: #fff;
+  cursor: pointer; letter-spacing: 0.01em;
+  box-shadow: 0 4px 18px rgba(249,115,22,0.35);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.btn-modal-danger:active { opacity: 0.88; transform: scale(0.98); }
+.btn-modal-cancel {
+  width: 100%; padding: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.btn-modal-cancel:hover { background: rgba(255,255,255,0.09); }
+[data-theme="light"] .btn-modal-cancel {
+  background: rgba(24,99,220,0.06) !important;
+  border-color: rgba(24,99,220,0.15) !important;
+  color: #1A1A2E !important;
+}
+</style>
+</head>
+
+<body>
+<div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
+  <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <span class="breadcrumb-separator">/</span>
+  <a href="../../profile/overview/" class="breadcrumb-item">Profile</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-item active">Edit Profile</span>
+</div>
+
+<div class="desktop-container">
+  <div class="device-frame">
+    <div class="device-notch"></div>
+
+    <div class="mobile-viewport">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px 4px;font-size:12px;font-weight:600;color:var(--text-secondary);position:relative;z-index:2">
+          <span>9:41</span>
+          <div style="display:flex;gap:6px;align-items:center">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+          </div>
+        </div>
+
+      <!-- Top bar -->
+      <div class="top-bar">
+        <a href="../../profile/overview/" class="back-btn" aria-label="Back">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
+        </a>
+        <span class="page-title">Edit Profile</span>
+      </div>
+
+      <div class="page-content">
+
+        <!-- Avatar -->
+        <div class="avatar-section">
+          <div class="avatar-wrap">
+            <div class="avatar">HP</div>
+            <div class="avatar-edit-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="archetype-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <span>Academic Archetype: <a href="#">Find Out</a></span>
+          </div>
+        </div>
+
+        <!-- Name fields -->
+        <div class="form-card">
+          <div class="field-row">
+            <div class="field-label">First Name</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input class="field-input" type="text" value="Hoang" placeholder="First name">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-label">Last Name</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              <input class="field-input" type="text" value="Phuc" placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-card">
+          <div class="field-row field-readonly">
+            <div class="field-label">Email</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input class="field-input" type="email" value="hoangphuc140904@gmail.com" readonly>
+            </div>
+            <div class="field-hint">Contact support to change the email.</div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-card">
+          <div class="field-row">
+            <div class="field-label">Location</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input class="field-input" type="text" value="Ho Chi Minh City, Vietnam" placeholder="Your location">
+            </div>
+          </div>
+        </div>
+
+        <!-- Study preferences -->
+        <div class="form-card">
+          <div class="field-row">
+            <div class="field-label">I want to study</div>
+            <div class="field-select-wrap">
+              <select class="field-select">
+                <option value="abroad">Abroad</option>
+                <option value="in-country" selected>In my country</option>
+                <option value="either">Either</option>
+              </select>
+              <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-label">I'm working toward a...</div>
+            <div class="field-select-wrap">
+              <select class="field-select">
+                <option value="bachelor" selected>Bachelor's Degree</option>
+                <option value="master">Master's Degree</option>
+                <option value="phd">PhD / Doctorate</option>
+                <option value="associate">Associate's Degree</option>
+              </select>
+              <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkbox -->
+        <label class="checkbox-row">
+          <input type="checkbox" id="know-study">
+          <div class="custom-checkbox">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>
+          <span class="checkbox-label">I already know what I want to study</span>
+        </label>
+
+        <!-- Save -->
+        <button class="btn-save" onclick="saveChanges()">Save Changes</button>
+
+        <!-- Secondary actions -->
+        <button class="btn-secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Leave Review
+        </button>
+
+        <button class="btn-reset" id="resetAccountBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Reset Account
+        </button>
+
+        <a href="#" class="btn-logout">Logout</a>
+
+
+      <!-- Reset Confirm Modal -->
+      <div class="modal-backdrop" id="resetModal">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1,4 1,10 7,10"/>
+              <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+            </svg>
+          </div>
+          <div class="modal-title">Reset Account?</div>
+          <div class="modal-body">
+            This will clear <strong>all quiz progress</strong> and all your answers.<br>
+            You'll start fresh from <strong>Question 1</strong>.
+          </div>
+          <div class="modal-actions">
+            <button class="btn-modal-danger" id="resetConfirmBtn">
+              Reset &amp; Start Over
+            </button>
+            <button class="btn-modal-cancel" id="resetCancelBtn">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+      </div><!-- /page-content -->
+    </div><!-- /mobile-viewport -->
+
+  </div><!-- /device-frame -->
+</div><!-- /desktop-container -->
+
+<script>
+(function(){function a(r){document.documentElement.setAttribute('data-theme',r)}function b(p){var r=p==='system'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;a(r);document.documentElement.setAttribute('data-theme-pref',p);try{localStorage.setItem('bd-theme',p)}catch(e){}}window.bdSetTheme=b;var s='dark';try{s=localStorage.getItem('bd-theme')||'dark'}catch(e){}b(s);window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){var p=document.documentElement.getAttribute('data-theme-pref')||'dark';if(p==='system')b('system')})})();
+
+// Checkbox visual update
+document.querySelectorAll('.checkbox-row').forEach(function(row) {
+  var input = row.querySelector('input[type="checkbox"]');
+  var box = row.querySelector('.custom-checkbox');
+  if (!input || !box) return;
+  function update() {
+    box.style.background = input.checked ? '#1863DC' : 'transparent';
+    box.style.borderColor = input.checked ? '#1863DC' : '';
+  }
+  input.addEventListener('change', update);
+  update();
+});
+
+function saveChanges() {
+  var btn = document.querySelector('.btn-save');
+  var orig = btn.textContent;
+  btn.textContent = '✓ Saved!';
+  btn.style.background = 'linear-gradient(135deg, #059669, #10B981)';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 1800);
+}
+
+// Reset Account modal
+var resetModal = document.getElementById('resetModal');
+document.getElementById('resetAccountBtn').addEventListener('click', function () {
+  resetModal.classList.add('open');
+});
+document.getElementById('resetCancelBtn').addEventListener('click', function () {
+  resetModal.classList.remove('open');
+});
+resetModal.addEventListener('click', function (e) {
+  if (e.target === resetModal) resetModal.classList.remove('open');
+});
+document.getElementById('resetConfirmBtn').addEventListener('click', function () {
+  try { localStorage.removeItem('quizProgress'); } catch(e) {}
+  try {
+    sessionStorage.removeItem('bd_dna');
+    sessionStorage.removeItem('bd_answers');
+    sessionStorage.removeItem('bd_scores');
+    sessionStorage.removeItem('bd_nextStart');
+  } catch(e) {}
+  var btn = document.getElementById('resetConfirmBtn');
+  btn.textContent = 'Resetting...';
+  btn.style.opacity = '0.7';
+  setTimeout(function () {
+    window.location.href = './quiz-card.html';
+  }, 800);
+});
+</script>
+</body>
+</html>

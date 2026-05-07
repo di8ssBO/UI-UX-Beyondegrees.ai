@@ -1,0 +1,43 @@
+/* discipline-detail-kt — screen-specific styles */
+
+/* ── Hero wave animation ───────────────────────────────── */
+@keyframes waveFlow {
+  0%   { transform: translateX(0)   skewY(-2deg) scaleY(1); }
+  50%  { transform: translateX(-8%) skewY(0deg)  scaleY(1.05); }
+  100% { transform: translateX(0)   skewY(-2deg) scaleY(1); }
+}
+@keyframes waveFlow2 {
+  0%   { transform: translateX(0)   skewY(1deg); }
+  50%  { transform: translateX(6%)  skewY(-1deg); }
+  100% { transform: translateX(0)   skewY(1deg); }
+}
+@keyframes heroGlow {
+  0%,100% { opacity: .55; }
+  50%      { opacity: .80; }
+}
+.hero-wave-1 { animation: waveFlow  8s ease-in-out infinite; transform-origin: center; }
+.hero-wave-2 { animation: waveFlow2 6s ease-in-out infinite 1s; transform-origin: center; }
+.hero-glow-pulse { animation: heroGlow 4s ease-in-out infinite; }
+
+/* ── Major teaser / lock state ──────────────────────────────────────────── */
+.major-card.locked { opacity:.50; pointer-events:none; }
+.major-card.locked .major-arrow { display:none; }
+.major-pct {
+  font-size:14px; font-weight:800; white-space:nowrap;
+  color:var(--text-secondary);
+}
+.major-pct.locked-pct {
+  color:rgba(255,255,255,.25); letter-spacing:.12em;
+  font-size:15px; font-family:monospace;
+}
+.major-unlock-banner {
+  display:flex; align-items:center; gap:12px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:14px; padding:13px 16px; margin-top:12px;
+  font-size:13px; line-height:1.5; color:var(--text-secondary);
+  cursor:pointer; transition:background .18s, transform .12s;
+}
+.major-unlock-banner:active { background:rgba(255,255,255,.11); transform:scale(0.98); }
+.major-unlock-banner .ul-icon { font-size:20px; flex-shrink:0; }
+.major-unlock-banner strong { color:var(--text-primary); }
