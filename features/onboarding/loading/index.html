@@ -1152,6 +1152,13 @@ function goToResult() {
 // Auto-update counts and btn href based on stage
 document.addEventListener('DOMContentLoaded', () => {
   const qDone = STAGE_Q_COUNT[_STAGE] || 30;
+
+  // ── Persist quiz progress so result screens can gate content ──
+  try {
+    const prev = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    if (qDone > prev) localStorage.setItem('quizProgress', qDone);
+  } catch(e) {}
+
   const elCount  = document.getElementById('qCount');
   const elReady  = document.getElementById('readyCount');
   if (elCount)  elCount.textContent  = qDone;

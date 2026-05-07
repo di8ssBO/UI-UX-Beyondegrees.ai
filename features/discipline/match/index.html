@@ -141,7 +141,7 @@
 <script>
 (function () {
   /* ── Ẩn "Tiếp tục Quiz" khi đã hoàn thành toàn bộ 30 câu ── */
-  const progress = parseInt(localStorage.getItem('quizProgress') || '10', 10);
+  const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
   const wrap = document.getElementById('quiz-continue-wrap');
   if (wrap) {
     if (progress >= 30) {
