@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -10,13 +10,13 @@
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- Breadcrumb (desktop) -->
 <div class="breadcrumb" id="breadcrumb">
-  <a href="../../major/recommendations/" class="breadcrumb-item">Majors</a>
+  <a href="../recommendations-v2/" class="breadcrumb-item">Majors</a>
   <span class="breadcrumb-separator">/</span>
   <span class="breadcrumb-item active" id="bcTitle">Major Detail</span>
 </div>
@@ -90,17 +90,13 @@
         </div>
       </div>
 
-      <!-- CTA -->
-      <div class="cta-wrap" id="ctaWrap" style="display:none">
-        <button class="cta-btn" id="ctaBtn">
-          Explore Major
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="2.5"
-               stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M13 6l6 6-6 6"/>
-          </svg>
+      <!-- Quiz CTA (Finish Quiz — hiện khi 20 ≤ progress < 30) -->
+      <div class="cta-wrap" id="quizCtaWrap" style="display:none">
+        <button class="cta-btn" id="quizCtaBtn" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);box-shadow:0 4px 20px rgba(124,58,237,.35)">
+          Finish Quiz &#8594;
         </button>
       </div>
+
 
       <!-- Floating Tab Bar -->
       <div class="tab-bar-wrap">
@@ -132,7 +128,7 @@
             <span class="tab-label">Disciplines</span>
           </a>
 
-          <a href="../../major/recommendations/" class="tab-item active" data-tab="t3">
+          <a href="../recommendations-v2/" class="tab-item active" data-tab="t3">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -346,8 +342,6 @@ function getBullets(major, disc){
 ═══════════════════════════════════════════════════════════ */
 function showPicker(){
   const body = document.getElementById('detailBody');
-  const cta  = document.getElementById('ctaWrap');
-  cta.style.display = 'none';
 
   const groups = {};
   MAJORS_DATA.forEach(m => {
@@ -383,10 +377,10 @@ function showPicker(){
   body.innerHTML = `
     <div style="padding-bottom:8px">
       <div style="font-size:15px;font-weight:800;color:#f8fafc;margin-bottom:4px">
-        Select a Major to view
+        Chọn Major để xem
       </div>
       <div style="font-size:12px;color:#6b6b9a;margin-bottom:20px">
-        ${MAJORS_DATA.length} majors available — click to preview
+        ${MAJORS_DATA.length} majors có sẵn — click để preview
       </div>
       ${rows}
     </div>
@@ -404,14 +398,13 @@ function render(){
   const params = new URLSearchParams(window.location.search);
   const rawId  = params.get('id');
   const body   = document.getElementById('detailBody');
-  const cta    = document.getElementById('ctaWrap');
 
   // No data file loaded at all
   if(typeof MAJORS_DATA === 'undefined'){
     body.innerHTML=`<div class="not-found">
       <div class="not-found-icon">⚠️</div>
-      <div class="not-found-title">majors-data.js not loaded</div>
-      <div class="not-found-sub">Đảm bảo file <code style="color:#a78bfa">majors-data.js</code> is in the same directory as this HTML file.<br><br>Nếu mở bằng trình duyệt trực tiếp (file://), thử dùng Live Server trong VS Code.</div>
+      <div class="not-found-title">majors-data.js chưa được load</div>
+      <div class="not-found-sub">Đảm bảo file <code style="color:#a78bfa">majors-data.js</code> nằm cùng thư mục với HTML này.<br><br>Nếu mở bằng trình duyệt trực tiếp (file://), thử dùng Live Server trong VS Code.</div>
     </div>`;
     return;
   }
@@ -425,7 +418,7 @@ function render(){
   const id = parseInt(rawId);
   const major = MAJORS_DATA.find(m=>m.id===id);
   if(!major){
-    body.innerHTML=`<div class="not-found"><div class="not-found-icon">😕</div><div class="not-found-title">ID ${id} not found</div><div class="not-found-sub">Quay lại <a href="../../major/detail/" style="color:var(--violet-400)">danh sách majors</a>.</div></div>`;
+    body.innerHTML=`<div class="not-found"><div class="not-found-icon">😕</div><div class="not-found-title">ID ${id} không tồn tại</div><div class="not-found-sub">Quay lại <a href="./" style="color:var(--violet-400)">danh sách majors</a>.</div></div>`;
     return;
   }
 
@@ -493,7 +486,7 @@ function render(){
     </div>
 
     <!-- Why I Match -->
-    <a class="why-banner" href="../../discipline/why/index.html${discCode ? '?disc='+discCode : ''}">
+    <a class="why-banner" href="discipline-why.html${discCode ? '?disc='+discCode : ''}">
       <div class="why-icon-box">🔍</div>
       <div class="why-text">
         <div class="why-title">Why I match this major?</div>
@@ -525,14 +518,28 @@ function render(){
   `;
 
   // ── CTA ──
-  cta.style.display = '';
-  document.getElementById('ctaBtn').innerHTML =
-    `Explore Programs <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>`;
+
 }
 
 document.addEventListener('DOMContentLoaded', render);
+
+/* ── Quiz CTA: Finish Quiz (20-29), ẩn khi >= 30 ────────────────────── */
+(function () {
+  const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+  const wrap = document.getElementById('quizCtaWrap');
+  const btn  = document.getElementById('quizCtaBtn');
+  if (!wrap || !btn) return;
+  if (progress >= 20 && progress < 30) {
+    wrap.style.display = '';
+    btn.addEventListener('click', function () {
+      var _p=parseInt(localStorage.getItem('quizProgress')||'0',10); window.location.href='quiz-card.html?start='+(_p>0?_p+1:21);
+    });
+  }
+  /* progress < 20 hoặc >= 30: ẩn (display:none mặc định) */
+})();
 </script>
 <script src="../../../shared/scripts/tab-lock.js"></script>
 <script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
 </body>
 </html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  
