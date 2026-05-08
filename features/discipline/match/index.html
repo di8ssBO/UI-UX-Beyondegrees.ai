@@ -56,6 +56,15 @@
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.2; }
 }
+@keyframes rdr-fade-in { from { opacity:0; } to { opacity:1; } }
+@keyframes rdr-pulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.75; }
+}
+@keyframes rdr-spin-in {
+  from { opacity:0; transform:scale(0.6); }
+  to   { opacity:1; transform:scale(1); }
+}
 </style>
 </head>
 <body>
@@ -82,7 +91,7 @@
           <div class="cst-sky-wrap">
             <div id="cstContainer"></div>
           </div>
-          <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your academic sky ✨</p>
+          <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your Academic DNA ✨</p>
         </div>
         <div class="ai-chip">&#10022; AI Powered Curation</div>
         <div class="ds-hl">Your Perfect<br><span class="ac">Disciplines</span></div>
@@ -189,230 +198,238 @@
   </div>
 </div>
 <script>
-/* ══ Constellation Sky Engine ═══════════════════════════════════════ */
+/* ══ Academic DNA Radar Chart ═══════════════════════════════════════ */
 (function () {
-  const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+  var progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+  var CX = 160, CY = 190, MAX_R = 100;
 
-  /* ══ Real constellation data mapped to disciplines ══
-     Each has: real star positions (320×480 SVG), mythology rationale,
-     connection pairs (index-based), bright star indices              */
-  const DISC = {
-    kt: {
-      name: 'Engineering & Tech', constellation: 'ORION',
-      myth: 'Like Orion — precise, powerful & systematic ⚙️',
-      color: '#4da6ff', pct: 94,
-      /* Betelgeuse, Bellatrix, Mintaka, Alnilam, Alnitak, Rigel, Saiph */
-      stars: [[212,38],[268,30],[218,92],[240,97],[262,102],[274,150],[204,146]],
-      bright: [0, 5],
-      conn: [[0,1],[0,2],[1,4],[2,3],[3,4],[2,6],[4,5]],
-    },
-    tn: {
-      name: 'Natural Sciences', constellation: 'CASSIOPEIA',
-      myth: 'Like Cassiopeia — curious, observant & exact 🔬',
-      color: '#22d3ee', pct: 89,
-      /* 5-star W-shape */
-      stars: [[22,52],[48,74],[70,40],[94,70],[118,44]],
-      bright: [2],
-      conn: [[0,1],[1,2],[2,3],[3,4]],
-    },
-    yt: {
-      name: 'Medical & Health', constellation: 'OPHIUCHUS',
-      myth: 'Like Ophiuchus — the healer who holds the serpent 🩺',
-      color: '#fb7185', pct: 64,
-      /* Rasalhague, Cebalrai, Yed Prior, Yed Post, Sabik, Han */
-      stars: [[258,172],[240,202],[215,220],[228,240],[260,242],[274,212]],
-      bright: [0, 4],
-      conn: [[0,1],[1,2],[2,3],[3,4],[4,5],[5,0]],
-    },
-    nn: {
-      name: 'Agricultural Sci', constellation: 'TAURUS',
-      myth: 'Like Taurus — grounded, patient & life-sustaining 🌱',
-      color: '#86efac', pct: 62,
-      /* Theta2, HyadumII, HyadumI, Aldebaran, Ain, Elnath */
-      stars: [[30,438],[44,418],[58,402],[78,422],[94,400],[110,376]],
-      bright: [3],
-      conn: [[0,1],[1,2],[2,3],[3,4],[4,5]],
-    },
-    xh: {
-      name: 'Social Sciences', constellation: 'GEMINI',
-      myth: 'Like Gemini — connecting, expressive & dual 🧠',
-      color: '#c084fc', pct: 34,
-      /* Castor, Pollux, Wasat, Mebsuda, Mekbuda, Tejat, Propus */
-      stars: [[60,182],[82,186],[54,218],[76,223],[64,258],[86,262],[46,256]],
-      bright: [0, 1],
-      conn: [[0,1],[0,2],[2,4],[4,6],[1,3],[3,5],[2,3],[4,5]],
-    },
-    nv: {
-      name: 'Humanities', constellation: 'VIRGO',
-      myth: 'Like Virgo — graceful, nuanced & deeply cultural 📖',
-      color: '#fdba74', pct: 32,
-      /* Minelauva, Auva, Porrima, Vindemiatrix, Zaniah, Spica */
-      stars: [[188,352],[202,372],[218,350],[208,328],[232,340],[248,392]],
-      bright: [5],
-      conn: [[0,1],[1,2],[2,3],[3,4],[2,4],[2,5]],
-    },
-  };
+  var DISC = [
+    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:'#4da6ff', pct:94, angle:0   },
+    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:'#22d3ee', pct:89, angle:60  },
+    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:'#fb7185', pct:64, angle:120 },
+    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:'#86efac', pct:62, angle:180 },
+    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:'#c084fc', pct:34, angle:240 },
+    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:'#fdba74', pct:32, angle:300 },
+  ];
 
-  const sorted      = Object.entries(DISC).sort((a, b) => b[1].pct - a[1].pct);
-  const formedCount = progress >= 30 ? 6 : progress >= 20 ? 4 : progress >= 10 ? 2 : 0;
-  const formed      = new Set(sorted.slice(0, formedCount).map(([k]) => k));
+  var sorted = DISC.slice().sort(function(a,b){ return b.pct - a.pct; });
+  var formedCount = progress >= 30 ? 6 : progress >= 20 ? 4 : progress >= 10 ? 2 : 0;
+  var formedKeys = {};
+  sorted.slice(0, formedCount).forEach(function(d){ formedKeys[d.key] = true; });
 
-  /* ── SVG canvas 320×480 (~80% of visible mobile screen) ── */
-  const NS  = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 320 480');
+  function vtx(angleDeg, r) {
+    var rad = angleDeg * Math.PI / 180;
+    return [+(CX + r * Math.sin(rad)).toFixed(2), +(CY - r * Math.cos(rad)).toFixed(2)];
+  }
+  function labelAnchor() { return 'middle'; }
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 320 370');
   svg.setAttribute('width', '100%');
   svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
-  /* ── Defs: sky gradient + per-discipline glow filters ── */
-  const defs = document.createElementNS(NS, 'defs');
+  /* -- Defs -- */
+  var defs = document.createElementNS(NS, 'defs');
 
-  const skyGrad = document.createElementNS(NS, 'radialGradient');
-  skyGrad.setAttribute('id', 'cst-sky');
-  skyGrad.setAttribute('cx', '35%'); skyGrad.setAttribute('cy', '20%');
-  skyGrad.setAttribute('r', '65%');
-  [['0%','#0f1d52'],['45%','#080e2e'],['100%','#020510']].forEach(([off, col]) => {
-    const s = document.createElementNS(NS, 'stop');
-    s.setAttribute('offset', off); s.setAttribute('stop-color', col);
+  var skyGrad = document.createElementNS(NS, 'radialGradient');
+  skyGrad.setAttribute('id', 'rdr-sky'); skyGrad.setAttribute('cx', '50%');
+  skyGrad.setAttribute('cy', '45%'); skyGrad.setAttribute('r', '60%');
+  [['0%','#0f1d52'],['50%','#080e2e'],['100%','#020510']].forEach(function(pair) {
+    var s = document.createElementNS(NS, 'stop');
+    s.setAttribute('offset', pair[0]); s.setAttribute('stop-color', pair[1]);
     skyGrad.appendChild(s);
   });
   defs.appendChild(skyGrad);
 
-  Object.entries(DISC).forEach(([k, d]) => {
-    const f = document.createElementNS(NS, 'filter');
-    f.setAttribute('id', 'cg-' + k);
-    f.setAttribute('x', '-120%'); f.setAttribute('y', '-120%');
-    f.setAttribute('width', '340%'); f.setAttribute('height', '340%');
-    const blur = document.createElementNS(NS, 'feGaussianBlur');
-    blur.setAttribute('stdDeviation', '3.2'); blur.setAttribute('result', 'cb');
-    const merge = document.createElementNS(NS, 'feMerge');
-    ['cb','SourceGraphic'].forEach(inp => {
-      const n = document.createElementNS(NS, 'feMergeNode');
-      n.setAttribute('in', inp); merge.appendChild(n);
-    });
-    f.appendChild(blur); f.appendChild(merge);
-    defs.appendChild(f);
+  var polyGrad = document.createElementNS(NS, 'radialGradient');
+  polyGrad.setAttribute('id', 'rdr-fill'); polyGrad.setAttribute('cx', '50%');
+  polyGrad.setAttribute('cy', '50%'); polyGrad.setAttribute('r', '50%');
+  [['0%','rgba(24,99,220,0.32)'],['100%','rgba(2,116,190,0.06)']].forEach(function(pair) {
+    var s = document.createElementNS(NS, 'stop');
+    s.setAttribute('offset', pair[0]); s.setAttribute('stop-color', pair[1]);
+    polyGrad.appendChild(s);
   });
+  defs.appendChild(polyGrad);
+
+  var glowFilter = document.createElementNS(NS, 'filter');
+  glowFilter.setAttribute('id', 'rdr-glow');
+  glowFilter.setAttribute('x', '-100%'); glowFilter.setAttribute('y', '-100%');
+  glowFilter.setAttribute('width', '300%'); glowFilter.setAttribute('height', '300%');
+  var blur = document.createElementNS(NS, 'feGaussianBlur');
+  blur.setAttribute('stdDeviation', '2.5'); blur.setAttribute('result', 'gb');
+  var merge = document.createElementNS(NS, 'feMerge');
+  ['gb','SourceGraphic'].forEach(function(inp) {
+    var n = document.createElementNS(NS, 'feMergeNode'); n.setAttribute('in', inp); merge.appendChild(n);
+  });
+  glowFilter.appendChild(blur); glowFilter.appendChild(merge);
+  defs.appendChild(glowFilter);
   svg.appendChild(defs);
 
-  /* Sky background rect */
-  const bg = document.createElementNS(NS, 'rect');
-  bg.setAttribute('width','320'); bg.setAttribute('height','480');
-  bg.setAttribute('fill','url(#cst-sky)');
+  /* -- Sky background -- */
+  var bg = document.createElementNS(NS, 'rect');
+  bg.setAttribute('width','320'); bg.setAttribute('height','370');
+  bg.setAttribute('fill','url(#rdr-sky)');
   svg.appendChild(bg);
 
-  /* Ambient micro-stars scattered across full 320×480 canvas */
-  [
-    [12,32],[88,9],[138,18],[188,6],[298,38],[308,118],[292,198],
-    [172,428],[82,452],[18,382],[158,308],[228,352],[112,162],
-    [198,272],[278,318],[138,378],[58,338],[298,288],[152,58],
-    [242,135],[162,198],[308,398],[33,288],[128,438],[248,468],
-    [175,88],[48,118],[295,155],[225,462],[68,405],[310,248],
-    [145,255],[262,72],[36,172],[192,142],[105,330],[285,380],
-  ].forEach(([x, y], i) => {
-    const c = document.createElementNS(NS, 'circle');
-    c.setAttribute('cx', x); c.setAttribute('cy', y);
+  /* -- Ambient micro-stars -- */
+  [[12,32],[88,9],[138,18],[188,6],[298,38],[308,118],[292,198],
+   [42,388],[82,412],[28,352],[158,368],[228,352],[112,422],
+   [198,402],[278,318],[18,302],[58,338],[298,288],[152,58],
+   [242,135],[162,198],[308,398],[33,288],[248,428],[175,88],
+   [48,118],[295,155],[225,422],[68,405],[310,248]].forEach(function(pt, i) {
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', pt[0]); c.setAttribute('cy', pt[1]);
     c.setAttribute('r', i % 3 === 0 ? '0.9' : '0.55');
-    c.setAttribute('fill', `rgba(255,255,255,${i % 4 === 0 ? 0.35 : 0.18})`);
+    c.setAttribute('fill', 'rgba(255,255,255,' + (i % 4 === 0 ? 0.3 : 0.15) + ')');
     svg.appendChild(c);
   });
 
-  /* Mythology tooltip overlay div */
-  const container = document.getElementById('cstContainer');
-  const tooltip   = document.createElement('div');
+  /* -- Guide hexagon rings at 33%, 66%, 100% -- */
+  [0.333, 0.666, 1.0].forEach(function(frac, ri) {
+    var r = MAX_R * frac;
+    var pts = DISC.map(function(d){ return vtx(d.angle, r).join(','); }).join(' ');
+    var hex = document.createElementNS(NS, 'polygon');
+    hex.setAttribute('points', pts);
+    hex.setAttribute('fill', 'none');
+    hex.setAttribute('stroke', ri === 2 ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.07)');
+    hex.setAttribute('stroke-width', ri === 2 ? '1' : '0.7');
+    if (ri < 2) hex.setAttribute('stroke-dasharray', '3 4');
+    svg.appendChild(hex);
+  });
+
+  /* -- Axis lines center to vertex -- */
+  DISC.forEach(function(d) {
+    var tip = vtx(d.angle, MAX_R);
+    var line = document.createElementNS(NS, 'line');
+    line.setAttribute('x1', CX); line.setAttribute('y1', CY);
+    line.setAttribute('x2', tip[0]); line.setAttribute('y2', tip[1]);
+    line.setAttribute('stroke', 'rgba(255,255,255,0.06)');
+    line.setAttribute('stroke-width', '0.7');
+    svg.appendChild(line);
+  });
+
+  /* -- Data polygon -- */
+  var dataPoints = DISC.map(function(d){ return vtx(d.angle, MAX_R * d.pct / 100); });
+  var dataPts = dataPoints.map(function(p){ return p.join(','); }).join(' ');
+
+  var polyFill = document.createElementNS(NS, 'polygon');
+  polyFill.setAttribute('points', dataPts);
+  polyFill.setAttribute('fill', 'url(#rdr-fill)');
+  polyFill.setAttribute('stroke', 'none');
+  polyFill.style.animation = 'rdr-fade-in 1.2s ease forwards';
+  svg.appendChild(polyFill);
+
+  var polyStroke = document.createElementNS(NS, 'polygon');
+  polyStroke.setAttribute('points', dataPts);
+  polyStroke.setAttribute('fill', 'none');
+  polyStroke.setAttribute('stroke', '#1863DC');
+  polyStroke.setAttribute('stroke-width', '1.8');
+  polyStroke.setAttribute('stroke-linejoin', 'round');
+  var perim = 0;
+  for (var pi = 0; pi < dataPoints.length; pi++) {
+    var p1 = dataPoints[pi], p2 = dataPoints[(pi+1) % dataPoints.length];
+    perim += Math.hypot(p2[0]-p1[0], p2[1]-p1[1]);
+  }
+  perim = perim.toFixed(1);
+  polyStroke.style.strokeDasharray = perim;
+  polyStroke.style.strokeDashoffset = perim;
+  polyStroke.style.transition = 'stroke-dashoffset 1.4s ease 0.3s';
+  svg.appendChild(polyStroke);
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ polyStroke.style.strokeDashoffset = '0'; }); });
+
+  /* -- Tooltip div -- */
+  var container = document.getElementById('cstContainer');
+  var tooltip = document.createElement('div');
   tooltip.id = 'cst-tooltip';
   if (container) { container.style.position = 'relative'; container.appendChild(tooltip); }
 
-  /* ── Render each constellation ── */
-  Object.entries(DISC).forEach(([k, d]) => {
-    const isFormed = formed.has(k);
-    const opacity  = progress === 0 ? 0.1 : isFormed ? 1 : 0.16;
-    const baseR    = isFormed ? (1.8 + d.pct / 52) : 1.3;
+  /* -- Vertex stars + labels -- */
+  DISC.forEach(function(d, i) {
+    var vx = dataPoints[i][0], vy = dataPoints[i][1];
+    var isFormed = !!formedKeys[d.key];
+    var starR = d.pct > 80 ? 4.5 : d.pct > 60 ? 3.5 : 2.8;
 
-    const g = document.createElementNS(NS, 'g');
-    g.setAttribute('opacity', opacity);
-    if (isFormed) g.style.cursor = 'pointer';
-
-    /* Connection lines using d.conn index pairs — draw-in animation */
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', vx); c.setAttribute('cy', vy); c.setAttribute('r', starR);
+    c.setAttribute('fill', isFormed ? d.color : 'rgba(255,255,255,0.2)');
     if (isFormed) {
-      d.conn.forEach(([i, j], li) => {
-        const [x1,y1] = d.stars[i], [x2,y2] = d.stars[j];
-        const line = document.createElementNS(NS, 'line');
-        line.setAttribute('x1',x1); line.setAttribute('y1',y1);
-        line.setAttribute('x2',x2); line.setAttribute('y2',y2);
-        line.setAttribute('stroke', d.color);
-        line.setAttribute('stroke-width', '0.9');
-        line.setAttribute('stroke-opacity', '0.45');
-        const len = Math.hypot(x2-x1, y2-y1);
-        line.style.cssText = `stroke-dasharray:${len.toFixed(1)};`
-          + `stroke-dashoffset:${len.toFixed(1)};`
-          + `animation:cst-draw .65s ease forwards ${(li*0.12+0.25).toFixed(2)}s`;
-        g.appendChild(line);
-      });
-    }
-
-    /* Stars — bright key stars rendered larger */
-    d.stars.forEach(([cx, cy], i) => {
-      const isBright = d.bright.includes(i);
-      const r = isFormed ? (isBright ? baseR * 1.65 : baseR) : 1.3;
-      const c = document.createElementNS(NS, 'circle');
-      c.setAttribute('cx', cx); c.setAttribute('cy', cy); c.setAttribute('r', r);
-      c.setAttribute('fill', isFormed ? d.color : 'rgba(255,255,255,0.5)');
-      if (isFormed) {
-        c.setAttribute('filter', `url(#cg-${k})`);
-        c.style.animation = `cst-twinkle ${2.6+i*0.42}s ease-in-out `
-          + `infinite ${(i*0.32).toFixed(2)}s`;
-      }
-      g.appendChild(c);
-    });
-
-    /* Labels: constellation name (dim) + discipline + match% (bold) */
-    if (isFormed) {
-      const cx   = d.stars.reduce((s,[x]) => s+x, 0) / d.stars.length;
-      const maxY = Math.max(...d.stars.map(([,y]) => y));
-      const mkT  = (txt, y, sz, fw, op) => {
-        const t = document.createElementNS(NS, 'text');
-        t.setAttribute('x', cx); t.setAttribute('y', y);
-        t.setAttribute('fill', d.color); t.setAttribute('font-size', sz);
-        t.setAttribute('font-weight', fw); t.setAttribute('text-anchor', 'middle');
-        t.setAttribute('opacity', op);
-        t.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
-        t.textContent = txt; return t;
-      };
-      g.appendChild(mkT(d.constellation,          maxY+13, '6',   '600', '0.45'));
-      g.appendChild(mkT(d.name+' · '+d.pct+'%',   maxY+22, '7.5', '800', '0.92'));
-    }
-
-    /* onclick: mythology tooltip (1.8s) → smooth scroll to discipline card */
-    if (isFormed) {
-      g.addEventListener('click', () => {
-        tooltip.textContent        = d.myth;
-        tooltip.style.color        = d.color;
-        tooltip.style.borderColor  = d.color + '60';
-        tooltip.style.opacity      = '1';
+      c.setAttribute('filter', 'url(#rdr-glow)');
+      c.style.animation = 'cst-twinkle ' + (2.4 + i * 0.38) + 's ease-in-out infinite ' + (i*0.28).toFixed(2) + 's';
+      c.style.cursor = 'pointer';
+      c.addEventListener('click', (function(disc) { return function() {
+        tooltip.textContent = disc.myth;
+        tooltip.style.color = disc.color;
+        tooltip.style.borderColor = disc.color + '60';
+        tooltip.style.opacity = '1';
         clearTimeout(tooltip._t);
-        tooltip._t = setTimeout(() => { tooltip.style.opacity = '0'; }, 1800);
-        setTimeout(() => {
-          const card = document.querySelector('.dc-' + k);
+        tooltip._t = setTimeout(function(){ tooltip.style.opacity = '0'; }, 1800);
+        setTimeout(function(){
+          var card = document.querySelector('.dc-' + disc.key);
           if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 500);
-      });
+      }; })(d));
     }
+    svg.appendChild(c);
 
-    svg.appendChild(g);
+    /* Labels */
+    var labelR = MAX_R + 26;
+    var lpos = vtx(d.angle, labelR);
+    var lx = lpos[0], ly = lpos[1];
+    var anchor = labelAnchor(d.angle);
+
+    var t1 = document.createElementNS(NS, 'text');
+    t1.setAttribute('x', lx); t1.setAttribute('y', ly - 6);
+    t1.setAttribute('fill', d.color); t1.setAttribute('font-size', '5.5');
+    t1.setAttribute('font-weight', '600'); t1.setAttribute('text-anchor', anchor);
+    t1.setAttribute('opacity', isFormed ? '0.55' : '0.18');
+    t1.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
+    t1.textContent = d.cst;
+    svg.appendChild(t1);
+
+    var t2 = document.createElementNS(NS, 'text');
+    t2.setAttribute('x', lx); t2.setAttribute('y', ly + 4);
+    t2.setAttribute('fill', isFormed ? '#fff' : 'rgba(255,255,255,0.18)');
+    t2.setAttribute('font-size', '6.5');
+    t2.setAttribute('font-weight', '700'); t2.setAttribute('text-anchor', anchor);
+    t2.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
+    t2.textContent = d.name;
+    svg.appendChild(t2);
+
+    if (isFormed) {
+      var t3 = document.createElementNS(NS, 'text');
+      t3.setAttribute('x', lx); t3.setAttribute('y', ly + 16);
+      t3.setAttribute('fill', d.color); t3.setAttribute('font-size', '10');
+      t3.setAttribute('font-weight', '800'); t3.setAttribute('text-anchor', anchor);
+      t3.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
+      t3.textContent = d.pct + '%';
+      svg.appendChild(t3);
+    }
   });
+
+  /* -- Center label -- */
+  var cLabel = document.createElementNS(NS, 'text');
+  cLabel.setAttribute('x', CX); cLabel.setAttribute('y', CY + 4);
+  cLabel.setAttribute('fill', 'rgba(255,255,255,0.1)');
+  cLabel.setAttribute('font-size', '5');
+  cLabel.setAttribute('font-weight', '600');
+  cLabel.setAttribute('text-anchor', 'middle');
+  cLabel.setAttribute('letter-spacing', '1.5');
+  cLabel.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
+  cLabel.textContent = 'ACADEMIC DNA';
+  svg.appendChild(cLabel);
 
   if (container) container.appendChild(svg);
 
-  /* Caption text per milestone */
-  const capKey = progress >= 30 ? 30 : progress >= 20 ? 20 : progress >= 10 ? 10 : 0;
-  const captions = {
-    0:  'Complete the quiz to reveal your academic sky ✨',
-    10: 'Orion & Cassiopeia revealed — tap a constellation to explore 🔥',
-    20: '4 constellations formed — 1 stage to complete your sky ⚡',
-    30: 'Your complete academic sky — tap any constellation to explore 🌌',
+  /* Caption per milestone */
+  var capKey = progress >= 30 ? 30 : progress >= 20 ? 20 : progress >= 10 ? 10 : 0;
+  var captions = {
+    0:  'Complete the quiz to reveal your Academic DNA ✨',
+    10: 'Top 2 disciplines revealed — tap a vertex star to explore 🔥',
+    20: '4 disciplines formed — 1 stage to complete your DNA ⚡',
+    30: 'Your complete Academic DNA — tap any vertex to explore 🌌',
   };
-  const cap = document.getElementById('cstCaption');
+  var cap = document.getElementById('cstCaption');
   if (cap) cap.textContent = captions[capKey];
 })();
 </script>
