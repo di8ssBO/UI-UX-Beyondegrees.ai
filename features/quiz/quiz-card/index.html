@@ -3690,6 +3690,12 @@ function recordAnswer(direction, answer) {
   // DNA: base +1 for participation, bonus by answer strength
   const weight = DNA_WEIGHTS[answer] ?? 0;
   state.dna[q.disc] = Math.max(0, (state.dna[q.disc] || 0) + 1 + weight);
+
+  // Cập nhật quizProgress sau mỗi câu trả lời để các tab khác
+  // có thể hiển thị "Continue Quiz" ngay từ câu đầu tiên
+  const answered = START_IDX + state.answers.length;
+  const prev = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+  if (answered > prev) localStorage.setItem('quizProgress', String(answered));
 }
 
 function updateScoreboard() {
