@@ -366,10 +366,9 @@ svg *, canvas, video, img { transition: none !important; }
 
 <script>
 /* ── Quiz gate: khoá University khi quizProgress < 30 ───────────────────
-   < 10  : "Start Quiz"    → stage=1
-   10-19 : "Continue Quiz" → stage=2
-   20-29 : "Finish Quiz"   → stage=3
-   >= 30 : mở bình thường
+   === 0  : "Start Quiz"    → quiz câu 1
+   >= 1   : "Continue Quiz" → quiz câu đang làm dở
+   >= 30  : mở bình thường
    ─────────────────────────────────────────────────────────────────────── */
 (function () {
   var progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
@@ -385,12 +384,8 @@ svg *, canvas, video, img { transition: none !important; }
   document.querySelectorAll('.uc-pct').forEach(function (el) { el.textContent = '??'; });
 
   /* Xác định label nút */
-  var label, stage;
-  if (progress < 10)      { label = 'Start Quiz';    stage = 1; }
-  else if (progress < 20) { label = 'Continue Quiz'; stage = 2; }
-  else                    { label = 'Finish Quiz';   stage = 3; }
-
-  var remaining = stage === 1 ? 30 : stage === 2 ? 20 : 10;
+  var label = progress === 0 ? 'Start Quiz' : 'Continue Quiz';
+  var remaining = 30 - progress;
 
   /* Chèn lock banner vào us-content */
   var content = document.querySelector('.us-content');
@@ -404,8 +399,10 @@ svg *, canvas, video, img { transition: none !important; }
     + '<button id="uniQuizCta" style="margin-top:4px;padding:12px 24px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(124,58,237,.4)">' + label + ' &#8594;</button>';
   content.insertBefore(banner, content.firstChild);
   document.getElementById('uniQuizCta').addEventListener('click', function () {
-    var _p=parseInt(localStorage.getItem('quizProgress')||'0',10);
-    window.location.href = _p>0 ? '../../quiz/quiz-card/index.html?start='+(_p+1) : '../../quiz/quiz-card/index.html';
+    var _p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    window.location.href = _p > 0
+      ? '../../quiz/quiz-card/index.html?start=' + (_p + 1)
+      : '../../quiz/quiz-card/index.html';
   });
 })();
 </script>

@@ -145,11 +145,6 @@
           <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
         </div>
       </div>
-        <div id="quiz-continue-wrap" style="padding:12px 20px 6px;">
-          <a href="../../quiz/quiz-card/index.html?stage=2" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 20px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;border-radius:999px;font-size:15px;font-weight:700;text-decoration:none;letter-spacing:0.01em;box-shadow:0 4px 20px rgba(124,58,237,.45);">
-            Continue Quiz &#8594;
-          </a>
-        </div>
         <!-- ░░ FLOATING TAB BAR ░░ -->
         <nav class="float-tab-bar" id="floatTabBar">
           <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
@@ -435,31 +430,6 @@
 </script>
 <script src="../../../features/discipline/discipline-nav.js"></script>
 
-<script>
-(function () {
-  /* ── Ẩn "Tiếp tục Quiz" khi đã hoàn thành toàn bộ 30 câu ── */
-  const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
-  const wrap = document.getElementById('quiz-continue-wrap');
-  if (wrap) {
-    if (progress >= 30) {
-      wrap.style.display = 'none';
-    } else if (progress >= 20) {
-      // Đã lên Major Recs rồi — nếu quay lại, chuyển sang stage 3
-      const link = wrap.querySelector('a');
-      if (link) link.href = '../../quiz/quiz-card/index.html?stage=3';
-    }
-    // progress=10: giữ nguyên href stage=2
-  }
-
-  /* ── Dev helper: toggle quizProgress để test (xoá khi production) ─
-  window.__setProgress = function(n) {
-    localStorage.setItem('quizProgress', String(n));
-    location.reload();
-  };
-  // Dùng: __setProgress(10) / __setProgress(20) / __setProgress(30)
-  ── */
-})();
-</script>
 
 <script src="../../../shared/scripts/tab-lock.js"></script>
 <script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
