@@ -279,7 +279,8 @@ const DISC = Object.fromEntries(
 );
 
 /* Điểm % của từng discipline — đồng bộ với discipline-match.html */
-const DISC_SCORES = { kt:94, tn:89, yt:64, nn:62, xh:34, nv:32 };
+const DISC_SCORES = JSON.parse(localStorage.getItem('discScores') || 'null')
+  || { kt:94, tn:89, yt:64, nn:62, xh:34, nv:32 };
 
 /* MAJORS array dùng trong render — pct sẽ được inject từ quiz results
    Mock pct phản ánh profile: Engineering & Natural Sci cao nhất (75–94%),
