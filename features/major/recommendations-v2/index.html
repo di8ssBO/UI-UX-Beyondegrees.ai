@@ -14,7 +14,7 @@
 </head>
 <body>
 <div class="breadcrumb">
-  <a href="#" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
   <span class="breadcrumb-sep">/</span>
   <span class="breadcrumb-item active">Major Recommendations v2</span>
 </div>
@@ -405,7 +405,7 @@ if (progress < 20) {
     /* 20-29: đổi thành "Finish Quiz" */
     if (continueBtn) continueBtn.innerHTML = 'Finish Quiz &#8594;';
     if (continueBtn) continueBtn.addEventListener('click', () => {
-      window.location.href = 'quiz-card.html?start=21';
+      window.location.href = '../../quiz/quiz-card/?start=21';
     });
   }
 }
@@ -436,7 +436,7 @@ function cardTap(el, majorId) {
   el.style.background = 'rgba(255,255,255,.06)';
   setTimeout(() => {
     el.style.background = '';
-    if (majorId) window.location.href = `major-detail.html?id=${majorId}`;
+    if (majorId) window.location.href = `../detail/?id=${majorId}`;
   }, 140);
 }
 
@@ -445,7 +445,7 @@ function goToDetail(btn) {
   const id   = card && card.dataset.majorId;
   if (!id) return;
   btn.style.opacity = '.6';
-  setTimeout(() => { window.location.href = `major-detail.html?id=${id}`; }, 120);
+  setTimeout(() => { window.location.href = `../detail/?id=${id}`; }, 120);
 }
 
 /* ── Pct → colour mapping (High/Mid/Low) ─────────────────────────────── */
