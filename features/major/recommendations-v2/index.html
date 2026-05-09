@@ -357,7 +357,9 @@ let activeDisc  = 'all';
 const accState  = { top: true, mid: false, low: false };
 const CHEV = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>`;
 
-function quizResumeUrl(){var p=parseInt(localStorage.getItem('quizProgress')||'0',10);return p>0?'quiz-card.html?start='+(p+1):'quiz-card.html';}
+function quizResumeUrl(){
+  return p>0 ? '../../quiz/quiz-card/?start='+(p+1) : '../../quiz/quiz-card/';
+}
 /* ── Quiz progress ────────────────────────────────────────────────────── */
 const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
 
