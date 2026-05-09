@@ -326,7 +326,7 @@ function quizResumeUrl(){var p=parseInt(localStorage.getItem('quizProgress')||'0
       ctaBtn.style.display = 'none';
     } else {
       let label, stage;
-      if (progress < 10)       { label = 'Start Quiz';    stage = 1; }
+      if (progress === 0)       { label = 'Start Quiz';    stage = 1; }
       else if (progress < 20)  { label = 'Continue Quiz'; stage = 2; }
       else                     { label = 'Finish Quiz';   stage = 3; }
       ctaBtn.innerHTML = label + ' ' + ARROW_SVG;

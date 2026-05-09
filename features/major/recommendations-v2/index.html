@@ -373,15 +373,17 @@ if (progress < 20) {
   // Cập nhật banner text theo mốc quiz
   const lockCta  = document.getElementById('lockCta');
   const lockSub  = document.getElementById('lockSubText');
-  if (progress < 10) {
+  if (progress === 0) {
     if (lockSub) lockSub.innerHTML = 'Complete <strong style="color:var(--text-primary)">10 questions</strong> to unlock Discipline results first.';
     if (lockCta) lockCta.innerHTML = 'Start Quiz &#8594;';
+  } else if (progress < 10) {
+    if (lockSub) lockSub.innerHTML = `Answered <strong style="color:var(--text-primary)">${progress} questions</strong>. Keep going to unlock Discipline results!`;
+    if (lockCta) lockCta.innerHTML = 'Continue Quiz &#8594;';
   } else {
     if (lockSub) lockSub.innerHTML = 'Complete <strong style="color:var(--text-primary)">10 more questions</strong> to unlock your best-fit majors.';
     if (lockCta) lockCta.innerHTML = 'Continue Quiz &#8594;';
   }
   if (lockCta) {
-    const stage = progress < 10 ? 1 : 2;
     lockCta.addEventListener('click', () => { window.location.href = quizResumeUrl(); });
   }
 } else {

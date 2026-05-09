@@ -867,16 +867,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── Progress-based state init ──────────────────────────────────────
   (function initProgress() {
     const p   = parseInt(localStorage.getItem('quizProgress') || '0', 10);
-    const key = p >= 30 ? 30 : p >= 20 ? 20 : p >= 10 ? 10 : 0;
+    const key = p >= 30 ? 30 : p >= 20 ? 20 : p >= 10 ? 10 : p > 0 ? 1 : 0;
     const $   = id => document.getElementById(id);
 
     // Ring fill
     const C    = 201.1; // 2π × 32
-    const pcts = { 0: 0, 10: 0.333, 20: 0.667, 30: 1 };
+    const pcts = { 0: 0, 1: 0.05, 10: 0.333, 20: 0.667, 30: 1 };
     const ring = $('heroRingFill');
     if (ring) {
       ring.style.strokeDasharray  = C;
-      ring.style.strokeDashoffset = C * (1 - pcts[key]);
+      ring.style.strokeDashoffset = C * (1 - (pcts[key] ?? 0));
       if (key === 30) ring.style.stroke = '#f59e0b'; // gold = complete
     }
 
@@ -885,6 +885,9 @@ document.addEventListener('DOMContentLoaded', () => {
       0:  { emoji: '🚀', tagline: 'Discover your academic identity',
             title: 'What major are you interested in?',
             sub:   'Answer 30 questions and let AI find your perfect match.' },
+      1:  { emoji: '💪', tagline: 'Great start! Keep going',
+            title: 'You\'re on your way to finding your match',
+            sub:   `Answered ${p} question${p>1?'s':''}. Pick up where you left off!` },
       10: { emoji: '🔥', tagline: 'Quiz Stage 1 complete!',
             title: 'Your top discipline is revealed 🔥',
             sub:   'Keep going! 20 more questions to unlock your Major matches.' },
@@ -903,7 +906,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Buttons
     const BTNS = {
-      0:  { b1: 'Start Quiz →',    u1: '../../quiz/quiz-card/',          b2: null },
+      0:  { b1: 'Start Quiz →',    u1: '../../quiz/quiz-card/',                    b2: null },
+      1:  { b1: 'Continue Quiz →', u1: `../../quiz/quiz-card/?start=${p+1}`,       b2: null },
       10: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/?start=11',
             b2: { t: 'View Discipline Results ›', u: '../../discipline/match/' } },
       20: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/?start=21',
