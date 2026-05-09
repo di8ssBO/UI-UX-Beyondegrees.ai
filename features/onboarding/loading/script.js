@@ -673,7 +673,7 @@ const _urlParams = new URLSearchParams(window.location.search);
 const _STAGE = parseInt(_urlParams.get('stage') || '1', 10);
 const RESULT_MAP = {
   1: '../../discipline/match/',
-  2: '../../major/recommendations/',
+  2: '../../major/recommendations-v2/',
   3: '../../university/matches/'
 };
 const STAGE_Q_COUNT = { 1: 10, 2: 20, 3: 30 };
