@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html lang="vi">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Major Recommendations v2 — BeyonDegrees.ai</title>
-<script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,11 +10,11 @@
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="breadcrumb">
-  <a href="#" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
   <span class="breadcrumb-sep">/</span>
   <span class="breadcrumb-item active">Major Recommendations v2</span>
 </div>
@@ -56,59 +55,45 @@
       <!-- Locked State: hiện khi quizProgress < 20 -->
       <div class="locked-state" id="lockedState">
 
-        <!-- Quiz progress banner -->
-        <div class="quiz-progress-banner">
-          <div class="qpb-top">
-            <span class="qpb-label">⚡ Quiz Progress</span>
-            <span class="qpb-count" id="qpbCount">10/20 questions</span>
-          </div>
-          <div class="qpb-bar"><div class="qpb-fill" id="qpbFill" style="width:0%"></div></div>
-          <div class="qpb-sub">Hoàn thành <strong style="color:var(--text-primary)">10 câu tiếp theo</strong> để AI ghép bạn với Major phù hợp nhất.</div>
+        <!-- Lock banner (style giống university-matches) -->
+        <div style="margin:0 0 16px 0;padding:20px 16px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);border-radius:16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px">
+          <div style="font-size:28px">🔒</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text-primary)">Major Match Locked</div>
+          <div id="lockSubText" style="font-size:12px;color:var(--text-muted);line-height:1.5">Complete <strong style="color:var(--text-primary)">20 more questions</strong> to unlock your best-fit majors.</div>
+          <button id="lockCta" style="margin-top:4px;padding:12px 24px;background:linear-gradient(135deg,#7c3aed,#8b5cf6);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(124,58,237,.4)">Start Quiz &#8594;</button>
         </div>
 
-        <!-- Discipline context từ quiz 1 -->
-        <div class="disc-context-label">Discipline Results (quiz 1)</div>
-        <div class="disc-context-list" id="discContextList"></div>
-
-        <!-- Teaser major cards -->
-        <div class="teaser-label">
-          🔒 Major Match <span style="color:var(--text-disabled)">(locked)</span>
-        </div>
-        <div class="teaser-list">
-          <div class="teaser-card">
-            <div class="tc-left">
-              <div class="tc-ico">🤖</div>
-              <div><div class="tc-name">Artificial Intelligence</div><div class="tc-sub">Machine Learning & Neural Networks</div></div>
+        <!-- Teaser major cards (blurred) -->
+        <div style="opacity:0.22;filter:blur(2px);pointer-events:none;user-select:none">
+          <div class="teaser-list">
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">🤖</div><div><div class="tc-name">Artificial Intelligence</div><div class="tc-sub">Machine Learning & Neural Networks</div></div></div>
+              <span class="tc-pct">??%</span>
             </div>
-            <span class="tc-pct">??%</span>
-          </div>
-          <div class="teaser-card">
-            <div class="tc-left">
-              <div class="tc-ico">📊</div>
-              <div><div class="tc-name">Data Science</div><div class="tc-sub">Analysis & Insights</div></div>
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">📊</div><div><div class="tc-name">Data Science</div><div class="tc-sub">Analysis & Insights</div></div></div>
+              <span class="tc-pct">??%</span>
             </div>
-            <span class="tc-pct">??%</span>
-          </div>
-          <div class="teaser-card">
-            <div class="tc-left">
-              <div class="tc-ico">💻</div>
-              <div><div class="tc-name">Software Engineering</div><div class="tc-sub">Development & Architecture</div></div>
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">💻</div><div><div class="tc-name">Software Engineering</div><div class="tc-sub">Development & Architecture</div></div></div>
+              <span class="tc-pct">??%</span>
             </div>
-            <span class="tc-pct">??%</span>
-          </div>
-          <div class="teaser-overlay">
-            <div class="teaser-unlock-msg">🔒 Complete 10 more questions to see results</div>
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">🔬</div><div><div class="tc-name">Biotechnology</div><div class="tc-sub">Life Sciences & Research</div></div></div>
+              <span class="tc-pct">??%</span>
+            </div>
           </div>
         </div>
-
-        <button class="lock-cta-btn" id="lockCta">Continue Quiz &#8594;</button>
       </div>
 
+        <div id="mainContent" style="display:none">
         <div class="demand-chip">🔥 High Demand</div>
         <div class="ms-hl">Majors Made<br>For You</div>
-        <p class="ms-sub">Explore by discipline or view all your matching results.</p>
+        <p class="ms-sub">Discover majors tailored to your interests and strengths.</p>
 
         <!-- Filter Chips -->
+        <!-- fc-pct: % = max pct của major cao nhất trong discipline, inject bởi JS
+             Màu: #06d6a0=HIGH(≥70%) | #f59e0b=MID(40–69%) | #ef4444=LOW(<40%) -->
         <div class="filter-scroll" id="filterChips">
           <div class="fc active" data-disc="all">All</div>
           <div class="fc" data-disc="kt" style="--c:#7c3aed">
@@ -119,20 +104,20 @@
             <span class="fc-dot"></span>Natural Sci
             <span class="fc-pct"></span>
           </div>
-          <div class="fc" data-disc="xh" style="--c:#a855f7">
-            <span class="fc-dot"></span>Social Sci
-            <span class="fc-pct"></span>
-          </div>
-          <div class="fc" data-disc="nv" style="--c:#3b82f6">
-            <span class="fc-dot"></span>Humanities
-            <span class="fc-pct"></span>
-          </div>
           <div class="fc" data-disc="yt" style="--c:#06d6a0">
             <span class="fc-dot"></span>Medical
             <span class="fc-pct"></span>
           </div>
           <div class="fc" data-disc="nn" style="--c:#f59e0b">
             <span class="fc-dot"></span>Agricultural
+            <span class="fc-pct"></span>
+          </div>
+          <div class="fc" data-disc="xh" style="--c:#a855f7">
+            <span class="fc-dot"></span>Social Sci
+            <span class="fc-pct"></span>
+          </div>
+          <div class="fc" data-disc="nv" style="--c:#3b82f6">
+            <span class="fc-dot"></span>Humanities
             <span class="fc-pct"></span>
           </div>
         </div>
@@ -154,7 +139,7 @@
         <!-- No results -->
         <div id="no-results">
           <div class="nr-icon">🔍</div>
-          <div class="nr-text">No majors found for this filter</div>
+          <div class="nr-text">Không có major nào cho bộ lọc này</div>
         </div>
 
         <!-- Accordion: Top Picks -->
@@ -181,7 +166,7 @@
           <div class="acc-hdr" onclick="toggleAcc('mid')">
             <div class="acc-title-wrap">
               <span class="acc-icon">💡</span>
-              <span class="acc-title">Also a Good Fit</span>
+              <span class="acc-title">Also Fits</span>
               <span class="acc-count" id="cntMid">0</span>
             </div>
             <span class="acc-chevron">
@@ -211,7 +196,7 @@
           </div>
           <div class="acc-body" id="bodyLow">
             <div class="acc-inner" id="listLow"></div>
-            <div class="acc-hint">💬 These aren't your core strengths, but worth exploring if you're passionate.</div>
+            <div class="acc-hint">💬 Those majors are not your primary strengths, but you can still study them if you're passionate.</div>
           </div>
         </div>
 
@@ -219,6 +204,7 @@
         <div class="continue-wrap" id="continueWrap">
           <button class="continue-btn" id="continueBtn">Continue Quiz &#8594;</button>
         </div>
+        </div><!-- /mainContent -->
 
       </div><!-- /ms-body -->
 
@@ -244,7 +230,7 @@
             </span>
             <span class="tab-label">Disciplines</span>
           </a>
-          <a href="../../major/recommendations/" class="tab-item active" data-tab="t3">
+          <a href="./" class="tab-item active" data-tab="t3">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
@@ -268,7 +254,7 @@
                 <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label">Hoang Phuc</span>
+            <span class="tab-label">Hoàng Phúc</span>
           </a>
         </nav>
       </div>
@@ -292,34 +278,70 @@ const DISC = Object.fromEntries(
   }])
 );
 
+/* Điểm % của từng discipline — đồng bộ với discipline-match.html */
+const DISC_SCORES = JSON.parse(localStorage.getItem('discScores') || 'null')
+  || { kt:94, tn:89, yt:64, nn:62, xh:34, nv:32 };
+
 /* MAJORS array dùng trong render — pct sẽ được inject từ quiz results
-   Hiện tại dùng mock pct để preview UI */
+   Mock pct phản ánh profile: Engineering & Natural Sci cao nhất (75–94%),
+   Medical & Agricultural vừa phải (45–64%), Social Sci & Humanities thấp (14–34%) */
 const MOCK_PCT = {
-  // kt
-  'Aeronautics':74, 'Chemical engineering':62, 'Civil engineering':48,
-  'Electrical engineering, Electronic engineering, Information engineering':85,
-  'Engineering':91, 'Environmental biotechnology':55, 'Environmental engineering':58,
-  'Industrial biotechnology':52, 'Materials engineering':60, 'Mechanical engineering':65,
-  'Medical engineering':78, 'Nano-technology':70, 'Other engineering and technologies':45,
-  // tn
-  'Biological sciences':80, 'Chemical sciences':72, 'Computer and information sciences':88,
-  'Earth and related Environmental sciences':50, 'Mathematics':76,
-  'Mathematics and Statistics':82, 'Physical sciences':68,
-  // yt
-  'Basic medicine':44, 'Clinical medicine':55, 'Health sciences':66,
-  'Medical biotechnology':74, 'Nursing':50, 'Other medical sciences':42,
-  // nn
-  'Agricultural biotechnology':60, 'Agriculture, forestry and fishery':48,
-  'Animal and dairy science':40,
-  // xh
-  'Behavioral Sciences':72, 'Business':68, 'Economics and business':75,
-  'Education':50, 'Educational sciences':48, 'Helms School of Government':55,
-  'Law':38, 'Political science':45, 'Psychology':78,
-  'Sciences':42, 'Social and economic geography':36, 'Sociology':52,
-  // nv
-  'Arts and Sciences':58, 'Communication and the Arts':62, 'English':70,
-  'History':54, 'History and archaeology':48, 'Languages and literature':65,
-  'Music':46, 'Philosophy, ethics and religion':75, 'Sign Language and Interpreting':35,
+  // ── Engineering & Technology (kt) — HIGH 75–94% ──────────────
+  'Aeronautics':86,
+  'Chemical engineering':83,
+  'Civil engineering':77,
+  'Electrical engineering, Electronic engineering, Information engineering':94,
+  'Engineering':91,
+  'Environmental biotechnology':79,
+  'Environmental engineering':81,
+  'Industrial biotechnology':76,
+  'Materials engineering':84,
+  'Mechanical engineering':88,
+  'Medical engineering':82,
+  'Nano-technology':87,
+  'Other engineering and technologies':75,
+  // ── Natural Sciences (tn) — HIGH 78–89% ──────────────────────
+  'Biological sciences':86,
+  'Chemical sciences':84,
+  'Computer and information sciences':89,
+  'Earth and related Environmental sciences':79,
+  'Mathematics':92,
+  'Mathematics and Statistics':90,
+  'Physical sciences':87,
+  // ── Medical & Health Sciences (yt) — MID 45–64% ──────────────
+  'Basic medicine':50,
+  'Clinical medicine':56,
+  'Health sciences':62,
+  'Medical biotechnology':64,
+  'Nursing':47,
+  'Other medical sciences':45,
+  // ── Agricultural Sciences (nn) — MID 45–62% ──────────────────
+  'Agricultural biotechnology':62,
+  'Agriculture, forestry and fishery':50,
+  'Animal and dairy science':46,
+  // ── Social Sciences (xh) — LOW 14–34% ───────────────────────
+  'Behavioral Sciences':30,
+  'Business':28,
+  'Economics and business':34,
+  'Education':20,
+  'Educational sciences':18,
+  'Helms School of Government':24,
+  'Law':16,
+  'Political science':22,
+  'Psychology':32,
+  'Sciences':19,
+  'Social and economic geography':14,
+  'Sociology':26,
+  // ── Humanities (nv) — LOW 12–32% ─────────────────────────────
+  'Arts and Sciences':26,
+  'Communication and the Arts':22,
+  'English':30,
+  'History':20,
+  'History and archaeology':16,
+  'Languages and literature':24,
+  'Music':18,
+  'Philosophy, ethics and religion':32,
+  'Sign Language and Interpreting':12,
 };
 
 const MAJORS = MAJORS_DATA.map(m => ({
@@ -331,109 +353,68 @@ const MAJORS = MAJORS_DATA.map(m => ({
   tags: [],
 }));
 
-/* ── Discipline scores (synced with discipline-match screen) ──────────── */
-/* In production these come from localStorage; mock values used for preview */
-const DISC_SCORES = JSON.parse(localStorage.getItem('discScores') || 'null') || {
-  kt:92, tn:78, xh:65, nv:54, yt:81, nn:43
-};
-
 /* ── State ────────────────────────────────────────────────────────────── */
 let activeDisc  = 'all';
 const accState  = { top: true, mid: false, low: false };
+const CHEV = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>`;
 
+function quizResumeUrl(){
+  return p>0 ? '../../quiz/quiz-card/?start='+(p+1) : '../../quiz/quiz-card/';
+}
 /* ── Quiz progress ────────────────────────────────────────────────────── */
 const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
 
-/* ── Locked state: chưa làm quiz 2 ─────────────────────────────── */
+/* ── Locked state: quizProgress < 20 ───────────────────────────────── */
 if (progress < 20) {
-  // Hiện locked state
+  // Hiện locked state — mainContent đã display:none từ HTML, không cần ẩn thêm
   document.getElementById('lockedState').classList.add('show');
 
-  // Ẩn content chính (filter, hero, accordions, continue btn)
-  ['filterChips','heroCard','no-results',
-   'secTop','secMid','secLow','continueWrap'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = 'none';
-  });
-  // Ẩn các class-based elements ở đầu
-  ['.demand-chip','.ms-hl','.ms-sub'].forEach(sel => {
-    const el = document.querySelector(sel);
-    if (el) el.style.display = 'none';
+  // Cập nhật banner text theo mốc quiz
+  const lockCta  = document.getElementById('lockCta');
+  const lockSub  = document.getElementById('lockSubText');
+  if (progress < 10) {
+    if (lockSub) lockSub.innerHTML = 'Complete <strong style="color:var(--text-primary)">10 questions</strong> to unlock Discipline results first.';
+    if (lockCta) lockCta.innerHTML = 'Start Quiz &#8594;';
+  } else {
+    if (lockSub) lockSub.innerHTML = 'Complete <strong style="color:var(--text-primary)">10 more questions</strong> to unlock your best-fit majors.';
+    if (lockCta) lockCta.innerHTML = 'Continue Quiz &#8594;';
+  }
+  if (lockCta) {
+    const stage = progress < 10 ? 1 : 2;
+    lockCta.addEventListener('click', () => { window.location.href = quizResumeUrl(); });
+  }
+} else {
+  /* ── Unlocked: hiện main content, render danh sách major ── */
+  document.getElementById('mainContent').style.display = '';
+  render();
+  updateChipPcts();
+
+  /* ── Filter chip click handler ──────────────────────────────────── */
+  document.getElementById('filterChips').addEventListener('click', e => {
+    const chip = e.target.closest('.fc[data-disc]');
+    if (!chip) return;
+    document.querySelectorAll('.fc[data-disc]').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    activeDisc = chip.dataset.disc;
+    render();
   });
 
-  // Progress bar
-  const done = Math.min(progress, 20);
-  const pct  = Math.round(done / 20 * 100);
-  document.getElementById('qpbFill').style.width  = pct + '%';
-  document.getElementById('qpbCount').textContent = done + '/20 câu';
-
-  // Discipline context từ quiz 1 — sử dụng DISC_SCORES đã khai báo ở global scope
-  const discOrder = Object.entries(DISC_SCORES).sort((a,b) => b[1]-a[1]);
-  const discList  = document.getElementById('discContextList');
-  const DISC_META = {
-    kt:{name:'Engineering & Tech', icon:'⚙️'},
-    tn:{name:'Natural Sciences',   icon:'🔬'},
-    xh:{name:'Social Sciences',    icon:'🧠'},
-    nv:{name:'Humanities',         icon:'📜'},
-    yt:{name:'Medical & Health',   icon:'🩺'},
-    nn:{name:'Agricultural Sci',   icon:'🌱'},
-  };
-  discList.innerHTML = discOrder.map(([code, score]) => {
-    const d = DISC[code]; const m = DISC_META[code];
-    return `<div class="dc-row">
-      <span class="dc-row-ico">${m.icon}</span>
-      <div class="dc-row-info">
-        <div class="dc-row-name">${m.name}</div>
-        <div class="dc-row-bar">
-          <div class="dc-row-fill" style="width:${score}%;background:${d.color}"></div>
-        </div>
-      </div>
-      <span class="dc-row-pct" style="color:${d.color}">${score}%</span>
-    </div>`;
-  }).join('');
-
-  // CTA
-  document.getElementById('lockCta').addEventListener('click', () => {
-    window.location.href = '../../quiz/quiz-card/index.html?stage=2';
-  });
+  /* ── Finish Quiz / ẩn nút theo tiến độ ─────────────────────────── */
+  const continueWrap = document.getElementById('continueWrap');
+  const continueBtn  = document.getElementById('continueBtn');
+  if (progress >= 30) {
+    if (continueWrap) continueWrap.style.display = 'none';
+  } else {
+    /* 20-29: đổi thành "Finish Quiz" */
+    if (continueBtn) continueBtn.innerHTML = 'Finish Quiz &#8594;';
+    if (continueBtn) continueBtn.addEventListener('click', () => {
+      window.location.href = '../../quiz/quiz-card/?start=21';
+    });
+  }
 }
 
 /* ── Helpers ──────────────────────────────────────────────────────────── */
-const CHEV = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>`;
-
 function pctClass(p) { return p >= 70 ? 'pct-high' : p >= 40 ? 'pct-mid' : 'pct-low'; }
-
-/* ── Pct → colour mapping (High/Mid/Low) ─────────────────────────────── */
-/* Design system: mint-500=#06d6a0 | amber=#f59e0b | red=#ef4444 */
-function pctColor(pct) {
-  if (pct >= 70) return { color: '#06d6a0', rgb: '6,214,160'  };
-  if (pct >= 40) return { color: '#f59e0b', rgb: '245,158,11' };
-  return              { color: '#ef4444', rgb: '239,68,68'  };
-}
-
-/* ── Inject discipline % into filter chips ───────────────────────────── */
-/* % shown = discipline score from DISC_SCORES (synced with discipline-match.html) */
-function updateChipPcts() {
-  const scroll  = document.getElementById('filterChips');
-  const allChip = scroll.querySelector('.fc[data-disc="all"]');
-  const chips   = [...scroll.querySelectorAll('.fc[data-disc]:not([data-disc="all"])')];
-
-  chips.forEach(chip => {
-    const disc = chip.dataset.disc;
-    const pct  = DISC_SCORES[disc] ?? 0;
-    chip._discPct = pct;
-    const el = chip.querySelector('.fc-pct');
-    if (!el) return;
-    el.textContent = pct + '%';
-    el.style.color = pctColor(pct).color;
-  });
-
-  /* Sort chips high → low by disc score */
-  const order = Object.keys(DISC_SCORES);
-  chips.sort((a, b) => order.indexOf(a.dataset.disc) - order.indexOf(b.dataset.disc));
-  chips.forEach(chip => scroll.appendChild(chip));
-  if (allChip) scroll.insertBefore(allChip, scroll.firstChild);
-}
 
 function renderCard(m) {
   const d = DISC[m.disc];
@@ -458,7 +439,7 @@ function cardTap(el, majorId) {
   el.style.background = 'rgba(255,255,255,.06)';
   setTimeout(() => {
     el.style.background = '';
-    if (majorId) window.location.href = `../detail/index.html?id=${majorId}`;
+    if (majorId) window.location.href = `../detail/?id=${majorId}`;
   }, 140);
 }
 
@@ -467,7 +448,40 @@ function goToDetail(btn) {
   const id   = card && card.dataset.majorId;
   if (!id) return;
   btn.style.opacity = '.6';
-  setTimeout(() => { window.location.href = `../detail/index.html?id=${id}`; }, 120);
+  setTimeout(() => { window.location.href = `../detail/?id=${id}`; }, 120);
+}
+
+/* ── Pct → colour mapping (High/Mid/Low) ─────────────────────────────── */
+/* Màu theo design system: mint-500=#06d6a0 | amber=#f59e0b | red=#ef4444 */
+function pctColor(pct) {
+  if (pct >= 70) return { color: '#06d6a0', rgb: '6,214,160'   };
+  if (pct >= 40) return { color: '#f59e0b', rgb: '245,158,11'  };
+  return              { color: '#ef4444', rgb: '239,68,68'   };
+}
+
+/* ── Inject discipline % vào filter chip + sort theo DISC_SCORES ─────── */
+/* % hiển thị = điểm discipline từ DISC_SCORES (đồng bộ discipline-match.html),
+   không phải max major. Sort thứ tự giống discipline-match: kt>tn>xh>nv>yt>nn */
+function updateChipPcts() {
+  const scroll  = document.getElementById('filterChips');
+  const allChip = scroll.querySelector('.fc[data-disc="all"]');
+  const chips   = [...scroll.querySelectorAll('.fc[data-disc]:not([data-disc="all"])')];
+
+  chips.forEach(chip => {
+    const disc = chip.dataset.disc;
+    const pct  = DISC_SCORES[disc] ?? 0;
+    chip._discPct = pct;
+    const el = chip.querySelector('.fc-pct');
+    if (!el) return;
+    el.textContent = pct + '%';
+    el.style.color = pctColor(pct).color;
+  });
+
+  /* Sort theo thứ tự DISC_SCORES (cao → thấp) */
+  const order = Object.keys(DISC_SCORES);           /* kt,tn,xh,nv,yt,nn */
+  chips.sort((a, b) => order.indexOf(a.dataset.disc) - order.indexOf(b.dataset.disc));
+  chips.forEach(chip => scroll.appendChild(chip));
+  if (allChip) scroll.insertBefore(allChip, scroll.firstChild);
 }
 
 /* ── Filter + Render ──────────────────────────────────────────────────── */
@@ -494,7 +508,7 @@ function render() {
     const hero = filtered[0];
     const hd   = DISC[hero.disc];
     heroCard.dataset.majorId = hero.id;
-    /* Dynamic hero card colour based on match % */
+    /* Màu hero card theo % match: xanh lá ≥70%, vàng 40–69%, đỏ <40% */
     const pc = pctColor(hero.pct);
     heroCard.style.setProperty('--disc-rgb',   pc.rgb);
     heroCard.style.setProperty('--disc-color', pc.color);
@@ -558,17 +572,14 @@ if (progress >= 30) {
   continueWrap.style.display = 'none';
 } else {
   const stage = progress < 20 ? 2 : 3;
-  continueBtn.textContent = stage === 3 ? 'Hoàn thành Quiz ✨' : 'Tiếp tục Quiz →';
+  continueBtn.textContent = stage === 3 ? 'Finish Quiz ✨' : 'Continue Quiz →';
   continueBtn.addEventListener('click', () => {
-    window.location.href = `../../quiz/quiz-card/index.html?stage=${stage}`;
+    window.location.href = quizResumeUrl();
   });
 }
 
 /* ── Init ─────────────────────────────────────────────────────────────── */
-if (progress >= 20) {
-  render();
-  updateChipPcts();
-}
+if (progress >= 20) render();
 </script>
 <script src="../../../shared/scripts/tab-lock.js"></script>
 <script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
