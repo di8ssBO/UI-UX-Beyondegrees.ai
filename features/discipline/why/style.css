@@ -1,8 +1,8 @@
-/* discipline-why — screen-specific styles */
+﻿/* discipline-why — screen-specific styles */
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;-webkit-font-smoothing:antialiased}
-body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-sans)}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-body)}
 
 /* ── Desktop frame ── */
 .desktop-container{

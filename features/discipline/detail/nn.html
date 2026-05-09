@@ -38,7 +38,6 @@
 
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-
   /* Radius */
   --radius-sm:6px;--radius-md:10px;--radius-lg:16px;
   --radius-xl:20px;--radius-full:999px;
@@ -500,7 +499,7 @@ body{
 
 <!-- Breadcrumb (desktop) -->
 <div class="breadcrumb">
-  <a href="../../discipline/match/" class="breadcrumb-item">Disciplines</a>
+  <a href="../match/" class="breadcrumb-item">Disciplines</a>
   <span class="breadcrumb-separator">/</span>
   <span class="breadcrumb-item active">Agricultural Sciences</span>
 </div>
@@ -681,7 +680,7 @@ body{
             <span class="tab-label">About me</span>
           </a>
 
-          <a href="../../discipline/match/" class="tab-item active" data-tab="t2">
+          <a href="../match/" class="tab-item active" data-tab="t2">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -694,7 +693,7 @@ body{
             <span class="tab-label">Disciplines</span>
           </a>
 
-          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+          <a href="../../major/recommendations-v2/" class="tab-item" data-tab="t3">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -733,7 +732,7 @@ body{
   </div><!-- /device-frame -->
 </div><!-- /desktop-container -->
 
-<script src="../../major/majors-data.js"></script>
+<script src="../../../features/major/majors-data.js"></script>
 <script>
 // Scroll tới #careers nếu URL có anchor đó
 if (window.location.hash === '#careers') {
@@ -760,7 +759,7 @@ function getMatchPct(id){
         ? m.desc.slice(0, 60).replace(/\s\S+$/, '') + '…'
         : m.desc;
       var pct = getMatchPct(m.id);
-      return '<div class="major-card" style="cursor:pointer" onclick="location.href=\'../../major/detail/index.html?id=' + m.id + '\'">'
+      return '<div class="major-card" style="cursor:pointer" onclick="location.href=\'../../major/detail/?id=' + m.id + '\'">' 
         + '<div class="major-icon">' + m.icon + '</div>'
         + '<div class="major-info">'
         + '<div class="major-name">' + m.title + '</div>'
@@ -806,7 +805,7 @@ function getMatchPct(id){
      20-29 : Finish Quiz → stage=3
      >= 30 : ẩn nút (quiz hoàn thành)
      ─────────────────────────────────────────────────────────────────── */
-function quizResumeUrl(){var p=parseInt(localStorage.getItem('quizProgress')||'0',10);return p>0?'../../quiz/quiz-card/index.html?start='+(p+1):'../../quiz/quiz-card/';}
+function quizResumeUrl(){var p=parseInt(localStorage.getItem('quizProgress')||'0',10);return p>0?'quiz-card.html?start='+(p+1):'quiz-card.html';}
   const ctaBtn = document.querySelector('.cta-btn');
   if (ctaBtn) {
     if (progress >= 30) {

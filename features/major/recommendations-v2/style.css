@@ -1,4 +1,4 @@
-/* major-recommendations-v2 — screen-specific styles */
+﻿/* major-recommendations-v2 — screen-specific styles */
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -72,12 +72,12 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .fc.active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.28);
   color:var(--text-primary)}
 .fc .fc-dot{width:7px;height:7px;border-radius:50%;background:var(--c,#888);flex-shrink:0}
-/* fc-pct: % badge in filter chip — colour reflects match level
-   HIGH (≥70%): mint  |  MID (40–69%): amber  |  LOW (<40%): red */
+/* fc-pct: % badge trong filter chip — màu thể hiện mức độ match
+   HIGH (≥70%): violet/rose  |  MID (40–69%): #f97316 orange  |  LOW (<40%): #ef4444 red */
 .fc-pct{font-size:10px;font-weight:800;letter-spacing:.01em;opacity:.9;flex-shrink:0}
 
 /* ── Hero Major Card ──────────────────────────────────────────── */
-/* hero-maj uses --disc-rgb (set by JS on render) to shift colour per discipline */
+/* hero-maj sử dụng --disc-rgb (set qua JS khi render) để tự đổi màu theo discipline */
 .hero-maj{
   background:linear-gradient(135deg,rgba(var(--disc-rgb),.08) 0%,rgba(var(--disc-rgb),.14) 100%);
   border:1px solid rgba(var(--disc-rgb),.28);
@@ -270,9 +270,9 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 /* CTA continue */
 .lock-cta-btn { display:flex; align-items:center; justify-content:center; gap:8px;
   width:100%; padding:14px 20px;
-  background:linear-gradient(135deg,#1863DC,#0274BE); color:#fff;
+  background:linear-gradient(135deg,#7c3aed,#8b5cf6); color:#fff;
   border-radius:var(--radius-full); font-size:15px; font-weight:700;
-  border:none; cursor:pointer; box-shadow:0 4px 20px rgba(24,99,220,.45);
+  border:none; cursor:pointer; box-shadow:0 4px 20px rgba(124,58,237,.45);
   transition:transform .15s, opacity .15s; }
 .lock-cta-btn:active { transform:scale(0.97); opacity:.9; }
 
@@ -310,8 +310,8 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 [data-theme="light"] .ml-name { color:#1a1a2e }
 [data-theme="light"] .ml-sub { color:rgba(26,26,46,.40) }
 [data-theme="light"] .quiz-progress-banner {
-  background:rgba(24,99,220,.07);border-color:rgba(24,99,220,.20) }
-[data-theme="light"] .qpb-label { color:#1863DC }
+  background:rgba(124,58,237,.07);border-color:rgba(124,58,237,.20) }
+[data-theme="light"] .qpb-label { color:var(--violet-600) }
 [data-theme="light"] .qpb-bar { background:rgba(0,0,0,.07) }
 [data-theme="light"] .qpb-sub { color:rgba(26,26,46,.45) }
 [data-theme="light"] .dc-row-bar { background:rgba(0,0,0,.07) }
@@ -323,30 +323,3 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 [data-theme="light"] #no-results .nr-text { color:rgba(26,26,46,.40) }
 [data-theme="light"] .device-frame {
   border-color:#c4d0e8 !important }
-
-/* ── Light mode: floating tab bar ── */
-[data-theme="light"] .float-tab-bar {
-  background:rgba(255,255,255,0.92);
-  border-color:rgba(24,99,220,0.12);
-  box-shadow:0 4px 24px rgba(0,0,0,0.10); }
-[data-theme="light"] .tab-item { color:rgba(26,26,46,0.40) }
-[data-theme="light"] .tab-item:hover { color:#1a1a2e }
-[data-theme="light"] .tab-item.active {
-  background:rgba(24,99,220,0.10);
-  color:#1863DC;
-  border-color:rgba(24,99,220,0.22); }
-[data-theme="light"] .tab-icon svg { stroke:currentColor }
-
-/* ── Light mode: search button ── */
-[data-theme="light"] .ms-search-btn {
-  background:rgba(0,0,0,0.07);
-  border-color:rgba(0,0,0,0.12);
-  color:#1a1a2e; }
-
-/* ── Light mode: lock CTA + continue button ── */
-[data-theme="light"] .lock-cta-btn {
-  background:linear-gradient(135deg,#1863DC,#0274BE);
-  box-shadow:0 4px 20px rgba(24,99,220,0.35); }
-[data-theme="light"] #quiz-continue-wrap a {
-  background:linear-gradient(135deg,#1863DC,#0274BE) !important;
-  box-shadow:0 4px 20px rgba(24,99,220,0.35) !important; }
