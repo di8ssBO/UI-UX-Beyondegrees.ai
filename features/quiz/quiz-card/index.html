@@ -3362,11 +3362,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bindKeyboard();
   if ($undoBtn) $undoBtn.addEventListener('click', undoLast);
   if ($spectrumConfirmBtn) $spectrumConfirmBtn.addEventListener('click', confirmSpectrum);
-  // Keep self-tab link consistent with current batch
-  const _selfTab = document.getElementById('quizSelfTabLink');
-  if (_selfTab) {
-    _selfTab.href = START_IDX > 0 ? ('../../quiz/quiz-card/index.html?start=' + (START_IDX + 1)) : '../../quiz/quiz-card/';
-  }
+  // Disciplines tab always points to discipline/match/ — freely accessible at any time
 });
 
 /* ─────────────────────────────────────────
