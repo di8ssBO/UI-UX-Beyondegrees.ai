@@ -359,6 +359,7 @@ const accState  = { top: true, mid: false, low: false };
 const CHEV = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>`;
 
 function quizResumeUrl(){
+  const p = parseInt(localStorage.getItem('quizProgress')||'0', 10);
   return p>0 ? '../../quiz/quiz-card/?start='+(p+1) : '../../quiz/quiz-card/';
 }
 /* ── Quiz progress ────────────────────────────────────────────────────── */
@@ -564,22 +565,7 @@ document.getElementById('filterChips').addEventListener('click', e => {
   render();
 });
 
-/* ── Continue Quiz button ─────────────────────────────────────────────── */
-const continueWrap = document.getElementById('continueWrap');
-const continueBtn  = document.getElementById('continueBtn');
-
-if (progress >= 30) {
-  continueWrap.style.display = 'none';
-} else {
-  const stage = progress < 20 ? 2 : 3;
-  continueBtn.textContent = stage === 3 ? 'Finish Quiz ✨' : 'Continue Quiz →';
-  continueBtn.addEventListener('click', () => {
-    window.location.href = quizResumeUrl();
-  });
-}
-
-/* ── Init ─────────────────────────────────────────────────────────────── */
-if (progress >= 20) render();
+/* continueWrap/continueBtn handled in the if/else block above (lines ~402-413) */
 </script>
 <script src="../../../shared/scripts/tab-lock.js"></script>
 <script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
