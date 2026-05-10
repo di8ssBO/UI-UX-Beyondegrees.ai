@@ -486,7 +486,7 @@ function render(){
     </div>
 
     <!-- Why I Match -->
-    <a class="why-banner" href="discipline-why.html${discCode ? '?disc='+discCode : ''}">
+    <a class="why-banner" href="../../discipline/why/index.html${discCode ? '?disc='+discCode : ''}">
       <div class="why-icon-box">🔍</div>
       <div class="why-text">
         <div class="why-title">Why I match this major?</div>
@@ -532,7 +532,7 @@ document.addEventListener('DOMContentLoaded', render);
   if (progress >= 20 && progress < 30) {
     wrap.style.display = '';
     btn.addEventListener('click', function () {
-      var _p=parseInt(localStorage.getItem('quizProgress')||'0',10); window.location.href='quiz-card.html?start='+(_p>0?_p+1:21);
+      var _p=parseInt(localStorage.getItem('quizProgress')||'0',10); window.location.href='../../quiz/quiz-card/?start='+(_p>0?_p+1:1);
     });
   }
   /* progress < 20 hoặc >= 30: ẩn (display:none mặc định) */
