@@ -3695,8 +3695,11 @@ function recordAnswer(direction, answer) {
   saveQuizState();
 
   // Cập nhật quizProgress sau mỗi câu trả lời để các tab khác
-  // có thể hiển thị "Continue Quiz" ngay từ câu đầu tiên
-  const answered = START_IDX + state.answers.length;
+  // có thể hiển thị "Continue Quiz" ngay từ câu đầu tiên.
+  // Dùng state.currentIndex + 1 (absolute, 1-based) thay vì
+  // START_IDX + state.answers.length để tránh double-count khi
+  // loadQuizState() đã load các câu cũ vào state.answers.
+  const answered = state.currentIndex + 1;
   const prev = parseInt(localStorage.getItem('quizProgress') || '0', 10);
   if (answered > prev) localStorage.setItem('quizProgress', String(answered));
 }
