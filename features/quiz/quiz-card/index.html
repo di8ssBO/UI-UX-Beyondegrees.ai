@@ -3352,7 +3352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $undoBtn             = document.getElementById('undoBtn');
 
   state.currentIndex = START_IDX;
-  if (START_IDX > 0) { loadQuizState(); }
+  if (START_IDX > 0) { loadQuizState(); updateScoreboard(); }
   BGEngine.init(QUESTIONS[Math.min(START_IDX, QUESTIONS.length-1)].disc);
   buildStoryBar();
   if (START_IDX > 0) updateDNA();
