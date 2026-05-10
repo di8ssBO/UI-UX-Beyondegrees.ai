@@ -515,11 +515,12 @@ document.getElementById('resetConfirmBtn').addEventListener('click', function ()
     sessionStorage.removeItem('bd_scores');
     sessionStorage.removeItem('bd_nextStart');
   } catch(e) {}
+  try { sessionStorage.setItem('bd_reset_success', '1'); } catch(e) {}
   var btn = document.getElementById('resetConfirmBtn');
   btn.textContent = 'Resetting...';
   btn.style.opacity = '0.7';
   setTimeout(function () {
-    window.location.href = './quiz-card.html';
+    window.location.href = '../../onboarding/home/';
   }, 800);
 });
 </script>

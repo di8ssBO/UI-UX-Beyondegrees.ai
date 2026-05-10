@@ -944,6 +944,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // ── Show reset-success toast if coming from Reset Account ──────────
+  try {
+    if (sessionStorage.getItem('bd_reset_success') === '1') {
+      sessionStorage.removeItem('bd_reset_success');
+      setTimeout(() => Toast.success('Your account has been reset successfully.'), 400);
+    }
+  } catch(e) {}
 });
 
 </script>
