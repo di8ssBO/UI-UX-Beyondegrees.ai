@@ -298,7 +298,7 @@ function getMatchPct(id){
       const banner = document.createElement('div');
       banner.className = 'major-unlock-banner';
       banner.innerHTML = '<span class="ul-icon">🔒</span><span>Complete <strong>10 more quiz questions</strong> to unlock compatibility của từng Major</span>';
-      banner.addEventListener('click', () => { window.location.href = '../../quiz/quiz-card/index.html?stage=2'; });
+      banner.addEventListener('click', () => { window.location.href = quizResumeUrl(); });
       majorList.after(banner);
     }
   }
@@ -313,19 +313,24 @@ function getMatchPct(id){
     });
   }
 
-  /* ── CTA button: thay đổi theo tiến độ quiz ────────────────────────── */
+function quizResumeUrl(){var p=parseInt(localStorage.getItem('quizProgress')||'0',10);return p>0?'../../quiz/quiz-card/index.html?start='+(p+1):'../../quiz/quiz-card/';}
+  /* ── CTA button theo mốc quiz ─────────────────────────────────────────
+     === 0  : Start Quiz
+     1-29   : Continue Quiz
+     >= 30  : ẩn nút
+     ─────────────────────────────────────────────────────────────────── */
   const ctaBtn = document.querySelector('.cta-btn');
   if (ctaBtn) {
     if (progress >= 30) {
-      ctaBtn.innerHTML = 'Find Programs ' + ARROW_SVG;
-      ctaBtn.addEventListener('click', () => {
-        /* TODO: link tới trang Programs khi có */
-      });
+      ctaBtn.style.display = 'none';
     } else {
-      const stage = progress < 20 ? 2 : 3;
-      ctaBtn.innerHTML = 'Continue Quiz ' + ARROW_SVG;
+      let label;
+      if (progress === 0)      { label = 'Start Quiz'; }
+      else if (progress < 20)  { label = 'Continue Quiz'; }
+      else                     { label = 'Finish Quiz'; }
+      ctaBtn.innerHTML = label + ' ' + ARROW_SVG;
       ctaBtn.addEventListener('click', () => {
-        window.location.href = '../../quiz/quiz-card/index.html?stage=' + stage;
+        window.location.href = quizResumeUrl();
       });
     }
   }
