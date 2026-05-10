@@ -909,11 +909,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Buttons
     const BTNS = {
-      0:  { b1: 'Start Quiz →',    u1: '../../quiz/quiz-card/',                    b2: null },
-      1:  { b1: 'Continue Quiz →', u1: `../../quiz/quiz-card/?start=${p+1}`,       b2: null },
-      10: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/?start=11',
+      0:  { b1: 'Start Quiz →',    u1: '../../quiz/quiz-card/',                         b2: null },
+      1:  { b1: 'Continue Quiz →', u1: `../../quiz/quiz-card/?start=${p+1}`,            b2: null },
+      10: { b1: 'Continue Quiz →', u1: `../../quiz/quiz-card/?start=${p+1}`,
             b2: { t: 'View Discipline Results ›', u: '../../discipline/match/' } },
-      20: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/?start=21',
+      20: { b1: 'Continue Quiz →', u1: `../../quiz/quiz-card/?start=${p+1}`,
             b2: { t: 'View Major Results ›',      u: '../../major/recommendations-v2/' } },
       30: { b1: 'View Match →',    u1: '../../university/matches/',
             b2: { t: 'View University Results ›', u: '../../university/matches/' } },
