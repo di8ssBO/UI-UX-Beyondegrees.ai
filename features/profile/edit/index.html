@@ -509,6 +509,7 @@ resetModal.addEventListener('click', function (e) {
 });
 document.getElementById('resetConfirmBtn').addEventListener('click', function () {
   try { localStorage.removeItem('quizProgress'); } catch(e) {}
+  try { localStorage.removeItem('quizMilestone'); } catch(e) {}
   try {
     sessionStorage.removeItem('bd_dna');
     sessionStorage.removeItem('bd_answers');

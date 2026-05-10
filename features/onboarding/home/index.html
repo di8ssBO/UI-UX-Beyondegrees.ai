@@ -866,8 +866,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Progress-based state init ──────────────────────────────────────
   (function initProgress() {
-    const p   = parseInt(localStorage.getItem('quizProgress') || '0', 10);
-    const key = p >= 30 ? 30 : p >= 20 ? 20 : p >= 10 ? 10 : p > 0 ? 1 : 0;
+    const p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    const m = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    // milestone (10/20/30) chỉ thay đổi khi hoàn thành hẳn 1 batch qua loading screen
+    // progress (1...) thay đổi sau mỗi câu trả lời, chỉ dùng để detect "đã bắt đầu quiz"
+    const key = m >= 30 ? 30 : m >= 20 ? 20 : m >= 10 ? 10 : p > 0 ? 1 : 0;
     const $   = id => document.getElementById(id);
 
     // Ring fill

@@ -3691,6 +3691,9 @@ function recordAnswer(direction, answer) {
   const weight = DNA_WEIGHTS[answer] ?? 0;
   state.dna[q.disc] = Math.max(0, (state.dna[q.disc] || 0) + 1 + weight);
 
+  // Lưu state sau mỗi câu để score-row hiển thị tích lũy khi Continue Quiz
+  saveQuizState();
+
   // Cập nhật quizProgress sau mỗi câu trả lời để các tab khác
   // có thể hiển thị "Continue Quiz" ngay từ câu đầu tiên
   const answered = START_IDX + state.answers.length;

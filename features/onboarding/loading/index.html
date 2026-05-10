@@ -1157,6 +1157,10 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     const prev = parseInt(localStorage.getItem('quizProgress') || '0', 10);
     if (qDone > prev) localStorage.setItem('quizProgress', qDone);
+    // quizMilestone chỉ được set khi hoàn thành hẳn 1 batch (10/20/30 câu)
+    // home screen dùng milestone này để quyết định state hiển thị
+    const prevM = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    if (qDone > prevM) localStorage.setItem('quizMilestone', String(qDone));
   } catch(e) {}
 
   const elCount  = document.getElementById('qCount');
