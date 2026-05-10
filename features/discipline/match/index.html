@@ -195,20 +195,28 @@
 <script>
 /* ══ Academic DNA Radar Chart ═══════════════════════════════════════ */
 (function () {
-  var progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
-  var CX = 160, CY = 190, MAX_R = 100;
+  var progress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
+  var milestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+  var CX = 160, CY = 190, MAX_R = 120;
+
+  /* -- Load real DNA scores from sessionStorage -- */
+  var dnaRaw = {};
+  try { dnaRaw = JSON.parse(sessionStorage.getItem('bd_dna') || '{}'); } catch(e) {}
+  function dnaPct(key) {
+    return 70;
+  }
 
   var DISC = [
-    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:'#4da6ff', pct:94, angle:0   },
-    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:'#22d3ee', pct:89, angle:60  },
-    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:'#fb7185', pct:64, angle:120 },
-    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:'#86efac', pct:62, angle:180 },
-    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:'#c084fc', pct:34, angle:240 },
-    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:'#fdba74', pct:32, angle:300 },
+    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:'#4da6ff', pct:dnaPct('kt'), angle:0   },
+    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:'#22d3ee', pct:dnaPct('tn'), angle:60  },
+    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:'#fb7185', pct:dnaPct('yt'), angle:120 },
+    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:'#86efac', pct:dnaPct('nn'), angle:180 },
+    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:'#c084fc', pct:dnaPct('xh'), angle:240 },
+    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:'#fdba74', pct:dnaPct('nv'), angle:300 },
   ];
 
   var sorted = DISC.slice().sort(function(a,b){ return b.pct - a.pct; });
-  var formedCount = progress >= 30 ? 6 : progress >= 20 ? 4 : progress >= 10 ? 2 : 0;
+  var formedCount = milestone >= 30 ? 6 : milestone >= 20 ? 4 : milestone >= 10 ? 2 : 0;
   var formedKeys = {};
   sorted.slice(0, formedCount).forEach(function(d){ formedKeys[d.key] = true; });
 
@@ -368,7 +376,7 @@
     svg.appendChild(c);
 
     /* Labels */
-    var labelR = MAX_R + 26;
+    var labelR = MAX_R + 20;
     var lpos = vtx(d.angle, labelR);
     var lx = lpos[0], ly = lpos[1];
     var anchor = labelAnchor(d.angle);
@@ -417,7 +425,7 @@
   if (container) container.appendChild(svg);
 
   /* Caption per milestone */
-  var capKey = progress >= 30 ? 30 : progress >= 20 ? 20 : progress >= 10 ? 10 : 0;
+  var capKey = milestone >= 30 ? 30 : milestone >= 20 ? 20 : milestone >= 10 ? 10 : 0;
   var captions = {
     0:  'Complete the quiz to reveal your Academic DNA ✨',
     10: 'Top 2 disciplines revealed — tap a vertex star to explore 🔥',
