@@ -411,7 +411,7 @@ if (progress < 20) {
     /* 20-29: đổi thành "Finish Quiz" */
     if (continueBtn) continueBtn.innerHTML = 'Finish Quiz &#8594;';
     if (continueBtn) continueBtn.addEventListener('click', () => {
-      window.location.href = '../../quiz/quiz-card/?start=21';
+      window.location.href = quizResumeUrl();
     });
   }
 }
