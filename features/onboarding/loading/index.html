@@ -247,7 +247,7 @@ svg *, canvas, video, img { transition: none !important; }
 </head>
 <body>
 <div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
-    <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
     <span class="breadcrumb-separator">/</span>
     <a href="../../onboarding/home/" class="breadcrumb-item">Screens</a>
     <span class="breadcrumb-separator">/</span>
@@ -255,7 +255,7 @@ svg *, canvas, video, img { transition: none !important; }
   </div>
 
   <div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
-    <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
     <span class="breadcrumb-separator">/</span>
     <span class="breadcrumb-item active">AI Loading Screen</span>
   </div>
@@ -1224,10 +1224,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // React to OS theme changes
   window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
     var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
-    if (pref === 'system') bdSetTheme('system');
-  });
-})();
-</script>
-
-</body>
-</html>
+    if (pref === 'system') bdSetTheme
