@@ -4,10 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BeyonDegrees.ai — UI/UX Dashboard</title>
-  <link rel="stylesheet" href="./styles/tokens.css">
-  <link rel="stylesheet" href="./styles/base.css">
-  <link rel="stylesheet" href="./styles/components.css">
-  <link rel="stylesheet" href="./styles/animations.css">
+  <link rel="stylesheet" href="./design-system/tokens.css">
+  <link rel="stylesheet" href="./design-system/base.css">
+  <link rel="stylesheet" href="./design-system/components/interactive.css">
+  <link rel="stylesheet" href="./design-system/components/display.css">
+  <link rel="stylesheet" href="./design-system/components/navigation.css">
+  <link rel="stylesheet" href="./design-system/animations.css">
   <style>
     body { display:flex; flex-direction:column; min-height:100vh; gap:var(--space-6); }
     .header-container { background:linear-gradient(135deg,var(--violet-700) 0%,var(--violet-900) 100%); padding:var(--space-12) var(--space-6); text-align:center; border-bottom:1px solid var(--neutral-700); }
@@ -312,7 +314,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Violet &middot; Mint &middot; Neutrals</span>
-            <a href="./pages/design-system/color-palette.html" class="card-link">Mo file &rarr;</a>
+            <a href="./design-system/docs/color-palette.html" class="card-link">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card">
@@ -325,7 +327,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Plus Jakarta Sans</span>
-            <a href="./pages/design-system/typography-spacing.html" class="card-link">Mo file &rarr;</a>
+            <a href="./design-system/docs/typography.html" class="card-link">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card">
@@ -338,7 +340,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">20+ components</span>
-            <a href="./pages/design-system/component-library.html" class="card-link">Mo file &rarr;</a>
+            <a href="./design-system/docs/component-library.html" class="card-link">Mo file &rarr;</a>
           </div>
         </div>
       </div>
@@ -361,7 +363,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">390 x 844px &middot; Mobile</span>
-            <a href="./pages/screens/home-screen.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./features/onboarding/home/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card mint">
@@ -374,7 +376,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">30 questions &middot; 4 directions</span>
-            <a href="./pages/screens/quiz-card.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./features/quiz/quiz-card/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card mint">
@@ -387,7 +389,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">GenZ loading experience</span>
-            <a href="./pages/screens/loading-screen.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./features/onboarding/loading/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card mint">
@@ -400,7 +402,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Reveal animation &middot; Score cards</span>
-            <a href="./pages/screens/results-screen.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./features/results/match-reveal/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
       </div>
@@ -423,7 +425,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Match scores &middot; Career data</span>
-            <a href="./pages/screens/discipline-match.html" class="card-link coral">Mo file &rarr;</a>
+            <a href="./features/discipline/match/index.html" class="card-link coral">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card coral">
@@ -436,7 +438,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">AI-ranked majors</span>
-            <a href="./pages/screens/major-recommendations-v2.html" class="card-link coral">Mo file &rarr;</a>
+            <a href="./features/major/recommendations-v2/index.html" class="card-link coral">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card coral">
@@ -449,7 +451,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Admission fit &middot; Rankings</span>
-            <a href="./pages/screens/university-matches.html" class="card-link coral">Mo file &rarr;</a>
+            <a href="./features/university/matches/index.html" class="card-link coral">Mo file &rarr;</a>
           </div>
         </div>
       </div>
@@ -466,8 +468,8 @@ svg *, canvas, video, img { transition: none !important; }
     <p>BeyonDegrees.ai Frontend &mdash; Vanilla HTML/CSS/JS &middot; Week 02 &middot; 7 Screens</p>
   </footer>
 
-  <script src="./scripts/utils.js"></script>
-  <script src="./scripts/navigation.js"></script>
+  <script src="./shared/scripts/utils.js"></script>
+  <script src="./shared/scripts/navigation.js"></script>
 
 <script>
 (function() {
