@@ -1,0 +1,2588 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>University Detail — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../design-system/tokens.css">
+<link rel="stylesheet" href="../../../design-system/base.css">
+<link rel="stylesheet" href="../../../design-system/animations.css">
+<link rel="stylesheet" href="../../../design-system/layout.css">
+<style>
+/* ═══════════════════════════════════════════════════════
+   THEME — same blue-shifted dark as matches page
+═══════════════════════════════════════════════════════ */
+:root, :root[data-theme="dark"] {
+  --violet-950: #06091A; --violet-900: #0A0F28; --violet-800: #0F2060;
+  --violet-700: #1358C4; --violet-600: #1863DC; --violet-500: #0274BE;
+  --violet-400: #6BA3FF; --violet-300: #93BBFF; --violet-200: #B8D4FF;
+}
+*, *::before, *::after {
+  transition: background-color .3s, border-color .3s, color .2s, box-shadow .3s;
+}
+svg *, canvas, video, img { transition: none !important; }
+
+/* ── Breadcrumb ────────────────────────────────────── */
+.breadcrumb {
+  position: absolute; top: 0; left: 0;
+  display: flex; align-items: center; gap: 6px;
+  padding: 16px 24px 0; font-size: 12px;
+  z-index: 10;
+}
+.breadcrumb-item { color: var(--text-muted); text-decoration: none; }
+.breadcrumb-item.active { color: var(--text-secondary); }
+.breadcrumb-separator { color: var(--text-muted); }
+
+/* ── Page Shell ────────────────────────────────────── */
+html, body { margin: 0; padding: 0; }
+body {
+  background: #0a0a14;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ── Desktop container override (same as major/detail) ── */
+.desktop-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ── Page header ───────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 8px;
+  background: rgba(6,9,26,.85);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  flex-shrink: 0;
+}
+.btn-icon {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.09);
+  color: var(--text-primary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  font-size: 0; /* icon only */
+  transition: background .15s, border-color .15s !important;
+}
+.btn-icon:hover { background: rgba(255,255,255,.10); }
+.btn-icon.saved {
+  background: rgba(239,68,68,.12);
+  border-color: rgba(239,68,68,.28);
+}
+.page-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Scroll body ───────────────────────────────────── */
+.ud-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 8px;
+}
+.ud-body::-webkit-scrollbar { display: none; }
+
+/* ═══════════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════════ */
+.ud-hero {
+  position: relative;
+  height: 220px;
+  background: linear-gradient(135deg, #0f2060 0%, #0a0f28 50%, #0d2030 100%);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.ud-hero-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  z-index: 0; display: block;
+}
+.ud-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,.05) 0%,
+    rgba(0,0,0,.25) 45%,
+    rgba(6,6,15,.88) 100%
+  );
+  z-index: 1;
+}
+.ud-hero-aurora {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+}
+.ud-hero-aurora::before {
+  content: '';
+  position: absolute; top: -10%; left: -5%; width: 55%; height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(24,99,220,.22) 0%, transparent 70%);
+  filter: blur(35px);
+}
+.ud-hero-aurora::after {
+  content: '';
+  position: absolute; bottom: -10%; right: -10%; width: 45%; height: 45%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(6,214,160,.14) 0%, transparent 70%);
+  filter: blur(35px);
+}
+/* Match pill — top-right of hero */
+.ud-match-pill {
+  position: absolute;
+  top: 14px; right: 14px;
+  font-size: 18px; font-weight: 900; line-height: 1;
+  padding: 5px 11px; border-radius: 12px;
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 3; letter-spacing: -.4px;
+}
+.match-green  { color: #06D6A0; }
+.match-yellow { color: #FBBF24; }
+.match-red    { color: #F87171; }
+/* Logo + name at bottom of hero */
+.ud-hero-content {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 0 16px 14px;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  gap: 11px;
+}
+.ud-logo-wrap {
+  flex-shrink: 0;
+  width: 48px; height: 48px;
+  border-radius: 13px;
+  background: rgba(255,255,255,.97);
+  border: 2px solid rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,.50);
+  overflow: hidden;
+}
+.ud-logo-img { width: 40px; height: 40px; object-fit: contain; }
+.ud-logo-emoji { font-size: 26px; line-height: 1; }
+.ud-hero-info { flex: 1; min-width: 0; }
+.ud-hero-name {
+  font-size: 16px; font-weight: 900;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,.75);
+  line-height: 1.2; margin-bottom: 3px;
+}
+.ud-hero-loc {
+  font-size: 10px; font-weight: 600;
+  color: rgba(255,255,255,.60);
+}
+
+/* ═══════════════════════════════════════════════════════
+   AI MATCH BANNER
+═══════════════════════════════════════════════════════ */
+.ud-match-banner {
+  margin: 12px 14px 0;
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 14px;
+}
+.ud-mb-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.ai-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(24,99,220,.12);
+  border: 1px solid rgba(24,99,220,.25);
+  border-radius: 20px; padding: 3px 10px;
+  font-size: 9px; font-weight: 700;
+  color: var(--violet-300); letter-spacing: .08em; text-transform: uppercase;
+}
+.ud-mb-see {
+  font-size: 10px; font-weight: 700;
+  color: var(--violet-400); cursor: pointer;
+  background: none; border: none; font-family: inherit; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.ud-mb-score-row {
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px;
+}
+.ud-mb-pct {
+  font-size: 38px; font-weight: 900; line-height: 1; letter-spacing: -1.5px;
+}
+.ud-mb-sub {
+  font-size: 10px; font-weight: 600;
+  color: var(--text-muted); line-height: 1.5;
+}
+.ud-mb-bar-track {
+  height: 6px; border-radius: 20px;
+  background: rgba(255,255,255,.06);
+  overflow: hidden; margin-bottom: 10px;
+}
+.ud-mb-bar-fill {
+  height: 100%; border-radius: 20px;
+  transition: width .7s cubic-bezier(.34,1.56,.64,1) !important;
+}
+.bar-green  { background: linear-gradient(90deg, #06D6A0, #34d399); }
+.bar-yellow { background: linear-gradient(90deg, #FBBF24, #fde68a); }
+.bar-red    { background: linear-gradient(90deg, #F87171, #fca5a5); }
+.ud-mb-factors {
+  display: flex; gap: 5px; flex-wrap: wrap;
+}
+.ud-mb-factor {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 9px; border-radius: 20px;
+  font-size: 9px; font-weight: 700;
+  background: rgba(6,214,160,.10); border: 1px solid rgba(6,214,160,.22); color: #06D6A0;
+}
+.ud-mb-factor.weak { background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.20); color: #F87171; }
+.ud-mb-factor.mid  { background: rgba(251,191,36,.08);  border-color: rgba(251,191,36,.20);  color: #FBBF24; }
+
+/* ═══════════════════════════════════════════════════════
+   CONTENT SECTIONS
+═══════════════════════════════════════════════════════ */
+.ud-sections { padding: 10px 14px 0; }
+
+.ud-section {
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 10px;
+}
+.ud-sec-hd {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+}
+.ud-sec-icon {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.ud-sec-icon.violet { background: rgba(24,99,220,.15); }
+.ud-sec-icon.mint   { background: rgba(6,214,160,.12); }
+.ud-sec-icon.orange { background: rgba(249,115,22,.12); }
+.ud-sec-icon.pink   { background: rgba(236,72,153,.12); }
+.ud-sec-icon.blue   { background: rgba(59,130,246,.12); }
+.ud-sec-title {
+  font-size: 12px; font-weight: 800; color: var(--text-primary);
+}
+
+/* ── Location ─────────────────────────────────────── */
+.ud-loc-row { display: flex; align-items: center; gap: 10px; }
+.ud-loc-icon-wrap {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: rgba(24,99,220,.10); border: 1px solid rgba(24,99,220,.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.ud-loc-text { font-size: 12px; font-weight: 600; color: var(--text-secondary); line-height: 1.4; }
+.ud-loc-country { font-size: 10px; font-weight: 600; color: var(--text-muted); margin-top: 1px; }
+
+/* ── About ────────────────────────────────────────── */
+.ud-meta-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.ud-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px; border-radius: 20px;
+  font-size: 10px; font-weight: 700;
+}
+.ud-chip.priv { background: rgba(251,146,60,.10); border: 1px solid rgba(251,146,60,.25); color: #fb923c; }
+.ud-chip.pub  { background: rgba(6,214,160,.10);  border: 1px solid rgba(6,214,160,.25);  color: #06D6A0; }
+.ud-chip.intl { background: rgba(24,99,220,.12);  border: 1px solid rgba(24,99,220,.25);  color: var(--violet-300); }
+.ud-chip.rank { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.10); color: var(--text-secondary); }
+.ud-about-text {
+  font-size: 12px; font-weight: 500;
+  color: var(--text-secondary); line-height: 1.65; margin-bottom: 10px;
+}
+.ud-discover-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700; color: var(--violet-400); cursor: pointer;
+  background: none; border: none; font-family: inherit; padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Programs — card style mirrors major/recommendations-v2 ── */
+.ud-programs-list { display: flex; flex-direction: column; }
+.ml-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s ease;
+}
+.ml-item:last-child { border-bottom: none; }
+.ml-item:active { background: rgba(255,255,255,.04); }
+.ml-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+.ml-ico {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.ml-info { flex: 1; min-width: 0; }
+.disc-badge { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 2px; }
+.disc-badge .d-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--bc, #888); flex-shrink: 0;
+}
+.disc-badge .d-name {
+  font-size: 9px; font-weight: 700;
+  color: var(--bc, #888);
+  letter-spacing: .04em; text-transform: uppercase; opacity: .85;
+}
+.ml-name {
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ml-sub { font-size: 10px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+.ml-right { display: flex; align-items: center; gap: 4px; flex-shrink: 0; margin-left: 8px; }
+.ml-pct { font-size: 14px; font-weight: 800; }
+.pct-high { color: #06D6A0; }
+.pct-mid  { color: #fb923c; }
+.pct-low  { color: var(--text-muted); }
+.ud-view-all {
+  width: 100%; margin-top: 4px; padding: 10px;
+  border-radius: 11px;
+  background: rgba(24,99,220,.08);
+  border: 1px solid rgba(24,99,220,.18);
+  color: var(--violet-300);
+  font-size: 11px; font-weight: 700; font-family: inherit;
+  text-align: center; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  display: block; text-decoration: none;
+  transition: background .15s !important;
+}
+.ud-view-all:hover { background: rgba(24,99,220,.14); }
+
+/* ── Stats grid ───────────────────────────────────── */
+.ud-stats-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
+}
+.ud-stat-card {
+  padding: 10px 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px;
+}
+.ud-stat-lbl {
+  font-size: 8px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-muted); margin-bottom: 4px;
+}
+.ud-stat-val { font-size: 13px; font-weight: 900; color: var(--text-primary); line-height: 1.2; }
+.ud-stat-val.accent { color: #06D6A0; }
+.ud-stat-sub { font-size: 9px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+
+/* ── Aid badge ────────────────────────────────────── */
+.ud-aid-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: 20px;
+  font-size: 11px; font-weight: 700; margin-bottom: 10px;
+}
+.ud-aid-badge.full  { background: rgba(6,214,160,.14); border: 1px solid rgba(6,214,160,.30); color: #06D6A0; }
+.ud-aid-badge.need  { background: rgba(249,115,22,.12); border: 1px solid rgba(249,115,22,.25); color: #fb923c; }
+.ud-aid-badge.merit { background: rgba(24,99,220,.12);  border: 1px solid rgba(24,99,220,.25);  color: var(--violet-300); }
+.ud-aid-text {
+  font-size: 11px; font-weight: 500;
+  color: var(--text-secondary); line-height: 1.55;
+}
+.ud-loan-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 11px; margin-top: 10px;
+}
+.ud-loan-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: rgba(251,191,36,.10);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.ud-loan-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-muted); }
+.ud-loan-val   { font-size: 12px; font-weight: 700; color: var(--text-primary); margin-top: 1px; }
+
+/* ── Campus life ──────────────────────────────────── */
+.ud-life-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.ud-life-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 5px 10px; border-radius: 20px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+  font-size: 10px; font-weight: 700; color: var(--text-secondary);
+}
+.ud-life-text { font-size: 11px; font-weight: 500; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── Admissions ───────────────────────────────────── */
+.ud-admit-stats {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px;
+}
+.ud-admit-stat {
+  padding: 10px 8px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+  border-radius: 12px; text-align: center;
+}
+.ud-admit-val { font-size: 15px; font-weight: 900; color: var(--text-primary); line-height: 1.2; }
+.ud-admit-lbl {
+  font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--text-muted); margin-top: 3px;
+}
+.ud-site-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.06);
+  border-radius: 11px; margin-bottom: 10px;
+}
+.ud-site-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(24,99,220,.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.ud-site-url {
+  flex: 1; font-size: 11px; font-weight: 600;
+  color: var(--violet-400);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* Apply CTA */
+.ud-apply-btn {
+  width: 100%; padding: 14px;
+  border-radius: 14px; font-size: 14px; font-weight: 800;
+  font-family: inherit; text-align: center;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  border: none; color: #fff; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 6px 22px rgba(24,99,220,.40);
+  display: block; letter-spacing: .01em;
+  transition: opacity .15s !important;
+}
+.ud-apply-btn:active { opacity: .85; }
+
+/* ── Immigration ──────────────────────────────────── */
+.ud-divider { height: 1px; background: rgba(255,255,255,.05); margin: 10px 0; }
+.ud-support-text { font-size: 11px; font-weight: 500; color: var(--text-secondary); line-height: 1.65; }
+
+/* ── Tab bar wrap ─────────────────────────────────── */
+.tab-bar-wrap {
+  padding: 6px 10px 12px;
+  flex-shrink: 0;
+}
+
+/* ── Wave animations (for major-in-uni hero) ───────── */
+@keyframes waveFlow{0%{transform:translateX(0) skewY(-2deg) scaleY(1)}50%{transform:translateX(-8%) skewY(0deg) scaleY(1.05)}100%{transform:translateX(0) skewY(-2deg) scaleY(1)}}
+@keyframes waveFlow2{0%{transform:translateX(0) skewY(1deg)}50%{transform:translateX(6%) skewY(-1deg)}100%{transform:translateX(0) skewY(1deg)}}
+
+/* ── Major-in-Uni view ─────────────────────────────── */
+.udm-hero{position:relative;height:190px;overflow:hidden;flex-shrink:0;background:#ffffff;margin:0 16px;border-radius:18px}
+.udm-aurora{display:none}
+.udm-waves{display:none}
+.udm-hero-logo-fill{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center center;z-index:0}
+.udm-hero-emoji-fill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;background:linear-gradient(135deg,#0f2060 0%,#0a0f28 100%);z-index:0}
+.udm-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,transparent 35%,rgba(6,4,14,.80) 100%)}
+.udm-label{position:absolute;bottom:0;left:0;right:0;padding:0 16px 16px;z-index:2}
+.udm-uni-tag{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--disc-light);background:var(--disc-bg);border:1px solid var(--disc-border);border-radius:20px;padding:3px 10px;margin-bottom:7px}
+.udm-major-name{font-size:20px;font-weight:900;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.70);line-height:1.2}
+.udm-disc-tag{display:inline-flex;align-items:center;gap:4px;margin-top:7px;font-size:10px;font-weight:700;color:var(--disc-light);background:var(--disc-bg);border:1px solid var(--disc-border);border-radius:20px;padding:3px 10px}
+.udm-body{padding:14px 14px 8px}
+.udm-desc{font-size:13px;color:var(--text-secondary);line-height:1.65;margin-bottom:14px}
+.udm-bullets{margin-bottom:16px}
+.udm-bullet{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--text-secondary);line-height:1.55;margin-bottom:8px}
+.udm-bullet-chk{width:18px;height:18px;border-radius:50%;background:var(--disc-bg);border:1px solid var(--disc-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.udm-bullet-chk svg{width:10px;height:10px}
+.udm-sec-hd{font-size:13px;font-weight:800;color:var(--text-primary);margin-bottom:10px}
+.udm-spec-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.udm-spec-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .15s,border-color .15s}
+.udm-spec-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.14)}
+.udm-spec-icon{width:36px;height:36px;border-radius:10px;background:var(--disc-bg);border:1px solid var(--disc-border);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.udm-spec-info{flex:1;min-width:0}
+.udm-spec-name{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:3px}
+.udm-spec-sub{font-size:11px;color:var(--text-muted);line-height:1.4;margin-bottom:5px}
+.udm-spec-tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid}
+.udm-spec-chev{color:var(--text-muted);flex-shrink:0}
+.udm-hero-logo{
+  position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  width:56px;height:56px;border-radius:16px;
+  background:rgba(255,255,255,.97);
+  border:1.5px solid rgba(255,255,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  padding:9px;
+  z-index:3;overflow:hidden;
+  box-shadow:0 4px 20px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.20) inset;
+}
+
+.udm-hero-logo-emoji{font-size:24px;line-height:1}
+
+/* ── Spec-in-Uni view ───────────────────────────────── */
+.sius-hero{position:relative;margin:0 16px 0;height:180px;border-radius:18px;overflow:hidden;flex-shrink:0;background:#ffffff}
+.sius-hero-aurora{display:none}
+.sius-hero-logo-fill{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center center;z-index:0}
+.sius-hero-emoji-fill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;background:linear-gradient(135deg,#0f2060 0%,#0a0f28 100%);z-index:0}
+.sius-hero-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,transparent 35%,rgba(6,4,14,.82) 100%)}
+.sius-hero-content{position:absolute;inset:0;padding:16px 18px;display:flex;flex-direction:column;justify-content:flex-end;z-index:2}
+.sius-icon-wrap{width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px}
+.sius-name{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.2;margin-bottom:7px}
+.sius-tags{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.sius-tag-parent{display:inline-flex;align-items:center;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:rgba(255,255,255,.80)}
+.sius-tag-spec{display:inline-flex;align-items:center;background:var(--disc-bg);border:1px solid var(--disc-border);border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--disc-light)}
+
+.sius-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:14px 16px 80px}
+.sius-body::-webkit-scrollbar{display:none}
+
+/* apply / link row */
+.sius-link-row{display:flex;align-items:center;gap:10px;background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:10px 13px;margin-bottom:8px}
+.sius-link-icon{width:28px;height:28px;border-radius:7px;background:rgba(24,99,220,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.sius-link-url{flex:1;font-size:11px;font-weight:600;color:var(--violet-400,#6ba3ff);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sius-apply-btn{padding:7px 14px;border-radius:10px;font-size:12px;font-weight:800;border:none;background:linear-gradient(90deg,#1863DC,#0274BE);color:#fff;cursor:pointer;flex-shrink:0;font-family:inherit;text-decoration:none;display:inline-flex;align-items:center}
+
+/* contact rows */
+.sius-contact-block{background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:4px 14px;margin-bottom:12px}
+.sius-contact-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.sius-contact-row:last-child{border-bottom:none}
+.sius-contact-lbl{font-size:9px;font-weight:700;color:var(--text-muted);width:72px;flex-shrink:0;padding-top:2px;text-transform:uppercase;letter-spacing:.05em}
+.sius-contact-val{font-size:12px;font-weight:600;color:var(--text-secondary);flex:1;line-height:1.55}
+
+/* top-unis cards */
+.sius-top-uni{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:13px 14px;margin-bottom:10px;transition:background .15s,border-color .15s,transform .12s !important}
+.sius-top-uni:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.18);transform:translateY(-1px)}
+.sius-top-uni-hdr{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.sius-top-uni-logo{width:36px;height:36px;border-radius:9px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;overflow:hidden;border:1px solid rgba(255,255,255,.10)}
+.sius-top-uni-logo img{width:100%;height:100%;object-fit:contain;padding:4px}
+.sius-top-uni-info{flex:1;min-width:0}
+.sius-top-uni-name{font-size:13px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sius-top-uni-loc{font-size:10px;color:var(--text-muted);margin-top:2px}
+.sius-top-uni-match{font-size:13px;font-weight:900;border-radius:20px;padding:2px 8px;flex-shrink:0;border:1px solid}
+.sius-top-uni-type{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid;display:inline-block;margin-bottom:9px}
+.sius-top-uni-stats{display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;margin-bottom:9px;background:rgba(255,255,255,.03);border-radius:9px;padding:8px 4px}
+.sius-top-stat{display:flex;flex-direction:column;align-items:center;gap:2px}
+.sius-top-stat-val{font-size:9.5px;font-weight:700;color:var(--text-primary);text-align:center;line-height:1.2}
+.sius-top-stat-lbl{font-size:9px;color:var(--text-muted);text-align:center}
+.sius-top-stat-div{background:rgba(255,255,255,.08)}
+.sius-top-uni-progs{display:flex;flex-wrap:wrap;gap:4px}
+.sius-top-uni-prog{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);color:var(--text-muted)}
+
+/* uni info card */
+.sius-uni-card{display:flex;align-items:center;gap:12px;background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px 14px;margin-bottom:12px}
+.sius-uni-logo{width:48px;height:48px;border-radius:11px;background:#fff;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:22px}
+.sius-uni-logo-img{width:100%;height:100%;object-fit:contain;padding:5px}
+.sius-uni-info{flex:1;min-width:0}
+.sius-uni-name{font-size:13px;font-weight:800;color:var(--text-primary);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sius-uni-loc{font-size:10px;color:var(--text-muted)}
+
+/* degree programs */
+.sius-deg-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.sius-deg-chip{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);font-size:11px;color:var(--text-secondary)}
+.sius-deg-chip b{font-weight:800;color:var(--text-primary);font-size:11px}
+.sius-deg-dur{font-size:10px;color:var(--text-muted);margin-left:2px}
+
+/* stats */
+.sius-stats{display:flex;align-items:stretch;background:var(--bg-surface);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:14px 0;margin-bottom:12px}
+.sius-stat{flex:1;text-align:center;padding:0 6px}
+.sius-stat-div{width:1px;background:rgba(255,255,255,.07);flex-shrink:0;margin:4px 0}
+.sius-stat-lbl{font-size:9px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.sius-stat-val{font-size:18px;font-weight:900;color:var(--text-primary);line-height:1}
+.sius-stat-val.accent{color:var(--disc-light,#a78bfa)}
+.sius-stat-sub{font-size:10px;color:var(--text-muted);margin-top:2px}
+
+/* section */
+.sius-sec{margin-bottom:16px}
+.sius-sec-hd{font-size:13px;font-weight:800;color:var(--text-primary);margin-bottom:10px}
+.sius-desc{font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px}
+.sius-career-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}
+.sius-career-tag{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--disc-bg);border:1px solid var(--disc-border);color:var(--disc-light)}
+.sius-skills-lbl{font-size:10px;font-weight:700;color:var(--text-muted);margin:10px 0 6px;text-transform:uppercase;letter-spacing:.05em}
+.sius-chips{display:flex;flex-wrap:wrap;gap:5px}
+.sius-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.10);color:var(--text-secondary)}
+.sius-tool-chip{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(var(--disc-primary-rgb,124,58,237),.08);border:1px solid var(--disc-border);color:var(--disc-light)}
+
+/* accordion (reuse udm pattern) */
+.sius-acc-item{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-bottom:8px;overflow:hidden}
+.sius-acc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;gap:10px}
+.sius-acc-head-left{display:flex;align-items:center;gap:8px}
+.sius-acc-icon{font-size:15px}
+.sius-acc-title{font-size:13px;font-weight:700;color:var(--text-primary)}
+.sius-acc-arrow{color:var(--text-muted);transition:transform .2s ease;flex-shrink:0}
+.sius-acc-item.open .sius-acc-arrow{transform:rotate(180deg)}
+.sius-acc-body{display:none;padding:0 14px 12px;font-size:12px;color:var(--text-secondary);line-height:1.65}
+.sius-acc-item.open .sius-acc-body{display:block}
+
+/* ── Why-Match view ─────────────────────────────────── */
+.uwm-hero{margin:12px 14px 12px;border-radius:18px;
+  background:linear-gradient(135deg,var(--uwm-dark,#064e3b) 0%,var(--bg-elevated,#0f0f1e) 100%);
+  border:1px solid var(--disc-border);padding:18px 18px 16px;
+  position:relative;overflow:hidden;flex-shrink:0}
+.uwm-hero::before{content:'';position:absolute;top:-40%;right:-15%;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--disc-glow) 0%,transparent 70%);pointer-events:none}
+.uwm-hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.uwm-disc-label{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;
+  color:var(--disc-light);letter-spacing:.06em;text-transform:uppercase;line-height:1.3}
+.uwm-disc-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;
+  background:var(--disc-primary);box-shadow:0 0 6px var(--disc-glow)}
+.uwm-pct{font-size:36px;font-weight:900;color:var(--disc-lighter);line-height:1;letter-spacing:-.04em}
+.uwm-pct-label{font-size:10px;font-weight:600;color:var(--disc-light);
+  letter-spacing:.08em;text-transform:uppercase;text-align:right;margin-top:2px;opacity:.8}
+.uwm-insight{font-size:12px;line-height:1.6;color:rgba(255,255,255,.75);
+  border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+.uwm-insight-tag{display:inline-flex;align-items:center;gap:4px;
+  background:var(--disc-bg);border:1px solid var(--disc-border);border-radius:20px;
+  padding:2px 8px;font-size:9px;font-weight:700;color:var(--disc-light);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+.uwm-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;padding:0 14px 12px}
+.uwm-body::-webkit-scrollbar{display:none}
+.uwm-sec-hd{font-size:10px;font-weight:700;color:var(--text-muted);
+  letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px}
+.uwm-score-wrap{background:var(--bg-surface);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:14px 16px;margin-bottom:4px}
+.uwm-score-title{font-size:10px;font-weight:700;color:var(--text-muted);
+  letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.uwm-score-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.uwm-score-row:last-child{margin-bottom:0}
+.uwm-score-label{font-size:10px;font-weight:600;color:var(--text-secondary);width:78px;flex-shrink:0}
+.uwm-score-track{flex:1;height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden}
+.uwm-score-fill{height:100%;border-radius:3px;transition:width .65s cubic-bezier(.34,1.2,.64,1)}
+.uwm-fill-agree   {background:linear-gradient(90deg,#06d6a0,#34d399)}
+.uwm-fill-strong  {background:linear-gradient(90deg,var(--disc-primary),var(--disc-light))}
+.uwm-fill-neutral {background:linear-gradient(90deg,#6b6b9a,#9d9dbf)}
+.uwm-fill-disagree{background:linear-gradient(90deg,#f43f5e,#fb7185)}
+.uwm-score-val{font-size:10px;font-weight:700;color:var(--text-muted);width:14px;text-align:right}
+.uwm-assertions{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.uwm-ac{background:var(--bg-surface);border:1px solid rgba(255,255,255,.07);
+  border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;
+  position:relative;overflow:hidden;animation:uwmSlide .3s ease both}
+@keyframes uwmSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.uwm-ac::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:14px 0 0 14px}
+.uwm-ac.uwm-agree::before   {background:#06d6a0;opacity:.8}
+.uwm-ac.uwm-strong::before  {background:var(--disc-primary);opacity:1;box-shadow:0 0 6px var(--disc-glow)}
+.uwm-ac.uwm-disagree::before{background:#f43f5e;opacity:.7}
+.uwm-ac.uwm-neutral::before {background:#6b6b9a;opacity:.6}
+.uwm-ac-text{font-size:12px;line-height:1.55;color:var(--text-primary);padding-left:4px}
+.uwm-ac-footer{display:flex;align-items:center;justify-content:space-between;padding-left:4px}
+.uwm-ac-num{font-size:10px;color:var(--text-muted);font-weight:600}
+.uwm-badge{display:inline-flex;align-items:center;border-radius:20px;
+  padding:3px 10px;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase}
+.uwm-b-agree   {background:rgba(6,214,160,.15);border:1px solid rgba(6,214,160,.35);color:#34d399}
+.uwm-b-strong  {background:var(--disc-bg);border:1px solid var(--disc-border);color:var(--disc-light)}
+.uwm-b-disagree{background:rgba(244,63,94,.13);border:1px solid rgba(244,63,94,.30);color:#fb7185}
+.uwm-b-neutral {background:rgba(107,107,154,.15);border:1px solid rgba(107,107,154,.30);color:#9d9dbf}
+.uwm-back-btn{width:100%;margin-bottom:8px;padding:12px;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  color:var(--text-secondary);font-size:12px;font-weight:700;font-family:inherit;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  display:flex;align-items:center;justify-content:center;gap:6px}
+</style>
+</head>
+<body>
+
+<!-- Breadcrumb (desktop only) -->
+<div class="breadcrumb">
+  <a href="../matches/" class="breadcrumb-item">Universities</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-item active" id="bcTitle">Detail</span>
+</div>
+
+<div class="desktop-container">
+  <div class="device-frame">
+    <div class="device-notch"></div>
+    <div class="mobile-screen" id="app">
+
+      <!-- Status bar -->
+      <div class="status-bar">
+        <span id="timeDisplay">9:41</span>
+        <div class="status-icons">
+          <svg width="16" height="11" viewBox="0 0 16 11" fill="none">
+            <rect x="0"    y="3"   width="3"   height="8"    rx="1" fill="currentColor" opacity=".4"/>
+            <rect x="4.5"  y="2"   width="3"   height="9"    rx="1" fill="currentColor" opacity=".6"/>
+            <rect x="9"    y="0.5" width="3"   height="10.5" rx="1" fill="currentColor" opacity=".8"/>
+            <rect x="13.5" y="0"   width="2.5" height="11"   rx="1" fill="currentColor"/>
+          </svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor">
+            <path d="M8 2.4C10.2 2.4 12.2 3.4 13.5 5L15 3.5C13.3 1.4 10.8 0 8 0 5.2 0 2.7 1.4 1 3.5L2.5 5C3.8 3.4 5.8 2.4 8 2.4Z" opacity=".4"/>
+            <path d="M8 5.6C9.4 5.6 10.7 6.2 11.6 7.2L13.1 5.7C11.8 4.3 10 3.5 8 3.5 6 3.5 4.2 4.3 2.9 5.7L4.4 7.2C5.3 6.2 6.6 5.6 8 5.6Z" opacity=".7"/>
+            <circle cx="8" cy="10" r="2"/>
+          </svg>
+          <svg width="22" height="11" viewBox="0 0 22 11" fill="none">
+            <rect x="0" y="1" width="18" height="9" rx="3" stroke="currentColor" stroke-width="1.2" opacity=".5"/>
+            <rect x="1.5" y="2.5" width="12" height="6" rx="1.5" fill="currentColor" opacity=".7"/>
+            <path d="M19.5 3.5 Q21 4 21 5.5 Q21 7 19.5 7.5" stroke="currentColor" stroke-width="1.2" fill="none" opacity=".5"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Page header -->
+      <div class="page-header">
+        <a href="../matches/" class="btn-icon" id="backBtn" aria-label="Back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+        </a>
+        <span class="page-title" id="headerTitle">University</span>
+        <button class="btn-icon" id="saveBtn" onclick="toggleSave()" aria-label="Save">
+          <svg id="heartIcon" width="17" height="17" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <button class="btn-icon" onclick="shareUni()" aria-label="Share" style="margin-left:2px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Scrollable body -->
+      <div class="ud-body" id="udBody">
+
+        <!-- HERO -->
+        <div class="ud-hero" id="udHero">
+          <div class="ud-hero-aurora"></div>
+          <div class="ud-hero-overlay"></div>
+          <div class="ud-match-pill" id="udMatchPill">—</div>
+          <div class="ud-hero-content">
+            <div class="ud-logo-wrap" id="udLogoWrap">
+              <span class="ud-logo-emoji" id="udLogoEmoji">🎓</span>
+            </div>
+            <div class="ud-hero-info">
+              <div class="ud-hero-name" id="udHeroName">University Name</div>
+              <div class="ud-hero-loc"  id="udHeroLoc">Location</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI MATCH BANNER -->
+        <div class="ud-match-banner">
+          <div class="ud-mb-top">
+            <span class="ai-chip">
+              <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
+                <path d="M5 1L6.2 3.5L9 3.8L7 5.7L7.5 8.5L5 7.2L2.5 8.5L3 5.7L1 3.8L3.8 3.5Z" fill="currentColor"/>
+              </svg>
+              AI Match
+            </span>
+            <button class="ud-mb-see" onclick="renderWhyMatch(_currentUni)">Why match →</button>
+          </div>
+          <div class="ud-mb-score-row">
+            <span class="ud-mb-pct" id="udMbPct">—</span>
+            <span class="ud-mb-sub">Overall<br>match score</span>
+          </div>
+          <div class="ud-mb-bar-track">
+            <div class="ud-mb-bar-fill" id="udMbBarFill" style="width:0%"></div>
+          </div>
+          <div class="ud-mb-factors" id="udMbFactors"></div>
+        </div>
+
+        <!-- SECTIONS -->
+        <div class="ud-sections">
+
+          <!-- Location -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon violet">📍</div>
+              <div class="ud-sec-title">Location</div>
+            </div>
+            <div class="ud-loc-row">
+              <div class="ud-loc-icon-wrap" id="udLocFlag">🌍</div>
+              <div>
+                <div class="ud-loc-text" id="udLocText">—</div>
+                <div class="ud-loc-country" id="udLocCountry">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon violet">🏛️</div>
+              <div class="ud-sec-title">About</div>
+            </div>
+            <div class="ud-meta-chips" id="udMetaChips"></div>
+            <div class="ud-about-text" id="udAboutText">—</div>
+            <button class="ud-discover-link">Discover more →</button>
+          </div>
+
+          <!-- Programs -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon mint">📚</div>
+              <div class="ud-sec-title">Majors Offered</div>
+            </div>
+            <div class="ud-programs-list" id="udPrograms" style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden"></div>
+            <div id="udViewAllWrap"></div>
+          </div>
+
+          <!-- Tuition & Financials -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon orange">💰</div>
+              <div class="ud-sec-title">Tuition & Financials</div>
+            </div>
+            <div class="ud-stats-grid" id="udTuitionStats"></div>
+            <div id="udAidBadge"></div>
+            <div class="ud-aid-text" id="udAidText">—</div>
+            <div class="ud-loan-row">
+              <div class="ud-loan-icon">💳</div>
+              <div>
+                <div class="ud-loan-label">Loan</div>
+                <div class="ud-loan-val" id="udLoanVal">Student loan available</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campus & Student Life -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon blue">🎓</div>
+              <div class="ud-sec-title">Campus & Student Life</div>
+            </div>
+            <div class="ud-life-chips" id="udLifeChips"></div>
+            <div class="ud-life-text" id="udLifeText">—</div>
+          </div>
+
+          <!-- Admissions -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon violet">📋</div>
+              <div class="ud-sec-title">Admissions</div>
+            </div>
+            <div class="ud-admit-stats" id="udAdmitStats"></div>
+            <div class="ud-site-row">
+              <div class="ud-site-icon">🌐</div>
+              <div class="ud-site-url" id="udSiteUrl">—</div>
+            </div>
+            <button class="ud-apply-btn" id="udApplyBtn">Apply Now →</button>
+          </div>
+
+          <!-- Immigration Support -->
+          <div class="ud-section">
+            <div class="ud-sec-hd">
+              <div class="ud-sec-icon pink">✈️</div>
+              <div class="ud-sec-title">Immigration Support</div>
+            </div>
+            <div class="ud-support-text" id="udSupportText">—</div>
+          </div>
+
+        </div><!-- /ud-sections -->
+      </div><!-- /ud-body -->
+
+      <!-- Floating Tab Bar (same as all other screens) -->
+      <div class="tab-bar-wrap">
+        <nav class="float-tab-bar">
+
+          <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="8" r="3.5"/>
+                <path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
+                <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z"
+                      fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label">About me</span>
+          </a>
+
+          <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88"
+                         stroke="none" fill="currentColor" opacity="0.6"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label">Disciplines</span>
+          </a>
+
+          <a href="../../major/recommendations-v2/" class="tab-item" data-tab="t3">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </span>
+            <span class="tab-label">Majors</span>
+          </a>
+
+          <a href="../matches/" class="tab-item active" data-tab="t4">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+              </svg>
+            </span>
+            <span class="tab-label">Universities</span>
+          </a>
+
+          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="7.5" r="3.5"/>
+                <path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/>
+                <circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
+                <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="tab-label">Hoang Phuc</span>
+          </a>
+
+        </nav>
+      </div>
+
+    </div><!-- /mobile-screen -->
+  </div><!-- /device-frame -->
+</div><!-- /desktop-container -->
+
+<script src="../../major/majors-data.js"></script>
+<script>
+/* ═══════════════════════════════════════════════════════
+   CONSTANTS
+═══════════════════════════════════════════════════════ */
+var W = 'https://commons.wikimedia.org/wiki/Special:FilePath/';
+var UNI_IMG_MAP = {
+  /* Vietnam */
+  'fulbright' : { icon: null,  image: null },
+  'rmit'      : { icon: W+'RMIT_University_Logo.svg',                                  image: null },
+  'fpt'       : { icon: null,  image: null },
+  'vnu-hcm'   : { icon: null,  image: null },
+  /* Asia */
+  'tokyo'     : { icon: W+'University_of_Tokyo_logo_(2024).svg',                       image: W+'Yasuda_Auditorium,_Tokyo_University_-_Apr_14,_2009.jpg' },
+  'kaist'     : { icon: W+'KAIST_logo.svg',                                            image: null },
+  'tsinghua'  : { icon: W+'Tsinghua_University_Logo.svg',                              image: null },
+  'nus'       : { icon: W+'National_University_of_Singapore_logo_print.jpg',           image: W+'NUS,_University_Hall_2,_Nov_06.JPG' },
+  'mahidol'   : { icon: W+'Mahidol_U.svg',                                             image: null },
+  'iit-bombay': { icon: W+'IIT_Bombay_Logo.svg',                                       image: null },
+  'mica'      : { icon: null,                                                           image: null },
+  /* Europe */
+  'oxford'    : { icon: W+'University_of_Oxford.svg',                                  image: W+'Radcliffe_Camera,_Oxford_-_Oct_2006.jpg' },
+  'eth'       : { icon: W+'ETH_Z%C3%BCrich_Logo_black.svg',                            image: null },
+  'tum'       : { icon: W+'Logo_of_the_Technical_University_of_Munich.svg',            image: null },
+  'sciencespo': { icon: W+'Logo_Sciences_Po.svg',                                      image: null },
+  'tudelft'   : { icon: W+'Zegel_Technische_Universiteit_Delft.svg',                   image: null },
+  /* USA */
+  'mit'       : { icon: W+'MIT_logo.svg',                                              image: W+'MIT_Building_10_and_the_Great_Dome,_Cambridge_MA.jpg' },
+  'columbia'  : { icon: W+'Columbia_University_1754.svg',                              image: W+'Columbia_University_-_Low_Memorial_Library-D.JPG' },
+  'duke'      : { icon: W+'Duke_University_logo.svg',                                  image: W+'Duke_Chapel_snow.JPG' },
+  'ucla'      : { icon: W+'The_University_of_California_UCLA.svg',                     image: W+'UCLA_Campus_on_lawn.JPG' },
+  'ucsd'      : { icon: W+'UC_San_Diego_Tritons_wordmark.svg',                         image: null },
+  'bu'        : { icon: W+'Boston_University_seal.svg',                                image: null },
+  'usc'       : { icon: W+'University_of_Southern_California_logo.svg',                image: null },
+  'ufl'       : { icon: W+'University_of_Florida_logo.svg',                            image: null },
+  'uci'       : { icon: W+'UC_Irvine_Anteaters_logo.svg',                              image: null },
+  'ucf'       : { icon: W+'UCF_Knights_logo.svg',                                      image: null },
+  'erau'      : { icon: W+'ERAU.svg',                                                  image: null },
+  'fisher'    : { icon: null,                                                           image: null },
+  /* Americas */
+  'ubc'       : { icon: W+'British_columbia_ca_univ_logo.svg',                         image: null },
+  'usp'       : { icon: W+'Universidade_de_S%C3%A3o_Paulo_Logo.svg',                   image: null },
+  'unam'      : { icon: W+'Escudo_UNAM.svg',                                           image: null },
+  /* Africa */
+  'uct'       : { icon: W+'University_of_Cape_Town_logo.svg',                          image: null },
+  'cairo-u'   : { icon: W+'Cairo_University_crest.svg',                                image: null },
+  'nairobi'   : { icon: null,                                                           image: null },
+  'lagos'     : { icon: null,                                                           image: null },
+  'mohammedv' : { icon: null,                                                           image: null },
+  /* Oceania */
+  'anu'       : { icon: W+'Arms_of_the_Australian_National_University.svg',            image: null },
+  'melbourne' : { icon: W+'Arms_of_the_University_of_Melbourne.svg',                   image: null },
+  'auckland'  : { icon: W+'Coat_of_arms_of_the_University_of_Auckland.svg',            image: null },
+};
+
+var CTRY_FLAGS = {
+  'Vietnam':'🇻🇳','India':'🇮🇳','Japan':'🇯🇵','South Korea':'🇰🇷',
+  'China':'🇨🇳','Singapore':'🇸🇬','Thailand':'🇹🇭',
+  'USA':'🇺🇸','Canada':'🇨🇦','Brazil':'🇧🇷','Mexico':'🇲🇽',
+  'UK':'🇬🇧','Germany':'🇩🇪','France':'🇫🇷','Netherlands':'🇳🇱','Switzerland':'🇨🇭',
+  'South Africa':'🇿🇦','Egypt':'🇪🇬','Kenya':'🇰🇪','Nigeria':'🇳🇬','Morocco':'🇲🇦',
+  'Australia':'🇦🇺','New Zealand':'🇳🇿'
+};
+
+var PROG_ICONS = {
+  'Engineering':'⚙️','Computer Science':'💻','Architecture':'🏛️','Management':'📊',
+  'Science':'🔬','Business':'💼','Law':'⚖️','Journalism':'📰','Arts & Sciences':'🎨',
+  'Medicine':'🏥','Public Policy':'🏛️','Film & TV':'🎬','Life Sciences':'🧬',
+  'Biology':'🧬','Economics':'📈','Communications':'📡','Public Health':'💊',
+  'Liberal Arts':'📚','Film & Media':'🎬','Agriculture':'🌾','Health Sciences':'🏥',
+  'Hospitality':'🏨','Education':'🎓','Security':'🛡️','Aviation':'✈️',
+  'Aerospace Engineering':'🚀','Healthcare Management':'🏥','Criminal Justice':'⚖️',
+  'Sport Management':'⚽','Forestry':'🌲','Social Ecology':'🌿','Humanities':'📖',
+  'Commerce':'💰','Social Sciences':'🌐','Arts':'🎨','Pharmacy':'💊',
+  'CS':'💻','Physics':'⚛️','Bio':'🧬','AI':'🤖','AI & Robotics':'🤖',
+  'Design':'🎨','Computing':'💻','PPE':'📖','Mathematics':'📐','History':'📜',
+  'Natural Sciences':'🔭','Fine Arts':'🎨','Technology':'💡','IT':'💻',
+  'Multimedia':'🎬','Communication':'📡','Advertising':'📣','Brand Management':'🏷️',
+  'Digital Media':'📱','Strategic Marketing':'📊','Marketing':'📊',
+  'International Affairs':'🌐','Urban & Environmental':'🌿',
+  'Aerospace Eng.':'🚀','Civil Eng.':'🏗️','Industrial Design':'🏭',
+  'Political Science':'🏛️','Economics':'📈','Urban':'🏙️',
+  'default':'📚'
+};
+
+/* ── University data ─────────────────────────────── */
+var UNI_DATA = [
+  { id:'fulbright', icon:'🎓', name:'Fulbright University Vietnam', loc:'Ho Chi Minh City, Vietnam', country:'Vietnam', type:'priv', typeLabel:'Private (Liberal Arts)', match:91, ranking:'#1 Liberal Arts VN', students:'1,200+', employment:'97%', tuition:'$30,000 / yr', aid:'Need-Based Aid', aidType:'need', salary:'$2,400 / mo avg', programs:['Liberal Arts','Public Policy','Business','Technology'] },
+  { id:'rmit', icon:'🏛️', name:'RMIT University Vietnam', loc:'Ho Chi Minh City, Vietnam', country:'Vietnam', type:'intl', typeLabel:'Intl in VN', match:84, ranking:'#200 World (QS)', students:'7,000+', employment:'94%', tuition:'$10k–$16k / yr', aid:'Full Scholarship', aidType:'full', salary:'$1,800 / mo avg', programs:['Computer Science','Business','Design','Engineering'] },
+  { id:'fpt', icon:'💻', name:'FPT University', loc:'HCM City / Hanoi / Da Nang', country:'Vietnam', type:'priv', typeLabel:'Private', match:82, ranking:'Top IT Private VN', students:'30,000+', employment:'96%', tuition:'₫25M–₫55M / yr', aid:'FPT Full Scholarship', aidType:'full', salary:'$1,200 / mo avg', programs:['Software Engineering','AI','Business','Design'] },
+  { id:'vnu-hcm', icon:'🏫', name:'VNU Ho Chi Minh City', loc:'Ho Chi Minh City, Vietnam', country:'Vietnam', type:'pub', typeLabel:'Public', match:72, ranking:'#1 Vietnam (QS 2025)', students:'80,000+', employment:'88%', tuition:'₫15M–₫40M / yr', aid:'Government Grant', aidType:'merit', salary:'$900 / mo avg', programs:['Engineering','Science','Law','Economics','Medicine'] },
+  { id:'tokyo', icon:'🗼', name:'University of Tokyo', loc:'Tokyo, Japan', country:'Japan', type:'pub', typeLabel:'Public', match:78, ranking:'#28 World (QS)', students:'28,000+', employment:'97%', tuition:'¥535k (~$3,500) / yr', aid:'MEXT Scholarship', aidType:'full', salary:'$3,200 / mo avg', programs:['Engineering','Science','Medicine','Law','Economics'] },
+  { id:'kaist', icon:'🔭', name:'KAIST', loc:'Daejeon, South Korea', country:'South Korea', type:'pub', typeLabel:'Public', match:73, ranking:'#42 World (QS)', students:'10,800', employment:'98%', tuition:'KRW 7M (~$5,200) / yr', aid:'Korean Government Scholarship', aidType:'full', salary:'$3,500 / mo avg', programs:['Engineering','Science','AI & Robotics','Business','Design'] },
+  { id:'tsinghua', icon:'🐉', name:'Tsinghua University', loc:'Beijing, China', country:'China', type:'pub', typeLabel:'Public', match:70, ranking:'#14 World (QS)', students:'57,000+', employment:'97%', tuition:'CNY 26k (~$3,600) / yr', aid:'CSC Scholarship', aidType:'full', salary:'$2,800 / mo avg', programs:['Engineering','Science','Economics','Law','Fine Arts'] },
+  { id:'nus', icon:'🌴', name:'National Univ. of Singapore', loc:'Singapore', country:'Singapore', type:'pub', typeLabel:'Public', match:75, ranking:'#8 World (QS)', students:'38,000+', employment:'98%', tuition:'S$17k–$28k / yr', aid:'ASEAN Scholarship', aidType:'full', salary:'$4,100 / mo avg', programs:['Computing','Business','Medicine','Law','Engineering'] },
+  { id:'mahidol', icon:'🏯', name:'Mahidol University', loc:'Bangkok, Thailand', country:'Thailand', type:'pub', typeLabel:'Public', match:58, ranking:'#215 World (QS)', students:'28,000+', employment:'92%', tuition:'THB 90k (~$2,500) / yr', aid:'ASEAN Scholarship', aidType:'merit', salary:'$1,500 / mo avg', programs:['Medicine','Public Health','Science','Engineering','Pharmacy'] },
+  { id:'iit-bombay', icon:'🏗️', name:'IIT Bombay', loc:'Mumbai, Maharashtra, India', country:'India', type:'pub', typeLabel:'Public (IIT)', match:68, ranking:'#118 World (QS)', students:'10,000+', employment:'98%', tuition:'INR 2.5L / yr (~$3k)', aid:'Merit + Need', aidType:'merit', salary:'$2,600 / mo avg', programs:['Engineering','Technology','Science','Design','MBA'] },
+  { id:'mica', icon:'📣', name:'MICA Ahmedabad', loc:'Ahmedabad, Gujarat, India', country:'India', type:'priv', typeLabel:'Private', match:45, ranking:'#1 Marketing India', students:'700', employment:'97%', tuition:'INR 21L / yr (~$25k)', aid:'Merit Scholarship', aidType:'merit', salary:'$1,800 / mo avg', programs:['Strategic Marketing','Communications','Media','Brand Management'] },
+  { id:'oxford', icon:'🎩', name:'University of Oxford', loc:'Oxford, United Kingdom', country:'UK', type:'pub', typeLabel:'Public', match:82, ranking:'#3 World (QS)', students:'26,000+', employment:'99%', tuition:'£28k–£37k / yr', aid:'Clarendon Scholarship', aidType:'merit', salary:'$5,200 / mo avg', programs:['PPE','Medicine','Law','Engineering','Humanities'] },
+  { id:'eth', icon:'⚗️', name:'ETH Zurich', loc:'Zurich, Switzerland', country:'Switzerland', type:'pub', typeLabel:'Public', match:79, ranking:'#9 World (QS)', students:'22,000+', employment:'99%', tuition:'CHF 730 (~$820) / semester', aid:'Excellence Scholarship', aidType:'merit', salary:'$6,100 / mo avg', programs:['Engineering','Architecture','Natural Sciences','Mathematics','Computer Science'] },
+  { id:'tum', icon:'🍺', name:'Technical Univ. of Munich', loc:'Munich, Germany', country:'Germany', type:'pub', typeLabel:'Public', match:76, ranking:'#37 World (QS)', students:'48,000+', employment:'98%', tuition:'€168 (~$185) / semester', aid:'TUM Scholarship', aidType:'merit', salary:'$4,800 / mo avg', programs:['Engineering','Computer Science','Natural Sciences','Medicine','Management'] },
+  { id:'sciencespo', icon:'🗽', name:'Sciences Po Paris', loc:'Paris, France', country:'France', type:'pub', typeLabel:'Public', match:74, ranking:'Top 200 World (QS)', students:'14,000+', employment:'96%', tuition:'€14k / yr (~$15k)', aid:'Eiffel Excellence Scholarship', aidType:'merit', salary:'$4,200 / mo avg', programs:['Political Science','Law','Economics','Journalism','International Affairs'] },
+  { id:'tudelft', icon:'🌷', name:'Delft Univ. of Technology', loc:'Delft, Netherlands', country:'Netherlands', type:'pub', typeLabel:'Public', match:71, ranking:'#57 World (QS)', students:'26,000+', employment:'97%', tuition:'€18k / yr (~$20k)', aid:'Holland Scholarship', aidType:'merit', salary:'$4,600 / mo avg', programs:['Architecture','Civil Eng.','Aerospace Eng.','Industrial Design','Computer Science'] },
+  { id:'mit', icon:'🔬', name:'MIT', loc:'Cambridge, MA, USA', country:'USA', type:'priv', typeLabel:'Private', match:93, ranking:'#1 World (QS)', students:'11,500+', employment:'99%', tuition:'$59,750 / yr', aid:'Full Need-Based', aidType:'full', salary:'$7,200 / mo avg', programs:['Engineering','Computer Science','Architecture','Management','Science'] },
+  { id:'columbia', icon:'🏛️', name:'Columbia University', loc:'New York City, NY, USA', country:'USA', type:'priv', typeLabel:'Private (Ivy)', match:82, ranking:'#12 World (US News)', students:'35,000+', employment:'97%', tuition:'$70,000 / yr', aid:'Full Need-Based', aidType:'need', salary:'$6,400 / mo avg', programs:['Business','Law','Engineering','Journalism','Arts & Sciences'] },
+  { id:'duke', icon:'🏟️', name:'Duke University', loc:'Durham, NC, USA', country:'USA', type:'priv', typeLabel:'Private', match:88, ranking:'#23 World (QS)', students:'16,680+', employment:'98%', tuition:'$65,000 / yr', aid:'Full Need-Based', aidType:'need', salary:'$6,800 / mo avg', programs:['Medicine','Public Policy','Engineering','Business','Law'] },
+  { id:'ucla', icon:'🐻', name:'UCLA', loc:'Los Angeles, CA, USA', country:'USA', type:'pub', typeLabel:'Public', match:85, ranking:'#40 World (QS)', students:'46,678+', employment:'96%', tuition:'$44,000 / yr', aid:'Need + Merit Aid', aidType:'merit', salary:'$5,900 / mo avg', programs:['Computer Science','Film & TV','Business','Engineering','Life Sciences'] },
+  { id:'ucsd', icon:'🌊', name:'UC San Diego (UCSD)', loc:'San Diego, CA, USA', country:'USA', type:'pub', typeLabel:'Public', match:80, ranking:'#62 World (QS)', students:'42,600+', employment:'95%', tuition:'$44,000 / yr', aid:'Need + Merit Aid', aidType:'need', salary:'$5,600 / mo avg', programs:['Computer Science','Biology','Engineering','Medicine','Economics'] },
+  { id:'bu', icon:'🦅', name:'Boston University', loc:'Boston, MA, USA', country:'USA', type:'priv', typeLabel:'Private', match:76, ranking:'Top 100 World (QS)', students:'33,972+', employment:'94%', tuition:'$65,000 / yr', aid:'Need + Merit Aid', aidType:'merit', salary:'$5,400 / mo avg', programs:['Communications','Business','Engineering','Public Health','Liberal Arts'] },
+  { id:'usc', icon:'⚔️', name:'Univ. of Southern California', loc:'Los Angeles, CA, USA', country:'USA', type:'priv', typeLabel:'Private', match:79, ranking:'Top 150 World (QS)', students:'49,500+', employment:'95%', tuition:'$67,000 / yr', aid:'Full Need-Based', aidType:'need', salary:'$5,700 / mo avg', programs:['Film & Media','Business','Engineering','Architecture','Law'] },
+  { id:'ufl', icon:'🐊', name:'University of Florida', loc:'Gainesville, FL, USA', country:'USA', type:'pub', typeLabel:'Public', match:74, ranking:'Top 200 World (QS)', students:'60,500+', employment:'94%', tuition:'$28,000 / yr', aid:'Merit-Based Aid', aidType:'merit', salary:'$4,800 / mo avg', programs:['Engineering','Business','Health Sciences','Agriculture','Architecture'] },
+  { id:'uci', icon:'🦅', name:'UC Irvine', loc:'Irvine, CA, USA', country:'USA', type:'pub', typeLabel:'Public', match:72, ranking:'Top 150 World (QS)', students:'37,000+', employment:'93%', tuition:'$45,000 / yr', aid:'Need + Merit Aid', aidType:'merit', salary:'$5,100 / mo avg', programs:['Computer Science','Business','Social Ecology','Engineering','Biology'] },
+  { id:'ucf', icon:'⚡', name:'Univ. of Central Florida', loc:'Orlando, FL, USA', country:'USA', type:'pub', typeLabel:'Public', match:70, ranking:'Top 500 World', students:'70,000+', employment:'91%', tuition:'$23,000 / yr', aid:'Merit-Based Aid', aidType:'merit', salary:'$4,200 / mo avg', programs:['Engineering','Computer Science','Hospitality','Education','Business'] },
+  { id:'erau', icon:'✈️', name:'Embry-Riddle Aeronautical Univ.', loc:'Daytona Beach, FL, USA', country:'USA', type:'priv', typeLabel:'Private', match:75, ranking:'#4 Aerospace US', students:'33,168+', employment:'97%', tuition:'$47,814 / yr', aid:'Merit-Based Aid', aidType:'merit', salary:'$5,300 / mo avg', programs:['Aerospace Engineering','Aviation','Computer Science','Business','Security'] },
+  { id:'fisher', icon:'🎓', name:'Fisher College', loc:'Boston, MA, USA', country:'USA', type:'priv', typeLabel:'Private', match:71, ranking:'#43 Regional (US News)', students:'1,500+', employment:'90%', tuition:'$35,524 / yr', aid:'Merit-Based Aid', aidType:'merit', salary:'$3,800 / mo avg', programs:['Business','Healthcare Management','Criminal Justice','Sport Management'] },
+  { id:'ubc', icon:'🍁', name:'Univ. of British Columbia', loc:'Vancouver, BC, Canada', country:'Canada', type:'pub', typeLabel:'Public', match:69, ranking:'#34 World (QS)', students:'66,000+', employment:'95%', tuition:'CAD $38k (~$28k) / yr', aid:'International Major Entrance Scholarship', aidType:'merit', salary:'$3,800 / mo avg', programs:['Science','Engineering','Arts','Medicine','Business','Forestry'] },
+  { id:'usp', icon:'🌿', name:'Univ. of São Paulo', loc:'São Paulo, Brazil', country:'Brazil', type:'pub', typeLabel:'Public', match:44, ranking:'#101 World (QS)', students:'90,000+', employment:'91%', tuition:'Free (public)', aid:'FUVEST Merit Grant', aidType:'merit', salary:'$1,200 / mo avg', programs:['Engineering','Medicine','Law','Architecture','Humanities'] },
+  { id:'unam', icon:'🦅', name:'UNAM', loc:'Mexico City, Mexico', country:'Mexico', type:'pub', typeLabel:'Public', match:41, ranking:'#105 World (QS)', students:'360,000+', employment:'89%', tuition:'Free (public)', aid:'UNAM Scholarship', aidType:'merit', salary:'$900 / mo avg', programs:['Medicine','Law','Engineering','Arts','Social Sciences','Business'] },
+  { id:'uct', icon:'🌋', name:'Univ. of Cape Town', loc:'Cape Town, South Africa', country:'South Africa', type:'pub', typeLabel:'Public', match:48, ranking:'#226 World (QS)', students:'29,000+', employment:'90%', tuition:'ZAR 75k (~$4,100) / yr', aid:'UCT Scholarship', aidType:'merit', salary:'$1,600 / mo avg', programs:['Medicine','Law','Engineering','Commerce','Humanities'] },
+  { id:'cairo-u', icon:'🏺', name:'Cairo University', loc:'Giza, Egypt', country:'Egypt', type:'pub', typeLabel:'Public', match:38, ranking:'#551 World (QS)', students:'250,000+', employment:'85%', tuition:'EGP 3k–10k (~$100–$350) / yr', aid:'Egyptian Government Scholarship', aidType:'full', salary:'$700 / mo avg', programs:['Medicine','Engineering','Law','Commerce','Arts','Sciences'] },
+  { id:'nairobi', icon:'🦁', name:'University of Nairobi', loc:'Nairobi, Kenya', country:'Kenya', type:'pub', typeLabel:'Public', match:36, ranking:'Top 5 Africa', students:'67,000+', employment:'84%', tuition:'KES 72k (~$560) / yr', aid:'Government Bursary', aidType:'need', salary:'$600 / mo avg', programs:['Medicine','Engineering','Law','Business','Architecture','Sciences'] },
+  { id:'lagos', icon:'🌊', name:'University of Lagos', loc:'Lagos, Nigeria', country:'Nigeria', type:'pub', typeLabel:'Public', match:35, ranking:'Top 10 Africa', students:'75,000+', employment:'83%', tuition:'NGN 80k (~$100) / yr', aid:'TETFUND Scholarship', aidType:'merit', salary:'$550 / mo avg', programs:['Medicine','Law','Engineering','Business','Sciences','Social Sciences'] },
+  { id:'mohammedv', icon:'🌙', name:'Mohammed V University', loc:'Rabat, Morocco', country:'Morocco', type:'pub', typeLabel:'Public', match:40, ranking:'Top 3 Africa (QS)', students:'100,000+', employment:'86%', tuition:'MAD 2k (~$200) / yr', aid:'Moroccan Government Scholarship', aidType:'full', salary:'$800 / mo avg', programs:['Law','Economics','Sciences','Medicine','Engineering','Humanities'] },
+  { id:'anu', icon:'🦘', name:'Australian National University', loc:'Canberra, ACT, Australia', country:'Australia', type:'pub', typeLabel:'Public', match:61, ranking:'#30 World (QS)', students:'22,000+', employment:'97%', tuition:'A$35k–$45k / yr', aid:'ANU Chancellor Scholarship', aidType:'merit', salary:'$4,300 / mo avg', programs:['Science','Law','Arts','Engineering','Business','Public Policy'] },
+  { id:'melbourne', icon:'🏅', name:'Univ. of Melbourne', loc:'Melbourne, VIC, Australia', country:'Australia', type:'pub', typeLabel:'Public', match:66, ranking:'#33 World (QS)', students:'52,000+', employment:'96%', tuition:'A$38k–$46k / yr', aid:'Graduate Research Scholarship', aidType:'merit', salary:'$4,500 / mo avg', programs:['Medicine','Law','Engineering','Commerce','Arts','Sciences'] },
+  { id:'auckland', icon:'🥝', name:'Univ. of Auckland', loc:'Auckland, New Zealand', country:'New Zealand', type:'pub', typeLabel:'Public', match:58, ranking:'#65 World (QS)', students:'45,000+', employment:'95%', tuition:'NZD $32k (~$19k) / yr', aid:'NZ Excellence Award', aidType:'merit', salary:'$3,600 / mo avg', programs:['Engineering','Medicine','Law','Commerce','Arts','Education'] }
+];
+
+/* Extended detail data */
+var UNI_DETAIL = {
+  'mit':     { accept:'4%',  intl:'11%', deadline:'Jan 1',   site:'mit.edu',         loan:'Federal + Institutional loans',
+    about:'MIT is the world\'s leading science and technology university, known for groundbreaking research and innovation. Graduates include Nobel laureates, astronauts, and founders of major tech companies.',
+    life:'Active student life with NCAA Div III athletics, 500+ student clubs, and a vibrant startup ecosystem in Cambridge, MA.',
+    support:'Dedicated International Students Office, F-1/J-1 visa advising, and financial aid available for international students including grants and work-study.' },
+  'columbia':{ accept:'4%',  intl:'19%', deadline:'Jan 1',   site:'columbia.edu',    loan:'Federal + Institutional loans',
+    about:'Columbia University is an Ivy League research university in the heart of New York City, offering unparalleled access to global networks, industry, and culture.',
+    life:'35k+ students, 6:1 student-faculty ratio, 19% international, on-campus housing available in Morningside Heights.',
+    support:'Financial aid and private loans available for international students; support via dedicated offices and the International Students & Scholars Office.' },
+  'duke':    { accept:'7%',  intl:'14%', deadline:'Jan 2',   site:'duke.edu',        loan:'Federal + Institutional loans',
+    about:'Duke University is a leading private research university in Durham, NC, combining academic excellence with a strong athletic tradition and commitment to research.',
+    life:'Active student life with NCAA Div I athletics and over 47% undergrads in campus housing. Strong community engagement.',
+    support:'Comprehensive international student support through the Duke Visa Services office, with merit-based fellowships available.' },
+  'ucla':    { accept:'9%',  intl:'12%', deadline:'Nov 30',  site:'ucla.edu',        loan:'Federal + CA grants',
+    about:'UCLA is California\'s flagship public research university, ranked among the top 40 globally. Located in Westwood, LA, with unrivaled access to the entertainment and tech industries.',
+    life:'46k+ students, vibrant campus with 1,000+ clubs, 15 Division I national championships, and world-class facilities.',
+    support:'Dashew Center for International Students provides comprehensive visa, tax, and cultural support for F-1 and J-1 students.' },
+  'ucsd':    { accept:'24%', intl:'15%', deadline:'Nov 30',  site:'ucsd.edu',        loan:'Federal + institutional',
+    about:'UC San Diego is a leading public research university known for its oceanographic, biological, and computing research, with strong ties to San Diego\'s biotech corridor.',
+    life:'42k+ students on a scenic campus in La Jolla, with top-ranked research institutes and proximity to the Pacific Ocean.',
+    support:'International Students & Programs Office (ISPO) provides comprehensive support including OPT/CPT guidance.' },
+  'bu':      { accept:'19%', intl:'24%', deadline:'Jan 1',   site:'bu.edu',          loan:'Federal + private loans',
+    about:'Boston University is a large private research university on the Charles River, offering 300+ programs and strong connections to Boston\'s healthcare, finance, and tech sectors.',
+    life:'33k+ students from 130 countries, vibrant Fenway neighborhood location with NCAA Div I hockey and a thriving arts scene.',
+    support:'International Students & Scholars Office provides visa advising, cultural adjustment support, and emergency funding.' },
+  'usc':     { accept:'12%', intl:'20%', deadline:'Jan 15',  site:'usc.edu',         loan:'Federal + USC loans',
+    about:'The University of Southern California is a leading private research university in Los Angeles, renowned for its film school, engineering programs, and entrepreneurial culture.',
+    life:'49k+ students in the heart of LA, with 650+ student organizations, NCAA Div I sports, and access to the entertainment industry.',
+    support:'Dedicated Trojan International services for visa and immigration support, with partial financial aid for international students.' },
+  'ufl':     { accept:'30%', intl:'8%',  deadline:'Nov 1',   site:'ufl.edu',         loan:'Federal + FL state loans',
+    about:'The University of Florida is a major public research university in Gainesville, known for its strength in agriculture, health sciences, and engineering.',
+    life:'60k+ students in a college-town atmosphere with Division I athletics, 1,000+ student organizations, and extensive recreational facilities.',
+    support:'UF International Center provides immigration advising, cultural programming, and emergency assistance for international students.' },
+  'uci':     { accept:'27%', intl:'13%', deadline:'Nov 30',  site:'uci.edu',         loan:'Federal + UC grants',
+    about:'UC Irvine is a top-ranked public research university in Southern California, known for its computer science, social ecology, and biological sciences programs.',
+    life:'37k+ students in a planned campus in Orange County, with strong research opportunities, 500+ clubs, and access to nearby beaches.',
+    support:'International Center provides comprehensive support for F-1/J-1 students including OPT/CPT processing and cultural programming.' },
+  'ucf':     { accept:'45%', intl:'7%',  deadline:'Dec 1',   site:'ucf.edu',         loan:'Federal + FL scholarships',
+    about:'UCF is one of the largest universities in the US, located in Orlando, FL. Known for its engineering and hospitality programs and strong industry partnerships.',
+    life:'70k+ students in a vibrant Orlando campus with Division I athletics, 600+ student orgs, and close proximity to major employers.',
+    support:'Global Perspectives Office provides immigration, cultural, and academic support for international students.' },
+  'erau':    { accept:'65%', intl:'12%', deadline:'Rolling', site:'erau.edu',        loan:'Federal + aerospace scholarships',
+    about:'Embry-Riddle Aeronautical University is the world\'s largest aviation and aerospace university, with campuses in Daytona Beach, FL and Prescott, AZ.',
+    life:'33k+ students across campuses, with flight simulators, wind tunnels, and a fleet of aircraft for hands-on training.',
+    support:'Dedicated international student services for aviation students, with work authorization guidance for aviation industry employment.' },
+  'fisher':  { accept:'72%', intl:'15%', deadline:'Rolling', site:'fisher.edu',      loan:'Federal + private loans',
+    about:'Fisher College is a small private college in Boston offering career-focused undergraduate programs in business, healthcare, and social sciences.',
+    life:'1,500+ students in an intimate campus setting in the heart of Boston, with strong career placement support.',
+    support:'Personalized international student advising, visa processing support, and campus cultural events.' },
+  'oxford':  { accept:'17%', intl:'45%', deadline:'Oct 15',  site:'ox.ac.uk',        loan:'UK student finance + scholarships',
+    about:'The University of Oxford is the world\'s oldest English-speaking university, consistently ranked #1–3 globally. Known for its tutorial system, stunning architecture, and 44 Nobel Prize winners.',
+    life:'24k+ students across 39 independent colleges with rich traditions, sport, drama, debate, and over 400 clubs and societies.',
+    support:'International Student Advisory Service provides visa guidance. Clarendon and Rhodes Scholarships available for international students.' },
+  'eth':     { accept:'27%', intl:'40%', deadline:'Dec 15',  site:'ethz.ch',         loan:'Swiss student loans + fellowships',
+    about:'ETH Zurich is the leading technical university in continental Europe, renowned for engineering, natural sciences, and architecture. 21 Nobel Prizes awarded to alumni.',
+    life:'22k+ students from 120 countries in one of the world\'s most livable cities, with strong innovation ecosystem.',
+    support:'International Student Services provides residence permit guidance. Excellence Scholarship for outstanding international students.' },
+  'tum':     { accept:'30%', intl:'38%', deadline:'Jan 15',  site:'tum.de',          loan:'BAföG + TUM scholarships',
+    about:'Technical University of Munich is Germany\'s top technical university and one of Europe\'s leading research institutions, with close ties to BMW, Siemens, and other industry leaders.',
+    life:'48k+ students in Munich, one of Europe\'s most dynamic cities with Bavarian culture and alpine recreation.',
+    support:'International Office provides visa and residence permit support. TUM Graduate School fellowships available.' },
+  'sciencespo':{ accept:'20%', intl:'50%', deadline:'Jan 10', site:'sciencespo.fr', loan:'French student aid',
+    about:'Sciences Po Paris is France\'s elite school for social and political science, with 7 campuses across France. Alumni include 6 French Presidents and global leaders.',
+    life:'14k+ students from 150 countries, with a deeply international campus culture in the heart of Paris.',
+    support:'Dedicated international affairs department for visa support. Emile Boutmy Scholarship for non-EU international students.' },
+  'tudelft': { accept:'35%', intl:'42%', deadline:'Apr 1',   site:'tudelft.nl',      loan:'Dutch student finance',
+    about:'Delft University of Technology is the Netherlands\' largest technical university, consistently ranked among the world\'s top engineering schools.',
+    life:'26k+ students in the charming canal city of Delft, with a strong cycling culture and proximity to Rotterdam and The Hague.',
+    support:'International Office provides MVV and residence permit support. Holland Scholarship and Excellence Scholarships available.' },
+  'tokyo':   { accept:'33%', intl:'13%', deadline:'Feb 25',  site:'u-tokyo.ac.jp',   loan:'JASSO scholarships',
+    about:'The University of Tokyo (Todai) is Japan\'s top-ranked university and one of Asia\'s most prestigious institutions, known for excellence in science, engineering, and humanities.',
+    life:'28k+ students on three campuses in Tokyo, with a rich academic culture, vibrant clubs, and access to Japan\'s economic and cultural capital.',
+    support:'UTokyo International Student Advising provides visa guidance. MEXT Scholarships and UTokyo Scholarships available.' },
+  'kaist':   { accept:'30%', intl:'10%', deadline:'Sep 30',  site:'kaist.ac.kr',     loan:'Korean government scholarships',
+    about:'KAIST is South Korea\'s premier science and technology university, consistently ranked among the world\'s top technical institutions with a highly entrepreneurial culture.',
+    life:'10k+ students in Daejeon with advanced research facilities and a strong graduate research ecosystem.',
+    support:'KAIST International Scholar & Student Services: visa guidance and KAIST International Scholarship covering full tuition and stipend.' },
+  'tsinghua':{ accept:'4%',  intl:'8%',  deadline:'Jan 1',   site:'tsinghua.edu.cn', loan:'Chinese government scholarships',
+    about:'Tsinghua University is China\'s top-ranked university and one of Asia\'s premier research institutions, known for science, engineering, economics, and management.',
+    life:'37k+ students on a sprawling campus in Haidian, Beijing, with rich traditions and access to China\'s political and economic center.',
+    support:'Office of International Students and Scholars provides visa support. Chinese Government Scholarship and Tsinghua Scholarship available.' },
+  'nus':     { accept:'20%', intl:'32%', deadline:'Dec 31',  site:'nus.edu.sg',      loan:'Singapore government loans',
+    about:'The National University of Singapore is Asia\'s top-ranked university, offering a unique global learning environment at the crossroads of East and West.',
+    life:'38k+ students on a large tropical campus in Kent Ridge, with 150+ co-curricular activities and access to Singapore\'s cosmopolitan city-state.',
+    support:'Office of Student Affairs provides Student Pass support through ICA. NUS Research Scholarship and ASEAN Undergraduate Scholarship available.' },
+  'mahidol': { accept:'40%', intl:'20%', deadline:'Mar 31',  site:'mahidol.ac.th',   loan:'Thai government loans',
+    about:'Mahidol University is Thailand\'s premier research university, particularly strong in medicine, public health, pharmacy, and the life sciences.',
+    life:'27k+ students across multiple campuses in Bangkok and Salaya, with strong healthcare focus and international partnerships.',
+    support:'International Relations Division provides Non-Immigrant ED visa guidance and cultural integration support for international students.' },
+  'iit-bombay':{ accept:'1%', intl:'2%', deadline:'Apr 30',  site:'iitb.ac.in',      loan:'Indian government loans',
+    about:'IIT Bombay is India\'s most prestigious technical university. Known globally for producing world-class engineers and entrepreneurs, with alumni at Google, Microsoft, and top firms.',
+    life:'10k+ students on a self-contained campus near Powai Lake, with 50+ technical clubs and Asia\'s largest college cultural festival (Mood Indigo).',
+    support:'International Relations Office provides visa guidance. DASA scheme for NRI/international candidates.' },
+  'mica':    { accept:'35%', intl:'5%',  deadline:'Feb 15',  site:'mica.ac.in',      loan:'Private bank loans',
+    about:'MICA is India\'s premier management and communications school, offering specialized MBA and PGDM programs in marketing, branding, and digital strategy.',
+    life:'2k+ students on a vibrant campus in Ahmedabad, with a strong focus on creativity and placement in top advertising and FMCG companies.',
+    support:'International desk provides basic visa advisory and accommodation support for exchange students.' },
+  'ubc':     { accept:'54%', intl:'30%', deadline:'Jan 15',  site:'ubc.ca',          loan:'Canadian student loans',
+    about:'The University of British Columbia is Canada\'s third-largest university, ranked among the world\'s top 40. Located in Vancouver with stunning mountain and ocean views.',
+    life:'66k+ students in one of the world\'s most livable cities, with 350+ student clubs and easy access to skiing and outdoor adventure.',
+    support:'International Student Advising provides study permit guidance. International Major Entrance Scholarship and IMSA awards available.' },
+  'usp':     { accept:'25%', intl:'8%',  deadline:'Dec 1',   site:'usp.br',          loan:'FIES government loans',
+    about:'The University of São Paulo is Latin America\'s most prestigious and largest university, with campuses across São Paulo state. Strong in medicine, engineering, law, and humanities.',
+    life:'90k+ students across 11 campuses, with a rich cultural life and free public university education for admitted students.',
+    support:'International Cooperation Office (AUCANI) provides support for exchange students and those on Brazilian government scholarships.' },
+  'unam':    { accept:'8%',  intl:'5%',  deadline:'Jan 15',  site:'unam.mx',         loan:'CONACYT scholarships',
+    about:'UNAM is Mexico\'s national university and one of Latin America\'s largest, with 360k+ students. A UNESCO World Heritage site and Mexico\'s intellectual and cultural heart.',
+    life:'360k+ students across multiple campuses in Mexico City, with world-class libraries, museums, and cultural venues on campus.',
+    support:'General Direction of International Cooperation provides support for exchange students. UNAM Scholarships available through bilateral agreements.' },
+  'uct':     { accept:'42%', intl:'12%', deadline:'Oct 31',  site:'uct.ac.za',       loan:'NSFAS government bursary',
+    about:'The University of Cape Town is Africa\'s top-ranked university, nestled at the foot of Table Mountain. Known for medicine, law, commerce, and African studies research.',
+    life:'29k+ students in one of the world\'s most scenic cities, with 200+ student societies and vibrant campus life across four campuses.',
+    support:'International Academic Programmes Office provides study visa guidance and cultural integration support for international students.' },
+  'cairo-u': { accept:'55%', intl:'10%', deadline:'Sep 15',  site:'cu.edu.eg',       loan:'Egyptian government scholarships',
+    about:'Cairo University is Egypt\'s largest and most prestigious university, founded in 1908. Known for its historic Giza campus, strong programs in medicine, law, and engineering.',
+    life:'250k+ students in the city of Giza, adjacent to Cairo\'s historic Islamic sites. Vibrant campus culture with rich student activities.',
+    support:'International Student Office provides Student Residence visa guidance. Egyptian Government Scholarship program available.' },
+  'nairobi': { accept:'25%', intl:'5%',  deadline:'Sep 30',  site:'uonbi.ac.ke',     loan:'HELB government loans',
+    about:'The University of Nairobi is Kenya\'s flagship public university and one of the continent\'s top 5 universities, offering programs across medicine, engineering, law, and arts.',
+    life:'67k+ students across 6 campuses in Kenya\'s dynamic capital, with a growing tech ecosystem known as "Silicon Savannah."',
+    support:'International Student Office provides student pass and visa guidance for international students.' },
+  'lagos':   { accept:'15%', intl:'3%',  deadline:'Aug 31',  site:'unilag.edu.ng',   loan:'TETFund scholarships',
+    about:'The University of Lagos is Nigeria\'s premier urban university, located on the scenic Mainland campus in Lagos — Africa\'s largest city and commercial capital.',
+    life:'75k+ students in a vibrant campus with strong student union culture, sports facilities, and access to Lagos\'s business scene.',
+    support:'International Office provides student visa guidance and accommodation support.' },
+  'mohammedv':{ accept:'30%', intl:'8%', deadline:'Sep 30',  site:'um5.ac.ma',       loan:'Moroccan government grants',
+    about:'Mohammed V University in Rabat is Morocco\'s oldest and most prestigious university, founded in 1957. Known for law, economics, sciences, and social sciences.',
+    life:'100k+ students in Morocco\'s political capital, with a cosmopolitan atmosphere shaped by French and Arab academic traditions.',
+    support:'International Cooperation Center provides visa guidance. Moroccan Government Scholarship for African and developing-country students.' },
+  'anu':     { accept:'35%', intl:'35%', deadline:'Oct 31',  site:'anu.edu.au',      loan:'Australian HECS-HELP',
+    about:'The Australian National University is Australia\'s premier research university, the only university created by the Australian Parliament. Consistently ranked #1 in Australia and top 30 globally.',
+    life:'22k+ students in Canberra, Australia\'s purpose-built capital, with a strong research culture and direct access to government and policy circles.',
+    support:'International Student Advisory and Support provides Visa 500 guidance. ANU Chancellor\'s Scholarship covers full fees for top international students.' },
+  'melbourne':{ accept:'40%', intl:'40%', deadline:'Oct 31', site:'unimelb.edu.au',  loan:'Australian HECS-HELP',
+    about:'The University of Melbourne is Australia\'s second-oldest university, consistently ranked top 35 globally. Known for graduate-model education, law, medicine, and the arts.',
+    life:'52k+ students in Australia\'s cultural capital, with a beautiful 1888-era campus, 300+ student clubs, and world-class food, arts, and sport.',
+    support:'Melbourne Connect provides visa, welfare, and cultural support. Graduate Research Scholarships and International Fee Remission Scholarships available.' },
+  'auckland': { accept:'38%', intl:'28%', deadline:'Dec 1',  site:'auckland.ac.nz',  loan:'NZ student loans',
+    about:'The University of Auckland is New Zealand\'s top-ranked university and the only New Zealand member of the Universitas 21 global network.',
+    life:'45k+ students in Auckland, NZ\'s largest city and Pacific hub, with 150+ student clubs, a stunning harbour-side campus, and strong Māori and Pacific culture.',
+    support:'International Office provides student visa guidance. NZ Excellence Award and Pacific-specific scholarships available.' },
+  'fulbright':{ accept:'25%', intl:'35%', deadline:'Mar 1',  site:'fulbright.edu.vn', loan:'US-Vietnam partnership aid',
+    about:'Fulbright University Vietnam is the first independent, non-profit university in Vietnam, modeled on the American liberal arts tradition. Supported by the Fulbright legacy and Vietnamese-American partnership.',
+    life:'1,200+ students in Ho Chi Minh City\'s Thủ Thiêm area, with a highly engaged cohort, US-style liberal arts experience, and strong alumni network.',
+    support:'Substantial need-based scholarships available covering up to 100% of tuition. English-medium instruction with Vietnamese cultural integration.' },
+  'rmit':    { accept:'60%', intl:'40%', deadline:'Rolling', site:'rmit.edu.vn',     loan:'Private bank loans',
+    about:'RMIT University Vietnam is a campus of RMIT Australia, offering Australian degrees in Vietnam. Located in Ho Chi Minh City and Hanoi with strong industry connections.',
+    life:'7k+ students at the Saigon South campus with Australian campus culture, modern facilities, and a vibrant international student community.',
+    support:'International Student Support Office provides student visa guidance. Australian awards and RMIT scholarships available.' },
+  'fpt':     { accept:'40%', intl:'10%', deadline:'Rolling', site:'fpt.edu.vn',      loan:'FPT Education loans',
+    about:'FPT University is Vietnam\'s largest private university, owned by FPT Corporation — Vietnam\'s leading tech company. Known for IT, business, and engineering.',
+    life:'30k+ students across campuses in Hanoi, Ho Chi Minh City, Đà Nẵng, and Cần Thơ, with strong startup culture and FPT employment pipeline.',
+    support:'International cooperation department provides student visa guidance. FPT Scholarship covering partial tuition for high-achieving international students.' },
+  'vnu-hcm': { accept:'20%', intl:'5%',  deadline:'Jul 31',  site:'vnuhcm.edu.vn',   loan:'Vietnamese government loans',
+    about:'Vietnam National University Ho Chi Minh City is Vietnam\'s largest national university system, comprising 9 member universities with strengths in engineering, science, and technology.',
+    life:'100k+ students across multiple campuses in Ho Chi Minh City, with comprehensive programs at competitive costs.',
+    support:'International Relations Division provides student visa guidance and cultural programs for international and exchange students.' },
+};
+
+function getDetail(id) {
+  return UNI_DETAIL[id] || {
+    accept:'N/A', intl:'N/A', deadline:'N/A', site:'university.edu', loan:'Student loan available',
+    about:'A leading university offering world-class programs across multiple disciplines with strong research output and excellent employment outcomes.',
+    life:'Vibrant campus life with student organizations, sports facilities, and strong academic community.',
+    support:'International student services available for visa and immigration guidance.'
+  };
+}
+
+/* ═══════════════════════════════════════════════════════
+   UNI MAJOR MAP  (uni id → array of MAJORS_DATA ids)
+═══════════════════════════════════════════════════════ */
+var UNI_MAJOR_MAP = {
+  'mit':[111,112,105,110,113,104,115,114],
+  'columbia':[105,130,133,134,146,132,144,110],
+  'duke':[122,121,134,133,146,111,112,129],
+  'ucla':[105,109,146,112,152,130,111,129],
+  'ucsd':[105,109,111,112,122,130,115,108],
+  'bu':[152,146,111,123,130,144,131,134],
+  'usc':[152,146,111,133,110,112,130,144],
+  'ufl':[111,112,110,146,123,126,113,116],
+  'uci':[105,146,132,109,111,130,129,133],
+  'ucf':[111,105,112,110,146,131,116,113],
+  'erau':[151,111,105,146,112,113,110,120],
+  'fisher':[146,123,133,130,131,145],
+  'oxford':[134,130,138,122,133,111,137,136],
+  'eth':[111,112,110,105,104,106,113,114],
+  'tum':[111,112,110,105,146,106,113,122],
+  'sciencespo':[134,133,130,152,158,145,132,144],
+  'tudelft':[110,151,112,111,105,113,114,116],
+  'fulbright':[139,134,146,105,130,144,132,158],
+  'rmit':[105,146,111,112,152,110,113,130],
+  'fpt':[105,146,152,111,130,112,131,143],
+  'vnu-hcm':[111,112,110,133,130,122,109,105],
+  'tokyo':[111,112,109,106,122,133,130,105],
+  'kaist':[111,112,105,106,114,146,119,115],
+  'tsinghua':[111,112,110,105,130,133,152,106],
+  'nus':[105,146,122,133,111,112,130,109],
+  'mahidol':[122,121,123,125,109,124,157,113],
+  'iit-bombay':[111,112,105,110,106,113,146,152],
+  'mica':[146,152,144,145,130,132],
+  'ubc':[109,111,105,133,122,146,126,130],
+  'usp':[111,112,122,133,110,137,130,109],
+  'unam':[122,133,111,152,132,146,134,109],
+  'uct':[122,133,111,112,146,132,130,137],
+  'cairo-u':[122,111,133,146,152,109,112,134],
+  'nairobi':[122,111,133,146,110,109,112,130],
+  'lagos':[122,133,111,146,109,132,130,112],
+  'mohammedv':[133,130,109,122,111,137,134,112],
+  'anu':[109,133,144,111,146,158,134,106],
+  'melbourne':[122,133,111,146,144,109,110,130],
+  'auckland':[111,112,122,133,146,144,131,130]
+};
+
+/* ═══════════════════════════════════════════════════════
+   SPEC DATA  (mirrors major/detail SPECIALIZATIONS)
+═══════════════════════════════════════════════════════ */
+var SPEC_DATA = {
+  109:[{icon:"🧬",name:"Molecular Biology & Genetics",desc:"DNA, gene expression, and hereditary mechanisms at the molecular level.",tag:"Research"},{icon:"🦠",name:"Microbiology & Immunology",desc:"Bacteria, viruses, and the body's defense systems against pathogens.",tag:"Lab-based"},{icon:"🌿",name:"Ecology & Conservation",desc:"Ecosystems, biodiversity, and strategies for environmental preservation.",tag:"Fieldwork"},{icon:"🐾",name:"Zoology & Animal Biology",desc:"Animal physiology, behavior, and evolutionary biology.",tag:"Fieldwork"}],
+  107:[{icon:"⚗️",name:"Organic Chemistry",desc:"Carbon-based compounds and reactions; foundation for pharmaceuticals.",tag:"Lab-based"},{icon:"🔋",name:"Physical & Computational Chemistry",desc:"Apply physics and math to understand molecular dynamics.",tag:"Research"},{icon:"🧪",name:"Analytical Chemistry",desc:"Techniques to identify and quantify substances in complex mixtures.",tag:"Lab-based"},{icon:"🌿",name:"Green & Environmental Chemistry",desc:"Sustainable chemical processes that minimize environmental impact.",tag:"Applied"}],
+  105:[{icon:"💻",name:"Software Engineering",desc:"Design, build, and maintain large-scale software systems and applications.",tag:"High Demand"},{icon:"🤖",name:"Artificial Intelligence & ML",desc:"Intelligent systems that learn from data and make autonomous decisions.",tag:"High Demand"},{icon:"🔐",name:"Cybersecurity",desc:"Protect systems and data from digital attacks and unauthorized access.",tag:"High Demand"},{icon:"📊",name:"Data Science & Analytics",desc:"Extract insights from large datasets using statistical and computational methods.",tag:"High Demand"}],
+  108:[{icon:"🌍",name:"Geology & Geophysics",desc:"Earth's structure, composition, and physical properties.",tag:"Fieldwork"},{icon:"🌦️",name:"Atmospheric & Climate Science",desc:"Weather systems, climate dynamics, and climate change drivers.",tag:"Research"},{icon:"🌊",name:"Oceanography",desc:"Ocean systems, marine chemistry, and deep-sea ecosystems.",tag:"Fieldwork"},{icon:"🌱",name:"Environmental Science",desc:"Human impact on ecosystems and strategies for mitigation.",tag:"Applied"}],
+  104:[{icon:"📐",name:"Pure Mathematics",desc:"Abstract structures, theorems, and proofs from number theory to topology.",tag:"Research"},{icon:"📊",name:"Statistics & Probability",desc:"Model uncertainty and extract meaning from data using rigorous methods.",tag:"Applied"},{icon:"🤖",name:"Computational Mathematics",desc:"Solve complex problems using algorithms, simulation, and numerical methods.",tag:"Applied"},{icon:"💹",name:"Mathematical Finance",desc:"Stochastic calculus and optimization applied to financial markets.",tag:"Industry"}],
+  106:[{icon:"⚛️",name:"Quantum Physics",desc:"Behavior of matter and energy at the atomic and subatomic scale.",tag:"Research"},{icon:"🔭",name:"Astrophysics & Cosmology",desc:"Stellar evolution, galaxies, and the large-scale structure of the universe.",tag:"Research"},{icon:"⚡",name:"Condensed Matter Physics",desc:"Properties of solid and liquid matter at a fundamental level.",tag:"Research"},{icon:"🔬",name:"Optics & Photonics",desc:"Harnessing light and electromagnetic radiation for technology.",tag:"Applied"}],
+  143:[{icon:"📐",name:"Applied Mathematics",desc:"Mathematical modeling for science, engineering, and social systems.",tag:"Applied"},{icon:"📊",name:"Biostatistics",desc:"Statistical methods for biological and medical research.",tag:"Research"},{icon:"🤖",name:"Data Science Track",desc:"Machine learning, big data processing, and statistical computing.",tag:"High Demand"},{icon:"💹",name:"Actuarial Science",desc:"Risk modeling and financial mathematics for insurance and investment.",tag:"Industry"}],
+  110:[{icon:"🏗️",name:"Structural Engineering",desc:"Design safe and efficient load-bearing structures and buildings.",tag:"Core"},{icon:"🌊",name:"Hydraulic & Water Resources",desc:"Water systems, flood control, and irrigation networks.",tag:"Applied"},{icon:"🛣️",name:"Transportation Engineering",desc:"Plan and design roads, rails, and urban transport networks.",tag:"Applied"},{icon:"🌍",name:"Geotechnical Engineering",desc:"Soil and rock mechanics for foundations and earthworks.",tag:"Fieldwork"}],
+  111:[{icon:"⚡",name:"Power Systems & Energy",desc:"Electricity generation, transmission, distribution, and smart grids.",tag:"Core"},{icon:"📡",name:"Telecommunications",desc:"Wireless networks, signal processing, and communication protocols.",tag:"Industry"},{icon:"🤖",name:"Embedded Systems & IoT",desc:"Microcontrollers and connected hardware for smart devices.",tag:"High Demand"},{icon:"🔌",name:"Electronics & VLSI Design",desc:"Integrated circuits and microchip architecture design.",tag:"Research"}],
+  112:[{icon:"🔧",name:"Thermodynamics & Energy",desc:"Heat engines, refrigeration, and energy conversion systems.",tag:"Core"},{icon:"✈️",name:"Fluid Mechanics & Aerodynamics",desc:"Fluid flow for aerospace, automotive, and industrial applications.",tag:"Applied"},{icon:"🤖",name:"Robotics & Automation",desc:"Robotic systems and automated manufacturing processes.",tag:"High Demand"},{icon:"🏎️",name:"Automotive & Vehicle Engineering",desc:"Propulsion, chassis, and control systems for vehicles.",tag:"Industry"}],
+  113:[{icon:"⚗️",name:"Process Engineering",desc:"Industrial chemical processes for pharmaceuticals and materials.",tag:"Industry"},{icon:"⚡",name:"Petroleum & Energy",desc:"Refining, extraction, and processing of fossil and renewable fuels.",tag:"Industry"},{icon:"🌿",name:"Biochemical Engineering",desc:"Biological systems in industrial production of drugs and foods.",tag:"Applied"},{icon:"🌍",name:"Environmental Engineering",desc:"Waste treatment, pollution management, and sustainable processes.",tag:"Applied"}],
+  114:[{icon:"🔬",name:"Nanomaterials",desc:"Engineering materials at the atomic scale for electronics and medicine.",tag:"Research"},{icon:"🛡️",name:"Biomaterials",desc:"Materials compatible with human tissue for medical implants.",tag:"Research"},{icon:"🏭",name:"Polymers & Composites",desc:"Advanced plastics, rubbers, and fiber-reinforced materials.",tag:"Industry"},{icon:"⚙️",name:"Metallurgy",desc:"Study and improvement of metals and alloys for structural use.",tag:"Core"}],
+  115:[{icon:"🩻",name:"Medical Imaging",desc:"MRI, CT, and ultrasound technologies for non-invasive diagnosis.",tag:"Research"},{icon:"🦾",name:"Prosthetics & Rehabilitation",desc:"Assistive devices and exoskeletons to restore mobility.",tag:"Applied"},{icon:"💊",name:"Drug Delivery Systems",desc:"Nano-carriers and implants for controlled drug release.",tag:"Research"},{icon:"🧬",name:"Bioinformatics",desc:"Computational tools for analyzing biological and genomic data.",tag:"High Demand"}],
+  116:[{icon:"💧",name:"Water & Wastewater Treatment",desc:"Systems to purify water and treat sewage efficiently.",tag:"Applied"},{icon:"🌬️",name:"Air Quality Control",desc:"Monitor and mitigate air pollutants from industrial sources.",tag:"Applied"},{icon:"♻️",name:"Solid Waste Management",desc:"Recycling, composting, and landfill engineering solutions.",tag:"Applied"},{icon:"☀️",name:"Renewable Energy Systems",desc:"Solar, wind, and bioenergy infrastructure design.",tag:"High Demand"}],
+  119:[{icon:"⚛️",name:"Nanoelectronics",desc:"Transistors and circuits at the nanoscale for next-gen chips.",tag:"Research"},{icon:"💊",name:"Nanomedicine",desc:"Targeted drug delivery and diagnostics at the cellular level.",tag:"Research"},{icon:"🌿",name:"Green Nanotechnology",desc:"Sustainable nanomaterials for energy and environmental remediation.",tag:"Applied"},{icon:"🔬",name:"Nano-characterization",desc:"Electron microscopy and spectroscopy to visualize nanoscale structures.",tag:"Lab-based"}],
+  120:[{icon:"🚀",name:"Aerospace Engineering",desc:"Design aircraft, spacecraft, and advanced propulsion systems.",tag:"Specialized"},{icon:"🏭",name:"Industrial Engineering",desc:"Optimize production systems, supply chains, and operations.",tag:"Industry"},{icon:"⚙️",name:"Mechatronics",desc:"Integration of mechanics, electronics, and software in smart systems.",tag:"Applied"},{icon:"💡",name:"Photonics Engineering",desc:"Laser, fiber optic, and display technology design.",tag:"Research"}],
+  121:[{icon:"🫀",name:"Anatomy & Physiology",desc:"Human body structure and organ system function.",tag:"Foundation"},{icon:"🦠",name:"Pathology & Microbiology",desc:"Disease mechanisms, infection, and the immune response.",tag:"Foundation"},{icon:"🧬",name:"Biochemistry & Pharmacology",desc:"Molecular basis of drugs and metabolic disease processes.",tag:"Research"},{icon:"🔬",name:"Medical Research",desc:"Clinical and translational studies to advance medicine.",tag:"Research"}],
+  122:[{icon:"🩺",name:"Internal Medicine",desc:"Diagnose and treat adult diseases across organ systems.",tag:"Clinical"},{icon:"🔪",name:"Surgery",desc:"Operative treatment of injuries, diseases, and deformities.",tag:"Clinical"},{icon:"🍼",name:"Pediatrics",desc:"Medical care for infants, children, and adolescents.",tag:"Clinical"},{icon:"🧠",name:"Neurology & Psychiatry",desc:"Brain, spinal cord, and mental health disorder treatment.",tag:"Clinical"}],
+  123:[{icon:"🏃",name:"Public Health & Epidemiology",desc:"Prevent disease and promote population-level health outcomes.",tag:"Applied"},{icon:"🏥",name:"Healthcare Management",desc:"Administration of health systems, hospitals, and organizations.",tag:"Industry"},{icon:"🥗",name:"Nutrition & Dietetics",desc:"Evidence-based dietary guidance from food science principles.",tag:"Applied"},{icon:"🧘",name:"Physiotherapy",desc:"Restore movement and function after injury or illness.",tag:"Clinical"}],
+  124:[{icon:"💉",name:"Vaccine Development",desc:"Design and test vaccines against infectious and chronic diseases.",tag:"Research"},{icon:"🧬",name:"Gene Therapy",desc:"Correct genetic disorders using viral vectors and CRISPR.",tag:"Research"},{icon:"🔬",name:"Diagnostics & Biosensors",desc:"Rapid tests and smart sensors for disease detection.",tag:"Applied"},{icon:"🦾",name:"Regenerative Medicine",desc:"Stem cell and tissue engineering to repair or replace organs.",tag:"Research"}],
+  125:[{icon:"🦷",name:"Dentistry & Oral Health",desc:"Diagnose and treat diseases of teeth, gums, and oral tissue.",tag:"Clinical"},{icon:"👁️",name:"Optometry & Vision Science",desc:"Assess and correct visual disorders and eye health.",tag:"Clinical"},{icon:"💊",name:"Pharmacy & Pharmacology",desc:"Drug design, action, and safe clinical use.",tag:"Applied"},{icon:"🧬",name:"Medical Laboratory Science",desc:"Diagnostic tests and biological specimen analysis.",tag:"Lab-based"}],
+  157:[{icon:"🏥",name:"Acute Care & ICU Nursing",desc:"Manage critically ill patients in intensive care settings.",tag:"Clinical"},{icon:"🤱",name:"Midwifery & Women's Health",desc:"Support pregnancy, childbirth, and postnatal care.",tag:"Clinical"},{icon:"🧠",name:"Mental Health Nursing",desc:"Therapeutic care for psychiatric and psychological disorders.",tag:"Clinical"},{icon:"🏘️",name:"Community & Primary Care",desc:"Preventive health services outside hospital settings.",tag:"Applied"}],
+  126:[{icon:"🌾",name:"Agronomy & Crop Science",desc:"Improve crop yields, soil health, and farming systems.",tag:"Core"},{icon:"🐄",name:"Animal & Livestock Science",desc:"Nutrition, breeding, and welfare of farm animals.",tag:"Applied"},{icon:"🌿",name:"Sustainable Agriculture",desc:"Eco-friendly farming practices and food security solutions.",tag:"Applied"},{icon:"🤖",name:"Precision Agriculture",desc:"Drones, sensors, and AI to optimize farm management.",tag:"High Demand"}],
+  127:[{icon:"🐄",name:"Dairy Technology",desc:"Processing and quality control of milk and dairy products.",tag:"Industry"},{icon:"🐑",name:"Animal Nutrition",desc:"Formulate diets for optimal animal health and productivity.",tag:"Applied"},{icon:"🧬",name:"Animal Genetics & Breeding",desc:"Improve livestock traits through selective breeding and genomics.",tag:"Research"},{icon:"🐾",name:"Veterinary Sciences",desc:"Diagnose and treat diseases in domestic and farm animals.",tag:"Clinical"}],
+  128:[{icon:"🌱",name:"Plant Genomics & GMO",desc:"Engineer crops for pest resistance, yield, and climate resilience.",tag:"Research"},{icon:"🧪",name:"Biopesticides",desc:"Bio-based alternatives to chemical agricultural inputs.",tag:"Applied"},{icon:"🍎",name:"Post-harvest Technology",desc:"Extend shelf life and preserve nutritional quality of produce.",tag:"Applied"},{icon:"🌊",name:"Aquaculture Biotechnology",desc:"Enhance fish and shellfish production through genetic tools.",tag:"Applied"}],
+  129:[{icon:"🧠",name:"Clinical Psychology",desc:"Evidence-based therapy for mental health disorders.",tag:"Clinical"},{icon:"🏢",name:"Organizational Psychology",desc:"Behavioral science applied to workplace performance.",tag:"Industry"},{icon:"🧒",name:"Developmental Psychology",desc:"Cognitive and emotional growth across the human lifespan.",tag:"Research"},{icon:"🔬",name:"Cognitive Neuroscience",desc:"Brain-behavior relationships and mental processes.",tag:"Research"}],
+  130:[{icon:"📈",name:"Macroeconomics & Policy",desc:"National economies, fiscal policy, and global trade dynamics.",tag:"Research"},{icon:"💹",name:"Finance & Investment",desc:"Asset management, financial markets, and corporate finance.",tag:"Industry"},{icon:"🏢",name:"Business Administration",desc:"Management, strategy, and operations of organizations.",tag:"Industry"},{icon:"📊",name:"Econometrics & Data",desc:"Statistical and computational methods for economic modeling.",tag:"Applied"}],
+  131:[{icon:"🏫",name:"Curriculum & Pedagogy",desc:"Design effective learning programs and teaching strategies.",tag:"Applied"},{icon:"🧒",name:"Early Childhood Education",desc:"Development-focused approaches for young learners.",tag:"Applied"},{icon:"💻",name:"Educational Technology",desc:"Leverage digital tools and online learning platforms.",tag:"High Demand"},{icon:"🌍",name:"International Education",desc:"Cross-cultural perspectives on education systems and reform.",tag:"Research"}],
+  132:[{icon:"🏙️",name:"Urban & Community Sociology",desc:"Social dynamics, inequality, and urban development.",tag:"Research"},{icon:"🌍",name:"Global & Development Studies",desc:"Inequality, migration, and international development.",tag:"Research"},{icon:"📣",name:"Media & Culture Studies",desc:"How media shapes social norms and cultural identity.",tag:"Applied"},{icon:"⚖️",name:"Gender & Diversity Studies",desc:"Intersectional analysis of identity, power, and social justice.",tag:"Research"}],
+  133:[{icon:"⚖️",name:"Corporate & Commercial Law",desc:"Legal frameworks governing business transactions and contracts.",tag:"Industry"},{icon:"🌍",name:"International & Human Rights Law",desc:"Public international law, treaties, and human rights protection.",tag:"Research"},{icon:"🏛️",name:"Constitutional Law",desc:"Government powers, civil liberties, and public administration.",tag:"Applied"},{icon:"💻",name:"Technology & Cyber Law",desc:"Legal issues in data privacy, AI, and digital commerce.",tag:"High Demand"}],
+  134:[{icon:"🏛️",name:"Comparative Politics",desc:"Political systems, institutions, and governance structures.",tag:"Research"},{icon:"🌍",name:"International Relations",desc:"State behavior, diplomacy, and global security dynamics.",tag:"Research"},{icon:"📋",name:"Public Policy",desc:"Design and evaluate government policies and programs.",tag:"Applied"},{icon:"🗳️",name:"Political Theory",desc:"Philosophical foundations of justice, democracy, and governance.",tag:"Research"}],
+  135:[{icon:"🗺️",name:"Urban Geography & Planning",desc:"Spatial analysis of cities, land use, and regional development.",tag:"Applied"},{icon:"🌍",name:"Development Geography",desc:"Economic and social inequalities in the Global South.",tag:"Research"},{icon:"📡",name:"GIS & Remote Sensing",desc:"Geospatial technology for mapping and environmental monitoring.",tag:"High Demand"},{icon:"🌊",name:"Environmental Geography",desc:"Interaction between human activity and natural landscapes.",tag:"Applied"}],
+  136:[{icon:"🏺",name:"Classical & Ancient History",desc:"Civilizations of Greece, Rome, Egypt, and the ancient world.",tag:"Research"},{icon:"⚔️",name:"Medieval & Early Modern History",desc:"Political and cultural change from 500–1800 CE.",tag:"Research"},{icon:"🔍",name:"Archaeology",desc:"Excavation and analysis of human artifacts and settlements.",tag:"Fieldwork"},{icon:"🌏",name:"Asian & Southeast Asian History",desc:"Colonial histories and modern transformation of Asia.",tag:"Research"}],
+  137:[{icon:"📝",name:"Creative Writing & Rhetoric",desc:"Craft literary fiction, poetry, and persuasive discourse.",tag:"Applied"},{icon:"🌍",name:"Linguistics & Language Theory",desc:"Structure, acquisition, and evolution of human language.",tag:"Research"},{icon:"📚",name:"Comparative Literature",desc:"Cross-cultural reading of texts across languages and traditions.",tag:"Research"},{icon:"🌐",name:"Translation & Interpreting",desc:"Bridge languages in literary, legal, and diplomatic contexts.",tag:"Industry"}],
+  138:[{icon:"🤔",name:"Ethics & Moral Philosophy",desc:"Reason about right action, justice, and the good life.",tag:"Research"},{icon:"🧠",name:"Philosophy of Mind & AI",desc:"Questions of consciousness, cognition, and intelligence.",tag:"Research"},{icon:"🔬",name:"Philosophy of Science",desc:"Foundations, methods, and epistemology of scientific knowledge.",tag:"Research"},{icon:"🏛️",name:"Political Philosophy",desc:"Legitimacy, justice, and the ethics of governance.",tag:"Applied"}],
+  146:[{icon:"📈",name:"Marketing & Brand Management",desc:"Brand identity, consumer strategy, and digital campaigns.",tag:"Industry"},{icon:"💹",name:"Finance & Accounting",desc:"Financial reporting, investment analysis, and risk management.",tag:"Industry"},{icon:"🏢",name:"Management & Leadership",desc:"Organizational behavior, strategy, and entrepreneurship.",tag:"Industry"},{icon:"🌐",name:"International Business",desc:"Cross-border trade, global supply chains, and market entry.",tag:"Industry"}],
+  144:[{icon:"✍️",name:"Literature & Critical Theory",desc:"Texts through feminist, postcolonial, and psychoanalytic lenses.",tag:"Research"},{icon:"🎭",name:"Drama & Performance Studies",desc:"Theatrical traditions, playwriting, and performance analysis.",tag:"Applied"},{icon:"📰",name:"Journalism & Media Writing",desc:"News writing, investigative reporting, and digital media.",tag:"Industry"},{icon:"🏫",name:"TESOL & Applied Linguistics",desc:"Teaching English and studying language acquisition.",tag:"Applied"}],
+  152:[{icon:"🎨",name:"Graphic Design & Visual Art",desc:"Visual communication, branding, and digital illustration.",tag:"Creative"},{icon:"🎬",name:"Film & Media Production",desc:"Storytelling through video, documentary, and new media.",tag:"Creative"},{icon:"📡",name:"Public Relations",desc:"Strategic messaging, PR campaigns, and media relations.",tag:"Industry"},{icon:"🎭",name:"Theatre & Performing Arts",desc:"Acting, directing, dramaturgy, and live performance.",tag:"Creative"}],
+  153:[{icon:"🏫",name:"Secondary Education",desc:"Subject specialization and pedagogy for high school teaching.",tag:"Applied"},{icon:"🌍",name:"TESOL & Language Education",desc:"Teaching English as a second or foreign language.",tag:"High Demand"},{icon:"💻",name:"Instructional Design & EdTech",desc:"Digital learning experiences and e-learning platforms.",tag:"High Demand"},{icon:"🧠",name:"Special & Inclusive Education",desc:"Support students with learning disabilities and diverse needs.",tag:"Applied"}],
+  154:[{icon:"⚙️",name:"Mechanical Engineering",desc:"Design and build machines, engines, and mechanical systems.",tag:"Core"},{icon:"🏗️",name:"Civil Engineering",desc:"Design infrastructure: bridges, roads, and buildings.",tag:"Core"},{icon:"⚡",name:"Electrical Engineering",desc:"Power systems, electronics, and signal processing.",tag:"Core"},{icon:"💻",name:"Software Engineering",desc:"Large-scale software development and system architecture.",tag:"High Demand"}],
+  156:[{icon:"🎹",name:"Performance & Instruments",desc:"Master classical or contemporary instruments for concert performance.",tag:"Creative"},{icon:"🎼",name:"Composition & Songwriting",desc:"Write music for orchestral, chamber, or popular contexts.",tag:"Creative"},{icon:"🎧",name:"Music Technology & Production",desc:"Digital audio workstations, sound design, and production.",tag:"Industry"},{icon:"📚",name:"Music Theory & Musicology",desc:"Musical structure, history, and cultural analysis.",tag:"Research"}],
+  158:[{icon:"🏛️",name:"Government & Public Policy",desc:"Political institutions, policy analysis, and public administration.",tag:"Applied"},{icon:"🌍",name:"International Affairs",desc:"Diplomacy, geopolitics, and international organizations.",tag:"Research"},{icon:"⚖️",name:"Constitutional Law",desc:"Government power, rights, and constitutional frameworks.",tag:"Applied"},{icon:"🏘️",name:"Community Development",desc:"Grassroots leadership, civic engagement, and social policy.",tag:"Applied"}],
+  148:[{icon:"🌍",name:"World & Global History",desc:"Interconnected histories across continents and civilizations.",tag:"Research"},{icon:"🏭",name:"Economic & Social History",desc:"History of labor, trade, class, and everyday life.",tag:"Research"},{icon:"🎨",name:"Cultural & Intellectual History",desc:"Ideas, arts, and cultural movements across time.",tag:"Research"},{icon:"🌏",name:"Vietnamese & Southeast Asian History",desc:"Local histories in regional and global context.",tag:"Applied"}],
+  145:[{icon:"🧠",name:"Cognitive & Decision Science",desc:"How people think, reason, and make choices under uncertainty.",tag:"Research"},{icon:"🏢",name:"Behavioral Economics",desc:"Psychological influences on economic decisions and markets.",tag:"Research"},{icon:"🏘️",name:"Social Work & Human Services",desc:"Support vulnerable populations and design social interventions.",tag:"Applied"},{icon:"📊",name:"Research Methods",desc:"Quantitative and qualitative methods for behavioral research.",tag:"Foundation"}],
+  142:[{icon:"🤟",name:"Sign Language Linguistics",desc:"Phonology, morphology, and syntax of signed languages.",tag:"Research"},{icon:"🏥",name:"Medical & Legal Interpreting",desc:"Specialized interpretation in healthcare and judicial settings.",tag:"Industry"},{icon:"🏫",name:"Deaf Education",desc:"Teaching methodologies for Deaf and hard-of-hearing students.",tag:"Applied"},{icon:"🌍",name:"Deaf Culture Studies",desc:"History, identity, and social dynamics of Deaf communities.",tag:"Research"}],
+  117:[{icon:"🌿",name:"Bioremediation",desc:"Microorganisms to break down environmental pollutants.",tag:"Research"},{icon:"⚡",name:"Biofuels & Biogas",desc:"Sustainable energy from biological feedstocks.",tag:"Applied"},{icon:"💧",name:"Biowater Treatment",desc:"Biological processes for clean water production.",tag:"Applied"},{icon:"🧬",name:"Microbial Ecology",desc:"Microbial communities in natural and engineered environments.",tag:"Research"}],
+  118:[{icon:"🧪",name:"Fermentation Technology",desc:"Large-scale production of enzymes, antibiotics, and biofuels.",tag:"Industry"},{icon:"🧬",name:"Metabolic Engineering",desc:"Redesign cellular metabolism for industrial chemical production.",tag:"Research"},{icon:"🌿",name:"Plant Biotechnology",desc:"Improve crops using genetic tools for yield and resilience.",tag:"Applied"},{icon:"💊",name:"Pharmaceutical Biotechnology",desc:"Biological drugs — proteins, antibodies, and vaccines.",tag:"Industry"}],
+  139:[{icon:"🔬",name:"Life Sciences Track",desc:"Biology, chemistry, and health sciences concentration.",tag:"Foundation"},{icon:"💡",name:"Social Sciences Track",desc:"Psychology, sociology, and policy studies concentration.",tag:"Foundation"},{icon:"🎨",name:"Humanities & Arts Track",desc:"Literature, philosophy, and fine arts concentration.",tag:"Foundation"},{icon:"💻",name:"Computing & Data Track",desc:"Computer science and data analytics foundation pathway.",tag:"Foundation"}],
+  150:[{icon:"🔬",name:"Biological Sciences",desc:"Cell biology, genetics, and organismal science.",tag:"Core"},{icon:"⚗️",name:"Physical & Chemical Sciences",desc:"Physics, chemistry, and materials science.",tag:"Core"},{icon:"🌍",name:"Earth & Environmental Sciences",desc:"Geology, climate, and ecosystem science.",tag:"Core"},{icon:"💻",name:"Applied & Computational Sciences",desc:"Data science, bioinformatics, and scientific computing.",tag:"Applied"}],
+  151:[{icon:"✈️",name:"Aerodynamics & Flight Mechanics",desc:"Principles of lift, drag, and aircraft stability.",tag:"Core"},{icon:"🚀",name:"Propulsion & Jet Engines",desc:"Gas turbine, rocket, and hybrid propulsion systems.",tag:"Core"},{icon:"🛰️",name:"Avionics & Flight Systems",desc:"Navigation, communication, and control electronics in aircraft.",tag:"Applied"},{icon:"🛡️",name:"Aerospace Structures & Materials",desc:"Lightweight composites and structural integrity for flight.",tag:"Research"}]
+};
+
+/* ── Disc-color helpers (for major-in-uni view) ─────────────── */
+function applyDiscColor(hex) {
+  var r = parseInt(hex.slice(1,3), 16);
+  var g = parseInt(hex.slice(3,5), 16);
+  var b = parseInt(hex.slice(5,7), 16);
+  var rgb = r + ',' + g + ',' + b;
+  var root = document.documentElement;
+  root.style.setProperty('--disc-primary', hex);
+  root.style.setProperty('--disc-light', lightenDisc(hex, 0.2));
+  root.style.setProperty('--disc-bg', 'rgba(' + rgb + ',.12)');
+  root.style.setProperty('--disc-border', 'rgba(' + rgb + ',.30)');
+}
+function lightenDisc(hex, amt) {
+  var r = parseInt(hex.slice(1,3), 16);
+  var g = parseInt(hex.slice(3,5), 16);
+  var b = parseInt(hex.slice(5,7), 16);
+  r = Math.min(255, Math.round(r + (255-r)*amt));
+  g = Math.min(255, Math.round(g + (255-g)*amt));
+  b = Math.min(255, Math.round(b + (255-b)*amt));
+  function hx(n) { return (n < 16 ? '0' : '') + n.toString(16); }
+  return '#' + hx(r) + hx(g) + hx(b);
+}
+
+/* ── Wave SVG for major-in-uni hero ──────────────────────────── */
+function buildMajorWaveSVG(hex) {
+  var c2 = hex + 'cc', c3 = hex + '80';
+  return '<svg viewBox="0 0 390 190" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">' +
+    '<defs>' +
+    '<linearGradient id="uwg1" x1="0%" y1="0%" x2="100%" y2="0%">' +
+    '<stop offset="0%" stop-color="' + hex + '" stop-opacity="0"/>' +
+    '<stop offset="35%" stop-color="' + hex + '" stop-opacity=".7"/>' +
+    '<stop offset="70%" stop-color="' + c2 + '" stop-opacity=".5"/>' +
+    '<stop offset="100%" stop-color="' + hex + '" stop-opacity="0"/>' +
+    '</linearGradient>' +
+    '<linearGradient id="uwg2" x1="0%" y1="0%" x2="100%" y2="0%">' +
+    '<stop offset="0%" stop-color="' + hex + '" stop-opacity="0"/>' +
+    '<stop offset="40%" stop-color="' + hex + '" stop-opacity=".45"/>' +
+    '<stop offset="75%" stop-color="' + c3 + '" stop-opacity=".3"/>' +
+    '<stop offset="100%" stop-color="' + hex + '" stop-opacity="0"/>' +
+    '</linearGradient></defs>' +
+    '<path d="M-40,140 C60,100 150,160 260,120 S370,80 430,100" fill="none" stroke="url(#uwg1)" stroke-width="2.5"/>' +
+    '<path d="M-40,120 C80,80 170,140 280,100 S390,60 440,80" fill="none" stroke="url(#uwg1)" stroke-width="1.8"/>' +
+    '<path d="M-40,160 C50,130 140,170 250,140 S360,110 430,125" fill="none" stroke="url(#uwg2)" stroke-width="2"/>' +
+    '<path d="M-20,95 C70,65 180,110 290,80 S400,50 450,70" fill="none" stroke="url(#uwg2)" stroke-width="1.5"/>' +
+    '<path d="M-20,170 C60,145 160,180 270,155 S380,130 440,148" fill="none" stroke="url(#uwg2)" stroke-width="1.8"/>' +
+    '</svg>';
+}
+
+/* ── Tag style for major-in-uni cards ────────────────────────── */
+var UDM_TAG = {
+  'High Demand':{bg:'rgba(6,214,160,.12)',bd:'rgba(6,214,160,.30)',tx:'#06d6a0'},
+  'Research'   :{bg:'var(--disc-bg)',bd:'var(--disc-border)',tx:'var(--disc-light)'},
+  'Applied'    :{bg:'rgba(251,146,60,.12)',bd:'rgba(251,146,60,.30)',tx:'#fb923c'},
+  'Clinical'   :{bg:'rgba(239,68,68,.12)',bd:'rgba(239,68,68,.30)',tx:'#f87171'},
+  'Industry'   :{bg:'rgba(255,212,59,.12)',bd:'rgba(255,212,59,.25)',tx:'#ffd43b'},
+  'Core'       :{bg:'rgba(200,200,224,.08)',bd:'rgba(200,200,224,.20)',tx:'#c8c8e0'},
+  'Foundation' :{bg:'rgba(200,200,224,.08)',bd:'rgba(200,200,224,.20)',tx:'#c8c8e0'},
+  'Creative'   :{bg:'var(--disc-bg)',bd:'var(--disc-border)',tx:'var(--disc-light)'},
+  'Fieldwork'  :{bg:'rgba(6,214,160,.10)',bd:'rgba(6,214,160,.22)',tx:'#34d399'},
+  'Lab-based'  :{bg:'var(--disc-bg)',bd:'var(--disc-border)',tx:'var(--disc-light)'},
+  'Elective'   :{bg:'rgba(200,200,224,.06)',bd:'rgba(200,200,224,.14)',tx:'#9d9dbf'},
+  'Specialized':{bg:'var(--disc-bg)',bd:'var(--disc-border)',tx:'var(--disc-light)'}
+};
+function udmTagStyle(t) {
+  var s = UDM_TAG[t] || UDM_TAG['Core'];
+  return 'background:' + s.bg + ';border-color:' + s.bd + ';color:' + s.tx;
+}
+
+/* ── Bullet extractor ────────────────────────────────────────── */
+function getMajorBullets(major) {
+  var text = major.desc.replace(/\n/g, ' ');
+  var parts = text.split('. ');
+  var bullets = [];
+  for (var bi = 0; bi < parts.length && bullets.length < 3; bi++) {
+    var s = parts[bi].replace(/^(This field|This discipline|It )/i, '').trim();
+    if (s.length > 28) bullets.push(s.replace(/\.$/, '') + '.');
+  }
+  return bullets;
+}
+
+/* ── Fallback specs ──────────────────────────────────────────── */
+function getFallbackSpecsMajor(major) {
+  return [
+    {icon:'📚', name:'Core Foundations', desc:'Fundamental theories and principles of ' + major.title + '.', tag:'Foundation'},
+    {icon:'🔬', name:'Research Methods', desc:'Quantitative and qualitative approaches for advanced inquiry.', tag:'Research'},
+    {icon:'🏢', name:'Applied Practice', desc:'Real-world projects, internships, and industry placements.', tag:'Applied'},
+    {icon:'🌐', name:'Interdisciplinary Studies', desc:'Connections with adjacent fields and emerging specialties.', tag:'Elective'}
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════════ */
+function findUni(id) {
+  for (var i = 0; i < UNI_DATA.length; i++) {
+    if (UNI_DATA[i].id === id) return UNI_DATA[i];
+  }
+  return null;
+}
+function getMatchColor(pct) {
+  return pct >= 70 ? '#06D6A0' : pct >= 40 ? '#FBBF24' : '#F87171';
+}
+function getMatchClass(pct) {
+  return pct >= 70 ? 'match-green' : pct >= 40 ? 'match-yellow' : 'match-red';
+}
+function getBarClass(pct) {
+  return pct >= 70 ? 'bar-green' : pct >= 40 ? 'bar-yellow' : 'bar-red';
+}
+
+/* Save toggle */
+var _saved = false;
+function toggleSave() {
+  _saved = !_saved;
+  var btn = document.getElementById('saveBtn');
+  var icon = document.getElementById('heartIcon');
+  if (_saved) {
+    btn.classList.add('saved');
+    icon.setAttribute('fill', '#ef4444');
+    icon.setAttribute('stroke', '#ef4444');
+  } else {
+    btn.classList.remove('saved');
+    icon.setAttribute('fill', 'none');
+    icon.setAttribute('stroke', 'currentColor');
+  }
+}
+function shareUni() {
+  if (navigator.share) {
+    navigator.share({ title: document.title, url: window.location.href });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════ */
+var _currentUni   = null;
+var _currentMajor = null;
+var _currentSpecs = [];
+var _savedBodyHTML = '';
+
+function render(u) {
+  _currentUni = u;
+  var det  = getDetail(u.id);
+  var imgs = UNI_IMG_MAP[u.id] || { icon: null, image: null };
+  var mc   = getMatchClass(u.match);
+  var bc   = getBarClass(u.match);
+
+  /* Document title & breadcrumb */
+  document.title = u.name + ' — BeyonDegrees.ai';
+  document.getElementById('bcTitle').textContent = u.name;
+  document.getElementById('headerTitle').textContent = u.name;
+
+  /* ── Hero campus image ── */
+  var hero = document.getElementById('udHero');
+  if (imgs.image) {
+    var heroImg = document.createElement('img');
+    heroImg.className = 'ud-hero-img';
+    heroImg.alt = u.name + ' campus';
+    heroImg.src = imgs.image;
+    heroImg.onerror = function() { this.style.display = 'none'; };
+    hero.insertBefore(heroImg, hero.firstChild);
+  }
+
+  /* ── Logo ── */
+  var logoWrap  = document.getElementById('udLogoWrap');
+  var logoEmoji = document.getElementById('udLogoEmoji');
+  if (imgs.icon) {
+    var logoImg = document.createElement('img');
+    logoImg.className = 'ud-logo-img';
+    logoImg.alt = u.name + ' logo';
+    logoImg.src = imgs.icon;
+    logoImg.onerror = function() {
+      this.style.display = 'none';
+      logoEmoji.style.display = 'block';
+    };
+    logoWrap.insertBefore(logoImg, logoEmoji);
+    logoEmoji.style.display = 'none';
+  } else {
+    logoEmoji.textContent = u.icon;
+  }
+
+  /* ── Hero text ── */
+  document.getElementById('udHeroName').textContent = u.name;
+  document.getElementById('udHeroLoc').textContent  = u.loc;
+
+  /* ── Match pill ── */
+  var pill = document.getElementById('udMatchPill');
+  pill.textContent = u.match + '%';
+  pill.className   = 'ud-match-pill ' + mc;
+
+  /* ── Match banner ── */
+  var pctEl = document.getElementById('udMbPct');
+  pctEl.textContent = u.match + '%';
+  pctEl.className   = 'ud-mb-pct ' + mc;
+
+  var fill = document.getElementById('udMbBarFill');
+  fill.className = 'ud-mb-bar-fill ' + bc;
+  setTimeout(function() { fill.style.width = u.match + '%'; }, 150);
+
+  var factors = [
+    { label: '✓ World Ranking',    type: 'good' },
+    { label: '✓ Aid Available',    type: 'good' },
+    { label: u.aidType === 'full' ? '✓ Full Scholarship' : u.aidType === 'need' ? '✓ Need-Based Aid' : '★ Merit Aid', type: 'good' },
+    { label: u.match >= 70 ? '✓ Profile Fit' : '~ Partial Fit', type: u.match >= 70 ? 'good' : 'mid' },
+    { label: u.match >= 60 ? '✓ Budget Range'  : '↑ Tuition High', type: u.match >= 60 ? 'good' : 'mid' },
+  ];
+  if (u.match < 50) factors.splice(3, 1, { label: '✗ Competitive', type: 'weak' });
+  var factHtml = '';
+  for (var i = 0; i < Math.min(factors.length, 4); i++) {
+    var f = factors[i];
+    factHtml += '<span class="ud-mb-factor' + (f.type === 'weak' ? ' weak' : f.type === 'mid' ? ' mid' : '') + '">' + f.label + '</span>';
+  }
+  document.getElementById('udMbFactors').innerHTML = factHtml;
+
+  /* ── Location ── */
+  var flag = CTRY_FLAGS[u.country] || '🌍';
+  document.getElementById('udLocFlag').textContent   = flag;
+  document.getElementById('udLocText').textContent    = u.loc;
+  document.getElementById('udLocCountry').textContent = u.country;
+
+  /* ── About ── */
+  var chipCls = u.type === 'pub' ? 'pub' : (u.type === 'intl' ? 'intl' : 'priv');
+  document.getElementById('udMetaChips').innerHTML =
+    '<span class="ud-chip ' + chipCls + '">' + u.typeLabel + '</span>' +
+    '<span class="ud-chip rank">📊 ' + u.ranking + '</span>';
+  document.getElementById('udAboutText').textContent = det.about;
+
+  /* ── Programs — top 3 by match %, expand to see rest ── */
+  var majorIds = UNI_MAJOR_MAP[u.id] || [];
+  var availMajors = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : [];
+
+  /* Build + sort by match % descending */
+  var majorList = [];
+  for (var pj = 0; pj < majorIds.length; pj++) {
+    var pmid = majorIds[pj];
+    var pm = null;
+    for (var pk = 0; pk < availMajors.length; pk++) {
+      if (availMajors[pk].id === pmid) { pm = availMajors[pk]; break; }
+    }
+    if (!pm) continue;
+    majorList.push({ major: pm, pct: ((pm.id * 17 + 31) % 30) + 62 });
+  }
+  majorList.sort(function(a, b) { return b.pct - a.pct; });
+
+  /* Build a single .ml-item HTML string */
+  function buildMlItem(pm, ppct, uid) {
+    var pdisc = (typeof DISCIPLINES !== 'undefined' && DISCIPLINES[String(pm.discId)]) ||
+      {title:'General', color:'#6b6b9a', short:'General', code:'xx'};
+    var pdclr  = pdisc.color;
+    var pdclrA = pdclr + '22';
+    var pctCls = ppct >= 70 ? 'pct-high' : ppct >= 50 ? 'pct-mid' : 'pct-low';
+    var psub   = pm.desc.slice(0, 55).replace(/\s+\S+$/, '') + '…';
+    return '<div class="ml-item" onclick="navigateToMajor(\'' + uid + '\',' + pm.id + ')">' +
+      '<div class="ml-left">' +
+        '<div class="ml-ico" style="background:' + pdclrA + '">' + pm.icon + '</div>' +
+        '<div class="ml-info">' +
+          '<div class="disc-badge" style="--bc:' + pdclr + '">' +
+            '<span class="d-dot"></span>' +
+            '<span class="d-name">' + (pdisc.short || pdisc.title) + '</span>' +
+          '</div>' +
+          '<div class="ml-name">' + pm.title + '</div>' +
+          '<div class="ml-sub">' + psub + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="ml-right">' +
+        '<span class="ml-pct ' + pctCls + '">' + ppct + '%</span>' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="color:var(--text-muted)"><path d="M9 18l6-6-6-6"/></svg>' +
+      '</div>' +
+    '</div>';
+  }
+
+  /* Top 3 + hidden remainder */
+  var topHtml = '', moreHtml = '';
+  for (var ml = 0; ml < majorList.length; ml++) {
+    var mlItem = buildMlItem(majorList[ml].major, majorList[ml].pct, u.id);
+    if (ml < 3) topHtml += mlItem;
+    else         moreHtml += mlItem;
+  }
+
+  var progContainer = topHtml;
+  if (moreHtml) {
+    progContainer += '<div id="udMorePrograms" style="display:none">' + moreHtml + '</div>';
+  }
+  document.getElementById('udPrograms').innerHTML = progContainer;
+
+  /* View all / collapse toggle button */
+  var vwWrap = document.getElementById('udViewAllWrap');
+  if (vwWrap) {
+    if (moreHtml) {
+      var remaining = majorList.length - 3;
+      vwWrap.innerHTML =
+        '<button id="udViewAllBtn" class="ud-view-all" style="margin-top:4px">' +
+          'View all ' + remaining + ' more programs ↓' +
+        '</button>';
+      document.getElementById('udViewAllBtn').onclick = function() {
+        var more = document.getElementById('udMorePrograms');
+        var open = more.style.display !== 'none';
+        more.style.display = open ? 'none' : '';
+        this.textContent = open
+          ? 'View all ' + remaining + ' more programs ↓'
+          : 'Show less ↑';
+      };
+    } else {
+      vwWrap.innerHTML = '';
+    }
+  }
+
+  /* ── Tuition stats ── */
+  document.getElementById('udTuitionStats').innerHTML =
+    '<div class="ud-stat-card">' +
+      '<div class="ud-stat-lbl">Annual Tuition</div>' +
+      '<div class="ud-stat-val" style="font-size:11px">' + u.tuition + '</div>' +
+    '</div>' +
+    '<div class="ud-stat-card">' +
+      '<div class="ud-stat-lbl">Avg. Salary</div>' +
+      '<div class="ud-stat-val accent">' + u.salary + '</div>' +
+    '</div>' +
+    '<div class="ud-stat-card">' +
+      '<div class="ud-stat-lbl">Total Students</div>' +
+      '<div class="ud-stat-val">' + u.students + '</div>' +
+    '</div>' +
+    '<div class="ud-stat-card">' +
+      '<div class="ud-stat-lbl">Employment Rate</div>' +
+      '<div class="ud-stat-val accent">' + u.employment + '</div>' +
+    '</div>';
+
+  /* ── Aid ── */
+  var aidCls   = u.aidType === 'full' ? 'full' : (u.aidType === 'merit' ? 'merit' : 'need');
+  var aidEmoji = u.aidType === 'full' ? '🏆' : (u.aidType === 'merit' ? '⭐' : '◈');
+  document.getElementById('udAidBadge').innerHTML =
+    '<div class="ud-aid-badge ' + aidCls + '">' + aidEmoji + ' ' + u.aid + '</div>';
+  document.getElementById('udAidText').textContent =
+    u.aidType === 'full'
+      ? 'Full scholarship covering tuition, housing, and living expenses. Awarded based on financial need and academic merit. Apply separately through the financial aid office.'
+      : u.aidType === 'merit'
+        ? 'Merit-based financial aid and scholarships available for outstanding academic achievements. Contact admissions for eligibility and application procedures.'
+        : 'Need-based financial aid available. Meets 100% of demonstrated financial need for admitted students. Expected family contribution applies.';
+  document.getElementById('udLoanVal').textContent = det.loan;
+
+  /* ── Campus life ── */
+  var chips = [u.students + ' Students', det.intl + ' International', '🏠 Housing', '🎓 Clubs'];
+  document.getElementById('udLifeChips').innerHTML = chips.map(function(c) {
+    return '<span class="ud-life-chip">' + c + '</span>';
+  }).join('');
+  document.getElementById('udLifeText').textContent = det.life;
+
+  /* ── Admissions ── */
+  document.getElementById('udAdmitStats').innerHTML =
+    '<div class="ud-admit-stat">' +
+      '<div class="ud-admit-val" style="color:' + getMatchColor(u.match) + '">' + det.accept + '</div>' +
+      '<div class="ud-admit-lbl">Accept Rate</div>' +
+    '</div>' +
+    '<div class="ud-admit-stat">' +
+      '<div class="ud-admit-val">' + det.intl + '</div>' +
+      '<div class="ud-admit-lbl">Intl. Students</div>' +
+    '</div>' +
+    '<div class="ud-admit-stat">' +
+      '<div class="ud-admit-val" style="font-size:11px;color:var(--violet-300)">' + det.deadline + '</div>' +
+      '<div class="ud-admit-lbl">App Deadline</div>' +
+    '</div>';
+
+  document.getElementById('udSiteUrl').textContent = det.site;
+  document.getElementById('udApplyBtn').onclick = function() {
+    window.open('https://' + det.site, '_blank');
+  };
+
+  /* ── Immigration ── */
+  document.getElementById('udSupportText').textContent = det.support;
+  /* Save a snapshot of udBody HTML (after bar animation) for why-match back-navigation */
+  setTimeout(function() {
+    var b = document.getElementById('udBody');
+    if (b) _savedBodyHTML = b.innerHTML;
+  }, 300);
+
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAJOR-IN-UNI VIEW
+═══════════════════════════════════════════════════════ */
+function renderMajorInUni(u, major) {
+  var disc = (typeof DISCIPLINES !== 'undefined' && DISCIPLINES[String(major.discId)]) ||
+    {title:'Engineering', color:'#7c3aed', icon:'⚙️'};
+  var color = disc.color;
+
+  /* Apply disc CSS vars */
+  applyDiscColor(color);
+
+  /* Update header */
+  document.getElementById('headerTitle').textContent = major.title;
+  var backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.href = '?id=' + u.id;
+    backBtn.onclick = function(e) { e.preventDefault(); history.back(); };
+  }
+
+  /* Hide save/share buttons since not relevant here */
+  var saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) saveBtn.style.display = 'none';
+
+  /* Store for spec card onclick */
+  _currentMajor = major;
+
+  /* Get specializations (2–4) */
+  var allSpecs = SPEC_DATA[major.id] || getFallbackSpecsMajor(major);
+  var specCount = Math.min(allSpecs.length, 2 + (major.id % 3));
+  var specs = allSpecs.slice(0, specCount);
+  _currentSpecs = specs;
+
+  /* Hero aurora color */
+  var r = parseInt(color.slice(1,3), 16);
+  var g2 = parseInt(color.slice(3,5), 16);
+  var b2 = parseInt(color.slice(5,7), 16);
+  var aStyle = 'background:radial-gradient(ellipse at 25% 35%,rgba(' + r + ',' + g2 + ',' + b2 + ',.28) 0%,transparent 65%)';
+
+  /* Build hero waves */
+  var waveSvg = buildMajorWaveSVG(color);
+
+  /* Build bullets */
+  var bullets = getMajorBullets(major);
+  var bullHtml = '';
+  for (var bi = 0; bi < bullets.length; bi++) {
+    bullHtml +=
+      '<div class="udm-bullet">' +
+        '<span class="udm-bullet-chk"><svg viewBox="0 0 12 12" fill="none" stroke="' + color + '" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="2,6 5,9 10,3"/></svg></span>' +
+        '<span>' + bullets[bi] + '</span>' +
+      '</div>';
+  }
+
+  /* Build spec cards */
+  var specHtml = '';
+  for (var si = 0; si < specs.length; si++) {
+    var sp = specs[si];
+    var ts = udmTagStyle(sp.tag);
+    specHtml +=
+      '<div class="udm-spec-card" onclick="renderSpecInUni(_currentUni,_currentMajor,_currentSpecs[' + si + '],' + si + ')">' +
+        '<div class="udm-spec-icon">' + sp.icon + '</div>' +
+        '<div class="udm-spec-info">' +
+          '<div class="udm-spec-name">' + sp.name + '</div>' +
+          '<div class="udm-spec-sub">' + sp.desc + '</div>' +
+          '<span class="udm-spec-tag" style="' + ts + '">' + sp.tag + '</span>' +
+        '</div>' +
+        '<span class="udm-spec-chev">&#8250;</span>' +
+      '</div>';
+  }
+
+  /* Short description */
+  var shortDesc = major.desc.length > 200
+    ? major.desc.slice(0, major.desc.lastIndexOf(' ', 200)) + '…'
+    : major.desc;
+
+  /* University logo — fills hero */
+  var muImgs = UNI_IMG_MAP[u.id] || { icon: null };
+  var muHeroFillHtml = muImgs.icon
+    ? '<div class="udm-hero-logo-fill" style="background-image:url(\'' + muImgs.icon + '\')"></div>'
+    : '<div class="udm-hero-emoji-fill">' + u.icon + '</div>';
+
+  /* Render into udBody */
+  document.getElementById('udBody').innerHTML =
+    '<div class="udm-hero">' +
+      muHeroFillHtml +
+      '<div class="udm-overlay"></div>' +
+      '<div class="udm-label">' +
+        '<div class="udm-major-name">' + major.title + '</div>' +
+        '<div class="udm-disc-tag">' + disc.icon + ' ' + disc.title + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="udm-body">' +
+      '<div class="udm-desc">' + shortDesc + '</div>' +
+      (bullHtml ? '<div class="udm-bullets">' + bullHtml + '</div>' : '') +
+      '<div class="udm-sec-hd">Specializations</div>' +
+      '<div class="udm-spec-list">' + specHtml + '</div>' +
+    '</div>';
+  var _udBodyEl = document.getElementById('udBody');
+  _udBodyEl.scrollTop = 0;
+  setTimeout(function() { _udBodyEl.scrollTop = 0; }, 0);
+  setTimeout(function() { _udBodyEl.scrollTop = 0; }, 100);
+
+}
+
+/* ═══════════════════════════════════════════════════════
+   UNI CONTACT INFO
+═══════════════════════════════════════════════════════ */
+var UNI_CONTACT = {
+  'mit':      { email:'admissions@mit.edu',              phone:'617-253-3400' },
+  'columbia': { email:'ugrad-ask@columbia.edu',          phone:'212-854-2522' },
+  'duke':     { email:'undergrad-admissions@duke.edu',   phone:'919-684-3214' },
+  'ucla':     { email:'ugadm@support.ucla.edu',          phone:'310-825-3101' },
+  'ucsd':     { email:'admissionsreply@ucsd.edu',        phone:'858-534-4831' },
+  'bu':       { email:'admissions@bu.edu',               phone:'617-353-2300' },
+  'usc':      { email:'admitusc@usc.edu',                phone:'213-740-1111' },
+  'oxford':   { email:'undergraduate.admissions@ox.ac.uk', phone:'+44-1865-288000' },
+  'eth':      { email:'admissions@ethz.ch',              phone:'+41-44-632-1111' },
+  'tum':      { email:'studium@tum.de',                  phone:'+49-89-289-01' },
+  'nus':      { email:'admissions@nus.edu.sg',           phone:'+65-6516-1010' },
+  'kaist':    { email:'admissions@kaist.ac.kr',          phone:'+82-42-350-2114' },
+  'fpt':      { email:'tuyensinh@fpt.edu.vn',            phone:'1800-6600' },
+  'fulbright':{ email:'admissions@fulbright.edu.vn',     phone:'028-3521-0204' },
+  'default':  { email:'admissions@university.edu',       phone:'Contact admissions office' },
+};
+
+/* ═══════════════════════════════════════════════════════
+   SPEC → UNI MAP  (mirrors spec-detail)
+═══════════════════════════════════════════════════════ */
+var _SPEC_UNI_MAP = {
+  '104_0':['mit','eth','oxford','tum'],'104_1':['nus','tum','ucla','ucsd','duke'],'104_2':['mit','kaist','eth','tum'],'104_3':['columbia','duke','eth','sciencespo'],
+  '105_0':['mit','fpt','rmit','kaist','ucla'],'105_1':['mit','kaist','tsinghua','nus','columbia'],'105_2':['mit','kaist','ucla','tum','rmit'],'105_3':['nus','tum','ucla','columbia','fpt'],
+  '106_0':['mit','eth','tum','kaist'],'106_1':['mit','eth','oxford','anu'],'106_2':['mit','eth','kaist','tum'],'106_3':['eth','kaist','tum','mit'],
+  '107_0':['eth','tum','oxford','nus'],'107_1':['eth','mit','tum','oxford'],'107_2':['tum','eth','nus','anu'],'107_3':['eth','tum','tudelft','nus'],
+  '108_0':['anu','mit','tum','oxford'],'108_1':['mit','oxford','anu','eth'],'108_2':['anu','mit','auckland','ucla'],'108_3':['tudelft','tum','nus','eth'],
+  '109_0':['mit','oxford','nus','kaist'],'109_1':['oxford','nus','mahidol','tum'],'109_2':['anu','oxford','auckland','tudelft'],'109_3':['anu','oxford','auckland','nus'],
+  '110_0':['tudelft','tum','mit','nus'],'110_1':['tudelft','tum','nus','auckland'],'110_2':['tudelft','tum','nus','ufl'],'110_3':['tudelft','mit','tum','nus'],
+  '111_0':['tum','nus','kaist','tudelft','fpt'],'111_1':['nus','kaist','tum','rmit','fpt'],'111_2':['kaist','fpt','rmit','tum','nus'],'111_3':['kaist','mit','tum','nus','eth'],
+  '112_0':['tum','eth','mit','kaist'],'112_1':['tum','eth','mit','oxford'],'112_2':['kaist','mit','tum','nus','fpt'],'112_3':['tum','eth','kaist','oxford'],
+  '113_0':['eth','tum','nus','tudelft'],'113_1':['tudelft','tum','nus','anu'],'113_2':['eth','tum','nus','kaist'],'113_3':['tudelft','eth','tum','nus'],
+  '114_0':['mit','eth','kaist','tum'],'114_1':['mit','oxford','nus','tum'],'114_2':['eth','tum','nus','kaist'],'114_3':['tum','eth','nus','auckland'],
+  '115_0':['tum','mit','eth','nus'],'115_1':['tum','mit','eth','oxford'],'115_2':['eth','mit','nus','oxford'],'115_3':['nus','mit','kaist','tum','fpt'],
+  '116_0':['tudelft','tum','nus','eth'],'116_1':['tudelft','eth','tum','nus'],'116_2':['tudelft','eth','nus','tum'],'116_3':['tudelft','eth','tum','kaist','nus'],
+  '117_0':['eth','tum','nus','oxford'],'117_1':['eth','tudelft','tum','nus'],'117_2':['tudelft','eth','tum','nus'],'117_3':['nus','eth','tum','kaist'],
+  '118_0':['eth','tum','nus','kaist'],'118_1':['mit','eth','kaist','nus'],'118_2':['eth','tum','nus','anu'],'118_3':['eth','mit','oxford','nus'],
+  '119_0':['mit','kaist','eth','tum'],'119_1':['mit','eth','oxford','nus'],'119_2':['eth','tudelft','tum','nus'],'119_3':['eth','mit','kaist','tum'],
+  '120_0':['mit','kaist','eth','anu','ucla'],'120_1':['tum','nus','ufl','tudelft'],'120_2':['kaist','tum','nus','eth','fpt'],'120_3':['eth','kaist','tum','mit'],
+  '121_0':['oxford','nus','tum','mahidol'],'121_1':['oxford','nus','mahidol','tum'],'121_2':['oxford','mit','nus','tum'],'121_3':['oxford','mit','nus','kaist'],
+  '122_0':['oxford','tum','nus','mahidol','duke'],'122_1':['oxford','duke','tum','nus'],'122_2':['oxford','tum','mahidol','nus'],'122_3':['oxford','tum','columbia','nus'],
+  '123_0':['oxford','nus','mahidol','duke','columbia'],'123_1':['duke','columbia','nus','tum'],'123_2':['oxford','nus','mahidol','tum'],'123_3':['oxford','nus','mahidol','melbourne'],
+  '124_0':['oxford','mit','eth','nus'],'124_1':['mit','oxford','eth','kaist'],'124_2':['mit','eth','nus','tum'],'124_3':['mit','oxford','eth','nus'],
+  '125_0':['oxford','nus','tum','melbourne'],'125_1':['oxford','nus','tum','auckland'],'125_2':['oxford','eth','nus','tum'],'125_3':['nus','tum','oxford','mahidol'],
+  '126_0':['anu','oxford','tum','auckland'],'126_1':['anu','tum','oxford','auckland'],'126_2':['anu','tudelft','tum','auckland'],'126_3':['nus','fpt','tum','kaist','anu'],
+  '129_0':['oxford','columbia','duke','melbourne'],'129_1':['columbia','duke','oxford','nus'],'129_2':['oxford','columbia','duke','melbourne'],'129_3':['mit','oxford','columbia','kaist'],
+  '130_0':['oxford','columbia','duke','eth'],'130_1':['columbia','duke','oxford','nus'],'130_2':['oxford','columbia','eth','sciencespo'],'130_3':['columbia','duke','eth','nus'],
+  '131_0':['columbia','duke','oxford','sciencespo'],'131_1':['columbia','duke','sciencespo','oxford'],'131_2':['columbia','sciencespo','oxford','fulbright'],'131_3':['columbia','duke','sciencespo','oxford'],
+  '132_0':['oxford','columbia','sciencespo','nus'],'132_1':['oxford','columbia','sciencespo','nus'],'132_2':['oxford','columbia','sciencespo','usc'],'132_3':['oxford','columbia','sciencespo','melbourne'],
+  '133_0':['oxford','columbia','sciencespo','duke'],'133_1':['oxford','columbia','sciencespo','nus'],'133_2':['oxford','columbia','sciencespo','fulbright'],'133_3':['oxford','columbia','nus','fpt'],
+  '134_0':['oxford','sciencespo','columbia','nus'],'134_1':['oxford','sciencespo','columbia','nus'],'134_2':['oxford','sciencespo','columbia','fulbright'],'134_3':['oxford','sciencespo','columbia','nus'],
+  '135_0':['oxford','nus','tudelft','anu'],'135_1':['oxford','sciencespo','nus','uct'],'135_2':['nus','tum','tudelft','kaist','fpt'],'135_3':['anu','oxford','tudelft','nus'],
+  '136_0':['oxford','columbia','sciencespo','uct'],'136_1':['oxford','columbia','sciencespo','melbourne'],'136_2':['oxford','anu','melbourne','auckland'],'136_3':['oxford','nus','tsinghua','melbourne'],
+  '137_0':['oxford','columbia','sciencespo','fulbright'],'137_1':['oxford','columbia','sciencespo','nus'],'137_2':['oxford','columbia','sciencespo','nus'],'137_3':['oxford','sciencespo','nus','columbia'],
+  '138_0':['oxford','columbia','sciencespo','melbourne'],'138_1':['oxford','mit','columbia','nus'],'138_2':['oxford','columbia','eth','nus'],'138_3':['oxford','sciencespo','columbia','fulbright'],
+  '139_0':['fulbright','oxford','columbia','nus'],'139_1':['fulbright','oxford','columbia','sciencespo'],'139_2':['fulbright','oxford','columbia','usc'],'139_3':['fulbright','fpt','nus','columbia'],
+  '143_0':['mit','eth','tum','nus'],'143_1':['oxford','columbia','duke','nus'],'143_2':['mit','nus','kaist','fpt','tum'],'143_3':['eth','columbia','mit','nus'],
+  '146_0':['columbia','duke','nus','sciencespo','rmit'],'146_1':['columbia','duke','eth','nus'],'146_2':['columbia','duke','nus','sciencespo'],'146_3':['columbia','nus','sciencespo','tsinghua','duke'],
+  '150_0':['mit','oxford','eth','nus'],'150_1':['mit','eth','tum','oxford'],'150_2':['eth','oxford','anu','tum'],'150_3':['mit','nus','fpt','kaist','tum'],
+  '151_0':['mit','kaist','tum','eth'],'151_1':['mit','kaist','eth','tum'],'151_2':['kaist','tum','mit','eth'],'151_3':['mit','eth','tum','kaist'],
+  '152_0':['rmit','usc','columbia','sciencespo'],'152_1':['usc','columbia','rmit','bu'],'152_2':['columbia','sciencespo','bu','usc'],'152_3':['oxford','columbia','sciencespo','fulbright'],
+  '153_0':['oxford','columbia','nus','melbourne'],'153_1':['oxford','columbia','nus','fulbright'],'153_2':['fpt','nus','columbia','oxford'],'153_3':['oxford','columbia','nus','fulbright'],
+  '154_0':['tum','mit','eth','kaist'],'154_1':['tudelft','tum','nus','mit'],'154_2':['tum','kaist','eth','nus'],'154_3':['mit','fpt','kaist','tum','nus'],
+};
+
+/* ═══════════════════════════════════════════════════════
+   SPEC-IN-UNI VIEW
+═══════════════════════════════════════════════════════ */
+var _SIUS_MOCK = {
+  default: {
+    entrySalary:'$45K', avgSalary:'$82K', employment:'86%',
+    careers:['Research Analyst','Policy Advisor','Consultant','Project Manager','Professor','Journalist'],
+    coreSkills:['Critical Thinking','Research Design','Data Analysis','Academic Writing','Communication'],
+    tools:['Microsoft Office','Statistical Software','Reference Manager','Presentation Tools'],
+    admission:'GPA ≥ 3.0. Academic transcript and statement of purpose required. Research or internship experience preferred for graduate admission.',
+    exams:'Field-specific professional certifications available. IELTS/TOEFL for international programs. GRE or equivalent for graduate programs.',
+    language:'English: IELTS 6.0+ / TOEFL 80+ for international programs. Local-language programs widely available domestically.',
+  }
+};
+
+var _DEGREE_PROGRAMS = [
+  {label:"Bachelor's Degree", dur:'4 years', icon:'🎓'},
+  {label:"Master's Degree",   dur:'2 years', icon:'📜'},
+  {label:"Doctoral Degree",   dur:'4–6 years', icon:'🔬'},
+  {label:"Associate's Degree",dur:'2 years', icon:'📋'},
+];
+
+function siusToggleAcc(el) {
+  var item = el.closest('.sius-acc-item');
+  var isOpen = item.classList.contains('open');
+  var list = item.parentNode.querySelectorAll('.sius-acc-item.open');
+  for (var i = 0; i < list.length; i++) list[i].classList.remove('open');
+  if (!isOpen) item.classList.add('open');
+}
+
+function renderSpecInUni(u, major, spec, specIdx, skipPush) {
+  var imgs  = UNI_IMG_MAP[u.id] || { icon: null };
+  var det   = getDetail(u.id);
+  var cont  = UNI_CONTACT[u.id] || UNI_CONTACT['default'];
+  var disc  = (typeof DISCIPLINES !== 'undefined' && DISCIPLINES[String(major.discId)]) ||
+              {title:'General', color:'#6b6b9a', short:'General'};
+  var color = disc.color;
+  applyDiscColor(color);
+
+  /* Header */
+  document.getElementById('headerTitle').textContent = spec.name;
+  var backBtn = document.getElementById('backBtn');
+  if (backBtn) {
+    backBtn.href = '?id=' + u.id + '&majorId=' + major.id;
+    backBtn.onclick = function(e) { e.preventDefault(); history.back(); };
+  }
+  var saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) saveBtn.style.display = 'none';
+
+  if (!skipPush && history && history.pushState) {
+    history.pushState({}, '', '?id=' + u.id + '&majorId=' + major.id + '&specIdx=' + specIdx);
+  }
+
+  /* Mock data */
+  var md = _SIUS_MOCK[major.id + '_' + specIdx] || _SIUS_MOCK.default;
+
+  /* Aurora style */
+  var r = parseInt(color.slice(1,3),16), g2 = parseInt(color.slice(3,5),16), b2 = parseInt(color.slice(5,7),16);
+  var aStyle = 'background:radial-gradient(ellipse at 30% 40%,rgba('+r+','+g2+','+b2+',.35) 0%,transparent 70%)';
+
+  /* Tag style */
+  var ts = 'color:' + color + ';background:' + color + '22;border-color:' + color + '44';
+
+  /* Uni logo */
+  var uniLogoHtml = imgs.icon
+    ? '<img src="' + imgs.icon + '" class="sius-uni-logo-img" onerror="this.style.display=\'none\';this.parentNode.innerHTML=\'' + u.icon + '\'">'
+    : u.icon;
+
+  /* Degree programs */
+  var degHtml = _DEGREE_PROGRAMS.map(function(d) {
+    return '<div class="sius-deg-chip">' +
+      '<span style="font-size:14px">' + d.icon + '</span>' +
+      '<span><b>' + d.label + '</b><span class="sius-deg-dur"> · ' + d.dur + '</span></span>' +
+    '</div>';
+  }).join('');
+
+  /* Career tags */
+  var careerHtml = md.careers.slice(0,6).map(function(c) {
+    return '<span class="sius-career-tag">' + c + '</span>';
+  }).join('');
+
+  /* Skills */
+  var coreHtml = md.coreSkills.map(function(s) { return '<span class="sius-chip">' + s + '</span>'; }).join('');
+  var toolHtml = md.tools.map(function(s) { return '<span class="sius-tool-chip">' + s + '</span>'; }).join('');
+
+  /* Accordion */
+  var accItems = [
+    {icon:'📋', title:'Admission Requirements', body: md.admission},
+    {icon:'📝', title:'Exams & Certifications',  body: md.exams},
+    {icon:'🌐', title:'Language Requirements',   body: md.language},
+  ];
+  var accHtml = accItems.map(function(a) {
+    return '<div class="sius-acc-item">' +
+      '<div class="sius-acc-head" onclick="siusToggleAcc(this)">' +
+        '<div class="sius-acc-head-left">' +
+          '<span class="sius-acc-icon">' + a.icon + '</span>' +
+          '<span class="sius-acc-title">' + a.title + '</span>' +
+        '</div>' +
+        '<span class="sius-acc-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
+      '</div>' +
+      '<div class="sius-acc-body">' + a.body + '</div>' +
+    '</div>';
+  }).join('');
+
+  /* University link + apply */
+  var siteUrl = det.site ? det.site : 'university.edu';
+  var fullUrl = siteUrl.indexOf('http') === 0 ? siteUrl : 'https://' + siteUrl;
+  var linkHtml =
+    '<div class="sius-link-row">' +
+      '<div class="sius-link-icon">🔗</div>' +
+      '<div class="sius-link-url">' + siteUrl + '</div>' +
+      '<a class="sius-apply-btn" href="' + fullUrl + '" target="_blank">Apply</a>' +
+    '</div>';
+
+  /* Contact block */
+  var contactHtml =
+    '<div class="sius-contact-block">' +
+      '<div class="sius-contact-row">' +
+        '<span class="sius-contact-lbl">✉️ Email</span>' +
+        '<span class="sius-contact-val">' + cont.email + '</span>' +
+      '</div>' +
+      '<div class="sius-contact-row">' +
+        '<span class="sius-contact-lbl">📞 Phone</span>' +
+        '<span class="sius-contact-val">' + cont.phone + '</span>' +
+      '</div>' +
+      '<div class="sius-contact-row" style="border-bottom:none">' +
+        '<span class="sius-contact-lbl">🛂 Intl Support</span>' +
+        '<span class="sius-contact-val">' + (det.support || 'International student services available.') + '</span>' +
+      '</div>' +
+    '</div>';
+
+  /* Top universities for this specialization */
+  var topUniIds = _SPEC_UNI_MAP[major.id + '_' + specIdx] || _SPEC_UNI_MAP[major.id + '_0'] || ['mit','oxford','nus','tum'];
+  var topUniHtml = '';
+  for (var ti = 0; ti < topUniIds.length; ti++) {
+    var tid = topUniIds[ti];
+    var tu = null;
+    for (var tj = 0; tj < UNI_DATA.length; tj++) {
+      if (UNI_DATA[tj].id === tid) { tu = UNI_DATA[tj]; break; }
+    }
+    if (!tu) continue;
+    var tuImgs = UNI_IMG_MAP[tid] || { icon: null };
+    var tuLogoHtml = tuImgs.icon
+      ? '<img src="' + tuImgs.icon + '" onerror="this.style.display=\'none\';this.parentNode.innerHTML=\'' + tu.icon + '\'">'
+      : tu.icon;
+    var tuMatch  = tu.match || 72;
+    var tuMatchC = tuMatch >= 80 ? '#7c3aed' : tuMatch >= 60 ? '#3b82f6' : '#f59e0b';
+    var tuRanking = tu.ranking || 'Top University';
+    var tuType   = tu.typeLabel || tu.type || 'Private';
+    var tuTypeC  = (tuType.indexOf('Public') !== -1) ? '#22c55e' : '#a78bfa';
+    var tuProgs  = tu.programs ? tu.programs.slice(0,3) : ['Bachelor\'s','Master\'s','PhD'];
+    var tuNavUrl = '?id=' + tid + '&majorId=' + major.id + '&specIdx=' + specIdx;
+    topUniHtml +=
+      '<div class="sius-top-uni" style="cursor:pointer" onclick="window.location.href=\'' + tuNavUrl + '\'">' +
+        '<div class="sius-top-uni-hdr">' +
+          '<div class="sius-top-uni-logo">' + tuLogoHtml + '</div>' +
+          '<div class="sius-top-uni-info">' +
+            '<div class="sius-top-uni-name">' + tu.name + '</div>' +
+            '<div class="sius-top-uni-loc">📍 ' + tu.loc + '</div>' +
+          '</div>' +
+          '<span class="sius-top-uni-match" style="color:' + tuMatchC + ';border-color:' + tuMatchC + '44;background:' + tuMatchC + '18">' + tuMatch + '%</span>' +
+        '</div>' +
+        '<span class="sius-top-uni-type" style="color:' + tuTypeC + ';border-color:' + tuTypeC + '44;background:' + tuTypeC + '12">' + tuType + '</span>' +
+        '<div class="sius-top-uni-stats">' +
+          '<div class="sius-top-stat"><div class="sius-top-stat-val" style="font-size:9px;font-weight:700">' + tuRanking + '</div><div class="sius-top-stat-lbl">Ranking</div></div>' +
+          '<div class="sius-top-stat-div"></div>' +
+          '<div class="sius-top-stat"><div class="sius-top-stat-val">' + (tu.students || 'N/A') + '</div><div class="sius-top-stat-lbl">Students</div></div>' +
+          '<div class="sius-top-stat-div"></div>' +
+          '<div class="sius-top-stat"><div class="sius-top-stat-val">' + (tu.employment || 'N/A') + '</div><div class="sius-top-stat-lbl">Employment</div></div>' +
+        '</div>' +
+        '<div class="sius-top-uni-progs">' +
+          tuProgs.map(function(p) { return '<span class="sius-top-uni-prog">' + p + '</span>'; }).join('') +
+        '</div>' +
+      '</div>';
+  }
+
+  /* Hero logo fill */
+  var siusHeroFillHtml = imgs.icon
+    ? '<div class="sius-hero-logo-fill" style="background-image:url(\'' + imgs.icon + '\')">' +
+        '<img src="' + imgs.icon + '" style="display:none" onerror="' +
+          'this.parentNode.className=\'sius-hero-emoji-fill\';' +
+          'this.parentNode.style.backgroundImage=\'none\';' +
+          'this.parentNode.innerHTML=\'' + u.icon + '\'">' +
+      '</div>'
+    : '<div class="sius-hero-emoji-fill">' + u.icon + '</div>';
+
+  document.getElementById('udBody').innerHTML =
+    /* ── Hero ── */
+    '<div class="sius-hero">' +
+      siusHeroFillHtml +
+      '<div class="sius-hero-overlay"></div>' +
+      '<div class="sius-hero-content">' +
+        '<div class="sius-icon-wrap">' + spec.icon + '</div>' +
+        '<div class="sius-name">' + spec.name + '</div>' +
+        '<div class="sius-tags">' +
+          '<span class="sius-tag-parent">' + major.title + '</span>' +
+          '<span class="sius-tag-spec" style="' + ts + '">' + spec.tag + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+
+    /* ── Body ── */
+    '<div class="sius-body">' +
+
+      /* University info */
+      '<div class="sius-uni-card">' +
+        '<div class="sius-uni-logo">' + uniLogoHtml + '</div>' +
+        '<div class="sius-uni-info">' +
+          '<div class="sius-uni-name">' + u.name + '</div>' +
+          '<div class="sius-uni-loc">📍 ' + u.loc + '</div>' +
+        '</div>' +
+      '</div>' +
+
+      /* Degree programs */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">Degree Programs</div>' +
+        '<div class="sius-deg-row">' + degHtml + '</div>' +
+      '</div>' +
+
+      /* Stats */
+      '<div class="sius-stats">' +
+        '<div class="sius-stat"><div class="sius-stat-lbl">Entry Salary</div><div class="sius-stat-val">' + md.entrySalary + '</div><div class="sius-stat-sub">/ year</div></div>' +
+        '<div class="sius-stat-div"></div>' +
+        '<div class="sius-stat"><div class="sius-stat-lbl">Avg Salary</div><div class="sius-stat-val accent">' + md.avgSalary + '</div><div class="sius-stat-sub">/ year</div></div>' +
+        '<div class="sius-stat-div"></div>' +
+        '<div class="sius-stat"><div class="sius-stat-lbl">Employment</div><div class="sius-stat-val">' + md.employment + '</div><div class="sius-stat-sub">rate</div></div>' +
+      '</div>' +
+
+      /* About */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">About this Specialization</div>' +
+        '<div class="sius-desc">' + spec.desc + '</div>' +
+        '<div class="sius-career-tags">' + careerHtml + '</div>' +
+      '</div>' +
+
+      /* Skills */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">Required Skills</div>' +
+        '<div class="sius-skills-lbl">Core Competencies</div>' +
+        '<div class="sius-chips">' + coreHtml + '</div>' +
+        '<div class="sius-skills-lbl">Tools & Software</div>' +
+        '<div class="sius-chips">' + toolHtml + '</div>' +
+      '</div>' +
+
+      /* Admission */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">Admission Info</div>' +
+        '<div>' + accHtml + '</div>' +
+      '</div>' +
+
+      /* University link + Apply */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">University Website</div>' +
+        linkHtml +
+      '</div>' +
+
+      /* Contact */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">Contact & Support</div>' +
+        contactHtml +
+      '</div>' +
+
+      /* Top universities */
+      '<div class="sius-sec">' +
+        '<div class="sius-sec-hd">Top universities offering this specialization</div>' +
+        topUniHtml +
+      '</div>' +
+
+    '</div>';
+  document.getElementById('udBody').scrollTop = 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAJOR NAVIGATION
+═══════════════════════════════════════════════════════ */
+function navigateToMajor(uid, mid) {
+  var u = findUni(uid);
+  if (!u) return;
+  var major = null;
+  if (typeof MAJORS_DATA !== 'undefined') {
+    for (var i = 0; i < MAJORS_DATA.length; i++) {
+      if (MAJORS_DATA[i].id === mid) { major = MAJORS_DATA[i]; break; }
+    }
+  }
+  if (!major) return;
+  if (history && history.pushState) {
+    history.pushState({}, '', '?id=' + uid + '&majorId=' + mid);
+  }
+  renderMajorInUni(u, major);
+}
+
+/* ═══════════════════════════════════════════════════════
+   WHY-MATCH VIEW
+═══════════════════════════════════════════════════════ */
+var UNI_MATCH_COLORS = {
+  high: {
+    primary:'#7c3aed', light:'#a78bfa', lighter:'#c4b5fd',
+    glow:'rgba(124,58,237,.40)', bg:'rgba(124,58,237,.12)', border:'rgba(124,58,237,.30)',
+    dark:'#1e0a4a'
+  },
+  mid: {
+    primary:'#3b82f6', light:'#60a5fa', lighter:'#93c5fd',
+    glow:'rgba(59,130,246,.40)', bg:'rgba(59,130,246,.12)', border:'rgba(59,130,246,.30)',
+    dark:'#0a1e4a'
+  },
+  low: {
+    primary:'#f59e0b', light:'#fbbf24', lighter:'#fde68a',
+    glow:'rgba(245,158,11,.40)', bg:'rgba(245,158,11,.12)', border:'rgba(245,158,11,.30)',
+    dark:'#2a1a04'
+  }
+};
+
+function getMatchTheme(pct) {
+  return pct >= 70 ? UNI_MATCH_COLORS.high : pct >= 40 ? UNI_MATCH_COLORS.mid : UNI_MATCH_COLORS.low;
+}
+
+function applyWhyColors(theme) {
+  var root = document.documentElement;
+  root.style.setProperty('--disc-primary', theme.primary);
+  root.style.setProperty('--disc-light',   theme.light);
+  root.style.setProperty('--disc-lighter', theme.lighter);
+  root.style.setProperty('--disc-glow',    theme.glow);
+  root.style.setProperty('--disc-bg',      theme.bg);
+  root.style.setProperty('--disc-border',  theme.border);
+  root.style.setProperty('--uwm-dark',     theme.dark);
+}
+
+function getUniInsight(u) {
+  var known = {
+    'mit':        'Your STEM passion and analytical mindset align perfectly with MIT\'s innovation-driven culture and research excellence.',
+    'oxford':     'Your interest in interdisciplinary thinking and global networks matches Oxford\'s rigorous tutorial-based academic system.',
+    'nus':        'Your openness to multicultural environments and tech interests position you well for NUS\'s global innovation ecosystem.',
+    'fulbright':  'Your collaborative spirit and interest in liberal arts align closely with Fulbright Vietnam\'s values-driven education model.',
+    'eth':        'Your quantitative strengths and European study ambitions align with ETH Zurich\'s world-class technical research culture.',
+    'tum':        'Your engineering interests and cost-conscious planning match TUM\'s high-value, low-tuition model in Germany.',
+    'kaist':      'Your passion for cutting-edge technology and competitive academic culture fits KAIST\'s innovation-first environment.',
+    'duke':       'Your balanced interest in medicine, policy, and research aligns with Duke\'s holistic, interdisciplinary excellence.',
+    'columbia':   'Your global outlook and urban interests resonate with Columbia\'s Ivy League presence in New York City.',
+    'ucla':       'Your interest in tech, creativity, and a large campus community matches UCLA\'s dynamic Los Angeles environment.',
+    'fpt':        'Your tech ambitions and Vietnam roots align with FPT University\'s strong industry pipeline and local relevance.',
+    'rmit':       'Your desire for international credentials in Vietnam matches RMIT\'s Australian-standard education in Ho Chi Minh City.',
+    'sciencespo': 'Your global mindset and interest in policy, law, and international affairs are a natural fit for Sciences Po Paris.'
+  };
+  if (known[u.id]) return known[u.id];
+  if (u.match >= 80) {
+    return 'Your academic profile and stated preferences align strongly with ' + u.name + '\'s programs, location, and financial aid structure.';
+  } else if (u.match >= 60) {
+    return 'There is a solid match between your goals and ' + u.name + '\'s strengths, particularly in your preferred field of study.';
+  } else {
+    return 'Your profile shows a partial match with ' + u.name + '. Consider whether the location, cost, and admission requirements fit your plan.';
+  }
+}
+
+function getUniAssertions(u) {
+  var a = [];
+
+  /* Q1 — Global ranking preference */
+  var rankStr = (u.ranking || '').toLowerCase();
+  var rankNum = parseInt(rankStr.replace(/[^0-9]/g, ''), 10) || 999;
+  var isTopTen = rankNum <= 10;
+  a.push({
+    q: 'I prioritize attending a globally ranked, internationally recognized university.',
+    answer: isTopTen ? 'strong' : (u.match >= 75 ? 'agree' : 'neutral'),
+    num: 'Q1'
+  });
+
+  /* Q2 — Location / country openness */
+  var locMap = {
+    'USA':'studying in the United States','Canada':'studying in Canada',
+    'UK':'studying in the United Kingdom','Germany':'studying in Germany',
+    'France':'studying in France','Switzerland':'studying in Switzerland',
+    'Netherlands':'studying in the Netherlands','Singapore':'studying in Singapore',
+    'Japan':'studying in Japan','China':'studying in China',
+    'South Korea':'studying in South Korea','Vietnam':'studying or staying in Vietnam',
+    'Australia':'studying in Australia','New Zealand':'studying in New Zealand',
+    'India':'studying in India','Thailand':'studying in Thailand',
+    'Brazil':'studying in South America','Mexico':'studying in Mexico'
+  };
+  var locLabel = locMap[u.country] || 'studying internationally';
+  a.push({
+    q: 'I am open to ' + locLabel + ' for my higher education.',
+    answer: u.match >= 78 ? 'strong' : u.match >= 52 ? 'agree' : 'neutral',
+    num: 'Q2'
+  });
+
+  /* Q3 — Financial aid importance */
+  a.push({
+    q: 'Access to scholarships or financial aid is a key factor in choosing a university.',
+    answer: u.aidType === 'full' ? 'strong' : 'agree',
+    num: 'Q3'
+  });
+
+  /* Q4 — Career outcome focus */
+  var empNum = parseInt(u.employment, 10) || 90;
+  a.push({
+    q: 'I want to attend a university with strong employment outcomes and industry connections.',
+    answer: empNum >= 97 ? 'strong' : empNum >= 90 ? 'agree' : 'neutral',
+    num: 'Q4'
+  });
+
+  /* Q5 — Program / field interest */
+  var firstProg = (u.programs && u.programs.length > 0) ? u.programs[0] : 'Sciences';
+  a.push({
+    q: 'I have a genuine interest in ' + firstProg + ' as a potential area of study.',
+    answer: u.match >= 82 ? 'strong' : u.match >= 62 ? 'agree' : (u.match >= 42 ? 'neutral' : 'disagree'),
+    num: 'Q5'
+  });
+
+  /* Q6 — University type preference */
+  if (u.type === 'priv') {
+    a.push({
+      q: 'I prefer smaller private universities that offer a more personalized academic community.',
+      answer: u.match >= 75 ? 'agree' : 'neutral',
+      num: 'Q6'
+    });
+  } else {
+    a.push({
+      q: 'I am comfortable at large public universities that offer diverse academic opportunities.',
+      answer: u.match >= 70 ? 'agree' : 'neutral',
+      num: 'Q6'
+    });
+  }
+
+  return a;
+}
+
+function renderWhyMatch(u) {
+  if (!u) return;
+  var theme = getMatchTheme(u.match);
+  applyWhyColors(theme);
+
+  /* Header */
+  document.getElementById('headerTitle').textContent = 'Why I Match';
+  var backBtn = document.getElementById('backBtn');
+  backBtn.removeAttribute('href');
+  backBtn.onclick = function(ev) { if (ev) ev.preventDefault(); history.back(); };
+  var saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) saveBtn.style.display = 'none';
+
+  /* Build assertion data */
+  var assertions = getUniAssertions(u);
+  var counts = { strong: 0, agree: 0, neutral: 0, disagree: 0 };
+  for (var ai = 0; ai < assertions.length; ai++) {
+    var ans = assertions[ai].answer;
+    if (counts[ans] !== undefined) counts[ans]++;
+  }
+  var total = assertions.length || 1;
+
+  /* Score breakdown bars */
+  function barW(n) { return Math.round(n / total * 100); }
+  var barsData = [
+    { label: 'Strongly Agree', cls: 'uwm-fill-strong',   val: counts.strong },
+    { label: 'Agree',          cls: 'uwm-fill-agree',    val: counts.agree },
+    { label: 'Neutral',        cls: 'uwm-fill-neutral',  val: counts.neutral },
+    { label: 'Disagree',       cls: 'uwm-fill-disagree', val: counts.disagree }
+  ];
+  var scoreHtml = '<div class="uwm-score-wrap"><div class="uwm-score-title">Response Summary</div>';
+  for (var bi = 0; bi < barsData.length; bi++) {
+    if (bi === 3 && counts.disagree === 0) continue;
+    var bd = barsData[bi];
+    scoreHtml +=
+      '<div class="uwm-score-row">' +
+        '<span class="uwm-score-label">' + bd.label + '</span>' +
+        '<div class="uwm-score-track">' +
+          '<div class="uwm-score-fill ' + bd.cls + '" style="width:0%" data-w="' + barW(bd.val) + '"></div>' +
+        '</div>' +
+        '<span class="uwm-score-val">' + bd.val + '</span>' +
+      '</div>';
+  }
+  scoreHtml += '</div>';
+
+  /* Assertion cards */
+  var ANSWER_CFG = {
+    strong:  { cls: 'uwm-strong',   badge: 'uwm-b-strong',   label: 'Strongly Agree' },
+    agree:   { cls: 'uwm-agree',    badge: 'uwm-b-agree',    label: 'Agree' },
+    neutral: { cls: 'uwm-neutral',  badge: 'uwm-b-neutral',  label: 'Neutral' },
+    disagree:{ cls: 'uwm-disagree', badge: 'uwm-b-disagree', label: 'Disagree' }
+  };
+  var assertHtml = '';
+  for (var aii = 0; aii < assertions.length; aii++) {
+    var as = assertions[aii];
+    var ac = ANSWER_CFG[as.answer] || ANSWER_CFG.neutral;
+    var delay = (aii * 0.06).toFixed(2);
+    assertHtml +=
+      '<div class="uwm-ac ' + ac.cls + '" style="animation-delay:' + delay + 's">' +
+        '<div class="uwm-ac-text">' + as.q + '</div>' +
+        '<div class="uwm-ac-footer">' +
+          '<span class="uwm-ac-num">' + as.num + '</span>' +
+          '<span class="uwm-badge ' + ac.badge + '">' + ac.label + '</span>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* Short name for hero label & back button */
+  var shortName = u.name.split(',')[0].split('(')[0].trim();
+  var heroLabel = shortName.length > 26 ? shortName.slice(0, 23) + '…' : shortName;
+  var backLabel = shortName.length > 16 ? shortName.slice(0, 13) + '…' : shortName;
+  var insight = getUniInsight(u);
+
+  /* Render */
+  document.getElementById('udBody').innerHTML =
+    '<div class="uwm-hero">' +
+      '<div class="uwm-hero-top">' +
+        '<div class="uwm-disc-label"><span class="uwm-disc-dot"></span>' + heroLabel + '</div>' +
+        '<div>' +
+          '<div class="uwm-pct">' + u.match + '%</div>' +
+          '<div class="uwm-pct-label">Match Score</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="uwm-insight">' +
+        '<div class="uwm-insight-tag">✦ AI Insight</div>' +
+        '<div>' + insight + '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="uwm-body">' +
+      '<div class="uwm-sec-hd">Score Breakdown</div>' +
+      scoreHtml +
+      '<div class="uwm-sec-hd">Quiz Responses</div>' +
+      '<div class="uwm-assertions">' + assertHtml + '</div>' +
+      '<button class="uwm-back-btn" onclick="_restoreUniView()">' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>' +
+        ' Back to ' + backLabel +
+      '</button>' +
+    '</div>';
+
+  document.getElementById('udBody').scrollTop = 0;
+
+  /* Animate score bars */
+  setTimeout(function() {
+    var fills = document.querySelectorAll('.uwm-score-fill[data-w]');
+    for (var fi = 0; fi < fills.length; fi++) {
+      fills[fi].style.width = (fills[fi].getAttribute('data-w') || '0') + '%';
+    }
+  }, 80);
+}
+
+function _restoreUniView() {
+  if (!_currentUni || !_savedBodyHTML) return;
+  /* Restore original body HTML */
+  document.getElementById('udBody').innerHTML = _savedBodyHTML;
+  /* Rebind apply button (not stored in innerHTML as onclick attr) */
+  var det = getDetail(_currentUni.id);
+  var applyBtn = document.getElementById('udApplyBtn');
+  if (applyBtn) {
+    applyBtn.onclick = function() { window.open('https://' + det.site, '_blank'); };
+  }
+  /* Restore header */
+  document.getElementById('headerTitle').textContent = _currentUni.name;
+  var backBtn = document.getElementById('backBtn');
+  backBtn.href = '../matches/';
+  backBtn.onclick = null;
+  var saveBtn = document.getElementById('saveBtn');
+  if (saveBtn) saveBtn.style.display = '';
+  /* Clear why-match CSS vars */
+  var root = document.documentElement;
+  root.style.removeProperty('--disc-primary');
+  root.style.removeProperty('--disc-light');
+  root.style.removeProperty('--disc-lighter');
+  root.style.removeProperty('--disc-glow');
+  root.style.removeProperty('--disc-bg');
+  root.style.removeProperty('--disc-border');
+  root.style.removeProperty('--uwm-dark');
+  /* Scroll to top */
+  var body = document.getElementById('udBody');
+  if (body) body.scrollTop = 0;
+}
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════
+   POPSTATE — handle browser back/forward within this page
+═══════════════════════════════════════════════════════ */
+window.addEventListener('popstate', function() {
+  var p = {};
+  window.location.search.slice(1).split('&').forEach(function(kv) {
+    var s = kv.split('=');
+    if (s[0]) p[decodeURIComponent(s[0])] = decodeURIComponent(s[1] || '');
+  });
+
+  var uid = p.id || (_currentUni ? _currentUni.id : null);
+  if (!uid) return;
+  var u = findUni(uid);
+  if (!u) return;
+
+  if (p.majorId) {
+    var mid = parseInt(p.majorId, 10);
+    var major = null;
+    if (typeof MAJORS_DATA !== 'undefined') {
+      for (var i = 0; i < MAJORS_DATA.length; i++) {
+        if (MAJORS_DATA[i].id === mid) { major = MAJORS_DATA[i]; break; }
+      }
+    }
+    if (!major) return;
+
+    if (p.specIdx !== undefined && p.specIdx !== '') {
+      /* Restore spec-in-uni view */
+      var si = parseInt(p.specIdx, 10);
+      var spec = _currentSpecs[si];
+      if (!spec) {
+        /* Recompute specs if not cached */
+        var allS = (typeof SPEC_DATA !== 'undefined' && SPEC_DATA[major.id])
+          ? SPEC_DATA[major.id]
+          : (typeof getFallbackSpecsMajor === 'function' ? getFallbackSpecsMajor(major) : []);
+        _currentSpecs = allS.slice(0, Math.min(allS.length, 2 + (major.id % 3)));
+        _currentMajor = major;
+        spec = _currentSpecs[si] || _currentSpecs[0];
+      }
+      if (spec) renderSpecInUni(u, major, spec, si, true /* skipPush */);
+    } else {
+      /* Restore major-in-uni view */
+      renderMajorInUni(u, major);
+    }
+  } else {
+    /* Restore main uni-detail view */
+    _restoreUniView();
+  }
+});
+
+(function init() {
+  /* Disable browser scroll restoration so our scrollTop=0 is never overridden */
+  if (history.scrollRestoration) history.scrollRestoration = 'manual';
+
+  /* Clock */
+  function tick() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes();
+    document.getElementById('timeDisplay').textContent = h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  tick();
+  setInterval(tick, 30000);
+
+  /* Parse URL params */
+  var params = {};
+  window.location.search.slice(1).split('&').forEach(function(p) {
+    var kv = p.split('=');
+    if (kv[0]) params[kv[0]] = decodeURIComponent(kv[1] || '');
+  });
+  var id = params.id || 'mit';
+  var u  = findUni(id) || findUni('mit');
+
+  /* Route: majorId param → major-in-uni or spec-in-uni view */
+  if (params.majorId && typeof MAJORS_DATA !== 'undefined') {
+    var mid = parseInt(params.majorId, 10);
+    var major = null;
+    for (var i = 0; i < MAJORS_DATA.length; i++) {
+      if (MAJORS_DATA[i].id === mid) { major = MAJORS_DATA[i]; break; }
+    }
+    if (major) {
+      /* Also need _savedBodyHTML for back-nav — build it from render() first */
+      render(u);
+      _currentUni = u;
+
+      if (params.specIdx !== undefined && params.specIdx !== '') {
+        /* spec-in-uni route: majorId + specIdx */
+        var si = parseInt(params.specIdx, 10);
+        var allSpecs = (typeof SPEC_DATA !== 'undefined' && SPEC_DATA[major.id])
+          ? SPEC_DATA[major.id]
+          : (typeof getFallbackSpecsMajor === 'function' ? getFallbackSpecsMajor(major) : []);
+        var specCount = Math.min(allSpecs.length, 2 + (major.id % 3));
+        var specs = allSpecs.slice(0, specCount);
+        _currentMajor = major;
+        _currentSpecs = specs;
+        var spec = specs[si] || specs[0];
+        if (spec) {
+          /* save body snapshot after render() has populated it */
+          setTimeout(function() {
+            var b = document.getElementById('udBody');
+            if (b) _savedBodyHTML = b.innerHTML;
+            renderSpecInUni(u, major, spec, si, true); /* skipPush=true: URL already correct from page load */
+          }, 50);
+          return;
+        }
+      }
+
+      /* major-in-uni route */
+      renderMajorInUni(u, major);
+      return;
+    }
+  }
+
+  render(u);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Library v1 — BeyonDegrees.ai</title>
+    <style>
+        :root {
+            --bg-base: #06060f;
+            --bg-surface: #12121f;
+            --bg-elevated: #1a1a2e;
+            --bg-overlay: #252540;
+            --violet-600: #7c3aed;
+            --violet-500: #8b5cf6;
+            --violet-400: #a78bfa;
+            --mint-500: #06d6a0;
+            --red-500: #ff4757;
+            --orange-500: #f97316;
+            --text-primary: #f8fafc;
+            --text-secondary: #c8c8e0;
+            --text-muted: #6b6b9a;
+            --neutral-700: #1a1a2e;
+            --neutral-600: #252540;
+            --neutral-500: #3d3d60;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg-base);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--neutral-600);
+            padding: 24px 16px;
+            overflow-y: auto;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+
+        .sidebar h3 {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--violet-500);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .sidebar-link {
+            display: block;
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 13px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .sidebar-link:hover {
+            background: var(--neutral-600);
+            color: var(--text-primary);
+        }
+
+        .main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 48px;
+            max-width: 1200px;
+        }
+
+        .header {
+            margin-bottom: 48px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--neutral-600);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--violet-400), var(--mint-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--violet-500);
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .demo-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--neutral-600);
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            border: none;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-sm { height: 32px; padding: 0 16px; }
+        .btn-md { height: 40px; padding: 0 20px; }
+        .btn-lg { height: 48px; padding: 0 24px; }
+
+        .btn-primary {
+            background: var(--violet-600);
+            color: white;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(124, 58, 237, 0.4); }
+        .btn-primary:active { transform: translateY(0); }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--violet-600);
+            border: 2px solid var(--violet-600);
+        }
+        .btn-secondary:hover { background: rgba(124, 58, 237, 0.1); }
+
+        .btn-ghost {
+            background: var(--neutral-700);
+            color: var(--text-secondary);
+        }
+        .btn-ghost:hover { background: var(--neutral-600); }
+
+        .btn-destructive {
+            background: var(--red-500);
+            color: white;
+        }
+        .btn-destructive:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 71, 87, 0.4); }
+
+        .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        /* QUIZ SWIPE CARD */
+        .quiz-container {
+            perspective: 1000px;
+            height: 500px;
+            position: relative;
+        }
+
+        .story-bar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+            height: 3px;
+        }
+
+        .story-segment {
+            flex: 1;
+            height: 3px;
+            background: var(--neutral-600);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .story-segment.active {
+            background: var(--mint-500);
+        }
+
+        .story-segment.completed {
+            background: var(--violet-500);
+        }
+
+        .card-stack {
+            position: relative;
+            width: 100%;
+            height: 380px;
+        }
+
+        .quiz-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--bg-elevated), var(--neutral-700));
+            border: 1px solid var(--neutral-600);
+            border-radius: 16px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            top: 0;
+        }
+
+        .quiz-card.card-0 { z-index: 10; transform: translateY(0) scale(1); }
+        .quiz-card.card-1 { z-index: 9; transform: translateY(12px) scale(0.96); opacity: 0.7; }
+        .quiz-card.card-2 { z-index: 8; transform: translateY(24px) scale(0.92); opacity: 0.4; }
+
+        .quiz-card.fly-left {
+            animation: flyLeft 0.5s ease-out forwards;
+        }
+
+        .quiz-card.fly-right {
+            animation: flyRight 0.5s ease-out forwards;
+        }
+
+        @keyframes flyLeft {
+            to { transform: translateX(-600px) rotateY(30deg); opacity: 0; }
+        }
+
+        @keyframes flyRight {
+            to { transform: translateX(600px) rotateY(-30deg); opacity: 0; }
+        }
+
+        .quiz-card-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .quiz-card-counter {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+        }
+
+        .swipe-btn {
+            flex: 1;
+            height: 48px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .swipe-btn:hover { transform: scale(1.05); }
+
+        .swipe-agree {
+            background: rgba(6, 214, 160, 0.2);
+            color: var(--mint-500);
+            border: 1px solid var(--mint-500);
+        }
+
+        .swipe-disagree {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--red-500);
+            border: 1px solid var(--red-500);
+        }
+
+        .swipe-neutral {
+            background: rgba(61, 61, 96, 0.4);
+            color: var(--text-secondary);
+            border: 1px solid var(--neutral-500);
+        }
+
+        .swipe-strong {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--violet-400);
+            border: 1px solid var(--violet-500);
+        }
+
+        .milestone-banner {
+            background: linear-gradient(135deg, var(--orange-500), var(--red-500));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* MATCH RESULT CARD */
+        .match-card {
+            background: linear-gradient(135deg, var(--bg-elevated), var(--neutral-700));
+            border: 2px solid;
+            border-image: linear-gradient(135deg, var(--violet-500), var(--mint-500)) 1;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .match-card:hover {
+            transform: scale(1.05);
+        }
+
+        .match-percentage {
+            font-size: 72px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--violet-400), var(--mint-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .match-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .discipline-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .university-chips {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .uni-chip {
+            background: var(--neutral-600);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+        }
+
+        /* SKELETON LOADER */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--neutral-600) 25%, var(--neutral-700) 50%, var(--neutral-600) 75%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+            border-radius: 8px;
+        }
+
+        .skeleton-card {
+            width: 100%;
+            height: 200px;
+            border-radius: 12px;
+        }
+
+        .skeleton-line {
+            height: 12px;
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        .skeleton-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .fun-fact {
+            background: var(--bg-elevated);
+            border: 1px solid var(--neutral-600);
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            font-style: italic;
+            color: var(--text-secondary);
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* INPUT FIELDS */
+        .input-group {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 14px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--neutral-600);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--violet-600);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .input-field.error {
+            border-color: var(--red-500);
+        }
+
+        .input-field.success {
+            border-color: var(--mint-500);
+        }
+
+        .input-error {
+            color: var(--red-500);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        /* TAGS & CHIPS */
+        .tag {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag-engineering {
+            background: rgba(124, 58, 237, 0.2);
+            color: var(--violet-400);
+            border: 1px solid var(--violet-500);
+        }
+
+        .tag-humanities {
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--orange-500);
+            border: 1px solid var(--orange-500);
+        }
+
+        .tag-medicine {
+            background: rgba(255, 71, 87, 0.2);
+            color: var(--red-500);
+            border: 1px solid var(--red-500);
+        }
+
+        .tag-agriculture {
+            background: rgba(6, 214, 160, 0.2);
+            color: var(--mint-500);
+            border: 1px solid var(--mint-500);
+        }
+
+        .tag.active {
+            background: var(--violet-600);
+            color: white;
+            border-color: var(--violet-600);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            background: var(--violet-600);
+            color: white;
+        }
+
+        /* PROGRESS BARS */
+        .progress-linear {
+            width: 100%;
+            height: 8px;
+            background: var(--neutral-700);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--violet-500), var(--mint-500));
+            transition: width 0.3s ease;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .progress-circle-bg {
+            fill: none;
+            stroke: var(--neutral-700);
+            stroke-width: 6;
+        }
+
+        .progress-circle-fill {
+            fill: none;
+            stroke: url(#gradientCircle);
+            stroke-width: 6;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.3s ease;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+
+        .progress-circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-circle-text-large {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .progress-circle-text-small {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav-demo {
+            background: var(--bg-surface);
+            border: 1px solid var(--neutral-600);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .mobile-phone {
+            width: 390px;
+            height: 620px;
+            background: var(--bg-base);
+            border: 1px solid var(--neutral-600);
+            border-radius: 40px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+
+        .phone-screen {
+            flex: 1;
+            background: var(--bg-surface);
+            border-radius: 32px;
+            padding: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-content {
+            flex: 1;
+            padding: 12px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--neutral-600);
+            padding: 8px 0;
+            gap: 0;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--text-muted);
+            font-size: 12px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--violet-500);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--violet-500);
+            border-radius: 50%;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* SPECS PANEL */
+        .specs-panel {
+            background: var(--neutral-700);
+            border: 1px solid var(--neutral-600);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 12px;
+            margin-top: 16px;
+            color: var(--text-secondary);
+        }
+
+        .specs-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--neutral-600);
+        }
+
+        .specs-row:last-child {
+            border-bottom: none;
+        }
+
+        .specs-label {
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .specs-value {
+            color: var(--mint-500);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* SCROLL */
+        .main::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .main::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+
+        .main::-webkit-scrollbar-thumb {
+            background: var(--neutral-600);
+            border-radius: 4px;
+        }
+
+        .main::-webkit-scrollbar-thumb:hover {
+            background: var(--neutral-500);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Components</h3>
+            <a class="sidebar-link" onclick="scrollTo('buttons')">Buttons</a>
+            <a class="sidebar-link" onclick="scrollTo('quiz')">Quiz Card</a>
+            <a class="sidebar-link" onclick="scrollTo('match')">Match Result</a>
+            <a class="sidebar-link" onclick="scrollTo('skeleton')">Skeleton</a>
+            <a class="sidebar-link" onclick="scrollTo('inputs')">Inputs</a>
+            <a class="sidebar-link" onclick="scrollTo('tags')">Tags & Chips</a>
+            <a class="sidebar-link" onclick="scrollTo('progress')">Progress</a>
+            <a class="sidebar-link" onclick="scrollTo('nav')">Bottom Nav</a>
+        </aside>
+
+        <main class="main">
+            <div class="header">
+                <h1>Component Library v1</h1>
+                <p>BeyonDegrees.ai — GenZ Education App | 23/04/2026</p>
+            </div>
+
+            <!-- BUTTONS -->
+            <section class="section" id="buttons">
+                <div class="section-label">1. Buttons</div>
+                
+                <div style="margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Primary Button</p>
+                    <div class="demo-grid">
+                        <button class="btn btn-primary btn-sm">Bắt đầu</button>
+                        <button class="btn btn-primary btn-md">Khám phá ngành</button>
+                        <button class="btn btn-primary btn-lg">Làm bài quiz</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Secondary Button</p>
+                    <div class="demo-grid">
+                        <button class="btn btn-secondary btn-md">Hủy</button>
+                        <button class="btn btn-secondary btn-md">Quay lại</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Ghost Button</p>
+                    <div class="demo-grid">
+                        <button class="btn btn-ghost btn-md">Chi tiết</button>
+                        <button class="btn btn-ghost btn-md">Xem thêm</button>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Destructive & Icon Buttons</p>
+                    <div class="demo-grid">
+                        <button class="btn btn-destructive btn-md">Xóa</button>
+                        <button class="btn btn-primary btn-icon">+</button>
+                        <button class="btn btn-primary btn-icon" id="loadingBtn" onclick="toggleLoading(this)">
+                            <span class="spinner"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="specs-panel">
+                    <div class="specs-row">
+                        <span class="specs-label">Sizes:</span>
+                        <span class="specs-value">32px, 40px, 48px</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Radius:</span>
+                        <span class="specs-value">999px (pill)</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">States:</span>
+                        <span class="specs-value">hover, active, disabled</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUIZ CARD -->
+            <section class="section" id="quiz">
+                <div class="section-label">2. Quiz Swipe Card</div>
+                
+                <div class="demo-box" style="background: transparent; border: none; justify-content: flex-start; min-height: auto; padding: 0;">
+                    <div style="width: 100%;">
+                        <div class="story-bar" id="storyBar">
+                            <div class="story-segment completed"></div>
+                            <div class="story-segment completed"></div>
+                            <div class="story-segment active"></div>
+                            <div class="story-segment"></div>
+                            <div class="story-segment"></div>
+                        </div>
+
+                        <div class="milestone-banner" id="milestoneBanner" style="display: none;"></div>
+
+                        <div class="card-stack">
+                            <div class="quiz-card card-0" id="card-0">
+                                <div class="quiz-card-content">
+                                    <h3>Bạn thích làm việc với các con số và công thức toán học?</h3>
+                                    <p style="color: var(--text-secondary); margin-top: 8px;">Điều này ảnh hưởng đến ngành học bạn chọn</p>
+                                    <div class="quiz-card-counter">Câu 3/30</div>
+                                </div>
+                                <div class="quiz-buttons">
+                                    <button class="swipe-btn swipe-disagree" onclick="swipeCard(event, 'left')">✕ Không</button>
+                                    <button class="swipe-btn swipe-neutral" onclick="swipeCard(event, 'neutral')">– Trung lập</button>
+                                    <button class="swipe-btn swipe-agree" onclick="swipeCard(event, 'right')">✓ Có</button>
+                                    <button class="swipe-btn swipe-strong" onclick="swipeCard(event, 'strong')">⚡ Rất</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="specs-panel" style="margin-top: 24px;">
+                            <div class="specs-row">
+                                <span class="specs-label">Animation:</span>
+                                <span class="specs-value">flyLeft, flyRight (0.5s)</span>
+                            </div>
+                            <div class="specs-row">
+                                <span class="specs-label">Stack Effect:</span>
+                                <span class="specs-value">3 cards visible</span>
+                            </div>
+                            <div class="specs-row">
+                                <span class="specs-label">Progress:</span>
+                                <span class="specs-value">TikTok-style bar</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MATCH RESULT CARD -->
+            <section class="section" id="match">
+                <div class="section-label">3. Match Result Card</div>
+                
+                <div class="demo-grid">
+                    <div class="match-card">
+                        <div class="match-percentage">92%</div>
+                        <div class="match-label">phù hợp</div>
+                        <div class="discipline-name">Kỹ sư Phần mềm</div>
+                        <div class="university-chips">
+                            <span class="uni-chip">ĐH Bách khoa HN</span>
+                            <span class="uni-chip">ĐH FPT</span>
+                        </div>
+                        <button class="btn btn-primary btn-md">Khám phá ngành →</button>
+                    </div>
+
+                    <div class="match-card">
+                        <div class="match-percentage" style="color: var(--orange-500);">68%</div>
+                        <div class="match-label">phù hợp</div>
+                        <div class="discipline-name">Thiết kế Đồ họa</div>
+                        <div class="university-chips">
+                            <span class="uni-chip">ĐH Công nghiệp HN</span>
+                        </div>
+                        <button class="btn btn-secondary btn-md">Chi tiết</button>
+                    </div>
+                </div>
+
+                <div class="specs-panel" style="margin-top: 24px;">
+                    <div class="specs-row">
+                        <span class="specs-label">Gradient Border:</span>
+                        <span class="specs-value">violet → mint</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Hover:</span>
+                        <span class="specs-value">scale(1.05)</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SKELETON LOADER -->
+            <section class="section" id="skeleton">
+                <div class="section-label">4. Skeleton Loaders & Loading States</div>
+                
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 13px;">Shimmer Animation (loading card):</p>
+                <div class="demo-box" style="flex-direction: column; align-items: stretch;">
+                    <div class="skeleton skeleton-card"></div>
+                </div>
+
+                <div style="margin-top: 24px; margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Loading Quiz State:</p>
+                    <div class="demo-box" style="flex-direction: column; align-items: center; gap: 16px;">
+                        <div class="loading-text">Đang phân tích câu trả lời của bạn<span id="dots">.</span></div>
+                        <div class="fun-fact" id="funFact">73% sinh viên đổi ngành sau năm nhất</div>
+                    </div>
+                </div>
+
+                <div class="specs-panel">
+                    <div class="specs-row">
+                        <span class="specs-label">Shimmer Duration:</span>
+                        <span class="specs-value">2s loop</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Fun Facts:</span>
+                        <span class="specs-value">rotate every 3s</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INPUT FIELDS -->
+            <section class="section" id="inputs">
+                <div class="section-label">5. Input Fields</div>
+                
+                <div style="margin-bottom: 24px; max-width: 400px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 13px;">Default</p>
+                    <div class="input-group">
+                        <input type="text" class="input-field" placeholder="Tìm ngành học...">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px; max-width: 400px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 13px;">Focused</p>
+                    <div class="input-group">
+                        <input type="text" class="input-field" placeholder="Nhập tên của bạn" style="border-color: var(--violet-600); box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);">
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px; max-width: 400px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 13px;">Error</p>
+                    <div class="input-group">
+                        <input type="text" class="input-field error" placeholder="Email" value="invalid">
+                        <div class="input-error">Email không hợp lệ</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px; max-width: 400px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 8px; font-size: 13px;">Success</p>
+                    <div class="input-group">
+                        <input type="text" class="input-field success" placeholder="Email" value="phuc@example.com">
+                        <span class="input-icon">✓</span>
+                    </div>
+                </div>
+
+                <div class="specs-panel" style="max-width: 400px;">
+                    <div class="specs-row">
+                        <span class="specs-label">Focus Color:</span>
+                        <span class="specs-value">#7c3aed</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Error Color:</span>
+                        <span class="specs-value">#ff4757</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAGS & CHIPS -->
+            <section class="section" id="tags">
+                <div class="section-label">6. Tags, Chips & Badges</div>
+                
+                <div style="margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Discipline Tags (Interactive):</p>
+                    <div class="demo-box" style="flex-wrap: wrap; justify-content: flex-start; gap: 8px;">
+                        <span class="tag tag-engineering" onclick="toggleTag(this)">Kỹ thuật</span>
+                        <span class="tag tag-humanities" onclick="toggleTag(this)">Nhân văn</span>
+                        <span class="tag tag-medicine" onclick="toggleTag(this)">Y tế</span>
+                        <span class="tag tag-agriculture" onclick="toggleTag(this)">Nông nghiệp</span>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 24px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Status Badges:</p>
+                    <div class="demo-box" style="flex-wrap: wrap; justify-content: flex-start; gap: 8px;">
+                        <span class="badge">Phù hợp cao</span>
+                        <span class="badge" style="background: var(--mint-500);">Đang học</span>
+                        <span class="badge" style="background: var(--orange-500);">Mới cập nhật</span>
+                    </div>
+                </div>
+
+                <div class="specs-panel">
+                    <div class="specs-row">
+                        <span class="specs-label">Tag Colors:</span>
+                        <span class="specs-value">4 disciplines</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Interactive:</span>
+                        <span class="specs-value">toggle active state</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PROGRESS BARS -->
+            <section class="section" id="progress">
+                <div class="section-label">7. Progress Bars</div>
+                
+                <div style="margin-bottom: 32px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Linear Progress (Câu 10/30):</p>
+                    <div class="demo-box" style="flex-direction: column; align-items: stretch;">
+                        <div class="progress-linear">
+                            <div class="progress-fill" style="width: 33%;"></div>
+                        </div>
+                        <div class="progress-label">Câu 10/30 hoàn thành</div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 32px;">
+                    <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13px;">Circular Progress (Match %):</p>
+                    <div class="demo-box">
+                        <div class="progress-circle">
+                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%;">
+                                <defs>
+                                    <linearGradient id="gradientCircle" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color: var(--violet-500); stop-opacity: 1" />
+                                        <stop offset="100%" style="stop-color: var(--mint-500); stop-opacity: 1" />
+                                    </linearGradient>
+                                </defs>
+                                <circle class="progress-circle-bg" cx="50" cy="50" r="40"></circle>
+                                <circle class="progress-circle-fill" cx="50" cy="50" r="40" style="stroke-dasharray: 251.2; stroke-dashoffset: 62.8;"></circle>
+                            </svg>
+                            <div class="progress-circle-text">
+                                <div class="progress-circle-text-large">92%</div>
+                                <div class="progress-circle-text-small">phù hợp</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="specs-panel">
+                    <div class="specs-row">
+                        <span class="specs-label">Linear Radius:</span>
+                        <span class="specs-value">999px</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Gradient:</span>
+                        <span class="specs-value">violet → mint</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BOTTOM NAV -->
+            <section class="section" id="nav">
+                <div class="section-label">8. Bottom Navigation (Mobile)</div>
+                
+                <div class="demo-box" style="flex-direction: column; align-items: center; justify-content: flex-start; padding: 0; border: none;">
+                    <div class="mobile-phone">
+                        <div class="phone-screen">
+                            <div class="phone-content">
+                                <div style="text-align: center; padding: 40px 0;">
+                                    <p style="font-size: 14px; margin-bottom: 12px;">Chào mừng 👋</p>
+                                    <p style="color: var(--text-muted); font-size: 12px;">Nhấp vào icon bên dưới để chuyển tab</p>
+                                </div>
+                            </div>
+                            <div class="bottom-nav" id="bottomNav">
+                                <div class="nav-item active" onclick="switchNav(0)">
+                                    <div class="nav-icon">🏠</div>
+                                    <div>Trang chủ</div>
+                                </div>
+                                <div class="nav-item" onclick="switchNav(1)">
+                                    <div class="nav-icon">🧭</div>
+                                    <div>Khám phá</div>
+                                </div>
+                                <div class="nav-item" onclick="switchNav(2)">
+                                    <div class="nav-icon">❓</div>
+                                    <div>Quiz</div>
+                                </div>
+                                <div class="nav-item" onclick="switchNav(3)">
+                                    <div class="nav-icon">👤</div>
+                                    <div>Hồ sơ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="specs-panel" style="margin-top: 24px;">
+                    <div class="specs-row">
+                        <span class="specs-label">Mobile Width:</span>
+                        <span class="specs-value">390px</span>
+                    </div>
+                    <div class="specs-row">
+                        <span class="specs-label">Active Indicator:</span>
+                        <span class="specs-value">dot below icon</span>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // SIDEBAR SCROLL
+        function scrollTo(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // BUTTON LOADING
+        function toggleLoading(btn) {
+            btn.classList.toggle('btn-loading');
+            if (btn.classList.contains('btn-loading')) {
+                btn.disabled = true;
+            } else {
+                btn.disabled = false;
+            }
+        }
+
+        // QUIZ CARD SWIPE
+        let currentQuestion = 3;
+        const questions = [
+            'Bạn thích làm việc với các con số và công thức toán học?',
+            'Bạn có yêu thích đọc và viết không?',
+            'Bạn có đam mê khoa học sống (sinh học, hóa học)?',
+            'Bạn thích làm việc với máy móc và cơ khí?',
+            'Bạn có kỹ năng giao tiếp tốt không?'
+        ];
+
+        const funFacts = [
+            '73% sinh viên đổi ngành sau năm nhất',
+            'Kỹ sư phần mềm là ngành có mức lương khởi điểm cao nhất VN 2024',
+            'BeyonDegrees đã giúp 10,000+ học sinh tìm đúng ngành',
+            'Ngành Y dược có tỷ lệ nhập học cao nhất tại các trường hàng đầu',
+            'Thiết kế UX/UI tăng trưởng 45% tuyển dụng mỗi năm'
+        ];
+
+        let currentFact = 0;
+        const dotAnimation = setInterval(() => {
+            const dotsEl = document.getElementById('dots');
+            if (dotsEl) {
+                const dots = dotsEl.textContent;
+                dotsEl.textContent = dots.length < 3 ? dots + '.' : '.';
+            }
+        }, 300);
+
+        const funFactInterval = setInterval(() => {
+            const funFactEl = document.getElementById('funFact');
+            if (funFactEl) {
+                currentFact = (currentFact + 1) % funFacts.length;
+                funFactEl.textContent = funFacts[currentFact];
+            }
+        }, 3000);
+
+        function swipeCard(e, direction) {
+            const card = document.getElementById('card-0');
+            card.classList.add(direction === 'left' || direction === 'neutral' ? 'fly-left' : 'fly-right');
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion > 30) currentQuestion = 1;
+
+                // Update story bar
+                updateStoryBar(currentQuestion);
+
+                // Show milestone
+                if (currentQuestion === 11 || currentQuestion === 21 || currentQuestion === 31) {
+                    const milestoneBanner = document.getElementById('milestoneBanner');
+                    const num = currentQuestion === 11 ? '1/3' : currentQuestion === 21 ? '2/3' : '3/3';
+                    milestoneBanner.textContent = `${num} xong rồi! 🔥`;
+                    milestoneBanner.style.display = 'block';
+                    setTimeout(() => { milestoneBanner.style.display = 'none'; }, 3000);
+                }
+
+                // Update card
+                const newCard = document.createElement('div');
+                newCard.className = 'quiz-card card-0';
+                newCard.id = 'card-0';
+                newCard.innerHTML = `
+                    <div class="quiz-card-content">
+                        <h3>${questions[currentQuestion % questions.length]}</h3>
+                        <p style="color: var(--text-secondary); margin-top: 8px;">Câu hỏi ${currentQuestion}/30</p>
+                        <div class="quiz-card-counter">Câu ${currentQuestion}/30</div>
+                    </div>
+                    <div class="quiz-buttons">
+                        <button class="swipe-btn swipe-disagree" onclick="swipeCard(event, 'left')">✕ Không</button>
+                        <button class="swipe-btn swipe-neutral" onclick="swipeCard(event, 'neutral')">– Trung lập</button>
+                        <button class="swipe-btn swipe-agree" onclick="swipeCard(event, 'right')">✓ Có</button>
+                        <button class="swipe-btn swipe-strong" onclick="swipeCard(event, 'strong')">⚡ Rất</button>
+                    </div>
+                `;
+
+                const cardStack = document.querySelector('.card-stack');
+                const oldCard = document.getElementById('card-0');
+                oldCard.remove();
+                cardStack.appendChild(newCard);
+            }, 500);
+        }
+
+        function updateStoryBar(questionNum) {
+            const storyBar = document.getElementById('storyBar');
+            storyBar.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'story-segment';
+                if (i < questionNum / 3) segment.classList.add('completed');
+                if (i === Math.ceil(questionNum / 3)) segment.classList.add('active');
+                storyBar.appendChild(segment);
+            }
+        }
+
+        // TAG TOGGLE
+        function toggleTag(el) {
+            el.classList.toggle('active');
+        }
+
+        // BOTTOM NAV SWITCH
+        function switchNav(index) {
+            const items = document.querySelectorAll('.nav-item');
+            items.forEach((item, i) => {
+                item.classList.toggle('active', i === index);
+            });
+        }
+    </script>
+</body>
+</html>

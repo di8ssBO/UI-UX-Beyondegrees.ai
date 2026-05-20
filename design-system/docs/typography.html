@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BeyonDegrees.ai — Typography & Spacing System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #06060f;
+            --bg-surface: #12121f;
+            --bg-elevated: #1a1a2e;
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --success: #06d6a0;
+            --text-primary: #f8fafc;
+            --text-secondary: #c8c8e0;
+            --text-muted: #6b6b9a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-base);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--bg-elevated);
+            padding: 24px 16px;
+            position: sticky;
+            top: 0;
+            max-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h1 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary-light);
+            margin-bottom: 16px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 12px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--bg-elevated);
+            color: var(--primary-light);
+        }
+
+        .main {
+            flex: 1;
+            padding: 48px;
+            overflow-y: auto;
+        }
+
+        .section {
+            margin-bottom: 64px;
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            color: var(--text-primary);
+        }
+
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 28px;
+            background: var(--primary);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        /* Typography Showcase */
+        .type-grid {
+            display: grid;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .type-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .type-item:hover {
+            background: var(--bg-elevated);
+            border-color: var(--primary);
+        }
+
+        .type-sample {
+            margin-bottom: 16px;
+        }
+
+        .type-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--bg-elevated);
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
+
+        /* Spacing Grid */
+        .spacing-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .spacing-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .spacing-bar {
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 4px;
+            min-height: 24px;
+        }
+
+        .spacing-label {
+            display: grid;
+            gap: 4px;
+            flex: 0 0 200px;
+        }
+
+        .spacing-label strong {
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .spacing-label span {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .usage-note {
+            flex: 1;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        /* Comparison Table */
+        .comparison {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .comparison-item h3 {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .comparison-item p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        /* Examples */
+        .example-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-elevated);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .example-title {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .quiz-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .quiz-question {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 8px;
+        }
+
+        .quiz-option {
+            background: var(--bg-surface);
+            border: 1px solid var(--text-muted);
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+            background: var(--bg-elevated);
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(6, 214, 160, 0.05));
+            border: 1px solid var(--primary);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .result-number {
+            font-size: 56px;
+            font-weight: 900;
+            color: var(--primary-light);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .result-major {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .result-uni {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .line-height-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-surface);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .line-height-table th,
+        .line-height-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--bg-elevated);
+            font-size: 14px;
+        }
+
+        .line-height-table th {
+            background: var(--bg-elevated);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .line-height-table td {
+            color: var(--text-secondary);
+        }
+
+        .line-height-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 1024px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; max-height: auto; position: relative; }
+            .comparison-grid { grid-template-columns: 1fr; }
+        }
+
+        .code-block {
+            background: var(--bg-base);
+            border: 1px solid var(--bg-elevated);
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: var(--success);
+            overflow-x: auto;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h1>Design System</h1>
+            <div class="nav-item active" onclick="showSection('typography')">Typography</div>
+            <div class="nav-item" onclick="showSection('spacing')">Spacing</div>
+            <div class="nav-item" onclick="showSection('rhythm')">Line Height</div>
+            <div class="nav-item" onclick="showSection('examples')">Live Examples</div>
+        </nav>
+
+        <main class="main">
+            <!-- Typography Section -->
+            <section class="section active" id="typography">
+                <h2 class="section-title">Typography Scale</h2>
+                
+                <div class="comparison">
+                    <div class="example-title">Font Family Comparison</div>
+                    <div class="comparison-grid">
+                        <div class="comparison-item">
+                            <h3>Plus Jakarta Sans</h3>
+                            <p style="font-family: 'Plus Jakarta Sans', sans-serif;">Khám phá con đường học vấn của bạn</p>
+                        </div>
+                        <div class="comparison-item">
+                            <h3>Inter</h3>
+                            <p style="font-family: 'Inter', sans-serif;">Khám phá con đường học vấn của bạn</p>
+                        </div>
+                        <div class="comparison-item">
+                            <h3>DM Sans</h3>
+                            <p style="font-family: 'DM Sans', sans-serif;">Khám phá con đường học vấn của bạn</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="type-grid">
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 56px; font-weight: 900; line-height: 1.2;">Khám phá con đường học vấn của bạn</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>Display</strong></div>
+                            <div class="spec-item"><strong>56px</strong></div>
+                            <div class="spec-item"><strong>900</strong></div>
+                            <div class="spec-item"><strong>1.2</strong></div>
+                            <div class="spec-item"><strong>-0.02em</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 56px; font-weight: 900; line-height: 1.2; letter-spacing: -0.02em;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 36px; font-weight: 800; line-height: 1.2;">Kết quả phù hợp của bạn</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>H1</strong></div>
+                            <div class="spec-item"><strong>36px</strong></div>
+                            <div class="spec-item"><strong>800</strong></div>
+                            <div class="spec-item"><strong>1.2</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 36px; font-weight: 800; line-height: 1.2; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 28px; font-weight: 700; line-height: 1.3;">Khoa học Nhân văn</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>H2</strong></div>
+                            <div class="spec-item"><strong>28px</strong></div>
+                            <div class="spec-item"><strong>700</strong></div>
+                            <div class="spec-item"><strong>1.3</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 28px; font-weight: 700; line-height: 1.3; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 22px; font-weight: 700; line-height: 1.3;">Tâm lý học</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>H3</strong></div>
+                            <div class="spec-item"><strong>22px</strong></div>
+                            <div class="spec-item"><strong>700</strong></div>
+                            <div class="spec-item"><strong>1.3</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 22px; font-weight: 700; line-height: 1.3; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 18px; font-weight: 600; line-height: 1.4;">Đại học Duy Tân</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>H4</strong></div>
+                            <div class="spec-item"><strong>18px</strong></div>
+                            <div class="spec-item"><strong>600</strong></div>
+                            <div class="spec-item"><strong>1.4</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 18px; font-weight: 600; line-height: 1.4; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 16px; font-weight: 400; line-height: 1.5;">Cơ hội tìm hiểu sâu về các ngành học mà bạn yêu thích, từ khoa học tự nhiên đến nhân văn xã hội.</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>Body Large</strong></div>
+                            <div class="spec-item"><strong>16px</strong></div>
+                            <div class="spec-item"><strong>400</strong></div>
+                            <div class="spec-item"><strong>1.5</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 16px; font-weight: 400; line-height: 1.5; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 14px; font-weight: 400; line-height: 1.5;">Hãy khám phá các chuyên ngành phù hợp với năng lực và sở thích của bạn.</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>Body</strong></div>
+                            <div class="spec-item"><strong>14px</strong></div>
+                            <div class="spec-item"><strong>400</strong></div>
+                            <div class="spec-item"><strong>1.5</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 14px; font-weight: 400; line-height: 1.5; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 12px; font-weight: 400; line-height: 1.4;">Cập nhật lần cuối: 20 tháng 4 năm 2026</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>Body Small</strong></div>
+                            <div class="spec-item"><strong>12px</strong></div>
+                            <div class="spec-item"><strong>400</strong></div>
+                            <div class="spec-item"><strong>1.4</strong></div>
+                            <div class="spec-item"><strong>0</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 12px; font-weight: 400; line-height: 1.4; letter-spacing: 0;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 11px; font-weight: 500; line-height: 1.4; letter-spacing: 0.05em;">CÓ 156 KẾT QUẢ</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>Caption</strong></div>
+                            <div class="spec-item"><strong>11px</strong></div>
+                            <div class="spec-item"><strong>500</strong></div>
+                            <div class="spec-item"><strong>1.4</strong></div>
+                            <div class="spec-item"><strong>0.05em</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 11px; font-weight: 500; line-height: 1.4; letter-spacing: 0.05em;', this)">Copy CSS</button>
+                    </div>
+
+                    <div class="type-item">
+                        <div class="type-sample" style="font-size: 10px; font-weight: 700; line-height: 1.4; letter-spacing: 0.1em; text-transform: uppercase;">TUẦN 2</div>
+                        <div class="type-specs">
+                            <div class="spec-item"><strong>Label</strong></div>
+                            <div class="spec-item"><strong>10px</strong></div>
+                            <div class="spec-item"><strong>700</strong></div>
+                            <div class="spec-item"><strong>1.4</strong></div>
+                            <div class="spec-item"><strong>0.1em</strong></div>
+                        </div>
+                        <button class="copy-btn" onclick="copyToClipboard('font-size: 10px; font-weight: 700; line-height: 1.4; letter-spacing: 0.1em; text-transform: uppercase;', this)">Copy CSS</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spacing Section -->
+            <section class="section" id="spacing">
+                <h2 class="section-title">Spacing System (4pt Grid)</h2>
+                
+                <div class="spacing-grid">
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 16px;"></div>
+                        <div class="spacing-label"><strong>4px</strong><span>0.25rem</span></div>
+                        <div class="usage-note">Minimal gaps, micro-interactions</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 32px;"></div>
+                        <div class="spacing-label"><strong>8px</strong><span>0.5rem</span></div>
+                        <div class="usage-note">Icon and label spacing</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 48px;"></div>
+                        <div class="spacing-label"><strong>12px</strong><span>0.75rem</span></div>
+                        <div class="usage-note">Internal button padding</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 64px;"></div>
+                        <div class="spacing-label"><strong>16px</strong><span>1rem</span></div>
+                        <div class="usage-note">Card padding, list gaps</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 80px;"></div>
+                        <div class="spacing-label"><strong>20px</strong><span>1.25rem</span></div>
+                        <div class="usage-note">Section headers spacing</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 96px;"></div>
+                        <div class="spacing-label"><strong>24px</strong><span>1.5rem</span></div>
+                        <div class="usage-note">Card gap, container padding</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 128px;"></div>
+                        <div class="spacing-label"><strong>32px</strong><span>2rem</span></div>
+                        <div class="usage-note">Major section margin</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 160px;"></div>
+                        <div class="spacing-label"><strong>40px</strong><span>2.5rem</span></div>
+                        <div class="usage-note">Large section gaps</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 192px;"></div>
+                        <div class="spacing-label"><strong>48px</strong><span>3rem</span></div>
+                        <div class="usage-note">Screen section padding</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 256px;"></div>
+                        <div class="spacing-label"><strong>64px</strong><span>4rem</span></div>
+                        <div class="usage-note">Full page margins</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 320px;"></div>
+                        <div class="spacing-label"><strong>80px</strong><span>5rem</span></div>
+                        <div class="usage-note">XL spacing, hero sections</div>
+                    </div>
+                    <div class="spacing-item">
+                        <div class="spacing-bar" style="width: 384px;"></div>
+                        <div class="spacing-label"><strong>96px</strong><span>6rem</span></div>
+                        <div class="usage-note">XXL spacing, screen dividers</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Line Height & Letter Spacing -->
+            <section class="section" id="rhythm">
+                <h2 class="section-title">Line Height & Letter Spacing</h2>
+                
+                <div style="background: var(--bg-surface); border: 1px solid var(--bg-elevated); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+                    <div class="example-title">Line Height Scale</div>
+                    <table class="line-height-table">
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Use Case</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td>Tight</td>
+                            <td>1.2</td>
+                            <td>Display, headings</td>
+                            <td style="line-height: 1.2;">Khám phá con đường</td>
+                        </tr>
+                        <tr>
+                            <td>Base</td>
+                            <td>1.5</td>
+                            <td>Body text, normal</td>
+                            <td style="line-height: 1.5;">Cơ hội tìm hiểu sâu về các ngành</td>
+                        </tr>
+                        <tr>
+                            <td>Relaxed</td>
+                            <td>1.7</td>
+                            <td>Long-form reading</td>
+                            <td style="line-height: 1.7;">Khám phá các chuyên ngành phù hợp với năng lực</td>
+                        </tr>
+                        <tr>
+                            <td>Loose</td>
+                            <td>2.0</td>
+                            <td>Small text, captions</td>
+                            <td style="line-height: 2.0; font-size: 12px;">Cập nhật lần cuối</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="background: var(--bg-surface); border: 1px solid var(--bg-elevated); border-radius: 12px; padding: 24px;">
+                    <div class="example-title">Letter Spacing Scale</div>
+                    <table class="line-height-table">
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Use Case</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td>Tight</td>
+                            <td>-0.02em</td>
+                            <td>Display text</td>
+                            <td style="letter-spacing: -0.02em;">Khám phá học vấn</td>
+                        </tr>
+                        <tr>
+                            <td>Normal</td>
+                            <td>0</td>
+                            <td>Body text</td>
+                            <td style="letter-spacing: 0;">Khám phá học vấn</td>
+                        </tr>
+                        <tr>
+                            <td>Wide</td>
+                            <td>0.05em</td>
+                            <td>Captions, tags</td>
+                            <td style="letter-spacing: 0.05em;">Khám phá học vấn</td>
+                        </tr>
+                        <tr>
+                            <td>Wider</td>
+                            <td>0.1em</td>
+                            <td>Labels, uppercase</td>
+                            <td style="letter-spacing: 0.1em; text-transform: uppercase;">Tuần 2</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Live Examples -->
+            <section class="section" id="examples">
+                <h2 class="section-title">Live Examples</h2>
+
+                <div class="example-card">
+                    <div class="example-title">Quiz Card</div>
+                    <div class="quiz-card">
+                        <div class="quiz-question">Bạn hứng thú nhất với lĩnh vực nào?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">Khoa học tự nhiên: Vật lý, Hóa học, Sinh học</div>
+                            <div class="quiz-option">Khoa học xã hội: Kinh tế, Chính trị, Luật pháp</div>
+                            <div class="quiz-option">Nhân văn: Tiếng Việt, Lịch sử, Địa lý</div>
+                            <div class="quiz-option">Công nghệ: Lập trình, Thiết kế, Kỹ thuật</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">Match Result Card</div>
+                    <div class="result-card">
+                        <div class="result-number">94%</div>
+                        <div class="result-major">Khoa học Máy tính</div>
+                        <div class="result-uni">Đại học Duy Tân, HUFLIT, FPT University</div>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">Home Screen Hero</div>
+                    <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(6, 214, 160, 0.05)); border: 1px solid var(--primary); border-radius: 12px; padding: 32px; text-align: center;">
+                        <h2 style="font-size: 36px; font-weight: 800; margin-bottom: 12px;">Khám phá con đường học vấn của bạn</h2>
+                        <p style="font-size: 16px; color: var(--text-secondary); margin-bottom: 20px;">Tìm hiểu về 50+ ngành học và 100+ trường đại học ở Việt Nam</p>
+                        <button class="copy-btn" style="margin: 0 auto;">Bắt đầu ngay</button>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">Navigation Label</div>
+                    <div style="background: var(--bg-elevated); border: 1px solid var(--text-muted); border-radius: 8px; padding: 12px 16px; display: inline-block;">
+                        <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--primary-light);">TUẦN 2 — KHO NGÀNH HỌC</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const original = button.textContent;
+                button.textContent = 'Đã sao chép!';
+                button.classList.add('copied');
+                setTimeout(() => {
+                    button.textContent = original;
+                    button.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Palette Reference — BeyonDegrees.ai</title>
+<style>
+  :root {
+    --violet-950:#1e0a3c;--violet-900:#2d1267;--violet-800:#4c1d95;
+    --violet-700:#6d28d9;--violet-600:#7c3aed;--violet-500:#8b5cf6;
+    --violet-400:#a78bfa;--violet-300:#c4b5fd;--violet-200:#ddd6fe;
+    --violet-100:#ede9fe;
+    --mint-900:#064e3b;--mint-700:#047857;--mint-500:#06d6a0;
+    --mint-400:#34d399;--mint-300:#6ee7b7;--mint-200:#a7f3d0;
+    --orange-600:#ea580c;--orange-500:#f97316;--orange-400:#fb923c;--orange-300:#fdba74;
+    --red-500:#ff4757;--red-400:#ff6b81;--yellow-500:#ffd43b;
+    --neutral-950:#06060f;--neutral-900:#0d0d1a;--neutral-800:#12121f;
+    --neutral-700:#1a1a2e;--neutral-600:#252540;--neutral-500:#3d3d60;
+    --neutral-400:#6b6b9a;--neutral-300:#9d9dbf;--neutral-200:#c8c8e0;
+    --neutral-100:#e8e8f5;--neutral-50:#f8f8ff;
+    --text-primary:#f8fafc;--text-secondary:#c8c8e0;
+    --text-muted:#6b6b9a;--text-disabled:#3d3d60;
+    --bg-base:#06060f;--bg-surface:#12121f;
+    --bg-elevated:#1a1a2e;--bg-overlay:#252540;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--neutral-950);color:var(--text-primary);font-family:'Plus Jakarta Sans','Inter',system-ui,sans-serif;min-height:100vh;}
+  .header{background:var(--neutral-900);border-bottom:1px solid var(--neutral-700);padding:20px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);}
+  .header-logo{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--violet-400);text-transform:uppercase;}
+  .header-title{font-size:14px;font-weight:600;color:var(--text-secondary);}
+  .header-meta{font-size:11px;color:var(--text-muted);}
+  .container{max-width:1200px;margin:0 auto;padding:48px 40px;}
+  .section{margin-bottom:60px;}
+  .section-label{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--violet-500);text-transform:uppercase;margin-bottom:8px;}
+  .section-title{font-size:22px;font-weight:700;color:var(--text-primary);margin-bottom:6px;}
+  .section-desc{font-size:13px;color:var(--text-muted);margin-bottom:28px;line-height:1.7;}
+  .scale-row{display:flex;gap:4px;align-items:stretch;margin-bottom:12px;}
+  .scale-name{width:80px;flex-shrink:0;display:flex;align-items:center;font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;}
+  .scale-swatches{display:flex;flex:1;gap:3px;}
+  .swatch{flex:1;height:56px;border-radius:8px;cursor:pointer;position:relative;transition:transform 0.15s,box-shadow 0.15s;display:flex;flex-direction:column;justify-content:flex-end;padding:5px 6px;overflow:hidden;}
+  .swatch:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 12px 24px rgba(0,0,0,0.5);z-index:2;}
+  .swatch-label{font-size:9px;font-weight:700;opacity:0;transition:opacity 0.15s;font-family:'Courier New',monospace;}
+  .swatch:hover .swatch-label{opacity:1;}
+  .tokens-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+  .token-card{background:var(--neutral-800);border:1px solid var(--neutral-700);border-radius:12px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+  .token-card:hover{border-color:var(--violet-500);transform:translateY(-2px);}
+  .token-swatch{height:80px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;}
+  .token-info{padding:12px;}
+  .token-name{font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:2px;}
+  .token-var{font-size:10px;color:var(--violet-400);font-family:'Courier New',monospace;margin-bottom:4px;}
+  .token-hex{font-size:10px;color:var(--text-muted);font-family:'Courier New',monospace;}
+  .token-usage{font-size:10px;color:var(--text-muted);margin-top:8px;line-height:1.6;border-top:1px solid var(--neutral-700);padding-top:8px;}
+  .usage-demo{background:var(--neutral-800);border:1px solid var(--neutral-700);border-radius:16px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+  .demo-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text-muted);text-transform:uppercase;margin-bottom:14px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:999px;font-size:13px;font-weight:600;border:none;cursor:pointer;margin:4px;transition:all 0.2s;}
+  .btn-primary{background:var(--violet-600);color:#fff;}
+  .btn-primary:hover{background:var(--violet-500);transform:translateY(-2px);box-shadow:0 8px 20px rgba(124,58,237,0.4);}
+  .btn-secondary{background:transparent;color:var(--violet-400);border:1.5px solid var(--violet-600);}
+  .btn-ghost{background:var(--neutral-700);color:var(--text-secondary);}
+  .btn-success{background:var(--mint-500);color:#06060f;font-weight:700;}
+  .btn-danger{background:var(--red-500);color:#fff;}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:600;margin:3px;}
+  .chip-agree{background:rgba(6,214,160,0.15);color:var(--mint-500);border:1px solid rgba(6,214,160,0.3);}
+  .chip-disagree{background:rgba(255,71,87,0.15);color:var(--red-400);border:1px solid rgba(255,71,87,0.3);}
+  .chip-neutral{background:rgba(107,107,154,0.2);color:var(--neutral-300);border:1px solid var(--neutral-600);}
+  .chip-strong{background:rgba(124,58,237,0.2);color:var(--violet-400);border:1px solid rgba(124,58,237,0.4);}
+  .bg-levels{display:flex;flex-direction:column;gap:4px;}
+  .bg-level{padding:10px 14px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;font-size:11px;}
+  .bg-level-name{font-weight:600;color:var(--text-primary);}
+  .bg-level-hex{font-family:monospace;color:var(--text-muted);font-size:10px;}
+  .contrast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+  .contrast-card{border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:4px;border:1px solid var(--neutral-700);}
+  .contrast-ratio{font-size:24px;font-weight:800;font-family:'Courier New',monospace;}
+  .contrast-pair{font-size:11px;font-weight:600;opacity:0.8;}
+  .contrast-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:10px;font-weight:700;margin-top:6px;width:fit-content;}
+  .badge-aaa{background:rgba(6,214,160,0.15);color:var(--mint-500);}
+  .badge-aa{background:rgba(124,58,237,0.15);color:var(--violet-400);}
+  .badge-fail{background:rgba(255,71,87,0.1);color:var(--red-400);}
+  .divider{height:1px;background:var(--neutral-800);margin:48px 0;}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--violet-600);color:#fff;padding:10px 20px;border-radius:999px;font-size:12px;font-weight:600;opacity:0;transform:translateY(10px);transition:all 0.2s;z-index:999;pointer-events:none;}
+  .toast.show{opacity:1;transform:translateY(0);}
+  .star{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);border-radius:4px;padding:1px 5px;font-size:9px;color:var(--violet-400);font-weight:700;margin-left:4px;}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="header-logo">BeyonDegrees.ai</div>
+  <div class="header-title">Color Palette Reference — v1.0</div>
+  <div class="header-meta">20/04/2026 · Phúc · Click bất kỳ swatch để copy hex</div>
+</header>
+<main class="container">
+
+  <section class="section">
+    <div class="section-label">01 — Primary Color</div>
+    <div class="section-title">Electric Violet ⚡</div>
+    <div class="section-desc">Màu chủ đạo của BeyonDegrees. Violet truyền tải sự sáng tạo, tham vọng, tư duy độc lập — đúng tinh thần "Beyond" mọi giới hạn. Với GenZ, violet associate mạnh với ambition, mystery, creativity (Twitch, Figma, Discord đều dùng violet). Đây là màu CTA chính, active states, và all brand moments.</div>
+    <div class="scale-row">
+      <span class="scale-name">Violet</span>
+      <div class="scale-swatches">
+        <div class="swatch" style="background:#1e0a3c;" onclick="copy('#1e0a3c',this)"><span class="swatch-label" style="color:#6b6b9a;">950</span></div>
+        <div class="swatch" style="background:#2d1267;" onclick="copy('#2d1267',this)"><span class="swatch-label" style="color:#9d9dbf;">900</span></div>
+        <div class="swatch" style="background:#4c1d95;" onclick="copy('#4c1d95',this)"><span class="swatch-label" style="color:#c4b5fd;">800</span></div>
+        <div class="swatch" style="background:#6d28d9;" onclick="copy('#6d28d9',this)"><span class="swatch-label" style="color:#ddd6fe;">700</span></div>
+        <div class="swatch" style="background:#7c3aed;outline:2px solid #a78bfa;outline-offset:2px;" onclick="copy('#7c3aed',this)"><span class="swatch-label" style="color:#fff;">600★</span></div>
+        <div class="swatch" style="background:#8b5cf6;" onclick="copy('#8b5cf6',this)"><span class="swatch-label" style="color:#fff;">500</span></div>
+        <div class="swatch" style="background:#a78bfa;" onclick="copy('#a78bfa',this)"><span class="swatch-label" style="color:#1e0a3c;">400</span></div>
+        <div class="swatch" style="background:#c4b5fd;" onclick="copy('#c4b5fd',this)"><span class="swatch-label" style="color:#2d1267;">300</span></div>
+        <div class="swatch" style="background:#ddd6fe;" onclick="copy('#ddd6fe',this)"><span class="swatch-label" style="color:#4c1d95;">200</span></div>
+        <div class="swatch" style="background:#ede9fe;" onclick="copy('#ede9fe',this)"><span class="swatch-label" style="color:#6d28d9;">100</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">02 — Secondary Color</div>
+    <div class="section-title">Neon Mint 🌿</div>
+    <div class="section-desc">Màu thứ cấp cho success, agree states, và positive moments. Neon mint tạo tương phản cao với violet và nền tối — cảm giác "fresh, go forward". Đây là màu của action, momentum, và positive reinforcement trong quiz flow.</div>
+    <div class="scale-row">
+      <span class="scale-name">Mint</span>
+      <div class="scale-swatches">
+        <div class="swatch" style="background:#064e3b;" onclick="copy('#064e3b',this)"><span class="swatch-label" style="color:#6ee7b7;">900</span></div>
+        <div class="swatch" style="background:#047857;" onclick="copy('#047857',this)"><span class="swatch-label" style="color:#a7f3d0;">700</span></div>
+        <div class="swatch" style="background:#06d6a0;outline:2px solid #34d399;outline-offset:2px;" onclick="copy('#06d6a0',this)"><span class="swatch-label" style="color:#064e3b;">500★</span></div>
+        <div class="swatch" style="background:#34d399;" onclick="copy('#34d399',this)"><span class="swatch-label" style="color:#064e3b;">400</span></div>
+        <div class="swatch" style="background:#6ee7b7;" onclick="copy('#6ee7b7',this)"><span class="swatch-label" style="color:#047857;">300</span></div>
+        <div class="swatch" style="background:#a7f3d0;" onclick="copy('#a7f3d0',this)"><span class="swatch-label" style="color:#064e3b;">200</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">03 — Accent & Semantic</div>
+    <div class="section-title">Achievement Orange + Semantic Colors 🔥</div>
+    <div class="section-desc">Orange là màu "dopamine" — dùng khi user đạt milestone (1/3 quiz xong, streak, achievement). Semantic colors cho trạng thái UI theo chuẩn UX: success (mint), error (red), warning (yellow). Đây là ngôn ngữ màu sắc mà user học subconsciously qua quiz flow.</div>
+    <div class="scale-row">
+      <span class="scale-name">Orange</span>
+      <div class="scale-swatches">
+        <div class="swatch" style="background:#ea580c;" onclick="copy('#ea580c',this)"><span class="swatch-label" style="color:#fff;">600</span></div>
+        <div class="swatch" style="background:#f97316;outline:2px solid #fb923c;outline-offset:2px;" onclick="copy('#f97316',this)"><span class="swatch-label" style="color:#06060f;">500★</span></div>
+        <div class="swatch" style="background:#fb923c;" onclick="copy('#fb923c',this)"><span class="swatch-label" style="color:#06060f;">400</span></div>
+        <div class="swatch" style="background:#fdba74;" onclick="copy('#fdba74',this)"><span class="swatch-label" style="color:#ea580c;">300</span></div>
+      </div>
+    </div>
+    <div class="scale-row">
+      <span class="scale-name">Semantic</span>
+      <div class="scale-swatches">
+        <div class="swatch" style="background:#06d6a0;" onclick="copy('#06d6a0',this)"><span class="swatch-label" style="color:#06060f;">success</span></div>
+        <div class="swatch" style="background:#ff4757;" onclick="copy('#ff4757',this)"><span class="swatch-label" style="color:#fff;">error</span></div>
+        <div class="swatch" style="background:#ffd43b;" onclick="copy('#ffd43b',this)"><span class="swatch-label" style="color:#06060f;">warning</span></div>
+        <div class="swatch" style="background:#7c3aed;" onclick="copy('#7c3aed',this)"><span class="swatch-label" style="color:#fff;">info</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">04 — Neutral Scale</div>
+    <div class="section-title">Dark Background System 🌑</div>
+    <div class="section-desc">BeyonDegrees dùng dark mode làm default — dark không phải trend mà là intentional choice: giảm eye strain cho session dài (quiz 30 câu), tạo premium feel, và làm các màu accent nổi bật hơn gấp đôi. Mỗi surface layer sáng hơn 1 bậc so với layer dưới — tạo depth perception tự nhiên.</div>
+    <div class="scale-row">
+      <span class="scale-name">Neutral</span>
+      <div class="scale-swatches">
+        <div class="swatch" style="background:#06060f;border:1px solid #1a1a2e;" onclick="copy('#06060f',this)"><span class="swatch-label" style="color:#3d3d60;">950</span></div>
+        <div class="swatch" style="background:#0d0d1a;" onclick="copy('#0d0d1a',this)"><span class="swatch-label" style="color:#3d3d60;">900</span></div>
+        <div class="swatch" style="background:#12121f;outline:2px solid #252540;outline-offset:2px;" onclick="copy('#12121f',this)"><span class="swatch-label" style="color:#6b6b9a;">800★</span></div>
+        <div class="swatch" style="background:#1a1a2e;outline:2px solid #3d3d60;outline-offset:2px;" onclick="copy('#1a1a2e',this)"><span class="swatch-label" style="color:#6b6b9a;">700★</span></div>
+        <div class="swatch" style="background:#252540;" onclick="copy('#252540',this)"><span class="swatch-label" style="color:#9d9dbf;">600</span></div>
+        <div class="swatch" style="background:#3d3d60;" onclick="copy('#3d3d60',this)"><span class="swatch-label" style="color:#c8c8e0;">500</span></div>
+        <div class="swatch" style="background:#6b6b9a;" onclick="copy('#6b6b9a',this)"><span class="swatch-label" style="color:#e8e8f5;">400</span></div>
+        <div class="swatch" style="background:#9d9dbf;" onclick="copy('#9d9dbf',this)"><span class="swatch-label" style="color:#1a1a2e;">300</span></div>
+        <div class="swatch" style="background:#c8c8e0;" onclick="copy('#c8c8e0',this)"><span class="swatch-label" style="color:#0d0d1a;">200</span></div>
+        <div class="swatch" style="background:#e8e8f5;" onclick="copy('#e8e8f5',this)"><span class="swatch-label" style="color:#06060f;">100</span></div>
+        <div class="swatch" style="background:#f8f8ff;" onclick="copy('#f8f8ff',this)"><span class="swatch-label" style="color:#06060f;">50</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-label">05 — Design Tokens</div>
+    <div class="section-title">Key CSS Variables cho Developer</div>
+    <div class="section-desc">Dùng tokens thay vì hardcode hex. Nếu brand màu thay đổi, chỉ cần update 1 chỗ trong :root.</div>
+    <div class="tokens-grid">
+      <div class="token-card" onclick="copy('#7c3aed',this)">
+        <div class="token-swatch" style="background:#7c3aed;">Aa</div>
+        <div class="token-info">
+          <div class="token-name">Primary</div>
+          <div class="token-var">--violet-600</div>
+          <div class="token-hex">#7c3aed</div>
+          <div class="token-usage">CTA buttons, active nav, links, brand highlights</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#06d6a0',this)">
+        <div class="token-swatch" style="background:#06d6a0;color:#06060f;">✓</div>
+        <div class="token-info">
+          <div class="token-name">Success / Agree</div>
+          <div class="token-var">--mint-500</div>
+          <div class="token-hex">#06d6a0</div>
+          <div class="token-usage">Agree swipe glow, completion, positive score, success toast</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#ff4757',this)">
+        <div class="token-swatch" style="background:#ff4757;">✕</div>
+        <div class="token-info">
+          <div class="token-name">Error / Disagree</div>
+          <div class="token-var">--red-500</div>
+          <div class="token-hex">#ff4757</div>
+          <div class="token-usage">Disagree swipe, error state, Q10 drop-off alert trong dashboard</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#f97316',this)">
+        <div class="token-swatch" style="background:#f97316;">🔥</div>
+        <div class="token-info">
+          <div class="token-name">Achievement</div>
+          <div class="token-var">--orange-500</div>
+          <div class="token-hex">#f97316</div>
+          <div class="token-usage">Milestone banners "1/3 xong 🔥", streaks, Duolingo-style rewards</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#06060f',this)">
+        <div class="token-swatch" style="background:#06060f;border:1px solid #252540;font-size:10px;color:#3d3d60;">BG</div>
+        <div class="token-info">
+          <div class="token-name">Background Base</div>
+          <div class="token-var">--bg-base</div>
+          <div class="token-hex">#06060f</div>
+          <div class="token-usage">Outermost page background. Tối nhất trong hệ thống.</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#12121f',this)">
+        <div class="token-swatch" style="background:#12121f;font-size:10px;color:#6b6b9a;">SURFACE</div>
+        <div class="token-info">
+          <div class="token-name">Surface</div>
+          <div class="token-var">--bg-surface</div>
+          <div class="token-hex">#12121f</div>
+          <div class="token-usage">Cards, panels, quiz cards, bottom sheets. Elevation layer 1.</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#1a1a2e',this)">
+        <div class="token-swatch" style="background:#1a1a2e;font-size:10px;color:#6b6b9a;">ELEVATED</div>
+        <div class="token-info">
+          <div class="token-name">Elevated</div>
+          <div class="token-var">--bg-elevated</div>
+          <div class="token-hex">#1a1a2e</div>
+          <div class="token-usage">Dropdowns, tooltips, modals, overlaid panels. Elevation layer 2.</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#f8fafc',this)">
+        <div class="token-swatch" style="background:#f8fafc;color:#06060f;font-weight:700;">Aa</div>
+        <div class="token-info">
+          <div class="token-name">Text Primary</div>
+          <div class="token-var">--text-primary</div>
+          <div class="token-hex">#f8fafc</div>
+          <div class="token-usage">Headings, body copy, all high-emphasis text</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#c8c8e0',this)">
+        <div class="token-swatch" style="background:#12121f;color:#c8c8e0;font-weight:500;font-size:13px;">Aa</div>
+        <div class="token-info">
+          <div class="token-name">Text Secondary</div>
+          <div class="token-var">--text-secondary</div>
+          <div class="token-hex">#c8c8e0</div>
+          <div class="token-usage">Subtitles, descriptions, supporting text</div>
+        </div>
+      </div>
+      <div class="token-card" onclick="copy('#6b6b9a',this)">
+        <div class="token-swatch" style="background:#12121f;color:#6b6b9a;font-size:13px;">Aa</div>
+        <div class="token-info">
+          <div class="token-name">Text Muted</div>
+          <div class="token-var">--text-muted</div>
+          <div class="token-hex">#6b6b9a</div>
+          <div class="token-usage">Placeholders, metadata, timestamps. Chỉ dùng cho non-essential text.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-label">06 — Usage in BeyonDegrees UI</div>
+    <div class="section-title">Màu trong Context Thực Tế</div>
+    <div class="usage-demo">
+      <div>
+        <div class="demo-label">Quiz Swipe States</div>
+        <span class="chip chip-agree">✓ Đồng ý</span>
+        <span class="chip chip-disagree">✕ Không đồng ý</span>
+        <span class="chip chip-neutral">– Trung lập</span>
+        <span class="chip chip-strong">⚡ Rất đồng ý</span>
+        <br><br>
+        <div class="demo-label">Buttons</div>
+        <button class="btn btn-primary">Bắt đầu Quiz →</button>
+        <button class="btn btn-secondary">Xem thêm</button>
+        <br>
+        <button class="btn btn-ghost">Bỏ qua</button>
+        <button class="btn btn-success">✓ Hoàn thành!</button>
+        <button class="btn btn-danger">Thoát</button>
+      </div>
+      <div>
+        <div class="demo-label">Background Elevation</div>
+        <div class="bg-levels">
+          <div class="bg-level" style="background:#06060f;border:1px solid #1a1a2e;"><span class="bg-level-name">Base — Page</span><span class="bg-level-hex">#06060f</span></div>
+          <div class="bg-level" style="background:#12121f;"><span class="bg-level-name">Surface — Cards</span><span class="bg-level-hex">#12121f</span></div>
+          <div class="bg-level" style="background:#1a1a2e;"><span class="bg-level-name">Elevated — Modals</span><span class="bg-level-hex">#1a1a2e</span></div>
+          <div class="bg-level" style="background:#252540;"><span class="bg-level-name">Overlay — Hover</span><span class="bg-level-hex">#252540</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="section">
+    <div class="section-label">07 — Accessibility Check</div>
+    <div class="section-title">Contrast Ratios (WCAG 2.1)</div>
+    <div class="section-desc">Target: tất cả body text ≥ AA (4.5:1), key headings ≥ AAA (7:1). Màu muted chỉ dùng cho decorative/non-essential elements.</div>
+    <div class="contrast-grid">
+      <div class="contrast-card" style="background:#12121f;">
+        <div class="contrast-ratio" style="color:#f8fafc;">15.3:1</div>
+        <div class="contrast-pair" style="color:#f8fafc;">White / Surface</div>
+        <div class="contrast-badge badge-aaa">✓ AAA — Body text OK</div>
+      </div>
+      <div class="contrast-card" style="background:#12121f;">
+        <div class="contrast-ratio" style="color:#c8c8e0;">7.1:1</div>
+        <div class="contrast-pair" style="color:#c8c8e0;">Secondary / Surface</div>
+        <div class="contrast-badge badge-aaa">✓ AAA — Subtitle OK</div>
+      </div>
+      <div class="contrast-card" style="background:#12121f;">
+        <div class="contrast-ratio" style="color:#a78bfa;">5.2:1</div>
+        <div class="contrast-pair" style="color:#a78bfa;">Violet-400 / Surface</div>
+        <div class="contrast-badge badge-aa">✓ AA — Links OK</div>
+      </div>
+      <div class="contrast-card" style="background:#12121f;">
+        <div class="contrast-ratio" style="color:#06d6a0;">8.9:1</div>
+        <div class="contrast-pair" style="color:#06d6a0;">Mint / Surface</div>
+        <div class="contrast-badge badge-aaa">✓ AAA — Success OK</div>
+      </div>
+      <div class="contrast-card" style="background:#7c3aed;">
+        <div class="contrast-ratio" style="color:#fff;">4.8:1</div>
+        <div class="contrast-pair" style="color:#fff;">White / Violet Button</div>
+        <div class="contrast-badge badge-aa">✓ AA — Button text OK</div>
+      </div>
+      <div class="contrast-card" style="background:#12121f;">
+        <div class="contrast-ratio" style="color:#6b6b9a;">2.9:1</div>
+        <div class="contrast-pair" style="color:#6b6b9a;">Muted / Surface</div>
+        <div class="contrast-badge badge-fail">⚠ Fail — Chỉ dùng placeholder</div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast">Copied!</div>
+<script>
+function copy(hex, el) {
+  navigator.clipboard.writeText(hex).then(() => {
+    const t = document.getElementById('toast');
+    t.textContent = 'Copied ' + hex;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 1800);
+  });
+}
+</script>
+</body>
+</html>

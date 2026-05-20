@@ -1,0 +1,154 @@
+/* Color Palette Page Styles */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 40px;
+}
+
+.section {
+  margin-bottom: 60px;
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--violet-500);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.section-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.scale-row {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+  margin-bottom: 12px;
+}
+
+.scale-name {
+  width: 80px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.scale-swatches {
+  display: flex;
+  flex: 1;
+  gap: 3px;
+}
+
+.swatch {
+  flex: 1;
+  height: 56px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5px 6px;
+  overflow: hidden;
+}
+
+.swatch:hover {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+
+.swatch-label {
+  font-size: 9px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s;
+  font-family: 'Courier New', monospace;
+}
+
+.swatch:hover .swatch-label {
+  opacity: 1;
+}
+
+.tokens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.token-card {
+  background: var(--neutral-800);
+  border: 1px solid var(--neutral-700);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+
+.token-card:hover {
+  border-color: var(--violet-500);
+  transform: translateY(-2px);
+}
+
+.token-swatch {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.token-info {
+  padding: 12px;
+}
+
+.token-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.token-var {
+  font-size: 10px;
+  color: var(--violet-400);
+  font-family: 'Courier New', monospace;
+  margin-bottom: 4px;
+}
+
+.token-hex {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-family: 'Courier New', monospace;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 24px 20px;
+  }
+
+  .tokens-grid {
+    grid-template-columns: 1fr;
+  }
+}
