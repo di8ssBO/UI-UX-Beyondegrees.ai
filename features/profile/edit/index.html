@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="../../../design-system/layout.css">
 <style>
 :root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
-:root[data-theme="light"]{--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#1863DC;--violet-300:#4A90E2;--violet-200:#93BBFF;--violet-100:#EEF4FB;--neutral-950:#FFFFFF;--neutral-900:#F2F7FD;--neutral-800:#E0ECFA;--neutral-700:#C5D5E8;--neutral-600:#A8BDD8;--neutral-500:#808DAA;--neutral-400:#5A6580;--neutral-300:#3A3A4A;--neutral-200:#1A1A2E;--neutral-100:#0D0D1A;--neutral-50:#060610;--bg-base:#FFFFFF;--bg-surface:#F2F7FD;--bg-elevated:#E0ECFA;--bg-overlay:#C5D5E8;--text-primary:#1A1A2E;--text-secondary:#3A3A4A;--text-muted:#808285;--text-disabled:#C0C0D0;--mint-500:#059669;--mint-400:#10B981}
-[data-theme="light"] body{background:#0f1020!important;color:#1A1A2E!important}
+/* Light-mode token overrides live in design-system/tokens.css */
+[data-theme="light"] body{background:#06060f!important;color:#f8fafc!important}
 *,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
 svg *,canvas,video,img{transition:none!important}
 
@@ -27,7 +27,7 @@ body { background: #06060f; }
   scrollbar-width: none;
 }
 .mobile-viewport::-webkit-scrollbar { display: none; }
-[data-theme="light"] .mobile-viewport { background: #f2f7fd; }
+[data-theme="light"] .mobile-viewport { background: #FFF8EB; }
 
 /* Top bar */
 .top-bar {
@@ -298,7 +298,7 @@ body { background: #06060f; }
 
 <body>
 <div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
-  <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
   <span class="breadcrumb-separator">/</span>
   <a href="../../profile/overview/" class="breadcrumb-item">Profile</a>
   <span class="breadcrumb-separator">/</span>
@@ -310,13 +310,13 @@ body { background: #06060f; }
     <div class="device-notch"></div>
 
     <div class="mobile-viewport">
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px 4px;font-size:12px;font-weight:600;color:var(--text-secondary);position:relative;z-index:2">
-          <span>9:41</span>
-          <div style="display:flex;gap:6px;align-items:center">
-            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
-            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
-          </div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
         </div>
+      </div>
 
       <!-- Top bar -->
       <div class="top-bar">

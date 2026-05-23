@@ -15,13 +15,8 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .breadcrumb-sep{color:var(--neutral-400)}
 .desktop-container{display:flex;align-items:center;justify-content:center;
   width:100%;flex:1;padding:20px}
-.device-frame{width:390px;height:844px;border-radius:52px;border:10px solid #1a1a2e;
-  background:var(--bg-base);box-shadow:0 0 0 1px #2d2d4a,0 24px 64px rgba(0,0,0,.7),
-  0 0 80px rgba(124,58,237,.2);overflow:hidden;position:relative;display:flex;flex-direction:column}
-.device-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:36%;height:30px;background:#0a0a14;border-radius:0 0 22px 22px;z-index:50}
-.mobile-screen{flex:1;display:flex;flex-direction:column;overflow:hidden;
-  position:relative;background:#06060f}
+/* device-frame, device-notch, mobile-screen → layout.css */
+.mobile-screen{background:#06060f}
 
 /* ── Aurora ───────────────────────────────────────────────────── */
 .ms-aurora{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
@@ -31,11 +26,6 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .ms-aurora::after{content:'';position:absolute;bottom:-30%;left:-10%;width:70%;height:70%;
   border-radius:50%;background:radial-gradient(ellipse,rgba(124,58,237,.14) 0%,transparent 65%);
   filter:blur(50px)}
-
-/* ── Status Bar ───────────────────────────────────────────────── */
-.ms-status{display:flex;justify-content:space-between;align-items:center;
-  padding:12px 20px 4px;font-size:12px;font-weight:600;
-  color:var(--text-secondary);position:relative;z-index:2}
 
 /* ── Header ───────────────────────────────────────────────────── */
 .ms-hdr{display:flex;align-items:center;justify-content:space-between;
@@ -173,21 +163,16 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .continue-wrap{padding:10px 0 6px}
 .continue-btn{display:flex;align-items:center;justify-content:center;gap:8px;
   width:100%;padding:14px 20px;
-  background:linear-gradient(135deg,#7c3aed,#8b5cf6);
-  color:#fff;border-radius:var(--radius-full);font-size:15px;font-weight:700;
+  /* btn-success: mint-500 — Continue Quiz */
+  background:var(--mint-500);
+  color:#06060f;border-radius:var(--radius-full);font-size:15px;font-weight:700;
   text-decoration:none;letter-spacing:.01em;
-  box-shadow:0 4px 20px rgba(124,58,237,.45);border:none;cursor:pointer;
-  transition:opacity .15s,transform .15s}
+  box-shadow:0 4px 20px rgba(6,214,160,.4);border:none;cursor:pointer;
+  transition:background .15s,opacity .15s,transform .15s}
+.continue-btn:hover{background:var(--mint-400)}
 .continue-btn:active{transform:scale(0.97);opacity:.9}
 
-/* ── Float Tab Bar ────────────────────────────────────────────── */
-.tab-bar-wrap{padding:0 10px 12px;position:relative;z-index:20}
-.float-tab-bar{display:flex;align-items:center;justify-content:space-between;
-  padding:5px;border-radius:999px;background:rgba(255,255,255,.06);
-  backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:0 8px 32px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.08) inset}
-/* tab-item styles — defined in design-system/layout.css */
+/* float-tab-bar + tab-item styles → design-system/layout.css */
 
 /* ── Empty State ──────────────────────────────────────────────── */
 #no-results{display:none;flex-direction:column;align-items:center;
@@ -256,20 +241,20 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .teaser-unlock-msg { display:flex; align-items:center; gap:6px;
   font-size:12px; font-weight:700; color:var(--text-primary); }
 
-/* CTA continue */
+/* CTA continue — btn-primary: violet-600 */
 .lock-cta-btn { display:flex; align-items:center; justify-content:center; gap:8px;
   width:100%; padding:14px 20px;
-  background:linear-gradient(135deg,#7c3aed,#8b5cf6); color:#fff;
+  background:var(--violet-600); color:#fff;
   border-radius:var(--radius-full); font-size:15px; font-weight:700;
   border:none; cursor:pointer; box-shadow:0 4px 20px rgba(124,58,237,.45);
-  transition:transform .15s, opacity .15s; }
+  transition:background .15s, transform .15s, opacity .15s; }
+.lock-cta-btn:hover { background:var(--violet-500); }
 .lock-cta-btn:active { transform:scale(0.97); opacity:.9; }
 
 /* ═══ LIGHT MODE ════════════════════════════════════════════════ */
 [data-theme="light"] .mobile-screen { background:#f0f4fb }
 [data-theme="light"] .ms-aurora::before,
 [data-theme="light"] .ms-aurora::after { opacity:0 !important }
-[data-theme="light"] .ms-status { color:#1a1a2e }
 [data-theme="light"] .ms-logo { color:#1a1a2e }
 [data-theme="light"] .ms-logo span { color:var(--mint-500) }
 [data-theme="light"] .ms-search-btn {

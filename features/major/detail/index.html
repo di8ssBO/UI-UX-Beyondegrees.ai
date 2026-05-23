@@ -99,8 +99,7 @@
 
 
       <!-- Floating Tab Bar -->
-      <div class="tab-bar-wrap">
-        <nav class="float-tab-bar">
+      <nav class="float-tab-bar">
 
           <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
             <span class="tab-icon">
@@ -149,19 +148,20 @@
             <span class="tab-label">Universities</span>
           </a>
 
-          <a href="#" class="tab-item tab-disabled" data-tab="t5">
+          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="7.5" r="3.5"/>
                 <path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/>
+                <circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
+                <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label">Profile</span>
+            <span class="tab-label">Hoang Phuc</span>
           </a>
 
-        </nav>
-      </div>
+      </nav>
 
     </div><!-- /mobile-screen -->
   </div><!-- /device-frame -->
@@ -503,8 +503,8 @@ function render(){
     <!-- Specializations -->
     <div class="section-header">Specializations</div>
     <div class="spec-list">
-      ${specs.map(s=>`
-        <div class="spec-card">
+      ${specs.map((s,i)=>`
+        <div class="spec-card" onclick="location.href='../spec-detail/?majorId=${id}&specIdx=${i}'" style="cursor:pointer">
           <div class="spec-icon">${s.icon}</div>
           <div class="spec-info">
             <div class="spec-name">${s.name}</div>

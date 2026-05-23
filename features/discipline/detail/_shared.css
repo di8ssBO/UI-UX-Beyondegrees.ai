@@ -74,12 +74,14 @@ body{
   width: 390px;
   height: 844px;
   background: var(--bg-base);
-  border-radius: 44px;
+  border-radius: 52px;
+  border: 10px solid #1a1a2e;
   overflow: hidden;
   position: relative;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.10),
-    0 40px 80px rgba(0,0,0,.60),
+    0 0 0 1px #2d2d4a,
+    0 24px 64px rgba(0,0,0,0.7),
+    0 0 80px rgba(124,58,237,0.2),
     0 0 120px var(--disc-glow-sm);
   display: flex;
   flex-direction: column;
@@ -87,10 +89,10 @@ body{
 .device-notch {
   position: absolute;
   top: 0; left: 50%; transform: translateX(-50%);
-  width: 120px; height: 34px;
-  background: #000;
-  border-radius: 0 0 20px 20px;
-  z-index: 100;
+  width: 36%; height: 30px;
+  background: #0a0a14;
+  border-radius: 0 0 22px 22px;
+  z-index: 50;
 }
 .mobile-screen {
   flex: 1;
@@ -118,7 +120,7 @@ body{
 ═══════════════════════════════════════════════════════════ */
 .status-bar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 20px 4px;
+  padding: 12px 20px 4px;
   font-size: 12px; font-weight: 600;
   color: var(--text-secondary);
   flex-shrink: 0;
@@ -328,7 +330,8 @@ body{
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%;
   padding: 15px 20px;
-  background: linear-gradient(135deg, var(--disc-primary), var(--disc-light));
+  /* Start Quiz — btn-primary: violet-600 */
+  background: var(--violet-600);
   color: #fff;
   border-radius: var(--radius-full);
   font-size: 15px; font-weight: 800;
@@ -336,25 +339,40 @@ body{
   text-decoration: none;
   cursor: pointer;
   border: none;
-  box-shadow: 0 6px 24px var(--disc-glow-sm), 0 1px 0 rgba(255,255,255,.18) inset;
-  transition: transform var(--t-fast), box-shadow var(--t-fast);
+  box-shadow: 0 6px 24px rgba(124,58,237,0.35), 0 1px 0 rgba(255,255,255,.18) inset;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
   -webkit-tap-highlight-color: transparent;
+}
+.cta-btn:hover {
+  background: var(--violet-500);
 }
 .cta-btn:active {
   transform: scale(0.97);
-  box-shadow: 0 3px 12px var(--disc-glow-sm);
+  box-shadow: 0 3px 12px rgba(124,58,237,0.25);
+}
+
+/* Continue Quiz — btn-success: mint-500 */
+.cta-btn.cta-continue {
+  background: var(--mint-500);
+  color: #06060f;
+  box-shadow: 0 6px 24px rgba(6,214,160,0.35), 0 1px 0 rgba(255,255,255,.18) inset;
+}
+.cta-btn.cta-continue:hover {
+  background: var(--mint-400);
+}
+.cta-btn.cta-continue:active {
+  box-shadow: 0 3px 12px rgba(6,214,160,0.25);
 }
 
 /* ═══════════════════════════════════════════════════════════
    Floating Tab Bar
 ═══════════════════════════════════════════════════════════ */
-.tab-bar-wrap {
-  padding: 6px 10px 12px;
-  flex-shrink: 0;
-}
 .float-tab-bar {
+  position: relative; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
+  margin: 0 10px 12px;
   padding: 5px;
+  flex-shrink: 0;
   border-radius: var(--radius-full);
   background: rgba(255,255,255,.06);
   backdrop-filter: blur(32px) saturate(200%);
@@ -447,19 +465,181 @@ body{
 .major-unlock-banner .ul-icon { font-size:20px; flex-shrink:0; }
 .major-unlock-banner strong { color:var(--text-primary); }
 
-/* ─── LIGHT MODE ─────────────────────────────────────────── */
-[data-theme="light"] body{background:#f0f4fb}
-[data-theme="light"] .desktop-container{background:#e8edf7}
-[data-theme="light"] .status-bar{color:#1a1a2e}
-[data-theme="light"] .btn-icon{background:rgba(0,0,0,.06)!important;border:1px solid rgba(0,0,0,.10)!important;color:#1a1a2e!important}
-[data-theme="light"] .detail-body{background:#f0f4fb}
-[data-theme="light"] .detail-desc{color:#1a1a2e}
-[data-theme="light"] .detail-bullet{color:rgba(26,26,46,.65)}
-[data-theme="light"] .section-header{color:#1a1a2e}
-[data-theme="light"] .major-card{background:#fff;border-color:rgba(0,0,0,.08)}
-[data-theme="light"] .major-name{color:#1a1a2e}
-[data-theme="light"] .major-tag{color:rgba(26,26,46,.40)}
-[data-theme="light"] .major-arrow{color:rgba(26,26,46,.30)}
-[data-theme="light"] .major-unlock-banner{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.10);color:rgba(26,26,46,.65)}
-[data-theme="light"] .major-unlock-banner strong{color:#1a1a2e}
-[data-theme="light"] .major-pct.locked-pct{color:rgba(26,26,46,.20)}
+/* ════════════════════════════════════════════════════════
+   LIGHT MODE — pastel cream/peach palette (matches features/ system)
+   Outside (body, device-frame, notch): stays DARK
+   Inside (mobile-screen, components): cream wallpaper + warm gradients
+   ════════════════════════════════════════════════════════ */
+
+/* Outside stays dark */
+[data-theme="light"] body { background: #06060f !important; color: #f8fafc !important; }
+[data-theme="light"] .desktop-container { background: transparent; }
+[data-theme="light"] .device-frame {
+  background: #06060f !important;
+  border-color: #1a1a2e !important;
+  box-shadow:
+    0 0 0 1px #2d2d4a,
+    0 24px 64px rgba(0,0,0,0.7),
+    0 0 80px rgba(124,58,237,0.2) !important;
+}
+[data-theme="light"] .device-notch { background: #0a0a14 !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+
+/* Inside — multi-color pastel wallpaper */
+[data-theme="light"] .mobile-screen {
+  background:
+    radial-gradient(ellipse 50% 32% at 82% 8%, rgba(244,201,168,0.42) 0%, transparent 65%),
+    radial-gradient(ellipse 42% 38% at 8% 22%, rgba(168,194,217,0.36) 0%, transparent 65%),
+    radial-gradient(ellipse 48% 42% at 22% 78%, rgba(229,181,168,0.34) 0%, transparent 60%),
+    radial-gradient(ellipse 38% 35% at 92% 58%, rgba(205,184,210,0.32) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 55% 92%, rgba(173,198,179,0.28) 0%, transparent 65%),
+    linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 45%, #F4E8D2 100%) !important;
+}
+
+/* Status bar */
+[data-theme="light"] .status-bar { color: #1A1A1A !important; }
+
+/* Page header buttons */
+[data-theme="light"] .btn-icon {
+  background: rgba(255,252,245,0.85) !important;
+  border: 1px solid #E8DCC2 !important;
+  color: #1A1A1A !important;
+}
+[data-theme="light"] .btn-icon:active { background: rgba(244,201,168,0.25) !important; }
+[data-theme="light"] .page-title { color: #1A1A1A !important; }
+
+/* Detail body */
+[data-theme="light"] .detail-body { background: transparent; }
+[data-theme="light"] .detail-desc { color: #1A1A1A !important; }
+[data-theme="light"] .detail-bullet { color: #3A2E26 !important; }
+[data-theme="light"] .section-header { color: #1A1A1A !important; }
+
+/* Hero — rich pastel gradient like image */
+[data-theme="light"] .hero {
+  background:
+    linear-gradient(135deg,
+      #FCEEE3 0%, #F4C9A8 22%, #FAEEDA 48%,
+      #DCE8EF 75%, #A8C2D9 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.50),
+    0 4px 16px rgba(224,139,110,0.12) !important;
+}
+[data-theme="light"] .hero-overlay {
+  background: linear-gradient(to bottom, transparent 30%, rgba(244,232,210,0.30) 60%, rgba(244,232,210,0.72) 100%) !important;
+}
+[data-theme="light"] .hero-label-name {
+  color: #1A1A1A !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.40);
+}
+[data-theme="light"] .hero-label-tag {
+  background: linear-gradient(135deg, rgba(224,139,110,0.18) 0%, rgba(224,139,110,0.28) 100%) !important;
+  border-color: rgba(224,139,110,0.40) !important;
+  color: #B26344 !important;
+}
+
+/* Major cards — cream base + per-index colored accent on icon & active */
+[data-theme="light"] .major-card {
+  background: linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 100%) !important;
+  border: 1px solid #E8DCC2 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 2px 8px rgba(107,88,64,0.06) !important;
+}
+[data-theme="light"] .major-name { color: #1A1A1A !important; }
+[data-theme="light"] .major-tag { color: #6B5840 !important; }
+[data-theme="light"] .major-arrow { color: #A89070 !important; }
+[data-theme="light"] .major-pct { color: #1A1A1A !important; }
+/* Per-card colored icon + active state — 6 distinct accent colors */
+[data-theme="light"] .major-card:nth-child(6n+1) .major-icon {
+  background: linear-gradient(135deg, rgba(224,139,110,0.14) 0%, rgba(224,139,110,0.26) 100%) !important;
+  border-color: rgba(224,139,110,0.35) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+1):active {
+  background: linear-gradient(180deg, #FFFCF5 0%, #F4C9A8 100%) !important; border-color: rgba(224,139,110,0.45) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+2) .major-icon {
+  background: linear-gradient(135deg, rgba(160,136,171,0.14) 0%, rgba(160,136,171,0.26) 100%) !important;
+  border-color: rgba(160,136,171,0.35) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+2):active {
+  background: linear-gradient(180deg, #FFFCF5 0%, #CDB8D2 100%) !important; border-color: rgba(160,136,171,0.45) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+3) .major-icon {
+  background: linear-gradient(135deg, rgba(143,181,204,0.18) 0%, rgba(143,181,204,0.30) 100%) !important;
+  border-color: rgba(143,181,204,0.40) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+3):active {
+  background: linear-gradient(180deg, #FFFCF5 0%, #A8C2D9 100%) !important; border-color: rgba(143,181,204,0.50) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+4) .major-icon {
+  background: linear-gradient(135deg, rgba(197,136,122,0.14) 0%, rgba(197,136,122,0.26) 100%) !important;
+  border-color: rgba(197,136,122,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+4):active {
+  background: linear-gradient(180deg, #FFFCF5 0%, #E5B5A8 100%) !important; border-color: rgba(197,136,122,0.48) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+5) .major-icon {
+  background: linear-gradient(135deg, rgba(146,178,153,0.14) 0%, rgba(146,178,153,0.26) 100%) !important;
+  border-color: rgba(146,178,153,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+5):active {
+  background: linear-gradient(180deg, #FFFCF5 0%, #ADC6B3 100%) !important; border-color: rgba(146,178,153,0.48) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+6) .major-icon {
+  background: linear-gradient(135deg, rgba(214,122,92,0.14) 0%, rgba(214,122,92,0.26) 100%) !important;
+  border-color: rgba(214,122,92,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+6):active {
+  background: linear-gradient(180deg, #FFFCF5 0%, #ECB597 100%) !important; border-color: rgba(214,122,92,0.48) !important;
+}
+
+/* CTA Primary — brand blue gradient */
+[data-theme="light"] .cta-btn:not(.cta-continue) {
+  background: linear-gradient(135deg, #1E8EDB 0%, #0274BE 50%, #075C9F 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px rgba(2,116,190,0.30),
+    0 8px 24px rgba(2,116,190,0.18) !important;
+}
+[data-theme="light"] .cta-btn.cta-continue {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+  color: #fff !important;
+}
+
+/* Float tab bar — cream glass */
+[data-theme="light"] .float-tab-bar {
+  background: linear-gradient(135deg, rgba(255,252,245,0.96) 0%, rgba(250,238,218,0.92) 100%) !important;
+  border-color: rgba(232,220,194,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 -2px 10px rgba(224,139,110,0.10),
+    0 6px 20px rgba(107,88,64,0.08) !important;
+}
+[data-theme="light"] .tab-item { color: rgba(58,46,38,0.52) !important; }
+[data-theme="light"] .tab-item.active {
+  background: linear-gradient(135deg, rgba(2,116,190,0.10) 0%, rgba(2,116,190,0.18) 100%) !important;
+  color: #0274BE !important;
+  border-color: rgba(2,116,190,0.25) !important;
+}
+
+/* Bullet check — coral */
+[data-theme="light"] .bullet-check {
+  background: linear-gradient(135deg, rgba(224,139,110,0.15) 0%, rgba(224,139,110,0.28) 100%) !important;
+  border-color: rgba(224,139,110,0.40) !important;
+  color: #B26344 !important;
+}
+
+/* Unlock banner */
+[data-theme="light"] .major-unlock-banner {
+  background: linear-gradient(135deg, rgba(255,252,245,0.92) 0%, rgba(250,238,218,0.92) 100%) !important;
+  border: 1px solid #E8DCC2 !important;
+  color: #3A2E26 !important;
+}
+[data-theme="light"] .major-unlock-banner strong { color: #1A1A1A !important; }
+[data-theme="light"] .major-pct.locked-pct { color: rgba(58,46,38,0.30) !important; }
+
+/* Locked card */
+[data-theme="light"] .major-card.locked { opacity: 0.55; }

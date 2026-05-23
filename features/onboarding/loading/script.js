@@ -694,6 +694,4 @@ document.addEventListener('DOMContentLoaded', () => {
   if (_quizTab) {
     if (_STAGE === 1) _quizTab.href = '../../quiz/quiz-card/index.html?start=11';
     else if (_STAGE === 2) _quizTab.href = '../../quiz/quiz-card/index.html?start=21';
-    else _quizTab.href = '../../quiz/quiz-card/';
-  }
-});
+    else

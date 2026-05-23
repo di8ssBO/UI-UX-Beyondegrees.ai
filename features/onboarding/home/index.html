@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Home Screen — BeyonDegrees.ai</title>
+  <script>
+  /* Theme boot — runs before paint to prevent flash.
+     Priority: ?theme= query → localStorage('bd-theme') → existing html attr → 'dark' */
+  (function(){
+    var p;
+    try { p = new URL(location.href).searchParams.get('theme'); } catch(e) {}
+    if (p !== 'light' && p !== 'dark' && p !== 'system') p = null;
+    if (!p) { try { p = localStorage.getItem('bd-theme'); } catch(e) {} }
+    if (!p) p = document.documentElement.getAttribute('data-theme') || 'dark';
+    var r = p === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+      : p;
+    document.documentElement.setAttribute('data-theme', r);
+    document.documentElement.setAttribute('data-theme-pref', p);
+  })();
+  </script>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/components/interactive.css">
@@ -40,254 +56,23 @@
   --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
 }
 
-/* ── LIGHT MODE: official BeyonDegrees brand palette ── */
-:root[data-theme="light"] {
-  /* Brand blue stays — all other palette flips to light */
-  --violet-600: #1863DC;
-  --violet-500: #0274BE;
-  --violet-400: #1863DC;
-  --violet-300: #4A90E2;
-  --violet-200: #93BBFF;
-  --violet-100: #EEF4FB;
-  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.18);
-  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.10);
-  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.20);
-  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.15);
+/* Light-theme tokens & component rules live in:
+     design-system/tokens.css   (palette: cream/coral/sky/blush scales)
+     design-system/layout.css   (all component rules: bg, cards, buttons, etc.)
+   This block keeps only screen-specific overrides. */
 
-  /* Neutral scale flips */
-  --neutral-950: #FFFFFF;
-  --neutral-900: #F2F7FD;
-  --neutral-800: #E0ECFA;
-  --neutral-700: #C5D5E8;
-  --neutral-600: #A8BDD8;
-  --neutral-500: #808DAA;
-  --neutral-400: #5A6580;
-  --neutral-300: #3A3A4A;
-  --neutral-200: #1A1A2E;
-  --neutral-100: #0D0D1A;
-  --neutral-50:  #060610;
-
-  /* Semantic background tokens */
-  --bg-base:     #FFFFFF;
-  --bg-surface:  #F2F7FD;
-  --bg-elevated: #E0ECFA;
-  --bg-overlay:  #C5D5E8;
-
-  /* Text tokens */
-  --text-primary:   #1A1A2E;
-  --text-secondary: #3A3A4A;
-  --text-muted:     #808285;
-  --text-disabled:  #C0C0D0;
-
-  /* Mint stays readable on light bg */
-  --mint-500: #059669;
-  --mint-400: #10B981;
-  --mint-300: #34D399;
-
-  /* Orange */
-  --orange-500: #D95F02;
-  --orange-400: #F97316;
-}
-
-/* ── LIGHT MODE: body & global overrides ── */
+/* OUTSIDE — body stays dark even in light mode */
 [data-theme="light"] body {
-  background: linear-gradient(135deg, #FFFFFF 0%, #EEF4FB 55%, #FFFFFF 100%) !important;
-  color: #1A1A2E !important;
+  background: #06060f !important;
+  color: #f8fafc !important;
 }
 
-/* Hardcoded violet rgba chips → blue */
-[data-theme="light"] [style*="rgba(124, 58, 237"],
-[data-theme="light"] [style*="rgba(124,58,237"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
+/* Progress ring uses gradient stroke defined in SVG <defs id="ringGradLight"> */
+[data-theme="light"] .ring-fill {
+  stroke: url(#ringGradLight) !important;
 }
-
-/* Cards → white glass */
-[data-theme="light"] .card,
-[data-theme="light"] [class*="card"],
-[data-theme="light"] .quiz-card,
-[data-theme="light"] .result-card,
-[data-theme="light"] .discipline-card,
-[data-theme="light"] .major-card,
-[data-theme="light"] .uni-card,
-[data-theme="light"] .option-card,
-[data-theme="light"] .stat-card,
-[data-theme="light"] .info-card,
-[data-theme="light"] .feature-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(24, 99, 220, 0.15) !important;
-  box-shadow: 0 4px 24px rgba(24, 99, 220, 0.10) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .card:hover,
-[data-theme="light"] [class*="card"]:hover {
-  border-color: rgba(24, 99, 220, 0.35) !important;
-  box-shadow: 0 12px 40px rgba(24, 99, 220, 0.18) !important;
-}
-
-/* Nav / header / tab-bar */
-[data-theme="light"] nav,
-[data-theme="light"] header,
-[data-theme="light"] .nav-bar,
-[data-theme="light"] .tab-bar,
-[data-theme="light"] .top-nav,
-[data-theme="light"] .header {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border-color: rgba(24, 99, 220, 0.12) !important;
-  box-shadow: 0 2px 16px rgba(24, 99, 220, 0.08) !important;
-}
-
-/* Tab items / nav links */
-[data-theme="light"] .tab-item,
-[data-theme="light"] .nav-link,
-[data-theme="light"] .nav-item {
-  color: #808285 !important;
-}
-[data-theme="light"] .tab-item.active,
-[data-theme="light"] .nav-link.active,
-[data-theme="light"] .tab-item:hover {
-  color: #1863DC !important;
-}
-
-/* Chips & tags */
-[data-theme="light"] .chip,
-[data-theme="light"] [class*="chip"],
-[data-theme="light"] [class*="tag"],
-[data-theme="light"] .badge {
-  background: rgba(24, 99, 220, 0.10) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] [class*="chip-mint"],
-[data-theme="light"] [class*="tag-mint"],
-[data-theme="light"] [class*="chip-success"] {
-  background: rgba(5, 150, 105, 0.12) !important;
-  border-color: rgba(5, 150, 105, 0.30) !important;
-  color: #059669 !important;
-}
-
-/* Dividers */
-[data-theme="light"] .divider,
-[data-theme="light"] hr {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Inputs */
-[data-theme="light"] input,
-[data-theme="light"] textarea,
-[data-theme="light"] .input {
-  background: #FFFFFF !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] input::placeholder,
-[data-theme="light"] textarea::placeholder {
-  color: #A0A0B0 !important;
-}
-[data-theme="light"] input:focus,
-[data-theme="light"] textarea:focus {
-  border-color: #1863DC !important;
-  box-shadow: 0 0 0 3px rgba(24,99,220,0.15) !important;
-}
-
-/* Buttons: primary stays blue, ghost adapts */
-[data-theme="light"] .btn-ghost,
-[data-theme="light"] [class*="btn-ghost"] {
-  background: rgba(24, 99, 220, 0.08) !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] .btn-ghost:hover {
-  background: rgba(24, 99, 220, 0.14) !important;
-}
-
-/* Background orbs — soften for light mode */
-[data-theme="light"] .bg-orb,
-[data-theme="light"] [class*="orb"] {
-  opacity: 0.35 !important;
-}
-
-/* Progress bars */
-[data-theme="light"] .progress,
-[data-theme="light"] [class*="progress-track"],
-[data-theme="light"] [class*="progress-bg"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Breadcrumb */
-[data-theme="light"] .breadcrumb-item { color: #808285 !important; }
-[data-theme="light"] .breadcrumb-item:hover,
-[data-theme="light"] .breadcrumb-item.active { color: #1863DC !important; }
-
-/* Text elements that may be hardcoded white */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4 {
-  color: #1A1A2E;
-}
-[data-theme="light"] p,
-[data-theme="light"] li,
-[data-theme="light"] label,
-[data-theme="light"] td,
-[data-theme="light"] th {
-  color: #3A3A4A;
-}
-
-/* ── Background — light mode override ── */
-[data-theme="light"] .device-frame {
-  background: #eef2f7 !important;
-  border-color: #b8cce8 !important;
-  box-shadow:
-    0 0 0 1px #ccd6e8,
-    0 24px 64px rgba(0,0,0,0.12),
-    0 0 60px rgba(24,99,220,0.08) !important;
-}
-[data-theme="light"] .mobile-viewport {
-  background: #f0f4fb !important;
-}
-[data-theme="light"] .aurora-bg,
-[data-theme="light"] .blob {
-  opacity: 0 !important;
-  pointer-events: none;
-}
-[data-theme="light"] .mobile-header {
-  background: rgba(255,255,255,0.92) !important;
-  border-bottom-color: rgba(24,99,220,0.10) !important;
-}
-
-/* ── Discipline cards — text visible in light mode ── */
-[data-theme="light"] .discipline-card span {
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .discipline-card:hover {
-  background: rgba(24,99,220,0.10) !important;
-  border-color: rgba(24,99,220,0.35) !important;
-}
-[data-theme="light"] .section-label-mobile {
-  color: #1863DC !important;
-  opacity: 0.75;
-}
-
-/* ── Hero section text — visible in light mode ── */
-[data-theme="light"] .hero-section h2 {
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .hero-section p {
-  color: #3A3A4A !important;
-}
-[data-theme="light"] .hero-section {
-  background: rgba(24,99,220,0.05) !important;
-  border-color: rgba(24,99,220,0.12) !important;
-  box-shadow: 0 4px 24px rgba(24,99,220,0.08) !important;
-}
-
-/* ── CTA secondary button — light mode ── */
-[data-theme="light"] .cta-section .btn-secondary {
-  background: rgba(24,99,220,0.07) !important;
-  border-color: rgba(24,99,220,0.18) !important;
-  color: #1863DC !important;
+[data-theme="light"] .hero-ring-svg circle:first-child {
+  stroke: rgba(232,220,194,0.70) !important;
 }
 
 /* ── TRANSITION: smooth theme switch ── */
@@ -331,7 +116,7 @@ svg *, canvas, video, img { transition: none !important; }
 </head>
 <body>
 <div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
-    <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
     <span class="breadcrumb-separator">/</span>
     <span class="breadcrumb-item active">Home Screen</span>
   </div>
@@ -357,8 +142,8 @@ svg *, canvas, video, img { transition: none !important; }
         <div class="status-bar">
           <span>9:41</span>
           <div class="status-icons">
-            <span>📶</span>
-            <span>🔋</span>
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
           </div>
         </div>
 
@@ -374,6 +159,13 @@ svg *, canvas, video, img { transition: none !important; }
             <!-- Progress Ring -->
             <div class="hero-ring-wrap">
               <svg class="hero-ring-svg" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ringGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#E89370"/>
+                    <stop offset="50%" stop-color="#0274BE"/>
+                    <stop offset="100%" stop-color="#075C9F"/>
+                  </linearGradient>
+                </defs>
                 <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
                 <circle id="heroRingFill" cx="38" cy="38" r="32" class="ring-fill"
                   stroke="#1863DC" stroke-width="3" stroke-linecap="round"/>
@@ -1002,18 +794,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.bdSetTheme = bdSetTheme;
 
-  // Init on load
-  var saved = 'dark';
-  try { saved = localStorage.getItem('bd-theme') || 'dark'; } catch(e) {}
+  // Init on load — respect head boot script's data-theme-pref
+  var saved;
+  try { saved = localStorage.getItem('bd-theme'); } catch(e) {}
+  if (!saved) saved = document.documentElement.getAttribute('data-theme-pref') || 'dark';
   bdSetTheme(saved);
 
   // React to OS theme changes
   window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
     var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
-    if (pref === 'system') bdSetTheme('system');
-  });
-})();
-</script>
-
-</body>
-</html>
+    if 

@@ -162,3 +162,161 @@
   --border-color: var(--neutral-700);
   --border-color-light: var(--neutral-600);
 }
+
+/* ════════════════════════════════════════════════════════
+   LIGHT THEME — warm cream/peach palette from BeyonDegrees hero
+   Aesthetic: soft, dreamy, beach-sunset, warm pastel
+     Brand primary:   #0274BE  (official Astra blue, unchanged)
+     Bg base:         #F4E8D2  (cream/wheat from hero)
+     Bg surface:      #FAEEDA  (light cream)
+     Bg elevated:     #FFF8EB  (ivory)
+     Border:          #EFDCC0  (sand)
+     Coral accent:    #E89370  (orange ball)
+     Sky accent:      #A8C5D4  (blue ball)
+     Text primary:    #3A2E26  (warm coffee dark)
+     Text secondary:  #5C4A3D  (warm brown)
+   ════════════════════════════════════════════════════════ */
+:root[data-theme="light"] {
+  /* Brand — keep official BeyonDegrees blue (#0274BE) */
+  --violet-950: #062C4A;
+  --violet-900: #0A4576;
+  --violet-800: #0B5F97;
+  --violet-700: #075C9F;
+  --violet-600: #0274BE;   /* PRIMARY brand */
+  --violet-500: #1E8EDB;
+  --violet-400: #4FA7E5;
+  --violet-300: #79BBEC;
+  --violet-200: #A8C2D9;   /* sky from image */
+  --violet-100: #DCE8EF;
+
+  /* Cream Scale — refined from image (warm beige progression) */
+  --cream-50:  #FFFCF5;   /* highlight */
+  --cream-100: #FAEEDA;   /* lightest cream */
+  --cream-200: #F4E8D2;   /* main bg */
+  --cream-300: #EFE0C8;   /* deeper cream */
+  --cream-400: #E8DCC2;   /* border tone */
+  --cream-500: #DCC9A8;   /* sand */
+  --cream-600: #C9B088;   /* deep sand */
+  --cream-700: #A89070;   /* warm taupe */
+  --cream-800: #8C7458;   /* brown */
+  --cream-900: #6B5840;   /* deep brown */
+
+  /* Peach/Coral Scale — from image (BD logo + warm spheres) */
+  --coral-50:  #FCEEE3;
+  --coral-100: #F8DDC8;
+  --coral-200: #F4C9A8;   /* light peach sphere */
+  --coral-300: #ECB597;
+  --coral-400: #E8B89B;
+  --coral-500: #E08B6E;   /* BD logo, active accent */
+  --coral-600: #D67A5C;
+  --coral-700: #B26344;
+  --coral-800: #8C4F35;
+  --coral-900: #663823;
+
+  /* Sky Scale — from image (blue waves) */
+  --sky-50:  #F0F5F8;
+  --sky-100: #DCE8EF;
+  --sky-200: #C2D5E0;
+  --sky-300: #B5CFE0;
+  --sky-400: #A8C2D9;     /* main sky */
+  --sky-500: #8FB5CC;
+  --sky-600: #7A9BA8;     /* muted teal */
+  --sky-700: #5E8090;
+  --sky-800: #456578;
+  --sky-900: #2D4858;
+
+  /* Blush Scale — from image (pink curves) */
+  --blush-50:  #FAEEE8;
+  --blush-100: #F5E0D5;
+  --blush-200: #EDCDC0;
+  --blush-300: #E5B5A8;   /* main pink */
+  --blush-400: #D8A89A;
+  --blush-500: #C5887A;
+  --blush-600: #A86E5E;
+  --blush-700: #855444;
+  --blush-800: #623D31;
+
+  /* Lavender Scale — from image (purple streaks) */
+  --lavender-50:  #F4EFF5;
+  --lavender-100: #ECE2EE;
+  --lavender-200: #DDCFE2;
+  --lavender-300: #CDB8D2;
+  --lavender-400: #BAA1C2;
+  --lavender-500: #A088AB;
+  --lavender-600: #856E92;
+  --lavender-700: #695878;
+  --lavender-800: #4D405A;
+
+  /* Sage Scale — from image (faint green hints) */
+  --sage-50:  #EFF4F0;
+  --sage-100: #DCE7DE;
+  --sage-200: #C5D8C9;
+  --sage-300: #ADC6B3;
+  --sage-400: #92B299;
+  --sage-500: #759781;
+  --sage-600: #5C7C68;
+  --sage-700: #455F50;
+
+  /* Mint — keep readable on cream */
+  --mint-900: #064E3B;
+  --mint-700: #047857;
+  --mint-500: #059669;
+  --mint-400: #10B981;
+  --mint-300: #6EE7B7;
+  --mint-200: #A7F3D0;
+
+  /* Orange — warm coral from hero ball */
+  --orange-600: #C46B4A;
+  --orange-500: #E89370;   /* coral accent */
+  --orange-400: #F2B89A;   /* light peach */
+  --orange-300: #F5D0BC;   /* very light peach */
+
+  /* Semantic */
+  --red-500: #C0392B;
+  --red-400: #E07060;
+  --yellow-500: #E8A547;
+
+  /* Neutral — warm cream hierarchy */
+  --neutral-950: #FFF8EB;   /* ivory */
+  --neutral-900: #FAEEDA;   /* light cream */
+  --neutral-800: #F4E8D2;   /* cream */
+  --neutral-700: #EFDCC0;   /* sand */
+  --neutral-600: #E5CCAB;   /* beige */
+  --neutral-500: #A89A85;   /* warm gray */
+  --neutral-400: #7A6856;   /* warm taupe */
+  --neutral-300: #5C4A3D;   /* warm brown */
+  --neutral-200: #3A2E26;   /* warm coffee dark */
+  --neutral-100: #251C16;   /* very dark warm */
+  --neutral-50:  #18120E;
+
+  /* Backgrounds — refined from image */
+  --bg-base:     #F4E8D2;   /* main cream from image */
+  --bg-surface:  #FAEEDA;   /* lighter surface */
+  --bg-elevated: #FFFCF5;   /* almost white */
+  --bg-overlay:  #EFE0C8;   /* deeper overlay */
+
+  /* Text — high contrast like image (near-black) */
+  --text-primary:   #1A1A1A;   /* almost black like in image */
+  --text-secondary: #3A2E26;   /* dark warm */
+  --text-muted:     #6B5840;   /* warm muted */
+  --text-disabled:  #A89070;
+
+  /* Border */
+  --border-color: #E8DCC2;
+  --border-color-light: #F4E8D2;
+
+  /* Shadows — warm and soft */
+  --shadow-sm: 0 2px 4px rgba(92, 74, 61, 0.06);
+  --shadow-md: 0 4px 12px rgba(92, 74, 61, 0.08);
+  --shadow-lg: 0 8px 24px rgba(92, 74, 61, 0.10);
+  --shadow-xl: 0 12px 32px rgba(92, 74, 61, 0.12);
+
+  --shadow-violet:    0 8px 24px rgba(2, 116, 190, 0.18);
+  --shadow-violet-sm: 0 4px 12px rgba(2, 116, 190, 0.10);
+  --shadow-mint:      0 8px 24px rgba(5, 150, 105, 0.16);
+  --shadow-mint-sm:   0 4px 12px rgba(5, 150, 105, 0.08);
+  --shadow-orange:    0 8px 24px rgba(232, 147, 112, 0.30);
+  --shadow-orange-sm: 0 4px 12px rgba(232, 147, 112, 0.18);
+  --shadow-red:       0 8px 24px rgba(192, 57, 43, 0.16);
+  --shadow-red-sm:    0 4px 12px rgba(192, 57, 43, 0.10);
+}

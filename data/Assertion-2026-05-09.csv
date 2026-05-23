@@ -1,0 +1,353 @@
+id,content,has_discipline,has_major,has_university
+1348,I don’t mind large lecture classes with hundreds of students.,False,False,True
+1347,"I want very selective, high-rigor programs.",False,False,True
+1346,"I want strong media, arts, and policy programs.",False,False,True
+1345,I want a mix of liberal arts and research.,False,False,True
+1344,I want a school with global recognition.,False,False,True
+1343,I want strong spiritual life options at the school.,False,False,True
+1342,I want to be part of a strong alumni networks for future jobs.,False,False,True
+1340,I want access to leading world-class research.,False,False,True
+1339,I want to feel school spirit at big sports games.,False,False,True
+1338,I care about the school's global reputation and prestige.,False,False,True
+1336,I want the school to provide support for international students.,False,False,True
+1334,I want applied learning over theory.,False,False,True
+1333,I want campuses with makerspaces and workshops.,False,False,True
+1332,I want to focus on solving current math and science problems.,False,False,True
+1331,I want the option to study abroad for some semesters.,False,False,True
+1330,I want the school to offer career services tied to my chosen industry.,False,False,True
+1329,I want schools where I can have an active city life.,False,False,True
+1328,I want a strong focus on engineering and technology.,False,False,True
+1327,I want large but academically strong campuses.,False,False,True
+1326,I want commuter-friendly options.,False,False,True
+1325,I want to have access to multiple clubs and activities on campus.,False,False,True
+1324,I want a faith-based campus community.,False,False,True
+1323,I want to attend a school that focuses strongly on research.,False,False,True
+1322,I want to attend a large private school in a city.,False,False,True
+1321,I'd prefer a smaller student-faculty ratio.,False,False,True
+1320,I want a supportive and collaborative campus culture.,False,False,True
+1319,"I want many majors and programs to choose from, so that I can change my mind if I want to.",False,False,True
+1318,"I want practical, career-focused programs.",False,False,True
+1317,I want to study at a small college with close faculty contact.,False,False,True
+1316,I want a built-in co-op program.,False,False,True
+1315,I want to study under professors who are active in science and tech research.,False,False,True
+1314,I want to study in a large city.,False,False,True
+1313,I want to be able to have access to travel and have global opportunities while studying.,False,False,True
+1312,"I want to study at a school with strong links to tech companies, so that I can work there later.",False,False,True
+1310,I want to attend a school focused on teaching rather than practicing.,False,False,True
+1309,I want to be able to choose from many internship opportunities.,False,False,True
+1308,I prefer smaller classes and close contact with faculty.,False,False,True
+1307,I want strong traditions and school pride.,False,False,True
+1306,I want to attend a school known for its career pathways.,False,False,True
+1305,I want to interact with multiple international students.,False,False,True
+1304,I want an easy admissions process.,False,False,True
+1303,"I want supportive, close-knit communities.",False,False,True
+1302,I could use financial aid from wealthy schools.,False,False,True
+1301,I want a city campus with access to internships.,False,False,True
+1300,I'd appreciate cultural opportunities near the university.,False,False,True
+1299,I'd prefer a balance of academics and sports activities.,False,False,True
+1298,I value strong campus communities.,False,False,True
+1297,"I'd enjoy going to many student events, intead of just studying.",False,False,True
+1296,I prefer hands-on labs and project-based learning.,False,False,True
+1295,I want to study at a big campus with thousands of students.,False,False,True
+1293,I want easy access to public transport.,False,False,True
+1292,I want affordable tuition options.,False,False,True
+1291,I want to be able to choose between a large amount of of majors and programs.,False,False,True
+1290,I want to study at a school with strong religious values.,False,False,True
+1289,I like using tools to fix things.,False,True,False
+1288,I want to design ways to teach people.,False,True,False
+1287,I want a career where I can improve public health.,False,True,False
+1286,I enjoy studying how power systems work.,False,True,False
+1285,I like performing on stage.,False,True,False
+1283,I work best under time pressure.,False,True,False
+1282,I like going to art exhibitions or musical performances.,False,True,False
+1281,I’m curious about why people make certain choices.,False,True,False
+1280,I like solving puzzles and logic problems.,False,True,False
+1279,I enjoy studying how animals grow and produce food.,False,True,False
+1278,I like learning about how humans change genetics of food in farming.,False,True,False
+1277,I want to understand what happens behind the scenes in communication apps like Discord or WhatsApp.,False,True,False
+1275,I want to improve how companies work.,False,True,False
+1274,I’m curious about how chemical reactions are controlled in factories.,False,True,False
+1273,I care about values in society.,False,True,False
+1271,I’m curious about how machines work and make our lives easier.,False,True,False
+1270,I like fixing or building electronic devices.,False,True,False
+1269,"I enjoy studying how metals, plastics, and ceramics are used.",False,True,False
+1268,I feel comfortable in debates and arguments.,False,True,False
+1267,I’m curious about how commercials and ads are created.,False,True,False
+1266,I want to make a difference in people’s lives.,False,True,False
+1265,I want to help people with mental health problems.,False,True,False
+1264,I like watching court and trial videos.,False,True,False
+1263,"I rather do something, instead of reading about it.",False,True,False
+1262,"I prefer to play in a band, than alone.",False,True,False
+1261,I think a whole team is needed to design a big structure.,False,True,False
+1260,I want to defend fairness in society.,False,True,False
+1259,I like designing new things and testing them.,False,True,False
+1258,I like debating about government and politics.,False,True,False
+1257,I like coding and creating computer programs.,False,True,False
+1256,I like working with people more than with things.,False,True,False
+1255,I want to use data to find useful patterns.,False,True,False
+1254,I’m curious about space and astronomy.,False,True,False
+1253,I like debating rules and rights.,False,True,False
+1252,I like solving problems with practical designs.,False,True,False
+1251,I want to design better ways to teach.,False,True,False
+1250,I like debating different viewpoints.,False,True,False
+1248,I enjoy analyzing how people behave in groups.,False,True,False
+1247,I want to learn how systems and processes work.,False,True,False
+1246,I like writing stories or essays.,False,True,False
+1245,I like analyzing events from the past.,False,True,False
+1244,I solve math puzzles for fun.,False,True,False
+1243,I want to defend fairness and justice.,False,True,False
+1242,I like structure and order in society.,False,True,False
+1241,I’m curious about what is right and wrong.,False,True,False
+1239,I want to learn how to optimize a business.,False,True,False
+1238,I want to understand what does it mean to be fair and ethical.,False,True,False
+1237,I like teamwork in creative projects.,False,True,False
+1236,"I like learning how metals, plastics, or ceramics are made.",False,True,False
+1235,I’m curious about designing medical devices for patients.,False,True,False
+1234,I want to share ideas with large audiences.,False,True,False
+1233,I’m curious about biotechnology in food and farming.,False,True,False
+1232,I like exploring how words shape meaning.,False,True,False
+1231,I like learning about digital systems.,False,True,False
+1230,I like visual design or creative work.,False,True,False
+1229,I’d rather hands-on work where I can help directly.,False,True,False
+1228,I’m curious about how planes and rockets fly.,False,True,False
+1227,I find it interesting to learn about how history shapes today.,False,True,False
+1226,I like doing biological lab work.,False,True,False
+1225,I find it interesting to learn about exploring different beliefs.,False,True,False
+1224,I like creating digital systems like apps or networks.,False,True,False
+1223,I like working with electricity and circuits.,False,True,False
+1222,I like experiments about motion and physics.,False,True,False
+1221,I like working on large construction projects.,False,True,False
+1220,I enjoy studying how cells interact with medicine.,False,True,False
+1219,I’m curious about energy systems and forces.,False,True,False
+1218,I like to follow rules and be fair.,False,True,False
+1217,"I like testing the limits of things I build, to see when they break.",False,True,False
+1215,"I want to be able to explain what I am thinking to others, in a way that they understand me.",False,True,False
+1214,I like explaining what I know to people younger than me.,False,True,False
+1213,I find it interesting to learn about medical research.,False,True,False
+1212,I'm interested how diseases spread.,False,True,False
+1211,I like practicing skills to improve my performance.,False,True,False
+1210,I prefer practical work to abstract theory.,False,True,False
+1209,I want to work in a hospital in the future.,False,True,False
+1207,I want to research new ways to improve health.,False,True,False
+1206,I like visiting libraries and archives.,False,True,False
+1205,I want to understand how research helps people.,False,True,False
+1204,I want to know how natural disasters occur.,False,True,False
+1203,"I'm fascinated by volcanoes, earthquakes, and the weather.",False,True,False
+1202,I like learning about the earth and environment.,False,True,False
+1201,I want to know how laws are created and why.,False,True,False
+1200,I like building things that move.,False,True,False
+1198,I want to design new materials for medicine.,False,True,False
+1197,I like watching historical videos on how cultures rise and fall.,False,True,False
+1196,I’m curious about electricity and circuits.,False,True,False
+1195,I'm always available for my family and friends when they're recovering from a sickness.,False,True,False
+1194,I’m curious about how people think and act.,False,True,False
+1193,I like learning how events connect across time.,False,True,False
+1192,I want to help people with their problems.,False,True,False
+1191,I like watching videos where people make music with an app.,False,True,False
+1190,I like sharing my ideas with other people.,False,True,False
+1189,I like doing experiments with chemicals in a lab.,False,True,False
+1188,I like using science to understand health problems.,False,True,False
+1187,I'd like to work on projects that have a visible impact on people’s lives.,False,True,False
+1186,I want to help improve medical care for communities.,False,True,False
+1184,I playing a musical instrument.,False,True,False
+1183,I like trying new ideas more than confirming proven methods.,False,True,False
+1182,I want to know how to create energy and power.,False,True,False
+1181,I want to understand mental health problems.,False,True,False
+1180,I’m curious about how media influences society.,False,True,False
+1179,I’m curious about climate change.,False,True,False
+1178,I want learn how to design more efficient materials.,False,True,False
+1177,I want to use chemistry to create new things.,False,True,False
+1176,I like solving problems with chemical processes.,False,True,False
+1175,I like debating different viewpoints with others.,False,True,False
+1174,I’m curious about human development over time.,False,True,False
+1173,I like planning and managing projects.,False,True,False
+1172,I like learning how humans affect the environment.,False,True,False
+1171,I enjoy studying reactions in the lab.,False,True,False
+1169,I’m curious about using genetics to solve health issues.,False,True,False
+1168,I enjoy studying how the body fights infection.,False,True,False
+1167,I find it interesting to learn about space travel and flight.,False,True,False
+1166,I’m curious about leadership and power.,False,True,False
+1165,I want to study archaeology and artifacts.,False,True,False
+1164,I want to make production more efficient.,False,True,False
+1163,"I’m curious about very small science, like nanotech.",False,True,False
+1162,I like working with electronics.,False,True,False
+1161,I like applied science projects.,False,True,False
+1160,I’d rather working on long-term projects over quick tasks.,False,True,False
+1159,I like asking 'why' questions about life and meaning.,False,True,False
+1158,I want to design media to share ideas.,False,True,False
+1157,I’m curious about motivation and choices.,False,True,False
+1156,I want to perform music for an audience.,False,True,False
+1155,I enjoy studying animals in their natural habitats.,False,True,False
+1154,I like learning how to design systems that protect nature.,False,True,False
+1153,"I find it interesting to learn about art, film, and drama.",False,True,False
+1152,I want to find new ways to improve people’s health.,False,True,False
+1151,I’d rather clear rules to open-ended choices.,False,True,False
+1150,I like applying physics to solve problems.,False,True,False
+1149,I’m curious about what chemicals are used in products around me.,False,True,False
+1148,I like solving problems with limited options.,False,True,False
+1147,I’m curious about how medical devices work.,False,True,False
+1146,I want to understand what connects biology and technology.,False,True,False
+1145,I care about justice and rights.,False,True,False
+1144,I like learning how vaccines and medicines are made.,False,True,False
+1143,I find it interesting to learn about farming and food systems.,False,True,False
+1142,I enjoy studying business decisions.,False,True,False
+1141,I like exploring why people behave differently.,False,True,False
+1140,I want to use music to connect with people.,False,True,False
+1139,I’m curious about making stronger or lighter materials.,False,True,False
+1138,I like to know and understand what changes in new phones before they become available.,False,True,False
+1137,I like being patient with others.,False,True,False
+1136,I enjoy studying how the body fights disease.,False,True,False
+1135,I like comparing different ways of solving problems.,False,True,False
+1134,I enjoy studying how people learn.,False,True,False
+1133,I find it interesting to learn about how companies work.,False,True,False
+1132,I like supporting people through everyday challenges.,False,True,False
+1131,I like learning about how rules and policies shape society.,False,True,False
+1130,I like creating messages that inspire people.,False,True,False
+1129,I'm interested in technology and how it works.,False,True,False
+1128,I like understanding what people say around me when travelling in another country.,False,True,False
+1127,I like analyzing texts and themes.,False,True,False
+1126,I find it interesting to learn about governments and policies.,False,True,False
+1125,I’m curious about substances and reactions.,False,True,False
+1124,I like learning about farming and food production.,False,True,False
+1123,I enjoy studying how schools can improve learning.,False,True,False
+1122,I like practicing speaking or writing clearly.,False,True,False
+1121,I like learning about forces and motion.,False,True,False
+1120,I enjoy studying ancient cultures.,False,True,False
+1119,I like doing lab experiments.,False,True,False
+1118,I want to invent useful new chemicals.,False,True,False
+1116,I like learning how to communicate without using words.,False,True,False
+1115,"I find it interesting to learn about medicine, fuels, and materials.",False,True,False
+1114,I like asking big questions about life.,False,True,False
+1113,I want to learn how to communicate clearly and effectively.,False,True,False
+1112,I enjoy understanding ecosystems and nature.,False,True,False
+1110,I like solving puzzles with one clear answer.,False,True,False
+1107,I feel comfortable speaking in public in front of many people.,False,True,False
+1106,I’m curious about how chemistry is used in real life.,False,True,False
+1105,I like doing lab experiments related to health.,False,True,False
+1104,I like making my own music or doing covers of songs.,False,True,False
+1103,I want to own my own company in the future.,False,True,False
+1102,I want to protect the environment at all costs.,False,True,False
+1101,I like telling and writing stories.,False,True,False
+1100,I’m curious about numbers and patterns.,False,True,False
+1099,I find it interesting to learn about how schools work.,False,True,False
+1098,I’m curious about modern people and if they're ethical.,False,True,False
+1097,I want to learn how to farm in a sustainable way.,False,True,False
+1096,I like testing out new computer games and finding bugs in them.,False,True,False
+1094,I like listening to different music styles and comparing them.,False,True,False
+1093,I want to teach people how to succeed in life.,False,True,False
+1092,I like learning about the periodic table.,False,True,False
+1091,I want to build things that are useful to people and at the same time don't harm the environment.,False,True,False
+1090,I want to discover new ways to heal people.,False,True,False
+1089,I like helping others through difficult situations.,False,True,False
+1087,I want to understand how the world around me works.,False,True,False
+1086,I see how chemistry surrounds me in everyday life.,False,True,False
+1085,I enjoy going to museums and learning about ancient cultures.,False,True,False
+1084,I like learning how factories produce useful materials.,False,True,False
+1083,I’m like to build robots and machines.,False,True,False
+1081,I’m want to know about how AI works.,False,True,False
+1079,I like reading about great thinkers and philosophers.,False,True,False
+1077,I like learning how cars and engines work.,False,True,False
+1076,I’m curious about how music is created and where it comes from.,False,True,False
+1075,I’m curious about how people grow up.,False,True,False
+1074,"I want to find out how the world is built from tiny things, like molecules and atoms.",False,True,False
+1073,"I like learning things about living things, like animals and plants.",False,True,False
+1072,I’m curious about why the same thing can be cheaper in one country than another.,False,True,False
+1071,I want to find out why prices for things change.,False,True,False
+1070,I like watching videos about how bridges are built.,False,True,False
+1069,I want to learn why data and statistics explain why things happen the way they do.,False,True,False
+1068,I like deep thinking and debating with others.,False,True,False
+1067,I like analyzing why people buy or sell things.,False,True,False
+1066,"I want to learn about how fuels, plastics, and medicines are made.",False,True,False
+1065,I want to learn how technology can improve medicine.,False,True,False
+1064,I want to learn how to create complex chemicals out of raw materials.,False,True,False
+1063,I want to improve transport and infrastructure.,False,True,False
+1062,I like working in a team to help others.,False,True,False
+1061,I care about helping others learn things.,False,True,False
+1060,I want to learn how forests can be protected and used.,False,True,False
+1059,I like analyzing and understanding historical events.,False,True,False
+1058,"I’m curious about how things start and stop moving, and why.",False,True,False
+1057,I enjoy studying the past to understand today.,False,True,False
+1056,I like learning how treatments to illnesses are discovered.,False,True,False
+1055,I’m curious about money and how it moves around the world.,False,True,False
+1054,I enjoy studying how oceans and fish feed people around the world.,False,True,False
+1053,I like planning and building large projects.,False,True,False
+1052,I use science to understand health problems.,False,True,False
+1051,I stay calm when others are stressed or upset.,False,True,False
+1050,I like using math to understand science.,False,True,False
+1048,I solve problems by using evidence and facts.,False,True,False
+1047,I’m curious about space and space travel.,False,True,False
+1046,I’m curious about how renewable energy is generated.,False,True,False
+1045,I like fixing or creating electronic devices.,False,True,False
+1044,I enjoy learning about different religions around the world.,False,True,False
+1043,I’m curious about tiny living things.,False,True,False
+1042,I’m curious about understanding where emotions and feelings come from.,False,True,False
+1041,I feel emotions when I listen to music.,False,True,False
+1040,I’d rather build things I can see and touch.,False,True,False
+1039,I want to learn about working in a hospital.,False,True,False
+1038,I like analyzing themes in novels or plays.,False,True,False
+1037,I find it interesting to learn about mental health.,False,True,False
+1036,I like teaching and explaining things.,False,True,False
+1035,"I want to study how people define what's ""true"".",False,True,False
+1034,I like helping people feel better when they are sick.,False,True,False
+1033,I’m curious about what happened in the past.,False,True,False
+1032,I like building teams with children or teens.,False,True,False
+1031,I'm fascinatred by how groups work together.,False,True,False
+1030,I want to use data to solve problems.,False,True,False
+1029,I’m curious about how cells and genes work.,False,True,False
+1028,I care about sustainability and nature.,False,True,False
+1027,I’m curious about how cities are designed and built.,False,True,False
+1026,I’m curious about where sound comes from and how it's created.,False,True,False
+1025,I like working outdoors and in the field.,False,True,False
+1024,I focus on details more than big ideas.,False,True,False
+1023,I like reading books and stories.,False,True,False
+1022,I like coding and programming.,False,True,False
+1021,I like working in a group more than alone.,False,True,False
+1020,I want to make healthcare better in the future.,False,True,False
+1018,I’m curious about how to teach and help people learn things.,False,True,False
+1016,I find it interesting to learn about translation and interpreting.,False,True,False
+1015,I want to design and optimize digital systems.,False,True,False
+1014,I’m curious about how the human body works.,True,False,False
+1013,I like learning about sustainability in agriculture.,True,False,False
+1012,I enjoy studying how society works.,True,False,False
+1011,I like learning about diseases and their treatments.,True,False,False
+1010,I like reading books and analyzing ideas.,True,False,False
+1009,I like asking big questions about life and meaning.,True,False,False
+1008,I enjoy studying people more than studying things.,True,False,False
+1007,"I enjoy studying art, language, and literature.",True,False,False
+1006,I find it interesting to learn about the environment around me.,True,False,False
+1005,"I like practical, hands-on work more than theory.",True,False,False
+1004,"I prefer being creative, than following a structured flow.",True,False,False
+1003,I like designing and building useful things.,True,False,False
+1002,I’d rather explore ideas and culture than do lab experiments.,True,False,False
+1001,I enjoy studying living things in nature.,True,False,False
+1000,I’m curious about the universe and how it was created.,True,False,False
+999,I like exploring different viewpoints through debates.,True,False,False
+998,I find it interesting to learn about new technologies that simplify daily life.,True,False,False
+997,I’m curious about how machines and systems work.,True,False,False
+996,I understand numbers more than words.,True,False,False
+995,I want to learn to apply science to real-world needs.,True,False,False
+994,I like working outdoors more than indoors.,True,False,False
+993,I enjoy studying past events more than present news.,True,False,False
+992,I want to improve health care in communities.,True,False,False
+991,I like learning to understand human behavior.,True,False,False
+990,I’m curious about how people and groups behave.,True,False,False
+989,I want to learn how communities can improve.,True,False,False
+988,I like being outdoors in nature.,True,False,False
+987,"I enjoy studying plants, animals, and ecosystems.",True,False,False
+986,I'm fascinated by chemistry and reactions.,True,False,False
+985,I enjoy studying how money and trade affect life.,True,False,False
+984,I like asking questions about values and beliefs.,True,False,False
+983,I like learning about the natural world.,True,False,False
+982,I find it interesting to learn about medicine or public health.,True,False,False
+981,I like discovering new scientific ideas more than building tools.,True,False,False
+980,"I like solving problems that have a single answer, instead of many.",True,False,False
+979,I enjoy studying people’s behavior more than their biology.,True,False,False
+978,I like learning about history and culture.,True,False,False
+977,I prefer working in a team than doing things alone.,True,False,False
+976,I’m curious about new solutions and technology in farming.,True,False,False
+975,I prefer learning about human health more than animal health.,True,False,False
+974,I like doing experiments and finding patterns in data.,True,False,False
+973,I like helping people improve their health.,True,False,False
+972,I like learning about politics and society.,True,False,False
+971,I’m curious about farming and food systems.,True,False,False
+970,I like solving problems with practical solutions.,True,False,False
