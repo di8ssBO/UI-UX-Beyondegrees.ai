@@ -800,7 +800,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!saved) saved = document.documentElement.getAttribute('data-theme-pref') || 'dark';
   bdSetTheme(saved);
 
-  // React to OS theme changes
+  // React to OS theme changes (only when user pref === 'system')
   window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
     var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
-    if 
+    if (pref === 'system') bdSetTheme('system');
+  });
+})();
+</script>
+
+</body>
+</html>
