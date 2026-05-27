@@ -66,17 +66,38 @@
   to   { opacity:1; transform:scale(1); }
 }
 
-/* ── Constellation light-theme overrides ───────────────────── */
-[data-theme="light"] .cst-caption {
-  color: #5C4A3D;
-  background: linear-gradient(to bottom, #F4E8D2, #FAEEDA);
+/* ── Constellation light-theme — frosted glass on wave background ── */
+/* Sky-wrap becomes a soft floating "window" with rounded corners.
+   The SVG sky rect is transparent (see THEME.skyStops), so the wave
+   background flows behind, blurred through this frosted surface. */
+[data-theme="light"] .cst-section {
+  padding: 0 14px 4px !important;
 }
-[data-theme="light"] #cst-tooltip {
-  background: linear-gradient(135deg, rgba(255,252,245,0.98) 0%, rgba(250,238,218,0.96) 100%);
-  border: 1px solid rgba(224,139,110,0.32);
+[data-theme="light"] .cst-sky-wrap {
+  border-radius: 24px !important;
+  background: linear-gradient(180deg,
+    rgba(255,253,250,0.82) 0%,
+    rgba(253,248,242,0.76) 50%,
+    rgba(245,237,224,0.82) 100%);
+  -webkit-backdrop-filter: blur(26px) saturate(140%);
+  backdrop-filter: blur(26px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.55),
-    0 4px 16px rgba(107,88,64,0.10);
+    0 2px 10px rgba(92,69,53,0.06),
+    0 14px 30px rgba(140,114,96,0.08);
+}
+[data-theme="light"] .cst-caption {
+  color: #5c4535 !important;
+  background: transparent !important;
+  padding: 10px 12px 14px !important;
+}
+[data-theme="light"] #cst-tooltip {
+  background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(253,248,242,0.96) 100%);
+  border: 1px solid rgba(201,107,85,0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 4px 16px rgba(92,69,53,0.12);
 }
 </style>
 </head>
@@ -107,7 +128,6 @@
           </div>
           <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your Academic DNA ✨</p>
         </div>
-        <div class="ai-chip">&#10022; AI Powered Curation</div>
         <div class="ds-hl">Your Perfect<br><span class="ac">Disciplines</span></div>
         <p class="ds-sub">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
         <!-- Lock banner — hiện khi quizProgress < 10 -->
@@ -226,14 +246,31 @@
   var CARD_PCTS = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
   function dnaPct(key) { return CARD_PCTS[key] || 70; }
 
+  /* ── Vertex colors — theme-aware.
+     Light mode preserves each discipline's characteristic hue family
+     (violet/rose/purple/blue/emerald/amber) but uses the 600-700 shade
+     for AA contrast on cream. Also aligns with each card's .dc-bar. ── */
+  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  var DISC_COLORS = isLight ? {
+    kt:'#7c3aed',  /* violet-600  — Engineering & Tech     */
+    xh:'#9333ea',  /* purple-600  — Social Sciences        */
+    tn:'#e11d48',  /* rose-600    — Natural Sciences       */
+    nv:'#2563eb',  /* blue-600    — Humanities             */
+    yt:'#059669',  /* emerald-600 — Medical & Health       */
+    nn:'#d97706'   /* amber-600   — Agricultural Sciences  */
+  } : {
+    kt:'#4da6ff', xh:'#c084fc', tn:'#22d3ee',
+    nv:'#fdba74', yt:'#fb7185', nn:'#86efac'
+  };
+
   /* Thứ tự xen kẽ cao-thấp → hình radar lồi lõm: 94→34→89→32→64→62 */
   var DISC = [
-    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:'#4da6ff', pct:dnaPct('kt'), angle:0   },
-    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:'#c084fc', pct:dnaPct('xh'), angle:60  },
-    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:'#22d3ee', pct:dnaPct('tn'), angle:120 },
-    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:'#fdba74', pct:dnaPct('nv'), angle:180 },
-    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:'#fb7185', pct:dnaPct('yt'), angle:240 },
-    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:'#86efac', pct:dnaPct('nn'), angle:300 },
+    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:DISC_COLORS.kt, pct:dnaPct('kt'), angle:0   },
+    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:DISC_COLORS.xh, pct:dnaPct('xh'), angle:60  },
+    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:DISC_COLORS.tn, pct:dnaPct('tn'), angle:120 },
+    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:DISC_COLORS.nv, pct:dnaPct('nv'), angle:180 },
+    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:DISC_COLORS.yt, pct:dnaPct('yt'), angle:240 },
+    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:DISC_COLORS.nn, pct:dnaPct('nn'), angle:300 },
   ];
 
   /* Xếp hạng để điều chỉnh độ sáng (rank 0 = cao nhất) */
@@ -250,19 +287,23 @@
     return [+(CX + r * Math.sin(rad)).toFixed(2), +(CY - r * Math.cos(rad)).toFixed(2)];
   }
 
-  /* ── THEME palette — detects data-theme="light" for cream sky ── */
-  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  /* ── THEME palette — light = terracotta/cream, dark = neon midnight ─ */
   var THEME = isLight ? {
-    skyStops:  [['0%','#FFFCF5'],['50%','#FAEEDA'],['100%','#F4E8D2']],
-    fillStops: [['0%','rgba(2,116,190,0.18)'],['100%','rgba(2,116,190,0.04)']],
-    star:      function(i){ return 'rgba(58,46,38,'+(i%4===0?0.32:0.18)+')'; },
-    hexStrong: 'rgba(107,88,64,0.30)',
-    hexWeak:   'rgba(107,88,64,0.14)',
-    axisLine:  'rgba(107,88,64,0.12)',
-    centerLbl: 'rgba(58,46,38,0.22)',
-    nameOn:    '#1A1A1A',
-    nameOff:   'rgba(26,26,26,0.30)',
-    ringColor: '#0274BE'
+    /* Sky rect → fully transparent so the wave SVG background flows
+       through the radar. Container styling (frosted glass + rounded
+       corners) is now handled by .cst-sky-wrap CSS. */
+    skyStops:  [['0%','rgba(253,248,242,0)'],['50%','rgba(245,237,224,0)'],['100%','rgba(237,225,207,0)']],
+    /* Soft terracotta-tinted fill — primary brand of light mode */
+    fillStops: [['0%','rgba(201,107,85,0.22)'],['100%','rgba(201,107,85,0.04)']],
+    /* Warm sand stars instead of cool gray */
+    star:      function(i){ return 'rgba(140,114,96,'+(i%4===0?0.40:0.22)+')'; },
+    hexStrong: 'rgba(140,114,96,0.30)',
+    hexWeak:   'rgba(140,114,96,0.14)',
+    axisLine:  'rgba(140,114,96,0.12)',
+    centerLbl: 'rgba(92,69,53,0.30)',
+    nameOn:    '#2c1f14',
+    nameOff:   'rgba(44,31,20,0.30)',
+    ringColor: '#c96b55'   /* terracotta-600 — primary brand */
   } : {
     skyStops:  [['0%','#0f1d52'],['50%','#080e2e'],['100%','#020510']],
     fillStops: [['0%','rgba(24,99,220,0.32)'],['100%','rgba(2,116,190,0.06)']],
@@ -465,19 +506,13 @@
     var lpos = vtx(d.angle, labelR);
     var lx = lpos[0], ly = lpos[1];
 
-    var t1 = document.createElementNS(NS, 'text');
-    t1.setAttribute('x',lx); t1.setAttribute('y', ly - 6);
-    t1.setAttribute('fill', d.color); t1.setAttribute('font-size','5.5');
-    t1.setAttribute('font-weight','600'); t1.setAttribute('text-anchor','middle');
-    t1.setAttribute('opacity', isFormed ? '0.55' : '0.18');
-    t1.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
-    t1.textContent = d.cst;
-    svg.appendChild(t1);
+    /* Constellation name (t1) removed per design — only discipline
+       name (t2) and percentage (t3) remain. */
 
     var t2 = document.createElementNS(NS, 'text');
     t2.setAttribute('x',lx); t2.setAttribute('y', ly + 4);
     t2.setAttribute('fill', isFormed ? THEME.nameOn : THEME.nameOff);
-    t2.setAttribute('font-size','6.5'); t2.setAttribute('font-weight','700');
+    t2.setAttribute('font-size','9.5'); t2.setAttribute('font-weight','700');
     t2.setAttribute('text-anchor','middle');
     t2.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
     t2.textContent = d.name;
@@ -486,7 +521,7 @@
     /* t3: % number — ẩn, xuất hiện pha cuối */
     var t3 = document.createElementNS(NS, 'text');
     t3.setAttribute('x',lx); t3.setAttribute('y', ly + 16);
-    t3.setAttribute('fill', d.color); t3.setAttribute('font-size','10');
+    t3.setAttribute('fill', d.color); t3.setAttribute('font-size','13');
     t3.setAttribute('font-weight','800'); t3.setAttribute('text-anchor','middle');
     t3.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
     t3.textContent = d.pct + '%';

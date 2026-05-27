@@ -251,49 +251,261 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .lock-cta-btn:hover { background:var(--violet-500); }
 .lock-cta-btn:active { transform:scale(0.97); opacity:.9; }
 
-/* ═══ LIGHT MODE ════════════════════════════════════════════════ */
-[data-theme="light"] .mobile-screen { background:#f0f4fb }
+/* ════════════════════════════════════════════════════════════════
+   LIGHT MODE — wave SVG bg + frosted glass cards + vivid hero.
+   Hero color reflects MATCH % (high=sage, mid=amber, low=coral)
+   via the JS-set --disc-rgb custom property — but mapped through
+   color-mix so every state stays readable on cream.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Outside stays dark */
+[data-theme="light"] body { background:#06060f !important; color:#f8fafc !important; }
+[data-theme="light"] .desktop-container { background:#06060f !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-sep { color:rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color:rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .device-frame { border-color:#1a1a2e !important; }
+
+/* Inside — wave SVG wallpaper (shared) */
+[data-theme="light"] .mobile-screen {
+  background:
+    url('../../../shared/bg-light.svg') center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
 [data-theme="light"] .ms-aurora::before,
-[data-theme="light"] .ms-aurora::after { opacity:0 !important }
-[data-theme="light"] .ms-logo { color:#1a1a2e }
-[data-theme="light"] .ms-logo span { color:var(--mint-500) }
+[data-theme="light"] .ms-aurora::after { opacity:0 !important; }
+
+/* Header */
+[data-theme="light"] .ms-logo { color:#2c1f14; }
+[data-theme="light"] .ms-logo span { color:#c96b55; } /* terracotta-600 brand */
 [data-theme="light"] .ms-search-btn {
-  background:rgba(0,0,0,.06);border-color:rgba(0,0,0,.09) }
-[data-theme="light"] .ms-hl { color:#1a1a2e }
-[data-theme="light"] .ms-sub { color:rgba(26,26,46,.50) }
+  background:rgba(255,253,250,0.90) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border:1px solid rgba(232,224,213,0.70) !important;
+  color:#2c1f14;
+}
+[data-theme="light"] .status-bar { color:#2c1f14 !important; }
+
+[data-theme="light"] .ms-hl { color:#2c1f14; }
+[data-theme="light"] .ms-sub { color:#8c7260; }
+
+/* Demand chip — sage success */
+[data-theme="light"] .demand-chip {
+  background:rgba(74,158,122,.14) !important;
+  border:1px solid rgba(74,158,122,.38) !important;
+  color:#2f6f53 !important;
+}
+
+/* ── Filter chips — frosted, active uses disc color ── */
 [data-theme="light"] .fc {
-  background:rgba(0,0,0,.05);border-color:rgba(0,0,0,.10);color:rgba(26,26,46,.55) }
-[data-theme="light"] .fc.active {
-  background:rgba(26,26,46,.12);border-color:rgba(26,26,46,.22);color:#1a1a2e }
+  background:rgba(253,248,242,0.88) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border:1px solid rgba(232,224,213,0.70) !important;
+  color:#5c4535 !important;
+}
+[data-theme="light"] .fc[data-disc]:not([data-disc="all"]).active {
+  /* Each disc chip uses its own --c custom prop set inline */
+  background:color-mix(in srgb, var(--c) 18%, rgba(255,255,255,0.55)) !important;
+  border-color:color-mix(in srgb, var(--c) 45%, transparent) !important;
+  color:color-mix(in srgb, var(--c) 35%, #2c1f14) !important;
+}
+[data-theme="light"] .fc[data-disc="all"].active {
+  background:rgba(201,107,85,.18) !important;
+  border-color:rgba(201,107,85,.40) !important;
+  color:#a84e30 !important;
+}
+
+/* ── Hero Major Card — BRAND IMAGE palette waves + match-% accent ──
+   Same brand-image gradient as why/detail heroes (terracotta + dusty
+   blue + sage on cream). The JS-set --disc-rgb (mint/amber/red for
+   match %) tints the center so high/mid/low match still reads. */
 [data-theme="light"] .hero-maj {
-  background:linear-gradient(135deg,rgba(6,214,160,.07) 0%,rgba(124,58,237,.07) 100%) }
-[data-theme="light"] .hm-name { color:#1a1a2e }
-[data-theme="light"] .hm-lbl { color:rgba(26,26,46,.40) }
+  background:
+    /* Terracotta-400 wave top-right */
+    radial-gradient(ellipse 90% 65% at 95% 0%, rgba(232,145,122,0.42) 0%, transparent 65%),
+    /* Dusty Blue-300 wave bottom-left */
+    radial-gradient(ellipse 85% 60% at 5% 100%, rgba(163,194,211,0.45) 0%, transparent 65%),
+    /* Sage-300 accent bottom-right */
+    radial-gradient(ellipse 55% 50% at 100% 90%, rgba(168,200,196,0.36) 0%, transparent 65%),
+    /* Blue-200 top-left */
+    radial-gradient(ellipse 50% 45% at 0% 20%, rgba(196,217,229,0.30) 0%, transparent 65%),
+    /* MATCH % accent at center (mint=high, amber=mid, coral=low) */
+    radial-gradient(ellipse 60% 55% at 50% 50%,
+      color-mix(in srgb, rgb(var(--disc-rgb)) 22%, transparent) 0%,
+      transparent 75%),
+    /* Cream base */
+    linear-gradient(135deg, #fdf8f2 0%, #fceae4 30%, #f5ede0 70%, #e0ecf3 100%) !important;
+  border:1px solid color-mix(in srgb, rgb(var(--disc-rgb)) 34%, rgba(232,224,213,0.6)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 4px 16px color-mix(in srgb, rgb(var(--disc-rgb)) 18%, transparent),
+    0 12px 30px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .hero-maj::before {
+  /* Match % accent blob */
+  background: radial-gradient(ellipse,
+    color-mix(in srgb, rgb(var(--disc-rgb)) 45%, transparent) 0%,
+    transparent 70%) !important;
+  opacity:0.40 !important;
+}
+[data-theme="light"] .hm-disc-badge { color:#5c4535 !important; }
+[data-theme="light"] .hm-name { color:#2c1f14 !important; }
+[data-theme="light"] .hm-pct {
+  color: color-mix(in srgb, rgb(var(--disc-rgb)) 55%, #2c1f14) !important;
+}
+[data-theme="light"] .hm-lbl { color:#8c7260 !important; }
+/* hm-tags — disc-tinted */
+[data-theme="light"] .hm-tag {
+  background: color-mix(in srgb, rgb(var(--disc-rgb)) 14%, rgba(255,255,255,0.7)) !important;
+  border-color: color-mix(in srgb, rgb(var(--disc-rgb)) 35%, transparent) !important;
+  color: color-mix(in srgb, rgb(var(--disc-rgb)) 50%, #2c1f14) !important;
+}
+[data-theme="light"] .hm-tag.v {
+  background:rgba(124,58,237,.12) !important;
+  border-color:rgba(124,58,237,.30) !important;
+  color:#6d28d9 !important;
+}
+[data-theme="light"] .hm-tag.n {
+  background:rgba(140,114,96,.10) !important;
+  border-color:rgba(140,114,96,.28) !important;
+  color:#5c4535 !important;
+}
+/* Hero CTA — palette btn-primary: terracotta-600 → terracotta-700.
+   Matches "CTA / Primary Action" token from color-palette-light.html
+   (background: var(--terracotta-600) #c96b55, white text). */
+[data-theme="light"] .hm-cta {
+  background: linear-gradient(135deg, #c96b55 0%, #a84e30 100%) !important;
+  color:#fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px rgba(201,107,85,0.32),
+    0 10px 26px rgba(201,107,85,0.18) !important;
+}
+[data-theme="light"] .hm-cta:hover {
+  background: linear-gradient(135deg, #d97f66 0%, #c96b55 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 6px 18px rgba(201,107,85,0.40),
+    0 12px 32px rgba(201,107,85,0.22) !important;
+}
+
+/* ── Accordion sections — frosted glass ── */
 [data-theme="light"] .acc-hdr {
-  background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.08) }
-[data-theme="light"] .acc-hdr:active { background:rgba(0,0,0,.07) }
-[data-theme="light"] .acc-title { color:#1a1a2e }
+  background:rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border:1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 2px 8px rgba(92,69,53,0.04) !important;
+}
+[data-theme="light"] .acc-hdr:active { background:rgba(245,237,224,0.88) !important; }
+[data-theme="light"] .acc-hdr.open {
+  border-bottom-color:transparent !important;
+}
+[data-theme="light"] .acc-title { color:#2c1f14 !important; }
 [data-theme="light"] .acc-count {
-  background:rgba(0,0,0,.07);color:rgba(26,26,46,.50) }
-[data-theme="light"] .acc-chevron { color:rgba(26,26,46,.38) }
+  background:rgba(140,114,96,.16) !important;
+  color:#5c4535 !important;
+}
+[data-theme="light"] .acc-chevron { color:#8c7260 !important; }
 [data-theme="light"] .acc-body {
-  background:rgba(0,0,0,.025);border-color:rgba(0,0,0,.08) }
-[data-theme="light"] .acc-hint { color:rgba(26,26,46,.40);border-top-color:rgba(0,0,0,.06) }
-[data-theme="light"] .ml-item { border-bottom-color:rgba(0,0,0,.05) }
-[data-theme="light"] .ml-item:active { background:rgba(0,0,0,.04) }
-[data-theme="light"] .ml-name { color:#1a1a2e }
-[data-theme="light"] .ml-sub { color:rgba(26,26,46,.40) }
-[data-theme="light"] .quiz-progress-banner {
-  background:rgba(124,58,237,.07);border-color:rgba(124,58,237,.20) }
-[data-theme="light"] .qpb-label { color:var(--violet-600) }
-[data-theme="light"] .qpb-bar { background:rgba(0,0,0,.07) }
-[data-theme="light"] .qpb-sub { color:rgba(26,26,46,.45) }
-[data-theme="light"] .dc-row-bar { background:rgba(0,0,0,.07) }
+  background:rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border:1px solid rgba(232,224,213,0.70) !important;
+  border-top:none !important;
+  box-shadow:
+    0 2px 8px rgba(92,69,53,0.04),
+    0 8px 20px rgba(140,114,96,0.06) !important;
+}
+[data-theme="light"] .acc-hint {
+  color:#8c7260 !important;
+  border-top:1px solid rgba(232,224,213,0.55) !important;
+}
+[data-theme="light"] .acc-empty { color:#8c7260 !important; }
+
+/* ── Major list items — discipline badge + pct color ── */
+[data-theme="light"] .ml-item {
+  border-bottom-color:rgba(232,224,213,0.55) !important;
+}
+[data-theme="light"] .ml-item:active {
+  background:rgba(245,237,224,0.65) !important;
+}
+[data-theme="light"] .ml-name { color:#2c1f14 !important; }
+[data-theme="light"] .ml-sub { color:#8c7260 !important; }
+/* Pct color — semantic palette mapping (not dark-mode neon) */
+[data-theme="light"] .pct-high { color:#2f6f53 !important; }  /* sage success deep */
+[data-theme="light"] .pct-mid  { color:#b45309 !important; }  /* amber-700 */
+[data-theme="light"] .pct-low  { color:#a89282 !important; }  /* warm sand muted */
+
+/* ── No results ── */
+[data-theme="light"] #no-results .nr-text { color:#8c7260 !important; }
+
+/* ── Lock banner (when quizProgress < 20) ── */
+[data-theme="light"] #lockedState > div:first-child {
+  background:rgba(201,107,85,.10) !important;
+  border:1px solid rgba(201,107,85,.32) !important;
+}
+[data-theme="light"] #lockedState > div:first-child > div:nth-child(2) {
+  color:#2c1f14 !important;
+}
+[data-theme="light"] #lockSubText { color:#5c4535 !important; }
+[data-theme="light"] #lockSubText strong { color:#2c1f14 !important; }
+[data-theme="light"] #lockCta {
+  background:#c96b55 !important;
+  color:#fff !important;
+  box-shadow:0 4px 16px rgba(201,107,85,.32) !important;
+}
+[data-theme="light"] #lockCta:hover {
+  background:#a84e30 !important;
+  box-shadow:0 6px 20px rgba(201,107,85,.40) !important;
+}
+
+/* ── Teaser list (preview) ── */
 [data-theme="light"] .teaser-list {
-  background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.07) }
+  background:rgba(253,248,242,0.55) !important;
+  border:1px solid rgba(232,224,213,0.55) !important;
+}
+[data-theme="light"] .teaser-card { border-bottom-color:rgba(232,224,213,0.45) !important; }
+[data-theme="light"] .teaser-card .tc-ico { background:rgba(140,114,96,.12) !important; }
+[data-theme="light"] .teaser-card .tc-name { color:#2c1f14 !important; }
+[data-theme="light"] .teaser-card .tc-sub { color:#8c7260 !important; }
+[data-theme="light"] .teaser-card .tc-pct { color:#2f6f53 !important; }
 [data-theme="light"] .teaser-overlay {
-  background:linear-gradient(to bottom,transparent 0%,rgba(240,244,251,.92) 100%) }
-[data-theme="light"] .teaser-unlock-msg { color:#1a1a2e }
-[data-theme="light"] #no-results .nr-text { color:rgba(26,26,46,.40) }
-[data-theme="light"] .device-frame {
-  border-color:#c4d0e8 !important }
+  background:linear-gradient(to bottom, transparent 0%, rgba(245,237,224,.92) 100%) !important;
+}
+[data-theme="light"] .teaser-unlock-msg { color:#2c1f14 !important; }
+
+/* ── Continue Quiz button — sage success ── */
+[data-theme="light"] .continue-btn {
+  background: linear-gradient(135deg, #4a9e7a 0%, #2f6f53 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px rgba(74,158,122,0.32),
+    0 10px 26px rgba(74,158,122,0.18) !important;
+}
+[data-theme="light"] .continue-btn:hover {
+  background: linear-gradient(135deg, #5ab088 0%, #3a8466 100%) !important;
+}
+
+/* ── Float tab bar — frosted cream ── */
+[data-theme="light"] .mobile-screen .float-tab-bar {
+  background: linear-gradient(135deg, rgba(255,253,250,0.92) 0%, rgba(245,237,224,0.88) 100%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border-color: rgba(232,224,213,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 -2px 12px rgba(201,107,85,0.06),
+    0 6px 20px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .mobile-screen .tab-item { color: rgba(92,69,53,0.55) !important; }
+[data-theme="light"] .mobile-screen .tab-item.active {
+  background: rgba(201,107,85,0.18) !important;
+  color: #a84e30 !important;
+  border-color: rgba(201,107,85,0.32) !important;
+}

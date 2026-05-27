@@ -57,25 +57,203 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
 .ni.a{opacity:1}.ni svg{width:20px;height:20px}
 .ni-lbl{font-size:9px;font-weight:600;color:var(--text-muted)}.ni.a .ni-lbl{color:var(--violet-400)}
 
-/* ═══ LIGHT MODE ════════════════════════════════════════════════ */
-[data-theme="light"] .ds { background:#f0f4fb }
+/* ═══ LIGHT MODE — Terracotta / Cream palette ════════════════════
+   Color palette v2: warm cream bg + terracotta primary + dusty blue
+   secondary + sage accent. Each card uses a distinct hue from palette
+   for clear ranking differentiation.
+   ════════════════════════════════════════════════════════════════ */
+[data-theme="light"] body { background:#f5ede0 }
+[data-theme="light"] .breadcrumb-item { color:#8c7260 }
+[data-theme="light"] .breadcrumb-item.active { color:#5c4535 }
+[data-theme="light"] .breadcrumb-separator { color:#b8a898 }
+
+/* Hero canvas — wave ribbons SVG behind everything.
+   The SVG carries the palette (terracotta + dusty blue + blush + sage
+   ribbons with decorative spheres), inspired by the brand image. */
+[data-theme="light"] .ds {
+  background:
+    url('../bg-light.svg') center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+/* Aurora pseudo-elements duplicate color — SVG already provides depth, hide */
 [data-theme="light"] .ds-aurora::before,
 [data-theme="light"] .ds-aurora::after { opacity:0 !important }
-[data-theme="light"] .ds-logo { color:#1a1a2e }
-[data-theme="light"] .ds-logo span { color:var(--violet-700) }
-[data-theme="light"] .ds-hl { color:#1a1a2e }
-[data-theme="light"] .ds-hl .ac { color:var(--violet-700) }
-[data-theme="light"] .ds-sub { color:rgba(26,26,46,.50) }
+
+[data-theme="light"] .ds-logo { color:#2c1f14 }
+[data-theme="light"] .ds-logo span { color:#c96b55 }
+[data-theme="light"] .ds-hdr > div:last-child {
+  background:#fdf8f2 !important;
+  border:1px solid #e8e0d5 !important;
+  color:#5c4535
+}
+
+[data-theme="light"] .ds-hl { color:#2c1f14 }
+[data-theme="light"] .ds-hl .ac { color:#c96b55 }
+[data-theme="light"] .ds-sub { color:#8c7260 }
+
+/* AI chip — sage accent for "AI Powered Curation" (calm/intelligent feel) */
 [data-theme="light"] .ai-chip {
-  background:rgba(6,214,160,.10);border-color:rgba(6,214,160,.35);color:#059669 }
-[data-theme="light"] .dc {
-  background:#fff;border-color:rgba(0,0,0,.08) }
-[data-theme="light"] .dc-name { color:#1a1a2e }
-[data-theme="light"] .dc-rank { color:rgba(26,26,46,.38) }
-[data-theme="light"] .dc-plbl { color:rgba(26,26,46,.38) }
-[data-theme="light"] .dc-desc { color:rgba(26,26,46,.60) }
-[data-theme="light"] .dc-prog { background:rgba(0,0,0,.07) }
+  background:rgba(106,150,144,.14);
+  border:1px solid rgba(106,150,144,.38);
+  color:#3a5c56
+}
+
+/* ─── Discipline Cards — Frosted glass over wave background ─── */
+[data-theme="light"] .ds .dc {
+  background:rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter:blur(24px) saturate(140%);
+  backdrop-filter:blur(24px) saturate(140%);
+  border:1px solid rgba(232,224,213,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.06),
+    0 8px 24px rgba(140,114,96,0.08) !important;
+  color:#2c1f14 !important;
+}
+[data-theme="light"] .dc-name { color:#2c1f14 }
+[data-theme="light"] .dc-rank { color:#8c7260 }
+[data-theme="light"] .dc-plbl { color:#8c7260 }
+[data-theme="light"] .dc-desc { color:#5c4535 }
+/* Progress track — !important to beat any earlier rule that sets it to transparent */
+[data-theme="light"] .ds .dc-prog {
+  background:rgba(140,114,96,.20) !important;
+  height:3px !important
+}
+
+/* ── Discipline colors — preserve each field's characteristic hue
+   from dark mode (violet/rose/purple/blue/emerald/amber). Light mode
+   uses the 600-700 shade so AA contrast holds on the frosted cream bg.
+   Each card's vertex star in the radar uses the SAME color
+   (see DISC_COLORS in index.html). ─────────────────────────────────── */
+
+/* ── KT · Engineering & Tech → Violet ── */
+[data-theme="light"] .dc-kt .dc-bar { background:#7c3aed }
+[data-theme="light"] .dc-kt .dc-ico {
+  background:rgba(124,58,237,.14);
+  box-shadow:inset 0 0 0 1px rgba(124,58,237,.22)
+}
+[data-theme="light"] .dc-kt .dc-pct { color:#6d28d9 }
+[data-theme="light"] .dc-kt .dc-pfill {
+  background:linear-gradient(90deg,#7c3aed,#a78bfa)
+}
+
+/* ── TN · Natural Sciences → Rose ── */
+[data-theme="light"] .dc-tn .dc-bar { background:#e11d48 }
+[data-theme="light"] .dc-tn .dc-ico {
+  background:rgba(225,29,72,.12);
+  box-shadow:inset 0 0 0 1px rgba(225,29,72,.20)
+}
+[data-theme="light"] .dc-tn .dc-pct { color:#be123c }
+[data-theme="light"] .dc-tn .dc-pfill {
+  background:linear-gradient(90deg,#e11d48,#fb7185)
+}
+
+/* ── YT · Medical & Health → Emerald ── */
+[data-theme="light"] .dc-yt .dc-bar { background:#059669 }
+[data-theme="light"] .dc-yt .dc-ico {
+  background:rgba(5,150,105,.14);
+  box-shadow:inset 0 0 0 1px rgba(5,150,105,.22)
+}
+[data-theme="light"] .dc-yt .dc-pct { color:#047857 }
+[data-theme="light"] .dc-yt .dc-pfill {
+  background:linear-gradient(90deg,#059669,#6ee7b7)
+}
+
+/* ── NN · Agricultural Sciences → Amber ── */
+[data-theme="light"] .dc-nn .dc-bar { background:#d97706 }
+[data-theme="light"] .dc-nn .dc-ico {
+  background:rgba(217,119,6,.14);
+  box-shadow:inset 0 0 0 1px rgba(217,119,6,.22)
+}
+[data-theme="light"] .dc-nn .dc-pct { color:#b45309 }
+[data-theme="light"] .dc-nn .dc-pfill {
+  background:linear-gradient(90deg,#d97706,#fbbf24)
+}
+
+/* ── XH · Social Sciences → Purple ── */
+[data-theme="light"] .dc-xh .dc-bar { background:#9333ea }
+[data-theme="light"] .dc-xh .dc-ico {
+  background:rgba(147,51,234,.12);
+  box-shadow:inset 0 0 0 1px rgba(147,51,234,.20)
+}
+[data-theme="light"] .dc-xh .dc-pct { color:#7e22ce }
+[data-theme="light"] .dc-xh .dc-pfill {
+  background:linear-gradient(90deg,#9333ea,#c084fc)
+}
+
+/* ── NV · Humanities → Blue ── */
+[data-theme="light"] .dc-nv .dc-bar { background:#2563eb }
+[data-theme="light"] .dc-nv .dc-ico {
+  background:rgba(37,99,235,.12);
+  box-shadow:inset 0 0 0 1px rgba(37,99,235,.20)
+}
+[data-theme="light"] .dc-nv .dc-pct { color:#1d4ed8 }
+[data-theme="light"] .dc-nv .dc-pfill {
+  background:linear-gradient(90deg,#2563eb,#93c5fd)
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────── */
 [data-theme="light"] .btn-ex {
-  background:rgba(124,58,237,.10);border-color:rgba(124,58,237,.28);color:var(--violet-700) }
+  background:rgba(201,107,85,.10);
+  border:1px solid rgba(201,107,85,.32);
+  color:#a84e30
+}
+[data-theme="light"] .btn-ex:hover {
+  background:rgba(201,107,85,.16);
+  border-color:rgba(201,107,85,.45)
+}
 [data-theme="light"] .btn-pw {
-  background:#f0f4fb;border-color:rgba(0,0,0,.10);color:rgba(26,26,46,.65) }
+  background:#f0e9df;
+  border:1px solid #e8e0d5;
+  color:#5c4535
+}
+[data-theme="light"] .btn-pw:hover {
+  background:#e8e0d5;
+  border-color:#d8ccbf
+}
+
+/* ─── Lock Banner (when quizProgress < 10) ───────────────────── */
+[data-theme="light"] #discLockedBanner {
+  background:rgba(201,107,85,.10) !important;
+  border:1px solid rgba(201,107,85,.32) !important
+}
+[data-theme="light"] #discLockedBanner > div:nth-child(2) { color:#2c1f14 !important }
+[data-theme="light"] #discLockSubText { color:#5c4535 !important }
+[data-theme="light"] #discLockSubText strong { color:#2c1f14 !important }
+[data-theme="light"] #discLockCta {
+  background:#c96b55 !important;
+  color:#fff !important;
+  box-shadow:0 4px 16px rgba(201,107,85,.32) !important
+}
+[data-theme="light"] #discLockCta:hover {
+  background:#a84e30 !important;
+  box-shadow:0 6px 20px rgba(201,107,85,.40) !important
+}
+/* Continue Quiz state in light mode → sage instead of mint */
+[data-theme="light"] #discLockCta[data-state="continue"] {
+  background:#4a9e7a !important;
+  color:#fff !important;
+  box-shadow:0 4px 16px rgba(74,158,122,.32) !important
+}
+
+/* ─── Float Tab Bar — override layout.css for terracotta palette ─ */
+[data-theme="light"] .ds .float-tab-bar {
+  background:linear-gradient(135deg, rgba(255,253,250,0.96) 0%, rgba(245,237,224,0.94) 100%) !important;
+  -webkit-backdrop-filter:blur(28px) saturate(150%);
+  backdrop-filter:blur(28px) saturate(150%);
+  border-color:rgba(232,224,213,0.80) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 -2px 12px rgba(201,107,85,0.08),
+    0 6px 20px rgba(140,114,96,0.10) !important
+}
+[data-theme="light"] .ds .tab-item { color:rgba(92,69,53,0.55) !important }
+[data-theme="light"] .ds .tab-item.active {
+  background:linear-gradient(135deg, rgba(201,107,85,0.12) 0%, rgba(201,107,85,0.22) 100%) !important;
+  color:#a84e30 !important;
+  border-color:rgba(201,107,85,0.30) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.50) !important
+}
+[data-theme="light"] .ds .tab-item:hover:not(.tab-disabled) {
+  color:rgba(44,31,20,0.88) !important
+}

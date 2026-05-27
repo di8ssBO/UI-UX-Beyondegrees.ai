@@ -261,18 +261,18 @@
 [data-theme="light"] .spec-uni-name { color: #1A1A1A !important; }
 [data-theme="light"] .spec-uni-loc { color: #6B5840 !important; }
 [data-theme="light"] .spec-uni-stats {
-  background: linear-gradient(135deg, rgba(168,194,217,0.10) 0%, rgba(205,184,210,0.12) 100%) !important;
-  border: 1px solid rgba(232,220,194,0.55) !important;
+  background: linear-gradient(135deg, rgba(163,194,211,0.16) 0%, rgba(168,200,196,0.18) 100%) !important;
+  border: 1px solid rgba(232,224,213,0.75) !important;
 }
 [data-theme="light"] .spec-uni-divider {
-  background: rgba(232,220,194,0.80) !important;
+  background: rgba(140,114,96,0.22) !important;
 }
-[data-theme="light"] .spec-uni-stat-val { color: #1A1A1A !important; }
-[data-theme="light"] .spec-uni-stat-lbl { color: #6B5840 !important; }
+[data-theme="light"] .spec-uni-stat-val { color: #2c1f14 !important; }
+[data-theme="light"] .spec-uni-stat-lbl { color: #8c7260 !important; }
 [data-theme="light"] .spec-uni-prog {
-  background: linear-gradient(135deg, rgba(2,116,190,0.08) 0%, rgba(2,116,190,0.16) 100%) !important;
-  border-color: rgba(2,116,190,0.28) !important;
-  color: #0274BE !important;
+  background: rgba(74,135,168,0.14) !important;
+  border: 1px solid rgba(74,135,168,0.38) !important;
+  color: #2f6a8c !important;
 }
 </style>
 </head>
@@ -321,20 +321,26 @@
         </button>
       </div>
 
-      <!-- Hero (no match badge) -->
-      <div class="spec-hero">
-        <div class="hero-aurora" id="heroAurora"></div>
-        <div id="heroWaves" style="position:absolute;inset:0;overflow:hidden;opacity:.70"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content" style="justify-content:flex-end;padding-bottom:18px">
-          <div class="hero-icon-wrap" id="heroIcon" style="margin-bottom:10px;align-self:flex-start">📐</div>
-          <div class="hero-name" id="heroName">Specialization</div>
-          <div class="hero-meta-row" style="margin-top:6px">
-            <span class="hero-parent-tag" id="heroParentTag">—</span>
-            <span class="hero-spec-tag" id="heroSpecTag">—</span>
+      <!-- Hero — production redesign: single focal point (title),
+           minimal decoration, structured parent context below.
+           Hero waves & aurora are kept only as soft accent layers
+           (CSS controls visibility per theme). -->
+      <header class="spec-hero" role="banner">
+        <div class="hero-aurora" id="heroAurora" aria-hidden="true"></div>
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-content">
+          <div class="hero-context" id="heroContext">
+            <span class="hero-context-disc" id="heroSpecTag">🔬 Natural Sci</span>
+            <span class="hero-context-sep" aria-hidden="true">·</span>
+            <span class="hero-context-major" id="heroParentTag">Mathematics</span>
+          </div>
+          <h1 class="hero-title" id="heroName">Specialization</h1>
+          <div class="hero-meta">
+            <span class="hero-icon" id="heroIcon" aria-hidden="true">📐</span>
+            <span class="hero-tag" id="heroTagBadge">Research</span>
           </div>
         </div>
-      </div>
+      </header>
 
       <!-- Body -->
       <div class="spec-body" id="specBody">
@@ -566,8 +572,66 @@ function normKey(s){ return s.toLowerCase().replace(/\s+/g,' ').trim(); }
 function toggleAcc(el){
   var item=el.closest('.acc-item');
   var isOpen=item.classList.contains('open');
-  document.querySelectorAll('.acc-item.open').forEach(function(i){i.classList.remove('open')});
-  if(!isOpen) item.classList.add('open');
+  document.querySelectorAll('.acc-item.open').forEach(function(i){
+    i.classList.remove('open');
+    var btn=i.querySelector('.acc-head');
+    if(btn) btn.setAttribute('aria-expanded','false');
+  });
+  if(!isOpen){
+    item.classList.add('open');
+    el.setAttribute('aria-expanded','true');
+  }
+}
+
+/* Overview Read more / Show less toggle */
+function toggleOverview(btn){
+  var card=btn.parentElement;
+  var p=card.querySelector('.overview-text');
+  if(!p) return;
+  var clamped=p.getAttribute('data-clamped')==='true';
+  if(clamped){
+    p.setAttribute('data-clamped','false');
+    btn.textContent='Show less';
+    btn.setAttribute('aria-expanded','true');
+  } else {
+    p.setAttribute('data-clamped','true');
+    btn.textContent='Read more';
+    btn.setAttribute('aria-expanded','false');
+    /* Scroll back to top of overview card so user doesn't lose context */
+    card.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+
+/* Auto-hide "Read more" if text isn't actually overflowing */
+function autoHideOverviewToggle(){
+  document.querySelectorAll('.overview-card').forEach(function(card){
+    var p=card.querySelector('.overview-text');
+    var btn=card.querySelector('.overview-toggle');
+    if(!p||!btn) return;
+    /* Compare scrollHeight (full) vs clientHeight (clamped) */
+    if(p.scrollHeight<=p.clientHeight+2){
+      btn.style.display='none';
+      p.setAttribute('data-clamped','false');
+    }
+  });
+}
+
+/* Pill overflow — show all hidden pills when "+N more" clicked */
+function toggleChipOverflow(btn){
+  var list=btn.parentElement;
+  var hidden=list.querySelectorAll('.pill-overflow');
+  var expanded=btn.getAttribute('aria-expanded')==='true';
+  hidden.forEach(function(c){
+    if(expanded) c.setAttribute('hidden','');
+    else c.removeAttribute('hidden');
+  });
+  if(expanded){
+    btn.textContent='+'+hidden.length+' more';
+    btn.setAttribute('aria-expanded','false');
+  } else {
+    btn.textContent='Show less';
+    btn.setAttribute('aria-expanded','true');
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1260,72 +1324,129 @@ function renderBody(spec, csvSpec, uniList, majorTitle, discCode){
     +'</div>';
   }).join('');
 
-  /* ── Render ── */
+  /* ── Render — production IA ──
+     1. About (concise overview)
+     2. Career outcomes (informational list)
+     3. Salary & outcomes (3 stat cards, avg salary prominent)
+     4. Required skills (grouped, scannable)
+     5. Learning path (accordion: admission + exams + language)
+     6. Where to study (uni cards)
+  */
   document.getElementById('loadingSkeleton').style.display = 'none';
+
+  /* Accordion items for new "Learning Path" section */
+  var accHTML2 = accSections.map(function(item){
+    return '<div class="acc-item">'
+      +'<button class="acc-head" onclick="toggleAcc(this)" aria-expanded="false">'
+        +'<span class="acc-head-left"><span class="acc-icon" aria-hidden="true">'+item.icon+'</span><span class="acc-title">'+item.title+'</span></span>'
+        +'<span class="acc-arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>'
+      +'</button>'
+      +'<div class="acc-body">'+item.body+'</div>'
+    +'</div>';
+  }).join('');
+
+  /* Skill pill overflow control — show 8 by default, "+N more" toggle.
+     Uses .pill class instead of .chip to avoid layout.css global
+     [class*="chip"] override that forces all chips blue. */
+  function buildChips(items, mutedClass) {
+    if (!items || !items.length) return '';
+    var cls = mutedClass ? 'pill pill-muted' : 'pill';
+    var maxVisible = 8;
+    var hidden = items.length > maxVisible ? items.slice(maxVisible) : [];
+    var visible = items.slice(0, maxVisible);
+    var html = '<div class="pill-list">'
+      + visible.map(function(s){ return '<span class="'+cls+'">'+s+'</span>'; }).join('');
+    if (hidden.length) {
+      html += hidden.map(function(s){ return '<span class="'+cls+' pill-overflow" hidden>'+s+'</span>'; }).join('');
+      html += '<button class="pill-more" onclick="toggleChipOverflow(this)" aria-expanded="false">+'+hidden.length+' more</button>';
+    }
+    return html + '</div>';
+  }
+
   document.getElementById('specBody').insertAdjacentHTML('beforeend',
+    /* 1. Salary & Outcomes — moved to top (high-intent metric first).
+       Avg salary = primary (most relevant after graduation),
+       Entry + Employment = supporting metrics. */
+    '<section class="sec sec-first">'
+      +'<h2 class="sec-title">Salary &amp; Outcomes</h2>'
+      +'<div class="stat-grid">'
+        +'<div class="stat-card stat-card-primary">'
+          +'<div class="stat-card-label">Average Salary</div>'
+          +'<div class="stat-card-value">'+md.avgSalary+'</div>'
+          +'<div class="stat-card-meta">per year · with experience</div>'
+        +'</div>'
+        +'<div class="stat-card">'
+          +'<div class="stat-card-label">Entry Level</div>'
+          +'<div class="stat-card-value">'+md.entrySalary+'</div>'
+          +'<div class="stat-card-meta">per year · starting</div>'
+        +'</div>'
+        +'<div class="stat-card">'
+          +'<div class="stat-card-label">Employment Rate</div>'
+          +'<div class="stat-card-value">'+md.employment+'</div>'
+          +'<div class="stat-card-meta">within 6 months of graduation</div>'
+        +'</div>'
+      +'</div>'
+    +'</section>'
 
-    /* Stats row */
-    '<div class="stats-row">'
-      +'<div class="stat-card">'
-        +'<div class="stat-label">Entry Salary</div>'
-        +'<div class="stat-value">'+md.entrySalary+'</div>'
-        +'<div class="stat-sub">/ year</div>'
+    /* 2. Overview — description in a card, line-clamped to 4 lines
+       with "Read more" toggle for long text walls */
+    +'<section class="sec">'
+      +'<h2 class="sec-title">Overview</h2>'
+      +'<div class="overview-card">'
+        +'<p class="sec-body overview-text" data-clamped="true">'+desc+'</p>'
+        +'<button class="overview-toggle" onclick="toggleOverview(this)" aria-expanded="false">Read more</button>'
       +'</div>'
-      +'<div class="stat-divider"></div>'
-      +'<div class="stat-card">'
-        +'<div class="stat-label">Avg Salary</div>'
-        +'<div class="stat-value accent">'+md.avgSalary+'</div>'
-        +'<div class="stat-sub">/ year</div>'
-      +'</div>'
-      +'<div class="stat-divider"></div>'
-      +'<div class="stat-card">'
-        +'<div class="stat-label">Employment</div>'
-        +'<div class="stat-value">'+md.employment+'</div>'
-        +'<div class="stat-sub">rate</div>'
-      +'</div>'
-    +'</div>'
+    +'</section>'
 
-    /* About */
-    +'<div class="section-block">'
-      +'<div class="section-title">About this Specialization</div>'
-      +'<div class="info-card-body" style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px">'+desc+'</div>'
-      +'<div class="career-tags">'
-        +md.careers.map(function(c){return '<span class="career-tag">'+c+'</span>'}).join('')
+    /* 3. Career Outcomes — chips style (consistent with Required Skills) */
+    +'<section class="sec">'
+      +'<div class="sec-header">'
+        +'<h2 class="sec-title">Career Outcomes</h2>'
+        +'<span class="sec-count">'+md.careers.length+'</span>'
       +'</div>'
-    +'</div>'
+      +buildChips(md.careers, false)
+    +'</section>'
 
-    /* Skills */
-    +'<div class="section-block">'
-      +'<div class="section-title">Required Skills</div>'
+    /* 4. Required Skills — grouped, scannable, overflow toggle */
+    +'<section class="sec">'
+      +'<h2 class="sec-title">Required Skills</h2>'
       +(csvSkills.length
-        ?'<div class="skills-group"><div class="skills-group-label">Recommended by Program</div>'
-          +'<div class="skills-chips">'+csvSkills.map(function(s){return '<span class="skill-chip">'+s+'</span>'}).join('')+'</div></div>'
+        ?'<div class="skill-group">'
+          +'<h3 class="skill-group-title">Recommended by Program</h3>'
+          +buildChips(csvSkills, false)
+        +'</div>'
         :'')
-      +'<div class="skills-group" style="margin-top:'+(csvSkills.length?'12px':'0')+'">'
-        +'<div class="skills-group-label">Core Competencies</div>'
-        +'<div class="skills-chips">'+md.coreSkills.map(function(s){return '<span class="skill-chip">'+s+'</span>'}).join('')+'</div>'
+      +'<div class="skill-group">'
+        +'<h3 class="skill-group-title">Core Competencies</h3>'
+        +buildChips(md.coreSkills, false)
       +'</div>'
-      +'<div class="skills-group" style="margin-top:12px">'
-        +'<div class="skills-group-label">Tools & Software</div>'
-        +'<div class="skills-chips">'+md.tools.map(function(s){return '<span class="tool-chip">'+s+'</span>'}).join('')+'</div>'
+      +'<div class="skill-group">'
+        +'<h3 class="skill-group-title">Tools &amp; Software</h3>'
+        +buildChips(md.tools, true)
       +'</div>'
-    +'</div>'
+    +'</section>'
 
-    /* Admission accordion — always 3 sections */
-    +'<div class="section-block">'
-      +'<div class="section-title">Admission Info</div>'
-      +'<div class="accordion" style="margin-top:12px">'+accHTML+'</div>'
-    +'</div>'
+    /* 5. Learning Path — accordion (admission/exams/language) */
+    +'<section class="sec">'
+      +'<h2 class="sec-title">Learning Path</h2>'
+      +'<p class="sec-sub">Admission requirements, exams, and language needs</p>'
+      +'<div class="accordion">'+accHTML2+'</div>'
+    +'</section>'
 
-    /* Universities */
-    +'<div class="section-block" style="margin-bottom:8px">'
-      +'<div class="section-title">Where to Study</div>'
-      +'<div class="section-sub">Top universities offering this specialization</div>'
+    /* 6. Where to study — universities */
+    +'<section class="sec sec-last">'
+      +'<div class="sec-header">'
+        +'<h2 class="sec-title">Where to Study</h2>'
+        +'<span class="sec-meta">'+(uniList?uniList.length:0)+' programs</span>'
+      +'</div>'
       +'<div id="uniListContainer"></div>'
-    +'</div>'
+    +'</section>'
   );
 
   renderUniCards();
+  /* Check whether Overview text actually overflows the 4-line clamp.
+     If it fits, hide the "Read more" button to avoid noise. */
+  requestAnimationFrame(autoHideOverviewToggle);
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1364,19 +1485,20 @@ document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('pageTitle').textContent = spec.name.length>22 ? spec.name.slice(0,20)+'…' : spec.name;
   document.title = spec.name+' — BeyonDegrees.ai';
 
-  /* Hero */
+  /* Hero — minimal aurora layer (subtle disc tint only, no fixed-dark
+     gradient — light mode CSS handles its own palette wave bg) */
   var hex6=color.slice(1);
   var r2=parseInt(hex6.slice(0,2),16),g2=parseInt(hex6.slice(2,4),16),b2=parseInt(hex6.slice(4,6),16);
   var ra='rgba('+r2+','+g2+','+b2;
   document.getElementById('heroAurora').style.background =
-    'radial-gradient(ellipse 110% 80% at 28% 40%,'+ra+',.58) 0%,'+ra+',.30) 45%,transparent 75%),'
-    +'radial-gradient(ellipse 90% 100% at 50% 100%,rgba(6,4,14,.85) 0%,transparent 70%),'
-    +'linear-gradient(160deg,rgba('+r2+','+g2+','+b2+',.22) 0%,#0a080e 40%,#060408 100%)';
-  document.getElementById('heroWaves').innerHTML = buildWavesSVG(color);
+    'radial-gradient(ellipse 90% 70% at 30% 35%,'+ra+',.42) 0%,'+ra+',.22) 45%,transparent 75%),'
+    +'linear-gradient(160deg,rgba('+r2+','+g2+','+b2+',.18) 0%,#0e0a18 50%,#06040c 100%)';
   document.getElementById('heroIcon').textContent      = spec.icon;
   document.getElementById('heroName').textContent      = spec.name;
   document.getElementById('heroParentTag').textContent = majorTitle;
   document.getElementById('heroSpecTag').textContent   = discIcon+' '+discTitle;
+  var heroTagBadge = document.getElementById('heroTagBadge');
+  if (heroTagBadge) heroTagBadge.textContent = spec.tag || 'Specialization';
 
   /* Fetch spec description CSV */
   var specKey_norm = normKey(spec.name);
