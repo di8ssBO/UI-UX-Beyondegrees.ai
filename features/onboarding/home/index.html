@@ -85,12 +85,13 @@ svg *, canvas, video, img { transition: none !important; }
 /* ── Progress Ring ──────────────────────────────── */
 .hero-ring-wrap {
   position: relative;
-  width: 76px;
-  height: 76px;
-  margin: 0 auto 10px;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 .hero-ring-svg {
   position: absolute;
@@ -105,7 +106,7 @@ svg *, canvas, video, img { transition: none !important; }
   transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), stroke .5s ease;
 }
 #heroEmoji {
-  font-size: 30px;
+  font-size: 24px;
   line-height: 1;
   position: relative;
   z-index: 1;
@@ -149,7 +150,7 @@ svg *, canvas, video, img { transition: none !important; }
 
         <!-- Header -->
         <header class="mobile-header">
-          <h1 class="mobile-logo">BeyonDegrees</h1>
+          <h1 class="mobile-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img">BeyonDegrees.ai</h1>
         </header>
 
         <!-- Hero Section -->
@@ -178,33 +179,33 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
         </section>
 
-        <!-- Disciplines Grid -->
+        <!-- Disciplines Grid — 6 official disciplines from majors-data.js -->
         <section class="disciplines-section">
           <h3 class="section-label-mobile">Choose 1 or more disciplines</h3>
           <div class="disciplines-grid">
-            <div class="discipline-card">
-              <div class="discipline-icon">💻</div>
-              <span>Computer Science</span>
+            <div class="discipline-card" data-disc="kt" data-disc-id="72" style="--disc:#7c3aed">
+              <div class="discipline-icon">⚙️</div>
+              <span>Engineering</span>
             </div>
-            <div class="discipline-card">
-              <div class="discipline-icon">⚕️</div>
-              <span>Medicine</span>
+            <div class="discipline-card" data-disc="yt" data-disc-id="73" style="--disc:#06d6a0">
+              <div class="discipline-icon">🩺</div>
+              <span>Medical</span>
             </div>
-            <div class="discipline-card">
-              <div class="discipline-icon">🎨</div>
-              <span>Design</span>
+            <div class="discipline-card" data-disc="tn" data-disc-id="71" style="--disc:#f43f5e">
+              <div class="discipline-icon">🔬</div>
+              <span>Natural Sci</span>
             </div>
-            <div class="discipline-card">
-              <div class="discipline-icon">📊</div>
-              <span>Business</span>
+            <div class="discipline-card" data-disc="nn" data-disc-id="74" style="--disc:#f59e0b">
+              <div class="discipline-icon">🌱</div>
+              <span>Agricultural</span>
             </div>
-            <div class="discipline-card">
-              <div class="discipline-icon">🏫</div>
-              <span>Education</span>
+            <div class="discipline-card" data-disc="xh" data-disc-id="75" style="--disc:#a855f7">
+              <div class="discipline-icon">🧠</div>
+              <span>Social Sci</span>
             </div>
-            <div class="discipline-card">
-              <div class="discipline-icon">🎭</div>
-              <span>Arts</span>
+            <div class="discipline-card" data-disc="nv" data-disc-id="76" style="--disc:#3b82f6">
+              <div class="discipline-icon">📜</div>
+              <span>Humanities</span>
             </div>
           </div>
         </section>
@@ -684,13 +685,13 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'You\'re on your way to finding your match',
             sub:   `Answered ${p} question${p>1?'s':''}. Pick up where you left off!` },
       10: { emoji: '🔥', tagline: 'Quiz Stage 1 complete!',
-            title: 'Your top discipline is revealed 🔥',
+            title: 'Your top discipline is revealed',
             sub:   'Keep going! 20 more questions to unlock your Major matches.' },
       20: { emoji: '⚡', tagline: 'Quiz Stage 2 complete!',
-            title: 'AI found your Major matches ⚡',
+            title: 'AI found your Major matches',
             sub:   '10 more questions to unlock your University matches.' },
       30: { emoji: '✨', tagline: 'Profile complete!',
-            title: 'Your academic identity is complete ✨',
+            title: 'Your academic identity is complete',
             sub:   'BeyonDegrees has found your perfect university matches.' },
     };
     const s = STATES[key];

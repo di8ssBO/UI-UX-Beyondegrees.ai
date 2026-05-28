@@ -30,8 +30,12 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 /* ── Header ───────────────────────────────────────────────────── */
 .ms-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:8px 20px 0;position:relative;z-index:2}
-.ms-logo{font-size:13px;font-weight:700;color:var(--text-primary)}
-.ms-logo span{color:var(--mint-500)}
+.ms-logo{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text-primary);line-height:1}
+.ms-logo .logo-text{display:inline-flex;align-items:baseline;gap:0;white-space:nowrap;letter-spacing:0}
+.ms-logo .logo-beyon{color:var(--text-primary)}
+.ms-logo .logo-accent{color:var(--mint-500)}
+.ms-logo .logo-img{height:20px;width:auto;display:block;flex-shrink:0;filter:drop-shadow(0 1px 3px rgba(124,58,237,0.25))}
+[data-theme="light"] .ms-logo .logo-img{filter:drop-shadow(0 1px 3px rgba(201,107,85,0.25))}
 .ms-search-btn{width:30px;height:30px;border-radius:8px;background:var(--bg-surface);
   border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;
   justify-content:center;cursor:pointer}
@@ -277,7 +281,8 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 
 /* Header */
 [data-theme="light"] .ms-logo { color:#2c1f14; }
-[data-theme="light"] .ms-logo span { color:#c96b55; } /* terracotta-600 brand */
+[data-theme="light"] .ms-logo .logo-beyon { color:#0d0a06; }
+[data-theme="light"] .ms-logo .logo-accent { color:#c96b55; } /* terracotta-600 brand */
 [data-theme="light"] .ms-search-btn {
   background:rgba(255,253,250,0.90) !important;
   -webkit-backdrop-filter: blur(18px) saturate(135%);

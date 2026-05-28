@@ -353,8 +353,14 @@
 }
 
 /* Header / logo */
+/* Dark mode — make black logo visible by brightening it to white */
+.logo-img { filter: brightness(0) saturate(100%) invert(1); }
+
 [data-theme="light"] .us-logo { color: #0d0a06 !important; font-weight: 800 !important; }
-[data-theme="light"] .us-logo span { color: #c96b55 !important; }   /* terracotta brand */
+[data-theme="light"] .us-logo .logo-beyon { color: #0d0a06 !important; }
+[data-theme="light"] .us-logo .logo-accent { color: #c96b55 !important; }   /* terracotta brand */
+/* Light mode — remove filter for logo */
+[data-theme="light"] .logo-img { filter: none; }
 [data-theme="light"] h1, [data-theme="light"] h2,
 [data-theme="light"] h3, [data-theme="light"] h4 { color: #0d0a06; }
 [data-theme="light"] p, [data-theme="light"] li { color: #1a1209; }
@@ -2700,7 +2706,7 @@ svg *, canvas, video, img { transition: none !important; }
         </div>
         <!-- Header -->
         <div class="us-hdr">
-          <div class="us-logo">Beyond<span>Degrees</span>.ai</div>
+          <div class="us-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
           <div style="width:30px;height:30px;border-radius:8px;background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </div>

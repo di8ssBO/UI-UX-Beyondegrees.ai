@@ -347,3 +347,168 @@
 }
 .btn-ghost.replay-btn:hover { color: var(--text-secondary); }
 
+/* ════════════════════════════════════════════════════════════════
+   LIGHT MODE — Wave SVG wallpaper + brand palette colors
+   (Terracotta · Dusty Blue · Warm Sage · Warm Sand)
+   ════════════════════════════════════════════════════════════════ */
+[data-theme="light"] body {
+  background: #06060f !important;
+  color: #f8fafc !important;
+}
+[data-theme="light"] .device-frame { border-color: #1a1a2e !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
+
+/* Wave SVG wallpaper on mobile screen (this page uses .mobile-screen) */
+[data-theme="light"] .mobile-screen,
+[data-theme="light"] .mobile-viewport {
+  background:
+    url("../../../shared/bg-light.svg") center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+
+/* Hide dark aurora/blobs in light mode (wave SVG takes over) */
+[data-theme="light"] .aurora-bg,
+[data-theme="light"] .aurora-bg .blob,
+[data-theme="light"] .blob,
+[data-theme="light"] .blob-1,
+[data-theme="light"] .blob-2,
+[data-theme="light"] .blob-3,
+[data-theme="light"] .blob-4,
+[data-theme="light"] .noise-overlay { display: none !important; }
+
+/* Story-bar progress — unified terracotta in light mode */
+[data-theme="light"] .story-bar-wrap .story-seg {
+  background: rgba(140,114,96,0.22) !important;
+  border: 1px solid rgba(140,114,96,0.18) !important;
+}
+[data-theme="light"] .story-bar-wrap .seg-fill {
+  background: linear-gradient(90deg, #e8917a 0%, #c96b55 50%, #a84e30 100%) !important;
+  box-shadow: 0 0 8px rgba(201,107,85,0.40) !important;
+}
+
+/* ── ORB — Terracotta primary + Sage accent (rings vibrant on cream) ── */
+[data-theme="light"] .ring-outer {
+  border-top-color: #c96b55 !important;          /* terra-600 solid */
+  border-right-color: rgba(201,107,85,0.30) !important;
+  border-bottom-color: rgba(201,107,85,0.55) !important;
+  border-left-color: rgba(201,107,85,0.18) !important;
+  filter: drop-shadow(0 0 8px rgba(201,107,85,0.45)) !important;
+}
+[data-theme="light"] .ring-mid {
+  border-top-color: #6a9690 !important;          /* sage-500 solid */
+  border-right-color: rgba(106,150,144,0.30) !important;
+  border-bottom-color: rgba(106,150,144,0.50) !important;
+  border-left-color: rgba(106,150,144,0.14) !important;
+  filter: drop-shadow(0 0 7px rgba(106,150,144,0.40)) !important;
+}
+
+/* Core orb — terracotta radial gradient (solid on cream) */
+[data-theme="light"] .orb-core {
+  background: radial-gradient(circle at 38% 35%,
+    #fceae4 0%,
+    #e8917a 35%,
+    #c96b55 65%,
+    #7d3720 100%
+  ) !important;
+  box-shadow:
+    0 0 0 1.5px rgba(201,107,85,0.45),
+    0 0 28px rgba(201,107,85,0.55),
+    0 0 64px rgba(201,107,85,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.50) !important;
+}
+[data-theme="light"] .orb-core { animation: orbPulseLight 3s ease-in-out infinite !important; }
+@keyframes orbPulseLight {
+  0%,100% {
+    box-shadow: 0 0 0 1.5px rgba(201,107,85,0.45), 0 0 28px rgba(201,107,85,0.55), 0 0 64px rgba(201,107,85,0.30), inset 0 1px 0 rgba(255,255,255,0.50);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 1.5px rgba(201,107,85,0.65), 0 0 42px rgba(201,107,85,0.78), 0 0 90px rgba(201,107,85,0.45), inset 0 1px 0 rgba(255,255,255,0.55);
+    transform: scale(1.05);
+  }
+}
+
+/* Orbiting particles — palette colors instead of violet/mint */
+[data-theme="light"] .particle.p-kt { background: #c96b55 !important; box-shadow: 0 0 10px rgba(201,107,85,0.85), 0 0 20px rgba(201,107,85,0.40) !important; }
+[data-theme="light"] .particle.p-yt { background: #6a9690 !important; box-shadow: 0 0 10px rgba(106,150,144,0.85), 0 0 20px rgba(106,150,144,0.40) !important; }
+[data-theme="light"] .particle.p-nv { background: #4a87a8 !important; box-shadow: 0 0 10px rgba(74,135,168,0.85), 0 0 20px rgba(74,135,168,0.40) !important; }
+[data-theme="light"] .particle.p-nn { background: #d9a040 !important; box-shadow: 0 0 10px rgba(217,160,64,0.85), 0 0 20px rgba(217,160,64,0.40) !important; }
+[data-theme="light"] .particle.p-xh { background: #a84e30 !important; box-shadow: 0 0 10px rgba(168,78,48,0.85), 0 0 20px rgba(168,78,48,0.40) !important; }
+[data-theme="light"] .particle.p-tn { background: #c45540 !important; box-shadow: 0 0 10px rgba(196,85,64,0.85), 0 0 20px rgba(196,85,64,0.40) !important; }
+
+/* ── Phase text ── */
+[data-theme="light"] .phase-label { color: #a84e30 !important; }    /* terra-700 */
+[data-theme="light"] .phase-title { color: #2c1f14 !important; font-weight: 900 !important; }
+
+/* ── Meta chips ── */
+[data-theme="light"] .countdown-chip {
+  background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
+  border: 1px solid rgba(201,107,85,0.50) !important;
+  color: #a84e30 !important;
+}
+[data-theme="light"] .cd-dot { background: #c96b55 !important; }
+[data-theme="light"] .questions-chip {
+  background: linear-gradient(135deg, rgba(168,200,196,0.30) 0%, rgba(106,150,144,0.32) 100%) !important;
+  border: 1px solid rgba(106,150,144,0.50) !important;
+  color: #3a5c56 !important;
+}
+
+/* ── DNA discipline bars ── */
+[data-theme="light"] .dna-heading { color: #6b5440 !important; font-weight: 900 !important; }
+[data-theme="light"] .dna-name { color: #2c1f14 !important; font-weight: 700 !important; }
+[data-theme="light"] .dna-track {
+  background: rgba(140,114,96,0.18) !important;
+  border: 1px solid rgba(140,114,96,0.18) !important;
+}
+[data-theme="light"] .dna-pct { color: #2c1f14 !important; font-weight: 800 !important; }
+/* Recolor dna fills to brand palette */
+[data-theme="light"] .dna-kt { background: linear-gradient(90deg, #c96b55, #e8917a) !important; }  /* Terra */
+[data-theme="light"] .dna-yt { background: linear-gradient(90deg, #3a5c56, #6a9690) !important; }  /* Sage */
+[data-theme="light"] .dna-nv { background: linear-gradient(90deg, #2f6a8c, #4a87a8) !important; }  /* Blue */
+[data-theme="light"] .dna-nn { background: linear-gradient(90deg, #d9a040, #f2c674) !important; }  /* Amber */
+[data-theme="light"] .dna-xh { background: linear-gradient(90deg, #a84e30, #c96b55) !important; }  /* Terra-deep */
+[data-theme="light"] .dna-tn { background: linear-gradient(90deg, #c45540, #d97a66) !important; }  /* Coral */
+
+/* ── Fun fact carousel ── */
+[data-theme="light"] .ff-badge { color: #b87916 !important; }       /* warning amber-700 */
+[data-theme="light"] .ff-text { color: #2c1f14 !important; font-weight: 500 !important; }
+[data-theme="light"] .ff-dot { background: rgba(140,114,96,0.30) !important; }
+[data-theme="light"] .ff-dot.active { background: #c96b55 !important; }
+
+/* ── Milestone toast — cream surface w/ terra accent ── */
+[data-theme="light"] .milestone-toast {
+  background: rgba(255,255,255,0.95) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1.5px solid rgba(201,107,85,0.40) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.85),
+    0 8px 32px rgba(201,107,85,0.18),
+    0 0 24px rgba(201,107,85,0.12) !important;
+}
+[data-theme="light"] .ms-title { color: #2c1f14 !important; font-weight: 900 !important; }
+[data-theme="light"] .ms-sub { color: #6b5440 !important; }
+
+/* ── Ready overlay — cream w/ frosted blur ── */
+[data-theme="light"] .ready-overlay {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%, rgba(232,145,122,0.30) 0%, transparent 65%),
+    rgba(253,248,242,0.95) !important;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+[data-theme="light"] .ready-title {
+  background: linear-gradient(135deg, #c96b55 0%, #4a87a8 50%, #6a9690 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+[data-theme="light"] .ready-sub { color: #5c4535 !important; }
+
+/* ── Replay button ghost ── */
+[data-theme="light"] .btn-ghost.replay-btn { color: #6b5440 !important; }
+[data-theme="light"] .btn-ghost.replay-btn:hover { color: #a84e30 !important; }
+

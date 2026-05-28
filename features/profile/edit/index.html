@@ -27,7 +27,16 @@ body { background: #06060f; }
   scrollbar-width: none;
 }
 .mobile-viewport::-webkit-scrollbar { display: none; }
-[data-theme="light"] .mobile-viewport { background: #FFF8EB; }
+[data-theme="light"] .mobile-viewport {
+  background:
+    url("../../../shared/bg-light.svg") center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+[data-theme="light"] .device-frame { border-color: #1a1a2e !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
 
 /* Top bar */
 .top-bar {
@@ -77,11 +86,31 @@ body { background: #06060f; }
 .archetype-chip {
   display: inline-flex; align-items: center; gap: 6px;
   font-size: 12px; color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 .archetype-chip a {
   color: #1863DC; font-weight: 600; text-decoration: none;
 }
 .archetype-chip a:hover { text-decoration: underline; }
+/* Neutralise layout.css global [class*="chip"] blue box — 9-not chain
+   to beat (0,9,0) specificity. archetype-chip is a label row, not pill. */
+.archetype-chip:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i),
+[data-theme="light"] .archetype-chip:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: #6b5440 !important;
+}
+[data-theme="light"] .archetype-chip a {
+  color: #a84e30 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .archetype-chip a:hover { color: #7d3720 !important; }
 
 /* Form card */
 .form-card {
@@ -120,8 +149,22 @@ body { background: #06060f; }
   padding: 0;
 }
 .field-input::placeholder { color: var(--text-muted); opacity: 0.7; }
-[data-theme="light"] .field-input { color: #1A1A2E; }
-[data-theme="light"] .field-input::placeholder { color: #808285; }
+/* Neutralise layout.css global input box paint —
+   field-input sits inside .form-card (which provides bg + border),
+   so the input itself must be transparent. 9-not chain to beat
+   global [data-theme="light"] input { ... } cream box. */
+[data-theme="light"] input.field-input,
+[data-theme="light"] textarea.field-input,
+[data-theme="light"] .field-input:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #2c1f14 !important;
+  padding: 0 !important;
+}
+[data-theme="light"] .field-input::placeholder { color: #8c7260 !important; opacity: 0.85 !important; }
+[data-theme="light"] .field-input:focus { box-shadow: none !important; outline: none !important; }
 
 .field-input-wrap {
   display: flex; align-items: center; gap: 8px;

@@ -41,153 +41,22 @@
   --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
 }
 
-/* Light-mode token overrides live in design-system/tokens.css */
+/* Light-mode palette + component rules live in ./style.css
+   (Wave SVG wallpaper + Terracotta/Blue/Sage/Sand palette) */
 
-/* ── LIGHT MODE: body & global overrides ── */
+/* ── LIGHT MODE: body stays DARK (outside frame) ── */
 [data-theme="light"] body {
   background: #06060f !important;
   color: #f8fafc !important;
 }
+[data-theme="light"] .breadcrumb-item { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
 
-/* Hardcoded violet rgba chips → blue */
-[data-theme="light"] [style*="rgba(124, 58, 237"],
-[data-theme="light"] [style*="rgba(124,58,237"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
-}
-
-/* Cards → white glass */
-[data-theme="light"] .card,
-[data-theme="light"] [class*="card"],
-[data-theme="light"] .quiz-card,
-[data-theme="light"] .result-card,
-[data-theme="light"] .discipline-card,
-[data-theme="light"] .major-card,
-[data-theme="light"] .uni-card,
-[data-theme="light"] .option-card,
-[data-theme="light"] .stat-card,
-[data-theme="light"] .info-card,
-[data-theme="light"] .feature-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(24, 99, 220, 0.15) !important;
-  box-shadow: 0 4px 24px rgba(24, 99, 220, 0.10) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .card:hover,
-[data-theme="light"] [class*="card"]:hover {
-  border-color: rgba(24, 99, 220, 0.35) !important;
-  box-shadow: 0 12px 40px rgba(24, 99, 220, 0.18) !important;
-}
-
-/* Nav / header / tab-bar */
-[data-theme="light"] nav,
-[data-theme="light"] header,
-[data-theme="light"] .nav-bar,
-[data-theme="light"] .tab-bar,
-[data-theme="light"] .top-nav,
-[data-theme="light"] .header {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border-color: rgba(24, 99, 220, 0.12) !important;
-  box-shadow: 0 2px 16px rgba(24, 99, 220, 0.08) !important;
-}
-
-/* Tab items / nav links */
-[data-theme="light"] .tab-item,
-[data-theme="light"] .nav-link,
-[data-theme="light"] .nav-item {
-  color: #808285 !important;
-}
-[data-theme="light"] .tab-item.active,
-[data-theme="light"] .nav-link.active,
-[data-theme="light"] .tab-item:hover {
-  color: #1863DC !important;
-}
-
-/* Chips & tags */
-[data-theme="light"] .chip,
-[data-theme="light"] [class*="chip"],
-[data-theme="light"] [class*="tag"],
-[data-theme="light"] .badge {
-  background: rgba(24, 99, 220, 0.10) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] [class*="chip-mint"],
-[data-theme="light"] [class*="tag-mint"],
-[data-theme="light"] [class*="chip-success"] {
-  background: rgba(5, 150, 105, 0.12) !important;
-  border-color: rgba(5, 150, 105, 0.30) !important;
-  color: #059669 !important;
-}
-
-/* Dividers */
-[data-theme="light"] .divider,
-[data-theme="light"] hr {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Inputs */
-[data-theme="light"] input,
-[data-theme="light"] textarea,
-[data-theme="light"] .input {
-  background: #FFFFFF !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] input::placeholder,
-[data-theme="light"] textarea::placeholder {
-  color: #A0A0B0 !important;
-}
-[data-theme="light"] input:focus,
-[data-theme="light"] textarea:focus {
-  border-color: #1863DC !important;
-  box-shadow: 0 0 0 3px rgba(24,99,220,0.15) !important;
-}
-
-/* Buttons: primary stays blue, ghost adapts */
-[data-theme="light"] .btn-ghost,
-[data-theme="light"] [class*="btn-ghost"] {
-  background: rgba(24, 99, 220, 0.08) !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] .btn-ghost:hover {
-  background: rgba(24, 99, 220, 0.14) !important;
-}
-
-/* Background orbs — soften for light mode */
-[data-theme="light"] .bg-orb,
-[data-theme="light"] [class*="orb"] {
-  opacity: 0.35 !important;
-}
-
-/* Progress bars */
-[data-theme="light"] .progress,
-[data-theme="light"] [class*="progress-track"],
-[data-theme="light"] [class*="progress-bg"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Breadcrumb */
-[data-theme="light"] .breadcrumb-item { color: #808285 !important; }
-[data-theme="light"] .breadcrumb-item:hover,
-[data-theme="light"] .breadcrumb-item.active { color: #1863DC !important; }
-
-/* Text elements that may be hardcoded white */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4 {
-  color: #1A1A2E;
-}
-[data-theme="light"] p,
-[data-theme="light"] li,
-[data-theme="light"] label,
-[data-theme="light"] td,
-[data-theme="light"] th {
-  color: #3A3A4A;
-}
+/* Text element fallbacks (only when no specific component rule applies) */
+[data-theme="light"] .loading-body h1,
+[data-theme="light"] .loading-body h2,
+[data-theme="light"] .loading-body h3,
+[data-theme="light"] .loading-body h4 { color: #2c1f14; }
 
 /* ── TRANSITION: smooth theme switch ── */
 *, *::before, *::after {
