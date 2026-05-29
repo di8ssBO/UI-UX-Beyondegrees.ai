@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
 <title>University Matches — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -2672,7 +2673,7 @@ svg *, canvas, video, img { transition: none !important; }
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(124,58,237,.40);
+  box-shadow: 0 4px 14px rgba(24,99,220,.40);
   transition: background .15s, color .15s, box-shadow .15s;
 }
 .lock-cta.cta-continue {
@@ -2731,8 +2732,8 @@ svg *, canvas, video, img { transition: none !important; }
             </div>
             <div class="us-hero-ov"></div>
             <div class="us-hero-txt">
-              <div class="us-hl">Best Universities<br>For You</div>
-              <div class="us-sub2">Top institutions matching your academic profile,<br>curated by our advanced matching engine.</div>
+              <div class="us-hl" data-i18n="uni.headline">Best Universities<br>For You</div>
+              <div class="us-sub2" data-i18n="uni.subtext">Top institutions matching your academic profile,<br>curated by our advanced matching engine.</div>
             </div>
           </div>
 
@@ -2743,29 +2744,29 @@ svg *, canvas, video, img { transition: none !important; }
               <span class="search-icon">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
               </span>
-              <input type="text" id="uniSearch" class="search-input" placeholder="Search universities...">
+              <input type="text" id="uniSearch" class="search-input" placeholder="Search universities..." data-i18n-placeholder="uni.search_placeholder">
             </div>
 
             <!-- Toolbar: Filter sheet trigger + sort + view toggle -->
             <div class="toolbar-row">
               <button class="filter-btn" id="filterBtn" onclick="openFilterSheet()">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                Filters
+                <span data-i18n="uni.filter.title">Filters</span>
                 <span class="filter-badge" id="filterBadge"></span>
               </button>
               <select id="sortBy" class="fselect" style="flex:1;min-width:0">
-                <option value="match">↓ Best Match</option>
-                <option value="diverse">⚡ Diverse Mix</option>
-                <option value="employment">↓ Employment</option>
-                <option value="alpha">↓ A → Z</option>
+                <option value="match" data-i18n="uni.sort.best_match">↓ Best Match</option>
+                <option value="diverse" data-i18n="uni.sort.diverse">⚡ Diverse Mix</option>
+                <option value="employment" data-i18n="uni.sort.employment">↓ Employment</option>
+                <option value="alpha" data-i18n="uni.sort.alpha">↓ A → Z</option>
               </select>
             </div>
 
             <!-- Results bar -->
             <div class="results-bar">
-              <span class="results-count" id="resultsCount">— universities</span>
+              <span class="results-count" id="resultsCount" data-i18n="uni.results">— universities</span>
               <button class="saved-toggle" id="savedToggle">
-                🤍 Saved <span class="saved-badge" id="savedCount">0</span>
+                <span data-i18n="uni.saved">🤍 Saved</span> <span class="saved-badge" id="savedCount">0</span>
               </button>
             </div>
 
@@ -2780,25 +2781,25 @@ svg *, canvas, video, img { transition: none !important; }
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/></svg>
               </span>
-              <span class="tab-label">About me</span>
+              <span class="tab-label" data-i18n="nav.about_me">About me</span>
             </a>
             <a href="../../discipline/match/" class="tab-item" data-tab="t2">
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
               </span>
-              <span class="tab-label">Disciplines</span>
+              <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
             </a>
-            <a href="../../major/recommendations-v2/" class="tab-item" data-tab="t3">
+            <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               </span>
-              <span class="tab-label">Majors</span>
+              <span class="tab-label" data-i18n="nav.majors">Majors</span>
             </a>
             <a href="../../university/matches/" class="tab-item active" data-tab="t4">
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
               </span>
-              <span class="tab-label">Universities</span>
+              <span class="tab-label" data-i18n="nav.universities">Universities</span>
             </a>
             <a href="../../profile/overview/" class="tab-item" data-tab="t5">
               <span class="tab-icon">
@@ -2814,48 +2815,48 @@ svg *, canvas, video, img { transition: none !important; }
         <div class="fs-panel">
           <div class="fs-handle"></div>
           <div class="fs-header">
-            <div class="fs-title">Filters</div>
-            <button class="fs-clear-btn" onclick="clearFsDraft()">Clear all</button>
+            <div class="fs-title" data-i18n="uni.filter.title">Filters</div>
+            <button class="fs-clear-btn" onclick="clearFsDraft()" data-i18n="uni.filter.clear_all">Clear all</button>
           </div>
           <div class="fs-body">
             <!-- 1. Region (continent-level) -->
             <div class="fs-section">
-              <div class="fs-section-title">Region</div>
+              <div class="fs-section-title" data-i18n="uni.filter.region">Region</div>
               <div id="fsRegionList"></div>
             </div>
             <!-- 2. Country (filtered by selected regions) -->
             <div class="fs-section">
-              <div class="fs-section-title" id="fsCountryTitle">Country</div>
-              <input type="text" class="fs-search" id="fsSearch" placeholder="Search country…" oninput="buildFsCountries(this.value)">
+              <div class="fs-section-title" id="fsCountryTitle" data-i18n="uni.filter.country">Country</div>
+              <input type="text" class="fs-search" id="fsSearch" placeholder="Search country…" data-i18n-placeholder="uni.filter.search_country" oninput="buildFsCountries(this.value)">
               <div class="fs-country-list" id="fsCountryList"></div>
             </div>
             <!-- 3. Financial Aid -->
             <div class="fs-section">
-              <div class="fs-section-title">Financial Aid</div>
+              <div class="fs-section-title" data-i18n="uni.filter.aid">Financial Aid</div>
               <div id="fsAidList"></div>
             </div>
           </div>
           <div class="fs-footer">
-            <button class="fs-cancel-btn" onclick="closeFilterSheet()">Cancel</button>
-            <button class="fs-apply-btn" id="fsApplyBtn" onclick="applyFilterSheet()">Show Results</button>
+            <button class="fs-cancel-btn" onclick="closeFilterSheet()" data-i18n="uni.filter.cancel">Cancel</button>
+            <button class="fs-apply-btn" id="fsApplyBtn" onclick="applyFilterSheet()" data-i18n="uni.filter.show">Show Results</button>
           </div>
         </div>
       </div>
 
       <!-- ░░ COMPARE BAR — floats above tab nav ░░ -->
       <div id="compareBar" class="compare-bar">
-        <span class="cb-label">Compare</span>
+        <span class="cb-label" data-i18n="uni.compare">Compare</span>
         <div class="cb-chips" id="cbChips"></div>
-        <button class="cb-compare-btn" id="cbCompareBtn" onclick="openCompare()">Compare →</button>
+        <button class="cb-compare-btn" id="cbCompareBtn" onclick="openCompare()" data-i18n="uni.compare_btn">Compare →</button>
         <button class="cb-clear-btn" onclick="clearCompare()" title="Clear">✕</button>
       </div>
 
       <!-- ░░ COMPARE OVERLAY — slides up from bottom ░░ -->
       <div id="compareOverlay" class="compare-overlay">
         <div class="co-header">
-          <button class="co-back-btn" onclick="closeCompare()">← Back</button>
-          <div class="co-title">Compare Universities</div>
-          <button class="co-clear-btn" onclick="clearCompare();closeCompare()">Clear all</button>
+          <button class="co-back-btn" onclick="closeCompare()" data-i18n="uni.compare_back">← Back</button>
+          <div class="co-title" data-i18n="uni.compare_title">Compare Universities</div>
+          <button class="co-clear-btn" onclick="clearCompare();closeCompare()" data-i18n="uni.compare_clear">Clear all</button>
         </div>
         <div id="compareContent" class="co-content"></div>
       </div>
@@ -2865,6 +2866,8 @@ svg *, canvas, video, img { transition: none !important; }
 </div><!-- end desktop-container -->
 
 <script>
+const t = k => window.BDi18n ? BDi18n.t(k) : k;
+
 /* ══════════════════════════════════════════════════════════
    UNIVERSITY DATA  (mock / UI showcase — 28 universities)
    Asia:     Vietnam ×4, Japan, South Korea, China, Singapore, Thailand, India ×2
@@ -3476,7 +3479,7 @@ function renderCard(u) {
         + '<button class="uc-compare-btn' + (isCompare ? ' active' : '') + '" onclick="toggleCompare(\'' + u.id + '\')">'
           + (isCompare ? '☑ Added' : '⊕ Compare')
         + '</button>'
-        + '<a class="uc-cta-btn" style="flex:1.3;text-align:center;text-decoration:none" href="../detail/index.html?id=' + u.id + '">View Program →</a>'
+        + '<a class="uc-cta-btn" style="flex:1.3;text-align:center;text-decoration:none" href="../detail/index.html?id=' + u.id + '" data-i18n="uni.cta.view_program">' + t('uni.cta.view_program') + '</a>'
       + '</div>'
 
     + '</div>'/* end uc-body */
@@ -3535,13 +3538,13 @@ function render() {
   var countEl = document.getElementById('resultsCount');
   var total   = list.length;
 
-  if (countEl) countEl.textContent = total + (total === 1 ? ' university' : ' universities');
+  if (countEl) countEl.textContent = total + (total === 1 ? t('uni.count.singular') : t('uni.count.plural'));
 
   if (total === 0) {
     listEl.innerHTML = '<div class="empty-state"><div class="empty-icon">'
       + (_state.showSaved ? '💾' : '🔍')
       + '</div><div>'
-      + (_state.showSaved ? 'No saved universities yet.<br>Tap 🤍 on any card to save.' : 'No universities match your filters.')
+      + (_state.showSaved ? t('uni.no_saved') + '<br>' + t('uni.no_saved_hint') : t('uni.no_match'))
       + '</div></div>';
     return;
   }
@@ -3557,7 +3560,7 @@ function render() {
     var showN = Math.min(remaining, PAGE_SIZE);
     html += '<div class="load-more-wrap">'
       + '<button class="load-more-btn" onclick="loadMore()">'
-      + 'Show ' + showN + ' more <span style="opacity:.55;font-weight:500">(' + remaining + ' left)</span>'
+      + t('uni.load_more').replace('{n}', showN) + ' <span style="opacity:.55;font-weight:500">(' + remaining + ' left)</span>'
       + '</button></div>';
   }
 
@@ -3641,7 +3644,7 @@ function updateFsApplyBtn() {
   _state.regions   = saved.regions;
   _state.countries = saved.countries;
   _state.aid       = saved.aid;
-  btn.textContent = 'Show ' + n + ' Result' + (n !== 1 ? 's' : '');
+  btn.textContent = (n !== 1 ? t('uni.filter.show_n_plural') : t('uni.filter.show_n')).replace('{n}', n);
 }
 
 /* ── Region checkboxes ── */
@@ -3668,8 +3671,8 @@ function buildFsRegions() {
   var titleEl = document.getElementById('fsCountryTitle');
   if (titleEl) {
     titleEl.textContent = _fsDraft.regions.length > 0
-      ? 'Country (within selected regions)'
-      : 'Country';
+      ? t('uni.filter.country_scoped')
+      : t('uni.filter.country');
   }
 }
 
@@ -3713,7 +3716,7 @@ function buildFsCountries(q) {
       + '</span>'
       + '</div>';
   }
-  el.innerHTML = html || '<div style="font-size:11px;color:var(--text-muted);padding:6px 0">No countries found</div>';
+  el.innerHTML = html || '<div style="font-size:11px;color:var(--text-muted);padding:6px 0">' + t('uni.country.none') + '</div>';
 }
 
 function toggleFsCountry(c) {
@@ -3841,7 +3844,7 @@ function renderCompareContent() {
   }
   if (!unis.length) {
     document.getElementById('compareContent').innerHTML =
-      '<div class="bento-empty">Select universities from cards to compare.</div>';
+      '<div class="bento-empty">' + t('uni.compare_empty') + '</div>';
     return;
   }
 
@@ -3872,27 +3875,27 @@ function renderCompareContent() {
      [Students — Sage · full width] */
   var html = '<div class="bento-grid">'
     + tile({
-        kind:'terra', large:true, icon:'🎯', label:'Match Score',
+        kind:'terra', large:true, icon:'🎯', label:t('uni.compare.match_score'),
         fn:function(u){ return { val:(_locked?'??':u.match+'%'), best:!_locked && u.match===bestMatch }; }
       })
     + tile({
-        kind:'blue', icon:'🏅', label:'Ranking',
+        kind:'blue', icon:'🏅', label:t('uni.compare.ranking'),
         fn:function(u){ return { val:u.ranking, best:false }; }
       })
     + tile({
-        kind:'sage', icon:'💼', label:'Employment',
+        kind:'sage', icon:'💼', label:t('uni.compare.employment'),
         fn:function(u){ return { val:u.employment, best:parseFloat(u.employment)===bestEmp }; }
       })
     + tile({
-        kind:'sand', icon:'💰', label:'Tuition',
+        kind:'sand', icon:'💰', label:t('uni.compare.tuition'),
         fn:function(u){ return { val:u.tuition, best:false }; }
       })
     + tile({
-        kind:'terra', icon:'🎁', label:'Financial Aid',
+        kind:'terra', icon:'🎁', label:t('uni.compare.financial_aid'),
         fn:function(u){ return { val:u.aid, best:false }; }
       })
     + tile({
-        kind:'blue', wide:true, icon:'👥', label:'Students',
+        kind:'blue', wide:true, icon:'👥', label:t('uni.compare.students'),
         fn:function(u){ return { val:(u.students || '—'), best:false }; }
       })
     + '</div>';
@@ -3909,7 +3912,7 @@ renderCompareContent = function() {
 
   var content = document.getElementById('compareContent');
   if (!unis.length) {
-    content.innerHTML = '<div class="vc-empty">Select universities from cards to compare.</div>';
+    content.innerHTML = '<div class="vc-empty">' + t('uni.compare_empty') + '</div>';
     return;
   }
 
@@ -3965,27 +3968,27 @@ renderCompareContent = function() {
   }
   html += '</div>'
     + section({
-        kind:'terra', icon:'&#127919;', label:'Match Score', sub:'Highest fit based on your quiz signal.',
+        kind:'terra', icon:'&#127919;', label:t('uni.compare.match_score'), sub:t('uni.compare.match_score.sub'),
         fn:function(u){ return { val:(_locked ? '??' : u.match + '%'), best:!_locked && u.match === bestMatch, match:true }; }
       })
     + section({
-        kind:'blue', icon:'&#127941;', label:'Ranking', sub:'Published rank or local positioning.',
+        kind:'blue', icon:'&#127941;', label:t('uni.compare.ranking'), sub:t('uni.compare.ranking.sub'),
         fn:function(u){ return { val:u.ranking || 'N/A', best:false }; }
       })
     + section({
-        kind:'sage', icon:'&#128188;', label:'Employment', sub:'Graduate employment outcome.',
+        kind:'sage', icon:'&#128188;', label:t('uni.compare.employment'), sub:t('uni.compare.employment.sub'),
         fn:function(u){ return { val:u.employment || 'N/A', best:parseFloat(u.employment) === bestEmp }; }
       })
     + section({
-        kind:'sand', icon:'&#128176;', label:'Tuition', sub:'Estimated annual study cost.',
+        kind:'sand', icon:'&#128176;', label:t('uni.compare.tuition'), sub:t('uni.compare.tuition.sub'),
         fn:function(u){ return { val:u.tuition || 'N/A', best:false }; }
       })
     + section({
-        kind:'terra', icon:'&#127873;', label:'Financial Aid', sub:'Scholarship or need-based aid signal.',
+        kind:'terra', icon:'&#127873;', label:t('uni.compare.financial_aid'), sub:t('uni.compare.financial_aid.sub'),
         fn:function(u){ return { val:u.aid || 'N/A', best:false }; }
       })
     + section({
-        kind:'blue', icon:'&#128101;', label:'Students', sub:'Approximate student body size.',
+        kind:'blue', icon:'&#128101;', label:t('uni.compare.students'), sub:t('uni.compare.students.sub'),
         fn:function(u){ return { val:u.students || 'N/A', best:false }; }
       })
     + '</div>';
@@ -4003,7 +4006,7 @@ function checkLock() {
 
   var remaining   = 30 - progress;
   var isContinue  = progress > 0;
-  var label       = isContinue ? 'Continue Quiz' : 'Start Quiz';
+  var label       = isContinue ? t('disc.cta.continue') : t('disc.cta.start');
   /* Continue Quiz → mint-500 (btn-success); Start Quiz → violet-600 (btn-primary) */
   var ctaClass    = 'lock-cta' + (isContinue ? ' cta-continue' : '');
 
@@ -4014,9 +4017,9 @@ function checkLock() {
   banner.className = 'lock-banner';
   banner.innerHTML =
       '<div class="lock-icon">🔒</div>'
-    + '<div class="lock-title">University Matches Locked</div>'
-    + '<div class="lock-body">Complete <strong>' + remaining + ' more questions</strong> to unlock your best-fit universities.</div>'
-    + '<button class="' + ctaClass + '" id="uniQuizCta">' + label + ' →</button>';
+    + '<div class="lock-title" data-i18n="uni.lock_title">' + t('uni.lock_title') + '</div>'
+    + '<div class="lock-body">' + t('uni.lock_body').replace('{n}', remaining) + '</div>'
+    + '<button class="' + ctaClass + '" id="uniQuizCta">' + label + '</button>';
   /* Insert banner at top of content (ai-chip removed) */
   content.insertBefore(banner, content.firstChild);
 
@@ -4094,5 +4097,6 @@ document.getElementById('savedToggle').addEventListener('click', function() {
 })();
 
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

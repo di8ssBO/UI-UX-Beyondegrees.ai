@@ -44,7 +44,7 @@
 
 .blob-1 {
   width: 300px; height: 300px; top: -60px; left: -80px;
-  background: radial-gradient(circle, rgba(124,58,237,0.7), transparent 70%);
+  background: radial-gradient(circle, rgba(24,99,220,0.7), transparent 70%);
   filter: blur(55px);
   animation: blobDrift1 38s ease-in-out infinite;
 }
@@ -62,7 +62,7 @@
 }
 .blob-4 {
   width: 180px; height: 180px; bottom: 8%; right: 5%;
-  background: radial-gradient(circle, rgba(124,58,237,0.3), transparent 70%);
+  background: radial-gradient(circle, rgba(24,99,220,0.3), transparent 70%);
   filter: blur(40px);
   animation: blobDrift4 52s ease-in-out infinite;
 }

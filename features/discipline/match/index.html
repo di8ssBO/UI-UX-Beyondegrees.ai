@@ -4,6 +4,7 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Discipline Match — BeyonDegrees.ai</title>
 <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+<script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +23,7 @@
 }
 .cst-caption {
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(255,255,255,0.4);
   padding: 8px 12px 10px;
   font-style: italic;
@@ -41,7 +42,7 @@
   border: 1px solid rgba(255,255,255,0.12);
   border-radius: 20px;
   padding: 7px 16px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   font-family: 'Plus Jakarta Sans', sans-serif;
   pointer-events: none;
@@ -126,66 +127,66 @@
           <div class="cst-sky-wrap">
             <div id="cstContainer"></div>
           </div>
-          <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your Academic DNA ✨</p>
+          <p class="cst-caption" id="cstCaption" data-i18n="disc.caption">Complete the quiz to reveal your Academic DNA ✨</p>
         </div>
-        <div class="ds-hl">Your Perfect<br><span class="ac">Disciplines</span></div>
-        <p class="ds-sub">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
+        <div class="ds-hl"><span data-i18n="disc.headline">Your Perfect</span><br><span class="ac" data-i18n="disc.headline_em">Disciplines</span></div>
+        <p class="ds-sub" data-i18n="disc.subtext">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
         <!-- Lock banner — hiện khi quizProgress < 10 -->
         <div id="discLockedBanner" style="display:none;margin:0 0 16px;padding:20px 16px;background:rgba(24,99,220,.1);border:1px solid rgba(24,99,220,.3);border-radius:16px;text-align:center;flex-direction:column;align-items:center;gap:10px">
           <div style="font-size:28px">🔒</div>
-          <div style="font-size:15px;font-weight:800;color:var(--text-primary)">Discipline Match Locked</div>
-          <div id="discLockSubText" style="font-size:12px;color:var(--text-muted);line-height:1.5">Complete <strong style="color:var(--text-primary)">10 questions</strong> to unlock your Discipline results.</div>
-          <button id="discLockCta" style="margin-top:4px;padding:12px 24px;background:var(--violet-600);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(124,58,237,.4);transition:background .15s,box-shadow .15s">Start Quiz &#8594;</button>
+          <div style="font-size:15px;font-weight:800;color:var(--text-primary)" data-i18n="disc.lock_title">Discipline Match Locked</div>
+          <div id="discLockSubText" style="font-size:12px;color:var(--text-muted);line-height:1.5" data-i18n="disc.lock_sub">Complete 10 questions to unlock your Discipline results.</div>
+          <button id="discLockCta" style="margin-top:4px;padding:12px 24px;background:var(--violet-600);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(24,99,220,.4);transition:background .15s,box-shadow .15s" data-i18n="disc.cta.start">Start Quiz →</button>
         </div>
         <!-- Cards wrapper — blurred when locked -->
         <div id="discCardsWrap">
         <!-- Card 1 -->
         <div class="dc dc-kt"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#9881;&#65039;</div><div><div class="dc-name">Engineering &amp; Technology</div><div class="dc-rank">#1 Ranked</div></div></div>
-          <div style="text-align:right"><div class="dc-pct">94%</div><div class="dc-plbl">Match</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#9881;&#65039;</div><div><div class="dc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="dc-rank">#1 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">94%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:94%"></div></div>
-          <p class="dc-desc">You possess strong analytical reasoning and a natural inclination toward systematic problem-solving and science innovation.</p>
-          <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
+          <p class="dc-desc" data-i18n="disc.desc.kt">You possess strong analytical reasoning and a natural inclination toward systematic problem-solving and science innovation.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
         </div>
         <!-- Card 2 -->
         <div class="dc dc-tn"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128300;</div><div><div class="dc-name">Natural Sciences</div><div class="dc-rank">#2 Ranked</div></div></div>
-          <div style="text-align:right"><div class="dc-pct">89%</div><div class="dc-plbl">Match</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128300;</div><div><div class="dc-name" data-i18n="disc.name.tn">Natural Sciences</div><div class="dc-rank">#2 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">89%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:89%"></div></div>
-          <p class="dc-desc">Your curiosity about the physical world and mathematical approach to observation align with life and physical science paths.</p>
-          <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
+          <p class="dc-desc" data-i18n="disc.desc.tn">Your curiosity about the physical world and mathematical approach to observation align with life and physical science paths.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
         </div>
         <!-- Card 3 -->
         <div class="dc dc-yt"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129658;</div><div><div class="dc-name">Medical &amp; Health Sciences</div><div class="dc-rank">#3 Ranked</div></div></div>
-          <div style="text-align:right"><div class="dc-pct">64%</div><div class="dc-plbl">Match</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129658;</div><div><div class="dc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="dc-rank">#3 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">64%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:64%"></div></div>
-          <p class="dc-desc">Your empathy and precision-oriented mindset suit healthcare and biomedical paths focused on improving human well-being.</p>
-          <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
+          <p class="dc-desc" data-i18n="disc.desc.yt">Your empathy and precision-oriented mindset suit healthcare and biomedical paths focused on improving human well-being.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
         </div>
         <!-- Card 4 -->
         <div class="dc dc-nn"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#127806;</div><div><div class="dc-name">Agricultural Sciences</div><div class="dc-rank">#4 Ranked</div></div></div>
-          <div style="text-align:right"><div class="dc-pct">62%</div><div class="dc-plbl">Match</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#127806;</div><div><div class="dc-name" data-i18n="disc.name.nn">Agricultural Sciences</div><div class="dc-rank">#4 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">62%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:62%"></div></div>
-          <p class="dc-desc">A grounded approach to sustainability and life sciences positions you well for agronomy, food science, and environmental stewardship.</p>
-          <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
+          <p class="dc-desc" data-i18n="disc.desc.nn">A grounded approach to sustainability and life sciences positions you well for agronomy, food science, and environmental stewardship.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
         </div>
         <!-- Card 5 -->
         <div class="dc dc-xh"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129504;</div><div><div class="dc-name">Social Sciences</div><div class="dc-rank">#5 Ranked</div></div></div>
-          <div style="text-align:right"><div class="dc-pct">34%</div><div class="dc-plbl">Match</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129504;</div><div><div class="dc-name" data-i18n="disc.name.xh">Social Sciences</div><div class="dc-rank">#5 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">34%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:34%"></div></div>
-          <p class="dc-desc">A deep interest in human behavior, societal structures, and interpersonal dynamics makes this a moderate-fit field for your profile.</p>
-          <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
+          <p class="dc-desc" data-i18n="disc.desc.xh">A deep interest in human behavior, societal structures, and interpersonal dynamics makes this a moderate-fit field for your profile.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
         </div>
         <!-- Card 6 -->
         <div class="dc dc-nv"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128214;</div><div><div class="dc-name">Humanities</div><div class="dc-rank">#6 Ranked</div></div></div>
-          <div style="text-align:right"><div class="dc-pct">32%</div><div class="dc-plbl">Match</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128214;</div><div><div class="dc-name" data-i18n="disc.name.nv">Humanities</div><div class="dc-rank">#6 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">32%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:32%"></div></div>
-          <p class="dc-desc">Your appreciation for language, culture, and critical thinking gives you a foundation in literature, philosophy, and history paths.</p>
-          <div class="dc-foot"><div class="btn-ex">Why I match? 🔍</div><div class="btn-pw">Career Paths</div></div>
+          <p class="dc-desc" data-i18n="disc.desc.nv">Your appreciation for language, culture, and critical thinking gives you a foundation in literature, philosophy, and history paths.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
         </div>
         </div><!-- /discCardsWrap -->
       </div>
@@ -197,7 +198,7 @@
                 <circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">About me</span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
           </a>
           <a href="../../discipline/match/" class="tab-item active" data-tab="t2">
             <span class="tab-icon">
@@ -205,15 +206,15 @@
                 <circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">Disciplines</span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
           </a>
-          <a href="../../major/recommendations-v2/" class="tab-item" data-tab="t3">
+          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
               </svg>
             </span>
-            <span class="tab-label">Majors</span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
           </a>
           <a href="../../university/matches/" class="tab-item" data-tab="t4">
             <span class="tab-icon">
@@ -221,7 +222,7 @@
                 <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
               </svg>
             </span>
-            <span class="tab-label">Universities</span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
           <a href="../../profile/overview/" class="tab-item" data-tab="t5">
             <span class="tab-icon">
@@ -243,7 +244,22 @@
   var milestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
   var CX = 160, CY = 190, MAX_R = 120;
 
-  var CARD_PCTS = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
+  /* ── Read real DNA scores from sessionStorage, fall back to demo ── */
+  var CARD_PCTS = (function () {
+    var demo = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
+    try {
+      var raw = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+      if (raw && Object.keys(raw).some(function (k) { return raw[k] > 0; })) {
+        var total = Object.keys(raw).reduce(function (s, k) { return s + (raw[k] || 0); }, 0) || 1;
+        var pcts = {};
+        ['kt', 'nv', 'yt', 'xh', 'nn', 'tn'].forEach(function (k) {
+          pcts[k] = Math.round(((raw[k] || 0) / total) * 100);
+        });
+        return pcts;
+      }
+    } catch (e) { /* keep demo */ }
+    return demo;
+  })();
   function dnaPct(key) { return CARD_PCTS[key] || 70; }
 
   /* ── Vertex colors — theme-aware.
@@ -641,8 +657,7 @@
 
 
 <script src="../../../shared/scripts/tab-lock.js"></script>
-<script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
-<script>
+<script>/* theme init */(function(){var s="light";try{s=localStorage.getItem("bd-theme")||"light";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script><script>
 (function () {
   const DISC_MAP = { 'dc-kt':'kt', 'dc-tn':'tn', 'dc-xh':'xh', 'dc-nv':'nv', 'dc-yt':'yt', 'dc-nn':'nn' };
   document.querySelectorAll('.dc').forEach(function (card) {
@@ -679,10 +694,13 @@
     }
 
     var rem = 10 - progress;
+    var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
     if (sub) sub.innerHTML = 'Complete <strong style="color:var(--text-primary)">' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</strong> to unlock your Discipline results.';
     if (cta) {
       var isContinue = progress > 0;
-      cta.textContent = isContinue ? 'Continue Quiz →' : 'Start Quiz →';
+      /* Update data-i18n so i18n.js (loaded after this script) uses the correct key */
+      cta.setAttribute('data-i18n', isContinue ? 'disc.cta.continue' : 'disc.cta.start');
+      cta.textContent = isContinue ? t('disc.cta.continue') : t('disc.cta.start');
       /* Continue Quiz → mint-500 (btn-success); Start Quiz → violet-600 (btn-primary) */
       if (isContinue) {
         cta.style.background  = 'var(--mint-500)';
@@ -697,5 +715,6 @@
   }
 })();
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

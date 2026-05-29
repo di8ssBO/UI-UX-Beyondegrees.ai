@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="vi" data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -19,6 +19,7 @@
   document.documentElement.setAttribute('data-theme-pref', p);
 })();
 </script>
+<script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -342,7 +343,7 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* ── Programs — card style mirrors major/recommendations-v2 ── */
+/* ── Programs — card style mirrors major/recommendations ── */
 .ud-programs-list { display: flex; flex-direction: column; }
 .ml-item {
   display: flex; align-items: center; justify-content: space-between;
@@ -3765,7 +3766,7 @@ body {
                       fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">About me</span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
           </a>
 
           <a href="../../discipline/match/" class="tab-item" data-tab="t2">
@@ -3778,10 +3779,10 @@ body {
                 <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">Disciplines</span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
           </a>
 
-          <a href="../../major/recommendations-v2/" class="tab-item" data-tab="t3">
+          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -3789,7 +3790,7 @@ body {
                 <path d="M6 12v5c3 3 9 3 12 0v-5"/>
               </svg>
             </span>
-            <span class="tab-label">Majors</span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
           </a>
 
           <a href="../matches/" class="tab-item active" data-tab="t4">
@@ -3799,7 +3800,7 @@ body {
                 <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
               </svg>
             </span>
-            <span class="tab-label">Universities</span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
 
           <a href="../../profile/overview/" class="tab-item" data-tab="t5">
@@ -3823,6 +3824,8 @@ body {
 
 <script src="../../major/majors-data.js"></script>
 <script>
+var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
 /* ═══════════════════════════════════════════════════════
    CONSTANTS
 ═══════════════════════════════════════════════════════ */
@@ -4510,15 +4513,15 @@ function render(u) {
       var remaining = majorList.length - 3;
       vwWrap.innerHTML =
         '<button id="udViewAllBtn" class="ud-view-all" style="margin-top:4px">' +
-          'View all ' + remaining + ' more programs ↓' +
+          t('uni.detail.view_all').replace('{n}', remaining) +
         '</button>';
       document.getElementById('udViewAllBtn').onclick = function() {
         var more = document.getElementById('udMorePrograms');
         var open = more.style.display !== 'none';
         more.style.display = open ? 'none' : '';
         this.textContent = open
-          ? 'View all ' + remaining + ' more programs ↓'
-          : 'Show less ↑';
+          ? t('uni.detail.view_all').replace('{n}', remaining)
+          : t('uni.detail.show_less');
       };
     } else {
       vwWrap.innerHTML = '';
@@ -5236,9 +5239,9 @@ function navigateToMajor(uid, mid) {
 ═══════════════════════════════════════════════════════ */
 var UNI_MATCH_COLORS = {
   high: {
-    primary:'#7c3aed', light:'#a78bfa', lighter:'#c4b5fd',
-    glow:'rgba(124,58,237,.40)', bg:'rgba(124,58,237,.12)', border:'rgba(124,58,237,.30)',
-    dark:'#1e0a4a'
+    primary:'#1863DC', light:'#6BA3FF', lighter:'#93BBFF',
+    glow:'rgba(24,99,220,.40)', bg:'rgba(24,99,220,.12)', border:'rgba(24,99,220,.30)',
+    dark:'#06091A'
   },
   mid: {
     primary:'#3b82f6', light:'#60a5fa', lighter:'#93c5fd',
@@ -5372,7 +5375,7 @@ function renderWhyMatch(u) {
   applyWhyColors(theme);
 
   /* Header */
-  document.getElementById('headerTitle').textContent = 'Why I Match';
+  document.getElementById('headerTitle').textContent = t('uni.detail.why_match');
   var backBtn = document.getElementById('backBtn');
   backBtn.removeAttribute('href');
   backBtn.onclick = function(ev) { if (ev) ev.preventDefault(); history.back(); };
@@ -5623,5 +5626,6 @@ window.addEventListener('popstate', function() {
   render(u);
 })();
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

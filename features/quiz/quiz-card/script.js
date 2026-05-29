@@ -5,18 +5,11 @@
    ===================================================== */
 
 // ─── QUESTIONS BANK ───────────────────────────────────
-const QUESTIONS = [
-  { text: 'Tôi thích giải quyết vấn đề bằng cách phân tích dữ liệu hơn là dựa vào cảm xúc', tag: '⚡ Kỹ thuật', discipline: 'kt' },
-  { text: 'Tôi cảm thấy hứng thú khi khám phá văn hóa và ngôn ngữ của các dân tộc khác nhau', tag: '📚 Nhân văn', discipline: 'nv' },
-  { text: 'Tôi muốn công việc tạo ra tác động trực tiếp đến sức khỏe con người', tag: '⚕️ Y & Sức khỏe', discipline: 'yt' },
-  { text: 'Tôi thích làm việc với số liệu, biểu đồ và mô hình hơn là với văn bản', tag: '📊 Xã hội học', discipline: 'kt' },
-  { text: 'Tôi tìm thấy ý nghĩa khi giúp đỡ người khác vượt qua khó khăn trong cuộc sống', tag: '💚 Nhân văn', discipline: 'nv' },
-  { text: 'Tôi bị thu hút bởi cách mà thiên nhiên và môi trường tự nhiên vận hành', tag: '🌿 Nông nghiệp', discipline: 'nn' },
-  { text: 'Tôi muốn tạo ra những thứ mà người khác có thể nhìn thấy và sử dụng hằng ngày', tag: '⚡ Kỹ thuật', discipline: 'kt' },
-  { text: 'Tôi tin rằng hiểu lịch sử và triết học giúp tôi đưa ra quyết định tốt hơn', tag: '📚 Nhân văn', discipline: 'nv' },
-  { text: 'Tôi thích thử nghiệm và chấp nhận rủi ro hơn là đi theo con đường an toàn', tag: '⚡ Kỹ thuật', discipline: 'kt' },
-  { text: 'Tôi cảm thấy có trách nhiệm với cộng đồng và muốn đóng góp cho xã hội', tag: '📊 Xã hội học', discipline: 'nv' },
-];
+// NOTE: QUESTIONS is now built at runtime by buildQuizSet() in index.html.
+// Source: data/assertions.js (window.BD_ASSERTIONS — auto-generated from Assertion-2026-05-09.csv)
+// 352 assertions → random 10 discipline + 10 major + 10 university per session.
+// This file (script.js) is a reference copy; the live quiz runs from index.html.
+const QUESTIONS = (typeof buildQuizSet === 'function') ? buildQuizSet() : [];
 
 // ─── STATE ────────────────────────────────────────────
 const state = {

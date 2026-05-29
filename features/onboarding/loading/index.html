@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AI Loading Screen — BeyonDegrees.ai</title>
   <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/components/interactive.css">
@@ -136,8 +137,8 @@ svg *, canvas, video, img { transition: none !important; }
 
           <!-- Phase text -->
           <div class="phase-wrap">
-            <p class="phase-label" id="phaseLabel">Analyzing</p>
-            <h2 class="phase-title" id="phaseTitle">Your Academic DNA</h2>
+            <p class="phase-label" id="phaseLabel" data-i18n="loading.analyzing">Analyzing</p>
+            <h2 class="phase-title" id="phaseTitle" data-i18n="loading.dna_title">Your Academic DNA</h2>
           </div>
 
           <!-- Countdown + progress row -->
@@ -153,7 +154,7 @@ svg *, canvas, video, img { transition: none !important; }
 
           <!-- DNA Discipline Bars -->
           <div class="dna-card glass-card">
-            <p class="dna-heading">Academic DNA forming</p>
+            <p class="dna-heading" data-i18n="loading.dna_forming">Academic DNA forming</p>
             <div class="dna-bars" id="dnaBars">
               <div class="dna-row">
                 <span class="dna-icon">💻</span>
@@ -169,25 +170,25 @@ svg *, canvas, video, img { transition: none !important; }
               </div>
               <div class="dna-row">
                 <span class="dna-icon">📖</span>
-                <span class="dna-name">Humanities</span>
+                <span class="dna-name" data-i18n="loading.dna.humanities">Humanities</span>
                 <div class="dna-track"><div class="dna-fill dna-nv" id="bar-nv"></div></div>
                 <span class="dna-pct" id="pct-nv">0%</span>
               </div>
               <div class="dna-row">
                 <span class="dna-icon">🌾</span>
-                <span class="dna-name">Agriculture</span>
+                <span class="dna-name" data-i18n="loading.dna.agriculture">Agriculture</span>
                 <div class="dna-track"><div class="dna-fill dna-nn" id="bar-nn"></div></div>
                 <span class="dna-pct" id="pct-nn">0%</span>
               </div>
               <div class="dna-row">
                 <span class="dna-icon">🌐</span>
-                <span class="dna-name">Social Sciences</span>
+                <span class="dna-name" data-i18n="loading.dna.social">Social Sciences</span>
                 <div class="dna-track"><div class="dna-fill dna-xh" id="bar-xh"></div></div>
                 <span class="dna-pct" id="pct-xh">0%</span>
               </div>
               <div class="dna-row">
                 <span class="dna-icon">🧬</span>
-                <span class="dna-name">Natural Sciences</span>
+                <span class="dna-name" data-i18n="loading.dna.natural">Natural Sciences</span>
                 <div class="dna-track"><div class="dna-fill dna-tn" id="bar-tn"></div></div>
                 <span class="dna-pct" id="pct-tn">0%</span>
               </div>
@@ -214,8 +215,8 @@ svg *, canvas, video, img { transition: none !important; }
         <div class="milestone-toast" id="milestoneToast">
           <span class="ms-emoji" id="msEmoji">🔥</span>
           <div>
-            <p class="ms-title" id="msTitle">Analysis complete!</p>
-            <p class="ms-sub"   id="msSub">Compiling your results...</p>
+            <p class="ms-title" id="msTitle" data-i18n="loading.done">Analysis complete!</p>
+            <p class="ms-sub"   id="msSub" data-i18n="loading.compiling">Compiling your results...</p>
           </div>
         </div>
 
@@ -223,7 +224,7 @@ svg *, canvas, video, img { transition: none !important; }
         <div class="ready-overlay" id="readyOverlay">
           <div class="ready-content">
             <div class="ready-emoji">🎉</div>
-            <h2 class="ready-title">Results are ready!</h2>
+            <h2 class="ready-title" data-i18n="loading.ready">Results are ready!</h2>
             <p class="ready-sub">AI has analyzed <span id="readyCount">?</span> of your answers</p>
             <a href="#" id="readyBtn" class="btn btn-primary ready-btn" onclick="goToResult();return false;">
               See my results →
@@ -242,7 +243,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">About me</span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
           </a>
           <a href="../../discipline/match/" id="quizTabLink" class="tab-item active" data-tab="disciplines">
             <span class="tab-icon">
@@ -252,16 +253,16 @@ svg *, canvas, video, img { transition: none !important; }
                 <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">Disciplines</span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
           </a>
-          <a href="../../major/recommendations-v2/" class="tab-item" data-tab="majors">
+          <a href="../../major/recommendations/" class="tab-item" data-tab="majors">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                 <path d="M6 12v5c3 3 9 3 12 0v-5"/>
               </svg>
             </span>
-            <span class="tab-label">Majors</span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
           </a>
           <a href="../../university/matches/" class="tab-item" data-tab="universities">
             <span class="tab-icon">
@@ -269,7 +270,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
               </svg>
             </span>
-            <span class="tab-label">Universities</span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
           <a href="../../profile/overview/" class="tab-item" data-tab="account">
             <span class="tab-icon">
@@ -670,15 +671,17 @@ window.PageTransition = PageTransition;
 (function () {
   'use strict';
 
+  const t = k => window.BDi18n ? BDi18n.t(k) : k;
+
   /* ── Config ─────────────────────────────────────── */
   const TOTAL_DURATION = 25; // seconds
 
   const PHASES = [
-    { label: 'Analyzing',  title: 'Your Academic DNA' },
-    { label: 'Evaluating',  title: 'Your Key Strengths' },
-    { label: 'Comparing',   title: 'Thousands of Majors' },
-    { label: 'Calculating', title: 'Your Compatibility' },
-    { label: 'Finalizing',  title: 'Results Tailored for You' },
+    { label: 'loading.phase.analyzing',   title: 'loading.phase.title.dna' },
+    { label: 'loading.phase.evaluating',  title: 'loading.phase.title.strengths' },
+    { label: 'loading.phase.comparing',   title: 'loading.phase.title.majors' },
+    { label: 'loading.phase.calculating', title: 'loading.phase.title.compat' },
+    { label: 'loading.phase.finalizing',  title: 'loading.phase.title.results' },
   ];
 
   // DNA bar final values (%), staggered reveal start (seconds)
@@ -701,9 +704,9 @@ window.PageTransition = PageTransition;
   ];
 
   const MILESTONES = [
-    { at: 5,  emoji: '🧬', title: 'Analysis done!',     sub: 'Evaluating your strengths...' },
-    { at: 12, emoji: '⚡', title: 'Pattern found!',     sub: 'Matching against 2,400+ majors...' },
-    { at: 20, emoji: '🎯', title: 'Almost there!',      sub: 'Personalizing results for you...' },
+    { at: 5,  emoji: '🧬', titleKey: 'loading.milestone1.title', subKey: 'loading.milestone1.sub' },
+    { at: 12, emoji: '⚡', titleKey: 'loading.milestone2.title', subKey: 'loading.milestone2.sub' },
+    { at: 20, emoji: '🎯', titleKey: 'loading.milestone3.title', subKey: 'loading.milestone3.sub' },
   ];
 
   /* ── State ──────────────────────────────────────── */
@@ -749,12 +752,12 @@ window.PageTransition = PageTransition;
     // Reset phase text (no animation on reset)
     const label = $('phaseLabel');
     const title = $('phaseTitle');
-    if (label) { label.className = 'phase-label'; label.textContent = PHASES[0].label; }
-    if (title) { title.className = 'phase-title'; title.textContent = PHASES[0].title; }
+    if (label) { label.className = 'phase-label'; label.textContent = t(PHASES[0].label); }
+    if (title) { title.className = 'phase-title'; title.textContent = t(PHASES[0].title); }
 
     // Reset countdown
     const cdText = $('cdText');
-    if (cdText) cdText.textContent = '~' + TOTAL_DURATION + ' seconds left';
+    if (cdText) cdText.textContent = t('loading.countdown').replace('{n}', TOTAL_DURATION);
 
     // Reset milestone toast
     const toast = $('milestoneToast');
@@ -792,7 +795,7 @@ window.PageTransition = PageTransition;
     const cdText = $('cdText');
     if (cdText) {
       const secs = Math.ceil(remaining);
-      cdText.textContent = secs > 0 ? '~' + secs + ' seconds left' : 'Finalizing...';
+      cdText.textContent = secs > 0 ? t('loading.countdown').replace('{n}', secs) : t('loading.finalizing_text');
     }
 
     // --- Phase transitions (every 5s) ---
@@ -863,8 +866,8 @@ window.PageTransition = PageTransition;
     title.classList.add('out');
 
     setTimeout(() => {
-      label.textContent = p.label;
-      title.textContent = p.title;
+      label.textContent = t(p.label);
+      title.textContent = t(p.title);
       label.className   = 'phase-label in';
       title.className   = 'phase-title in';
 
@@ -925,8 +928,8 @@ window.PageTransition = PageTransition;
     if (!toast) return;
 
     if (emoji)  emoji.textContent  = m.emoji;
-    if (mTitle) mTitle.textContent = m.title;
-    if (mSub)   mSub.textContent   = m.sub;
+    if (mTitle) mTitle.textContent = t(m.titleKey);
+    if (mSub)   mSub.textContent   = t(m.subKey);
 
     toast.classList.add('visible');
     setTimeout(() => toast.classList.remove('visible'), 3200);
@@ -967,7 +970,7 @@ const _urlParams = new URLSearchParams(window.location.search);
 const _STAGE = parseInt(_urlParams.get('stage') || '1', 10);
 const RESULT_MAP = {
   1: '../../discipline/match/',
-  2: '../../major/recommendations-v2/',
+  2: '../../major/recommendations/',
   3: '../../university/matches/'
 };
 const STAGE_Q_COUNT = { 1: 10, 2: 20, 3: 30 };
@@ -1049,4 +1052,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // React to OS theme changes
   window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
     var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
-    if (pref === 'system') bdSetTheme
+    if (pref === 'system') bdSetTheme('system');
+  });
+})();
+</script>
+<script src="../../../shared/scripts/i18n.js"></script>
+</body>
+</html>

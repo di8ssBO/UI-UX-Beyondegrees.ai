@@ -91,10 +91,10 @@
   --text-h3-size: 22px;
   --text-h4-size: 18px;
   --text-body-lg-size: 16px;
-  --text-body-size: 15px;
+  --text-body-size: 16px;
   --text-sm-size: 13px;
-  --text-caption-size: 11px;
-  --text-label-size: 10px;
+  --text-caption-size: 12px;
+  --text-label-size: 11px;
 
   /* Font Weights */
   --fw-regular: 400;

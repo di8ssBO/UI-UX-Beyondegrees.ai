@@ -62,7 +62,6 @@ BeyonDegrees-UI/
 │   │   └── why/                # Giải thích lý do match
 │   ├── major/
 │   │   ├── recommendations/    # Danh sách chuyên ngành gợi ý
-│   │   ├── recommendations-v2/ # Phiên bản 2 — cải tiến UI
 │   │   └── detail/             # Chi tiết chuyên ngành
 │   ├── university/
 │   │   └── matches/            # Kết quả trường đại học

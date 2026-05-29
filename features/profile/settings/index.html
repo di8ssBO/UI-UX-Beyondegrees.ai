@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- Prevent RTL layout flash -->
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <title>Account Settings — BeyonDegrees.ai</title>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
@@ -328,7 +330,7 @@ body { background: #06060f; }
         <a href="../../profile/overview/" class="back-btn" aria-label="Back">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
         </a>
-        <span class="page-title">Account Settings</span>
+        <span class="page-title" data-i18n="settings.title">Account Settings</span>
       </div>
 
       <!-- Content -->
@@ -336,13 +338,13 @@ body { background: #06060f; }
 
         <!-- Preferences -->
         <div class="settings-group">
-          <div class="settings-row">
+          <div class="settings-row" onclick="openLangSheet()" style="cursor:pointer;">
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
             </div>
-            <div class="row-body"><span class="row-label">Language</span></div>
+            <div class="row-body"><span class="row-label" data-i18n="settings.language">Language</span></div>
             <div class="row-right">
-              <span class="row-value">English</span>
+              <span class="row-value" id="lang-row-value">English</span>
               <div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div>
             </div>
           </div>
@@ -351,7 +353,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
             </div>
-            <div class="row-body"><span class="row-label">Theme</span></div>
+            <div class="row-body"><span class="row-label" data-i18n="settings.theme">Theme</span></div>
             <div class="row-right">
               <span class="row-value" id="theme-row-value">Dark</span>
               <div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div>
@@ -362,7 +364,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
             </div>
-            <div class="row-body"><span class="row-label">Notifications</span></div>
+            <div class="row-body"><span class="row-label" data-i18n="settings.notifications">Notifications</span></div>
             <div class="toggle-wrap">
               <label class="toggle">
                 <input type="checkbox" checked id="notif-toggle">
@@ -379,7 +381,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </div>
-            <span class="row-label">Log Out</span>
+            <span class="row-label" data-i18n="settings.logout">Log Out</span>
             <div class="row-right"><div class="row-chevron" style="color:#ff4757"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
           </div>
         </div>
@@ -389,7 +391,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </div>
-            <span class="row-label">Delete Account</span>
+            <span class="row-label" data-i18n="settings.delete">Delete Account</span>
             <div class="row-right"><div class="row-chevron" style="color:#ff4757"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
           </div>
         </div>
@@ -402,7 +404,7 @@ body { background: #06060f; }
     <div class="bottom-sheet" id="themeSheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <span class="sheet-title">Select Theme</span>
+        <span class="sheet-title" data-i18n="settings.theme_sheet_title">Select Theme</span>
         <button class="sheet-close" onclick="closeThemeSheet()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -414,7 +416,7 @@ body { background: #06060f; }
             <div class="sheet-opt-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             </div>
-            <span>Light</span>
+            <span data-i18n="settings.theme.light">Light</span>
           </div>
           <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
         </div>
@@ -423,7 +425,7 @@ body { background: #06060f; }
             <div class="sheet-opt-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
             </div>
-            <span>Dark</span>
+            <span data-i18n="settings.theme.dark">Dark</span>
           </div>
           <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
         </div>
@@ -432,7 +434,57 @@ body { background: #06060f; }
             <div class="sheet-opt-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <span>System</span>
+            <span data-i18n="settings.theme.system">System</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LANGUAGE BOTTOM SHEET ── -->
+    <div class="sheet-overlay" id="langSheetOverlay" onclick="closeLangSheet()"></div>
+    <div class="bottom-sheet" id="langSheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title" data-i18n="settings.lang_sheet_title">Select Language</span>
+        <button class="sheet-close" onclick="closeLangSheet()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-divider"></div>
+      <div class="sheet-options" id="langOptions">
+        <div class="sheet-option" data-lang-opt="en" onclick="selectLang('en')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇺🇸</div>
+            <span>English</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="vi" onclick="selectLang('vi')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇻🇳</div>
+            <span>Tiếng Việt</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="hi" onclick="selectLang('hi')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇮🇳</div>
+            <span>हिन्दी</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="fr" onclick="selectLang('fr')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇫🇷</div>
+            <span>Français</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="ar" onclick="selectLang('ar')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇸🇦</div>
+            <span>العربية</span>
           </div>
           <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
         </div>
@@ -457,10 +509,9 @@ var _currentPref='dark';
 function bdApplyTheme(r){document.documentElement.setAttribute('data-theme',r);}
 
 function updateThemeUI(pref){
-  var labels={dark:'Dark',light:'Light',system:'System'};
   var el=document.getElementById('theme-row-value');
-  if(el) el.textContent=labels[pref]||'Dark';
-  document.querySelectorAll('.sheet-option').forEach(function(o){
+  if(el) el.textContent=window.BDi18n?BDi18n.t('settings.theme.'+pref):({dark:'Dark',light:'Light',system:'System'}[pref]||'Dark');
+  document.querySelectorAll('.sheet-option[data-pref]').forEach(function(o){
     o.setAttribute('data-selected', o.dataset.pref===pref?'true':'false');
   });
 }
@@ -488,11 +539,40 @@ function selectTheme(pref){
   setTimeout(closeThemeSheet,320);
 }
 
+/* ── Language sheet ── */
+function openLangSheet(){
+  document.getElementById('langSheet').classList.add('open');
+  document.getElementById('langSheetOverlay').classList.add('open');
+}
+function closeLangSheet(){
+  document.getElementById('langSheet').classList.remove('open');
+  document.getElementById('langSheetOverlay').classList.remove('open');
+}
+function selectLang(code){
+  if(window.BDi18n) BDi18n.apply(code);
+  updateLangUI(code);
+  setTimeout(closeLangSheet,320);
+}
+function updateLangUI(code){
+  var meta=window.BDi18n?BDi18n.LANGS[code]:null;
+  var name=meta?meta.nativeName:'English';
+  var el=document.getElementById('lang-row-value');
+  if(el) el.textContent=name;
+  document.querySelectorAll('.sheet-option[data-lang-opt]').forEach(function(o){
+    o.setAttribute('data-selected', o.dataset.langOpt===code?'true':'false');
+  });
+  /* Re-sync theme label (language may have changed its translation) */
+  updateThemeUI(_currentPref);
+}
+
 /* ── Init UI labels once DOM is ready ── */
 document.addEventListener('DOMContentLoaded',function(){
-  var saved='dark';try{saved=localStorage.getItem('bd-theme')||'dark';}catch(e){}
-  _currentPref=saved;
-  updateThemeUI(saved);
+  var savedTheme='dark';try{savedTheme=localStorage.getItem('bd-theme')||'dark';}catch(e){}
+  _currentPref=savedTheme;
+  updateThemeUI(savedTheme);
+
+  var savedLang='en';try{savedLang=localStorage.getItem('bd-lang')||'en';}catch(e){}
+  updateLangUI(savedLang);
 });
 
 window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',function(){
@@ -500,5 +580,6 @@ window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',func
   if(pref==='system') bdSetTheme('system');
 });
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

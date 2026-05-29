@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <title>Edit Profile — BeyonDegrees.ai</title>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
@@ -366,7 +367,7 @@ body { background: #06060f; }
         <a href="../../profile/overview/" class="back-btn" aria-label="Back">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
         </a>
-        <span class="page-title">Edit Profile</span>
+        <span class="page-title" data-i18n="edit.title">Edit Profile</span>
       </div>
 
       <div class="page-content">
@@ -390,14 +391,14 @@ body { background: #06060f; }
         <!-- Name fields -->
         <div class="form-card">
           <div class="field-row">
-            <div class="field-label">First Name</div>
+            <div class="field-label" data-i18n="edit.first_name">First Name</div>
             <div class="field-input-wrap">
               <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               <input class="field-input" type="text" value="Hoang" placeholder="First name">
             </div>
           </div>
           <div class="field-row">
-            <div class="field-label">Last Name</div>
+            <div class="field-label" data-i18n="edit.last_name">Last Name</div>
             <div class="field-input-wrap">
               <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
               <input class="field-input" type="text" value="Phuc" placeholder="Last name">
@@ -408,19 +409,19 @@ body { background: #06060f; }
         <!-- Email -->
         <div class="form-card">
           <div class="field-row field-readonly">
-            <div class="field-label">Email</div>
+            <div class="field-label" data-i18n="edit.email">Email</div>
             <div class="field-input-wrap">
               <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
               <input class="field-input" type="email" value="hoangphuc140904@gmail.com" readonly>
             </div>
-            <div class="field-hint">Contact support to change the email.</div>
+            <div class="field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
           </div>
         </div>
 
         <!-- Location -->
         <div class="form-card">
           <div class="field-row">
-            <div class="field-label">Location</div>
+            <div class="field-label" data-i18n="edit.location">Location</div>
             <div class="field-input-wrap">
               <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
               <input class="field-input" type="text" value="Ho Chi Minh City, Vietnam" placeholder="Your location">
@@ -431,24 +432,24 @@ body { background: #06060f; }
         <!-- Study preferences -->
         <div class="form-card">
           <div class="field-row">
-            <div class="field-label">I want to study</div>
+            <div class="field-label" data-i18n="edit.study">I want to study</div>
             <div class="field-select-wrap">
               <select class="field-select">
-                <option value="abroad">Abroad</option>
-                <option value="in-country" selected>In my country</option>
-                <option value="either">Either</option>
+                <option value="abroad" data-i18n="edit.study.abroad">Abroad</option>
+                <option value="in-country" selected data-i18n="edit.study.in_country">In my country</option>
+                <option value="either" data-i18n="edit.study.either">Either</option>
               </select>
               <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
             </div>
           </div>
           <div class="field-row">
-            <div class="field-label">I'm working toward a...</div>
+            <div class="field-label" data-i18n="edit.degree">I'm working toward a...</div>
             <div class="field-select-wrap">
               <select class="field-select">
-                <option value="bachelor" selected>Bachelor's Degree</option>
-                <option value="master">Master's Degree</option>
-                <option value="phd">PhD / Doctorate</option>
-                <option value="associate">Associate's Degree</option>
+                <option value="bachelor" selected data-i18n="edit.degree.bachelor">Bachelor's Degree</option>
+                <option value="master" data-i18n="edit.degree.master">Master's Degree</option>
+                <option value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</option>
+                <option value="associate" data-i18n="edit.degree.associate">Associate's Degree</option>
               </select>
               <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
             </div>
@@ -461,11 +462,11 @@ body { background: #06060f; }
           <div class="custom-checkbox">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
           </div>
-          <span class="checkbox-label">I already know what I want to study</span>
+          <span class="checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
         </label>
 
         <!-- Save -->
-        <button class="btn-save" onclick="saveChanges()">Save Changes</button>
+        <button class="btn-save" onclick="saveChanges()" data-i18n="edit.save">Save Changes</button>
 
         <!-- Secondary actions -->
         <button class="btn-secondary">
@@ -478,7 +479,7 @@ body { background: #06060f; }
           Reset Account
         </button>
 
-        <a href="#" class="btn-logout">Logout</a>
+        <a href="#" class="btn-logout" data-i18n="edit.logout">Logout</a>
 
 
       <!-- Reset Confirm Modal -->
@@ -491,7 +492,7 @@ body { background: #06060f; }
               <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
             </svg>
           </div>
-          <div class="modal-title">Reset Account?</div>
+          <div class="modal-title" data-i18n="edit.reset_title">Reset Account?</div>
           <div class="modal-body">
             This will clear <strong>all quiz progress</strong> and all your answers.<br>
             You'll start fresh from <strong>Question 1</strong>.
@@ -500,7 +501,7 @@ body { background: #06060f; }
             <button class="btn-modal-danger" id="resetConfirmBtn">
               Reset &amp; Start Over
             </button>
-            <button class="btn-modal-cancel" id="resetCancelBtn">
+            <button class="btn-modal-cancel" id="resetCancelBtn" data-i18n="edit.cancel">
               Cancel
             </button>
           </div>
@@ -528,10 +529,11 @@ document.querySelectorAll('.checkbox-row').forEach(function(row) {
   update();
 });
 
+var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 function saveChanges() {
   var btn = document.querySelector('.btn-save');
   var orig = btn.textContent;
-  btn.textContent = '✓ Saved!';
+  btn.textContent = _t('edit.save_success');
   btn.style.background = 'linear-gradient(135deg, #059669, #10B981)';
   setTimeout(function() {
     btn.textContent = orig;
@@ -561,12 +563,13 @@ document.getElementById('resetConfirmBtn').addEventListener('click', function ()
   } catch(e) {}
   try { sessionStorage.setItem('bd_reset_success', '1'); } catch(e) {}
   var btn = document.getElementById('resetConfirmBtn');
-  btn.textContent = 'Resetting...';
+  btn.textContent = _t('edit.resetting');
   btn.style.opacity = '0.7';
   setTimeout(function () {
     window.location.href = '../../onboarding/home/';
   }, 800);
 });
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>
