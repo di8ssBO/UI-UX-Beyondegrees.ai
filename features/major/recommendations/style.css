@@ -1,4 +1,4 @@
-﻿/* major-recommendations-v2 — screen-specific styles */
+﻿/* major-recommendations — screen-specific styles */
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -30,8 +30,16 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 /* ── Header ───────────────────────────────────────────────────── */
 .ms-hdr{display:flex;align-items:center;justify-content:space-between;
   padding:8px 20px 0;position:relative;z-index:2}
-.ms-logo{font-size:13px;font-weight:700;color:var(--text-primary)}
-.ms-logo span{color:var(--mint-500)}
+.ms-logo{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text-primary);line-height:1}
+.ms-logo .logo-text{display:inline-flex;align-items:baseline;gap:0;white-space:nowrap;letter-spacing:0}
+.ms-logo .logo-beyon{color:var(--text-primary)}.ms-logo .logo-accent{color:var(--violet-400)}
+.ms-logo .logo-img{height:20px;width:auto;display:block;flex-shrink:0;filter:drop-shadow(0 1px 3px rgba(124,58,237,0.25))}
+[data-theme="light"] .ms-logo .logo-img{filter:drop-shadow(0 1px 3px rgba(201,107,85,0.25))}
+[data-theme="dark"] .ms-logo .logo-img{filter:brightness(0) invert(1) drop-shadow(0 1px 4px rgba(107,163,255,0.30))}
+[data-theme="dark"] .ms-logo .logo-text{background:linear-gradient(135deg,#a78bfa 0%,#06d6a0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+[data-theme="dark"] .ms-logo .logo-beyon,[data-theme="dark"] .ms-logo .logo-accent{-webkit-text-fill-color:transparent}
+[data-theme="light"] .ms-logo .logo-text{background:linear-gradient(135deg,#c96b55 0%,#0274BE 100%) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;background-clip:text !important}
+[data-theme="light"] .ms-logo .logo-beyon,[data-theme="light"] .ms-logo .logo-accent{-webkit-text-fill-color:transparent !important;color:inherit !important}
 .ms-search-btn{width:30px;height:30px;border-radius:8px;background:var(--bg-surface);
   border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;
   justify-content:center;cursor:pointer}
@@ -509,3 +517,14 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
   color: #a84e30 !important;
   border-color: rgba(201,107,85,0.32) !important;
 }
+
+/* ── Light mode: text size boosts for readability ── */
+[data-theme="light"] .ms-hl   { font-size:25px !important }
+[data-theme="light"] .ms-sub  { font-size:13px !important }
+[data-theme="light"] .hm-name { font-size:22px !important }
+[data-theme="light"] .hm-lbl  { font-size:11px !important }
+[data-theme="light"] .acc-title{ font-size:15px !important }
+[data-theme="light"] .acc-empty{ font-size:13px !important }
+[data-theme="light"] .fc-pct  { font-size:12px !important }
+[data-theme="light"] .ml-name { font-size:13px !important }
+[data-theme="light"] .ml-sub  { font-size:11px !important }

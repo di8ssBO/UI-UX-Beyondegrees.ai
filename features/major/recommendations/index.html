@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="../../../shared/scripts/i18n.js"></script>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
@@ -42,7 +43,7 @@
 
       <!-- Header -->
       <div class="ms-hdr">
-        <div class="ms-logo">Beyond<span>Degrees</span>.ai</div>
+        <div class="ms-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
         <div class="ms-search-btn">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -592,6 +593,5 @@ document.getElementById('filterChips').addEventListener('click', e => {
 </script>
 <script src="../../../shared/scripts/tab-lock.js"></script>
 <script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
-<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

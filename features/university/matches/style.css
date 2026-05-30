@@ -10,6 +10,16 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
 .us-logo{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text-primary);line-height:1}.us-logo .logo-text{display:inline-flex;align-items:baseline;gap:0;white-space:nowrap;letter-spacing:0}.us-logo .logo-beyon{color:var(--text-primary)}.us-logo .logo-accent{color:var(--violet-400)}
 .us-logo .logo-img{height:20px;width:auto;display:block;flex-shrink:0;filter:drop-shadow(0 1px 3px rgba(124,58,237,0.25))}
 [data-theme="light"] .us-logo .logo-img{filter:drop-shadow(0 1px 3px rgba(201,107,85,0.25))}
+[data-theme="dark"] .us-logo .logo-img{filter:brightness(0) invert(1) drop-shadow(0 1px 4px rgba(107,163,255,0.30))}
+[data-theme="dark"] .us-logo .logo-text{background:linear-gradient(135deg,#a78bfa 0%,#06d6a0 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+[data-theme="dark"] .us-logo .logo-beyon,[data-theme="dark"] .us-logo .logo-accent{-webkit-text-fill-color:transparent}
+[data-theme="light"] .us-logo .logo-text{background:linear-gradient(135deg,#c96b55 0%,#0274BE 100%) !important;-webkit-background-clip:text !important;-webkit-text-fill-color:transparent !important;background-clip:text !important}
+[data-theme="light"] .us-logo .logo-beyon,[data-theme="light"] .us-logo .logo-accent{-webkit-text-fill-color:transparent !important;color:inherit !important}
+/* ── Light mode: text size boosts for readability ── */
+[data-theme="light"] .us-hl  { font-size:22px !important }
+[data-theme="light"] .us-sub2{ font-size:12px !important; color:#5c4535 !important }
+[data-theme="light"] .uc-loc { font-size:12px !important }
+[data-theme="light"] .uc-type-chip { font-size:10px !important }
 .us-body{flex:1;overflow-y:auto;padding:0 0 20px;position:relative;z-index:2;scrollbar-width:none}
 .us-body::-webkit-scrollbar{display:none}
 .us-hero{position:relative;height:160px;margin:10px 18px 0;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#0d1b2e 0%,#1a2a40 50%,#0d2030 100%)}

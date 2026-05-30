@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../../design-system/animations.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="./style.css">
+  <script src="../../../shared/scripts/i18n.js"></script>
 
 <style>
 
@@ -148,7 +149,7 @@ svg *, canvas, video, img { transition: none !important; }
               <span id="cdText">~25 seconds left</span>
             </div>
             <div class="questions-chip">
-              <span id="qCount">?</span>/<span id="qTotal">30</span> questions ✓
+              <span id="qCount">?</span>/<span id="qTotal">30</span> <span data-i18n="loading.questions_done">questions ✓</span>
             </div>
           </div>
 
@@ -158,13 +159,13 @@ svg *, canvas, video, img { transition: none !important; }
             <div class="dna-bars" id="dnaBars">
               <div class="dna-row">
                 <span class="dna-icon">💻</span>
-                <span class="dna-name">Engineering & Tech</span>
+                <span class="dna-name" data-i18n="loading.dna.engineering">Engineering &amp; Tech</span>
                 <div class="dna-track"><div class="dna-fill dna-kt" id="bar-kt"></div></div>
                 <span class="dna-pct" id="pct-kt">0%</span>
               </div>
               <div class="dna-row">
                 <span class="dna-icon">🩺</span>
-                <span class="dna-name">Health & Medicine</span>
+                <span class="dna-name" data-i18n="loading.dna.health">Health &amp; Medicine</span>
                 <div class="dna-track"><div class="dna-fill dna-yt" id="bar-yt"></div></div>
                 <span class="dna-pct" id="pct-yt">0%</span>
               </div>
@@ -197,7 +198,7 @@ svg *, canvas, video, img { transition: none !important; }
 
           <!-- Fun Fact Carousel -->
           <div class="funfact-wrap glass-card" id="funfactWrap">
-            <span class="ff-badge">💡 Did you know?</span>
+            <span class="ff-badge" data-i18n="loading.did_you_know">💡 Did you know?</span>
             <p class="ff-text" id="ffText">73% of students switch majors after year one due to a poor initial choice.</p>
             <div class="ff-dots" id="ffDots">
               <span class="ff-dot active"></span>
@@ -225,11 +226,11 @@ svg *, canvas, video, img { transition: none !important; }
           <div class="ready-content">
             <div class="ready-emoji">🎉</div>
             <h2 class="ready-title" data-i18n="loading.ready">Results are ready!</h2>
-            <p class="ready-sub">AI has analyzed <span id="readyCount">?</span> of your answers</p>
-            <a href="#" id="readyBtn" class="btn btn-primary ready-btn" onclick="goToResult();return false;">
+            <p class="ready-sub" id="readySub">AI has analyzed <span id="readyCount">?</span> of your answers</p>
+            <a href="#" id="readyBtn" class="btn btn-primary ready-btn" data-i18n="quiz.see_result" onclick="goToResult();return false;">
               See my results →
             </a>
-            <button class="btn-ghost replay-btn" id="replayBtn">↺ Replay demo</button>
+            <button class="btn-ghost replay-btn" id="replayBtn" data-i18n="loading.replay_demo">↺ Replay demo</button>
           </div>
         </div>
 
@@ -671,7 +672,12 @@ window.PageTransition = PageTransition;
 (function () {
   'use strict';
 
-  const t = k => window.BDi18n ? BDi18n.t(k) : k;
+  const t = function(k) {
+    var lang = 'en';
+    try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
+    if (window.BDi18n) return window.BDi18n.t.call({ _lang: lang }, k);
+    return k;
+  };
 
   /* ── Config ─────────────────────────────────────── */
   const TOTAL_DURATION = 25; // seconds
@@ -694,14 +700,18 @@ window.PageTransition = PageTransition;
     { disc: 'tn', target: 68, start: 12.5 },
   ];
 
-  const FUN_FACTS = [
-    '73% of students switch majors after year one due to a poor initial choice.',
-    'BeyonDegrees users make major decisions 3.2× more confidently than average.',
-    'Only 18% of students have enough information about majors before deciding.',
-    'AI analyzes 47 data dimensions from your 30 answers.',
-    'The right major isn\'t just about grades — personality matters 2.4× more.',
-    'BeyonDegrees has helped over 50,000 students discover their right path.',
-  ];
+  /* Fun facts — built lazily using t() so language is resolved at call-time */
+  function getFunFacts() {
+    return [
+      t('loading.ff.0'),
+      t('loading.ff.1'),
+      t('loading.ff.2'),
+      t('loading.ff.3'),
+      t('loading.ff.4'),
+      t('loading.ff.5'),
+    ];
+  }
+  const FUN_FACTS_LEN = 6; /* used for dot count */
 
   const MILESTONES = [
     { at: 5,  emoji: '🧬', titleKey: 'loading.milestone1.title', subKey: 'loading.milestone1.sub' },
@@ -772,7 +782,7 @@ window.PageTransition = PageTransition;
     currentFact = 0;
     renderFunFact(0, false); // no fade on first render
     factIntervalId = setInterval(() => {
-      currentFact = (currentFact + 1) % FUN_FACTS.length;
+      currentFact = (currentFact + 1) % FUN_FACTS_LEN;
       renderFunFact(currentFact, true);
     }, 4400);
 
@@ -904,16 +914,18 @@ window.PageTransition = PageTransition;
     const text = $('ffText');
     const dots = document.querySelectorAll('.ff-dot');
     if (!text) return;
+    const facts = getFunFacts();
+    const fact  = facts[index] || facts[0];
 
     if (!animated) {
-      text.textContent = FUN_FACTS[index];
+      text.textContent = fact;
       dots.forEach((d, i) => d.classList.toggle('active', i === index));
       return;
     }
 
     text.classList.add('fading');
     setTimeout(() => {
-      text.textContent = FUN_FACTS[index];
+      text.textContent = fact;
       text.classList.remove('fading');
       dots.forEach((d, i) => d.classList.toggle('active', i === index));
     }, 290);
@@ -939,6 +951,17 @@ window.PageTransition = PageTransition;
   function showReady() {
     if (factIntervalId) { clearInterval(factIntervalId); factIntervalId = null; }
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+
+    /* Translate ready-sub with readyCount placeholder */
+    const subEl = $('readySub');
+    const cntEl = $('readyCount');
+    if (subEl && window.BDi18n) {
+      var lang = 'en';
+      try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
+      var n = cntEl ? cntEl.textContent : '?';
+      var tpl = window.BDi18n.t.call({_lang: lang}, 'quiz.ready_sub');
+      subEl.innerHTML = tpl.replace('{n}', '<span id="readyCount">' + n + '</span>');
+    }
 
     const overlay = $('readyOverlay');
     if (overlay) overlay.classList.add('visible');
@@ -1056,6 +1079,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 </script>
-<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>
