@@ -99,10 +99,69 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 }
 .detail-body::-webkit-scrollbar{display:none}
 
+/* ─── OVERVIEW CARD (mirrors udm-desc-card from spec-in-uni view) ───
+   Transparent sage tint background + 4px sage strip left + frosted blur */
+.detail-overview-card {
+  position: relative;
+  overflow: hidden;
+  background: rgba(106,150,144,0.10);
+  border: 1px solid rgba(106,150,144,0.30);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.detail-overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: #6a9690;
+}
+
+/* Collapsible bullets — hide ENTIRE bullets list when data-collapsed="true" */
+.detail-overview-card .detail-bullets[data-collapsed="true"] {
+  display: none;
+}
+.detail-overview-card .detail-bullets {
+  margin-top: 10px;
+}
+
+/* Show more / Show less toggle button — full width, between desc and bullets */
+.detail-overview-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 8px 0;
+  background: rgba(106,150,144,0.10);
+  border: 1px solid rgba(106,150,144,0.25);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6a9690;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.detail-overview-toggle:hover {
+  background: rgba(106,150,144,0.18);
+  border-color: rgba(106,150,144,0.40);
+  color: #3a5c56;
+}
+.detail-overview-toggle .toggle-arrow {
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+}
+.detail-overview-toggle.open .toggle-arrow {
+  transform: rotate(180deg);
+}
+
 /* Tagline */
 .detail-desc{
   font-size:15px;font-weight:700;line-height:1.55;
-  color:var(--text-primary);margin-bottom:16px;letter-spacing:-.01em;
+  color:var(--text-primary);margin-bottom:12px;letter-spacing:-.01em;
 }
 
 /* Bullet list */
@@ -339,6 +398,22 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 
 /* ── Detail body ── */
 [data-theme="light"] .detail-body { background: transparent !important; }
+
+/* Overview card — light mode (sage frosted glass) */
+[data-theme="light"] .detail-overview-card {
+  background: rgba(168,200,196,0.20) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(106,150,144,0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.50) !important;
+}
+[data-theme="light"] .detail-overview-card .detail-desc { color: #2c1f14 !important; font-weight: 700 !important; }
+[data-theme="light"] .detail-overview-card .detail-bullet { color: #2c1f14 !important; font-weight: 500 !important; }
+[data-theme="light"] .detail-overview-toggle {
+  color: #3a5c56 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .detail-overview-toggle:hover { color: #1e3330 !important; }
 [data-theme="light"] .detail-desc { color: #2c1f14 !important; }
 [data-theme="light"] .detail-bullet { color: #5c4535 !important; }
 [data-theme="light"] .section-header { color: #2c1f14 !important; }
