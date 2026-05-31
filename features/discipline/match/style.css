@@ -77,7 +77,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
    ribbons with decorative spheres), inspired by the brand image. */
 [data-theme="light"] .ds {
   background:
-    url('../bg-light.svg') center top / cover no-repeat,
+    url('../../../shared/bg-light.svg') center top / cover no-repeat,
     linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
 }
 /* Aurora pseudo-elements duplicate color — SVG already provides depth, hide */

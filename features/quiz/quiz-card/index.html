@@ -3177,10 +3177,41 @@ const DISC_COLORS = {
 
 /* ─────────────────────────────────────────
    2. QUESTIONS BANK
-   Loaded dynamically from data/assertions.js (window.BD_ASSERTIONS).
-   Random 10 per stage each session: 10 discipline + 10 major + 10 university.
+   Built at runtime from window.BD_ASSERTIONS (assertions.js — auto-generated from CSV).
+   30 per session: 10 discipline (d) + 10 major (m) + 10 university (u).
+   Disc assigned round-robin: kt→nn→nv→tn→xh→yt→... for visual variety + balanced DNA.
    ───────────────────────────────────────── */
-const QUESTIONS = [
+const _DISC_ORDER = ['kt', 'nn', 'nv', 'tn', 'xh', 'yt'];
+
+function _shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuizSet() {
+  const src = window.BD_ASSERTIONS;
+  if (!src) return [];
+  const pick = (pool, n) =>
+    _shuffle(pool).slice(0, n).map((q, i) => ({
+      ...q,
+      disc: _DISC_ORDER[i % _DISC_ORDER.length]
+    }));
+  return [
+    ...pick(src.d || [], 10),
+    ...pick(src.m || [], 10),
+    ...pick(src.u || [], 10),
+  ];
+}
+
+/* ── LEGACY BANK (kept as reference only — DO NOT USE in production) ──────
+   The array below is the old hardcoded 30-question bank. It is no longer
+   used; QUESTIONS is now built dynamically by buildQuizSet() above.
+   ───────────────────────────────────────────────────────────────────────── */
+const _LEGACY_QUESTIONS = [
   { id:  1, disc: 'kt', text: 'I enjoy solving problems through data analysis.',
     vi: 'Tôi thích giải quyết vấn đề thông qua phân tích dữ liệu.',
     fr: "J'aime résoudre des problèmes par l'analyse de données.",
@@ -3332,6 +3363,10 @@ const QUESTIONS = [
     hi: 'नई सामग्री और नैनोटेक्नोलॉजी जीने का तरीका बदल देगी — मैं उसमें योगदान देना चाहता हूं।',
     ar: 'المواد الجديدة وتقنية النانو ستغير طريقة حياتنا — أريد المساهمة في ذلك.' },
 ];
+
+/* ── LIVE QUESTIONS (built from BD_ASSERTIONS) ── */
+const QUESTIONS = buildQuizSet();
+
 /* ── Language helpers ───────────────────────────────────────────
    Both read localStorage directly so they work on first paint,
    regardless of whether BDi18n.init() has run yet.
@@ -3342,8 +3377,12 @@ function _bdLang() {
 
 function getQText(q) {
   var lang = _bdLang();
-  if (q[lang]) return q[lang]; /* vi / fr / hi / ar — all stored inline */
-  return q.text;               /* fallback: English */
+  if (lang === 'vi' && q.vi) return q.vi;
+  if (q[lang]) return q[lang]; /* fr/hi/ar stored inline (legacy format) */
+  /* Check i18n lookup table (assertions-i18n.js — fr/hi/ar keyed by assertion id) */
+  if (window.BD_ASSERTIONS_I18N && window.BD_ASSERTIONS_I18N[lang] && window.BD_ASSERTIONS_I18N[lang][q.id])
+    return window.BD_ASSERTIONS_I18N[lang][q.id];
+  return q.text; /* fallback: English */
 }
 
 /* Disc chip label translation (uses BDi18n.t with temporary _lang override) */
@@ -3378,9 +3417,6 @@ if (START_IDX === 0) {
     sessionStorage.removeItem('bd_scores');
   } catch(e) {}
 }
-// QUESTIONS stays as the full 30-question array — no slicing
-
-
 /* ─────────────────────────────────────────
    3. STATE
    ───────────────────────────────────────── */
