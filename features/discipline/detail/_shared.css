@@ -74,12 +74,14 @@ body{
   width: 390px;
   height: 844px;
   background: var(--bg-base);
-  border-radius: 44px;
+  border-radius: 52px;
+  border: 10px solid #1a1a2e;
   overflow: hidden;
   position: relative;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.10),
-    0 40px 80px rgba(0,0,0,.60),
+    0 0 0 1px #2d2d4a,
+    0 24px 64px rgba(0,0,0,0.7),
+    0 0 80px rgba(124,58,237,0.2),
     0 0 120px var(--disc-glow-sm);
   display: flex;
   flex-direction: column;
@@ -87,10 +89,10 @@ body{
 .device-notch {
   position: absolute;
   top: 0; left: 50%; transform: translateX(-50%);
-  width: 120px; height: 34px;
-  background: #000;
-  border-radius: 0 0 20px 20px;
-  z-index: 100;
+  width: 36%; height: 30px;
+  background: #0a0a14;
+  border-radius: 0 0 22px 22px;
+  z-index: 50;
 }
 .mobile-screen {
   flex: 1;
@@ -118,7 +120,7 @@ body{
 ═══════════════════════════════════════════════════════════ */
 .status-bar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 14px 20px 4px;
+  padding: 12px 20px 4px;
   font-size: 12px; font-weight: 600;
   color: var(--text-secondary);
   flex-shrink: 0;
@@ -203,7 +205,7 @@ body{
   border: 1px solid var(--disc-border);
   border-radius: var(--radius-full);
   padding: 3px 10px;
-  font-size: 10px; font-weight: 700;
+  font-size: 11px; font-weight: 700;
   color: var(--disc-light);
   letter-spacing: .08em; text-transform: uppercase;
 }
@@ -328,7 +330,8 @@ body{
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%;
   padding: 15px 20px;
-  background: linear-gradient(135deg, var(--disc-primary), var(--disc-light));
+  /* Start Quiz — btn-primary: violet-600 */
+  background: var(--violet-600);
   color: #fff;
   border-radius: var(--radius-full);
   font-size: 15px; font-weight: 800;
@@ -336,25 +339,40 @@ body{
   text-decoration: none;
   cursor: pointer;
   border: none;
-  box-shadow: 0 6px 24px var(--disc-glow-sm), 0 1px 0 rgba(255,255,255,.18) inset;
-  transition: transform var(--t-fast), box-shadow var(--t-fast);
+  box-shadow: 0 6px 24px rgba(124,58,237,0.35), 0 1px 0 rgba(255,255,255,.18) inset;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
   -webkit-tap-highlight-color: transparent;
+}
+.cta-btn:hover {
+  background: var(--violet-500);
 }
 .cta-btn:active {
   transform: scale(0.97);
-  box-shadow: 0 3px 12px var(--disc-glow-sm);
+  box-shadow: 0 3px 12px rgba(124,58,237,0.25);
+}
+
+/* Continue Quiz — btn-success: mint-500 */
+.cta-btn.cta-continue {
+  background: var(--mint-500);
+  color: #06060f;
+  box-shadow: 0 6px 24px rgba(6,214,160,0.35), 0 1px 0 rgba(255,255,255,.18) inset;
+}
+.cta-btn.cta-continue:hover {
+  background: var(--mint-400);
+}
+.cta-btn.cta-continue:active {
+  box-shadow: 0 3px 12px rgba(6,214,160,0.25);
 }
 
 /* ═══════════════════════════════════════════════════════════
    Floating Tab Bar
 ═══════════════════════════════════════════════════════════ */
-.tab-bar-wrap {
-  padding: 6px 10px 12px;
-  flex-shrink: 0;
-}
 .float-tab-bar {
+  position: relative; z-index: 20;
   display: flex; align-items: center; justify-content: space-between;
+  margin: 0 10px 12px;
   padding: 5px;
+  flex-shrink: 0;
   border-radius: var(--radius-full);
   background: rgba(255,255,255,.06);
   backdrop-filter: blur(32px) saturate(200%);
@@ -447,19 +465,233 @@ body{
 .major-unlock-banner .ul-icon { font-size:20px; flex-shrink:0; }
 .major-unlock-banner strong { color:var(--text-primary); }
 
-/* ─── LIGHT MODE ─────────────────────────────────────────── */
-[data-theme="light"] body{background:#f0f4fb}
-[data-theme="light"] .desktop-container{background:#e8edf7}
-[data-theme="light"] .status-bar{color:#1a1a2e}
-[data-theme="light"] .btn-icon{background:rgba(0,0,0,.06)!important;border:1px solid rgba(0,0,0,.10)!important;color:#1a1a2e!important}
-[data-theme="light"] .detail-body{background:#f0f4fb}
-[data-theme="light"] .detail-desc{color:#1a1a2e}
-[data-theme="light"] .detail-bullet{color:rgba(26,26,46,.65)}
-[data-theme="light"] .section-header{color:#1a1a2e}
-[data-theme="light"] .major-card{background:#fff;border-color:rgba(0,0,0,.08)}
-[data-theme="light"] .major-name{color:#1a1a2e}
-[data-theme="light"] .major-tag{color:rgba(26,26,46,.40)}
-[data-theme="light"] .major-arrow{color:rgba(26,26,46,.30)}
-[data-theme="light"] .major-unlock-banner{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.10);color:rgba(26,26,46,.65)}
-[data-theme="light"] .major-unlock-banner strong{color:#1a1a2e}
-[data-theme="light"] .major-pct.locked-pct{color:rgba(26,26,46,.20)}
+/* ════════════════════════════════════════════════════════════════
+   LIGHT MODE — terracotta/cream palette with wave SVG wallpaper.
+   Hero card now VIVIDLY disc-colored (was generic coral cream).
+   Each discipline's --disc-primary drives the hero, bullet checks,
+   CTA, and tab active state via color-mix.
+   Cards become frosted glass over the wave wallpaper.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Outside stays dark */
+[data-theme="light"] body { background: #06060f !important; color: #f8fafc !important; }
+[data-theme="light"] .desktop-container { background: transparent; }
+[data-theme="light"] .device-frame {
+  background: #06060f !important;
+  border-color: #1a1a2e !important;
+  box-shadow:
+    0 0 0 1px #2d2d4a,
+    0 24px 64px rgba(0,0,0,0.7),
+    0 0 80px var(--disc-glow-sm, rgba(124,58,237,0.2)) !important;
+}
+[data-theme="light"] .device-notch { background: #0a0a14 !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+
+/* Inside — shared wave SVG wallpaper */
+[data-theme="light"] .mobile-screen {
+  background:
+    url('../bg-light.svg') center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+
+/* Status bar */
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
+
+/* Page header buttons — frosted */
+[data-theme="light"] .btn-icon {
+  background: rgba(255,253,250,0.90) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .btn-icon:active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,253,250,0.85)) !important;
+}
+[data-theme="light"] .page-title { color: #2c1f14 !important; }
+
+/* Detail body text */
+[data-theme="light"] .detail-body { background: transparent; }
+[data-theme="light"] .detail-desc { color: #2c1f14 !important; }
+[data-theme="light"] .detail-bullet { color: #5c4535 !important; }
+[data-theme="light"] .section-header { color: #2c1f14 !important; }
+
+/* ── Hero — BRAND IMAGE palette waves + disc identity overlay ──
+   The hero now LOOKS like the brand image: cream + terracotta +
+   dusty blue + sage radials. Each discipline still adds its
+   characteristic color as a center tint (--disc-primary) so users
+   can tell which page they're on without losing brand cohesion. */
+[data-theme="light"] .hero {
+  background:
+    /* Terracotta-400 wave top-right */
+    radial-gradient(ellipse 95% 70% at 95% 0%, rgba(232,145,122,0.45) 0%, transparent 65%),
+    /* Dusty Blue-300 wave bottom-left */
+    radial-gradient(ellipse 90% 65% at 5% 100%, rgba(163,194,211,0.48) 0%, transparent 65%),
+    /* Sage-300 accent bottom-right */
+    radial-gradient(ellipse 55% 55% at 100% 85%, rgba(168,200,196,0.40) 0%, transparent 65%),
+    /* Blue-200 subtle top-left */
+    radial-gradient(ellipse 50% 45% at 0% 25%, rgba(196,217,229,0.32) 0%, transparent 65%),
+    /* DISC IDENTITY center tint */
+    radial-gradient(ellipse 65% 60% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 24%, transparent) 0%,
+      transparent 75%),
+    /* Cream base */
+    linear-gradient(135deg, #fdf8f2 0%, #fceae4 28%, #f5ede0 65%, #e0ecf3 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 4px 16px color-mix(in srgb, var(--disc-primary) 18%, transparent),
+    0 12px 30px rgba(140,114,96,0.12) !important;
+}
+[data-theme="light"] .hero-aurora {
+  /* Aurora layer — sage + terracotta + disc accent on cream */
+  background:
+    radial-gradient(ellipse 100% 75% at 25% 35%,
+      rgba(232,145,122,0.32) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 75% 60% at 85% 75%,
+      rgba(163,194,211,0.38) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 28%, transparent) 0%,
+      transparent 70%),
+    linear-gradient(160deg, rgba(253,248,242,0.50) 0%, rgba(245,237,224,0.40) 100%) !important;
+}
+[data-theme="light"] .hero-overlay {
+  background: linear-gradient(to bottom,
+    transparent 40%,
+    color-mix(in srgb, var(--disc-dark) 12%, rgba(253,248,242,0.4)) 75%,
+    color-mix(in srgb, var(--disc-dark) 22%, rgba(245,237,224,0.75)) 100%) !important;
+}
+[data-theme="light"] .hero-label-name {
+  color: color-mix(in srgb, var(--disc-dark) 78%, #2c1f14) !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.45);
+}
+[data-theme="light"] .hero-label-tag {
+  background: color-mix(in srgb, var(--disc-primary) 22%, rgba(255,255,255,0.65)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 45%, transparent) !important;
+  color: color-mix(in srgb, var(--disc-dark) 70%, var(--disc-primary)) !important;
+}
+
+/* ── Bullet check — disc-tinted ── */
+[data-theme="light"] .bullet-check {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.6)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 40%, transparent) !important;
+}
+[data-theme="light"] .bullet-check svg {
+  stroke: color-mix(in srgb, var(--disc-dark) 50%, var(--disc-primary)) !important;
+}
+
+/* ── Major cards — frosted glass over wave bg ──
+   The disc-primary bar on the left stripe stays vivid since each
+   detail page sets --disc-primary; per-card icon variation by
+   nth-child rotates through the palette colors for visual richness. */
+[data-theme="light"] .major-card {
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px rgba(140,114,96,0.07) !important;
+}
+[data-theme="light"] .major-card::before {
+  /* Stripe takes disc-primary which IS the page's hue */
+  background: var(--disc-primary) !important;
+  opacity: 0.85;
+}
+[data-theme="light"] .major-name { color: #2c1f14 !important; }
+[data-theme="light"] .major-tag { color: #8c7260 !important; }
+[data-theme="light"] .major-arrow { color: #a89282 !important; }
+[data-theme="light"] .major-pct { color: #2c1f14 !important; }
+
+/* Per-card icon — 6 palette hues rotating through positions for
+   visual variety, while the page's primary stripe remains disc-color */
+[data-theme="light"] .major-card:nth-child(6n+1) .major-icon {
+  background: rgba(201,107,85,0.16) !important;
+  border-color: rgba(201,107,85,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+2) .major-icon {
+  background: rgba(74,135,168,0.16) !important;
+  border-color: rgba(74,135,168,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+3) .major-icon {
+  background: rgba(106,150,144,0.16) !important;
+  border-color: rgba(106,150,144,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+4) .major-icon {
+  background: rgba(217,160,64,0.16) !important;
+  border-color: rgba(217,160,64,0.38) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+5) .major-icon {
+  background: rgba(196,85,64,0.14) !important;
+  border-color: rgba(196,85,64,0.36) !important;
+}
+[data-theme="light"] .major-card:nth-child(6n+6) .major-icon {
+  background: rgba(140,114,96,0.16) !important;
+  border-color: rgba(140,114,96,0.38) !important;
+}
+[data-theme="light"] .major-card:active {
+  background: color-mix(in srgb, var(--disc-primary) 8%, rgba(253,248,242,0.85)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 35%, rgba(232,224,213,0.6)) !important;
+}
+
+/* ── CTA buttons — vivid disc-colored, not pale ── */
+[data-theme="light"] .cta-btn:not(.cta-continue) {
+  background: linear-gradient(135deg,
+    var(--disc-primary) 0%,
+    color-mix(in srgb, var(--disc-primary) 75%, var(--disc-dark)) 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px color-mix(in srgb, var(--disc-primary) 32%, transparent),
+    0 10px 26px color-mix(in srgb, var(--disc-primary) 18%, transparent) !important;
+}
+[data-theme="light"] .cta-btn:not(.cta-continue):hover {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--disc-primary) 85%, #ffffff) 0%,
+    var(--disc-primary) 100%) !important;
+}
+/* Continue Quiz CTA → sage success */
+[data-theme="light"] .cta-btn.cta-continue {
+  background: linear-gradient(135deg, #4a9e7a 0%, #2f6f53 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px rgba(74,158,122,0.32),
+    0 10px 26px rgba(74,158,122,0.18) !important;
+}
+
+/* ── Float tab bar — frosted cream ── */
+[data-theme="light"] .mobile-screen .float-tab-bar {
+  background: linear-gradient(135deg, rgba(255,253,250,0.92) 0%, rgba(245,237,224,0.88) 100%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border-color: rgba(232,224,213,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 -2px 12px rgba(201,107,85,0.06),
+    0 6px 20px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .mobile-screen .tab-item { color: rgba(92,69,53,0.55) !important; }
+[data-theme="light"] .mobile-screen .tab-item.active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.5)) !important;
+  color: color-mix(in srgb, var(--disc-dark) 65%, var(--disc-primary)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 32%, transparent) !important;
+}
+
+/* ── Unlock banner — frosted, terracotta-tinted ── */
+[data-theme="light"] .major-unlock-banner {
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  color: #5c4535 !important;
+}
+[data-theme="light"] .major-unlock-banner strong { color: #2c1f14 !important; }
+[data-theme="light"] .major-pct.locked-pct { color: rgba(92,69,53,0.40) !important; }
+
+/* Locked card */
+[data-theme="light"] .major-card.locked { opacity: 0.50; }

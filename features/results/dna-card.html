@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Academic DNA Card — BeyonDegrees.ai</title>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     /* ── RESET & BASE ─────────────────────────────── */
@@ -342,7 +343,7 @@
     </div>
 
     <div class="bottom-hint">
-      ← <a href="./match-reveal/">Back to Results</a> &nbsp;·&nbsp; <a href="../../index.html">All Screens</a>
+      ← <a href="./match-reveal/">Back to Results</a> &nbsp;·&nbsp; <a href="../../">All Screens</a>
     </div>
 
   </div>
@@ -351,6 +352,7 @@
   <div class="toast" id="toast">✓ Link copied to clipboard!</div>
 
   <script>
+    const t = k => window.BDi18n ? BDi18n.t(k) : k;
     const PROFILES = [
       {
         name: 'Tech Profile',
@@ -428,7 +430,9 @@
       const p = PROFILES[idx];
       document.getElementById('mainPct').textContent = p.mainPct;
       document.getElementById('mainDisc').innerHTML = p.mainDisc;
-      document.getElementById('mainSub').textContent = p.mainSub;
+      var mainSubEl = document.getElementById('mainSub');
+      mainSubEl.textContent = t('dna.main_sub');
+      mainSubEl.setAttribute('data-i18n', 'dna.main_sub');
       document.getElementById('taglineText').innerHTML = p.tagline;
       renderBars(p.bars);
       // Update button states
@@ -456,5 +460,6 @@
     // Init
     loadProfile(0);
   </script>
+  <script src="../../shared/scripts/i18n.js"></script>
 </body>
 </html>

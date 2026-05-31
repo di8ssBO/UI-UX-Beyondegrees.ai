@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <!-- Prevent RTL layout flash -->
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <title>Account Settings — BeyonDegrees.ai</title>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
@@ -13,8 +15,8 @@
   <link rel="stylesheet" href="../../../design-system/layout.css">
 <style>
 :root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
-:root[data-theme="light"]{--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#1863DC;--violet-300:#4A90E2;--violet-200:#93BBFF;--violet-100:#EEF4FB;--neutral-950:#FFFFFF;--neutral-900:#F2F7FD;--neutral-800:#E0ECFA;--neutral-700:#C5D5E8;--neutral-600:#A8BDD8;--neutral-500:#808DAA;--neutral-400:#5A6580;--neutral-300:#3A3A4A;--neutral-200:#1A1A2E;--neutral-100:#0D0D1A;--neutral-50:#060610;--bg-base:#FFFFFF;--bg-surface:#F2F7FD;--bg-elevated:#E0ECFA;--bg-overlay:#C5D5E8;--text-primary:#1A1A2E;--text-secondary:#3A3A4A;--text-muted:#808285;--text-disabled:#C0C0D0;--mint-500:#059669;--mint-400:#10B981}
-[data-theme="light"] body{background:#0f1020!important;color:#1A1A2E!important}
+/* Light-mode token overrides live in design-system/tokens.css */
+[data-theme="light"] body{background:#06060f!important;color:#f8fafc!important}
 *,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
 svg *,canvas,video,img{transition:none!important}
 
@@ -27,7 +29,16 @@ body { background: #06060f; }
   scrollbar-width: none;
 }
 .mobile-viewport::-webkit-scrollbar { display: none; }
-[data-theme="light"] .mobile-viewport { background: #f2f7fd; }
+[data-theme="light"] .mobile-viewport {
+  background:
+    url("../../../shared/bg-light.svg") center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+[data-theme="light"] .device-frame { border-color: #1a1a2e !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
 
 /* Top bar */
 .top-bar {
@@ -38,7 +49,13 @@ body { background: #06060f; }
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
-[data-theme="light"] .top-bar { background: rgba(255,255,255,0.94)!important; border-bottom-color: rgba(24,99,220,0.10)!important; }
+[data-theme="light"] .top-bar {
+  background: rgba(253,248,242,0.78) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border-bottom: 1px solid rgba(232,224,213,0.65) !important;
+}
+[data-theme="light"] .page-title { color: #2c1f14 !important; font-weight: 800 !important; }
 
 .back-btn {
   width: 34px; height: 34px; border-radius: 50%;
@@ -49,7 +66,16 @@ body { background: #06060f; }
   transition: background 0.18s; flex-shrink: 0;
 }
 .back-btn:hover { background: rgba(255,255,255,0.10); }
-[data-theme="light"] .back-btn { background: rgba(24,99,220,0.08)!important; border-color: rgba(24,99,220,0.15)!important; }
+[data-theme="light"] .back-btn {
+  background: rgba(255,255,255,0.85) !important;
+  border: 1px solid rgba(201,107,85,0.35) !important;
+  color: #a84e30 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 2px 6px rgba(201,107,85,0.10) !important;
+}
+[data-theme="light"] .back-btn:hover {
+  background: linear-gradient(135deg, rgba(232,145,122,0.18) 0%, rgba(201,107,85,0.22) 100%) !important;
+  border-color: rgba(201,107,85,0.55) !important;
+}
 .page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
 
 /* Page content */
@@ -62,7 +88,16 @@ body { background: #06060f; }
   border: 1px solid rgba(255,255,255,0.07);
   border-radius: 18px; overflow: hidden; margin-bottom: 12px;
 }
-[data-theme="light"] .settings-group { background: rgba(255,255,255,0.88)!important; border-color: rgba(24,99,220,0.12)!important; box-shadow: 0 2px 12px rgba(24,99,220,0.06); }
+[data-theme="light"] .settings-group {
+  background: rgba(255,255,255,0.92) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(140,114,96,0.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,1),
+    0 1px 3px rgba(58,46,38,0.06),
+    0 6px 16px rgba(140,114,96,0.10) !important;
+}
 
 .settings-row {
   display: flex; align-items: center; gap: 12px;
@@ -73,8 +108,8 @@ body { background: #06060f; }
 }
 .settings-row:last-child { border-bottom: none; }
 .settings-row:hover { background: rgba(255,255,255,0.04); }
-[data-theme="light"] .settings-row { border-bottom-color: rgba(24,99,220,0.07)!important; }
-[data-theme="light"] .settings-row:hover { background: rgba(24,99,220,0.04)!important; }
+[data-theme="light"] .settings-row { border-bottom-color: rgba(140,114,96,0.18) !important; }
+[data-theme="light"] .settings-row:hover { background: rgba(201,107,85,0.06) !important; }
 
 .row-icon {
   width: 34px; height: 34px; border-radius: 9px;
@@ -82,13 +117,35 @@ body { background: #06060f; }
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; color: var(--violet-400);
 }
-[data-theme="light"] .row-icon { background: rgba(24,99,220,0.10)!important; }
+/* Light mode — 4-palette rotation per row icon */
+[data-theme="light"] .settings-row:nth-child(4n+1) .row-icon {
+  background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
+  border: 1px solid rgba(201,107,85,0.40) !important;
+  color: #a84e30 !important;
+}
+[data-theme="light"] .settings-row:nth-child(4n+2) .row-icon {
+  background: linear-gradient(135deg, rgba(127,168,190,0.26) 0%, rgba(74,135,168,0.30) 100%) !important;
+  border: 1px solid rgba(74,135,168,0.40) !important;
+  color: #2f6a8c !important;
+}
+[data-theme="light"] .settings-row:nth-child(4n+3) .row-icon {
+  background: linear-gradient(135deg, rgba(168,200,196,0.30) 0%, rgba(106,150,144,0.32) 100%) !important;
+  border: 1px solid rgba(106,150,144,0.40) !important;
+  color: #3a5c56 !important;
+}
+[data-theme="light"] .settings-row:nth-child(4n+4) .row-icon {
+  background: linear-gradient(135deg, rgba(216,204,191,0.55) 0%, rgba(140,114,96,0.25) 100%) !important;
+  border: 1px solid rgba(140,114,96,0.42) !important;
+  color: #6b5440 !important;
+}
 .row-body { flex: 1; display: flex; flex-direction: column; gap: 1px; }
 .row-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-[data-theme="light"] .row-label { color: #1A1A2E!important; }
+[data-theme="light"] .row-label { color: #2c1f14 !important; font-weight: 700 !important; }
 .row-right { display: flex; align-items: center; gap: 6px; }
 .row-value { font-size: 13px; color: var(--text-muted); }
+[data-theme="light"] .row-value { color: #6b5440 !important; font-weight: 600 !important; }
 .row-chevron { color: var(--text-muted); display: flex; align-items: center; }
+[data-theme="light"] .row-chevron { color: #8c7260 !important; }
 
 /* Toggle */
 .toggle-wrap { display: flex; align-items: center; }
@@ -96,13 +153,27 @@ body { background: #06060f; }
 .toggle input { opacity: 0; width: 0; height: 0; }
 .toggle-track { position: absolute; inset: 0; border-radius: 100px; background: var(--neutral-600); transition: background 0.25s ease; }
 .toggle input:checked ~ .toggle-track { background: #1863DC; }
+[data-theme="light"] .toggle-track { background: rgba(140,114,96,0.30) !important; }
+[data-theme="light"] .toggle input:checked ~ .toggle-track {
+  background: linear-gradient(135deg, #e8917a 0%, #c96b55 50%, #a84e30 100%) !important;
+  box-shadow: 0 2px 8px rgba(201,107,85,0.25) !important;
+}
 .toggle-thumb { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
 .toggle input:checked ~ .toggle-thumb { transform: translateX(20px); }
 
 /* Destructive */
 .row-destructive .row-icon { background: rgba(255,71,87,0.12); color: #ff4757; }
 .row-destructive .row-label { color: #ff4757; }
-[data-theme="light"] .row-destructive .row-icon { background: rgba(255,71,87,0.10)!important; }
+[data-theme="light"] .settings-row.row-destructive .row-icon,
+[data-theme="light"] .settings-row.row-destructive:nth-child(4n+1) .row-icon,
+[data-theme="light"] .settings-row.row-destructive:nth-child(4n+2) .row-icon,
+[data-theme="light"] .settings-row.row-destructive:nth-child(4n+3) .row-icon,
+[data-theme="light"] .settings-row.row-destructive:nth-child(4n+4) .row-icon {
+  background: linear-gradient(135deg, rgba(216,135,118,0.30) 0%, rgba(196,85,64,0.28) 100%) !important;
+  border: 1px solid rgba(196,85,64,0.50) !important;
+  color: #c45540 !important;
+}
+[data-theme="light"] .row-destructive .row-label { color: #c45540 !important; }
 
 /* ── Bottom sheet scoped to device-frame ── */
 .sheet-overlay {
@@ -113,6 +184,12 @@ body { background: #06060f; }
   backdrop-filter: blur(4px);
 }
 .sheet-overlay.open { opacity: 1; pointer-events: all; }
+/* Light mode — warm-tint backdrop instead of cold black */
+[data-theme="light"] .sheet-overlay {
+  background: rgba(44,31,20,0.45) !important;
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  backdrop-filter: blur(8px) saturate(120%);
+}
 
 .bottom-sheet {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 201;
@@ -124,19 +201,57 @@ body { background: #06060f; }
   box-shadow: 0 -8px 40px rgba(0,0,0,0.4);
 }
 .bottom-sheet.open { transform: translateY(0); }
-[data-theme="light"] .bottom-sheet { background: #FFFFFF!important; border-color: rgba(24,99,220,0.12)!important; }
+[data-theme="light"] .bottom-sheet {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(232,145,122,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(127,168,190,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 0% 0%, rgba(168,200,196,0.08) 0%, transparent 70%),
+    #ffffff !important;
+  border: 1.5px solid rgba(201,107,85,0.32) !important;
+  border-bottom: none !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.85),
+    0 -2px 12px rgba(201,107,85,0.14),
+    0 -8px 40px rgba(140,114,96,0.20),
+    0 -16px 60px rgba(74,135,168,0.12) !important;
+}
+/* Top palette accent strip — 4-color brand signature */
+[data-theme="light"] .bottom-sheet::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    #c96b55 0%, #c96b55 25%,
+    #4a87a8 25%, #4a87a8 50%,
+    #6a9690 50%, #6a9690 75%,
+    #8c7260 75%, #8c7260 100%);
+  border-radius: 24px 24px 0 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
 
 .sheet-handle { width: 36px; height: 4px; border-radius: 100px; background: rgba(255,255,255,0.15); margin: 10px auto 0; }
-[data-theme="light"] .sheet-handle { background: rgba(0,0,0,0.12)!important; }
+[data-theme="light"] .sheet-handle { background: rgba(140,114,96,0.30) !important; }
 
 .sheet-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px 10px; }
 .sheet-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+[data-theme="light"] .sheet-title { color: #2c1f14 !important; font-weight: 800 !important; }
 .sheet-close { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.08); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: background 0.18s; }
 .sheet-close:hover { background: rgba(255,255,255,0.14); }
-[data-theme="light"] .sheet-close { background: rgba(0,0,0,0.06)!important; }
+[data-theme="light"] .sheet-close {
+  background: linear-gradient(135deg, rgba(216,204,191,0.50) 0%, rgba(140,114,96,0.20) 100%) !important;
+  color: #6b5440 !important;
+  border: 1px solid rgba(140,114,96,0.40) !important;
+}
+[data-theme="light"] .sheet-close:hover {
+  background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
+  color: #a84e30 !important;
+  border-color: rgba(201,107,85,0.45) !important;
+}
 
 .sheet-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 0 20px; }
-[data-theme="light"] .sheet-divider { background: rgba(24,99,220,0.08)!important; }
+[data-theme="light"] .sheet-divider { background: rgba(140,114,96,0.18) !important; }
 
 .sheet-options { padding: 6px 0 20px; }
 .sheet-option {
@@ -148,23 +263,49 @@ body { background: #06060f; }
 }
 .sheet-option:last-child { border-bottom: none; }
 .sheet-option:hover { background: rgba(255,255,255,0.04); }
-[data-theme="light"] .sheet-option { color: #1A1A2E!important; }
-[data-theme="light"] .sheet-option:hover { background: rgba(24,99,220,0.04)!important; }
+[data-theme="light"] .sheet-option { color: #2c1f14 !important; font-weight: 600 !important; border-bottom-color: rgba(140,114,96,0.14) !important; }
+[data-theme="light"] .sheet-option:hover { background: rgba(201,107,85,0.06) !important; }
 
 .sheet-option-left { display: flex; align-items: center; gap: 12px; }
 .sheet-opt-icon { width: 30px; height: 30px; border-radius: 8px; background: rgba(24,99,220,0.10); display: flex; align-items: center; justify-content: center; color: var(--violet-400); flex-shrink: 0; }
 .sheet-option[data-selected="true"] .sheet-opt-icon { background: rgba(24,99,220,0.18); }
-[data-theme="light"] .sheet-opt-icon { background: rgba(24,99,220,0.08)!important; }
-[data-theme="light"] .sheet-option[data-selected="true"] .sheet-opt-icon { background: rgba(24,99,220,0.15)!important; }
+/* Light mode — palette rotation for sheet option icons */
+[data-theme="light"] .sheet-option:nth-child(4n+1) .sheet-opt-icon {
+  background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
+  border: 1px solid rgba(201,107,85,0.40) !important;
+  color: #a84e30 !important;
+}
+[data-theme="light"] .sheet-option:nth-child(4n+2) .sheet-opt-icon {
+  background: linear-gradient(135deg, rgba(127,168,190,0.26) 0%, rgba(74,135,168,0.30) 100%) !important;
+  border: 1px solid rgba(74,135,168,0.40) !important;
+  color: #2f6a8c !important;
+}
+[data-theme="light"] .sheet-option:nth-child(4n+3) .sheet-opt-icon {
+  background: linear-gradient(135deg, rgba(168,200,196,0.30) 0%, rgba(106,150,144,0.32) 100%) !important;
+  border: 1px solid rgba(106,150,144,0.40) !important;
+  color: #3a5c56 !important;
+}
+[data-theme="light"] .sheet-option:nth-child(4n+4) .sheet-opt-icon {
+  background: linear-gradient(135deg, rgba(216,204,191,0.55) 0%, rgba(140,114,96,0.25) 100%) !important;
+  border: 1px solid rgba(140,114,96,0.42) !important;
+  color: #6b5440 !important;
+}
+[data-theme="light"] .sheet-option[data-selected="true"] .sheet-opt-icon {
+  background: linear-gradient(135deg, rgba(232,145,122,0.40) 0%, rgba(201,107,85,0.45) 100%) !important;
+  border-color: rgba(201,107,85,0.55) !important;
+  color: #a84e30 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 2px 6px rgba(201,107,85,0.18) !important;
+}
 
 .sheet-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
 .sheet-option[data-selected="true"] .sheet-check { opacity: 1; color: #1863DC; }
+[data-theme="light"] .sheet-option[data-selected="true"] .sheet-check { color: #a84e30 !important; }
 </style>
 </head>
 
 <body>
 <div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
-  <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
   <span class="breadcrumb-separator">/</span>
   <a href="../../profile/overview/" class="breadcrumb-item">Profile</a>
   <span class="breadcrumb-separator">/</span>
@@ -176,20 +317,20 @@ body { background: #06060f; }
     <div class="device-notch"></div>
 
     <div class="mobile-viewport">
-              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px 4px;font-size:12px;font-weight:600;color:var(--text-secondary);position:relative;z-index:2">
-          <span>9:41</span>
-          <div style="display:flex;gap:6px;align-items:center">
-            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
-            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
-          </div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
         </div>
+      </div>
 
       <!-- Top bar -->
       <div class="top-bar">
         <a href="../../profile/overview/" class="back-btn" aria-label="Back">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
         </a>
-        <span class="page-title">Account Settings</span>
+        <span class="page-title" data-i18n="settings.title">Account Settings</span>
       </div>
 
       <!-- Content -->
@@ -197,13 +338,13 @@ body { background: #06060f; }
 
         <!-- Preferences -->
         <div class="settings-group">
-          <div class="settings-row">
+          <div class="settings-row" onclick="openLangSheet()" style="cursor:pointer;">
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
             </div>
-            <div class="row-body"><span class="row-label">Language</span></div>
+            <div class="row-body"><span class="row-label" data-i18n="settings.language">Language</span></div>
             <div class="row-right">
-              <span class="row-value">English</span>
+              <span class="row-value" id="lang-row-value">English</span>
               <div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div>
             </div>
           </div>
@@ -212,7 +353,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
             </div>
-            <div class="row-body"><span class="row-label">Theme</span></div>
+            <div class="row-body"><span class="row-label" data-i18n="settings.theme">Theme</span></div>
             <div class="row-right">
               <span class="row-value" id="theme-row-value">Dark</span>
               <div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div>
@@ -223,7 +364,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
             </div>
-            <div class="row-body"><span class="row-label">Notifications</span></div>
+            <div class="row-body"><span class="row-label" data-i18n="settings.notifications">Notifications</span></div>
             <div class="toggle-wrap">
               <label class="toggle">
                 <input type="checkbox" checked id="notif-toggle">
@@ -240,7 +381,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
             </div>
-            <span class="row-label">Log Out</span>
+            <span class="row-label" data-i18n="settings.logout">Log Out</span>
             <div class="row-right"><div class="row-chevron" style="color:#ff4757"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
           </div>
         </div>
@@ -250,7 +391,7 @@ body { background: #06060f; }
             <div class="row-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             </div>
-            <span class="row-label">Delete Account</span>
+            <span class="row-label" data-i18n="settings.delete">Delete Account</span>
             <div class="row-right"><div class="row-chevron" style="color:#ff4757"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
           </div>
         </div>
@@ -263,7 +404,7 @@ body { background: #06060f; }
     <div class="bottom-sheet" id="themeSheet">
       <div class="sheet-handle"></div>
       <div class="sheet-header">
-        <span class="sheet-title">Select Theme</span>
+        <span class="sheet-title" data-i18n="settings.theme_sheet_title">Select Theme</span>
         <button class="sheet-close" onclick="closeThemeSheet()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -275,7 +416,7 @@ body { background: #06060f; }
             <div class="sheet-opt-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
             </div>
-            <span>Light</span>
+            <span data-i18n="settings.theme.light">Light</span>
           </div>
           <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
         </div>
@@ -284,7 +425,7 @@ body { background: #06060f; }
             <div class="sheet-opt-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
             </div>
-            <span>Dark</span>
+            <span data-i18n="settings.theme.dark">Dark</span>
           </div>
           <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
         </div>
@@ -293,7 +434,57 @@ body { background: #06060f; }
             <div class="sheet-opt-icon">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
             </div>
-            <span>System</span>
+            <span data-i18n="settings.theme.system">System</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LANGUAGE BOTTOM SHEET ── -->
+    <div class="sheet-overlay" id="langSheetOverlay" onclick="closeLangSheet()"></div>
+    <div class="bottom-sheet" id="langSheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title" data-i18n="settings.lang_sheet_title">Select Language</span>
+        <button class="sheet-close" onclick="closeLangSheet()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-divider"></div>
+      <div class="sheet-options" id="langOptions">
+        <div class="sheet-option" data-lang-opt="en" onclick="selectLang('en')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇺🇸</div>
+            <span>English</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="vi" onclick="selectLang('vi')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇻🇳</div>
+            <span>Tiếng Việt</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="hi" onclick="selectLang('hi')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇮🇳</div>
+            <span>हिन्दी</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="fr" onclick="selectLang('fr')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇫🇷</div>
+            <span>Français</span>
+          </div>
+          <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
+        </div>
+        <div class="sheet-option" data-lang-opt="ar" onclick="selectLang('ar')">
+          <div class="sheet-option-left">
+            <div class="sheet-opt-icon" style="font-size:18px;line-height:1">🇸🇦</div>
+            <span>العربية</span>
           </div>
           <div class="sheet-check"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg></div>
         </div>
@@ -318,10 +509,9 @@ var _currentPref='dark';
 function bdApplyTheme(r){document.documentElement.setAttribute('data-theme',r);}
 
 function updateThemeUI(pref){
-  var labels={dark:'Dark',light:'Light',system:'System'};
   var el=document.getElementById('theme-row-value');
-  if(el) el.textContent=labels[pref]||'Dark';
-  document.querySelectorAll('.sheet-option').forEach(function(o){
+  if(el) el.textContent=window.BDi18n?BDi18n.t('settings.theme.'+pref):({dark:'Dark',light:'Light',system:'System'}[pref]||'Dark');
+  document.querySelectorAll('.sheet-option[data-pref]').forEach(function(o){
     o.setAttribute('data-selected', o.dataset.pref===pref?'true':'false');
   });
 }
@@ -349,11 +539,40 @@ function selectTheme(pref){
   setTimeout(closeThemeSheet,320);
 }
 
+/* ── Language sheet ── */
+function openLangSheet(){
+  document.getElementById('langSheet').classList.add('open');
+  document.getElementById('langSheetOverlay').classList.add('open');
+}
+function closeLangSheet(){
+  document.getElementById('langSheet').classList.remove('open');
+  document.getElementById('langSheetOverlay').classList.remove('open');
+}
+function selectLang(code){
+  if(window.BDi18n) BDi18n.apply(code);
+  updateLangUI(code);
+  setTimeout(closeLangSheet,320);
+}
+function updateLangUI(code){
+  var meta=window.BDi18n?BDi18n.LANGS[code]:null;
+  var name=meta?meta.nativeName:'English';
+  var el=document.getElementById('lang-row-value');
+  if(el) el.textContent=name;
+  document.querySelectorAll('.sheet-option[data-lang-opt]').forEach(function(o){
+    o.setAttribute('data-selected', o.dataset.langOpt===code?'true':'false');
+  });
+  /* Re-sync theme label (language may have changed its translation) */
+  updateThemeUI(_currentPref);
+}
+
 /* ── Init UI labels once DOM is ready ── */
 document.addEventListener('DOMContentLoaded',function(){
-  var saved='dark';try{saved=localStorage.getItem('bd-theme')||'dark';}catch(e){}
-  _currentPref=saved;
-  updateThemeUI(saved);
+  var savedTheme='dark';try{savedTheme=localStorage.getItem('bd-theme')||'dark';}catch(e){}
+  _currentPref=savedTheme;
+  updateThemeUI(savedTheme);
+
+  var savedLang='en';try{savedLang=localStorage.getItem('bd-lang')||'en';}catch(e){}
+  updateLangUI(savedLang);
 });
 
 window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',function(){
@@ -361,5 +580,6 @@ window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',func
   if(pref==='system') bdSetTheme('system');
 });
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

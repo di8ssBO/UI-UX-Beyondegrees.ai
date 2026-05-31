@@ -18,19 +18,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
     radial-gradient(ellipse 50% 40% at 80% 80%,rgba(6,214,160,.04) 0%,transparent 70%),
     var(--bg-base);
 }
-.device-frame{
-  width:390px;height:844px;background:var(--bg-base);
-  border-radius:44px;overflow:hidden;position:relative;
-  box-shadow:0 0 0 1px rgba(255,255,255,.10),0 40px 80px rgba(0,0,0,.60),
-    0 0 120px rgba(124,58,237,.08);
-  display:flex;flex-direction:column;
-}
-.device-notch{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:120px;height:34px;background:#000;
-  border-radius:0 0 20px 20px;z-index:100;
-}
-.mobile-screen{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+/* device-frame, device-notch, mobile-screen → layout.css */
 
 /* ═══════════════════════════════════════════════════════════
    Breadcrumb (desktop)
@@ -206,18 +194,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 }
 .cta-btn:active{transform:scale(.97);box-shadow:0 3px 12px var(--disc-glow-sm)}
 
-/* ═══════════════════════════════════════════════════════════
-   Floating Tab Bar
-═══════════════════════════════════════════════════════════ */
-.tab-bar-wrap{padding:6px 10px 12px;flex-shrink:0}
-.float-tab-bar{
-  display:flex;align-items:center;justify-content:space-between;padding:5px;
-  border-radius:var(--radius-full);background:rgba(255,255,255,.06);
-  backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:0 8px 32px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.08) inset;
-}
-/* tab-item styles — defined in design-system/layout.css */
+/* float-tab-bar + tab-item styles → design-system/layout.css */
 
 /* ═══════════════════════════════════════════════════════════
    Not-found state
@@ -255,35 +232,240 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 ═══════════════════════════════════════════════════════════ */
 @media(max-width:480px){
   .desktop-container{padding:0;background:var(--bg-base)}
-  .device-frame{width:100%;height:100vh;border-radius:0;box-shadow:none}
+  .device-frame{width:100%;height:100vh;border-radius:0;border:none;box-shadow:none}
   .device-notch{display:none}
   .status-bar{padding-top:8px}
   .breadcrumb{display:none}
 }
 
-/* ═══ LIGHT MODE ════════════════════════════════════════════════ */
-[data-theme="light"] .desktop-container { background:#e8edf7 }
-[data-theme="light"] .status-bar { color:#1a1a2e }
+/* ════════════════════════════════════════════════════════════════
+   LIGHT MODE — wave SVG bg + vivid disc-colored hero + frosted glass
+   Each major has its own discipline color (set via JS --disc-primary
+   etc.). The hero now uses that disc color at 38% mix for a vivid
+   pastel — no longer the pale "color-mix(disc-dark @18%)" issue.
+   Spec icons cycle through 4 palette hues per index.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Outside stays dark */
+[data-theme="light"] body { background:#06060f !important; color:#f8fafc !important; }
+[data-theme="light"] .desktop-container { background:#06060f !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color:rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color:rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .device-frame { border-color:#1a1a2e !important; }
+
+/* Inside — wave SVG wallpaper (shared) */
+[data-theme="light"] .mobile-screen {
+  background:
+    url('../../../shared/bg-light.svg') center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+
+/* Status bar + header */
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
 [data-theme="light"] .btn-icon {
-  background:rgba(0,0,0,.06) !important;border:1px solid rgba(0,0,0,.10) !important;color:#1a1a2e !important }
+  background: rgba(255,253,250,0.90) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .btn-icon:active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,253,250,0.85)) !important;
+}
+[data-theme="light"] .page-title { color: #2c1f14 !important; }
+
+/* ── Hero — BRAND IMAGE palette waves + disc identity overlay ──
+   Same brand-image gradient as discipline/detail. JS sets
+   --disc-primary inline; we override the JS-set DARK .hero-aurora
+   with palette colors + disc tint via !important. */
+[data-theme="light"] .hero {
+  background:
+    /* Terracotta-400 wave top-right */
+    radial-gradient(ellipse 95% 70% at 95% 0%, rgba(232,145,122,0.45) 0%, transparent 65%),
+    /* Dusty Blue-300 wave bottom-left */
+    radial-gradient(ellipse 90% 65% at 5% 100%, rgba(163,194,211,0.48) 0%, transparent 65%),
+    /* Sage-300 accent bottom-right */
+    radial-gradient(ellipse 55% 55% at 100% 85%, rgba(168,200,196,0.40) 0%, transparent 65%),
+    /* Blue-200 subtle top-left */
+    radial-gradient(ellipse 50% 45% at 0% 25%, rgba(196,217,229,0.32) 0%, transparent 65%),
+    /* DISC IDENTITY center tint */
+    radial-gradient(ellipse 65% 60% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 24%, transparent) 0%,
+      transparent 75%),
+    /* Cream base */
+    linear-gradient(135deg, #fdf8f2 0%, #fceae4 28%, #f5ede0 65%, #e0ecf3 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 4px 16px color-mix(in srgb, var(--disc-primary) 18%, transparent),
+    0 12px 30px rgba(140,114,96,0.12) !important;
+}
+[data-theme="light"] .hero-aurora {
+  /* Beats JS-set inline DARK gradient via !important */
+  background:
+    radial-gradient(ellipse 100% 75% at 25% 35%,
+      rgba(232,145,122,0.32) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 75% 60% at 85% 75%,
+      rgba(163,194,211,0.38) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 28%, transparent) 0%,
+      transparent 70%),
+    linear-gradient(160deg, rgba(253,248,242,0.50) 0%, rgba(245,237,224,0.40) 100%) !important;
+}
+[data-theme="light"] .hero-waves { opacity:0.55 !important; }
 [data-theme="light"] .hero-overlay {
-  background:linear-gradient(to bottom,transparent 25%,rgba(230,236,248,.20) 55%,rgba(230,236,248,.65) 100%) }
-[data-theme="light"] .detail-body { background:#f0f4fb }
-[data-theme="light"] .detail-desc { color:#1a1a2e }
-[data-theme="light"] .detail-bullet { color:rgba(26,26,46,.65) }
-[data-theme="light"] .section-header { color:#1a1a2e }
+  background: linear-gradient(to bottom,
+    transparent 40%,
+    color-mix(in srgb, var(--disc-dark) 10%, rgba(253,248,242,0.40)) 75%,
+    color-mix(in srgb, var(--disc-dark) 20%, rgba(245,237,224,0.75)) 100%) !important;
+}
+[data-theme="light"] .hero-label-name {
+  color: color-mix(in srgb, var(--disc-primary) 30%, #2c1f14) !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.50);
+}
+[data-theme="light"] .hero-match-pct {
+  color: color-mix(in srgb, var(--disc-primary) 60%, #2c1f14) !important;
+}
+[data-theme="light"] .hero-match-label {
+  color: #5c4535 !important;
+}
+[data-theme="light"] .hero-label-tag {
+  background: color-mix(in srgb, var(--disc-primary) 22%, rgba(255,255,255,0.65)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 45%, transparent) !important;
+  color: color-mix(in srgb, var(--disc-primary) 50%, #2c1f14) !important;
+}
+
+/* ── Detail body ── */
+[data-theme="light"] .detail-body { background: transparent !important; }
+[data-theme="light"] .detail-desc { color: #2c1f14 !important; }
+[data-theme="light"] .detail-bullet { color: #5c4535 !important; }
+[data-theme="light"] .section-header { color: #2c1f14 !important; }
+
+/* ── Bullet check — disc-tinted ── */
+[data-theme="light"] .bullet-check {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.6)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 40%, transparent) !important;
+}
+
+/* ── Why I Match banner — frosted, disc accent ── */
 [data-theme="light"] .why-banner {
-  background:rgba(255,255,255,.85);border-color:rgba(0,0,0,.10) }
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 25%, rgba(232,224,213,0.55)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px color-mix(in srgb, var(--disc-primary) 8%, rgba(140,114,96,0.06)) !important;
+}
+[data-theme="light"] .why-banner:active {
+  background: color-mix(in srgb, var(--disc-primary) 10%, rgba(253,248,242,0.85)) !important;
+}
 [data-theme="light"] .why-icon-box {
-  background:rgba(0,0,0,.05);border:1px solid rgba(0,0,0,.09) }
-[data-theme="light"] .why-title { color:#1a1a2e }
-[data-theme="light"] .why-sub { color:rgba(26,26,46,.45) }
-[data-theme="light"] .why-arrow { color:var(--disc-primary) }
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.6)) !important;
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 38%, transparent) !important;
+}
+[data-theme="light"] .why-title { color: #2c1f14 !important; }
+[data-theme="light"] .why-sub { color: #8c7260 !important; }
+[data-theme="light"] .why-arrow {
+  color: color-mix(in srgb, var(--disc-primary) 55%, #2c1f14) !important;
+}
+
+/* ── Specialization cards — frosted glass + 4-hue icon rotation ── */
 [data-theme="light"] .spec-card {
-  background:#fff;border-color:rgba(0,0,0,.08) }
-[data-theme="light"] .spec-icon { background:rgba(255,255,255,.80) }
-[data-theme="light"] .spec-name { color:#1a1a2e }
-[data-theme="light"] .spec-sub { color:rgba(26,26,46,.45) }
-[data-theme="light"] .spec-arrow { color:rgba(26,26,46,.30) }
-[data-theme="light"] .not-found-title { color:rgba(26,26,46,.65) }
-[data-theme="light"] .not-found-sub { color:rgba(26,26,46,.40) }
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px rgba(140,114,96,0.07) !important;
+}
+[data-theme="light"] .spec-card::before {
+  background: var(--disc-primary) !important;
+  opacity: 0.85;
+}
+[data-theme="light"] .spec-card:active {
+  background: color-mix(in srgb, var(--disc-primary) 8%, rgba(253,248,242,0.85)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 35%, rgba(232,224,213,0.6)) !important;
+}
+[data-theme="light"] .spec-name { color: #2c1f14 !important; }
+[data-theme="light"] .spec-sub { color: #5c4535 !important; }
+[data-theme="light"] .spec-arrow { color: #a89282 !important; }
+
+/* Spec icon — 4 palette hues rotating */
+[data-theme="light"] .spec-card:nth-child(4n+1) .spec-icon {
+  background: rgba(201,107,85,0.16) !important;
+  border-color: rgba(201,107,85,0.38) !important;
+}
+[data-theme="light"] .spec-card:nth-child(4n+2) .spec-icon {
+  background: rgba(74,135,168,0.16) !important;
+  border-color: rgba(74,135,168,0.38) !important;
+}
+[data-theme="light"] .spec-card:nth-child(4n+3) .spec-icon {
+  background: rgba(106,150,144,0.16) !important;
+  border-color: rgba(106,150,144,0.38) !important;
+}
+[data-theme="light"] .spec-card:nth-child(4n+4) .spec-icon {
+  background: rgba(217,160,64,0.16) !important;
+  border-color: rgba(217,160,64,0.38) !important;
+}
+
+/* Spec tag — keep semantic, ensure readable on cream */
+[data-theme="light"] .spec-tag {
+  background: rgba(140,114,96,0.12) !important;
+  border-color: rgba(140,114,96,0.32) !important;
+  color: #5c4535 !important;
+}
+
+/* ── CTA — vivid disc-colored, beats layout.css blue ── */
+[data-theme="light"] .mobile-screen .cta-btn:not(.cta-continue),
+[data-theme="light"] .cta-btn:not(.cta-continue) {
+  background: linear-gradient(135deg,
+    var(--disc-primary) 0%,
+    color-mix(in srgb, var(--disc-primary) 75%, var(--disc-dark, #2c1f14)) 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px color-mix(in srgb, var(--disc-primary) 30%, transparent),
+    0 10px 26px color-mix(in srgb, var(--disc-primary) 18%, transparent) !important;
+}
+[data-theme="light"] .mobile-screen .cta-btn:not(.cta-continue):hover,
+[data-theme="light"] .cta-btn:not(.cta-continue):hover {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--disc-primary) 85%, #ffffff) 0%,
+    var(--disc-primary) 100%) !important;
+}
+
+/* Quiz CTA (Finish Quiz button — uses inline violet style by default) */
+[data-theme="light"] #quizCtaBtn {
+  background: linear-gradient(135deg, #c96b55 0%, #a84e30 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 20px rgba(201,107,85,.35) !important;
+}
+
+/* ── Float tab bar — frosted cream ── */
+[data-theme="light"] .mobile-screen .float-tab-bar {
+  background: linear-gradient(135deg, rgba(255,253,250,0.92) 0%, rgba(245,237,224,0.88) 100%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border-color: rgba(232,224,213,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 -2px 12px rgba(201,107,85,0.06),
+    0 6px 20px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .mobile-screen .tab-item { color: rgba(92,69,53,0.55) !important; }
+[data-theme="light"] .mobile-screen .tab-item.active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.5)) !important;
+  color: color-mix(in srgb, var(--disc-primary) 50%, #2c1f14) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 32%, transparent) !important;
+}
+
+/* Not-found state */
+[data-theme="light"] .not-found-title { color: #2c1f14 !important; }
+[data-theme="light"] .not-found-sub { color: #5c4535 !important; }
+[data-theme="light"] .not-found-icon { opacity: 0.50 !important; }

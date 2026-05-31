@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <title>Quiz Card — BeyonDegrees.ai</title>
-  
+
 <style>
 /* === tokens === */
 /* BeyonDegrees.ai Design Tokens — CSS Variables */
@@ -145,8 +146,8 @@
   --shadow-xl: 0 12px 32px rgba(0, 0, 0, 0.25);
 
   /* Color-specific shadows for glow effects */
-  --shadow-violet: 0 8px 24px rgba(124, 58, 237, 0.3);
-  --shadow-violet-sm: 0 4px 12px rgba(124, 58, 237, 0.2);
+  --shadow-violet: 0 8px 24px rgba(24, 99, 220, 0.3);
+  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.2);
   --shadow-mint: 0 8px 24px rgba(6, 214, 160, 0.3);
   --shadow-mint-sm: 0 4px 12px rgba(6, 214, 160, 0.2);
   --shadow-orange: 0 8px 24px rgba(249, 115, 22, 0.3);
@@ -1667,15 +1668,16 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px 6px;
-  margin-top: 16px;
-  font-size: 11px;
+  padding: 12px 20px 4px;
+  font-size: 12px;
   font-weight: 600;
-  color: rgba(248,250,252,0.7);
+  color: var(--text-secondary);
+  flex-shrink: 0;
 }
 .status-icons {
   display: flex;
   gap: 6px;
+  align-items: center;
 }
 
 /* ── Story Bar (Loading + Results) ──────────────────── */
@@ -1811,7 +1813,6 @@ body {
 .status-bar, .quiz-header, .card-arena { position:relative; z-index:1; }
 
 /* STATUS BAR — base from layout.css */
-.status-right { display:flex; gap:6px; }
 
 /* ===== QUIZ HEADER ===== */
 .quiz-header {
@@ -1999,7 +2000,11 @@ body {
 .milestone-content {
   display:flex; flex-direction:column; align-items:center; gap:8px;
   padding:32px 44px; border-radius:24px;
+  background: rgba(10,10,26,.82);
+  border: 1px solid rgba(255,255,255,.10);
   backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  box-shadow: 0 8px 32px rgba(0,0,0,.40);
   animation:milestoneScale 2.4s forwards;
 }
 @keyframes milestoneScale {
@@ -2007,8 +2012,8 @@ body {
   20%{transform:scale(1)} 80%{transform:scale(1)} 100%{transform:scale(0.8)}
 }
 .milestone-emoji { font-size:52px; }
-.milestone-text  { font-size:22px; font-weight:900; }
-.milestone-sub   { font-size:13px; color:rgba(255,255,255,0.6); }
+.milestone-text  { font-size:22px; font-weight:900; color:#f8fafc; }
+.milestone-sub   { font-size:13px; font-weight:600; color:rgba(255,255,255,0.80); }
 
 /* ===== FOOTER ===== */
 .quiz-footer {
@@ -2259,211 +2264,269 @@ body {
   --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
 }
 
-/* ── LIGHT MODE: official BeyonDegrees brand palette ── */
-:root[data-theme="light"] {
-  /* Brand blue stays — all other palette flips to light */
-  --violet-600: #1863DC;
-  --violet-500: #0274BE;
-  --violet-400: #1863DC;
-  --violet-300: #4A90E2;
-  --violet-200: #93BBFF;
-  --violet-100: #EEF4FB;
-  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.18);
-  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.10);
-  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.20);
-  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.15);
+/* ════════════════════════════════════════════════════════
+   Quiz-card LIGHT mode — INSIDE only (outside dark via layout.css)
+   BGEngine paints discipline-tinted pastel on .aurora-bg
+   This block overrides quiz-specific dark surfaces
+   ════════════════════════════════════════════════════════ */
 
-  /* Neutral scale flips */
-  --neutral-950: #FFFFFF;
-  --neutral-900: #F2F7FD;
-  --neutral-800: #E0ECFA;
-  --neutral-700: #C5D5E8;
-  --neutral-600: #A8BDD8;
-  --neutral-500: #808DAA;
-  --neutral-400: #5A6580;
-  --neutral-300: #3A3A4A;
-  --neutral-200: #1A1A2E;
-  --neutral-100: #0D0D1A;
-  --neutral-50:  #060610;
-
-  /* Semantic background tokens */
-  --bg-base:     #FFFFFF;
-  --bg-surface:  #F2F7FD;
-  --bg-elevated: #E0ECFA;
-  --bg-overlay:  #C5D5E8;
-
-  /* Text tokens */
-  --text-primary:   #1A1A2E;
-  --text-secondary: #3A3A4A;
-  --text-muted:     #808285;
-  --text-disabled:  #C0C0D0;
-
-  /* Mint stays readable on light bg */
-  --mint-500: #059669;
-  --mint-400: #10B981;
-  --mint-300: #34D399;
-
-  /* Orange */
-  --orange-500: #D95F02;
-  --orange-400: #F97316;
-}
-
-/* ── LIGHT MODE: body & global overrides ── */
+/* Body & breadcrumb stay dark (outside) */
 [data-theme="light"] body {
-  background: linear-gradient(135deg, #FFFFFF 0%, #EEF4FB 55%, #FFFFFF 100%) !important;
-  color: #1A1A2E !important;
+  background: #06060f !important;
+  color: #f8fafc !important;
+}
+[data-theme="light"] .breadcrumb-bar {
+  background: rgba(13,13,26,0.9) !important;
+  border-bottom-color: var(--neutral-700) !important;
+}
+[data-theme="light"] .breadcrumb-bar a { color: rgba(255,255,255,0.55) !important; }
+[data-theme="light"] .breadcrumb-bar a:hover { color: #a78bfa !important; }
+[data-theme="light"] .breadcrumb-bar .active { color: rgba(255,255,255,0.85) !important; }
+
+/* Mobile-screen: let aurora-bg show through (don't paint cream over discipline color) */
+[data-theme="light"] .mobile-screen {
+  background: transparent !important;
 }
 
-/* Hardcoded violet rgba chips → blue */
-[data-theme="light"] [style*="rgba(124, 58, 237"],
-[data-theme="light"] [style*="rgba(124,58,237"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
+/* Aurora-bg: initial fallback cream before BGEngine paints */
+[data-theme="light"] .aurora-bg {
+  background: linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 60%, #F4E8D2 100%);
 }
 
-/* Cards → white glass */
-[data-theme="light"] .card,
-[data-theme="light"] [class*="card"],
-[data-theme="light"] .quiz-card,
-[data-theme="light"] .result-card,
-[data-theme="light"] .discipline-card,
-[data-theme="light"] .major-card,
-[data-theme="light"] .uni-card,
-[data-theme="light"] .option-card,
-[data-theme="light"] .stat-card,
-[data-theme="light"] .info-card,
-[data-theme="light"] .feature-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(24, 99, 220, 0.15) !important;
-  box-shadow: 0 4px 24px rgba(24, 99, 220, 0.10) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .card:hover,
-[data-theme="light"] [class*="card"]:hover {
-  border-color: rgba(24, 99, 220, 0.35) !important;
-  box-shadow: 0 12px 40px rgba(24, 99, 220, 0.18) !important;
+/* Disc-watermark: bump opacity slightly so emoji is visible on cream */
+[data-theme="light"] .disc-watermark {
+  opacity: 0.10 !important;
 }
 
-/* Nav / header / tab-bar */
-[data-theme="light"] nav,
-[data-theme="light"] header,
-[data-theme="light"] .nav-bar,
-[data-theme="light"] .tab-bar,
-[data-theme="light"] .top-nav,
-[data-theme="light"] .header {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border-color: rgba(24, 99, 220, 0.12) !important;
-  box-shadow: 0 2px 16px rgba(24, 99, 220, 0.08) !important;
+/* Quiz header glass — cream */
+[data-theme="light"] .quiz-header {
+  background: rgba(255,252,245,0.55) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border-bottom-color: rgba(232,220,194,0.50) !important;
+}
+[data-theme="light"] .quiz-footer {
+  background: rgba(255,252,245,0.55) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  border-top-color: rgba(232,220,194,0.40) !important;
 }
 
-/* Float Tab Bar — explicit light fix */
+/* Undo button */
+[data-theme="light"] .undo-btn {
+  background: rgba(255,252,245,0.70) !important;
+  border-color: rgba(232,220,194,0.55) !important;
+  color: #5C4A3D !important;
+}
+[data-theme="light"] .undo-btn:hover {
+  border-color: rgba(2,116,190,0.40) !important;
+  color: #0274BE !important;
+}
+
+/* Counter — high-contrast text */
+[data-theme="light"] .counter-current { color: #0274BE !important; }
+[data-theme="light"] .counter-total { color: rgba(58,46,38,0.50) !important; }
+[data-theme="light"] .counter-sep { color: rgba(58,46,38,0.30) !important; }
+
+/* Mode indicator pill */
+[data-theme="light"] .mode-indicator {
+  background: rgba(255,252,245,0.70) !important;
+  border-color: rgba(232,220,194,0.55) !important;
+  color: #5C4A3D !important;
+}
+
+/* Story-bar progression segments */
+[data-theme="light"] .story-seg {
+  background: rgba(58,46,38,0.10) !important;
+}
+[data-theme="light"] .story-seg.filled,
+[data-theme="light"] .story-seg.done {
+  background: var(--violet-600, #0274BE) !important;
+}
+[data-theme="light"] .story-seg.active {
+  background: rgba(2,116,190,0.20) !important;
+}
+
+/* Score chips — pastel tints */
+[data-theme="light"] .score-chip.agree {
+  background: rgba(5,150,105,0.12) !important;
+  color: #059669 !important;
+  border-color: rgba(5,150,105,0.30) !important;
+}
+[data-theme="light"] .score-chip.strong {
+  background: rgba(2,116,190,0.12) !important;
+  color: #0274BE !important;
+  border-color: rgba(2,116,190,0.30) !important;
+}
+[data-theme="light"] .score-chip.neutral {
+  background: rgba(107,88,64,0.10) !important;
+  color: #6B5840 !important;
+  border-color: rgba(107,88,64,0.25) !important;
+}
+[data-theme="light"] .score-chip.disagree {
+  background: rgba(192,57,43,0.10) !important;
+  color: #C0392B !important;
+  border-color: rgba(192,57,43,0.28) !important;
+}
+
+/* ── Q-CARD (swipe cards) — discipline-aware cream glass ── */
+[data-theme="light"] .q-card {
+  background: linear-gradient(180deg, rgba(255,252,245,0.95) 0%, rgba(250,238,218,0.92) 100%) !important;
+  border-color: rgba(232,220,194,0.70) !important;
+  backdrop-filter: blur(20px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
+}
+[data-theme="light"] .active-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 8px 28px rgba(107,88,64,0.10),
+    0 16px 40px rgba(2,116,190,0.10) !important;
+}
+[data-theme="light"] .q-text {
+  color: #1A1A1A !important;
+}
+[data-theme="light"] .q-number {
+  color: rgba(58,46,38,0.45) !important;
+}
+[data-theme="light"] .discipline-tag {
+  background: linear-gradient(135deg, rgba(2,116,190,0.10) 0%, rgba(2,116,190,0.22) 100%) !important;
+  border-color: rgba(2,116,190,0.30) !important;
+  color: #0274BE !important;
+}
+[data-theme="light"] .card-placeholder {
+  color: rgba(58,46,38,0.30) !important;
+}
+
+/* Swipe hint */
+[data-theme="light"] .swipe-hint {
+  border-top-color: rgba(232,220,194,0.50) !important;
+}
+[data-theme="light"] .swipe-hint span {
+  color: rgba(58,46,38,0.50) !important;
+}
+[data-theme="light"] .hint-hold {
+  color: rgba(58,46,38,0.45) !important;
+}
+
+/* Direction hints (AGREE / DISAGREE etc.) — boost contrast */
+[data-theme="light"] .hint-right {
+  color: #059669 !important;
+  border-color: #059669 !important;
+  background: rgba(255,252,245,0.85) !important;
+}
+[data-theme="light"] .hint-left {
+  color: #C0392B !important;
+  border-color: #C0392B !important;
+  background: rgba(255,252,245,0.85) !important;
+}
+[data-theme="light"] .hint-up {
+  color: #0274BE !important;
+  border-color: #0274BE !important;
+  background: rgba(255,252,245,0.85) !important;
+}
+[data-theme="light"] .hint-down {
+  color: #6B5840 !important;
+  border-color: rgba(107,88,64,0.50) !important;
+  background: rgba(255,252,245,0.85) !important;
+}
+
+/* Spectrum mode track + thumb */
+[data-theme="light"] .spectrum-wrap {
+  border-top-color: rgba(2,116,190,0.30) !important;
+}
+[data-theme="light"] .spec-label-left { color: #C0392B !important; }
+[data-theme="light"] .spec-label-right { color: #059669 !important; }
+[data-theme="light"] .spectrum-thumb {
+  background: white !important;
+  border-color: #0274BE !important;
+  box-shadow: 0 2px 8px rgba(2,116,190,0.30) !important;
+}
+[data-theme="light"] .spectrum-value-label {
+  color: #1A1A1A !important;
+}
+[data-theme="light"] .spectrum-confirm-btn {
+  background: linear-gradient(135deg, #1E8EDB 0%, #0274BE 100%) !important;
+  color: white !important;
+}
+
+/* Disc-label (small text floating top of arena) */
+[data-theme="light"] .disc-label {
+  color: rgba(58,46,38,0.55) !important;
+}
+
+/* Bottom shortcut row */
+[data-theme="light"] .sc { color: rgba(58,46,38,0.45) !important; }
+[data-theme="light"] .sc-left { color: rgba(192,57,43,0.65) !important; }
+[data-theme="light"] .sc-up { color: rgba(2,116,190,0.65) !important; }
+[data-theme="light"] .sc-down { color: rgba(107,88,64,0.55) !important; }
+[data-theme="light"] .sc-right { color: rgba(5,150,105,0.65) !important; }
+
+/* Toast */
+[data-theme="light"] .bd-toast {
+  background: rgba(255,252,245,0.96) !important;
+  border-color: rgba(232,220,194,0.60) !important;
+  color: #1A1A1A !important;
+}
+
+/* Milestone overlay — light mode: frosted cream panel, high-contrast text */
+[data-theme="light"] .milestone-content {
+  background: rgba(255,252,245,0.92) !important;
+  border-color: rgba(232,220,194,0.65) !important;
+  box-shadow: 0 8px 32px rgba(92,69,53,0.18), inset 0 1px 0 rgba(255,255,255,0.75) !important;
+}
+[data-theme="light"] .milestone-text {
+  color: #1A1A1A !important;
+  font-weight: 900 !important;
+}
+[data-theme="light"] .milestone-sub {
+  color: #5c4535 !important;
+  font-weight: 700 !important;
+}
+
+/* Side panel (legend) */
+[data-theme="light"] .panel-section .legend-item {
+  background: linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 100%) !important;
+  border-color: rgba(232,220,194,0.60) !important;
+  color: #3A2E26 !important;
+}
+[data-theme="light"] .mode-card {
+  background: linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 100%) !important;
+  border-color: rgba(232,220,194,0.60) !important;
+}
+[data-theme="light"] .mode-card-title { color: #1A1A1A !important; }
+[data-theme="light"] .mode-card-desc { color: #5C4A3D !important; }
+[data-theme="light"] .panel-label { color: #B26344 !important; }
+[data-theme="light"] .dna-bar { background: #E8DCC2 !important; }
+[data-theme="light"] .dna-label { color: #5C4A3D !important; }
+[data-theme="light"] .dna-pct { color: #5C4A3D !important; }
+[data-theme="light"] .aurora-preview {
+  border-color: rgba(232,220,194,0.60) !important;
+}
+[data-theme="light"] .aurora-disc-name { color: #1A1A1A !important; }
+[data-theme="light"] .aurora-next-name { color: rgba(58,46,38,0.55) !important; }
+[data-theme="light"] .aurora-note { color: rgba(58,46,38,0.50) !important; }
+
+/* ── Float Tab Bar — Light Mode ── */
 [data-theme="light"] .float-tab-bar {
-  background: rgba(255,255,255,0.98) !important;
-  border-color: rgba(0,0,0,0.07) !important;
-  box-shadow: 0 -1px 0 rgba(0,0,0,0.05), 0 4px 24px rgba(0,0,0,0.09) !important;
+  background: linear-gradient(135deg, rgba(255,253,250,0.92) 0%, rgba(245,237,224,0.88) 100%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border-color: rgba(232,220,194,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 -2px 12px rgba(2,116,190,0.06),
+    0 6px 20px rgba(107,88,64,0.10) !important;
 }
-
-/* Tab items / nav links */
-[data-theme="light"] .tab-item,
-[data-theme="light"] .nav-link,
-[data-theme="light"] .nav-item {
-  color: rgba(26,26,46,0.38) !important;
+[data-theme="light"] .tab-item {
+  color: rgba(92,69,53,0.55) !important;
 }
-[data-theme="light"] .tab-item.active,
-[data-theme="light"] .nav-link.active {
-  background: rgba(24,99,220,0.10) !important;
-  color: #1863DC !important;
-  border-color: rgba(24,99,220,0.14) !important;
-  box-shadow: none !important;
+[data-theme="light"] .tab-item.active {
+  background: rgba(2,116,190,0.15) !important;
+  color: #0274BE !important;
+  border-color: rgba(2,116,190,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.50) !important;
 }
 [data-theme="light"] .tab-item:hover:not(.tab-disabled) {
-  color: rgba(26,26,46,0.60) !important;
-}
-
-/* Chips & tags */
-[data-theme="light"] .chip,
-[data-theme="light"] [class*="chip"],
-[data-theme="light"] [class*="tag"],
-[data-theme="light"] .badge {
-  background: rgba(24, 99, 220, 0.10) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] [class*="chip-mint"],
-[data-theme="light"] [class*="tag-mint"],
-[data-theme="light"] [class*="chip-success"] {
-  background: rgba(5, 150, 105, 0.12) !important;
-  border-color: rgba(5, 150, 105, 0.30) !important;
-  color: #059669 !important;
-}
-
-/* Dividers */
-[data-theme="light"] .divider,
-[data-theme="light"] hr {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Inputs */
-[data-theme="light"] input,
-[data-theme="light"] textarea,
-[data-theme="light"] .input {
-  background: #FFFFFF !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] input::placeholder,
-[data-theme="light"] textarea::placeholder {
-  color: #A0A0B0 !important;
-}
-[data-theme="light"] input:focus,
-[data-theme="light"] textarea:focus {
-  border-color: #1863DC !important;
-  box-shadow: 0 0 0 3px rgba(24,99,220,0.15) !important;
-}
-
-/* Buttons: primary stays blue, ghost adapts */
-[data-theme="light"] .btn-ghost,
-[data-theme="light"] [class*="btn-ghost"] {
-  background: rgba(24, 99, 220, 0.08) !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] .btn-ghost:hover {
-  background: rgba(24, 99, 220, 0.14) !important;
-}
-
-/* Background orbs — soften for light mode */
-[data-theme="light"] .bg-orb,
-[data-theme="light"] [class*="orb"] {
-  opacity: 0.35 !important;
-}
-
-/* Progress bars */
-[data-theme="light"] .progress,
-[data-theme="light"] [class*="progress-track"],
-[data-theme="light"] [class*="progress-bg"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Breadcrumb */
-[data-theme="light"] .breadcrumb-item { color: #808285 !important; }
-[data-theme="light"] .breadcrumb-item:hover,
-[data-theme="light"] .breadcrumb-item.active { color: #1863DC !important; }
-
-/* Text elements that may be hardcoded white */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4 {
-  color: #1A1A2E;
-}
-[data-theme="light"] p,
-[data-theme="light"] li,
-[data-theme="light"] label,
-[data-theme="light"] td,
-[data-theme="light"] th {
-  color: #3A3A4A;
+  color: rgba(44,31,20,0.88) !important;
 }
 
 /* ── TRANSITION: smooth theme switch ── */
@@ -2477,7 +2540,7 @@ svg *, canvas, video, img { transition: none !important; }
 </head>
 <body>
   <nav class="breadcrumb-bar">
-    <a href="../../../index.html">BeyonDegrees-UI</a>
+    <a href="../../../">BeyonDegrees-UI</a>
     <span>/</span><a href="#">Screens</a>
     <span>/</span><span class="active">Quiz Card</span>
   </nav>
@@ -2505,8 +2568,11 @@ svg *, canvas, video, img { transition: none !important; }
 
           <!-- Status Bar -->
           <div class="status-bar">
-            <span class="status-time">9:41</span>
-            <div class="status-right"><span>●●●</span><span>WiFi</span><span>🔋</span></div>
+            <span>9:41</span>
+            <div class="status-icons">
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+              <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+            </div>
           </div>
 
           <!-- Quiz Header -->
@@ -2540,10 +2606,10 @@ svg *, canvas, video, img { transition: none !important; }
           <div class="card-arena" id="cardArena">
 
             <!-- Direction hints -->
-            <div class="dir-hint hint-right" id="hintRight">AGREE &#x2713;</div>
-            <div class="dir-hint hint-left"  id="hintLeft">DISAGREE &#x2715;</div>
-            <div class="dir-hint hint-up"    id="hintUp">STRONGLY AGREE &#x26A1;</div>
-            <div class="dir-hint hint-down"  id="hintDown">TRUNG LẬP &ndash;</div>
+            <div class="dir-hint hint-right" id="hintRight" data-i18n="quiz.swipe.agree">AGREE ✓</div>
+            <div class="dir-hint hint-left"  id="hintLeft"  data-i18n="quiz.swipe.disagree">DISAGREE ✕</div>
+            <div class="dir-hint hint-up"    id="hintUp"    data-i18n="quiz.swipe.strong">STRONGLY AGREE ⚡</div>
+            <div class="dir-hint hint-down"  id="hintDown"  data-i18n="quiz.swipe.neutral">NEUTRAL –</div>
 
             <!-- Discipline label -->
             <div class="disc-label" id="discLabel"></div>
@@ -2568,21 +2634,21 @@ svg *, canvas, video, img { transition: none !important; }
                   <!-- Spectrum mode -->
                   <div class="spectrum-wrap" id="spectrumWrap">
                     <div class="spectrum-labels">
-                      <span class="spec-label-left">Disagree</span>
-                      <span class="spec-label-right">Agree</span>
+                      <span class="spec-label-left" data-i18n="quiz.spec.disagree">Disagree</span>
+                      <span class="spec-label-right" data-i18n="quiz.spec.agree">Agree</span>
                     </div>
                     <div class="spectrum-track" id="spectrumTrack">
                       <div class="spectrum-thumb" id="spectrumThumb"></div>
                     </div>
-                    <div class="spectrum-value-label" id="spectrumValueLabel">Neutral</div>
-                    <button class="spectrum-confirm-btn" id="spectrumConfirmBtn">Confirm &#x2713;</button>
+                    <div class="spectrum-value-label" id="spectrumValueLabel" data-i18n="quiz.spec.neutral">Neutral</div>
+                    <button class="spectrum-confirm-btn" id="spectrumConfirmBtn" data-i18n="quiz.spec.confirm">Confirm ✓</button>
                   </div>
 
                   <!-- Swipe hint -->
                   <div class="swipe-hint" id="swipeHint">
-                    <span>Drag to answer</span>
-                    <span class="hint-arrows">&#x2190; &#x2192;</span>
-                    <span class="hint-hold">Hold to set intensity</span>
+                    <span data-i18n="quiz.hint.drag">Drag to answer</span>
+                    <span class="hint-arrows" data-i18n="quiz.hint.arrows">← →</span>
+                    <span class="hint-hold" data-i18n="quiz.hint.hold">Hold to set intensity</span>
                   </div>
                 </div>
               </div>
@@ -2610,7 +2676,7 @@ svg *, canvas, video, img { transition: none !important; }
                   <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
                 </svg>
               </span>
-              <span class="tab-label">About me</span>
+              <span class="tab-label" data-i18n="nav.about_me">About me</span>
             </a>
 
             <!-- 2. Disciplines — compass -->
@@ -2622,18 +2688,18 @@ svg *, canvas, video, img { transition: none !important; }
                   <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
                 </svg>
               </span>
-              <span class="tab-label">Disciplines</span>
+              <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
             </a>
 
             <!-- 3. Majors -->
-            <a href="../../major/recommendations-v2/" class="tab-item" data-tab="majors">
+            <a href="../../major/recommendations/" class="tab-item" data-tab="majors">
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                   <path d="M6 12v5c3 3 9 3 12 0v-5"/>
                 </svg>
               </span>
-              <span class="tab-label">Majors</span>
+              <span class="tab-label" data-i18n="nav.majors">Majors</span>
             </a>
 
             <!-- 4. Universities -->
@@ -2643,10 +2709,10 @@ svg *, canvas, video, img { transition: none !important; }
                   <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
                 </svg>
               </span>
-              <span class="tab-label">Universities</span>
+              <span class="tab-label" data-i18n="nav.universities">Universities</span>
             </a>
 
-            <!-- 5. Hoàng Phúc -->
+            <!-- 5. Hoang Phuc -->
             <a href="../../profile/overview/" class="tab-item" data-tab="account">
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -2656,7 +2722,7 @@ svg *, canvas, video, img { transition: none !important; }
                   <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="tab-label">Profile</span>
+              <span class="tab-label">Hoang Phuc</span>
             </a>
 
           </nav>
@@ -2672,6 +2738,8 @@ svg *, canvas, video, img { transition: none !important; }
   
   
   
+<script src="../assertions-i18n.js"></script>
+<script src="../assertions.js"></script>
 <script>
 /* utils */
 /* BeyonDegrees.ai — Shared Utilities */
@@ -3057,49 +3125,235 @@ const DISC_EMOJIS = {
 };
 
 const DISC_COLORS = {
-  kt: { primary: '#7c3aed', dark: '#2d1267', glow: 'rgba(24,99,220,0.5)',  label: '⚡ Engineering & CN',  next: 'nv' },
-  nv: { primary: '#3b82f6', dark: '#1e3a8a', glow: 'rgba(59,130,246,0.5)',  label: '📚 Humanities',        next: 'yt' },
-  yt: { primary: '#06d6a0', dark: '#064e3b', glow: 'rgba(6,214,160,0.5)',   label: '⚕️ Health & Medicine',   next: 'xh' },
-  xh: { primary: '#a855f7', dark: '#3b0764', glow: 'rgba(168,85,247,0.5)',  label: '🌐 Xã hội học',      next: 'nn' },
-  nn: { primary: '#f59e0b', dark: '#451a03', glow: 'rgba(245,158,11,0.5)',  label: '🌿 Nông nghiệp',     next: 'tn' },
-  tn: { primary: '#f43f5e', dark: '#4c0519', glow: 'rgba(244,63,94,0.5)',   label: '🔬 Natural Sciences',     next: 'kt' },
+  kt: {
+    primary: '#7c3aed', dark: '#2d1267', glow: 'rgba(24,99,220,0.5)',
+    /* Light theme: lavender pastel base + brand-blue accent glow */
+    light: '#ECE2EE', lightAccent: '#A088AB',
+    lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #ECE2EE 60%, #DDCFE2 100%)',
+    lightGlow: 'rgba(160,136,171,0.45)',
+    label: '⚡ Engineering & CN',  next: 'nv'
+  },
+  nv: {
+    primary: '#3b82f6', dark: '#1e3a8a', glow: 'rgba(59,130,246,0.5)',
+    /* Light: sky blue pastel */
+    light: '#DCE8EF', lightAccent: '#5E8090',
+    lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #DCE8EF 60%, #C2D5E0 100%)',
+    lightGlow: 'rgba(143,181,204,0.50)',
+    label: '📚 Humanities',        next: 'yt'
+  },
+  yt: {
+    primary: '#06d6a0', dark: '#064e3b', glow: 'rgba(6,214,160,0.5)',
+    /* Light: sage green pastel */
+    light: '#DCE7DE', lightAccent: '#5C7C68',
+    lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #DCE7DE 60%, #C5D8C9 100%)',
+    lightGlow: 'rgba(146,178,153,0.50)',
+    label: '⚕️ Health & Medicine',   next: 'xh'
+  },
+  xh: {
+    primary: '#a855f7', dark: '#3b0764', glow: 'rgba(168,85,247,0.5)',
+    /* Light: deeper lavender pastel */
+    light: '#DDCFE2', lightAccent: '#856E92',
+    lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #DDCFE2 60%, #CDB8D2 100%)',
+    lightGlow: 'rgba(186,161,194,0.50)',
+    label: '🌐 Xã hội học',      next: 'nn'
+  },
+  nn: {
+    primary: '#f59e0b', dark: '#451a03', glow: 'rgba(245,158,11,0.5)',
+    /* Light: warm peach/amber pastel */
+    light: '#FAEEDA', lightAccent: '#B26344',
+    lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 50%, #F4C9A8 100%)',
+    lightGlow: 'rgba(232,168,107,0.50)',
+    label: '🌿 Nông nghiệp',     next: 'tn'
+  },
+  tn: {
+    primary: '#f43f5e', dark: '#4c0519', glow: 'rgba(244,63,94,0.5)',
+    /* Light: blush pink pastel */
+    light: '#F5E0D5', lightAccent: '#A86E5E',
+    lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #F5E0D5 60%, #EDCDC0 100%)',
+    lightGlow: 'rgba(197,136,122,0.50)',
+    label: '🔬 Natural Sciences',     next: 'kt'
+  },
 };
 
 /* ─────────────────────────────────────────
    2. QUESTIONS BANK
+   Loaded dynamically from data/assertions.js (window.BD_ASSERTIONS).
+   Random 10 per stage each session: 10 discipline + 10 major + 10 university.
    ───────────────────────────────────────── */
 const QUESTIONS = [
-  { id:  1, disc: 'kt', text: 'I enjoy solving problems through data analysis.' },
-  { id:  2, disc: 'nv', text: 'Đọc văn học và thơ ca mang lại cho tôi nhiều cảm xúc sâu sắc.' },
-  { id:  3, disc: 'yt', text: 'Tôi quan tâm đến sức khoẻ cộng đồng và cách phòng ngừa bệnh tật.' },
-  { id:  4, disc: 'kt', text: 'Lập trình hoặc xây dựng phần mềm là điều tôi muốn làm mỗi ngày.' },
-  { id:  5, disc: 'xh', text: 'Tôi tò mò về hành vi con người và cấu trúc xã hội.' },
-  { id:  6, disc: 'nn', text: 'Bảo vệ môi trường và phát triển bền vững là ưu tiên của tôi.' },
-  { id:  7, disc: 'tn', text: 'Tôi yêu thích thí nghiệm và khám phá quy luật tự nhiên.' },
-  { id:  8, disc: 'nv', text: 'Nghiên cứu lịch sử giúp tôi hiểu thế giới hiện tại tốt hơn.' },
-  { id:  9, disc: 'yt', text: 'Chăm sóc và giúp đỡ người bệnh là việc ý nghĩa nhất với tôi.' },
-  { id: 10, disc: 'kt', text: 'Tôi thích thiết kế hệ thống và tối ưu hoá quy trình.' },
-  { id: 11, disc: 'xh', text: 'Làm việc nhóm và thúc đẩy cộng đồng phát triển là thế mạnh của tôi.' },
-  { id: 12, disc: 'nn', text: 'Công nghệ sinh học trong nông nghiệp hấp dẫn tôi rất nhiều.' },
-  { id: 13, disc: 'tn', text: 'Toán học và vật lý là những môn học tôi luôn tìm thấy niềm vui.' },
-  { id: 14, disc: 'nv', text: 'Dạy học và truyền đạt kiến thức cho người khác là đam mê của tôi.' },
-  { id: 15, disc: 'kt', text: 'Trí tuệ nhân tạo và tự động hoá đang định hình tương lai theo cách tôi muốn.' },
-  { id: 16, disc: 'xh', text: 'Tôi muốn tham gia vào việc xây dựng chính sách công.' },
-  { id: 17, disc: 'yt', text: 'Nghiên cứu dược phẩm và bào chế thuốc thu hút tôi.' },
-  { id: 18, disc: 'nn', text: 'Tôi thích làm việc ngoài trời và gần thiên nhiên hơn văn phòng.' },
-  { id: 19, disc: 'tn', text: 'Hoá học và sinh học phân tử là lĩnh vực tôi muốn đào sâu.' },
-  { id: 20, disc: 'nv', text: 'Sáng tác, viết lách và kể chuyện là cách tôi thể hiện bản thân.' },
-  { id: 21, disc: 'kt', text: 'An toàn thông tin và bảo mật mạng là thứ tôi muốn chuyên sâu.' },
-  { id: 22, disc: 'xh', text: 'Kinh tế học giúp tôi hiểu vì sao các quốc gia thịnh vượng hoặc thất bại.' },
-  { id: 23, disc: 'nn', text: 'Tôi quan tâm đến cách sản xuất thực phẩm an toàn cho hàng triệu người.' },
-  { id: 24, disc: 'yt', text: 'Phục hồi chức năng và y học thể thao là lĩnh vực tôi hướng tới.' },
-  { id: 25, disc: 'tn', text: 'Tôi muốn khám phá vũ trụ và nghiên cứu thiên văn học.' },
-  { id: 26, disc: 'nv', text: 'Luật pháp và bảo vệ quyền con người là giá trị cốt lõi của tôi.' },
-  { id: 27, disc: 'kt', text: 'Điện tử, vi mạch và hardware cuốn hút tôi không kém software.' },
-  { id: 28, disc: 'xh', text: 'Tâm lý học và hiểu hành vi con người là thứ tôi đam mê.' },
-  { id: 29, disc: 'nn', text: 'Rừng, biển và hệ sinh thái cần được bảo tồn — tôi muốn là người làm điều đó.' },
-  { id: 30, disc: 'tn', text: 'Vật liệu mới và công nghệ nano sẽ thay đổi cuộc sống — tôi muốn góp phần vào đó.' },
+  { id:  1, disc: 'kt', text: 'I enjoy solving problems through data analysis.',
+    vi: 'Tôi thích giải quyết vấn đề thông qua phân tích dữ liệu.',
+    fr: "J'aime résoudre des problèmes par l'analyse de données.",
+    hi: 'मुझे डेटा विश्लेषण के माध्यम से समस्याओं को हल करने में आनंद आता है।',
+    ar: 'أستمتع بحل المشكلات من خلال تحليل البيانات.' },
+  { id:  2, disc: 'nv', text: 'I am passionate about literature and creative writing.',
+    vi: 'Tôi đam mê văn học và sáng tác.',
+    fr: 'Je suis passionné par la littérature et l\'écriture créative.',
+    hi: 'मैं साहित्य और रचनात्मक लेखन के प्रति जुनूनी हूं।',
+    ar: 'أنا شغوف بالأدب والكتابة الإبداعية.' },
+  { id:  3, disc: 'yt', text: 'I am interested in healthcare and medical research.',
+    vi: 'Tôi quan tâm đến chăm sóc sức khỏe và nghiên cứu y học.',
+    fr: 'Je m\'intéresse aux soins de santé et à la recherche médicale.',
+    hi: 'मुझे स्वास्थ्य देखभाल और चिकित्सा अनुसंधान में रुचि है।',
+    ar: 'أنا مهتم بالرعاية الصحية والبحث الطبي.' },
+  { id:  4, disc: 'kt', text: 'I enjoy working with data and building software solutions.',
+    vi: 'Tôi thích làm việc với dữ liệu và xây dựng các giải pháp phần mềm.',
+    fr: 'J\'aime travailler avec des données et créer des solutions logicielles.',
+    hi: 'मुझे डेटा के साथ काम करना और सॉफ्टवेयर समाधान बनाना पसंद है।',
+    ar: 'أستمتع بالعمل مع البيانات وبناء الحلول البرمجية.' },
+  { id:  5, disc: 'xh', text: 'I am curious about human behavior and social structures.',
+    vi: 'Tôi tò mò về hành vi con người và cấu trúc xã hội.',
+    fr: 'Je suis curieux du comportement humain et des structures sociales.',
+    hi: 'मैं मानव व्यवहार और सामाजिक संरचनाओं के बारे में जिज्ञासु हूं।',
+    ar: 'أنا فضولي بشأن السلوك البشري والهياكل الاجتماعية.' },
+  { id:  6, disc: 'nn', text: 'Protecting the environment and promoting sustainable development is my priority.',
+    vi: 'Bảo vệ môi trường và thúc đẩy phát triển bền vững là ưu tiên của tôi.',
+    fr: 'Protéger l\'environnement et promouvoir le développement durable est ma priorité.',
+    hi: 'पर्यावरण की रक्षा करना और सतत विकास को बढ़ावा देना मेरी प्राथमिकता है।',
+    ar: 'حماية البيئة وتعزيز التنمية المستدامة هي أولويتي.' },
+  { id:  7, disc: 'tn', text: 'I love conducting experiments and exploring natural laws.',
+    vi: 'Tôi thích thực hiện thí nghiệm và khám phá các quy luật tự nhiên.',
+    fr: 'J\'aime mener des expériences et explorer les lois naturelles.',
+    hi: 'मुझे प्रयोग करना और प्राकृतिक नियमों की खोज करना पसंद है।',
+    ar: 'أحب إجراء التجارب واستكشاف القوانين الطبيعية.' },
+  { id:  8, disc: 'nv', text: 'Historical research helps me understand the current world better.',
+    vi: 'Nghiên cứu lịch sử giúp tôi hiểu thế giới hiện tại tốt hơn.',
+    fr: 'La recherche historique m\'aide à mieux comprendre le monde actuel.',
+    hi: 'ऐतिहासिक शोध मुझे वर्तमान दुनिया को बेहतर ढंग से समझने में मदद करता है।',
+    ar: 'يساعدني البحث التاريخي على فهم العالم الحالي بشكل أفضل.' },
+  { id:  9, disc: 'yt', text: 'Caring for and helping patients is the most meaningful work for me.',
+    vi: 'Chăm sóc và giúp đỡ bệnh nhân là công việc có ý nghĩa nhất với tôi.',
+    fr: 'Soigner et aider les patients est le travail le plus significatif pour moi.',
+    hi: 'रोगियों की देखभाल करना और उनकी मदद करना मेरे लिए सबसे अर्थपूर्ण काम है।',
+    ar: 'رعاية المرضى ومساعدتهم هو أكثر عمل ذي معنى بالنسبة لي.' },
+  { id: 10, disc: 'kt', text: 'I like designing systems and optimizing processes.',
+    vi: 'Tôi thích thiết kế hệ thống và tối ưu hóa quy trình.',
+    fr: 'J\'aime concevoir des systèmes et optimiser les processus.',
+    hi: 'मुझे सिस्टम डिजाइन करना और प्रक्रियाओं को अनुकूलित करना पसंद है।',
+    ar: 'أحب تصميم الأنظمة وتحسين العمليات.' },
+  { id: 11, disc: 'xh', text: 'Working in teams and driving community development is my strength.',
+    vi: 'Làm việc nhóm và thúc đẩy sự phát triển cộng đồng là thế mạnh của tôi.',
+    fr: 'Travailler en équipe et stimuler le développement communautaire est mon point fort.',
+    hi: 'टीमों में काम करना और सामुदायिक विकास को बढ़ावा देना मेरी ताकत है।',
+    ar: 'العمل في فرق ودفع التنمية المجتمعية هي نقطة قوتي.' },
+  { id: 12, disc: 'nn', text: 'Biotechnology in agriculture is very appealing to me.',
+    vi: 'Công nghệ sinh học trong nông nghiệp rất hấp dẫn đối với tôi.',
+    fr: 'La biotechnologie en agriculture m\'attire beaucoup.',
+    hi: 'कृषि में जैव प्रौद्योगिकी मुझे बहुत आकर्षक लगती है।',
+    ar: 'التكنولوجيا الحيوية في الزراعة جذابة جداً بالنسبة لي.' },
+  { id: 13, disc: 'tn', text: 'Mathematics and physics are subjects I always find joy in.',
+    vi: 'Toán học và vật lý là những môn tôi luôn tìm thấy niềm vui.',
+    fr: 'Les mathématiques et la physique sont des matières qui me passionnent toujours.',
+    hi: 'गणित और भौतिकी ऐसे विषय हैं जिनमें मुझे हमेशा आनंद मिलता है।',
+    ar: 'الرياضيات والفيزياء مواد دائماً ما أجد فيها متعة.' },
+  { id: 14, disc: 'nv', text: 'Teaching and sharing knowledge with others is my passion.',
+    vi: 'Giảng dạy và chia sẻ kiến thức với người khác là đam mê của tôi.',
+    fr: 'Enseigner et partager mes connaissances avec les autres est ma passion.',
+    hi: 'दूसरों को पढ़ाना और ज्ञान साझा करना मेरा जुनून है।',
+    ar: 'التدريس ومشاركة المعرفة مع الآخرين هو شغفي.' },
+  { id: 15, disc: 'kt', text: 'I am interested in artificial intelligence and automation.',
+    vi: 'Tôi quan tâm đến trí tuệ nhân tạo và tự động hóa.',
+    fr: 'Je m\'intéresse à l\'intelligence artificielle et à l\'automatisation.',
+    hi: 'मुझे कृत्रिम बुद्धिमत्ता और स्वचालन में रुचि है।',
+    ar: 'أنا مهتم بالذكاء الاصطناعي والأتمتة.' },
+  { id: 16, disc: 'xh', text: 'I want to participate in building public policies.',
+    vi: 'Tôi muốn tham gia xây dựng các chính sách công.',
+    fr: 'Je veux participer à l\'élaboration des politiques publiques.',
+    hi: 'मैं सार्वजनिक नीतियों के निर्माण में भाग लेना चाहता हूं।',
+    ar: 'أريد المشاركة في بناء السياسات العامة.' },
+  { id: 17, disc: 'yt', text: 'Drug research and pharmaceutical formulation attract me.',
+    vi: 'Nghiên cứu thuốc và bào chế dược phẩm thu hút tôi.',
+    fr: 'La recherche sur les médicaments et la formulation pharmaceutique m\'attirent.',
+    hi: 'दवा अनुसंधान और फार्मास्युटिकल फॉर्मूलेशन मुझे आकर्षित करते हैं।',
+    ar: 'أبحاث الأدوية والتركيب الصيدلاني تجذبني.' },
+  { id: 18, disc: 'nn', text: 'I prefer working outdoors and near nature over working in an office.',
+    vi: 'Tôi thích làm việc ngoài trời và gần thiên nhiên hơn là làm việc trong văn phòng.',
+    fr: 'Je préfère travailler en plein air et près de la nature plutôt que dans un bureau.',
+    hi: 'मैं कार्यालय में काम करने के बजाय बाहर और प्रकृति के पास काम करना पसंद करता हूं।',
+    ar: 'أفضل العمل في الهواء الطلق وقريباً من الطبيعة على العمل في مكتب.' },
+  { id: 19, disc: 'tn', text: 'Chemistry and molecular biology are fields I want to explore deeply.',
+    vi: 'Hóa học và sinh học phân tử là những lĩnh vực tôi muốn khám phá sâu.',
+    fr: 'La chimie et la biologie moléculaire sont des domaines que je veux approfondir.',
+    hi: 'रसायन विज्ञान और आणविक जीव विज्ञान ऐसे क्षेत्र हैं जिन्हें मैं गहराई से खोजना चाहता हूं।',
+    ar: 'الكيمياء والأحياء الجزيئية مجالات أريد استكشافها بعمق.' },
+  { id: 20, disc: 'nv', text: 'Creating, writing, and storytelling is how I express myself.',
+    vi: 'Sáng tạo, viết lách và kể chuyện là cách tôi thể hiện bản thân.',
+    fr: 'Créer, écrire et raconter des histoires est ma façon de m\'exprimer.',
+    hi: 'बनाना, लिखना और कहानी सुनाना मेरी आत्म-अभिव्यक्ति का तरीका है।',
+    ar: 'الإبداع والكتابة ورواية القصص هي طريقتي في التعبير عن نفسي.' },
+  { id: 21, disc: 'kt', text: 'Information security and network protection are areas I want to specialize in.',
+    vi: 'An toàn thông tin và bảo vệ mạng là lĩnh vực tôi muốn chuyên sâu.',
+    fr: 'La sécurité de l\'information et la protection des réseaux sont des domaines dans lesquels je veux me spécialiser.',
+    hi: 'सूचना सुरक्षा और नेटवर्क सुरक्षा ऐसे क्षेत्र हैं जिनमें मैं विशेषज्ञता प्राप्त करना चाहता हूं।',
+    ar: 'أمن المعلومات وحماية الشبكات مجالات أريد التخصص فيها.' },
+  { id: 22, disc: 'xh', text: 'Economics helps me understand why some countries prosper while others fail.',
+    vi: 'Kinh tế học giúp tôi hiểu tại sao một số quốc gia phát triển trong khi những nước khác thất bại.',
+    fr: 'L\'économie m\'aide à comprendre pourquoi certains pays prospèrent pendant que d\'autres échouent.',
+    hi: 'अर्थशास्त्र मुझे यह समझने में मदद करता है कि कुछ देश समृद्ध क्यों होते हैं जबकि अन्य विफल होते हैं।',
+    ar: 'الاقتصاد يساعدني على فهم سبب ازدهار بعض البلدان بينما يفشل البعض الآخر.' },
+  { id: 23, disc: 'nn', text: 'I am concerned about how to produce safe food for millions of people.',
+    vi: 'Tôi quan tâm đến việc sản xuất thực phẩm an toàn cho hàng triệu người.',
+    fr: 'Je me préoccupe de la façon de produire des aliments sûrs pour des millions de personnes.',
+    hi: 'मुझे लाखों लोगों के लिए सुरक्षित भोजन कैसे उत्पादित किया जाए इसकी चिंता है।',
+    ar: 'أنا قلق بشأن كيفية إنتاج الغذاء الآمن لملايين الناس.' },
+  { id: 24, disc: 'yt', text: 'Rehabilitation and sports medicine are fields I am drawn to.',
+    vi: 'Phục hồi chức năng và y học thể thao là những lĩnh vực thu hút tôi.',
+    fr: 'La rééducation et la médecine du sport sont des domaines qui m\'attirent.',
+    hi: 'पुनर्वास और खेल चिकित्सा ऐसे क्षेत्र हैं जो मुझे आकर्षित करते हैं।',
+    ar: 'إعادة التأهيل والطب الرياضي مجالات أنجذب إليها.' },
+  { id: 25, disc: 'tn', text: 'I am interested in space exploration and astronomy.',
+    vi: 'Tôi quan tâm đến khám phá không gian và thiên văn học.',
+    fr: 'Je m\'intéresse à l\'exploration spatiale et à l\'astronomie.',
+    hi: 'मुझे अंतरिक्ष अन्वेषण और खगोल विज्ञान में रुचि है।',
+    ar: 'أنا مهتم باستكشاف الفضاء وعلم الفلك.' },
+  { id: 26, disc: 'nv', text: 'I am passionate about law and protecting human rights.',
+    vi: 'Tôi đam mê luật pháp và bảo vệ quyền con người.',
+    fr: 'Je suis passionné par le droit et la protection des droits humains.',
+    hi: 'मैं कानून और मानवाधिकारों की रक्षा के प्रति जुनूनी हूं।',
+    ar: 'أنا شغوف بالقانون وحماية حقوق الإنسان.' },
+  { id: 27, disc: 'kt', text: 'Electronics, microchips, and hardware are as fascinating to me as software.',
+    vi: 'Điện tử, vi mạch và phần cứng cũng hấp dẫn tôi không kém phần mềm.',
+    fr: 'L\'électronique, les micropuces et le matériel informatique me fascinent autant que les logiciels.',
+    hi: 'इलेक्ट्रॉनिक्स, माइक्रोचिप्स और हार्डवेयर मुझे सॉफ्टवेयर जितना ही आकर्षक लगते हैं।',
+    ar: 'الإلكترونيات والرقائق الدقيقة والأجهزة تبهرني بقدر ما يبهرني البرمجيات.' },
+  { id: 28, disc: 'xh', text: 'Psychology and understanding human behavior are what I am passionate about.',
+    vi: 'Tâm lý học và hiểu hành vi con người là điều tôi đam mê.',
+    fr: 'La psychologie et la compréhension du comportement humain sont ce qui me passionne.',
+    hi: 'मनोविज्ञान और मानव व्यवहार को समझना मेरे जुनून हैं।',
+    ar: 'علم النفس وفهم السلوك البشري هو ما أنا شغوف به.' },
+  { id: 29, disc: 'nn', text: 'Forests, oceans, and ecosystems need to be preserved — I want to be someone who works towards that.',
+    vi: 'Rừng, đại dương và hệ sinh thái cần được bảo tồn — tôi muốn là người làm việc hướng tới điều đó.',
+    fr: 'Les forêts, les océans et les écosystèmes doivent être préservés — je veux être quelqu\'un qui y contribue.',
+    hi: 'जंगलों, महासागरों और पारिस्थितिक तंत्रों को संरक्षित करने की जरूरत है — मैं उस दिशा में काम करने वाला बनना चाहता हूं।',
+    ar: 'الغابات والمحيطات والأنظمة البيئية تحتاج إلى الحفاظ عليها — أريد أن أكون شخصاً يعمل نحو ذلك.' },
+  { id: 30, disc: 'tn', text: 'New materials and nanotechnology will change the way we live — I want to contribute to that.',
+    vi: 'Vật liệu mới và công nghệ nano sẽ thay đổi cách chúng ta sống — tôi muốn đóng góp vào điều đó.',
+    fr: 'Les nouveaux matériaux et les nanotechnologies changeront notre façon de vivre — je veux y contribuer.',
+    hi: 'नई सामग्री और नैनोटेक्नोलॉजी जीने का तरीका बदल देगी — मैं उसमें योगदान देना चाहता हूं।',
+    ar: 'المواد الجديدة وتقنية النانو ستغير طريقة حياتنا — أريد المساهمة في ذلك.' },
 ];
+/* ── Language helpers ───────────────────────────────────────────
+   Both read localStorage directly so they work on first paint,
+   regardless of whether BDi18n.init() has run yet.
+   ──────────────────────────────────────────────────────────── */
+function _bdLang() {
+  try { return localStorage.getItem('bd-lang') || 'en'; } catch(e) { return 'en'; }
+}
+
+function getQText(q) {
+  var lang = _bdLang();
+  if (q[lang]) return q[lang]; /* vi / fr / hi / ar — all stored inline */
+  return q.text;               /* fallback: English */
+}
+
+/* Disc chip label translation (uses BDi18n.t with temporary _lang override) */
+var _DISC_EMOJIS = { kt:'⚡', nv:'📚', yt:'⚕️', xh:'💡', nn:'🌱', tn:'🔬' };
+function getDiscLabel(discKey) {
+  var lang = _bdLang();
+  if (lang === 'en' || !window.BDi18n) return DISC_COLORS[discKey].label;
+  var translated = window.BDi18n.t.call({ _lang: lang }, 'disc.short.' + discKey);
+  return (_DISC_EMOJIS[discKey] || '') + ' ' + translated;
+}
 /* ── START-QUESTION DETECTION ── */
 // sessionStorage bd_nextStart is the primary resume mechanism (set by result screens)
 // URL ?start=N is secondary fallback. Default: Q1 (START_IDX=0)
@@ -3112,6 +3366,16 @@ if (START_IDX === 0) {
   try {
     const _up = new URLSearchParams(window.location.search).get('start');
     if (_up) START_IDX = Math.max(0, parseInt(_up, 10) - 1);
+  } catch(e) {}
+}
+// Fresh start (no ?start param and no bd_nextStart) → reset stale quizProgress so
+// "Continue Quiz" on other pages doesn't resume from an old session's position.
+if (START_IDX === 0) {
+  try { localStorage.removeItem('quizProgress'); } catch(e) {}
+  try {
+    sessionStorage.removeItem('bd_dna');
+    sessionStorage.removeItem('bd_answers');
+    sessionStorage.removeItem('bd_scores');
   } catch(e) {}
 }
 // QUESTIONS stays as the full 30-question array — no slicing
@@ -3151,6 +3415,10 @@ const BGEngine = (() => {
     return `rgba(${r},${g},${b},${a})`;
   }
 
+  function _isLight() {
+    return document.documentElement.getAttribute('data-theme') === 'light';
+  }
+
   function _buildBg(cur, nxt, ox, oy) {
     ox = ox || 0; oy = oy || 0;
     const c = DISC_COLORS[cur];
@@ -3159,6 +3427,15 @@ const BGEngine = (() => {
     const py = Math.round(28 + oy * 18);
     const sx = Math.round(78 - ox * 18);
     const sy = Math.round(72 - oy * 14);
+    if (_isLight()) {
+      /* Light: pastel glow over discipline-tinted cream base */
+      const nextTint = _hexToRgba(n.lightAccent || n.primary, 0.16);
+      return [
+        `radial-gradient(ellipse 85% 65% at ${px}% ${py}%, ${c.lightGlow} 0%, transparent 70%)`,
+        `radial-gradient(ellipse 55% 65% at ${sx}% ${sy}%, ${nextTint} 0%, transparent 65%)`,
+        c.lightBase || c.light,
+      ].join(', ');
+    }
     return [
       `radial-gradient(ellipse 85% 65% at ${px}% ${py}%, ${c.glow} 0%, transparent 68%)`,
       `radial-gradient(ellipse 55% 65% at ${sx}% ${sy}%, ${_hexToRgba(n.primary, 0.22)} 0%, transparent 62%)`,
@@ -3174,16 +3451,19 @@ const BGEngine = (() => {
 
   function _updatePanel() {
     if (_auroraPreview) {
+      const isL = _isLight();
       _auroraPreview.style.background = [
-        `radial-gradient(ellipse 90% 80% at 30% 35%, ${DISC_COLORS[_cur].glow} 0%, transparent 70%)`,
-        DISC_COLORS[_cur].dark,
+        `radial-gradient(ellipse 90% 80% at 30% 35%, ${isL ? DISC_COLORS[_cur].lightGlow : DISC_COLORS[_cur].glow} 0%, transparent 70%)`,
+        isL ? (DISC_COLORS[_cur].lightBase || DISC_COLORS[_cur].light) : DISC_COLORS[_cur].dark,
       ].join(', ');
     }
-    if (_auroraDiscName) _auroraDiscName.textContent = DISC_COLORS[_cur].label;
-    if (_auroraNextName) _auroraNextName.textContent = '→ ' + DISC_COLORS[_nxt].label;
+    if (_auroraDiscName) _auroraDiscName.textContent = getDiscLabel(_cur);
+    if (_auroraNextName) _auroraNextName.textContent = '→ ' + getDiscLabel(_nxt);
   }
 
   function _updateGlow() {
+    /* Device frame glow — only update in dark theme (light keeps purple glow from layout.css) */
+    if (_isLight()) return;
     const frame = document.getElementById('deviceFrame');
     if (frame) frame.style.boxShadow =
       `0 0 0 1px rgba(255,255,255,0.07), 0 30px 80px ${DISC_COLORS[_cur].glow}`;
@@ -3200,14 +3480,24 @@ const BGEngine = (() => {
     if (!_el) return;
     const c = DISC_COLORS[_cur];
     const n = DISC_COLORS[_nxt];
-    // Primary blobs use current discipline
-    _el.style.setProperty('--blob-p1', _hexToRgba(c.primary, 0.72));
-    _el.style.setProperty('--blob-p2', _hexToRgba(c.primary, 0.45));
-    _el.style.setProperty('--blob-p3', _hexToRgba(n.primary, 0.40));
-    _el.style.setProperty('--blob-p4', _hexToRgba(n.primary, 0.30));
-    // Tab bar active color follows discipline
+    const isL = _isLight();
+    /* Light theme: softer pastel blob opacity using accent tones */
+    const curAccent = isL ? (c.lightAccent || c.primary) : c.primary;
+    const nxtAccent = isL ? (n.lightAccent || n.primary) : n.primary;
+    if (isL) {
+      _el.style.setProperty('--blob-p1', _hexToRgba(curAccent, 0.35));
+      _el.style.setProperty('--blob-p2', _hexToRgba(curAccent, 0.22));
+      _el.style.setProperty('--blob-p3', _hexToRgba(nxtAccent, 0.20));
+      _el.style.setProperty('--blob-p4', _hexToRgba(nxtAccent, 0.15));
+    } else {
+      _el.style.setProperty('--blob-p1', _hexToRgba(curAccent, 0.72));
+      _el.style.setProperty('--blob-p2', _hexToRgba(curAccent, 0.45));
+      _el.style.setProperty('--blob-p3', _hexToRgba(nxtAccent, 0.40));
+      _el.style.setProperty('--blob-p4', _hexToRgba(nxtAccent, 0.30));
+    }
+    // Tab bar active color follows discipline (use accent in light mode)
     const tabBar = document.getElementById('floatTabBar');
-    if (tabBar) tabBar.style.setProperty('--tab-active-color', c.primary);
+    if (tabBar) tabBar.style.setProperty('--tab-active-color', isL ? curAccent : c.primary);
 
     // ── Discipline ambient layers ──
     const screen    = document.getElementById('mobileScreen');
@@ -3275,7 +3565,7 @@ const BGEngine = (() => {
       if (_discLabel) {
         const strength = Math.min(1, Math.sqrt(ox*ox + oy*oy) / 0.4);
         if (strength > 0.1) {
-          _discLabel.textContent = DISC_COLORS[_cur].label;
+          _discLabel.textContent = getDiscLabel(_cur);
           _discLabel.style.opacity = String(Math.min(1, (strength - 0.1) * 1.4));
         } else {
           _discLabel.style.opacity = '0';
@@ -3352,8 +3642,16 @@ document.addEventListener('DOMContentLoaded', () => {
   $undoBtn             = document.getElementById('undoBtn');
 
   state.currentIndex = START_IDX;
+
+  // Guard: if BD_ASSERTIONS failed to load, show a clear error and bail
+  if (!QUESTIONS || QUESTIONS.length === 0) {
+    if ($activeCard) $activeCard.innerHTML = '<div style="padding:24px;text-align:center;color:#ff4757"><p style="font-size:16px;font-weight:700;margin-bottom:8px">⚠️ Quiz data failed to load</p><p style="font-size:13px;opacity:0.7">Please refresh the page</p></div>';
+    console.error('[BeyonDegrees] BD_ASSERTIONS not loaded — check assertions.js path');
+    return;
+  }
+
   if (START_IDX > 0) { loadQuizState(); updateScoreboard(); }
-  BGEngine.init(QUESTIONS[Math.min(START_IDX, QUESTIONS.length-1)].disc);
+  BGEngine.init(QUESTIONS[Math.min(START_IDX, QUESTIONS.length - 1)].disc);
   buildStoryBar();
   if (START_IDX > 0) updateDNA();
   loadCard(START_IDX);
@@ -3380,10 +3678,10 @@ function loadCard(index) {
   const q    = QUESTIONS[index];
   const disc = DISC_COLORS[q.disc];
 
-  if ($qText)          $qText.textContent        = q.text;
-  if ($qNumber)        $qNumber.textContent       = String(q.id).padStart(2, '0');
+  if ($qText)          $qText.textContent        = getQText(q);
+  if ($qNumber)        $qNumber.textContent       = String(index + 1).padStart(2, '0');
   if ($disciplineTag) {
-    $disciplineTag.textContent = disc.label;
+    $disciplineTag.textContent = q.tag || getDiscLabel(q.disc);
     $disciplineTag.style.color = disc.primary;
   }
   if ($counterCurrent) $counterCurrent.textContent = String(index + 1);
@@ -3731,10 +4029,14 @@ function advanceCard() {
 
   const done  = state.currentIndex;
   const total = QUESTIONS.length;
+  const _qt = function(k) {
+    try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
+    return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
+  };
   const MILESTONES = [
-    { at: Math.floor(total / 3),   emoji: '🔥', text: '1/3 done!', sub: 'Keep going! 💪' },
-    { at: Math.floor(total / 2),   emoji: '⚡', text: 'Nửa đường rồi!', sub: 'Đang rất tốt đấy!' },
-    { at: Math.floor(total * 2/3), emoji: '🚀', text: '2/3 hoàn thành!', sub: 'Sắp xong rồi!' },
+    { at: Math.floor(total / 3),   emoji: '🔥', text: _qt('quiz.milestone.1of3'),  sub: _qt('quiz.milestone.1of3.sub') },
+    { at: Math.floor(total / 2),   emoji: '⚡', text: _qt('quiz.milestone.half'),   sub: _qt('quiz.milestone.half.sub') },
+    { at: Math.floor(total * 2/3), emoji: '🚀', text: _qt('quiz.milestone.2of3'),  sub: _qt('quiz.milestone.2of3.sub') },
   ];
 
   const hit = MILESTONES.find(m => m.at === done);
@@ -3762,7 +4064,11 @@ function showMilestone(emoji, text, sub, cb) {
    ───────────────────────────────────────── */
 function undoLast() {
   if (!state.answers.length) {
-    if (typeof BD !== 'undefined' && BD.Toast) BD.Toast.show('Không có gì để hoàn tác!', 1500);
+    var _qtu = function(k) {
+      try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
+      return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
+    };
+    if (typeof BD !== 'undefined' && BD.Toast) BD.Toast.show(_qtu('quiz.undo_empty'), 1500);
     return;
   }
   const last = state.answers.pop();
@@ -3819,14 +4125,23 @@ function loadQuizState() {
 }
 function showBatchDone(stage) {
   if ($activeCard) {
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    var headColor = isLight ? '#1A1A1A' : '#f8fafc';
+    var subColor  = isLight ? '#5c4535'  : 'rgba(255,255,255,0.75)';
+    var _qt2 = function(k) {
+      try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
+      return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
+    };
+    var nDone   = (stage === 1 ? '10' : '20');
+    var textMsg = _qt2('quiz.batch.done').replace('{n}', nDone);
+    var subMsg  = _qt2('quiz.batch.analyzing');
     $activeCard.style.transform = '';
-    $activeCard.innerHTML = `
-      <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px 24px;">
-        <div style="font-size:52px;line-height:1;">${stage === 1 ? '🏁' : '⚡'}</div>
-        <h2 style="font-size:20px;font-weight:800;color:var(--text-primary);margin:0;">${stage === 1 ? '10' : '20'} câu hoàn thành!</h2>
-        <p style="font-size:14px;color:var(--text-secondary);margin:0;">AI đang phân tích kết quả giai đoạn này…</p>
-      </div>
-    `;
+    $activeCard.innerHTML =
+      '<div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px 24px;">'
+      + '<div style="font-size:52px;line-height:1;">' + (stage === 1 ? '🏁' : '⚡') + '</div>'
+      + '<h2 style="font-size:20px;font-weight:800;color:' + headColor + ';margin:0;">' + textMsg + '</h2>'
+      + '<p style="font-size:14px;color:' + subColor + ';margin:0;">' + subMsg + '</p>'
+      + '</div>';
   }
   BGEngine.onFling();
   saveQuizState();
@@ -3837,14 +4152,20 @@ function showBatchDone(stage) {
 function showFinished() {
   // All 30 questions done → Loading stage=3 → University Matches
   if ($activeCard) {
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    var headColor = isLight ? '#1A1A1A' : '#f8fafc';
+    var subColor  = isLight ? '#5c4535'  : 'rgba(255,255,255,0.75)';
+    var _qt3 = function(k) {
+      try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
+      return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
+    };
     $activeCard.style.transform = '';
-    $activeCard.innerHTML = `
-      <div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px 24px;">
-        <div style="font-size:52px;line-height:1;">🎉</div>
-        <h2 style="font-size:20px;font-weight:800;color:var(--text-primary);margin:0;">All 30 done!</h2>
-        <p style="font-size:14px;color:var(--text-secondary);margin:0;">AI đang phân tích kết quả của bạn…</p>
-      </div>
-    `;
+    $activeCard.innerHTML =
+      '<div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px 24px;">'
+      + '<div style="font-size:52px;line-height:1;">🎉</div>'
+      + '<h2 style="font-size:20px;font-weight:800;color:' + headColor + ';margin:0;">' + _qt3('quiz.all_done') + '</h2>'
+      + '<p style="font-size:14px;color:' + subColor + ';margin:0;">' + _qt3('quiz.all_analyzing') + '</p>'
+      + '</div>';
   }
   BGEngine.onFling();
   saveQuizState();
@@ -3908,6 +4229,6 @@ function showFinished() {
   });
 })();
 </script>
-
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

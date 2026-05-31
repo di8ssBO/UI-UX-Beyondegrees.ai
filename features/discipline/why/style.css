@@ -12,18 +12,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
     radial-gradient(ellipse 60% 50% at 20% 20%, rgba(124,58,237,.05) 0%, transparent 70%),
     var(--bg-base);
 }
-.device-frame{
-  width:390px;height:844px;background:var(--bg-base);border-radius:44px;overflow:hidden;
-  position:relative;
-  box-shadow:0 0 0 1px rgba(255,255,255,.10),0 40px 80px rgba(0,0,0,.60),
-             0 0 120px var(--disc-glow-sm);
-  display:flex;flex-direction:column;
-}
-.device-notch{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:120px;height:34px;background:#000;border-radius:0 0 20px 20px;z-index:100;
-}
-.mobile-screen{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+/* device-frame, device-notch, mobile-screen → layout.css */
 
 /* Breadcrumb */
 .breadcrumb{display:flex;align-items:center;gap:6px;padding:16px 24px 0;font-size:12px;
@@ -191,21 +180,12 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 }
 .cta-btn:active{transform:scale(0.97)}
 
-/* ── Tab bar ── */
-.tab-bar-wrap{padding:6px 10px 12px;flex-shrink:0}
-.float-tab-bar{
-  display:flex;align-items:center;justify-content:space-between;padding:5px;
-  border-radius:var(--radius-full);background:rgba(255,255,255,.06);
-  backdrop-filter:blur(32px) saturate(200%);-webkit-backdrop-filter:blur(32px) saturate(200%);
-  border:1px solid rgba(255,255,255,.10);
-  box-shadow:0 8px 32px rgba(0,0,0,.35),0 1px 0 rgba(255,255,255,.08) inset;
-}
-/* tab-item styles — defined in design-system/layout.css */
+/* float-tab-bar + tab-item styles → design-system/layout.css */
 
 /* ── Responsive ── */
 @media(max-width:480px){
   .desktop-container{padding:0;background:var(--bg-base)}
-  .device-frame{width:100%;height:100vh;border-radius:0;box-shadow:none}
+  .device-frame{width:100%;height:100vh;border-radius:0;border:none;box-shadow:none}
   .device-notch{display:none}
   .status-bar{padding-top:8px}
   .breadcrumb{display:none}
@@ -224,24 +204,208 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .assertion-card:nth-child(5){animation-delay:.25s}
 .assertion-card:nth-child(6){animation-delay:.30s}
 
-/* ═══ LIGHT MODE ════════════════════════════════════════════════ */
-[data-theme="light"] .desktop-container { background:#e8edf7 }
-[data-theme="light"] .status-bar { color:#1a1a2e }
-[data-theme="light"] .page-title { color:#1a1a2e }
+/* ════════════════════════════════════════════════════════════════
+   LIGHT MODE — terracotta/cream palette with wave SVG wallpaper.
+   Outside (body, device-frame): stays dark (matches the dark mode
+   bezel aesthetic). Inside (mobile-screen): cream wave bg + frosted
+   glass cards + vivid disc-colored hero.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Outside stays dark */
+[data-theme="light"] body { background:#06060f !important; color:#f8fafc !important; }
+[data-theme="light"] .desktop-container { background:#06060f !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-sep { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+
+/* Inside — wave SVG wallpaper (shared with /match/) */
+[data-theme="light"] .mobile-screen {
+  background:
+    url('../bg-light.svg') center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+
+/* Status bar + header */
+[data-theme="light"] .status-bar { color:#2c1f14 !important; }
+[data-theme="light"] .page-title { color:#2c1f14 !important; }
 [data-theme="light"] .btn-icon {
-  background:rgba(0,0,0,.06) !important;border-color:rgba(0,0,0,.10) !important;color:#1a1a2e !important }
+  background: rgba(255,253,250,0.90) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .btn-icon:active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,253,250,0.85)) !important;
+}
+
+/* ── Match hero — BRAND IMAGE palette waves + disc identity overlay ──
+   Layered radials from palette (Terracotta-400 + Blue-300 + Sage-300
+   + Blue-200) over cream gradient, with disc-primary as the
+   identity tint at center. Mimics the brand wave image directly. */
 [data-theme="light"] .match-hero {
-  background:linear-gradient(135deg,color-mix(in srgb,var(--disc-dark) 70%,#dce4f2) 0%,rgba(240,244,251,.9) 100%) }
+  background:
+    /* Terracotta-400 wave top-right */
+    radial-gradient(ellipse 90% 65% at 95% 0%, rgba(232,145,122,0.42) 0%, transparent 65%),
+    /* Dusty Blue-300 wave bottom-left */
+    radial-gradient(ellipse 85% 60% at 5% 100%, rgba(163,194,211,0.45) 0%, transparent 65%),
+    /* Sage-300 accent bottom-right */
+    radial-gradient(ellipse 55% 50% at 100% 90%, rgba(168,200,196,0.36) 0%, transparent 65%),
+    /* Blue-200 subtle top-left */
+    radial-gradient(ellipse 50% 45% at 0% 20%, rgba(196,217,229,0.30) 0%, transparent 65%),
+    /* DISC IDENTITY tint at center */
+    radial-gradient(ellipse 60% 55% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 22%, transparent) 0%,
+      transparent 75%),
+    /* Cream base from palette: bg-surface → terracotta-100 → bg-base → blue-100 */
+    linear-gradient(135deg, #fdf8f2 0%, #fceae4 30%, #f5ede0 70%, #e0ecf3 100%) !important;
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 30%, rgba(232,224,213,0.65)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 4px 16px color-mix(in srgb, var(--disc-primary) 16%, transparent),
+    0 12px 30px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .match-hero::before {
+  /* Disc glow blob — terracotta-tinted if disc has no terracotta affinity */
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--disc-primary) 50%, transparent) 0%,
+    transparent 65%) !important;
+  opacity: 0.45;
+}
+[data-theme="light"] .match-disc-label {
+  color: color-mix(in srgb, var(--disc-dark) 75%, var(--disc-primary)) !important;
+}
+[data-theme="light"] .match-hero-top div[style*="rgba(255,255,255,.45)"] {
+  color: #5c4535 !important;
+}
+[data-theme="light"] .match-pct {
+  color: color-mix(in srgb, var(--disc-dark) 60%, var(--disc-primary)) !important;
+}
+[data-theme="light"] .match-pct-label {
+  color: color-mix(in srgb, var(--disc-dark) 80%, var(--disc-primary)) !important;
+  opacity: 0.85;
+}
 [data-theme="light"] .match-insight {
-  color:rgba(26,26,46,.70);border-top-color:rgba(0,0,0,.10) }
-[data-theme="light"] .section-hdr { color:rgba(26,26,46,.45) }
+  color: #2c1f14 !important;
+  border-top: 1px solid color-mix(in srgb, var(--disc-primary) 25%, rgba(255,255,255,0.4)) !important;
+}
+[data-theme="light"] .match-insight-tag {
+  background: color-mix(in srgb, var(--disc-primary) 22%, rgba(255,255,255,0.7)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 45%, transparent) !important;
+  color: color-mix(in srgb, var(--disc-dark) 70%, var(--disc-primary)) !important;
+}
+
+/* Section heading */
+[data-theme="light"] .section-hdr { color: #8c7260 !important; }
+
+/* ── Assertion cards — frosted glass over wave bg ── */
 [data-theme="light"] .assertion-card {
-  background:#fff;border-color:rgba(0,0,0,.08) }
-[data-theme="light"] .assertion-text { color:#1a1a2e }
-[data-theme="light"] .assertion-q-num { color:rgba(26,26,46,.38) }
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px rgba(140,114,96,0.07) !important;
+}
+[data-theme="light"] .assertion-text { color: #2c1f14 !important; }
+[data-theme="light"] .assertion-q-num { color: #8c7260 !important; }
+
+/* Answer badges — use palette semantic colors instead of dark-mode neon */
+[data-theme="light"] .badge-agree {
+  background: rgba(74,158,122,0.14) !important;
+  border-color: rgba(74,158,122,0.38) !important;
+  color: #2f6f53 !important;
+}
+[data-theme="light"] .badge-strong {
+  background: color-mix(in srgb, var(--disc-primary) 16%, rgba(255,255,255,0.6)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 38%, transparent) !important;
+  color: color-mix(in srgb, var(--disc-dark) 70%, var(--disc-primary)) !important;
+}
+[data-theme="light"] .badge-disagree {
+  background: rgba(196,85,64,0.12) !important;
+  border-color: rgba(196,85,64,0.34) !important;
+  color: #a84e30 !important;
+}
+[data-theme="light"] .badge-neutral {
+  background: rgba(140,114,96,0.14) !important;
+  border-color: rgba(140,114,96,0.32) !important;
+  color: #6b5440 !important;
+}
+/* Assertion left-stripe — semantic colors in light mode */
+[data-theme="light"] .assertion-card.answer-agree::before { background:#4a9e7a !important }
+[data-theme="light"] .assertion-card.answer-disagree::before { background:#c45540 !important }
+[data-theme="light"] .assertion-card.answer-neutral::before { background:#8c7260 !important }
+
+/* ── Score bar — frosted ── */
 [data-theme="light"] .score-bar-wrap {
-  background:#fff;border-color:rgba(0,0,0,.08) }
-[data-theme="light"] .score-bar-title { color:rgba(26,26,46,.45) }
-[data-theme="light"] .score-label { color:rgba(26,26,46,.65) }
-[data-theme="light"] .score-track { background:rgba(0,0,0,.07) }
-[data-theme="light"] .score-val { color:rgba(26,26,46,.45) }
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px rgba(140,114,96,0.07) !important;
+}
+[data-theme="light"] .score-bar-title { color: #8c7260 !important; }
+[data-theme="light"] .score-label { color: #2c1f14 !important; }
+[data-theme="light"] .score-track { background: rgba(140,114,96,0.18) !important; }
+[data-theme="light"] .score-val { color: #5c4535 !important; }
+/* Score fills — use palette semantic colors for the 4 answer types,
+   strong stays disc-tinted */
+[data-theme="light"] .fill-agree {
+  background: linear-gradient(90deg,#4a9e7a,#7bc59e) !important;
+}
+[data-theme="light"] .fill-strong {
+  background: linear-gradient(90deg,
+    var(--disc-primary),
+    color-mix(in srgb, var(--disc-light) 60%, #ffffff)) !important;
+}
+[data-theme="light"] .fill-neutral {
+  background: linear-gradient(90deg,#8c7260,#c4b3a5) !important;
+}
+[data-theme="light"] .fill-disagree {
+  background: linear-gradient(90deg,#c45540,#e08d7c) !important;
+}
+
+/* ── CTA — vivid disc-colored, no longer pale ──
+   Selector matches layout.css specificity (uses :not(.cta-continue))
+   AND adds ancestor scope so this beats the global blue cta in
+   layout.css line 521. */
+[data-theme="light"] .mobile-screen .cta-btn:not(.cta-continue),
+[data-theme="light"] .cta-btn:not(.cta-continue) {
+  background: linear-gradient(135deg,
+    var(--disc-primary) 0%,
+    color-mix(in srgb, var(--disc-primary) 75%, var(--disc-dark)) 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px color-mix(in srgb, var(--disc-primary) 30%, transparent),
+    0 10px 26px color-mix(in srgb, var(--disc-primary) 18%, transparent) !important;
+}
+[data-theme="light"] .mobile-screen .cta-btn:not(.cta-continue):hover,
+[data-theme="light"] .cta-btn:not(.cta-continue):hover {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--disc-primary) 85%, #ffffff) 0%,
+    var(--disc-primary) 100%) !important;
+}
+
+/* ── Float tab bar — frosted cream over wave bg ── */
+[data-theme="light"] .mobile-screen .float-tab-bar {
+  background: linear-gradient(135deg, rgba(255,253,250,0.92) 0%, rgba(245,237,224,0.88) 100%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border-color: rgba(232,224,213,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 -2px 12px rgba(201,107,85,0.06),
+    0 6px 20px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .mobile-screen .tab-item { color: rgba(92,69,53,0.55) !important; }
+[data-theme="light"] .mobile-screen .tab-item.active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.5)) !important;
+  color: color-mix(in srgb, var(--disc-dark) 65%, var(--disc-primary)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 32%, transparent) !important;
+}

@@ -33,7 +33,6 @@
 .status-bar, .quiz-header, .card-arena { position:relative; z-index:1; }
 
 /* STATUS BAR — base from layout.css */
-.status-right { display:flex; gap:6px; }
 
 /* ===== QUIZ HEADER ===== */
 .quiz-header {

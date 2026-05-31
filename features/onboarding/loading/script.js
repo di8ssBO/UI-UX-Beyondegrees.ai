@@ -673,7 +673,7 @@ const _urlParams = new URLSearchParams(window.location.search);
 const _STAGE = parseInt(_urlParams.get('stage') || '1', 10);
 const RESULT_MAP = {
   1: '../../discipline/match/',
-  2: '../../major/recommendations-v2/',
+  2: '../../major/recommendations/',
   3: '../../university/matches/'
 };
 const STAGE_Q_COUNT = { 1: 10, 2: 20, 3: 30 };
@@ -694,6 +694,4 @@ document.addEventListener('DOMContentLoaded', () => {
   if (_quizTab) {
     if (_STAGE === 1) _quizTab.href = '../../quiz/quiz-card/index.html?start=11';
     else if (_STAGE === 2) _quizTab.href = '../../quiz/quiz-card/index.html?start=21';
-    else _quizTab.href = '../../quiz/quiz-card/';
-  }
-});
+    else

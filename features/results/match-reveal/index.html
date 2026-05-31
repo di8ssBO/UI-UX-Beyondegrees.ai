@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Results Screen — BeyonDegrees.ai</title>
   <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/components/interactive.css">
@@ -41,59 +42,12 @@
   --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
 }
 
-/* ── LIGHT MODE: official BeyonDegrees brand palette ── */
-:root[data-theme="light"] {
-  /* Brand blue stays — all other palette flips to light */
-  --violet-600: #1863DC;
-  --violet-500: #0274BE;
-  --violet-400: #1863DC;
-  --violet-300: #4A90E2;
-  --violet-200: #93BBFF;
-  --violet-100: #EEF4FB;
-  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.18);
-  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.10);
-  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.20);
-  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.15);
-
-  /* Neutral scale flips */
-  --neutral-950: #FFFFFF;
-  --neutral-900: #F2F7FD;
-  --neutral-800: #E0ECFA;
-  --neutral-700: #C5D5E8;
-  --neutral-600: #A8BDD8;
-  --neutral-500: #808DAA;
-  --neutral-400: #5A6580;
-  --neutral-300: #3A3A4A;
-  --neutral-200: #1A1A2E;
-  --neutral-100: #0D0D1A;
-  --neutral-50:  #060610;
-
-  /* Semantic background tokens */
-  --bg-base:     #FFFFFF;
-  --bg-surface:  #F2F7FD;
-  --bg-elevated: #E0ECFA;
-  --bg-overlay:  #C5D5E8;
-
-  /* Text tokens */
-  --text-primary:   #1A1A2E;
-  --text-secondary: #3A3A4A;
-  --text-muted:     #808285;
-  --text-disabled:  #C0C0D0;
-
-  /* Mint stays readable on light bg */
-  --mint-500: #059669;
-  --mint-400: #10B981;
-  --mint-300: #34D399;
-
-  /* Orange */
-  --orange-500: #D95F02;
-  --orange-400: #F97316;
-}
+/* Light-mode token overrides live in design-system/tokens.css */
 
 /* ── LIGHT MODE: body & global overrides ── */
 [data-theme="light"] body {
-  background: linear-gradient(135deg, #FFFFFF 0%, #EEF4FB 55%, #FFFFFF 100%) !important;
-  color: #1A1A2E !important;
+  background: #06060f !important;
+  color: #f8fafc !important;
 }
 
 /* Hardcoded violet rgba chips → blue */
@@ -247,7 +201,7 @@ svg *, canvas, video, img { transition: none !important; }
 </head>
 <body>
 <div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
-    <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
     <span class="breadcrumb-separator">/</span>
     <a href="../../onboarding/home/" class="breadcrumb-item">Screens</a>
     <span class="breadcrumb-separator">/</span>
@@ -275,7 +229,10 @@ svg *, canvas, video, img { transition: none !important; }
         <!-- Status Bar -->
         <div class="status-bar">
           <span>9:41</span>
-          <div class="status-icons"><span>📶</span><span>🔋</span></div>
+          <div class="status-icons">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+          </div>
         </div>
 
         <!-- ░░ STORY BAR — Fully filled ░░ -->
@@ -312,7 +269,7 @@ svg *, canvas, video, img { transition: none !important; }
           <div class="match-hero" id="matchHero">
             <div class="match-disc-chip" id="matchDiscChip">
               <span>💻</span>
-              <span>Kỹ thuật &amp; Công nghệ</span>
+              <span data-i18n="disc.name.kt">Engineering &amp; Technology</span>
             </div>
 
             <div class="match-pct-ring" id="matchRing">
@@ -320,12 +277,12 @@ svg *, canvas, video, img { transition: none !important; }
                 <span class="match-pct" id="matchPct">0</span>
                 <span class="match-pct-sym">%</span>
               </div>
-              <div class="match-label">Độ phù hợp</div>
+              <div class="match-label" data-i18n="results.match_label">Match Rate</div>
             </div>
 
             <div class="match-badge" id="matchBadge">
               <span class="badge-star">⭐</span>
-              <span>Top 12% người phù hợp nhất</span>
+              <span>Top 12% best match</span>
             </div>
           </div>
 
@@ -341,7 +298,7 @@ svg *, canvas, video, img { transition: none !important; }
 
             <div class="dsc-header">
               <div class="dsc-header-left">
-                <p class="dsc-label">Academic DNA</p>
+                <p class="dsc-label" data-i18n="results.dna.label">Academic DNA</p>
                 <p class="dsc-name">Phan Văn Hoang Phuc</p>
               </div>
               <button class="dsc-share-btn" id="dnaShareBtn">
@@ -349,44 +306,44 @@ svg *, canvas, video, img { transition: none !important; }
                   <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
                   <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
                 </svg>
-                Chia sẻ
+                <span data-i18n="results.dna.share">Share</span>
               </button>
             </div>
 
             <div class="dsc-bars" id="dscBars">
               <div class="dsc-row">
                 <span class="dsc-icon">💻</span>
-                <span class="dsc-name">Kỹ thuật &amp; CN</span>
+                <span class="dsc-name" data-i18n="results.dna.kt">Eng &amp; Tech</span>
                 <div class="dsc-track"><div class="dsc-fill dna-kt" id="dsc-bar-kt"></div></div>
                 <span class="dsc-pct" id="dsc-pct-kt">0%</span>
               </div>
               <div class="dsc-row">
                 <span class="dsc-icon">🧬</span>
-                <span class="dsc-name">Khoa học TN</span>
+                <span class="dsc-name" data-i18n="results.dna.tn">Natural Sci</span>
                 <div class="dsc-track"><div class="dsc-fill dna-tn" id="dsc-bar-tn"></div></div>
                 <span class="dsc-pct" id="dsc-pct-tn">0%</span>
               </div>
               <div class="dsc-row">
                 <span class="dsc-icon">📖</span>
-                <span class="dsc-name">Nhân văn</span>
+                <span class="dsc-name" data-i18n="results.dna.nv">Humanities</span>
                 <div class="dsc-track"><div class="dsc-fill dna-nv" id="dsc-bar-nv"></div></div>
                 <span class="dsc-pct" id="dsc-pct-nv">0%</span>
               </div>
               <div class="dsc-row">
                 <span class="dsc-icon">🌐</span>
-                <span class="dsc-name">Khoa học XH</span>
+                <span class="dsc-name" data-i18n="results.dna.xh">Social Sci</span>
                 <div class="dsc-track"><div class="dsc-fill dna-xh" id="dsc-bar-xh"></div></div>
                 <span class="dsc-pct" id="dsc-pct-xh">0%</span>
               </div>
               <div class="dsc-row">
                 <span class="dsc-icon">🩺</span>
-                <span class="dsc-name">Y &amp; Sức khoẻ</span>
+                <span class="dsc-name" data-i18n="results.dna.yt">Med &amp; Health</span>
                 <div class="dsc-track"><div class="dsc-fill dna-yt" id="dsc-bar-yt"></div></div>
                 <span class="dsc-pct" id="dsc-pct-yt">0%</span>
               </div>
               <div class="dsc-row">
                 <span class="dsc-icon">🌾</span>
-                <span class="dsc-name">Nông nghiệp</span>
+                <span class="dsc-name" data-i18n="results.dna.nn">Agriculture</span>
                 <div class="dsc-track"><div class="dsc-fill dna-nn" id="dsc-bar-nn"></div></div>
                 <span class="dsc-pct" id="dsc-pct-nn">0%</span>
               </div>
@@ -400,7 +357,7 @@ svg *, canvas, video, img { transition: none !important; }
 
           <!-- ── Top 3 Ngành Recommended ── -->
           <div class="section-header">
-            <span class="section-label">Top ngành phù hợp nhất</span>
+            <span class="section-label" data-i18n="results.section.top_majors">Your Top Majors</span>
           </div>
 
           <!-- Major Card 1 — Primary match -->
@@ -421,7 +378,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <span class="major-tag">📈 Nhu cầu tuyển dụng +40%/năm</span>
               </div>
               <div class="major-actions">
-                <button class="major-cta">Xem lộ trình →</button>
+                <button class="major-cta" data-i18n="results.major.view_path">View Path →</button>
                 <button class="major-save">♡</button>
               </div>
             </div>
@@ -445,7 +402,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <span class="major-tag">🔥 Ngành hot nhất 2025</span>
               </div>
               <div class="major-actions">
-                <button class="major-cta">Xem lộ trình →</button>
+                <button class="major-cta" data-i18n="results.major.view_path">View Path →</button>
                 <button class="major-save">♡</button>
               </div>
             </div>
@@ -469,18 +426,18 @@ svg *, canvas, video, img { transition: none !important; }
                 <span class="major-tag">📊 Cơ hội quốc tế cao</span>
               </div>
               <div class="major-actions">
-                <button class="major-cta">Xem lộ trình →</button>
+                <button class="major-cta" data-i18n="results.major.view_path">View Path →</button>
                 <button class="major-save">♡</button>
               </div>
             </div>
           </div>
 
           <!-- CTA row -->
-          <a href="../../major/recommendations-v2/" class="cta-full btn btn-primary">Khám phá tất cả ngành học phù hợp →</a>
+          <a href="../../major/recommendations/" class="cta-full btn btn-primary" data-i18n="results.cta.explore">Explore all matching majors →</a>
 
           <div class="cta-ghost-row">
-            <a href="../../quiz/quiz-card/" class="btn btn-ghost cta-ghost">↺ Làm lại quiz</a>
-            <button class="btn btn-ghost cta-ghost" id="saveResultBtn">🔖 Lưu kết quả</button>
+            <a href="../../quiz/quiz-card/" class="btn btn-ghost cta-ghost" data-i18n="results.cta.retake">↺ Retake Quiz</a>
+            <button class="btn btn-ghost cta-ghost" id="saveResultBtn" data-i18n="results.cta.save">🔖 Save Results</button>
           </div>
 
           <div class="results-footer">
@@ -499,7 +456,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">About me</span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
           </a>
           <a href="../../discipline/match/" class="tab-item" data-tab="disciplines">
             <span class="tab-icon">
@@ -509,16 +466,16 @@ svg *, canvas, video, img { transition: none !important; }
                 <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
               </svg>
             </span>
-            <span class="tab-label">Disciplines</span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
           </a>
-          <a href="../../major/recommendations-v2/" class="tab-item" data-tab="majors">
+          <a href="../../major/recommendations/" class="tab-item" data-tab="majors">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                 <path d="M6 12v5c3 3 9 3 12 0v-5"/>
               </svg>
             </span>
-            <span class="tab-label">Majors</span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
           </a>
           <a href="../../university/matches/" class="tab-item" data-tab="universities">
             <span class="tab-icon">
@@ -526,7 +483,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
               </svg>
             </span>
-            <span class="tab-label">Universities</span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
           <a href="../../profile/overview/" class="tab-item" data-tab="account">
             <span class="tab-icon">
@@ -551,6 +508,7 @@ svg *, canvas, video, img { transition: none !important; }
 <script>
 /* utils */
 /* BeyonDegrees.ai — Shared Utilities */
+const t = k => window.BDi18n ? BDi18n.t(k) : k;
 
 // Toast Notification System
 const Toast = {
@@ -593,7 +551,7 @@ const Clipboard = {
       return true;
     } catch (err) {
       console.error('Failed to copy:', err);
-      Toast.error('Failed to copy');
+      Toast.error(t('err.copy_failed'));
       return false;
     }
   },
@@ -604,7 +562,7 @@ const Clipboard = {
       return text;
     } catch (err) {
       console.error('Failed to paste:', err);
-      Toast.error('Failed to paste');
+      Toast.error(t('err.paste_failed'));
       return null;
     }
   }
@@ -1107,7 +1065,8 @@ window.PageTransition = PageTransition;
     const screen = document.getElementById('mobileScreen');
     const toast  = document.createElement('div');
     toast.className = 'share-toast';
-    toast.textContent = '✓ Link đã sao chép!';
+    var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+    toast.textContent = t('results.share_toast');
     if (screen) screen.appendChild(toast);
 
     function showToast() {
@@ -1128,11 +1087,12 @@ window.PageTransition = PageTransition;
     const btn = $('saveResultBtn');
     if (!btn) return;
     btn.addEventListener('click', () => {
-      btn.textContent = '✅ Đã lưu!';
+      var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+      btn.textContent = t('results.cta.saved');
       btn.style.color = 'var(--mint-400)';
       btn.style.borderColor = 'rgba(6,214,160,0.3)';
       setTimeout(() => {
-        btn.textContent = '🔖 Lưu kết quả';
+        btn.textContent = t('results.cta.save');
         btn.style.color = '';
         btn.style.borderColor = '';
       }, 2000);
@@ -1214,6 +1174,6 @@ window.PageTransition = PageTransition;
   });
 })();
 </script>
-
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>
