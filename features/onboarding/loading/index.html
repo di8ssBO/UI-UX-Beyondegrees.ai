@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="./style.css">
   <script src="../../../shared/scripts/i18n.js"></script>
+<script src="../../../shared/scripts/bd-profile.js"></script>
 
 <style>
 
@@ -120,21 +121,8 @@ svg *, canvas, video, img { transition: none !important; }
         <!-- ░░ MAIN LOADING CONTENT ░░ -->
         <div class="loading-body">
 
-          <!-- Central AI Orb -->
-          <div class="orb-wrap">
-            <div class="orb-ring ring-outer" id="ringOuter"></div>
-            <div class="orb-ring ring-mid"   id="ringMid"></div>
-            <div class="orb-core"            id="orbCore">
-              <span class="orb-emoji" id="orbEmoji">✨</span>
-            </div>
-            <!-- Orbiting discipline particles -->
-            <div class="orbit orbit-1"><div class="particle p-kt"></div></div>
-            <div class="orbit orbit-2"><div class="particle p-yt"></div></div>
-            <div class="orbit orbit-3"><div class="particle p-nv"></div></div>
-            <div class="orbit orbit-4"><div class="particle p-nn"></div></div>
-            <div class="orbit orbit-5"><div class="particle p-xh"></div></div>
-            <div class="orbit orbit-6"><div class="particle p-tn"></div></div>
-          </div>
+          <!-- Main Character Canvas -->
+          <canvas id="mcCanvas" width="320" height="320"></canvas>
 
           <!-- Phase text -->
           <div class="phase-wrap">
@@ -1077,6 +1065,163 @@ document.addEventListener('DOMContentLoaded', () => {
     var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
     if (pref === 'system') bdSetTheme('system');
   });
+})();
+</script>
+
+<!-- ── Nhân Vật Chính — Main Character Animation ── -->
+<script>
+(function () {
+  /* "YOU" word — translated per active language */
+  const YOU_WORDS = { en:'YOU', vi:'BẠN', hi:'आप', fr:'TOI', ar:'أنت' };
+  function getYouWord() {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return YOU_WORDS[lang] || 'YOU';
+  }
+
+  const COLORS       = ['#8b5cf6','#06d6a0','#60a5fa','#fbbf24','#c084fc','#22d3ee'];
+  const COLORS_LIGHT = ['#b85a42','#2d8078','#1e6599','#b87310','#8b3520','#c45540'];
+  /* Discipline abbreviations — language-dependent */
+  const LABELS_MAP = {
+    en: ['KN','HE','PR','LA','SO','NA'],
+    vi: ['KT','YT','NV','NN','XH','TN'],
+    hi: ['ज्ञा','स्वा','व्यक्','भा','सा','प्र'],
+    fr: ['CO','SA','PE','LA','SO','NA'],
+    ar: ['مع','صح','شخ','لغ','اج','طب']
+  };
+  function getLabels() {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return LABELS_MAP[lang] || LABELS_MAP.en;
+  }
+  const LABELS = getLabels();
+  const TGT_A  = COLORS.map((_,i) => (i*60-90)*Math.PI/180);
+  const ez  = p => p<.5 ? 2*p*p : 1-(-2*p+2)**2/2;
+  const eo3 = p => 1-(1-p)**3;
+  const clp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const rng = (t,a,b) => clp((t-a)/(b-a),0,1);
+  const mix = (a,b,t) => a+(b-a)*t;
+
+  const tokens = LABELS.map((label,i) => ({
+    label, color: COLORS[i],
+    chaos0: Math.random()*Math.PI*2,
+    cDist:  22+Math.random()*32,
+    cSpeed: (0.45+Math.random()*0.55)*(Math.random()<.5?1:-1),
+  }));
+
+  const cvs = document.getElementById('mcCanvas');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const W = 160, H = 160, cx = W/2, cy = H/2, ORBIT_R = 46, CYCLE = 6000;
+  ctx.scale(2, 2);
+  let t0 = null;
+
+  function frame(now) {
+    if (!t0) t0 = now;
+    const abs = (now-t0)/1000;
+    const cyc = (now-t0) % CYCLE;
+    ctx.clearRect(0,0,W,H);
+
+    const settleP   = ez(rng(cyc, CYCLE*.15, CYCLE*.42));
+    const convergeP = eo3(rng(cyc, CYCLE*.42, CYCLE*.57));
+    const youP      = eo3(rng(cyc, CYCLE*.57, CYCLE*.76));
+    const youFadeP  = rng(cyc, CYCLE*.76, CYCLE*.85);
+    const scatterP  = eo3(rng(cyc, CYCLE*.83, CYCLE*.95));
+    const dimP      = rng(cyc, CYCLE*.95, CYCLE);
+
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+    tokens.forEach((tk,i) => {
+      const chaosA   = tk.chaos0 + tk.cSpeed*abs;
+      const settledA = TGT_A[i];
+      let da = settledA - chaosA;
+      da = ((da+Math.PI*3)%(Math.PI*2)) - Math.PI;
+      const displayA = scatterP>0 ? mix(settledA,chaosA,scatterP) : mix(chaosA,chaosA+da,settleP);
+      const displayDist = scatterP>0
+        ? mix(0,tk.cDist,scatterP)
+        : mix(mix(tk.cDist,ORBIT_R,settleP),0,convergeP);
+      const x = cx + displayDist*Math.cos(displayA);
+      const y = cy + displayDist*Math.sin(displayA);
+      const alpha = (scatterP>0 ? scatterP : (1-convergeP))*(1-dimP*.6);
+      const col = isLight ? COLORS_LIGHT[i] : COLORS[i];
+
+      if (isLight) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, alpha) * 0.9;
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(x,y,12,0,Math.PI*2); ctx.fill();
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = "800 10px 'Plus Jakarta Sans','Inter',sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(tk.label,x,y);
+        ctx.restore();
+      } else {
+        ctx.save();
+        ctx.globalAlpha = alpha * .22;
+        ctx.fillStyle = col;
+        ctx.beginPath(); ctx.arc(x,y,13,0,Math.PI*2); ctx.fill();
+        ctx.restore();
+        ctx.save();
+        ctx.globalAlpha = Math.max(0,alpha);
+        ctx.fillStyle = col;
+        ctx.font = "800 12px 'Plus Jakarta Sans','Inter',sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(tk.label,x,y);
+        ctx.restore();
+      }
+    });
+
+    // Dashed orbit ring
+    if (settleP>.15 && convergeP<.8) {
+      ctx.save();
+      ctx.strokeStyle = `rgba(167,139,250,${Math.min(settleP,1-convergeP)*.22})`;
+      ctx.lineWidth = .5; ctx.setLineDash([3,6]);
+      ctx.beginPath(); ctx.arc(cx,cy,ORBIT_R,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
+
+    // YOU phase — glowing sphere orb
+    const ya = eo3(youP)*Math.max(0,1-youFadeP);
+    if (ya>.01) {
+      const rr = eo3(youP);
+      const R  = 38*rr;
+      ctx.save();
+      ctx.globalAlpha = ya;
+
+      // Contained glow
+      const halo = ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*1.7);
+      halo.addColorStop(0, `rgba(139,92,246,${.3*ya})`);
+      halo.addColorStop(1, 'rgba(139,92,246,0)');
+      ctx.fillStyle = halo;
+      ctx.beginPath(); ctx.arc(cx,cy,R*1.7,0,Math.PI*2); ctx.fill();
+
+      // Sphere gradient
+      const sphere = ctx.createRadialGradient(cx-R*.28,cy-R*.28,0, cx,cy,R);
+      sphere.addColorStop(0,   `rgba(220,210,255,${.97*ya})`);
+      sphere.addColorStop(0.38,`rgba(124,58,237,${.88*ya})`);
+      sphere.addColorStop(1,   `rgba(20,5,50,${.75*ya})`);
+      ctx.fillStyle = sphere;
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+
+      // Specular highlight (off-center, not over text)
+      const spec = ctx.createRadialGradient(cx-R*.52,cy-R*.50,0, cx-R*.35,cy-R*.35,R*.55);
+      spec.addColorStop(0, `rgba(255,255,255,${.42*ya})`);
+      spec.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = spec;
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+
+      // YOU word — localized
+      ctx.shadowColor = 'rgba(0,0,0,0.85)';
+      ctx.shadowBlur  = 8;
+      ctx.fillStyle   = '#ffffff';
+      ctx.font = `800 ${Math.round(15*rr+4)}px 'Plus Jakarta Sans','Inter',sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(getYouWord(), cx, cy);
+      ctx.restore();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
