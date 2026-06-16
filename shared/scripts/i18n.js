@@ -33,6 +33,27 @@
       'nav.disciplines':  'Disciplines',
       'nav.majors':       'Majors',
       'nav.universities': 'Universities',
+      'nav.quiz':         'Quiz',
+      'nav.settings':     'Settings',
+
+      /* Desktop sidebar (sections + footer stats) */
+      'sidebar.explore':   'Explore',
+      'sidebar.results':   'Results',
+      'sidebar.account':   'Account',
+      'sidebar.questions': 'Questions',
+      'sidebar.top_match': 'Top match',
+
+      /* Desktop settings page */
+      'settings.title':         'Account Settings',
+      'settings.language':      'Language',
+      'settings.theme':         'Theme',
+      'settings.theme.light':   '☀️ Light',
+      'settings.theme.dark':    '🌙 Dark',
+      'settings.theme.system':  '🖥️ System',
+      'settings.notifications': 'Notifications',
+      'settings.account':       'Account',
+      'settings.log_out':       'Log Out',
+      'settings.delete_account':'Delete Account',
 
       /* Home */
       'home.tagline':         'Discover your academic identity',
@@ -374,6 +395,27 @@
       'nav.disciplines':  'Ngành học',
       'nav.majors':       'Chuyên ngành',
       'nav.universities': 'Trường ĐH',
+      'nav.quiz':         'Câu hỏi',
+      'nav.settings':     'Cài đặt',
+
+      /* Desktop sidebar (sections + footer stats) */
+      'sidebar.explore':   'Khám phá',
+      'sidebar.results':   'Kết quả',
+      'sidebar.account':   'Tài khoản',
+      'sidebar.questions': 'Câu hỏi',
+      'sidebar.top_match': 'Phù hợp nhất',
+
+      /* Desktop settings page */
+      'settings.title':         'Cài đặt tài khoản',
+      'settings.language':      'Ngôn ngữ',
+      'settings.theme':         'Giao diện',
+      'settings.theme.light':   '☀️ Sáng',
+      'settings.theme.dark':    '🌙 Tối',
+      'settings.theme.system':  '🖥️ Hệ thống',
+      'settings.notifications': 'Thông báo',
+      'settings.account':       'Tài khoản',
+      'settings.log_out':       'Đăng xuất',
+      'settings.delete_account':'Xóa tài khoản',
 
       /* Home */
       'home.tagline':         'Khám phá bản sắc học thuật của bạn',
@@ -1641,9 +1683,15 @@
   };
 
   /* ── Engine ────────────────────────────────────────────────────────────── */
+  /* Read saved language synchronously at load so t() returns the correct
+     language even when called at parse-time (before DOMContentLoaded init). */
+  var _savedLang = 'en';
+  try { _savedLang = localStorage.getItem('bd-lang') || 'en'; } catch (e) {}
+  if (!T[_savedLang]) _savedLang = 'en';
+
   window.BDi18n = {
     LANGS: LANGS,
-    _lang: 'en',
+    _lang: _savedLang,
 
     /** Translate a key with optional fallback to English */
     t: function (key) {

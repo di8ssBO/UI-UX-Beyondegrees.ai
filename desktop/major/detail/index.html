@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Major Detail — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/desktop.css">
+<style>
+  .md-hero { display: flex; align-items: center; gap: 26px; padding: 40px; position: relative; overflow: hidden; }
+  .md-hero::after {
+    content: ''; position: absolute; top: -50%; right: -12%;
+    width: 58%; height: 160%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 18%, transparent) 0%, transparent 70%);
+    filter: blur(32px); pointer-events: none;
+  }
+  .md-hero > * { position: relative; z-index: 1; }
+  .md-hero .ic { width: 84px; height: 84px; border-radius: 22px; flex: none; display: grid; place-items: center; font-size: 40px;
+    background: color-mix(in srgb, var(--acc) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 32%, transparent); }
+  .md-hero h1 { font-size: 28px; font-weight: 900; line-height: 1.2; color: var(--text-primary); }
+  .md-pct { margin-left: auto; text-align: center; flex: none; }
+  .md-pct b { font-size: 40px; font-weight: 900; color: var(--acc-pct); line-height: 1; }
+  .md-pct span { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .md-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.75; }
+  /* Spec cards */
+  .spec-card { padding: 20px; }
+  .spec-card .em { font-size: 28px; }
+  .spec-card b { display: block; font-size: 15px; margin-top: 10px; color: var(--text-primary); }
+  .spec-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px; min-height: 42px; }
+  .spec-tag { display: inline-flex; margin-top: 12px; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+  .lock-note { text-align: center; padding: 60px 20px; }
+  .lock-note .em { font-size: 48px; }
+  /* Back button (mobile parity → history.back()) */
+  .md-back { margin-bottom: 18px; }
+  /* Why I match banner (mobile .why-banner → discipline-why) */
+  .why-banner { display: flex; align-items: center; gap: 16px; padding: 20px 24px; }
+  .why-banner .why-ic { width: 48px; height: 48px; border-radius: 14px; flex: none; display: grid; place-items: center; font-size: 22px;
+    background: color-mix(in srgb, var(--acc) 15%, transparent); border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent); }
+  .why-banner .why-title { font-size: 16px; font-weight: 800; color: var(--text-primary); }
+  .why-banner .why-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+  .why-banner .why-arrow { margin-left: auto; color: var(--acc-pct); flex: none; display: flex; }
+</style>
+</head>
+<body class="app" data-page="majors" data-crumb="Major Detail">
+  <div class="main">
+    <div class="content fade-in" id="root"></div>
+  </div>
+
+  <script src="../../assets/majors-data.js"></script>
+  <script src="../../assets/spec-data.js"></script>
+  <script src="../../../shared/scripts/i18n.js"></script>
+  <script src="../../assets/desktop.js?v=3"></script>
+  <script>
+    var MOCK_PCT = {
+      'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
+      'Electrical engineering, Electronic engineering, Information engineering':94,
+      'Engineering':91,'Environmental biotechnology':79,'Environmental engineering':81,
+      'Industrial biotechnology':76,'Materials engineering':84,'Mechanical engineering':88,
+      'Medical engineering':82,'Nano-technology':87,'Other engineering and technologies':75,
+      'Biological sciences':86,'Chemical sciences':84,'Computer and information sciences':89,
+      'Earth and related Environmental sciences':79,'Mathematics':92,'Mathematics and Statistics':90,
+      'Physical sciences':87,
+      'Basic medicine':50,'Clinical medicine':56,'Health sciences':62,'Medical biotechnology':64,
+      'Nursing':47,'Other medical sciences':45,
+      'Agricultural biotechnology':62,'Agriculture, forestry and fishery':50,'Animal and dairy science':46,
+      'Behavioral Sciences':30,'Business':28,'Economics and business':34,'Education':20,
+      'Educational sciences':18,'Helms School of Government':24,'Law':16,'Political science':22,
+      'Psychology':32,'Sciences':19,'Social and economic geography':14,'Sociology':26,
+      'Arts and Sciences':26,'Communication and the Arts':22,'English':30,'History':20,
+      'History and archaeology':16,'Languages and literature':24,'Music':18,
+      'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
+    };
+    var DISC_LABEL = {
+      kt:'⚙️ Engineering', tn:'🔬 Natural Sci', yt:'🩺 Medical',
+      nn:'🌱 Agricultural', xh:'🧠 Social Sci', nv:'📜 Humanities'
+    };
+
+    var wanted = BD.param('major', 'Computer and information sciences');
+    var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
+    var major = _MAJORS.find(function (m) { return m.title === wanted; })
+             || _MAJORS.find(function (m) { return m.title === 'Computer and information sciences'; });
+    var root = document.getElementById('root');
+
+    /* Back về trang trước đó (giống mobile history.back()), fallback majors.html */
+    function goBack() { if (history.length > 1) history.back(); else location.href = '../../major/recommendations/'; }
+    window.goBack = goBack;
+    var backBtn = '<button class="btn btn-ghost md-back" onclick="goBack()">← Back</button>';
+
+    if (!major) {
+      root.innerHTML = backBtn + '<div class="card lock-note"><div class="em">⏳</div>' +
+        '<h2 class="mt-4" style="font-weight:900;">Loading…</h2>' +
+        '<p class="muted mt-2">Complete the quiz to unlock major details.</p>' +
+        '<a class="btn btn-primary mt-6" href="../../quiz/quiz-card/">Finish Quiz →</a></div>';
+    } else {
+      document.title = major.title + ' — BeyonDegrees.ai';
+      var pct = MOCK_PCT[major.title] != null ? MOCK_PCT[major.title] : 50;
+      /* mobile: desc tách câu, lấy các câu >30 ký tự */
+      var sentences = major.desc.replace(/\n/g, ' ').split(/(?<=[.!?])\s+/).filter(function (s) { return s.length > 30; });
+      var specs = (window.SPECIALIZATIONS || {})[major.id] || [];
+
+      var specCards = specs.map(function (sp, i) {
+        var t = (window.TAG_STYLES || {})[sp.tag] || { bg:'rgba(200,200,224,.08)', border:'rgba(200,200,224,.2)', text:'#c8c8e0' };
+        return '<a class="card hoverable spec-card" href="../../major/spec-detail/?major=' + encodeURIComponent(major.title) + '&spec=' + i + '">' +
+          '<span class="em">' + sp.icon + '</span><b>' + sp.name + '</b><p>' + sp.desc + '</p>' +
+          '<span class="spec-tag" style="background:' + t.bg + ';border:1px solid ' + t.border + ';color:' + t.text + ';">' + sp.tag + '</span>' +
+        '</a>';
+      }).join('');
+
+      root.innerHTML = backBtn +
+        '<div class="acc-' + major.discCode + '">' +
+          '<div class="card glass-hero md-hero">' +
+            '<div class="ic">' + (major.icon || '🎓') + '</div>' +
+            '<div>' +
+              '<span class="chip violet">' + DISC_LABEL[major.discCode] + '</span>' +
+              '<h1 class="mt-2">' + major.title + '</h1>' +
+            '</div>' +
+            '<div class="md-pct"><b>' + pct + '%</b><span>Match</span></div>' +
+          '</div>' +
+          '<div class="card mt-6">' +
+            '<span class="section-label">About this major</span>' +
+            '<p class="md-desc mt-4">' + sentences.slice(0, 5).join(' ') + '</p>' +
+          '</div>' +
+          '<a class="card hoverable why-banner mt-6" href="../../major/why/?major=' + encodeURIComponent(major.title) + '">' +
+            '<div class="why-ic">🔍</div>' +
+            '<div>' +
+              '<div class="why-title">Why I match this major?</div>' +
+              '<div class="why-sub">See how your quiz answers align with this major</div>' +
+            '</div>' +
+            '<span class="why-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+          '</a>' +
+          (specs.length
+            ? '<div class="section-title">Specializations <span class="hint">— choose a specialization track</span></div>' +
+              '<div class="grid grid-4 fade-in-stagger">' + specCards + '</div>'
+            : '') +
+        '</div>';
+    }
+  </script>
+</body>
+</html>

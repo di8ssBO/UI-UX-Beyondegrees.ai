@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Specialization — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/desktop.css">
+<style>
+  .sp-hero { display: flex; align-items: center; gap: 24px; padding: 36px 40px; position: relative; overflow: hidden; }
+  .sp-hero::after { content: ''; position: absolute; top: -50%; right: -10%; width: 55%; height: 160%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 18%, transparent) 0%, transparent 70%);
+    filter: blur(30px); pointer-events: none; }
+  .sp-hero > * { position: relative; z-index: 1; }
+  .sp-hero .ic { width: 76px; height: 76px; border-radius: 20px; flex: none; display: grid; place-items: center; font-size: 36px;
+    background: color-mix(in srgb, var(--acc) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 32%, transparent); }
+  .sp-hero h1 { font-size: 26px; font-weight: 900; color: var(--text-primary); }
+  .sp-crumb { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  .sp-uctx { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .sp-uctx b { color: var(--text-primary); }
+
+  /* Section heading inside a card */
+  .sp-h { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 800; color: var(--text-primary); }
+  .sp-h .em { font-size: 18px; }
+  .sp-sub { font-size: 12.5px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
+
+  /* Salary & Outcomes — stat items (mobile stat-grid parity) */
+  .sp-stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media (max-width: 760px) { .sp-stat-grid { grid-template-columns: 1fr; } }
+  .sp-stat { padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); }
+  :root[data-theme="light"] .sp-stat { background: #fdf8f2; border-color: #e8e0d5; }
+  .sp-stat.primary { background: color-mix(in srgb, var(--acc) 12%, transparent); border-color: color-mix(in srgb, var(--acc) 30%, transparent); }
+  .sp-stat-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+  .sp-stat-value { font-size: 28px; font-weight: 900; color: var(--text-primary); margin-top: 6px; line-height: 1; }
+  .sp-stat.primary .sp-stat-value { color: var(--acc-pct); }
+  .sp-stat-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; }
+
+  .sp-overview { font-size: 14px; color: var(--text-secondary); line-height: 1.75; margin-top: 12px; }
+
+  /* Skill / career chips */
+  .skill-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .skill-chips span {
+    padding: 6px 13px; border-radius: 999px; font-size: 12px; font-weight: 700;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary);
+  }
+  :root[data-theme="light"] .skill-chips span { background: #fdf8f2; border-color: #e8e0d5; color: #5c4535; }
+  .career-chips span { background: color-mix(in srgb, var(--acc) 12%, transparent);
+    border-color: color-mix(in srgb, var(--acc) 28%, transparent); color: var(--acc-pct); }
+  .sp-glabel { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); display: block; }
+  .sp-skill-group + .sp-skill-group { margin-top: 18px; }
+
+  /* Learning Path rows */
+  .req-block { padding: 14px 0; }
+  .req-block b { font-size: 13.5px; display: block; color: var(--text-primary); margin-bottom: 5px; }
+  .req-block p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+
+  /* Where to Study — uni cards */
+  .wts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media (max-width: 760px) { .wts-grid { grid-template-columns: 1fr; } }
+
+  /* ── "Other Universities" card — uc.uc-v2 (mobile parity) ── */
+  .uc.uc-v2 { display: block; background: var(--bg-surface); border: 1px solid rgba(255,255,255,.07); border-radius: 16px;
+    padding: 0; overflow: hidden; cursor: pointer; transition: transform .15s, border-color .15s, box-shadow .15s; }
+  .uc.uc-v2:hover { transform: translateY(-2px); border-color: rgba(255,255,255,.14); }
+  .uc.uc-v2 .uc-hero { display: flex; align-items: center; gap: 14px; padding: 14px; min-height: 80px;
+    border-bottom: 1px solid rgba(255,255,255,.06); }
+  .uc.uc-v2 .uc-hero-logo-wrap { width: 50px; height: 50px; flex: none; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    background: #ffffff; border: 1px solid rgba(255,255,255,.18);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), inset 0 -2px 6px rgba(140,114,96,0.10), 0 2px 6px rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.20); }
+  .uc.uc-v2 .uc-hero-logo-fill { width: 78%; height: 78%; background-size: contain; background-repeat: no-repeat; background-position: center; }
+  .uc.uc-v2 .uc-hero-emoji-fill { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .uc.uc-v2 .uc-hero-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+  .uc.uc-v2 .uc-name { color: var(--text-primary); font-size: 15px; font-weight: 800; line-height: 1.3; letter-spacing: -.01em;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; margin: 0; }
+  .uc.uc-v2 .uc-meta-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+  .uc.uc-v2 .uc-loc { color: rgba(255,255,255,.65); font-size: 11px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .uc.uc-v2 .uc-dot { color: rgba(255,255,255,.35); font-weight: 700; flex: none; }
+  .uc.uc-v2 .uc-type-chip { font-size: 9px; padding: 2px 7px; border-radius: 999px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; flex: none; }
+  .uc.uc-v2 .uc-type-chip.pub  { background: rgba(6,214,160,.10); border: 1px solid rgba(6,214,160,.25); color: #06d6a0; }
+  .uc.uc-v2 .uc-type-chip.priv { background: rgba(251,146,60,.10); border: 1px solid rgba(251,146,60,.25); color: #fb923c; }
+  .uc.uc-v2 .uc-type-chip.intl { background: rgba(24,99,220,.12); border: 1px solid rgba(24,99,220,.25); color: #93BBFF; }
+  .uc.uc-v2 .uc-match-badge { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: none; min-width: 48px; }
+  .uc.uc-v2 .uc-match-val { font-size: 17px; font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+  .uc.uc-v2 .uc-match-badge.mh .uc-match-val { color: #06d6a0; }
+  .uc.uc-v2 .uc-match-badge.mm .uc-match-val { color: #fb923c; }
+  .uc.uc-v2 .uc-match-badge.ml .uc-match-val { color: #ff6b81; }
+  .uc.uc-v2 .uc-match-lbl { font-size: 9px; font-weight: 700; letter-spacing: .10em; text-transform: uppercase; color: rgba(255,255,255,.45); margin-top: 3px; }
+  .uc.uc-v2 .uc-body { padding: 12px; }
+  .uc.uc-v2 .uc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 12px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(74,135,168,0.20) 0%, rgba(106,150,144,0.12) 100%); border: 1px solid rgba(74,135,168,0.32);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 1px 2px rgba(0,0,0,0.20); }
+  .uc.uc-v2 .uc-stat { display: flex; flex-direction: column; gap: 3px; padding: 0 10px; text-align: center; }
+  .uc.uc-v2 .uc-stat:not(:last-child) { border-right: 1px solid rgba(74,135,168,0.32); }
+  .uc.uc-v2 .uc-stat-val { font-size: 13px; font-weight: 800; color: var(--text-primary); line-height: 1.3; }
+  .uc.uc-v2 .uc-stat-lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #a3c2d3; opacity: .9; }
+  :root[data-theme="light"] .uc.uc-v2 { background: #FFFFFF; border: 1px solid rgba(140,114,96,0.16);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 1px 2px rgba(58,46,38,0.06), 0 4px 12px rgba(92,69,53,0.08), 0 12px 28px rgba(140,114,96,0.10);
+    position: relative; }
+  :root[data-theme="light"] .uc.uc-v2::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; z-index: 1; pointer-events: none;
+    background: linear-gradient(90deg, #e8917a 0%, #c96b55 50%, #a84e30 100%); }
+  :root[data-theme="light"] .uc.uc-v2 .uc-hero { border-bottom-color: rgba(140,114,96,0.18); }
+  :root[data-theme="light"] .uc.uc-v2 .uc-hero-logo-wrap { background: #ffffff; border: 1px solid rgba(232,224,213,0.85);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 6px rgba(140,114,96,0.14); }
+  :root[data-theme="light"] .uc.uc-v2 .uc-name { color: #2c1f14; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-loc { color: #5c4535; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-dot { color: #a89282; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-type-chip.pub  { background: rgba(74,158,122,0.14); border-color: rgba(74,158,122,0.45); color: #3a7c5e; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-type-chip.priv { background: rgba(232,145,122,0.18); border-color: rgba(201,107,85,0.45); color: #a84e30; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-type-chip.intl { background: rgba(127,168,190,0.22); border-color: rgba(74,135,168,0.50); color: #2f6a8c; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-match-badge.mh .uc-match-val { color: #3a7c5e; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-match-badge.mm .uc-match-val { color: #b87916; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-match-badge.ml .uc-match-val { color: #c45540; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-match-lbl { color: #6b5440; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-stats { background: linear-gradient(135deg, rgba(127,168,190,0.22) 0%, rgba(168,200,196,0.18) 100%);
+    border: 1px solid rgba(74,135,168,0.40); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 2px 6px rgba(74,135,168,0.10); }
+  :root[data-theme="light"] .uc.uc-v2 .uc-stat:not(:last-child) { border-right-color: rgba(74,135,168,0.32); }
+  :root[data-theme="light"] .uc.uc-v2 .uc-stat-val { color: #2c1f14; }
+  :root[data-theme="light"] .uc.uc-v2 .uc-stat-lbl { color: #2f6a8c; }
+</style>
+</head>
+<body class="app" data-page="majors" data-crumb="Specialization">
+  <div class="main">
+    <div class="content fade-in" id="root"></div>
+  </div>
+
+  <script src="../../assets/majors-data.js"></script>
+  <script src="../../assets/spec-data.js"></script>
+  <script src="../../assets/spec-mock.js"></script>
+  <script src="../../assets/uni-data.js"></script>
+  <script src="../../assets/uni-img-map.js"></script>
+  <script src="../../../shared/scripts/i18n.js"></script>
+  <script src="../../assets/desktop.js?v=3"></script>
+  <script>
+    var DISC_LABEL = {
+      kt:'⚙️ Engineering', tn:'🔬 Natural Sci', yt:'🩺 Medical',
+      nn:'🌱 Agricultural', xh:'🧠 Social Sci', nv:'📜 Humanities'
+    };
+    /* getDefaultMockData — fallback nguyên văn mobile spec-detail */
+    function getDefaultMockData() {
+      return {
+        entrySalary:'$40K', avgSalary:'$75K', employment:'82%',
+        careers:['Researcher','Analyst','Consultant','Project Manager','Professor','Policy Advisor'],
+        coreSkills:['Critical Thinking','Research Design','Data Analysis','Academic Writing','Communication'],
+        tools:['Microsoft Office','Statistical Software','Reference Manager','Presentation Tools'],
+        admission:'GPA ≥ 3.0. Academic transcript and statement of purpose required. Research or internship experience preferred for graduate admission.',
+        exams:'Field-specific professional certifications available. IELTS/TOEFL for international programs. GRE or equivalent for graduate programs.',
+        language:'English: IELTS 6.0+ / TOEFL 80+ for international programs. Local-language programs widely available domestically.'
+      };
+    }
+
+    var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
+    var _SPECS  = (typeof SPECIALIZATIONS !== 'undefined') ? SPECIALIZATIONS : (window.SPECIALIZATIONS || {});
+    var _TAGS   = (typeof TAG_STYLES !== 'undefined') ? TAG_STYLES : (window.TAG_STYLES || {});
+    var _MOCK   = (typeof MOCK_DATA !== 'undefined') ? MOCK_DATA : (window.MOCK_DATA || {});
+    var _SUMAP  = (typeof SPEC_UNI_MAP !== 'undefined') ? SPEC_UNI_MAP : (window.SPEC_UNI_MAP || {});
+    var _UNIS   = (typeof UNI_DATA !== 'undefined') ? UNI_DATA : (window.UNI_DATA || []);
+
+    var majorName = BD.param('major', 'Computer and information sciences');
+    var specIdx   = parseInt(BD.param('spec', '0'), 10) || 0;
+    var uniId     = BD.param('u', '');     /* optional → trang "major × university" */
+
+    var major = _MAJORS.find(function (m) { return m.title === majorName; }) || _MAJORS[0];
+    var specs = major ? (_SPECS[major.id] || []) : [];
+    var spec  = specs[specIdx] || specs[0] || { icon:'📐', name:'Specialization', desc:'', tag:'Research' };
+    var md    = _MOCK[major.id + '_' + specIdx] || getDefaultMockData();
+    var uctx  = uniId ? _UNIS.find(function (u) { return u.id === uniId; }) : null;
+
+    /* Trang "spec × university" đã chuyển sang folder university/detail — redirect nếu có ?u= */
+    if (uctx) { location.replace('../../university/detail/?u=' + uctx.id + '&major=' + encodeURIComponent(major.title) + '&spec=' + specIdx); }
+
+    document.title = spec.name + ' — BeyonDegrees.ai';
+
+    /* Back về trang trước (mobile history.back()), fallback major-detail */
+    function goBack() { if (history.length > 1) history.back(); else location.href = '../../major/detail/?major=' + encodeURIComponent(major.title); }
+    window.goBack = goBack;
+
+    function chips(arr, cls) { return (arr || []).map(function (c) { return '<span>' + c + '</span>'; }).join(''); }
+
+    /* "Other Universities" card (uc.uc-v2, mobile parity) */
+    function ucCardHTML(uni, navUrl) {
+      var im = (window.UNI_IMG_MAP || {})[uni.id] || { icon: null };
+      var logo = im.icon
+        ? '<div class="uc-hero-logo-fill" style="background-image:url(\'' + im.icon + '\')"></div>'
+        : '<div class="uc-hero-emoji-fill">' + uni.icon + '</div>';
+      var typeCls = uni.type === 'pub' ? 'pub' : (uni.type === 'priv' ? 'priv' : 'intl');
+      var matchCls = uni.match >= 80 ? 'mh' : uni.match >= 60 ? 'mm' : 'ml';
+      return '<a class="uc uc-v2" href="' + navUrl + '">' +
+          '<div class="uc-hero">' +
+            '<div class="uc-hero-logo-wrap">' + logo + '</div>' +
+            '<div class="uc-hero-info">' +
+              '<div class="uc-name">' + uni.name + '</div>' +
+              '<div class="uc-meta-row">' +
+                '<span class="uc-loc">' + uni.loc + '</span>' +
+                '<span class="uc-dot" aria-hidden="true">·</span>' +
+                '<span class="uc-type-chip ' + typeCls + '">' + (uni.typeLabel || uni.type) + '</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="uc-match-badge ' + matchCls + '">' +
+              '<div class="uc-match-val">' + uni.match + '%</div>' +
+              '<div class="uc-match-lbl">MATCH</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="uc-body">' +
+            '<div class="uc-stats">' +
+              '<div class="uc-stat"><div class="uc-stat-val">' + uni.ranking + '</div><div class="uc-stat-lbl">Ranking</div></div>' +
+              '<div class="uc-stat"><div class="uc-stat-val">' + (uni.tuition || 'N/A') + '</div><div class="uc-stat-lbl">Annual Tuition</div></div>' +
+            '</div>' +
+          '</div>' +
+        '</a>';
+    }
+
+    /* ── Where to Study — universities offering this spec (SPEC_UNI_MAP, fallback top match) ── */
+    function whereToStudy() {
+      var key = major.id + '_' + specIdx;
+      var ids = (_SUMAP[key] || []).slice();
+      if (!ids.length) ids = _UNIS.slice().sort(function (a, b) { return b.match - a.match; }).slice(0, 4).map(function (u) { return u.id; });
+      if (uctx && ids.indexOf(uctx.id) < 0) ids.unshift(uctx.id);   /* combined: uni hiện tại lên đầu */
+      var list = ids.map(function (id) { return _UNIS.find(function (u) { return u.id === id; }); }).filter(Boolean);
+      if (uctx) list.sort(function (a, b) { return (b.id === uctx.id) - (a.id === uctx.id); });
+      return list.map(function (u) {
+        return ucCardHTML(u, '../../university/detail/?u=' + u.id + '&major=' + encodeURIComponent(major.title) + '&spec=' + specIdx);
+      }).join('');
+    }
+
+    function render() {
+      var dc = major ? major.discCode : 'tn';
+      var t = _TAGS[spec.tag] || { bg:'rgba(200,200,224,.08)', border:'rgba(200,200,224,.2)', text:'#c8c8e0' };
+
+      document.getElementById('root').innerHTML =
+        '<div class="acc-' + dc + '">' +
+
+          '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
+
+          /* Hero */
+          '<div class="card glass-hero sp-hero">' +
+            '<div class="ic">' + spec.icon + '</div>' +
+            '<div>' +
+              '<div class="sp-crumb">' + (DISC_LABEL[dc] || '') + ' · ' + major.title + '</div>' +
+              '<h1 class="mt-2">' + spec.name + '</h1>' +
+              '<span class="spec-tag chip mt-2" style="background:' + t.bg + ';border-color:' + t.border + ';color:' + t.text + ';">' + spec.tag + '</span>' +
+              (uctx ? '<div class="sp-uctx mt-2">📍 at <b>' + uctx.name + '</b></div>' : '') +
+            '</div>' +
+          '</div>' +
+
+          /* Salary & Outcomes */
+          '<div class="card mt-6">' +
+            '<div class="sp-h"><span class="em">💰</span>Salary &amp; Outcomes</div>' +
+            '<div class="sp-stat-grid">' +
+              '<div class="sp-stat primary"><div class="sp-stat-label">Average Salary</div><div class="sp-stat-value">' + md.avgSalary + '</div><div class="sp-stat-meta">per year · with experience</div></div>' +
+              '<div class="sp-stat"><div class="sp-stat-label">Entry Level</div><div class="sp-stat-value">' + md.entrySalary + '</div><div class="sp-stat-meta">per year · starting</div></div>' +
+              '<div class="sp-stat"><div class="sp-stat-label">Employment Rate</div><div class="sp-stat-value">' + md.employment + '</div><div class="sp-stat-meta">within 6 months of graduation</div></div>' +
+            '</div>' +
+          '</div>' +
+
+          /* Overview */
+          (spec.desc ?
+          '<div class="card mt-6">' +
+            '<div class="sp-h"><span class="em">📋</span>Overview</div>' +
+            '<p class="sp-overview">' + spec.desc + '</p>' +
+          '</div>' : '') +
+
+          /* Career Outcomes | Required Skills */
+          '<div class="grid grid-2 mt-6">' +
+            '<div class="card">' +
+              '<div class="sp-h"><span class="em">💼</span>Career Outcomes</div>' +
+              '<div class="sp-sub">' + md.careers.length + ' job paths</div>' +
+              '<div class="skill-chips career-chips">' + chips(md.careers) + '</div>' +
+            '</div>' +
+            '<div class="card">' +
+              '<div class="sp-h"><span class="em">⚡</span>Required Skills</div>' +
+              '<div class="sp-sub">Core competencies &amp; tools</div>' +
+              '<div class="sp-skill-group" style="margin-top:14px;"><span class="sp-glabel">Core Competencies</span><div class="skill-chips">' + chips(md.coreSkills) + '</div></div>' +
+              '<div class="sp-skill-group"><span class="sp-glabel">Tools &amp; Software</span><div class="skill-chips">' + chips(md.tools) + '</div></div>' +
+            '</div>' +
+          '</div>' +
+
+          /* Learning Path */
+          '<div class="card mt-6">' +
+            '<div class="sp-h"><span class="em">🧭</span>Learning Path</div>' +
+            '<div class="sp-sub">Admission requirements, exams, and language needs</div>' +
+            '<div class="req-block row-line" style="margin-top:8px;"><b>🎓 Admission</b><p>' + md.admission + '</p></div>' +
+            '<div class="req-block row-line"><b>📝 Exams &amp; certificates</b><p>' + md.exams + '</p></div>' +
+            '<div class="req-block"><b>🌐 Language</b><p>' + md.language + '</p></div>' +
+          '</div>' +
+
+          /* Apply at {uni} — chỉ hiện ở trang kết hợp major × university */
+          (uctx ?
+          '<div class="card mt-6">' +
+            '<div class="sp-h"><span class="em">🚀</span>Apply at ' + uctx.name + '</div>' +
+            '<div class="sp-sub">Study ' + spec.name + ' at ' + uctx.name + ' · ' + uctx.loc + '</div>' +
+            '<div class="flex mt-4" style="gap:10px;">' +
+              '<a class="btn btn-primary" href="../../university/detail/?u=' + uctx.id + '">View ' + uctx.name + ' →</a>' +
+            '</div>' +
+          '</div>' : '') +
+
+          /* Where to Study */
+          '<div class="card mt-6">' +
+            '<div class="sp-h"><span class="em">🏛️</span>Where to Study</div>' +
+            '<div class="wts-grid">' + whereToStudy() + '</div>' +
+          '</div>' +
+
+          /* Footer */
+          '<div class="flex mt-8" style="gap:12px;">' +
+            '<a class="btn btn-ghost" href="../../major/detail/?major=' + encodeURIComponent(major.title) + '">← ' + major.title + '</a>' +
+          '</div>' +
+        '</div>';
+    }
+    render();
+    new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- Warm cream base -->
+    <linearGradient id="bg" x1="0" y1="0" x2="0.2" y2="1">
+      <stop offset="0"    stop-color="#fdf9f3"/>
+      <stop offset="0.5"  stop-color="#f7efe2"/>
+      <stop offset="1"    stop-color="#efe2d0"/>
+    </linearGradient>
+
+    <!-- Flowing wave ribbons (mobile palette, tuned softer for the wide desktop canvas) -->
+    <linearGradient id="r-blue" x1="0" y1="0" x2="1" y2="0.35">
+      <stop offset="0"    stop-color="#a3c2d3" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#c4d9e5" stop-opacity="0.42"/>
+      <stop offset="1"    stop-color="#7fa8be" stop-opacity="0.30"/>
+    </linearGradient>
+    <linearGradient id="r-coral" x1="0" y1="0.2" x2="1" y2="0.5">
+      <stop offset="0"    stop-color="#f8cfc2" stop-opacity="0.58"/>
+      <stop offset="0.5"  stop-color="#f2b09d" stop-opacity="0.46"/>
+      <stop offset="1"    stop-color="#e8917a" stop-opacity="0.30"/>
+    </linearGradient>
+    <linearGradient id="r-terra" x1="0.1" y1="0" x2="1" y2="0.5">
+      <stop offset="0"    stop-color="#e8917a" stop-opacity="0.46"/>
+      <stop offset="0.5"  stop-color="#f2b09d" stop-opacity="0.38"/>
+      <stop offset="1"    stop-color="#c96b55" stop-opacity="0.26"/>
+    </linearGradient>
+    <linearGradient id="r-sage" x1="0" y1="0" x2="1" y2="0.3">
+      <stop offset="0"    stop-color="#a8c8c4" stop-opacity="0.48"/>
+      <stop offset="0.55" stop-color="#c5d9d7" stop-opacity="0.38"/>
+      <stop offset="1"    stop-color="#8fb5b0" stop-opacity="0.24"/>
+    </linearGradient>
+    <linearGradient id="r-blush" x1="0" y1="0" x2="1" y2="0.2">
+      <stop offset="0"    stop-color="#f8cfc2" stop-opacity="0.50"/>
+      <stop offset="0.5"  stop-color="#fceae4" stop-opacity="0.40"/>
+      <stop offset="1"    stop-color="#f2b09d" stop-opacity="0.24"/>
+    </linearGradient>
+
+    <filter id="soft" x="-8%" y="-8%" width="116%" height="116%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+
+  <!-- Cream base -->
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+
+  <!-- ═══ Flowing wave layers (full-bleed, organic, gently overlapping) ═══ -->
+
+  <!-- Dusty blue · top -->
+  <path d="M -100,170 C 280,108 520,232 860,158 C 1160,96 1420,212 1700,148
+           L 1700,302 C 1420,362 1160,250 860,312 C 520,382 280,258 -100,322 Z"
+        fill="url(#r-blue)" filter="url(#soft)"/>
+
+  <!-- Coral peach · upper-mid -->
+  <path d="M -100,358 C 260,298 540,432 880,348 C 1180,286 1440,400 1700,336
+           L 1700,500 C 1440,562 1180,448 880,512 C 540,582 260,458 -100,520 Z"
+        fill="url(#r-coral)" filter="url(#soft)"/>
+
+  <!-- Terracotta · mid (anchor) -->
+  <path d="M -100,540 C 300,468 560,612 900,520 C 1200,448 1460,582 1700,510
+           L 1700,664 C 1460,734 1200,600 900,692 C 560,772 300,640 -100,702 Z"
+        fill="url(#r-terra)" filter="url(#soft)"/>
+
+  <!-- Sage · lower-mid -->
+  <path d="M -100,710 C 280,648 540,784 880,700 C 1180,638 1440,758 1700,690
+           L 1700,846 C 1440,906 1180,792 880,856 C 540,924 280,800 -100,862 Z"
+        fill="url(#r-sage)" filter="url(#soft)"/>
+
+  <!-- Blush · bottom -->
+  <path d="M -100,872 C 300,820 560,944 900,860 C 1200,798 1460,914 1700,850
+           L 1700,1020 C 1460,1075 1200,968 900,1028 C 560,1085 300,982 -100,1035 Z"
+        fill="url(#r-blush)" filter="url(#soft)"/>
+</svg>

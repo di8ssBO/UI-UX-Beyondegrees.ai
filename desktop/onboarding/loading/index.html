@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Loading — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/desktop.css">
+<style>
+  .load-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; max-width: 1020px; margin: 0 auto; align-items: stretch; }
+  /* ── Orb + phase (mobile .orb-wrap) ── */
+  .orb-card { text-align: center; padding: 40px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .orb-wrap { position: relative; width: 190px; height: 190px; margin-bottom: 28px; }
+  .orb-core {
+    position: absolute; inset: 40px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 42px;
+    background: radial-gradient(circle at 35% 30%, var(--violet-400), var(--violet-700));
+    box-shadow: 0 0 50px rgba(124,58,237,0.55), inset 0 2px 12px rgba(255,255,255,0.25);
+    animation: orbPulse 3s ease-in-out infinite;
+  }
+  :root[data-theme="light"] .orb-core {
+    background: radial-gradient(circle at 35% 30%, #F2B09D, #C96B55);
+    box-shadow: 0 0 50px rgba(201,107,85,0.45), inset 0 2px 12px rgba(255,255,255,0.35);
+  }
+  @keyframes orbPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
+  .orb-ring { position: absolute; inset: 18px; border-radius: 50%; border: 1px dashed rgba(167,139,250,0.35); animation: ringSpin 14s linear infinite; }
+  .orb-ring.r2 { inset: 2px; border-color: rgba(6,214,160,0.25); animation-duration: 22s; animation-direction: reverse; }
+  :root[data-theme="light"] .orb-ring { border-color: rgba(201,107,85,0.35); }
+  :root[data-theme="light"] .orb-ring.r2 { border-color: rgba(106,150,144,0.40); }
+  @keyframes ringSpin { to { transform: rotate(360deg); } }
+  .orbit { position: absolute; top: 50%; left: 50%; animation: orbitSpin linear infinite; }
+  .orbit span { position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); font-size: 17px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
+  .o1 { width: 150px; height: 150px; margin: -75px 0 0 -75px; animation-duration: 5.8s; }
+  .o2 { width: 178px; height: 178px; margin: -89px 0 0 -89px; animation-duration: 8.2s; animation-direction: reverse; }
+  .o3 { width: 136px; height: 136px; margin: -68px 0 0 -68px; animation-duration: 4.9s; }
+  .o4 { width: 168px; height: 168px; margin: -84px 0 0 -84px; animation-duration: 9.4s; animation-direction: reverse; }
+  .o5 { width: 128px; height: 128px; margin: -64px 0 0 -64px; animation-duration: 7.1s; }
+  .o6 { width: 188px; height: 188px; margin: -94px 0 0 -94px; animation-duration: 11.5s; }
+  @keyframes orbitSpin { to { transform: rotate(360deg); } }
+  .phase-label {
+    font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
+    color: rgba(167,139,250,0.75);
+  }
+  :root[data-theme="light"] .phase-label { color: #a84e30; font-weight: 900; }
+  .phase-title { font-size: 26px; font-weight: 900; margin-top: 6px; color: var(--text-primary); }
+  .time-left { font-size: 13px; color: var(--text-muted); margin-top: 10px; }
+  .q-progress { font-size: 13px; font-weight: 700; color: var(--text-secondary); margin-top: 18px; }
+  .q-progress b { color: var(--mint-500); }
+  :root[data-theme="light"] .q-progress b { color: #047857; }
+
+  /* ── DNA forming (mobile DNA bars) ── */
+  .dna-title { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; margin-bottom: 18px; color: var(--text-primary); }
+  .dna-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .dna-row .ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; font-size: 16px;
+    background: color-mix(in srgb, var(--acc) 16%, transparent); flex: none; }
+  .dna-row .name { width: 170px; font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+  .dna-row .bar { flex: 1; height: 6px; }
+  .dna-row .pct { width: 44px; text-align: right; font-size: 13px; font-weight: 900; color: var(--acc-pct); }
+  /* Fun fact */
+  .fact-card { margin-top: 22px; padding: 18px 20px; border-radius: 14px;
+    background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25); }
+  :root[data-theme="light"] .fact-card { background: rgba(232,168,107,0.12); border-color: rgba(232,168,107,0.38); }
+  .fact-card .fk { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--orange-400); }
+  :root[data-theme="light"] .fact-card .fk { color: #b26344; }
+  .fact-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px; min-height: 40px; }
+  .fact-dots { display: flex; gap: 5px; margin-top: 10px; }
+  .fact-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+  :root[data-theme="light"] .fact-dots i { background: #e0d5c5; }
+  .fact-dots i.on { background: var(--orange-400); }
+  :root[data-theme="light"] .fact-dots i.on { background: #c96b55; }
+
+  /* ── End overlay: Results ready (mobile parity) ── */
+  .done-overlay {
+    position: fixed; inset: 0; z-index: 200; display: none;
+    align-items: center; justify-content: center;
+    background: rgba(6,6,15,0.78); backdrop-filter: blur(12px);
+  }
+  :root[data-theme="light"] .done-overlay { background: rgba(245,237,224,0.85); }
+  .done-overlay.show { display: flex; }
+  .done-box { text-align: center; animation: fadeUp .55s var(--ease-out) both; }
+  .done-box .big { font-size: 72px; }
+  .done-box h2 { font-size: 30px; font-weight: 900; margin-top: 10px; color: var(--text-primary); }
+  .done-box p { color: var(--text-secondary); margin-top: 8px; }
+  .done-box .row { display: flex; gap: 12px; justify-content: center; margin-top: 24px; }
+</style>
+</head>
+<body class="app" data-page="quiz" data-crumb="AI Loading Screen">
+  <div class="main">
+    <div class="content fade-in">
+      <div class="load-layout">
+
+        <!-- Orb + phases -->
+        <div class="card glass-hero orb-card">
+          <div class="orb-wrap">
+            <div class="orb-ring"></div><div class="orb-ring r2"></div>
+            <div class="orbit o1"><span>💻</span></div>
+            <div class="orbit o2"><span>🩺</span></div>
+            <div class="orbit o3"><span>📖</span></div>
+            <div class="orbit o4"><span>🌾</span></div>
+            <div class="orbit o5"><span>🌐</span></div>
+            <div class="orbit o6"><span>🧬</span></div>
+            <div class="orb-core">✨</div>
+          </div>
+          <div class="phase-label" id="phaseLabel">Analyzing</div>
+          <div class="phase-title" id="phaseTitle">Your Academic DNA</div>
+          <div class="time-left" id="timeLeft">~25 seconds left</div>
+          <div class="bar mt-6" style="width:100%;"><span id="mainBar" style="width:3%"></span></div>
+          <div class="q-progress"><b id="qDone">30</b> / 30 questions ✓</div>
+        </div>
+
+        <!-- DNA forming + fun facts -->
+        <div class="card">
+          <div class="dna-title">🧬 Academic DNA forming</div>
+          <div id="dnaRows"></div>
+          <div class="fact-card">
+            <div class="fk">💡 Did you know?</div>
+            <p id="factText">73% of students switch majors after year one due to a poor initial choice.</p>
+            <div class="fact-dots" id="factDots"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Results ready -->
+  <div class="done-overlay" id="doneOverlay">
+    <div class="done-box">
+      <div class="big">🎉</div>
+      <h2>Results are ready!</h2>
+      <p>AI has analyzed <b>30</b> of your answers</p>
+      <div class="row">
+        <a class="btn btn-primary" href="../../results/match-reveal/">See my results →</a>
+        <button class="btn btn-ghost" onclick="location.reload()">↺ Replay demo</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/i18n.js"></script>
+  <script src="../../assets/desktop.js?v=3"></script>
+  <script>
+    /* ── PHASES + DNA_SCHEDULE + FUN_FACTS — English (mobile i18n.js EN table) ── */
+    var PHASES = [
+      { label: 'Analyzing',   title: 'Your Academic DNA' },
+      { label: 'Evaluating',  title: 'Your Key Strengths' },
+      { label: 'Comparing',   title: 'Thousands of Majors' },
+      { label: 'Calculating', title: 'Your Compatibility' },
+      { label: 'Finalizing',  title: 'Results Tailored for You' }
+    ];
+    var DNA_SCHEDULE = [
+      { disc:'kt', ico:'💻', name:'Engineering & Tech',  target:78, start:2.0 },
+      { disc:'yt', ico:'🩺', name:'Health & Medicine',   target:45, start:4.5 },
+      { disc:'nv', ico:'📖', name:'Humanities',          target:62, start:6.0 },
+      { disc:'nn', ico:'🌾', name:'Agriculture',         target:31, start:8.5 },
+      { disc:'xh', ico:'🌐', name:'Social Sciences',     target:55, start:10.0 },
+      { disc:'tn', ico:'🧬', name:'Natural Sciences',    target:68, start:12.5 }
+    ];
+    var FUN_FACTS = [
+      '73% of students switch majors after year one due to a poor initial choice.',
+      'BeyonDegrees users make major decisions 3.2× more confidently than average.',
+      'Only 18% of students have enough information about majors before deciding.',
+      'AI analyzes 47 data dimensions from your 30 answers.',
+      'The right major isn\'t just about grades — personality matters 2.4× more.',
+      'BeyonDegrees has helped over 50,000 students discover their right path.'
+    ];
+    var DURATION = 17; /* mobile: 17s blank screen solution */
+
+    /* DNA rows */
+    var rows = document.getElementById('dnaRows');
+    DNA_SCHEDULE.forEach(function (d) {
+      var el = document.createElement('div');
+      el.className = 'dna-row acc-' + d.disc;
+      el.innerHTML =
+        '<div class="ico">' + d.ico + '</div>' +
+        '<div class="name">' + d.name + '</div>' +
+        '<div class="bar"><span class="dc-pfill" id="dna-' + d.disc + '" style="width:0%"></span></div>' +
+        '<div class="pct" id="dnap-' + d.disc + '">0%</div>';
+      rows.appendChild(el);
+    });
+
+    /* Fact dots */
+    var dots = document.getElementById('factDots');
+    FUN_FACTS.forEach(function (_, i) {
+      var s = document.createElement('i'); if (i === 0) s.className = 'on'; dots.appendChild(s);
+    });
+    var curFact = 0;
+    setInterval(function () {
+      curFact = (curFact + 1) % FUN_FACTS.length;
+      document.getElementById('factText').textContent = FUN_FACTS[curFact];
+      Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i === curFact ? 'on' : ''; });
+    }, 3400);
+
+    /* Main loop */
+    var t0 = Date.now();
+    var iv = setInterval(function () {
+      var t = (Date.now() - t0) / 1000;
+      var pr = Math.min(t / DURATION, 1);
+      document.getElementById('mainBar').style.width = (pr * 100) + '%';
+      document.getElementById('timeLeft').textContent = '~' + Math.max(0, Math.ceil(DURATION - t)) + ' seconds left';
+      var ph = Math.min(Math.floor(pr * PHASES.length), PHASES.length - 1);
+      document.getElementById('phaseLabel').textContent = PHASES[ph].label;
+      document.getElementById('phaseTitle').textContent = PHASES[ph].title;
+      DNA_SCHEDULE.forEach(function (d) {
+        if (t > d.start) {
+          var p = Math.min((t - d.start) / 4, 1) * d.target;
+          document.getElementById('dna-' + d.disc).style.width = p + '%';
+          document.getElementById('dnap-' + d.disc).textContent = Math.round(p) + '%';
+        }
+      });
+      if (pr >= 1) {
+        clearInterval(iv);
+        setTimeout(function () { document.getElementById('doneOverlay').classList.add('show'); }, 500);
+      }
+    }, 120);
+  </script>
+</body>
+</html>

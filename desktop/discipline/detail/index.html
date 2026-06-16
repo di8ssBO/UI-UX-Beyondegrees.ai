@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discipline Detail — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/desktop.css">
+<style>
+  .dd-back { margin-bottom: 18px; }
+  /* Hero aurora theo màu ngành (mobile .hero-aurora per-disc) */
+  .dd-hero { position: relative; overflow: hidden; padding: 44px 40px; display: flex; align-items: center; gap: 28px; }
+  .dd-hero::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 70%; height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--acc) 55%, transparent), transparent);
+  }
+  .dd-hero::after {
+    content: ''; position: absolute; top: -50%; right: -12%;
+    width: 60%; height: 160%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 20%, transparent) 0%, transparent 70%);
+    filter: blur(34px); pointer-events: none;
+  }
+  .dd-hero > * { position: relative; z-index: 1; }
+  .dd-hero .big-ico {
+    width: 92px; height: 92px; border-radius: 24px; flex: none;
+    display: grid; place-items: center; font-size: 44px;
+    background: color-mix(in srgb, var(--acc) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 35%, transparent);
+    filter: drop-shadow(0 6px 18px color-mix(in srgb, var(--acc) 35%, transparent));
+  }
+  .dd-hero h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.5px; color: var(--text-primary); }
+  .dd-rank { display: inline-flex; margin-top: 8px; }
+  .dd-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; margin-top: 12px; max-width: 620px; }
+  /* Bullets */
+  .hl-row { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; }
+  .hl-row .dot { width: 34px; height: 34px; border-radius: 10px; flex: none; display: grid; place-items: center; font-size: 15px;
+    background: color-mix(in srgb, var(--acc) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc) 25%, transparent); }
+  .hl-row p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; padding-top: 6px; }
+
+  /* ── Related Majors (mobile .major-list / .major-card) ── */
+  .rm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  @media (max-width: 860px) { .rm-grid { grid-template-columns: 1fr; } }
+  .rm-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px; min-width: 0; }
+  .rm-ico { width: 46px; height: 46px; border-radius: 12px; flex: none; display: grid; place-items: center; font-size: 22px;
+    background: color-mix(in srgb, var(--acc) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--acc) 22%, transparent); }
+  .rm-info { flex: 1; min-width: 0; }
+  .rm-name { font-size: 15px; font-weight: 800; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rm-tag { font-size: 12px; color: var(--text-muted); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rm-pct { font-size: 18px; font-weight: 900; color: var(--acc-pct); flex: none; }
+  .rm-card.locked { opacity: .5; filter: blur(1.5px); pointer-events: none; user-select: none; }
+  .rm-locked-banner { display: flex; align-items: center; gap: 10px; margin-top: 16px; padding: 15px 20px; border-radius: 14px; cursor: pointer;
+    background: color-mix(in srgb, var(--acc) 9%, transparent); border: 1px solid color-mix(in srgb, var(--acc) 24%, transparent);
+    font-size: 13.5px; font-weight: 700; color: var(--text-secondary); transition: background var(--tr-fast); }
+  .rm-locked-banner:hover { background: color-mix(in srgb, var(--acc) 14%, transparent); }
+  .rm-locked-banner b { color: var(--text-primary); }
+  .rm-locked-banner .lk { font-size: 20px; }
+</style>
+</head>
+<body class="app" data-page="disciplines" data-crumb="Discipline Detail">
+  <div class="main">
+    <div class="content fade-in" id="root"></div>
+  </div>
+
+  <script src="../../assets/majors-data.js"></script>
+  <script src="../../../shared/scripts/i18n.js"></script>
+  <script src="../../assets/desktop.js?v=3"></script>
+  <script>
+    /* ── Nội dung nguyên văn từ 6 file mobile detail/(kt|tn|xh|nv|yt|nn).html ── */
+    var DETAIL = {
+      kt: { ico:'⚙️', name:'Engineering & Technology', rank:'#1 Ranked Match',
+        desc:'Applying mathematics and science to design, build, and optimize systems, structures, and technologies that shape our world.' },
+      tn: { ico:'🔬', name:'Natural Sciences', rank:'#2 Ranked Match',
+        desc:'Understanding the physical and natural world through observation, experimentation, and analysis.' },
+      xh: { ico:'🧠', name:'Social Sciences', rank:'#3 Ranked Match',
+        desc:'Exploring human behaviour, social structures, and the forces that shape societies, communities, and collective decision-making.' },
+      nv: { ico:'📖', name:'Humanities', rank:'#4 Ranked Match',
+        desc:'Understanding the human experience through language, literature, philosophy, history, and the cultural traditions that define civilisations.' },
+      yt: { ico:'🩺', name:'Medical & Health Sciences', rank:'#5 Ranked Match',
+        desc:'Dedicated to understanding, preserving, and restoring human health through science, compassionate care, and evidence-based practice.' },
+      nn: { ico:'🌾', name:'Agricultural Sciences', rank:'#6 Ranked Match',
+        desc:'Advancing sustainable food production, land stewardship, and environmental resilience to nourish and sustain a growing global population.' }
+    };
+    /* 3 bullet highlights (mobile dùng chung cho mọi ngành) */
+    var HIGHLIGHTS = [
+      { ico:'🧩', text:'Includes core fields like Physics, Chemistry, and Biology.' },
+      { ico:'📊', text:'Emphasizes empirical evidence and measurable data analysis.' },
+      { ico:'🌱', text:'Lays the foundation for medicine and environmental studies.' }
+    ];
+
+    var key = BD.param('d', 'kt');
+    if (!DETAIL[key]) key = 'kt';
+    var d = DETAIL[key];
+    document.title = d.name + ' — BeyonDegrees.ai';
+
+    /* Aurora tint theo ngành (mobile per-disc aurora) */
+    var TINT = {
+      kt:'rgba(124,58,237,0.55)', tn:'rgba(244,63,94,0.45)', yt:'rgba(6,214,160,0.45)',
+      nn:'rgba(245,158,11,0.42)', xh:'rgba(168,85,247,0.50)', nv:'rgba(59,130,246,0.50)'
+    };
+    document.documentElement.style.setProperty('--blob-p1', TINT[key]);
+    document.documentElement.style.setProperty('--blob-p4', TINT[key]);
+
+    /* Back về trang trước (mobile history.back()), fallback discipline-match */
+    function goBack() { if (history.length > 1) history.back(); else location.href = '../../discipline/match/'; }
+    window.goBack = goBack;
+
+    /* ── Related Majors từ majors-data.js (lọc theo discCode) ── */
+    var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
+    function matchPct(id) {
+      try { var r = JSON.parse(localStorage.getItem('quizResults') || '{}'); if (r[id]) return r[id]; } catch (e) {}
+      return ((id * 17 + 31) % 30) + 62;
+    }
+    /* Lock related majors khi chưa làm đủ 20 câu (mobile parity) */
+    var rawProgress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
+    var rawMilestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    var answered = rawMilestone >= 30 ? 30 : Math.max(rawProgress, rawMilestone);
+    var locked = answered < 20;
+
+    var relMajors = _MAJORS.filter(function (m) { return m.discCode === key; });
+    var rmCards = relMajors.map(function (m) {
+      var tag = m.desc.length > 64 ? m.desc.slice(0, 64).replace(/\s\S+$/, '') + '…' : m.desc;
+      var pct = locked ? '??' : matchPct(m.id);
+      return '<a class="card hoverable rm-card' + (locked ? ' locked' : '') + '" href="../../major/detail/?major=' + encodeURIComponent(m.title) + '">' +
+        '<div class="rm-ico">' + m.icon + '</div>' +
+        '<div class="rm-info"><div class="rm-name">' + m.title + '</div><div class="rm-tag">' + tag + '</div></div>' +
+        '<span class="rm-pct">' + pct + '%</span>' +
+      '</a>';
+    }).join('');
+
+    var hls = HIGHLIGHTS.map(function (h) {
+      return '<div class="hl-row row-line"><div class="dot">' + h.ico + '</div><p>' + h.text + '</p></div>';
+    }).join('');
+
+    var lockBanner = '';
+    if (locked) {
+      var rem = 20 - answered;
+      lockBanner = '<div class="rm-locked-banner" id="rmLock"><span class="lk">🔒</span>' +
+        '<span>Complete <b>' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</b> to unlock your major matches.</span></div>';
+    }
+
+    document.getElementById('root').innerHTML =
+      '<div class="acc-' + key + '">' +
+        '<button class="btn btn-ghost dd-back" onclick="goBack()">← Back</button>' +
+        '<div class="card glass-hero dd-hero">' +
+          '<div class="big-ico">' + d.ico + '</div>' +
+          '<div>' +
+            '<h1>' + d.name + '</h1>' +
+            '<span class="chip violet dd-rank">🏅 ' + d.rank + '</span>' +
+            '<p class="dd-desc">' + d.desc + '</p>' +
+          '</div>' +
+        '</div>' +
+        '<div class="card mt-6">' +
+          '<span class="section-label">Discipline highlights</span>' +
+          '<div class="mt-4">' + hls + '</div>' +
+        '</div>' +
+        '<div class="section-title">Related Majors <span class="hint">— ' + relMajors.length + ' majors in ' + d.name + '</span></div>' +
+        '<div class="rm-grid">' + rmCards + '</div>' +
+        lockBanner +
+      '</div>';
+
+    var lk = document.getElementById('rmLock');
+    if (lk) lk.onclick = function () { location.href = '../../quiz/quiz-card/'; };
+  </script>
+</body>
+</html>

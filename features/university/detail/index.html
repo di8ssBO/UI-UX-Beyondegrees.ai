@@ -514,11 +514,16 @@ body {
 @keyframes waveFlow2{0%{transform:translateX(0) skewY(1deg)}50%{transform:translateX(6%) skewY(-1deg)}100%{transform:translateX(0) skewY(1deg)}}
 
 /* ── Major-in-Uni view ─────────────────────────────── */
-.udm-hero{position:relative;height:190px;overflow:hidden;flex-shrink:0;background:#ffffff;margin:0 16px;border-radius:18px;border:1px solid rgba(255,255,255,.10);box-shadow:0 4px 16px rgba(0,0,0,.30),0 10px 30px rgba(124,58,237,.12)}
+.udm-hero{position:relative;height:220px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#0f2060 0%,#0a0f28 50%,#0d2030 100%)}
 .udm-aurora{display:none}
 .udm-waves{display:none}
 .udm-hero-logo-fill{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center center;z-index:0}
 .udm-hero-emoji-fill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;background:linear-gradient(135deg,#0f2060 0%,#0a0f28 100%);z-index:0}
+.udm-hero-photo-blur{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:blur(20px) saturate(1.15);transform:scale(1.15);z-index:0}
+.udm-hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;z-index:0;display:block}
+.udm-logo-wrap{position:absolute;bottom:14px;left:16px;width:48px;height:48px;border-radius:13px;background:rgba(255,255,255,.97);border:2px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.50);overflow:hidden;z-index:2}
+.udm-logo-img{width:40px;height:40px;object-fit:contain}
+.udm-logo-emoji{font-size:26px;line-height:1}
 /* Dark fade at bottom of hero — gives depth + smooth transition for white logos */
 .udm-overlay{
   position:absolute;inset:0;z-index:1;pointer-events:none;
@@ -668,12 +673,16 @@ body {
 
 /* ── Spec-in-Uni view ───────────────────────────────── */
 /* Hero — logo full (like udm-hero), no text overlay */
-.sius-hero{position:relative;margin:0 16px 0;height:190px;border-radius:18px;overflow:hidden;flex-shrink:0;background:#ffffff;border:1px solid rgba(255,255,255,.10);box-shadow:0 4px 16px rgba(0,0,0,.30),0 10px 30px rgba(124,58,237,.12)}
+.sius-hero{position:relative;height:220px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#0f2060 0%,#0a0f28 50%,#0d2030 100%)}
 .sius-hero-aurora{display:none}
 .sius-hero-logo-fill{position:absolute;inset:0;background-size:contain;background-repeat:no-repeat;background-position:center center;z-index:0}
 .sius-hero-emoji-fill{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;background:linear-gradient(135deg,#0f2060 0%,#0a0f28 100%);z-index:0}
+.sius-hero-photo-blur{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:blur(20px) saturate(1.15);transform:scale(1.15);z-index:0}
+.sius-hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;z-index:0;display:block}
 .sius-hero-overlay{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,transparent 0%,transparent 50%,rgba(6,4,14,0.55) 75%,rgba(6,4,14,0.88) 92%,rgba(6,4,14,0.96) 100%)}
-.sius-hero-content{display:none !important}
+.sius-logo-wrap{position:absolute;bottom:14px;left:16px;width:48px;height:48px;border-radius:13px;background:rgba(255,255,255,.97);border:2px solid rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.50);overflow:hidden;z-index:2}
+.sius-logo-img{width:40px;height:40px;object-fit:contain}
+.sius-logo-emoji{font-size:26px;line-height:1}
 .sius-hero-content{position:absolute;inset:0;padding:16px 18px;display:flex;flex-direction:column;justify-content:flex-end;z-index:2}
 .sius-icon-wrap{width:46px;height:46px;border-radius:13px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.20);display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:10px}
 .sius-name{font-size:20px;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.2;margin-bottom:7px}
@@ -4672,11 +4681,19 @@ function renderMajorInUni(u, major) {
     ? major.desc.slice(0, major.desc.lastIndexOf(' ', 200)) + '…'
     : major.desc;
 
-  /* University logo — fills hero */
+  /* Hero fill — campus photo (parity with base hero) → logo → emoji fallback */
   var muImgs = UNI_IMG_MAP[u.id] || { icon: null };
-  var muHeroFillHtml = muImgs.icon
+  var muHeroFillHtml = muImgs.image
+    ? '<img class="udm-hero-photo-blur" src="' + muImgs.image + '" alt="" aria-hidden="true" onerror="this.style.display=\'none\'">' +
+      '<img class="udm-hero-photo" src="' + muImgs.image + '" alt="' + u.name + ' campus" onerror="this.style.display=\'none\'">'
+    : muImgs.icon
     ? '<div class="udm-hero-logo-fill" style="background-image:url(\'' + muImgs.icon + '\')"></div>'
     : '<div class="udm-hero-emoji-fill">' + u.icon + '</div>';
+
+  /* University logo chip — bottom-left of hero */
+  var muLogoHtml = muImgs.icon
+    ? '<div class="udm-logo-wrap"><img class="udm-logo-img" src="' + muImgs.icon + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;udm-logo-emoji&quot;>' + u.icon + '</span>\'"></div>'
+    : '<div class="udm-logo-wrap"><span class="udm-logo-emoji">' + u.icon + '</span></div>';
 
   /* Match % — same formula as the program list on parent screen */
   var udmPct = ((major.id * 17 + 31) % 30) + 62;
@@ -4686,6 +4703,8 @@ function renderMajorInUni(u, major) {
   document.getElementById('udBody').innerHTML =
     '<div class="udm-hero">' +
       muHeroFillHtml +
+      '<div class="udm-overlay"></div>' +
+      muLogoHtml +
     '</div>' +
     '<div class="udm-label">' +
       '<div class="udm-label-info">' +
@@ -4990,8 +5009,11 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       '</div>';
   }
 
-  /* Hero logo fill */
-  var siusHeroFillHtml = imgs.icon
+  /* Hero fill — campus photo (desktop parity) → logo → emoji fallback */
+  var siusHeroFillHtml = imgs.image
+    ? '<img class="sius-hero-photo-blur" src="' + imgs.image + '" alt="" aria-hidden="true" onerror="this.style.display=\'none\'">' +
+      '<img class="sius-hero-photo" src="' + imgs.image + '" alt="' + u.name + ' campus" onerror="this.style.display=\'none\'">'
+    : imgs.icon
     ? '<div class="sius-hero-logo-fill" style="background-image:url(\'' + imgs.icon + '\')">' +
         '<img src="' + imgs.icon + '" style="display:none" onerror="' +
           'this.parentNode.className=\'sius-hero-emoji-fill\';' +
@@ -4999,6 +5021,11 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
           'this.parentNode.innerHTML=\'' + u.icon + '\'">' +
       '</div>'
     : '<div class="sius-hero-emoji-fill">' + u.icon + '</div>';
+
+  /* University logo chip — bottom-left of hero */
+  var siusLogoHtml = imgs.icon
+    ? '<div class="sius-logo-wrap"><img class="sius-logo-img" src="' + imgs.icon + '" onerror="this.parentNode.innerHTML=\'<span class=&quot;sius-logo-emoji&quot;>' + u.icon + '</span>\'"></div>'
+    : '<div class="sius-logo-wrap"><span class="sius-logo-emoji">' + u.icon + '</span></div>';
 
   /* ─── NEW PILLS BUILDER ─── show 8 by default + "+N more" toggle ─── */
   function siusBuildPills(items, mutedClass) {
@@ -5028,6 +5055,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
     '<div class="sius-hero">' +
       siusHeroFillHtml +
       '<div class="sius-hero-overlay"></div>' +
+      siusLogoHtml +
     '</div>' +
 
     /* ── Spec label below hero (mirrors udm-label-info pattern) ── */
