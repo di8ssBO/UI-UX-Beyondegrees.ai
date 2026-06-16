@@ -17,101 +17,8 @@
 }
 .loading-body::-webkit-scrollbar { display: none; }
 
-/* ── AI Orb ─────────────────────────────────────────── */
-.orb-wrap {
-  position: relative;
-  width: 160px; height: 160px;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-
-/* Rotating rings */
-.orb-ring {
-  position: absolute;
-  border-radius: 50%;
-}
-.ring-outer {
-  width: 154px; height: 154px;
-  border: 1.5px solid transparent;
-  border-top-color: rgba(124,58,237,0.55);
-  border-right-color: rgba(124,58,237,0.15);
-  border-bottom-color: rgba(124,58,237,0.3);
-  border-left-color: rgba(124,58,237,0.08);
-  animation: ringSpinCW 8s linear infinite;
-  filter: drop-shadow(0 0 6px rgba(124,58,237,0.3));
-}
-.ring-mid {
-  width: 124px; height: 124px;
-  border: 1px solid transparent;
-  border-top-color: rgba(6,214,160,0.5);
-  border-right-color: rgba(6,214,160,0.12);
-  border-bottom-color: rgba(6,214,160,0.25);
-  border-left-color: rgba(6,214,160,0.06);
-  animation: ringSpinCCW 5.5s linear infinite;
-  filter: drop-shadow(0 0 5px rgba(6,214,160,0.25));
-}
-@keyframes ringSpinCW  { to { transform: rotate(360deg); } }
-@keyframes ringSpinCCW { to { transform: rotate(-360deg); } }
-
-/* Core orb sphere */
-.orb-core {
-  width: 84px; height: 84px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 35%,
-    rgba(196,181,253,0.95) 0%,
-    rgba(124,58,237,0.85) 40%,
-    rgba(30,10,60,0.7) 100%
-  );
-  box-shadow:
-    0 0 0 1px rgba(167,139,250,0.2),
-    0 0 24px rgba(124,58,237,0.65),
-    0 0 56px rgba(124,58,237,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.3);
-  display: flex; align-items: center; justify-content: center;
-  position: relative; z-index: 2;
-  animation: orbPulse 3s ease-in-out infinite;
-}
-@keyframes orbPulse {
-  0%,100% {
-    box-shadow: 0 0 0 1px rgba(167,139,250,0.2), 0 0 24px rgba(124,58,237,0.65), 0 0 56px rgba(124,58,237,0.3), inset 0 1px 0 rgba(255,255,255,0.3);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 0 1px rgba(167,139,250,0.35), 0 0 36px rgba(124,58,237,0.9), 0 0 80px rgba(124,58,237,0.45), inset 0 1px 0 rgba(255,255,255,0.3);
-    transform: scale(1.05);
-  }
-}
-.orb-emoji { font-size: 30px; line-height: 1; user-select: none; }
-
-/* Orbiting discipline particles */
-.orbit {
-  position: absolute;
-  border-radius: 50%;
-  display: flex; align-items: flex-start; justify-content: center;
-  top: 50%; left: 50%;
-}
-.orbit-1 { width: 128px; height: 128px; margin: -64px 0 0 -64px; animation: orbitSpin 5.8s linear infinite; }
-.orbit-2 { width: 150px; height: 150px; margin: -75px 0 0 -75px; animation: orbitSpin 8.2s linear infinite reverse; }
-.orbit-3 { width: 116px; height: 116px; margin: -58px 0 0 -58px; animation: orbitSpin 4.9s linear infinite; }
-.orbit-4 { width: 142px; height: 142px; margin: -71px 0 0 -71px; animation: orbitSpin 9.4s linear infinite reverse; }
-.orbit-5 { width: 110px; height: 110px; margin: -55px 0 0 -55px; animation: orbitSpin 7.1s linear infinite; }
-.orbit-6 { width: 158px; height: 158px; margin: -79px 0 0 -79px; animation: orbitSpin 11.5s linear infinite reverse; }
-
-@keyframes orbitSpin { to { transform: rotate(360deg); } }
-
-.particle {
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  margin-top: -4.5px; /* sits at edge of orbit radius */
-  flex-shrink: 0;
-}
-.p-kt { background: rgba(139,92,246,0.95);  box-shadow: 0 0 10px rgba(139,92,246,0.9),  0 0 20px rgba(139,92,246,0.4); }
-.p-yt { background: rgba(6,214,160,0.95);   box-shadow: 0 0 10px rgba(6,214,160,0.9),   0 0 20px rgba(6,214,160,0.4); }
-.p-nv { background: rgba(59,130,246,0.95);  box-shadow: 0 0 10px rgba(59,130,246,0.9),  0 0 20px rgba(59,130,246,0.4); }
-.p-nn { background: rgba(245,158,11,0.95);  box-shadow: 0 0 10px rgba(245,158,11,0.9),  0 0 20px rgba(245,158,11,0.4); }
-.p-xh { background: rgba(168,85,247,0.95);  box-shadow: 0 0 10px rgba(168,85,247,0.9),  0 0 20px rgba(168,85,247,0.4); }
-.p-tn { background: rgba(244,63,94,0.95);   box-shadow: 0 0 10px rgba(244,63,94,0.9),   0 0 20px rgba(244,63,94,0.4); }
+/* ── Main Character Canvas ───────────────────────────── */
+#mcCanvas { display:block; width:160px; height:160px; margin-top:4px; flex-shrink:0; }
 
 /* ── Phase Text ─────────────────────────────────────── */
 .phase-wrap { text-align: center; }
@@ -249,7 +156,7 @@
 /* ── Milestone Toast ────────────────────────────────── */
 .milestone-toast {
   position: absolute;
-  bottom: 76px; left: 14px; right: 14px;
+  bottom: 82px; left: 14px; right: 14px; /* above tab bar, never covers canvas */
   display: flex; align-items: center; gap: 12px;
   padding: 12px 16px; border-radius: 14px;
   background: rgba(13,13,26,0.92);
@@ -263,7 +170,7 @@
   z-index: 30;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(18px) scale(0.96);
+  transform: translateY(18px) scale(0.96); /* slides up from below */
   transition:
     opacity 0.4s cubic-bezier(0.34,1.2,0.64,1),
     transform 0.4s cubic-bezier(0.34,1.2,0.64,1);
@@ -389,55 +296,7 @@
   box-shadow: 0 0 8px rgba(201,107,85,0.40) !important;
 }
 
-/* ── ORB — Terracotta primary + Sage accent (rings vibrant on cream) ── */
-[data-theme="light"] .ring-outer {
-  border-top-color: #c96b55 !important;          /* terra-600 solid */
-  border-right-color: rgba(201,107,85,0.30) !important;
-  border-bottom-color: rgba(201,107,85,0.55) !important;
-  border-left-color: rgba(201,107,85,0.18) !important;
-  filter: drop-shadow(0 0 8px rgba(201,107,85,0.45)) !important;
-}
-[data-theme="light"] .ring-mid {
-  border-top-color: #6a9690 !important;          /* sage-500 solid */
-  border-right-color: rgba(106,150,144,0.30) !important;
-  border-bottom-color: rgba(106,150,144,0.50) !important;
-  border-left-color: rgba(106,150,144,0.14) !important;
-  filter: drop-shadow(0 0 7px rgba(106,150,144,0.40)) !important;
-}
-
-/* Core orb — terracotta radial gradient (solid on cream) */
-[data-theme="light"] .orb-core {
-  background: radial-gradient(circle at 38% 35%,
-    #fceae4 0%,
-    #e8917a 35%,
-    #c96b55 65%,
-    #7d3720 100%
-  ) !important;
-  box-shadow:
-    0 0 0 1.5px rgba(201,107,85,0.45),
-    0 0 28px rgba(201,107,85,0.55),
-    0 0 64px rgba(201,107,85,0.30),
-    inset 0 1px 0 rgba(255,255,255,0.50) !important;
-}
-[data-theme="light"] .orb-core { animation: orbPulseLight 3s ease-in-out infinite !important; }
-@keyframes orbPulseLight {
-  0%,100% {
-    box-shadow: 0 0 0 1.5px rgba(201,107,85,0.45), 0 0 28px rgba(201,107,85,0.55), 0 0 64px rgba(201,107,85,0.30), inset 0 1px 0 rgba(255,255,255,0.50);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 0 1.5px rgba(201,107,85,0.65), 0 0 42px rgba(201,107,85,0.78), 0 0 90px rgba(201,107,85,0.45), inset 0 1px 0 rgba(255,255,255,0.55);
-    transform: scale(1.05);
-  }
-}
-
-/* Orbiting particles — palette colors instead of violet/mint */
-[data-theme="light"] .particle.p-kt { background: #c96b55 !important; box-shadow: 0 0 10px rgba(201,107,85,0.85), 0 0 20px rgba(201,107,85,0.40) !important; }
-[data-theme="light"] .particle.p-yt { background: #6a9690 !important; box-shadow: 0 0 10px rgba(106,150,144,0.85), 0 0 20px rgba(106,150,144,0.40) !important; }
-[data-theme="light"] .particle.p-nv { background: #4a87a8 !important; box-shadow: 0 0 10px rgba(74,135,168,0.85), 0 0 20px rgba(74,135,168,0.40) !important; }
-[data-theme="light"] .particle.p-nn { background: #d9a040 !important; box-shadow: 0 0 10px rgba(217,160,64,0.85), 0 0 20px rgba(217,160,64,0.40) !important; }
-[data-theme="light"] .particle.p-xh { background: #a84e30 !important; box-shadow: 0 0 10px rgba(168,78,48,0.85), 0 0 20px rgba(168,78,48,0.40) !important; }
-[data-theme="light"] .particle.p-tn { background: #c45540 !important; box-shadow: 0 0 10px rgba(196,85,64,0.85), 0 0 20px rgba(196,85,64,0.40) !important; }
+/* (Orb light-mode overrides removed — replaced by Main Character canvas) */
 
 /* ── Phase text ── */
 [data-theme="light"] .phase-label { color: #a84e30 !important; }    /* terra-700 */

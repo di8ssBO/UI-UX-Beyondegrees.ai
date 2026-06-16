@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="../../../design-system/animations.css">
 <link rel="stylesheet" href="../../../design-system/layout.css">
 <script src="../../../shared/scripts/i18n.js"></script>
+<script src="../../../shared/scripts/bd-profile.js"></script>
 <style>
 /* ═══════════════════════════════════════════════════════
    THEME — same blue-shifted dark as matches page
@@ -3649,7 +3650,7 @@ body {
               </svg>
               AI Match
             </span>
-            <button class="ud-mb-see" onclick="renderWhyMatch(_currentUni)">Why match →</button>
+            <button class="ud-mb-see" onclick="renderWhyMatch(_currentUni)" data-i18n="uni.detail.why_match_btn">Why match →</button>
           </div>
           <div class="ud-mb-score-row">
             <span class="ud-mb-pct" id="udMbPct">—</span>
@@ -3687,7 +3688,7 @@ body {
             </div>
             <div class="ud-meta-chips" id="udMetaChips"></div>
             <div class="ud-about-text" id="udAboutText">—</div>
-            <button class="ud-discover-link">Discover more →</button>
+            <button class="ud-discover-link" data-i18n="uni.detail.discover">Discover more →</button>
           </div>
 
           <!-- Programs -->
@@ -3739,7 +3740,7 @@ body {
               <div class="ud-site-icon">🌐</div>
               <div class="ud-site-url" id="udSiteUrl">—</div>
             </div>
-            <button class="ud-apply-btn" id="udApplyBtn">Apply Now →</button>
+            <button class="ud-apply-btn" id="udApplyBtn" data-i18n="uni.detail.apply_now">Apply Now →</button>
           </div>
 
           <!-- Immigration Support -->
@@ -4912,7 +4913,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
     '<div class="sius-link-row">' +
       '<div class="sius-link-icon">🔗</div>' +
       '<div class="sius-link-url">' + siteUrl + '</div>' +
-      '<a class="sius-apply-btn" href="' + fullUrl + '" target="_blank">Apply</a>' +
+      '<a class="sius-apply-btn" href="' + fullUrl + '" target="_blank">' + t('uni.detail.apply') + '</a>' +
     '</div>';
 
   /* Contact block */
@@ -5061,7 +5062,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       /* 2 · SALARY & OUTCOMES — Discipline color family
          3 stat-cards (primary spans full, 2 secondaries in row) */
       '<section class="sius-sec sius-sec-disc">' +
-        '<h2 class="sius-sec-title">Salary &amp; Outcomes</h2>' +
+        '<h2 class="sius-sec-title">' + t('uni.detail.sec_salary') + '</h2>' +
         '<div class="sius-stat-grid">' +
           '<div class="sius-stat-card sius-stat-card-primary">' +
             '<div class="sius-stat-card-label">Average Salary</div>' +
@@ -5083,10 +5084,10 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
 
       /* 3 · OVERVIEW — Sage family */
       '<section class="sius-sec sius-sec-sage">' +
-        '<h2 class="sius-sec-title">Overview</h2>' +
+        '<h2 class="sius-sec-title">' + t('uni.detail.sec_overview') + '</h2>' +
         '<div class="sius-overview-card">' +
           '<p class="sius-overview-text" data-clamped="true">' + spec.desc + '</p>' +
-          '<button class="sius-overview-toggle" onclick="siusToggleOverview(this)" aria-expanded="false">Read more</button>' +
+          '<button class="sius-overview-toggle" onclick="siusToggleOverview(this)" aria-expanded="false">' + t('uni.detail.read_more') + '</button>' +
         '</div>' +
       '</section>' +
 
@@ -5097,7 +5098,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16M2 13h20"/></svg>' +
           '</div>' +
           '<div class="sius-sec-head-text">' +
-            '<h2 class="sius-sec-title">Career Outcomes</h2>' +
+            '<h2 class="sius-sec-title">' + t('uni.detail.sec_career') + '</h2>' +
             '<span class="sius-sec-sub-lbl">' + md.careers.length + ' job paths · click to view</span>' +
           '</div>' +
           '<span class="sius-sec-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
@@ -5112,7 +5113,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>' +
           '</div>' +
           '<div class="sius-sec-head-text">' +
-            '<h2 class="sius-sec-title">Degree Programs</h2>' +
+            '<h2 class="sius-sec-title">' + t('uni.detail.sec_programs') + '</h2>' +
             '<span class="sius-sec-sub-lbl">Available study programs &amp; duration</span>' +
           '</div>' +
           '<span class="sius-sec-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
@@ -5129,7 +5130,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
             '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>' +
           '</div>' +
           '<div class="sius-sec-head-text">' +
-            '<h2 class="sius-sec-title">Required Skills</h2>' +
+            '<h2 class="sius-sec-title">' + t('uni.detail.sec_skills') + '</h2>' +
             '<span class="sius-sec-sub-lbl">Core competencies &amp; tools</span>' +
           '</div>' +
           '<span class="sius-sec-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
@@ -5148,14 +5149,14 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
 
       /* 7 · LEARNING PATH — Sage family */
       '<section class="sius-sec sius-sec-sage">' +
-        '<h2 class="sius-sec-title">Learning Path</h2>' +
-        '<p class="sius-sec-sub">Admission requirements, exams, and language needs</p>' +
+        '<h2 class="sius-sec-title">' + t('uni.detail.sec_learning') + '</h2>' +
+        '<p class="sius-sec-sub">' + t('uni.detail.sec_learning_sub') + '</p>' +
         '<div class="sius-accordion">' + accHtml + '</div>' +
       '</section>' +
 
       /* 8 · APPLY AT THIS UNIVERSITY — Terracotta family (CTA) */
       '<section class="sius-sec sius-sec-terra">' +
-        '<h2 class="sius-sec-title">Apply at ' + u.name + '</h2>' +
+        '<h2 class="sius-sec-title">' + t('uni.detail.sec_apply_at').replace('{name}', u.name) + '</h2>' +
         linkHtml +
         contactHtml +
       '</section>' +
@@ -5163,7 +5164,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       /* 9 · OTHER UNIVERSITIES — multi-palette (uni cards keep their rotation) */
       '<section class="sius-sec sius-sec-last">' +
         '<div class="sius-sec-header">' +
-          '<h2 class="sius-sec-title">Other Universities</h2>' +
+          '<h2 class="sius-sec-title">' + t('uni.detail.sec_other') + '</h2>' +
           '<span class="sius-sec-meta">offering this specialization</span>' +
         '</div>' +
         topUniHtml +
@@ -5190,11 +5191,11 @@ function siusToggleOverview(btn) {
   var expanded = txt.getAttribute('data-clamped') === 'false';
   if (expanded) {
     txt.setAttribute('data-clamped', 'true');
-    btn.textContent = 'Read more';
+    btn.textContent = t('uni.detail.read_more');
     btn.setAttribute('aria-expanded', 'false');
   } else {
     txt.setAttribute('data-clamped', 'false');
-    btn.textContent = 'Show less';
+    btn.textContent = t('uni.detail.show_less');
     btn.setAttribute('aria-expanded', 'true');
   }
 }
@@ -5207,7 +5208,7 @@ function siusTogglePillOverflow(btn) {
     else p.removeAttribute('hidden');
   });
   btn.setAttribute('aria-expanded', String(!expanded));
-  btn.textContent = expanded ? '+' + hidden.length + ' more' : 'Show less';
+  btn.textContent = expanded ? t('uni.detail.pill_more').replace('{n}', hidden.length) : t('uni.detail.show_less');
 }
 function siusToggleSection(btn) {
   var sec = btn.closest('.sius-sec-collapsible');

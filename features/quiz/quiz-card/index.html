@@ -3390,7 +3390,7 @@ svg *, canvas, video, img { transition: none !important; }
 <!-- ── Milestone patch: suppress 15Q half milestone instantly, fix 20Q badge ── -->
 <script>
 (function () {
-  var HALF_TITLES = ['Halfway there', 'Nửa đường rồi', 'आधा हो गया', 'À mi-chemin', 'في منتصف الطريق'];
+  var HALF_TITLES = ['Halfway there', 'Nửa đường rồi', 'आधा हो गया', 'À moitié', 'نصف الطريق'];
   function isHalfTitle(txt) {
     return HALF_TITLES.some(function(w){ return (txt||'').indexOf(w) !== -1; });
   }
@@ -3413,20 +3413,21 @@ svg *, canvas, video, img { transition: none !important; }
         badge.textContent = badge.textContent.replace('3/3','2/3');
       }
 
-      /* Suppress 15Q half milestone: hide and close immediately */
+      /* Suppress 15Q half milestone: hide overlay visually then trigger tap-dismiss
+         so the quiz's own cb() fires immediately (advances Q15→Q16) instead of
+         waiting for the 4300ms auto-timer which caused the Q15 re-render glitch. */
       if (isHalfTitle(titleEl.textContent)) {
-        document.body.classList.add('bd-suppress-half-ms');   /* display:none */
+        document.body.classList.add('bd-suppress-half-ms');
+        overlay.click();   /* fires tap-dismiss → clearTimeout + _msPlanetDismiss(ov,cb) → cb() advances to Q16 */
         setTimeout(function () {
-          /* Close overlay — quiz's own 2400ms timer will fire later as no-op */
-          overlay.classList.remove('show','visible','animate-milestone-in');
           document.body.classList.remove('bd-suppress-half-ms');
-        }, 20);
+        }, 800);           /* keep hidden until overlay fade completes (~320+420ms) */
       }
     }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
   });
 
   /* ── Orb emoji dedup ── */
-  var ORB_ALT = { '🔥':'⭐', '⚡':'🌟', '🎉':'💫' };
+  var ORB_ALT = { '🔥':'⭐', '⚡':'🌟', '🎉':'💫', '🚀':'🪐' };
   document.addEventListener('DOMContentLoaded', function () {
     var orbEl = document.getElementById('msPlanetOrbEmoji');
     if (!orbEl) return;

@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<title>BeyonDegrees — DNA Viz Concepts</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  background:#07010f;
+  color:#e2d9f3;
+  font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+  height:100vh; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.hdr{
+  position:relative; z-index:20;
+  padding:14px 28px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(7,1,15,.9); backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  flex-shrink:0;
+}
+.hdr-logo{
+  font-size:12px; font-weight:900; letter-spacing:.1em; text-transform:uppercase;
+  background:linear-gradient(90deg,#a78bfa,#06d6a0);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.hdr-title{font-size:11px;color:rgba(226,217,243,.4);letter-spacing:.05em}
+.hdr-nav{display:flex;gap:7px;align-items:center}
+.nav-dot{
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(255,255,255,.18); cursor:pointer;
+  border:none; transition:all .3s ease; padding:0;
+}
+.nav-dot.active{width:22px;border-radius:4px;background:#7c3aed}
+.nav-dot:hover:not(.active){background:rgba(167,139,250,.5)}
+
+/* ── MAIN ────────────────────────────────────────────── */
+.main{
+  flex:1; display:flex; align-items:center; justify-content:center;
+  gap:48px; padding:24px 60px; overflow:hidden; position:relative;
+}
+
+/* ambient bg glow */
+.main::before{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 50%, rgba(124,58,237,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 400px at 80% 50%, rgba(6,214,160,.05) 0%, transparent 70%);
+}
+
+/* ── PHONE FRAME ─────────────────────────────────────── */
+.phone{
+  width:270px; height:500px; flex-shrink:0;
+  background:#0d0520;
+  border-radius:38px;
+  border:1.5px solid rgba(124,58,237,.4);
+  box-shadow:
+    0 0 0 5px rgba(124,58,237,.07),
+    0 0 60px rgba(124,58,237,.22),
+    0 30px 80px rgba(0,0,0,.7);
+  overflow:hidden; position:relative;
+  transition:opacity .25s ease;
+}
+.phone-notch{
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:72px; height:20px; background:#07010f;
+  border-radius:0 0 14px 14px; z-index:10;
+}
+.phone-screen{
+  width:100%; height:100%; position:relative; overflow:hidden;
+}
+
+/* ── ARROW BUTTONS ───────────────────────────────────── */
+.arr{
+  position:absolute; top:50%; transform:translateY(-50%);
+  z-index:30; width:42px; height:42px; border-radius:50%;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  color:rgba(226,217,243,.6); font-size:20px; cursor:pointer;
+  transition:all .2s ease; display:flex; align-items:center; justify-content:center;
+  user-select:none;
+}
+.arr:hover{background:rgba(124,58,237,.35); color:#fff; border-color:rgba(124,58,237,.5)}
+.arr.lft{left:16px}
+.arr.rgt{right:16px}
+
+/* ── INFO PANEL ──────────────────────────────────────── */
+.info{
+  width:300px; display:flex; flex-direction:column; gap:14px;
+}
+.info-num{
+  font-size:10px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+  color:rgba(167,139,250,.55);
+}
+.info-title{
+  font-size:26px; font-weight:900; line-height:1.15;
+  background:linear-gradient(135deg,#f0eaff 0%,#a78bfa 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+.info-tag{
+  font-size:14px; font-weight:700; color:rgba(226,217,243,.55); line-height:1.5;
+}
+.info-desc{
+  font-size:12px; color:rgba(226,217,243,.4); line-height:1.75;
+}
+.info-whys{display:flex;flex-direction:column;gap:7px;margin-top:2px}
+.info-why{
+  display:flex; align-items:flex-start; gap:8px;
+  font-size:11.5px; color:rgba(226,217,243,.45); line-height:1.5;
+}
+.info-why::before{
+  content:'✦'; color:#7c3aed; font-size:7px; flex-shrink:0; margin-top:4px;
+}
+.btn-replay{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:9px 20px; border-radius:999px; margin-top:6px; align-self:flex-start;
+  background:rgba(124,58,237,.14); border:1px solid rgba(124,58,237,.4);
+  color:#c4b5fd; font-size:12px; font-weight:800; cursor:pointer;
+  transition:all .2s ease; font-family:inherit;
+}
+.btn-replay:hover{background:rgba(124,58,237,.3); transform:translateY(-1px)}
+
+/* ── KEYFRAMES ───────────────────────────────────────── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blobA{
+  0%,100%{border-radius:60% 40% 70% 30%/50% 60% 40% 70%}
+  33%   {border-radius:40% 60% 30% 70%/60% 40% 70% 30%}
+  66%   {border-radius:70% 30% 50% 50%/30% 70% 60% 40%}
+}
+@keyframes blobB{
+  0%,100%{border-radius:50% 50% 30% 70%/70% 30% 50% 50%}
+  33%   {border-radius:70% 30% 60% 40%/40% 60% 30% 70%}
+  66%   {border-radius:30% 70% 40% 60%/60% 40% 70% 30%}
+}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.65}}
+@keyframes starPulse{0%,100%{r:var(--sr);filter:blur(0)}50%{r:calc(var(--sr)*1.2);filter:blur(1px)}}
+@keyframes scanLine{0%{top:0%}100%{top:100%}}
+@keyframes orbDrift{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ── CONCEPT 1: HELIX ────────────────────────────────── */
+.helix-bg{
+  width:100%; height:100%;
+  background:linear-gradient(180deg,#0d0325 0%,#160840 50%,#0a0220 100%);
+  display:flex; flex-direction:column; align-items:center; gap:0;
+  padding-top:26px;
+}
+.helix-hdr{
+  font-size:9px; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(167,139,250,.45); margin-bottom:10px;
+}
+
+/* ── CONCEPT 2: CONSTELLATION ────────────────────────── */
+.const-bg{
+  width:100%; height:100%; position:relative; overflow:hidden;
+  background:radial-gradient(ellipse 200px 160px at 50% 42%,rgba(124,58,237,.2) 0%,transparent 70%),
+             linear-gradient(180deg,#030115 0%,#06012a 100%);
+}
+.const-phase{
+  position:absolute; bottom:20px; left:0; right:0; text-align:center;
+  font-size:9px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+  color:rgba(167,139,250,.45); opacity:0; transition:opacity .8s ease;
+}
+
+/* ── CONCEPT 3: SPECTROGRAM ──────────────────────────── */
+.spec-bg{
+  width:100%; height:100%;
+  background:linear-gradient(180deg,#020810 0%,#050e20 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  padding-bottom:28px; position:relative; overflow:hidden;
+}
+.spec-phase{
+  position:absolute; top:28px; left:0; right:0; text-align:center;
+  font-size:9px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+  transition:color .5s ease, opacity .4s ease;
+}
+.spec-scanline{
+  position:absolute; left:0; right:0; height:2px; pointer-events:none;
+  background:linear-gradient(90deg,transparent 0%,rgba(6,214,160,.7) 50%,transparent 100%);
+  top:0; opacity:0;
+}
+.spec-bars{
+  display:flex; gap:9px; align-items:flex-end; height:200px; padding:0 12px;
+}
+.spec-col{display:flex; flex-direction:column; align-items:center; gap:5px; position:relative}
+.spec-pct{
+  font-size:10px; font-weight:900; opacity:0;
+  transition:opacity .5s ease; margin-bottom:2px;
+}
+.spec-bar{
+  width:30px; border-radius:5px 5px 2px 2px;
+  min-height:3px; height:3px;
+  transition:height .9s cubic-bezier(.34,1.2,.64,1);
+}
+.spec-lbl{
+  font-size:8px; font-weight:800; letter-spacing:.04em; text-transform:uppercase;
+}
+
+/* ── CONCEPT 4: IKIGAI BLOOM ─────────────────────────── */
+.ikigai-bg{
+  width:100%; height:100%; position:relative;
+  background:radial-gradient(ellipse at 50% 50%,#100530 0%,#030010 100%);
+  display:flex; align-items:center; justify-content:center;
+}
+
+/* ── CONCEPT 5: MORPHING BLOB ────────────────────────── */
+.blob-bg{
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:18px; background:#04000d;
+}
+.blob-wrap{position:relative; width:170px; height:170px}
+.blob-el{
+  position:absolute; inset:0; border-radius:60% 40% 70% 30%/50% 60% 40% 70%;
+  animation:blobA 4s ease-in-out infinite;
+  transition:background .9s ease, box-shadow .9s ease;
+}
+.blob-inner{
+  position:absolute; inset:22px; border-radius:50% 50% 30% 70%/70% 30% 50% 50%;
+  animation:blobB 3s ease-in-out infinite; opacity:.4;
+}
+.blob-txt{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; z-index:2;
+  opacity:0; transition:opacity .6s ease;
+}
+.blob-chips{
+  display:flex; flex-wrap:wrap; gap:5px; justify-content:center;
+  max-width:240px; opacity:0; transition:opacity .6s ease;
+}
+.blob-chip{
+  padding:3px 9px; border-radius:999px;
+  font-size:9px; font-weight:800; letter-spacing:.04em;
+}
+.blob-foot{
+  font-size:8px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  color:rgba(255,255,255,.22); opacity:0; transition:opacity .6s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="hdr">
+  <span class="hdr-logo">BeyonDegrees.ai</span>
+  <span class="hdr-title">Academic DNA — Visualization Concepts</span>
+  <div class="hdr-nav" id="navDots"></div>
+</header>
+
+<!-- Main -->
+<div class="main">
+  <button class="arr lft" id="btnPrev">‹</button>
+
+  <!-- Phone frame -->
+  <div class="phone" id="phoneFrame">
+    <div class="phone-notch"></div>
+    <div class="phone-screen" id="phoneScreen"></div>
+  </div>
+
+  <!-- Info panel -->
+  <div class="info" id="infoPanel"></div>
+
+  <button class="arr rgt" id="btnNext">›</button>
+</div>
+
+<script>
+/* ══ DATA ═══════════════════════════════════════════════ */
+const D = [
+  { id:'kt', label:'Kỹ thuật',    short:'KT', color:'#8b5cf6', value:72 },
+  { id:'yt', label:'Y tế',        short:'YT', color:'#06d6a0', value:45 },
+  { id:'nv', label:'Nhân văn',    short:'NV', color:'#60a5fa', value:61 },
+  { id:'nn', label:'Nông nghiệp', short:'NN', color:'#fbbf24', value:28 },
+  { id:'xh', label:'Xã hội',     short:'XH', color:'#c084fc', value:55 },
+  { id:'tn', label:'Tự nhiên',   short:'TN', color:'#22d3ee', value:68 },
+];
+
+/* ══ ANIMATION CONTROLLER ════════════════════════════════ */
+let _ver = 0;
+const _to = [], _iv = [];
+
+function clearAll() {
+  _ver++;
+  _to.forEach(clearTimeout); _to.length = 0;
+  _iv.forEach(clearInterval); _iv.length = 0;
+}
+function later(fn, ms) {
+  const v = _ver;
+  const id = setTimeout(() => { if (_ver === v) fn(); }, ms);
+  _to.push(id); return id;
+}
+function tick(fn, ms) {
+  const v = _ver;
+  const id = setInterval(() => { if (_ver === v) fn(); }, ms);
+  _iv.push(id); return id;
+}
+function anim(fn, ms, ease, done) {
+  const v = _ver, t0 = performance.now();
+  const e = ease || (t => t);
+  function f(now) {
+    if (_ver !== v) return;
+    const p = Math.min((now - t0) / ms, 1);
+    fn(e(p));
+    if (p < 1) requestAnimationFrame(f);
+    else if (done) done();
+  }
+  requestAnimationFrame(f);
+}
+const easeOut  = t => 1 - Math.pow(1-t, 3);
+const easeSpring = t => { const s = 1.70158; return ((t=t-1)*t*((s+1)*t+s)+1); };
+
+/* ══ SVG HELPER ══════════════════════════════════════════ */
+function svgEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  if (attrs) for (const [k,v] of Object.entries(attrs)) el.setAttribute(k, v);
+  return el;
+}
+function makeSVG(w, h) {
+  return svgEl('svg', { viewBox:`0 0 ${w} ${h}`, width:'100%', height:`${h}px`, xmlns:'http://www.w3.org/2000/svg' });
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONCEPT 1 — DNA HELIX STRAND
+═══════════════════════════════════════════════════════════ */
+function renderHelix(screen) {
+  screen.innerHTML = '';
+  const bg = document.createElement('div');
+  bg.className = 'helix-bg';
+
+  const hdr = document.createElement('div');
+  hdr.className = 'helix-hdr';
+  hdr.textContent = '🧬  Academic DNA Formation';
+  bg.appendChild(hdr);
+
+  /* SVG canvas */
+  const W = 270, H = 430;
+  const cx = W/2, amp = 32, period = H / 3;
+  const svg = makeSVG(W, H);
+
+  /* Defs: gradient for strands */
+  const defs = svgEl('defs');
+  const gL = svgEl('linearGradient',{id:'hgL',x1:'0',y1:'0',x2:'0',y2:'1'});
+  gL.appendChild(svgEl('stop',{offset:'0%','stop-color':'#4c1d95','stop-opacity':'.9'}));
+  gL.appendChild(svgEl('stop',{offset:'100%','stop-color':'#7c3aed','stop-opacity':'.5'}));
+  const gR = svgEl('linearGradient',{id:'hgR',x1:'0',y1:'0',x2:'0',y2:'1'});
+  gR.appendChild(svgEl('stop',{offset:'0%','stop-color':'#5b21b6','stop-opacity':'.9'}));
+  gR.appendChild(svgEl('stop',{offset:'100%','stop-color':'#6d28d9','stop-opacity':'.5'}));
+  defs.appendChild(gL); defs.appendChild(gR);
+  svg.appendChild(defs);
+
+  /* Build sine-wave strand paths */
+  const yS = 20, yE = H - 20, steps = 240;
+  let pL = '', pR = '';
+  for (let i = 0; i <= steps; i++) {
+    const y = yS + (i/steps)*(yE-yS);
+    const ph = (2*Math.PI*(y-yS)) / period;
+    const xL = cx + amp * Math.sin(ph);
+    const xR = cx - amp * Math.sin(ph);
+    if (i===0) { pL = `M${xL.toFixed(1)},${y.toFixed(1)}`; pR = `M${xR.toFixed(1)},${y.toFixed(1)}`; }
+    else { pL += ` L${xL.toFixed(1)},${y.toFixed(1)}`; pR += ` L${xR.toFixed(1)},${y.toFixed(1)}`; }
+  }
+  const stL = svgEl('path',{d:pL, fill:'none', stroke:'url(#hgL)', 'stroke-width':'2.5', 'stroke-linecap':'round'});
+  const stR = svgEl('path',{d:pR, fill:'none', stroke:'url(#hgR)', 'stroke-width':'2.5', 'stroke-linecap':'round'});
+  svg.appendChild(stL); svg.appendChild(stR);
+
+  /* Crossbar positions: peaks of sine wave = |sin|≈1 */
+  /* peak y = yS + period/4 + n*(period/2), n=0..5 */
+  const crossData = Array.from({length:6}, (_,n) => {
+    const y = yS + period/4 + n*(period/2);
+    const ph = (2*Math.PI*(y-yS)) / period;
+    const xL = cx + amp * Math.sin(ph);
+    const xR = cx - amp * Math.sin(ph);
+    const x1 = Math.min(xL,xR), x2 = Math.max(xL,xR);
+    return { y, x1, x2, d: D[n] };
+  });
+
+  const crossEls = crossData.map(({y, x1, x2, d}) => {
+    /* glow */
+    const glo1 = svgEl('circle',{cx:x1.toFixed(1),cy:y.toFixed(1),r:'10',fill:d.color,opacity:'0',filter:'blur(6px)'});
+    const glo2 = svgEl('circle',{cx:x2.toFixed(1),cy:y.toFixed(1),r:'10',fill:d.color,opacity:'0',filter:'blur(6px)'});
+    /* bar - starts at center */
+    const bar = svgEl('line',{x1:cx.toFixed(1),y1:y.toFixed(1),x2:cx.toFixed(1),y2:y.toFixed(1),
+      stroke:d.color,'stroke-width':'3.5','stroke-linecap':'round',opacity:'0'});
+    /* endpoint dots */
+    const dot1 = svgEl('circle',{cx:x1.toFixed(1),cy:y.toFixed(1),r:'4.5',fill:d.color,opacity:'0'});
+    const dot2 = svgEl('circle',{cx:x2.toFixed(1),cy:y.toFixed(1),r:'4.5',fill:d.color,opacity:'0'});
+    /* right label */
+    const lbl = svgEl('text',{x:(x2+9).toFixed(1),y:(y+3.5).toFixed(1),
+      fill:d.color,'font-size':'9','font-weight':'800','font-family':'Plus Jakarta Sans,system-ui',opacity:'0'});
+    lbl.textContent = `${d.short}  ${d.value}%`;
+    /* left label */
+    const lblL = svgEl('text',{x:(x1-9).toFixed(1),y:(y+3.5).toFixed(1),
+      fill:d.color,'font-size':'9','font-weight':'700','font-family':'Plus Jakarta Sans,system-ui',
+      'text-anchor':'end', opacity:'0'});
+    lblL.textContent = d.label;
+    [glo1,glo2,bar,dot1,dot2,lbl,lblL].forEach(e=>svg.appendChild(e));
+    return {glo1,glo2,bar,dot1,dot2,lbl,lblL,x1,x2,y};
+  });
+
+  bg.appendChild(svg);
+  screen.appendChild(bg);
+
+  /* Animate strands */
+  function drawPath(pathEl, dur) {
+    later(()=>{
+      const len = pathEl.getTotalLength();
+      pathEl.style.strokeDasharray = len;
+      pathEl.style.strokeDashoffset = len;
+      anim(t => { pathEl.style.strokeDashoffset = len*(1-t); }, dur, easeOut);
+    }, 100);
+  }
+  drawPath(stL, 1600);
+  drawPath(stR, 1600);
+
+  /* Animate crossbars */
+  crossEls.forEach(({glo1,glo2,bar,dot1,dot2,lbl,lblL,x1,x2}, i) => {
+    later(()=>{
+      /* dots snap in */
+      [dot1,dot2].forEach(e=>{ e.style.transition='opacity .3s'; e.style.opacity='1'; });
+      [glo1,glo2].forEach(e=>{ e.style.transition='opacity .4s'; e.style.opacity='0.22'; });
+      later(()=>{
+        bar.style.opacity='1';
+        anim(t=>{
+          const xe = easeSpring(t);
+          bar.setAttribute('x1', (cx+(x1-cx)*xe).toFixed(1));
+          bar.setAttribute('x2', (cx+(x2-cx)*xe).toFixed(1));
+        }, 380, null, ()=>{
+          lbl.style.transition='opacity .4s'; lbl.style.opacity='1';
+          lblL.style.transition='opacity .3s'; lblL.style.opacity='0.55';
+        });
+      }, 160);
+    }, 500 + i*260);
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONCEPT 2 — CONSTELLATION MAP
+═══════════════════════════════════════════════════════════ */
+function renderConstellation(screen) {
+  screen.innerHTML = '';
+  const bg = document.createElement('div');
+  bg.className = 'const-bg';
+
+  const W=270, H=500;
+  const svg = makeSVG(W,H);
+  svg.style.cssText='position:absolute;inset:0';
+
+  /* Defs: glow filter */
+  const defs = svgEl('defs');
+  const filt = svgEl('filter',{id:'cglow',x:'-80%',y:'-80%',width:'260%',height:'260%'});
+  filt.appendChild(svgEl('feGaussianBlur',{in:'SourceGraphic',stdDeviation:'5',result:'b'}));
+  const fm = svgEl('feMerge');
+  fm.appendChild(svgEl('feMergeNode',{in:'b'})); fm.appendChild(svgEl('feMergeNode',{in:'SourceGraphic'}));
+  filt.appendChild(fm); defs.appendChild(filt); svg.appendChild(defs);
+
+  /* Background stars */
+  for (let i=0; i<80; i++) {
+    const x=(Math.random()*W).toFixed(1), y=(Math.random()*H).toFixed(1);
+    const r=(Math.random()*1.1+0.2).toFixed(1);
+    const op=(Math.random()*.45+.08).toFixed(2);
+    const dur=(2+Math.random()*3).toFixed(1);
+    const c = svgEl('circle',{cx:x,cy:y,r,fill:'white',opacity:op});
+    c.innerHTML=`<animate attributeName="opacity" values="${op};${(+op*3).toFixed(2)};${op}" dur="${dur}s" repeatCount="indefinite" begin="${(Math.random()*3).toFixed(1)}s"/>`;
+    svg.appendChild(c);
+  }
+
+  /* Star positions — form a recognizable constellation layout */
+  const stars = [
+    { x:195, y:75,  d:D[0] }, /* KT — top right  */
+    { x:68,  y:95,  d:D[2] }, /* NV — top left   */
+    { x:215, y:185, d:D[5] }, /* TN — right mid  */
+    { x:128, y:230, d:D[4] }, /* XH — center     */
+    { x:58,  y:320, d:D[1] }, /* YT — bottom left*/
+    { x:200, y:335, d:D[3] }, /* NN — bottom right*/
+  ];
+
+  /* Connection edges */
+  const edges = [[0,2],[2,3],[3,1],[1,5],[5,3],[3,4],[4,2]];
+
+  /* Draw edges (hidden) */
+  const edgeEls = edges.map(([a,b])=>{
+    const p1=stars[a], p2=stars[b];
+    const len = Math.hypot(p2.x-p1.x, p2.y-p1.y).toFixed(1);
+    const el = svgEl('line',{
+      x1:p1.x,y1:p1.y, x2:p2.x,y2:p2.y,
+      stroke:'rgba(167,139,250,.3)','stroke-width':'1',
+      'stroke-dasharray':len,'stroke-dashoffset':len, opacity:'0'
+    });
+    svg.appendChild(el);
+    return {el,len};
+  });
+
+  /* Draw stars */
+  const starEls = stars.map(({x,y,d})=>{
+    const r = (3 + (d.value/100)*10).toFixed(1);
+    const glo = svgEl('circle',{cx:x,cy:y,r:(+r*2.8).toFixed(1),fill:d.color,opacity:'0',filter:'url(#cglow)'});
+    const star= svgEl('circle',{cx:x,cy:y,r,fill:d.color,opacity:'0'});
+    const core= svgEl('circle',{cx:x,cy:y,r:(+r*.38).toFixed(1),fill:'white',opacity:'0'});
+    [glo,star,core].forEach(e=>svg.appendChild(e));
+    return {glo,star,core,x,y,d,r:+r};
+  });
+
+  bg.appendChild(svg);
+
+  /* HTML labels (positioned absolute over SVG) */
+  const labelEls = stars.map(({x,y,d},i)=>{
+    const lbl = document.createElement('div');
+    lbl.style.cssText=`position:absolute;opacity:0;transition:opacity .5s ease;pointer-events:none;z-index:5;`;
+    const right = x > W/2;
+    const r = starEls[i].r;
+    if (right) { lbl.style.left=(x+r+7)+'px'; }
+    else { lbl.style.right=(W-x+r+7)+'px'; }
+    lbl.style.top = (y-14)+'px';
+    lbl.innerHTML=`<div style="font-size:9px;font-weight:900;color:${d.color};letter-spacing:.06em;text-transform:uppercase">${d.short}</div>
+<div style="font-size:12px;font-weight:900;color:${d.color};line-height:1">${d.value}%</div>`;
+    bg.appendChild(lbl);
+    return lbl;
+  });
+
+  /* Phase label */
+  const phase = document.createElement('div');
+  phase.className = 'const-phase';
+  phase.textContent = '✦  Chòm sao học thuật của bạn đã định hình  ✦';
+  bg.appendChild(phase);
+
+  screen.appendChild(bg);
+
+  /* Animate stars appearing */
+  starEls.forEach(({glo,star,core},i)=>{
+    later(()=>{
+      glo.style.transition='opacity .7s ease'; glo.style.opacity='0.18';
+      star.style.transition='opacity .5s ease'; star.style.opacity='0.9';
+      later(()=>{
+        core.style.transition='opacity .3s'; core.style.opacity='0.9';
+        labelEls[i].style.opacity='1';
+      },200);
+    }, 200 + i*220);
+  });
+
+  /* Animate edges drawing */
+  edgeEls.forEach(({el,len},i)=>{
+    later(()=>{
+      el.style.opacity='1';
+      el.style.transition=`stroke-dashoffset .65s ease`;
+      el.style.strokeDashoffset='0';
+    }, 1700 + i*200);
+  });
+
+  /* Phase label */
+  later(()=>{ phase.style.opacity='1'; }, 3300);
+
+  /* Pulse stars */
+  later(()=>{
+    starEls.forEach(({glo},i)=>{
+      let bright=false;
+      tick(()=>{
+        bright=!bright;
+        glo.style.transition='opacity 1.4s ease-in-out';
+        glo.style.opacity = bright ? '0.35' : '0.12';
+      }, 1400 + i*100);
+    });
+  }, 3000);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONCEPT 3 — SPECTROGRAM / EQUALIZER
+═══════════════════════════════════════════════════════════ */
+function renderSpectrum(screen) {
+  screen.innerHTML = '';
+  const bg = document.createElement('div');
+  bg.className = 'spec-bg';
+
+  /* Scan line */
+  const scanLine = document.createElement('div');
+  scanLine.className = 'spec-scanline';
+  bg.appendChild(scanLine);
+
+  /* Phase label */
+  const phase = document.createElement('div');
+  phase.className = 'spec-phase';
+  phase.style.color = 'rgba(6,182,212,.6)';
+  phase.textContent = '◉  AI đang phân tích tín hiệu học thuật  ◉';
+  bg.appendChild(phase);
+
+  /* Bars */
+  const barsWrap = document.createElement('div');
+  barsWrap.className = 'spec-bars';
+  const MAX = 186;
+
+  const cols = D.map(d=>{
+    const col = document.createElement('div');
+    col.className = 'spec-col';
+
+    const pct = document.createElement('div');
+    pct.className = 'spec-pct';
+    pct.style.color = d.color;
+    pct.textContent = `${d.value}%`;
+
+    const bar = document.createElement('div');
+    bar.className = 'spec-bar';
+    bar.style.cssText += `background:linear-gradient(180deg,${d.color},${d.color}66);box-shadow:0 0 14px ${d.color}55;`;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'spec-lbl';
+    lbl.style.color = d.color+'bb';
+    lbl.textContent = d.short;
+
+    col.append(pct,bar,lbl);
+    barsWrap.appendChild(col);
+    return {bar,pct,d};
+  });
+  bg.appendChild(barsWrap);
+  screen.appendChild(bg);
+
+  /* Phase 1: random scan pulse */
+  let scanning = true;
+  scanLine.style.opacity='1';
+  let scanY=40;
+  const scanTick = tick(()=>{
+    scanY = (scanY+4)%460;
+    scanLine.style.top=scanY+'px';
+  },16);
+
+  const pulseTick = tick(()=>{
+    if(!scanning) return;
+    cols.forEach(({bar})=>{
+      const h = Math.random()*MAX*.75 + MAX*.04;
+      bar.style.transition=`height ${.08+Math.random()*.14}s ease`;
+      bar.style.height=h+'px';
+    });
+  }, 110);
+
+  /* Phase 2: settle to real values */
+  later(()=>{
+    scanning=false;
+    /* fade scan line */
+    scanLine.style.transition='opacity .5s'; scanLine.style.opacity='0';
+    /* update phase label */
+    phase.style.opacity='0';
+    later(()=>{
+      phase.style.color='rgba(6,214,160,.65)';
+      phase.textContent='✦  DNA học thuật đã giải mã  ✦';
+      phase.style.opacity='1';
+    },300);
+    /* settle bars */
+    cols.forEach(({bar,pct,d})=>{
+      const h=(d.value/100)*MAX;
+      bar.style.transition='height .95s cubic-bezier(.34,1.2,.64,1)';
+      bar.style.height=h+'px';
+      later(()=>{ pct.style.opacity='1'; }, 700);
+    });
+  }, 2400);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONCEPT 4 — IKIGAI BLOOM
+═══════════════════════════════════════════════════════════ */
+function renderIkigai(screen) {
+  screen.innerHTML='';
+  const bg=document.createElement('div');
+  bg.className='ikigai-bg';
+
+  const W=270, H=500;
+  const svg=makeSVG(W,H);
+  svg.style.cssText='position:absolute;inset:0';
+
+  /* Defs */
+  const defs=svgEl('defs');
+  /* Glow filter */
+  const fg=svgEl('filter',{id:'ig',x:'-60%',y:'-60%',width:'220%',height:'220%'});
+  fg.appendChild(svgEl('feGaussianBlur',{in:'SourceGraphic',stdDeviation:'10',result:'b'}));
+  const fm=svgEl('feMerge');
+  fm.appendChild(svgEl('feMergeNode',{in:'b'}));fm.appendChild(svgEl('feMergeNode',{in:'SourceGraphic'}));
+  fg.appendChild(fm); defs.appendChild(fg);
+
+  /* Circle gradients */
+  const circleDefs = [
+    {id:'ig0',color:'#7c3aed',cx:'135',cy:'175',r:'95'},  /* Đam mê — top  */
+    {id:'ig1',color:'#06d6a0',cx:'90', cy:'275',r:'95'},  /* Kỹ năng — btm left */
+    {id:'ig2',color:'#f59e0b',cx:'180',cy:'275',r:'95'},  /* Nhu cầu — btm right*/
+  ];
+  circleDefs.forEach(({id,color})=>{
+    const g=svgEl('radialGradient',{id,cx:'50%',cy:'50%',r:'50%'});
+    g.appendChild(svgEl('stop',{offset:'0%','stop-color':color,'stop-opacity':'.45'}));
+    g.appendChild(svgEl('stop',{offset:'100%','stop-color':color,'stop-opacity':'.06'}));
+    defs.appendChild(g);
+  });
+  svg.appendChild(defs);
+
+  /* Circles */
+  const cDat = [
+    {label:'Đam mê',  cx:135,cy:175,r:95, color:'#7c3aed', id:'ig0', discs:[D[2],D[4]] },
+    {label:'Kỹ năng', cx:90, cy:275,r:95, color:'#06d6a0', id:'ig1', discs:[D[0],D[5]] },
+    {label:'Nhu cầu', cx:180,cy:275,r:95, color:'#f59e0b', id:'ig2', discs:[D[1],D[3]] },
+  ];
+
+  const circEls = cDat.map(({cx,cy,r,color,id})=>{
+    const glo=svgEl('circle',{cx,cy,r:r+18,fill:`url(#${id})`,opacity:'0',filter:'url(#ig)'});
+    const ring=svgEl('circle',{cx,cy,r,fill:'none',stroke:color,'stroke-width':'1.5','stroke-opacity':'.5',opacity:'0'});
+    const fill=svgEl('circle',{cx,cy,r,fill:`url(#${id})`,opacity:'0'});
+    [glo,fill,ring].forEach(e=>svg.appendChild(e));
+    return {glo,ring,fill};
+  });
+
+  /* Center highlight */
+  const cX=135, cY=248;
+  const cGlo=svgEl('circle',{cx:cX,cy:cY,r:28,fill:'rgba(255,255,255,.06)',stroke:'rgba(255,255,255,.28)','stroke-width':'1.5',opacity:'0'});
+  svg.appendChild(cGlo);
+
+  /* Labels outside circles */
+  const labelCfg=[
+    {txt:'Đam mê',  x:135,y:60, anchor:'middle', color:'#a78bfa'},
+    {txt:'Kỹ năng', x:26, y:280,anchor:'start',  color:'#34d399'},
+    {txt:'Nhu cầu', x:244,y:280,anchor:'end',    color:'#fcd34d'},
+  ];
+  const lblEls = labelCfg.map(({txt,x,y,anchor,color})=>{
+    const el=svgEl('text',{x,y,'text-anchor':anchor,fill:color,
+      'font-size':'9.5','font-weight':'800','font-family':'Plus Jakarta Sans,system-ui',
+      'letter-spacing':'.06em',opacity:'0'});
+    el.textContent=txt.toUpperCase();
+    svg.appendChild(el); return el;
+  });
+
+  /* Discipline labels inside circles */
+  const discCfg=[
+    {d:D[2],x:135,y:140},{d:D[4],x:135,y:160},  /* Đam mê group */
+    {d:D[0],x:75, y:288},{d:D[5],x:75, y:305},  /* Kỹ năng group */
+    {d:D[1],x:195,y:288},{d:D[3],x:195,y:305},  /* Nhu cầu group */
+  ];
+  const discEls=discCfg.map(({d,x,y})=>{
+    const el=svgEl('text',{x,y,'text-anchor':'middle',fill:d.color,
+      'font-size':'8.5','font-weight':'800','font-family':'Plus Jakarta Sans,system-ui',opacity:'0'});
+    el.textContent=`${d.short} ${d.value}%`;
+    svg.appendChild(el); return el;
+  });
+
+  /* Center IKIGAI text */
+  const cTxt=svgEl('text',{x:cX,y:cY-4,'text-anchor':'middle',fill:'rgba(255,255,255,.8)',
+    'font-size':'8','font-weight':'900','font-family':'Plus Jakarta Sans,system-ui',
+    'letter-spacing':'.1em',opacity:'0'});
+  cTxt.textContent='IKIGAI';
+  const cSub=svgEl('text',{x:cX,y:cY+10,'text-anchor':'middle',fill:'rgba(255,255,255,.45)',
+    'font-size':'7','font-weight':'700','font-family':'Plus Jakarta Sans,system-ui',opacity:'0'});
+  cSub.textContent='điểm giao thoa';
+  [cTxt,cSub].forEach(e=>svg.appendChild(e));
+
+  /* Header */
+  const hdr=document.createElement('div');
+  hdr.style.cssText='position:absolute;top:16px;left:0;right:0;text-align:center;font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(167,139,250,.4);z-index:5;';
+  hdr.textContent='◈  Mô hình IKIGAI học thuật';
+  bg.appendChild(hdr);
+
+  bg.appendChild(svg);
+  screen.appendChild(bg);
+
+  /* Animate circles one by one */
+  circEls.forEach(({glo,ring,fill},i)=>{
+    later(()=>{
+      glo.style.transition='opacity .9s ease'; glo.style.opacity='1';
+      fill.style.transition='opacity .7s ease'; fill.style.opacity='1';
+      ring.style.transition='opacity .6s ease'; ring.style.opacity='1';
+      later(()=>{
+        lblEls[i].style.transition='opacity .5s'; lblEls[i].style.opacity='1';
+        /* disc labels in pairs */
+        const pair=[discEls[i*2],discEls[i*2+1]];
+        pair.forEach(e=>{ e.style.transition='opacity .4s'; e.style.opacity='1'; });
+      },500);
+    }, 300 + i*550);
+  });
+
+  /* Center highlight */
+  later(()=>{
+    cGlo.style.transition='opacity .7s ease'; cGlo.style.opacity='1';
+    cTxt.style.transition='opacity .6s'; cTxt.style.opacity='1';
+    cSub.style.transition='opacity .6s'; cSub.style.opacity='1';
+  },2100);
+
+  /* Pulse center */
+  later(()=>{
+    let t=0;
+    tick(()=>{
+      t++;
+      cGlo.style.transition='r 1.3s ease-in-out,opacity 1.3s ease-in-out';
+      cGlo.setAttribute('r', t%2===0 ? '28':'34');
+      cGlo.setAttribute('opacity', t%2===0 ? '1':'0.6');
+    }, 1300);
+  }, 2600);
+}
+
+/* ══════════════════════════════════════════════════════════
+   CONCEPT 5 — MORPHING BLOB
+═══════════════════════════════════════════════════════════ */
+function renderBlob(screen) {
+  screen.innerHTML='';
+  const bg=document.createElement('div');
+  bg.className='blob-bg';
+
+  const sorted=[...D].sort((a,b)=>b.value-a.value);
+  let idx=0;
+  const cur=()=>sorted[idx];
+
+  /* Blob */
+  const wrap=document.createElement('div');
+  wrap.className='blob-wrap';
+
+  const blob=document.createElement('div');
+  blob.className='blob-el';
+  blob.style.background=`radial-gradient(circle at 40% 38%,${cur().color}cc,${cur().color}40)`;
+  blob.style.boxShadow=`0 0 70px ${cur().color}55, 0 0 140px ${cur().color}18`;
+
+  const inner=document.createElement('div');
+  inner.className='blob-inner';
+  inner.style.background=`radial-gradient(circle at 60% 60%,${cur().color}77,transparent 70%)`;
+
+  const txt=document.createElement('div');
+  txt.className='blob-txt';
+
+  const updateTxt=(d)=>{
+    txt.innerHTML=`
+      <div style="font-size:10px;font-weight:800;letter-spacing:.08em;color:rgba(255,255,255,.65);text-transform:uppercase;margin-bottom:2px">${d.label}</div>
+      <div style="font-size:38px;font-weight:900;color:white;line-height:1">${d.value}%</div>
+      <div style="font-size:9px;font-weight:700;color:${d.color};letter-spacing:.04em;margin-top:3px">ngành phù hợp nhất</div>
+    `;
+  };
+  updateTxt(cur());
+
+  [inner,txt].forEach(e=>blob.appendChild(e));
+  wrap.appendChild(blob);
+
+  /* Chips */
+  const chips=document.createElement('div');
+  chips.className='blob-chips';
+  sorted.forEach(d=>{
+    const c=document.createElement('div');
+    c.className='blob-chip';
+    c.style.cssText=`background:${d.color}18;border:1px solid ${d.color}44;color:${d.color};`;
+    c.textContent=`${d.short} ${d.value}%`;
+    chips.appendChild(c);
+  });
+
+  const foot=document.createElement('div');
+  foot.className='blob-foot';
+  foot.textContent='personality shape · unique to you';
+
+  bg.append(wrap, chips, foot);
+  screen.appendChild(bg);
+
+  /* Appear */
+  later(()=>{
+    blob.style.opacity='0'; blob.style.transition='opacity .8s ease'; blob.style.opacity='1';
+    later(()=>{ txt.style.opacity='1'; }, 500);
+  }, 300);
+  later(()=>{ chips.style.opacity='1'; foot.style.opacity='1'; }, 1200);
+
+  /* Cycle through disciplines */
+  later(()=>{
+    tick(()=>{
+      idx=(idx+1)%sorted.length;
+      const d=cur();
+      blob.style.background=`radial-gradient(circle at 40% 38%,${d.color}cc,${d.color}40)`;
+      blob.style.boxShadow=`0 0 70px ${d.color}55, 0 0 140px ${d.color}18`;
+      inner.style.background=`radial-gradient(circle at 60% 60%,${d.color}77,transparent 70%)`;
+      txt.style.opacity='0';
+      later(()=>{ updateTxt(d); txt.style.opacity='1'; }, 300);
+    }, 1800);
+  }, 2000);
+}
+
+/* ══ CONCEPTS REGISTRY ════════════════════════════════════ */
+const CONCEPTS=[
+  {
+    num:'Concept 01 / 05',
+    title:'DNA Helix Strand',
+    tag:'"ADN học thuật" được ghép từng cặp',
+    desc:'6 ngành học = 6 cặp base pair trên chuỗi ADN xoắn đôi. Helix lắp ráp từ trên xuống khi AI phân tích — mỗi cặp bật vào vị trí với spring animation rồi hiện điểm %.',
+    why:['Metaphor ADN là core concept của BeyonDegrees — trực quan nhất có thể','Spring-lock animation tạo cảm giác "AI đang ghép bộ gen của bạn"','Chưa app career nào dùng hình ảnh này — cực kỳ differentiated'],
+    render: renderHelix,
+  },
+  {
+    num:'Concept 02 / 05',
+    title:'Constellation Map',
+    tag:'Chòm sao học thuật riêng của từng người',
+    desc:'6 ngành = 6 ngôi sao trên bầu trời. Độ sáng tương đương điểm %. Các đường nối sáng lên dần như mạch thần kinh. Mỗi người có một chòm sao hoàn toàn khác nhau.',
+    why:['Extend trực tiếp thế giới Dark Oracle đã có — không phải element lạ','Storytelling mạnh: "AI đang vẽ bản đồ sao của bạn"','Rất shareable — "chòm sao của mình là gì?" tạo curiosity cao'],
+    render: renderConstellation,
+  },
+  {
+    num:'Concept 03 / 05',
+    title:'Spectrogram · Equalizer',
+    tag:'Sóng âm tần năng lực học thuật',
+    desc:'6 thanh equalizer, mỗi thanh là một ngành. Phase 1: pulse ngẫu nhiên (AI đang quét). Phase 2: settle chính xác xuống giá trị thực. Ngôn ngữ TikTok và Spotify mà GenZ thuộc lòng.',
+    why:['Pattern quen thuộc nhất với GenZ — TikTok, Spotify, YouTube Music','Transition scan → result tạo drama và cảm giác "AI đang làm việc"','Dễ đọc hơn radar chart, không cần giải thích'],
+    render: renderSpectrum,
+  },
+  {
+    num:'Concept 04 / 05',
+    title:'Ikigai Bloom',
+    tag:'Điểm giao thoa "sứ mệnh" của bạn',
+    desc:'Trực tiếp visualize mô hình Ikigai — sứ mệnh cốt lõi của BeyonDegrees. 3 vòng tròn (Đam mê · Kỹ năng · Nhu cầu) nở ra và giao nhau, tâm giao là ngành phù hợp nhất.',
+    why:['"Se la 1 platform theo mo hinh ikigai" — mentor đã xác định ngay buổi 1','Duy nhất — chưa có app hướng nghiệp nào dùng Ikigai làm visualization chính','Chiều sâu conceptual phù hợp để trình bày với phụ huynh lẫn học sinh'],
+    render: renderIkigai,
+  },
+  {
+    num:'Concept 05 / 05',
+    title:'Morphing Blob',
+    tag:'Hình dạng cá nhân hóa độc nhất vô nhị',
+    desc:'Một blob SVG liên tục biến dạng và đổi màu theo ngành dominant. Không có số liệu, không có chart — chỉ là hình dạng + màu riêng của từng người. Viral potential cao nhất trong 5 concept.',
+    why:['Mỗi người có shape riêng → "shape của bạn trông như thế nào?" = FOMO','Cực kỳ phù hợp GenZ thích visual identity độc đáo (BeReal, Locket)','Đơn giản về thông tin nhưng mạnh về cảm xúc — UX tốt nhất'],
+    render: renderBlob,
+  },
+];
+
+/* ══ NAVIGATION ══════════════════════════════════════════ */
+let cur = 0;
+const screen   = document.getElementById('phoneScreen');
+const frame    = document.getElementById('phoneFrame');
+const infoPanel= document.getElementById('infoPanel');
+const navDots  = document.getElementById('navDots');
+
+function buildDots(){
+  navDots.innerHTML='';
+  CONCEPTS.forEach((_,i)=>{
+    const d=document.createElement('button');
+    d.className='nav-dot'+(i===cur?' active':'');
+    d.addEventListener('click',()=>goTo(i));
+    navDots.appendChild(d);
+  });
+}
+
+function buildInfo(c){
+  infoPanel.innerHTML=`
+    <div class="info-num">${c.num}</div>
+    <div class="info-title">${c.title}</div>
+    <div class="info-tag">${c.tag}</div>
+    <div class="info-desc">${c.desc}</div>
+    <div class="info-whys">${c.why.map(w=>`<div class="info-why">${w}</div>`).join('')}</div>
+    <button class="btn-replay" onclick="replay()">▶ &nbsp;Replay animation</button>
+  `;
+}
+
+function replay(){
+  clearAll();
+  screen.innerHTML='';
+  CONCEPTS[cur].render(screen);
+}
+
+function goTo(idx){
+  if(idx===cur) return;
+  clearAll();
+  frame.style.opacity='0';
+  later(()=>{
+    cur=idx;
+    screen.innerHTML='';
+    CONCEPTS[cur].render(screen);
+    frame.style.transition='opacity .3s ease';
+    frame.style.opacity='1';
+    buildInfo(CONCEPTS[cur]);
+    buildDots();
+  }, 260);
+}
+
+document.getElementById('btnPrev').addEventListener('click',()=>goTo((cur-1+CONCEPTS.length)%CONCEPTS.length));
+document.getElementById('btnNext').addEventListener('click',()=>goTo((cur+1)%CONCEPTS.length));
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight') goTo((cur+1)%CONCEPTS.length);
+  if(e.key==='ArrowLeft')  goTo((cur-1+CONCEPTS.length)%CONCEPTS.length);
+});
+
+/* ══ INIT ════════════════════════════════════════════════ */
+buildDots();
+buildInfo(CONCEPTS[0]);
+CONCEPTS[0].render(screen);
+</script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>BeyonDegrees — Option A: Story Burst</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#07071a;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  overflow:hidden;
+}
+
+/* ── Phone ──────────────────────────────────────────── */
+.phone{
+  width:390px;height:844px;background:#0d0d1e;border-radius:48px;
+  border:2px solid rgba(255,255,255,.07);position:relative;overflow:hidden;
+  box-shadow:0 60px 120px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.05);
+}
+.phone::before{
+  content:'';position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  width:120px;height:34px;background:#07071a;border-radius:20px;z-index:999;
+}
+/* Fake quiz content behind overlay */
+.quiz-bg{position:absolute;inset:0;background:linear-gradient(160deg,#0d1b4a 0%,#0d0d1e 55%);}
+.quiz-top{position:absolute;top:60px;left:20px;right:20px;height:44px;background:rgba(255,255,255,.04);border-radius:12px;}
+.quiz-card{position:absolute;top:124px;left:20px;right:20px;height:360px;background:rgba(255,255,255,.03);border-radius:20px;border:1px solid rgba(255,255,255,.05);}
+.quiz-tabs{position:absolute;bottom:0;left:0;right:0;height:72px;background:rgba(13,13,30,.95);border-top:1px solid rgba(255,255,255,.06);}
+
+/* ══════════════════════════════════════════════════════
+   STORY OVERLAY
+═══════════════════════════════════════════════════════ */
+.story{
+  position:absolute;inset:0;
+  background:transparent;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  z-index:50;pointer-events:none;
+  opacity:0;
+}
+.story.in{
+  opacity:1;
+  animation:storyIn .38s cubic-bezier(.34,1.2,.64,1) forwards;
+  pointer-events:auto;
+}
+.story.out{
+  animation:storyOut .42s ease forwards;
+  pointer-events:none;
+}
+@keyframes storyIn{
+  0%{opacity:0;transform:scale(.96);}
+  100%{opacity:1;transform:scale(1);}
+}
+@keyframes storyOut{
+  0%{opacity:1;transform:scale(1);}
+  100%{opacity:0;transform:scale(1.04);}
+}
+
+/* ── Dark tinted bg (full overlay) ────────────────── */
+.story-bg{
+  position:absolute;inset:0;
+  background:#09041e;
+  opacity:.96;
+}
+
+/* ── Animated radial glow ──────────────────────────── */
+.story-glow{
+  position:absolute;
+  width:380px;height:380px;
+  top:50%;left:50%;transform:translate(-50%,-55%);
+  background:
+    radial-gradient(ellipse at 50% 50%,rgba(124,58,237,.55) 0%,transparent 62%),
+    radial-gradient(ellipse at 50% 50%,rgba(6,214,160,.22) 0%,transparent 48%);
+  animation:glowPulse 2.2s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+@keyframes glowPulse{
+  0%{transform:translate(-50%,-55%) scale(1);}
+  100%{transform:translate(-50%,-55%) scale(1.15);}
+}
+
+/* ── Floating background particles ────────────────── */
+.bg-particle{
+  position:absolute;border-radius:50%;pointer-events:none;
+  animation:floatUp var(--dur,4s) ease-in-out var(--delay,0s) infinite;
+  opacity:0;
+}
+@keyframes floatUp{
+  0%{opacity:0;transform:translateY(0) scale(1);}
+  15%{opacity:var(--op,.6);}
+  85%{opacity:var(--op,.6);}
+  100%{opacity:0;transform:translateY(-320px) scale(.4);}
+}
+
+/* ── Instagram-style story progress bar ────────────── */
+.story-bar-wrap{
+  position:absolute;top:50px;left:16px;right:16px;height:4px;
+  background:rgba(255,255,255,.18);border-radius:4px;z-index:10;overflow:hidden;
+}
+.story-bar-fill{
+  height:100%;width:0%;border-radius:4px;
+  background:linear-gradient(90deg,#a78bfa,#06d6a0);
+  transition:none;
+}
+.story-bar-fill.run{
+  width:100%;
+  transition:width var(--bar-duration,2.4s) linear;
+}
+
+/* ── Center content ────────────────────────────────── */
+.story-content{
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;z-index:5;
+  margin-top:-30px; /* shift slightly above center */
+}
+
+/* ── Burst rings (expand from emoji center) ─────────── */
+.rings{position:absolute;width:0;height:0;}
+.ring{
+  position:absolute;border-radius:50%;border:3px solid;
+  transform:translate(-50%,-50%);
+  opacity:0;
+}
+.ring1{width:90px;height:90px;border-color:rgba(167,139,250,.7);}
+.ring2{width:90px;height:90px;border-color:rgba(6,214,160,.55);}
+.ring3{width:90px;height:90px;border-color:rgba(255,255,255,.35);}
+.rings.burst .ring1{animation:ringOut .7s cubic-bezier(.2,.6,.4,1) .00s forwards;}
+.rings.burst .ring2{animation:ringOut .7s cubic-bezier(.2,.6,.4,1) .14s forwards;}
+.rings.burst .ring3{animation:ringOut .7s cubic-bezier(.2,.6,.4,1) .28s forwards;}
+@keyframes ringOut{
+  0%{opacity:.9;transform:translate(-50%,-50%) scale(0);}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(3.8);}
+}
+
+/* ── Milestone emoji ────────────────────────────────── */
+.ms-emoji{
+  font-size:88px;line-height:1;
+  opacity:0;transform:scale(0) rotate(-15deg);
+  margin-bottom:18px;
+  filter:drop-shadow(0 0 24px rgba(255,200,50,.8)) drop-shadow(0 8px 20px rgba(0,0,0,.5));
+}
+.ms-emoji.pop{
+  animation:emojiPop .55s cubic-bezier(.34,1.7,.64,1) forwards;
+}
+@keyframes emojiPop{
+  0%{opacity:0;transform:scale(0) rotate(-20deg);}
+  65%{opacity:1;transform:scale(1.18) rotate(6deg);}
+  82%{transform:scale(.94) rotate(-3deg);}
+  100%{opacity:1;transform:scale(1) rotate(0deg);}
+}
+
+/* Continuous wiggle after pop */
+.ms-emoji.wiggle{
+  animation:emojiPop .55s cubic-bezier(.34,1.7,.64,1) forwards,
+            emojiIdle 1.8s ease-in-out .6s infinite;
+}
+@keyframes emojiIdle{
+  0%,100%{transform:scale(1) rotate(0deg);}
+  30%{transform:scale(1.06) rotate(-5deg);}
+  70%{transform:scale(1.04) rotate(4deg);}
+}
+
+/* ── Title ──────────────────────────────────────────── */
+.ms-title{
+  font-size:36px;font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(135deg,#c4b5fd 0%,#a78bfa 40%,#06d6a0 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  opacity:0;transform:scale(1.6) translateY(8px);
+  filter:drop-shadow(0 4px 16px rgba(167,139,250,.5));
+  margin-bottom:10px;
+}
+.ms-title.in{animation:titleIn .45s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes titleIn{
+  to{opacity:1;transform:scale(1) translateY(0);}
+}
+
+/* ── Sub text ───────────────────────────────────────── */
+.ms-sub{
+  font-size:16px;font-weight:600;color:rgba(255,255,255,.72);
+  opacity:0;transform:translateY(12px);
+  letter-spacing:.3px;margin-bottom:28px;
+}
+.ms-sub.in{animation:subIn .4s ease forwards;}
+@keyframes subIn{to{opacity:1;transform:translateY(0);}}
+
+/* ── XP badge ───────────────────────────────────────── */
+.xp-badge{
+  display:inline-flex;align-items:center;gap:7px;
+  background:linear-gradient(135deg,rgba(124,58,237,.35),rgba(6,214,160,.25));
+  border:1.5px solid rgba(167,139,250,.45);
+  border-radius:50px;padding:10px 22px;
+  font-size:17px;font-weight:800;color:#c4b5fd;
+  backdrop-filter:blur(8px);
+  opacity:0;transform:translateY(20px) scale(.7);
+  box-shadow:0 4px 20px rgba(124,58,237,.3),inset 0 1px 0 rgba(255,255,255,.1);
+}
+.xp-badge.in{animation:xpIn .45s cubic-bezier(.34,1.7,.64,1) forwards;}
+@keyframes xpIn{to{opacity:1;transform:translateY(0) scale(1);}}
+.xp-icon{font-size:18px;}
+
+/* ── Tap-to-dismiss hint ────────────────────────────── */
+.tap-hint{
+  position:absolute;bottom:100px;
+  font-size:12px;font-weight:600;color:rgba(255,255,255,.3);
+  letter-spacing:.5px;
+  opacity:0;
+  animation:hintFade 1s ease 1.4s forwards;
+}
+@keyframes hintFade{to{opacity:1;}}
+
+/* ── Screen flash ───────────────────────────────────── */
+.flash{
+  position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 44%,rgba(230,220,255,.95) 0%,transparent 55%);
+  opacity:0;pointer-events:none;z-index:20;
+}
+.flash.go{animation:flashGo .38s ease forwards;}
+@keyframes flashGo{0%{opacity:0;}10%{opacity:1;}100%{opacity:0;}}
+
+/* ── Confetti ───────────────────────────────────────── */
+.cf{position:absolute;border-radius:3px;pointer-events:none;opacity:0;}
+@keyframes cfFall{
+  0%{opacity:1;transform:translate(var(--x0),var(--y0)) rotate(0deg);}
+  100%{opacity:0;transform:translate(var(--x1),var(--y1)) rotate(var(--r,540deg)) scale(.2);}
+}
+
+/* ── Replay ─────────────────────────────────────────── */
+.replay-btn{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#7c3aed,#06d6a0);border:none;border-radius:50px;
+  padding:13px 30px;color:white;font-size:14px;font-weight:800;letter-spacing:.5px;
+  cursor:pointer;z-index:200;box-shadow:0 8px 24px rgba(124,58,237,.5);
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .15s;
+}
+.replay-btn.show{opacity:1;pointer-events:auto;}
+.replay-btn:active{transform:translateX(-50%) scale(.94);}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+
+  <!-- Fake quiz behind -->
+  <div class="quiz-bg">
+    <div class="quiz-top"></div>
+    <div class="quiz-card"></div>
+    <div class="quiz-tabs"></div>
+  </div>
+
+  <!-- ══ STORY OVERLAY ════════════════════════════════ -->
+  <div class="story" id="story">
+    <div class="story-bg"></div>
+    <div class="story-glow"></div>
+    <div class="flash" id="flash"></div>
+
+    <!-- Floating ambient particles (created by JS) -->
+    <div id="bgParticles"></div>
+
+    <!-- Progress bar -->
+    <div class="story-bar-wrap">
+      <div class="story-bar-fill" id="storyBar" style="--bar-duration:2.4s"></div>
+    </div>
+
+    <!-- Center content -->
+    <div class="story-content">
+      <div class="rings" id="rings">
+        <div class="ring ring1"></div>
+        <div class="ring ring2"></div>
+        <div class="ring ring3"></div>
+      </div>
+
+      <div class="ms-emoji" id="msEmoji">🔥</div>
+      <div class="ms-title" id="msTitle">1/3 Done!</div>
+      <div class="ms-sub"   id="msSub">Keep going! 💪</div>
+      <div class="xp-badge" id="xpBadge">
+        <span class="xp-icon">⚡</span>+10 XP
+      </div>
+    </div>
+
+    <div class="tap-hint">Tap anywhere to continue</div>
+  </div>
+
+  <button class="replay-btn" id="replayBtn" onclick="runStory()">▶ Play Again</button>
+</div>
+
+<script>
+/* ─── Ambient background particles ──────────────────── */
+function buildBgParticles(){
+  const wrap = document.getElementById('bgParticles');
+  wrap.innerHTML = '';
+  const cols = ['#a78bfa','#06d6a0','#c4b5fd','#ffffff','#34d399','#7c3aed'];
+  for(let i=0;i<28;i++){
+    const el = document.createElement('div');
+    el.className = 'bg-particle';
+    const sz = 3 + Math.random()*5;
+    const x  = 10 + Math.random()*370;
+    const startY = 200 + Math.random()*500;
+    el.style.cssText = `
+      width:${sz}px;height:${sz}px;
+      left:${x}px;top:${startY}px;
+      background:${cols[i%cols.length]};
+      --dur:${3+Math.random()*4}s;
+      --delay:${Math.random()*3}s;
+      --op:${.3+Math.random()*.5};
+    `;
+    wrap.appendChild(el);
+  }
+}
+
+/* ─── Confetti burst ─────────────────────────────────── */
+function spawnConfetti(n){
+  const wrap = document.getElementById('story');
+  const cols = ['#a78bfa','#06d6a0','#fb923c','#f472b6','#60a5fa','#fde68a','#c4b5fd','#fff'];
+  for(let i=0;i<n;i++){
+    const el = document.createElement('div');
+    el.className = 'cf';
+    const s = 6+Math.random()*9;
+    const startX = 160+Math.random()*70-35;
+    const startY = 340+Math.random()*40;
+    const endX   = startX + (Math.random()-0.5)*320;
+    const endY   = startY - 80 - Math.random()*220;
+    el.style.cssText = `
+      width:${s}px;height:${s}px;
+      left:0;top:0;
+      border-radius:${Math.random()>.5?'50%':'3px'};
+      background:${cols[i%cols.length]};
+      --x0:${startX}px; --y0:${startY}px;
+      --x1:${endX}px;   --y1:${endY}px;
+      --r:${Math.random()>0.5?540:-540}deg;
+      animation:cfFall ${.8+Math.random()*1}s cubic-bezier(.25,.46,.45,.94) ${Math.random()*.25}s forwards;
+    `;
+    wrap.appendChild(el);
+    setTimeout(()=>el.remove(), 1600);
+  }
+}
+
+/* ─── Main story animation ───────────────────────────── */
+function runStory(){
+  buildBgParticles();
+
+  const story   = document.getElementById('story');
+  const storyBar= document.getElementById('storyBar');
+  const flash   = document.getElementById('flash');
+  const rings   = document.getElementById('rings');
+  const emoji   = document.getElementById('msEmoji');
+  const title   = document.getElementById('msTitle');
+  const sub     = document.getElementById('msSub');
+  const badge   = document.getElementById('xpBadge');
+  const replay  = document.getElementById('replayBtn');
+
+  // Reset
+  story.className   = 'story';
+  storyBar.className= 'story-bar-fill';
+  storyBar.style.width = '0%';
+  flash.className   = 'flash';
+  rings.className   = 'rings';
+  emoji.className   = 'ms-emoji';
+  title.className   = 'ms-title';
+  sub.className     = 'ms-sub';
+  badge.className   = 'xp-badge';
+  replay.className  = 'replay-btn';
+  void story.offsetWidth;
+
+  const T = (d,fn)=>setTimeout(fn,d);
+
+  /* 0ms — story overlay fades in */
+  T(60, ()=> story.classList.add('in'));
+
+  /* 280ms — flash burst */
+  T(280, ()=> flash.classList.add('go'));
+
+  /* 350ms — story bar starts filling */
+  T(350, ()=>{
+    storyBar.style.transition = 'none';
+    storyBar.style.width = '0%';
+    void storyBar.offsetWidth;
+    storyBar.classList.add('run');
+  });
+
+  /* 400ms — ring burst from center */
+  T(400, ()=> rings.classList.add('burst'));
+
+  /* 440ms — emoji POPS in */
+  T(440, ()=>{
+    emoji.classList.add('wiggle');
+    spawnConfetti(36);
+  });
+
+  /* 680ms — title stamps */
+  T(680, ()=> title.classList.add('in'));
+
+  /* 900ms — sub fades up */
+  T(900, ()=> sub.classList.add('in'));
+
+  /* 1100ms — XP badge pops */
+  T(1100, ()=> badge.classList.add('in'));
+
+  /* 2750ms — auto-dismiss (bar just finished) */
+  T(2750, ()=>{
+    story.classList.remove('in');
+    story.classList.add('out');
+  });
+
+  /* 3180ms — replay button */
+  T(3180, ()=> replay.classList.add('show'));
+}
+
+/* Allow tapping overlay to skip */
+document.getElementById('story').addEventListener('click', function(){
+  if(!this.classList.contains('in')) return;
+  this.classList.remove('in');
+  this.classList.add('out');
+  setTimeout(()=>{
+    document.getElementById('replayBtn').classList.add('show');
+  }, 450);
+});
+
+window.addEventListener('load', ()=> setTimeout(runStory, 400));
+</script>
+</body>
+</html>
