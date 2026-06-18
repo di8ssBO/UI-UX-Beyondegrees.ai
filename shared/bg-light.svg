@@ -124,52 +124,5 @@
   <path d="M -60,800 C 100,755 280,860 480,775 L 480,920 L -60,920 Z"
         fill="url(#ribbon-blush)" filter="url(#soft)"/>
 
-  <!-- ═══ LARGE BRAND SPHERES (the focal points) ═══ -->
-
-  <!-- Top-right BIG terracotta orb -->
-  <circle cx="320" cy="135" r="48" fill="url(#sphere-terra-big)"/>
-  <circle cx="318" cy="125" r="13" fill="#fef5f2" opacity="0.55"/>
-
-  <!-- Top-left salmon cluster -->
-  <circle cx="58" cy="190" r="32" fill="url(#sphere-salmon)"/>
-  <circle cx="55" cy="180" r="9" fill="#fef5f2" opacity="0.50"/>
-
-  <!-- Mid-right medium terra -->
-  <circle cx="345" cy="310" r="22" fill="url(#sphere-terra-med)"/>
-
-  <!-- Mid-left blue sphere -->
-  <circle cx="78" cy="370" r="28" fill="url(#sphere-blue)"/>
-  <circle cx="74" cy="362" r="8" fill="#f0f6fa" opacity="0.55"/>
-
-  <!-- Center small salmon dots -->
-  <circle cx="200" cy="280" r="10" fill="#e8917a" opacity="0.45"/>
-  <circle cx="250" cy="430" r="7" fill="#c96b55" opacity="0.45"/>
-
-  <!-- Mid-bottom BIG terra ball -->
-  <circle cx="68" cy="560" r="42" fill="url(#sphere-terra-big)"/>
-  <circle cx="62" cy="546" r="11" fill="#fef5f2" opacity="0.55"/>
-
-  <!-- Mid-bottom right medium terra -->
-  <circle cx="335" cy="600" r="26" fill="url(#sphere-terra-med)"/>
-
-  <!-- Sage accent -->
-  <circle cx="285" cy="465" r="20" fill="url(#sphere-sage)"/>
-
-  <!-- Small blue dot left -->
-  <circle cx="110" cy="690" r="12" fill="url(#sphere-blue-small)"/>
-
-  <!-- Bottom-right medium salmon -->
-  <circle cx="312" cy="745" r="28" fill="url(#sphere-salmon)"/>
-  <circle cx="308" cy="735" r="8" fill="#fef5f2" opacity="0.45"/>
-
-  <!-- Bottom-left small terra -->
-  <circle cx="85" cy="810" r="18" fill="url(#sphere-terra-med)"/>
-
-  <!-- Bottom decorative tiny dots -->
-  <circle cx="220" cy="820" r="6" fill="#c96b55" opacity="0.40"/>
-  <circle cx="170" cy="385" r="4" fill="#7fa8be" opacity="0.55"/>
-  <circle cx="155" cy="730" r="5" fill="#8fb5b0" opacity="0.50"/>
-
-  <!-- Bottom-left tiny terra dot accent -->
-  <circle cx="40" cy="855" r="5" fill="#c96b55" opacity="0.50"/>
+  <!-- Decorative spheres/dots removed: cleaner, less distracting background -->
 </svg>

@@ -333,6 +333,7 @@ body { background: #06060f; }
 (function(){function a(r){document.documentElement.setAttribute('data-theme',r)}function b(p){var r=p==='system'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;a(r);document.documentElement.setAttribute('data-theme-pref',p);try{localStorage.setItem('bd-theme',p)}catch(e){}}window.bdSetTheme=b;var s='dark';try{s=localStorage.getItem('bd-theme')||'dark'}catch(e){}b(s);window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){var p=document.documentElement.getAttribute('data-theme-pref')||'dark';if(p==='system')b('system')})})();
 </script>
 <script src="../../../shared/scripts/i18n.js"></script>
+<script src="../../../shared/scripts/bd-profile.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const tabBar=document.getElementById('floatTabBar');
