@@ -626,32 +626,31 @@
   font-weight: 900 !important;
 }
 
-/* ── LIGHT MODE: Discipline cards — màu sắc theo light theme, behavior giống dark mode ── */
+/* ── LIGHT MODE: Discipline cards — Concept A: gradient tint ── */
 
-/* Base card */
+/* Base card — white → disc-tinted gradient toward bottom-right */
 [data-theme="light"] .discipline-card {
-  background: #ffffff;
-  border: 1.5px solid color-mix(in srgb, var(--disc, #c96b55) 28%, rgba(200,185,170,0.5));
-  box-shadow: 0 2px 12px rgba(80,50,30,0.10), 0 1px 0 rgba(255,255,255,0.9) inset;
+  background: linear-gradient(145deg, #ffffff 35%, color-mix(in srgb, var(--disc, #c96b55) 13%, #ffffff) 100%);
+  border: 1.5px solid color-mix(in srgb, var(--disc, #c96b55) 26%, rgba(200,185,170,0.35));
+  box-shadow: 0 2px 8px rgba(80,50,30,0.07);
 }
 
-/* Hover (unselected) — same lift as dark mode */
+/* Hover — deeper tint + stronger border glow */
 [data-theme="light"] .discipline-card:hover:not(.selected) {
-  background: color-mix(in srgb, var(--disc, #c96b55) 10%, #ffffff);
-  border-color: color-mix(in srgb, var(--disc, #c96b55) 45%, rgba(200,185,170,0.5));
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--disc, #c96b55) 22%, rgba(80,50,30,0.12)),
-              0 1px 0 rgba(255,255,255,0.9) inset;
+  background: linear-gradient(145deg, #ffffff 15%, color-mix(in srgb, var(--disc, #c96b55) 20%, #ffffff) 100%);
+  border-color: color-mix(in srgb, var(--disc, #c96b55) 48%, rgba(200,185,170,0.4));
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--disc, #c96b55) 18%, rgba(80,50,30,0.09));
 }
 
-/* Selected — same transform/animation as dark mode, chỉ đổi màu */
+/* Selected — full-coverage tint gradient + prominent disc border */
 [data-theme="light"] .discipline-card.selected {
-  background: color-mix(in srgb, var(--disc, #c96b55) 18%, #ffffff);
+  background: linear-gradient(145deg, color-mix(in srgb, var(--disc, #c96b55) 8%, #ffffff) 0%, color-mix(in srgb, var(--disc, #c96b55) 24%, #ffffff) 100%);
   border-color: var(--disc, #c96b55);
   border-width: 2px;
   box-shadow:
-    0 20px 48px rgba(80,50,30,0.18),
+    0 20px 48px rgba(80,50,30,0.16),
     0 0 0 1px var(--disc, #c96b55),
-    0 6px 32px color-mix(in srgb, var(--disc, #c96b55) 40%, transparent);
+    0 6px 32px color-mix(in srgb, var(--disc, #c96b55) 38%, transparent);
 }
 
 /* Text colors */
@@ -722,4 +721,3 @@
 }
 [data-theme="light"] .tab-item.active svg,
 [data-theme="light"] .tab-item.active .tab-icon { color: #a84e30 !important; }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
