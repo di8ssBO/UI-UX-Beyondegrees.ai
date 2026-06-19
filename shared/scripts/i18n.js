@@ -45,7 +45,7 @@
       'home.chip.arts':       'Arts',
       'home.choose_disc':      'Choose 1 or more disciplines',
       /* Home CTA buttons */
-      'home.cta.start':       'Start Quiz →',
+      'home.cta.start':       'Discover your Career DNA →',
       'home.cta.continue':    'Continue Quiz →',
       'home.cta.view_disc':   'View Discipline Results ›',
       'home.cta.view_major':  'View Major Results ›',
@@ -208,6 +208,19 @@
       'major.detail.specializations': 'Specializations',
       'major.detail.picker_title':  'Choose a Major to view',
       'major.detail.picker_sub':    'majors available — click to preview',
+
+      /* App hamburger menu */
+      'menu.section_account':  'Account',
+      'menu.my_account':       'My Account',
+      'menu.leave_review':     'Leave Review',
+      'menu.share_archetype':  'Share Archetype',
+      'menu.contact_us':       'Contact Us',
+      'menu.reset_account':    'Reset Account',
+      'menu.reset_title':      'Reset Account?',
+      'menu.reset_body':       'All your quiz progress and results will be permanently deleted. This cannot be undone.',
+      'menu.reset_confirm':    'Reset Account',
+      'menu.reset_cancel':     'Cancel',
+      'menu.resetting':        'Resetting…',
 
       /* Discipline detail */
       'disc.detail.unlock_banner': 'Finish {n} more questions to see the fit of each major',
@@ -408,7 +421,7 @@
       'home.chip.arts':       'Nghệ thuật',
       'home.choose_disc':      'Chọn 1 hoặc nhiều lĩnh vực học',
       /* Home CTA buttons */
-      'home.cta.start':       'Bắt đầu Quiz →',
+      'home.cta.start':       'Tìm Career DNA của bạn →',
       'home.cta.continue':    'Tiếp tục Quiz →',
       'home.cta.view_disc':   'Xem kết quả Ngành học ›',
       'home.cta.view_major':  'Xem kết quả Chuyên ngành ›',
@@ -570,6 +583,19 @@
       'major.detail.specializations': 'Chuyên ngành',
       'major.detail.picker_title':  'Chọn ngành để xem',
       'major.detail.picker_sub':    'ngành có sẵn — nhấn để xem trước',
+
+      /* App hamburger menu */
+      'menu.section_account':  'Tài khoản',
+      'menu.my_account':       'Tài khoản của tôi',
+      'menu.leave_review':     'Để lại đánh giá',
+      'menu.share_archetype':  'Chia sẻ Archetype',
+      'menu.contact_us':       'Liên hệ chúng tôi',
+      'menu.reset_account':    'Đặt lại tài khoản',
+      'menu.reset_title':      'Đặt lại tài khoản?',
+      'menu.reset_body':       'Toàn bộ tiến trình và kết quả quiz của bạn sẽ bị xóa vĩnh viễn. Không thể hoàn tác.',
+      'menu.reset_confirm':    'Đặt lại tài khoản',
+      'menu.reset_cancel':     'Hủy',
+      'menu.resetting':        'Đang đặt lại…',
 
       /* Discipline detail */
       'disc.detail.unlock_banner': 'Hoàn thành thêm {n} câu hỏi để xem mức độ phù hợp của từng chuyên ngành',
@@ -769,7 +795,7 @@
       'home.chip.education': 'शिक्षा',
       'home.chip.arts':      'कला',
       /* Home CTA buttons */
-      'home.cta.start':      'Quiz शुरू करें →',
+      'home.cta.start':      'अपना Career DNA खोजें →',
       'home.cta.continue':   'Quiz जारी रखें →',
       'home.cta.view_disc':  'विषय परिणाम देखें ›',
       'home.cta.view_major': 'प्रमुख विषय परिणाम देखें ›',
@@ -898,6 +924,19 @@
       'disc.desc.nn': 'स्थिरता और जीवन विज्ञान के प्रति व्यावहारिक दृष्टिकोण आपको कृषि विज्ञान के लिए उपयुक्त बनाता है।',
       'disc.desc.xh': 'मानव व्यवहार और सामाजिक संरचनाओं में गहरी रुचि आपके प्रोफ़ाइल के लिए एक मध्यम-उपयुक्त क्षेत्र है।',
       'disc.desc.nv': 'भाषा, संस्कृति और आलोचनात्मक सोच की आपकी सराहना साहित्य, दर्शन और इतिहास में आधार प्रदान करती है।',
+      /* App hamburger menu */
+      'menu.section_account':  'खाता',
+      'menu.my_account':       'मेरा खाता',
+      'menu.leave_review':     'समीक्षा छोड़ें',
+      'menu.share_archetype':  'Archetype शेयर करें',
+      'menu.contact_us':       'संपर्क करें',
+      'menu.reset_account':    'खाता रीसेट करें',
+      'menu.reset_title':      'खाता रीसेट करें?',
+      'menu.reset_body':       'आपकी सभी quiz प्रगति और परिणाम स्थायी रूप से हटा दिए जाएंगे। यह पूर्ववत नहीं किया जा सकता।',
+      'menu.reset_confirm':    'खाता रीसेट करें',
+      'menu.reset_cancel':     'रद्द करें',
+      'menu.resetting':        'रीसेट हो रहा है…',
+
       /* Discipline detail */
       'disc.cta.explore':  'अनुशासन खोजें',
       'disc.detail.unlock_banner': '{n} और प्रश्न पूरे करें ताकि हर Major की फ़िट देख सकें',
@@ -1066,7 +1105,7 @@
       'loading.phase.title.majors':     'हजारों Major',
       'loading.phase.title.compat':     'आपकी संगतता',
       'loading.phase.title.results':    'आपके लिए परिणाम',
-      'loading.countdown':        '~{n} सेकंड शेष',
+      'loading.countdown':        '{n} सेकंड शेष',
       'loading.finalizing_text':  'अंतिम रूप दिया जा रहा है...',
       'loading.milestone1.title': 'विश्लेषण पूर्ण!',
       'loading.milestone1.sub':   'आपकी शक्तियों का मूल्यांकन हो रहा है...',
@@ -1111,7 +1150,7 @@
       'home.chip.education': 'Éducation',
       'home.chip.arts':      'Arts',
       /* Home CTA buttons */
-      'home.cta.start':      'Commencer le Quiz →',
+      'home.cta.start':      'Découvrez votre Career DNA →',
       'home.cta.continue':   'Continuer le Quiz →',
       'home.cta.view_disc':  'Voir les résultats Disciplines ›',
       'home.cta.view_major': 'Voir les résultats Filières ›',
@@ -1267,6 +1306,19 @@
       'disc.desc.nn': 'Une approche pratique de la durabilité vous prépare bien pour l\'agronomie, la science alimentaire et la gestion environnementale.',
       'disc.desc.xh': 'Un profond intérêt pour le comportement humain et les structures sociales fait de ce domaine un champ modérément adapté à votre profil.',
       'disc.desc.nv': 'Votre appréciation du langage, de la culture et de la pensée critique vous offre des bases en littérature, philosophie et histoire.',
+      /* App hamburger menu */
+      'menu.section_account':  'Compte',
+      'menu.my_account':       'Mon compte',
+      'menu.leave_review':     'Laisser un avis',
+      'menu.share_archetype':  'Partager l\'Archetype',
+      'menu.contact_us':       'Nous contacter',
+      'menu.reset_account':    'Réinitialiser le compte',
+      'menu.reset_title':      'Réinitialiser le compte ?',
+      'menu.reset_body':       'Toute votre progression et vos résultats seront définitivement supprimés. Cette action est irréversible.',
+      'menu.reset_confirm':    'Réinitialiser le compte',
+      'menu.reset_cancel':     'Annuler',
+      'menu.resetting':        'Réinitialisation…',
+
       /* Discipline detail & why */
       'disc.cta.explore':  'Explorer la discipline',
       'disc.detail.unlock_banner': 'Terminez {n} questions de plus pour voir la compatibilité de chaque filière',
@@ -1440,7 +1492,7 @@
       'home.chip.education': 'التربية والتعليم',
       'home.chip.arts':      'الفنون',
       /* Home CTA buttons */
-      'home.cta.start':      'ابدأ الاختبار',
+      'home.cta.start':      'اكتشف Career DNA الخاص بك →',
       'home.cta.continue':   'تابع الاختبار',
       'home.cta.view_disc':  'نتائج التخصصات',
       'home.cta.view_major': 'نتائج المسارات',
@@ -1596,6 +1648,19 @@
       'disc.desc.nn': 'نهجك العملي في الاستدامة يؤهلك للزراعة وعلوم الغذاء وإدارة البيئة.',
       'disc.desc.xh': 'الاهتمام العميق بالسلوك البشري والهياكل الاجتماعية يجعل هذا المجال مناسباً بشكل معتدل.',
       'disc.desc.nv': 'تقديرك للغة والثقافة والتفكير النقدي يوفر لك أساساً في الأدب والفلسفة والتاريخ.',
+      /* App hamburger menu */
+      'menu.section_account':  'الحساب',
+      'menu.my_account':       'حسابي',
+      'menu.leave_review':     'اترك تقييماً',
+      'menu.share_archetype':  'مشاركة النمط',
+      'menu.contact_us':       'اتصل بنا',
+      'menu.reset_account':    'إعادة تعيين الحساب',
+      'menu.reset_title':      'إعادة تعيين الحساب؟',
+      'menu.reset_body':       'سيتم حذف جميع تقدمك ونتائج الاختبار بشكل دائم. لا يمكن التراجع عن هذا.',
+      'menu.reset_confirm':    'إعادة تعيين الحساب',
+      'menu.reset_cancel':     'إلغاء',
+      'menu.resetting':        'جارٍ إعادة التعيين…',
+
       /* Discipline detail & why */
       'disc.cta.explore':  'استكشف التخصص',
       'disc.detail.unlock_banner': 'أكمل {n} أسئلة إضافية لرؤية مدى ملاءمة كل مسار',

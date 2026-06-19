@@ -230,7 +230,7 @@ body {
   padding: 7px 10px;
   border-radius: 999px;
   text-decoration: none !important;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.58);
   transition:
     color 0.2s ease,
     background 0.3s cubic-bezier(0.34,1.3,0.64,1),
@@ -531,35 +531,47 @@ html[data-theme="light"] body {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.70), 0 8px 20px rgba(214,122,92,0.25), 0 14px 36px rgba(214,122,92,0.18) !important;
 }
 
-/* ─── Buttons: Primary (brand blue gradient) ──────────────── */
+/* ─── Buttons: Primary (teal gradient) ──────────────────── */
 [data-theme="light"] .btn-primary,
 [data-theme="light"] .cta-primary,
-[data-theme="light"] .cta-btn:not(.cta-continue) {
-  background: linear-gradient(135deg, #1E8EDB 0%, #0274BE 50%, #075C9F 100%) !important;
+[data-theme="light"] .cta-btn:not(.cta-continue),
+[data-theme="light"] .lock-cta:not(.cta-continue) {
+  background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%) !important;
   color: #fff !important;
   border: none !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    0 4px 14px rgba(2,116,190,0.30),
-    0 8px 24px rgba(2,116,190,0.18) !important;
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 4px 14px rgba(13,148,136,0.32),
+    0 8px 24px rgba(15,118,110,0.20) !important;
 }
 [data-theme="light"] .btn-primary:hover,
 [data-theme="light"] .cta-primary:hover,
-[data-theme="light"] .cta-btn:hover:not(.cta-continue) {
-  background: linear-gradient(135deg, #4FA7E5 0%, #1E8EDB 50%, #0274BE 100%) !important;
+[data-theme="light"] .cta-btn:hover:not(.cta-continue),
+[data-theme="light"] .lock-cta:hover:not(.cta-continue) {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.35),
-    0 6px 18px rgba(2,116,190,0.40),
-    0 12px 32px rgba(2,116,190,0.25) !important;
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 6px 18px rgba(13,148,136,0.42),
+    0 12px 32px rgba(15,118,110,0.28) !important;
 }
 
-/* ─── Buttons: Continue / Success (mint gradient) ─────────── */
-[data-theme="light"] .cta-btn.cta-continue {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+/* ─── Buttons: Continue / Progress (teal gradient) ────────── */
+[data-theme="light"] .cta-btn.cta-continue,
+[data-theme="light"] .lock-cta.cta-continue {
+  background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%) !important;
   color: #fff !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    0 4px 14px rgba(5,150,105,0.30) !important;
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 4px 14px rgba(13,148,136,0.32),
+    0 8px 24px rgba(15,118,110,0.20) !important;
+}
+[data-theme="light"] .cta-btn.cta-continue:hover,
+[data-theme="light"] .lock-cta.cta-continue:hover {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 6px 18px rgba(13,148,136,0.42),
+    0 12px 32px rgba(15,118,110,0.28) !important;
 }
 
 /* ─── Buttons: Secondary / Ghost (coral) ─────────────────── */

@@ -18,7 +18,36 @@
 .loading-body::-webkit-scrollbar { display: none; }
 
 /* ── Main Character Canvas ───────────────────────────── */
-#mcCanvas { display:block; width:160px; height:160px; margin-top:4px; flex-shrink:0; }
+.mc-wrap { position:relative; width:160px; height:164px; flex-shrink:0; align-self:center; }
+#mcCanvas { display:block; width:160px; height:160px; margin-top:4px; }
+
+/* YOU pulse ring — expands when DNA data flows in */
+.you-pulse-ring {
+  position:absolute; top:50%; left:50%;
+  width:110px; height:110px;
+  margin:-55px 0 0 -55px;
+  border-radius:50%;
+  border:2px solid transparent;
+  box-shadow:none;
+  pointer-events:none;
+  opacity:0;
+}
+.you-pulse-ring.pulsing {
+  animation: youPulse 1.6s ease-out forwards;
+}
+@keyframes youPulse {
+  0%   { opacity:1; transform:scale(0.45); border-color:rgba(139,92,246,0.7); box-shadow:0 0 0 0 rgba(139,92,246,0.35); }
+  55%  { opacity:0.5; transform:scale(0.95); border-color:rgba(139,92,246,0.25); box-shadow:0 0 18px 6px rgba(139,92,246,0.12); }
+  100% { opacity:0; transform:scale(1.3); border-color:transparent; box-shadow:0 0 28px 14px rgba(139,92,246,0); }
+}
+[data-theme="light"] .you-pulse-ring.pulsing {
+  animation: youPulseLight 1.6s ease-out forwards;
+}
+@keyframes youPulseLight {
+  0%   { opacity:1; transform:scale(0.45); border-color:rgba(124,58,237,0.65); box-shadow:0 0 0 0 rgba(124,58,237,0.28); }
+  55%  { opacity:0.45; transform:scale(0.95); border-color:rgba(124,58,237,0.2); box-shadow:0 0 16px 6px rgba(124,58,237,0.08); }
+  100% { opacity:0; transform:scale(1.3); border-color:transparent; box-shadow:0 0 24px 12px rgba(124,58,237,0); }
+}
 
 /* ── Phase Text ─────────────────────────────────────── */
 .phase-wrap { text-align: center; }
@@ -49,7 +78,7 @@
 
 /* ── Meta Row ───────────────────────────────────────── */
 .meta-row {
-  display: flex; gap: 8px;
+  display: flex; gap: 8px; flex-wrap: wrap;
   width: 100%; justify-content: center;
 }
 
@@ -60,6 +89,7 @@
   border: 1px solid rgba(124,58,237,0.3);
   font-size: 12px; font-weight: 700;
   color: var(--violet-300);
+  white-space: nowrap; flex-shrink: 0;
 }
 .cd-dot {
   width: 6px; height: 6px;
@@ -76,6 +106,7 @@
   border: 1px solid rgba(6,214,160,0.25);
   font-size: 12px; font-weight: 700;
   color: var(--mint-400);
+  white-space: nowrap; flex-shrink: 0;
 }
 
 /* ── Glass Card ─────────────────────────────────────── */
@@ -98,12 +129,38 @@
   flex: 1; height: 7px; border-radius: 999px;
   background: rgba(255,255,255,0.07);
   overflow: hidden;
+  position: relative;
 }
 .dna-fill {
   height: 100%; border-radius: 999px;
   width: 0%;
   transition: width 1s cubic-bezier(0.34, 1.2, 0.64, 1);
 }
+
+/* Scan shimmer — active bar only */
+.dna-row.scanning .dna-track::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; width: 45%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.65) 50%, transparent 100%);
+  border-radius: 999px;
+  animation: dnaScanning 1.1s ease-in-out;
+}
+@keyframes dnaScanning {
+  0%   { left: -45%; }
+  100% { left: 120%; }
+}
+
+/* AI status text */
+.ai-status {
+  font-size: 10.5px; font-weight: 600;
+  color: rgba(139,92,246,0.62);
+  letter-spacing: 0.3px; text-align: center;
+  margin: -4px 0 0; min-height: 14px;
+  transition: opacity 0.32s ease;
+}
+.ai-status.fading { opacity: 0; }
+[data-theme="light"] .ai-status { color: rgba(109,40,217,0.72); }
 /* Per-discipline gradients */
 .dna-kt { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
 .dna-yt { background: linear-gradient(90deg, #059669, #34d399); }
