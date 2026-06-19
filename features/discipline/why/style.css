@@ -221,7 +221,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 /* Inside — wave SVG wallpaper (shared with /match/) */
 [data-theme="light"] .mobile-screen {
   background:
-    url('../bg-light.svg') center top / cover no-repeat,
+    url('../../../shared/bg-light.svg') center top / cover no-repeat,
     linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
 }
 

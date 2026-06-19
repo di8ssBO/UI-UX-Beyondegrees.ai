@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <script src="../../../shared/scripts/bd-profile.js"></script>
   <title>Edit Profile — BeyonDegrees.ai</title>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
@@ -204,15 +205,24 @@ body { background: #06060f; }
 }
 [data-theme="light"] .checkbox-row { background: rgba(24,99,220,0.04)!important; border-color: rgba(24,99,220,0.10)!important; }
 .custom-checkbox {
-  width: 20px; height: 20px; border-radius: 6px;
+  width: 20px; height: 20px; border-radius: 11px;
   border: 2px solid rgba(255,255,255,0.20);
   background: transparent; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  transition: all 0.2s ease;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+}
+.custom-checkbox svg {
+  opacity: 0; transform: scale(0.3) rotate(-10deg);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
 }
 .checkbox-row input { display: none; }
 .checkbox-row input:checked ~ .custom-checkbox {
   background: #1863DC; border-color: #1863DC;
+  transform: scale(1.08);
+}
+.checkbox-row input:checked ~ .custom-checkbox svg {
+  opacity: 1; transform: scale(1) rotate(0deg);
 }
 [data-theme="light"] .custom-checkbox { border-color: rgba(0,0,0,0.20)!important; }
 .checkbox-label { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
@@ -235,32 +245,28 @@ body { background: #06060f; }
 /* Secondary buttons */
 .btn-secondary {
   width: 100%; padding: 13px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 14px;
   font-size: 14px; font-weight: 600; color: var(--text-primary);
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: background 0.18s; margin-bottom: 10px;
+  transition: background 0.18s, border-color 0.18s; margin-bottom: 10px;
 }
-.btn-secondary:hover { background: rgba(255,255,255,0.08); }
-[data-theme="light"] .btn-secondary { background: rgba(24,99,220,0.06)!important; border-color: rgba(24,99,220,0.15)!important; color: #1A1A2E!important; }
+.btn-secondary:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.26); }
+[data-theme="light"] .btn-secondary { background: rgba(24,99,220,0.07)!important; border-color: rgba(24,99,220,0.22)!important; color: #1A1A2E!important; }
+[data-theme="light"] .btn-secondary:hover { background: rgba(24,99,220,0.12)!important; }
 
 .btn-reset {
-  width: 100%; padding: 13px;
-  background: rgba(249,115,22,0.10);
-  border: 1px solid rgba(249,115,22,0.20); border-radius: 14px;
-  font-size: 14px; font-weight: 600; color: #f97316;
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  transition: background 0.18s; margin-bottom: 10px;
+  width: 100%; padding: 12px 8px; margin-top: 4px;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.38); border-radius: 14px;
+  font-size: 13px; font-weight: 600; color: #ef4444;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background 0.18s, border-color 0.18s;
 }
-.btn-reset:hover { background: rgba(249,115,22,0.15); }
+.btn-reset:hover { background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.55); }
+[data-theme="light"] .btn-reset { background: rgba(239,68,68,0.08)!important; border-color: rgba(239,68,68,0.30)!important; color: #dc2626!important; }
+[data-theme="light"] .btn-reset:hover { background: rgba(239,68,68,0.14)!important; border-color: rgba(239,68,68,0.45)!important; }
 
-.btn-logout {
-  display: block; text-align: center;
-  font-size: 13px; color: var(--text-muted); cursor: pointer;
-  padding: 8px; margin-top: 4px;
-  text-decoration: none; transition: color 0.18s;
-}
-.btn-logout:hover { color: #ff4757; }
 
 /* ── Reset Confirm Modal ─────────────────────────────────────── */
 .modal-backdrop {
@@ -376,11 +382,6 @@ body { background: #06060f; }
         <div class="avatar-section">
           <div class="avatar-wrap">
             <div class="avatar">HP</div>
-            <div class="avatar-edit-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
-              </svg>
-            </div>
           </div>
           <div class="archetype-chip">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
@@ -394,14 +395,14 @@ body { background: #06060f; }
             <div class="field-label" data-i18n="edit.first_name">First Name</div>
             <div class="field-input-wrap">
               <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <input class="field-input" type="text" value="Hoang" placeholder="First name">
+              <input class="field-input" id="editFirstName" type="text" value="Hoang" placeholder="First name">
             </div>
           </div>
           <div class="field-row">
             <div class="field-label" data-i18n="edit.last_name">Last Name</div>
             <div class="field-input-wrap">
               <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-              <input class="field-input" type="text" value="Phuc" placeholder="Last name">
+              <input class="field-input" id="editLastName" type="text" value="Phuc" placeholder="Last name">
             </div>
           </div>
         </div>
@@ -471,15 +472,13 @@ body { background: #06060f; }
         <!-- Secondary actions -->
         <button class="btn-secondary">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          Leave Review
+          <span data-i18n="edit.leave_review">Leave Review</span>
         </button>
 
         <button class="btn-reset" id="resetAccountBtn">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
-          Reset Account
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          <span data-i18n="edit.reset">Reset Account</span>
         </button>
-
-        <a href="#" class="btn-logout" data-i18n="edit.logout">Logout</a>
 
 
       <!-- Reset Confirm Modal -->
@@ -493,12 +492,11 @@ body { background: #06060f; }
             </svg>
           </div>
           <div class="modal-title" data-i18n="edit.reset_title">Reset Account?</div>
-          <div class="modal-body">
-            This will clear <strong>all quiz progress</strong> and all your answers.<br>
-            You'll start fresh from <strong>Question 1</strong>.
+          <div class="modal-body" data-i18n="edit.reset_body">
+            This will clear all quiz progress and all your answers. You'll start fresh from Question 1.
           </div>
           <div class="modal-actions">
-            <button class="btn-modal-danger" id="resetConfirmBtn">
+            <button class="btn-modal-danger" id="resetConfirmBtn" data-i18n="edit.reset_confirm">
               Reset &amp; Start Over
             </button>
             <button class="btn-modal-cancel" id="resetCancelBtn" data-i18n="edit.cancel">
@@ -508,6 +506,7 @@ body { background: #06060f; }
         </div>
       </div>
       </div><!-- /page-content -->
+
     </div><!-- /mobile-viewport -->
 
   </div><!-- /device-frame -->
@@ -530,7 +529,30 @@ document.querySelectorAll('.checkbox-row').forEach(function(row) {
 });
 
 var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
+/* Pre-fill name fields from localStorage on load */
+(function() {
+  function prefill() {
+    if (!window.BDProfile) return;
+    var p = BDProfile.get();
+    var fnEl = document.getElementById('editFirstName');
+    var lnEl = document.getElementById('editLastName');
+    if (fnEl && p.firstName) fnEl.value = p.firstName;
+    if (lnEl && p.lastName)  lnEl.value = p.lastName;
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', prefill);
+  } else { prefill(); }
+})();
+
 function saveChanges() {
+  /* Save name to localStorage */
+  var fnEl = document.getElementById('editFirstName');
+  var lnEl = document.getElementById('editLastName');
+  if (window.BDProfile && fnEl && lnEl) {
+    BDProfile.save(fnEl.value, lnEl.value);
+  }
+
   var btn = document.querySelector('.btn-save');
   var orig = btn.textContent;
   btn.textContent = _t('edit.save_success');
@@ -552,15 +574,23 @@ document.getElementById('resetCancelBtn').addEventListener('click', function () 
 resetModal.addEventListener('click', function (e) {
   if (e.target === resetModal) resetModal.classList.remove('open');
 });
-document.getElementById('resetConfirmBtn').addEventListener('click', function () {
-  try { localStorage.removeItem('quizProgress'); } catch(e) {}
-  try { localStorage.removeItem('quizMilestone'); } catch(e) {}
+/* ── Helper: clear ALL quiz progress from storage ── */
+function clearQuizProgress() {
+  try {
+    localStorage.removeItem('quizProgress');
+    localStorage.removeItem('quizMilestone');
+    localStorage.removeItem('bd-quiz-progress'); // Fix #3 resume key
+  } catch(e) {}
   try {
     sessionStorage.removeItem('bd_dna');
     sessionStorage.removeItem('bd_answers');
     sessionStorage.removeItem('bd_scores');
     sessionStorage.removeItem('bd_nextStart');
   } catch(e) {}
+}
+
+document.getElementById('resetConfirmBtn').addEventListener('click', function () {
+  clearQuizProgress();
   try { sessionStorage.setItem('bd_reset_success', '1'); } catch(e) {}
   var btn = document.getElementById('resetConfirmBtn');
   btn.textContent = _t('edit.resetting');
@@ -569,6 +599,7 @@ document.getElementById('resetConfirmBtn').addEventListener('click', function ()
     window.location.href = '../../onboarding/home/';
   }, 800);
 });
+
 </script>
 <script src="../../../shared/scripts/i18n.js"></script>
 </body>

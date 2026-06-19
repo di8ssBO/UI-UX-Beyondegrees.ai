@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <script>
+  /* Theme boot — runs before paint to prevent flash.
+     Priority: ?theme= query → localStorage('bd-theme') → existing html attr → 'dark' */
+  (function(){
+    var p;
+    try { p = new URL(location.href).searchParams.get('theme'); } catch(e) {}
+    if (p !== 'light' && p !== 'dark' && p !== 'system') p = null;
+    if (!p) { try { p = localStorage.getItem('bd-theme'); } catch(e) {} }
+    if (!p) p = document.documentElement.getAttribute('data-theme') || 'dark';
+    var r = p === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+      : p;
+    document.documentElement.setAttribute('data-theme', r);
+    document.documentElement.setAttribute('data-theme-pref', p);
+  })();
+  </script>
   <title>Quiz Card — BeyonDegrees.ai</title>
 
 <style>
@@ -1722,7 +1738,6 @@ body {
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   margin: 0 10px 12px;
   padding: 5px;
   border-radius: 999px;
@@ -1740,31 +1755,51 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 7px 8px;
+  padding: 7px 10px;
   border-radius: 999px;
   text-decoration: none !important;
   color: rgba(255,255,255,0.35);
-  transition: color 0.2s ease, background 0.3s cubic-bezier(0.34,1.3,0.64,1);
+  transition:
+    color 0.2s ease,
+    background 0.3s cubic-bezier(0.34,1.3,0.64,1),
+    padding 0.25s ease,
+    flex 0.25s ease;
   cursor: pointer;
-  min-width: 42px;
-  flex-shrink: 0;
+  min-width: 0;
+  flex: 1 1 0;
   -webkit-tap-highlight-color: transparent;
   outline: none;
 }
 .tab-item:hover:not(.tab-disabled) { color: rgba(255,255,255,0.65); text-decoration: none !important; }
 .tab-item.active {
-  background: rgba(255,255,255,0.13);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(24,99,220,0.50) 0%, rgba(155,93,229,0.50) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.16);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset;
+  border: 1px solid rgba(155,93,229,0.45);
+  box-shadow:
+    0 0 12px rgba(155,93,229,0.25),
+    0 1px 0 rgba(255,255,255,0.12) inset;
+  padding: 7px 14px;
+  flex: 0 0 auto;
 }
 .tab-item:active:not(.tab-disabled) { transform: scale(0.92); }
 .tab-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
 .tab-icon svg { transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
 .tab-item.active .tab-icon svg { transform: scale(1.1); }
-.tab-label { font-size: 9px; font-weight: 700; letter-spacing: 0.1px; line-height: 1; white-space: nowrap; }
+/* Label: hidden for inactive, shown for active */
+.tab-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1px; line-height: 1;
+  white-space: nowrap; display: none;
+}
+.tab-item.active .tab-label {
+  display: block;
+  animation: tabLabelIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes tabLabelIn {
+  from { opacity: 0; transform: scale(0.7) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
 .tab-disabled { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
 
 /* ── Responsive (tablet/desktop preview) ───────────── */
@@ -1821,7 +1856,8 @@ body {
   backdrop-filter:blur(16px);
   border-bottom:1px solid rgba(255,255,255,0.06);
 }
-.header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; position:relative; }
+.header-top .counter-wrap { position:absolute; left:50%; transform:translateX(-50%); }
 .undo-btn {
   width:32px; height:32px; border-radius:50%;
   border:1px solid rgba(255,255,255,0.1);
@@ -1834,14 +1870,6 @@ body {
 .counter-current { color:var(--violet-400); font-size:16px; }
 .counter-sep { color:var(--neutral-500); margin:0 2px; }
 .counter-total { color:var(--neutral-400); }
-.mode-indicator {
-  display:flex; align-items:center; gap:5px; padding:4px 10px; border-radius:999px;
-  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1);
-  font-size:10px; font-weight:600; color:var(--text-muted); transition:all 0.3s;
-}
-.mode-indicator.spectrum { border-color:var(--violet-500); color:var(--violet-400); background:rgba(24,99,220,0.15); }
-.mode-dot { width:6px; height:6px; border-radius:50%; background:var(--mint-500); transition:background 0.5s; }
-.mode-indicator.spectrum .mode-dot { background:var(--violet-500); }
 
 /* Story bar */
 .story-bar { display:flex; gap:3px; margin-bottom:10px; }
@@ -1956,64 +1984,287 @@ body {
   margin-top:auto; display:flex; flex-direction:column; align-items:center; gap:4px;
   padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);
 }
-.swipe-hint span { font-size:11px; color:rgba(255,255,255,0.35); }
-.hint-arrows { font-size:16px; letter-spacing:8px; }
-.hint-hold { font-size:10px; font-style:italic; }
+.swipe-hint span { font-size:12px; font-weight:600; color:rgba(255,255,255,0.72); }
+.hint-arrows { font-size:17px; letter-spacing:8px; font-weight:700; }
 
-/* ===== SPECTRUM MODE ===== */
-.spectrum-wrap {
-  margin-top:auto; display:none; flex-direction:column; gap:10px;
-  padding-top:12px; border-top:1px solid rgba(24,99,220,0.3);
-  animation:specIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
-}
-.spectrum-wrap.visible { display:flex; }
-@keyframes specIn { from{opacity:0;transform:translateY(12px) scale(0.95)} to{opacity:1;transform:none} }
-.spectrum-labels { display:flex; justify-content:space-between; }
-.spec-label-left  { font-size:10px; color:var(--red-400); font-weight:600; }
-.spec-label-right { font-size:10px; color:var(--mint-500); font-weight:600; }
-.spectrum-track {
-  height:6px; border-radius:999px; position:relative; cursor:ew-resize;
-  background:linear-gradient(90deg, var(--red-500), #3d3d60 50%, var(--mint-500));
-}
-.spectrum-thumb {
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  width:20px; height:20px; border-radius:50%; background:white;
-  box-shadow:0 2px 8px rgba(0,0,0,0.5); border:2px solid var(--violet-400);
-  pointer-events:none; transition:left 0.05s, border-color 0.2s;
-}
-.spectrum-value-label { text-align:center; font-size:13px; font-weight:700; color:var(--text-primary); }
-.spectrum-confirm-btn {
-  background:var(--violet-600); color:white; border:none; border-radius:999px;
-  padding:10px; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.2s;
-}
-.spectrum-confirm-btn:hover { background:var(--violet-500); transform:translateY(-1px); box-shadow:0 6px 20px rgba(24,99,220,0.4); }
 
-/* ===== MILESTONE ===== */
+/* ===== MILESTONE — Planet Burst ===== */
 .milestone-overlay {
   position:absolute; inset:0; z-index:100;
-  display:flex; align-items:center; justify-content:center;
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:flex-start;
   pointer-events:none; opacity:0;
+  transition:opacity 0.4s ease;
 }
 .milestone-overlay.show,
-.milestone-overlay.visible { pointer-events:auto; animation:milestoneAnim 2.4s forwards; }
-@keyframes milestoneAnim { 0%{opacity:0} 12%{opacity:1} 75%{opacity:1} 100%{opacity:0} }
-.milestone-content {
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  padding:32px 44px; border-radius:24px;
-  background: rgba(10,10,26,.82);
-  border: 1px solid rgba(255,255,255,.10);
-  backdrop-filter:blur(24px);
-  -webkit-backdrop-filter:blur(24px);
-  box-shadow: 0 8px 32px rgba(0,0,0,.40);
-  animation:milestoneScale 2.4s forwards;
+.milestone-overlay.visible { pointer-events:auto; opacity:1; }
+
+/* Hidden legacy elements (keep DOM refs valid) */
+.milestone-overlay .ms-legacy { display:none; }
+/* Suppress half (15Q) milestone — covers both class-based and animation-based show */
+.bd-suppress-half-ms .milestone-overlay,
+.bd-suppress-half-ms .milestone-overlay.show,
+.bd-suppress-half-ms .milestone-overlay.visible,
+.bd-suppress-half-ms .milestone-overlay.animate-milestone-in { display:none !important; }
+
+/* Space background */
+.ms-po-bg {
+  position:absolute; inset:0; background:#08031b; opacity:0;
+  transition:opacity 0.35s ease; pointer-events:none;
 }
-@keyframes milestoneScale {
-  0%{transform:scale(0.65)} 15%{transform:scale(1.06)}
-  20%{transform:scale(1)} 80%{transform:scale(1)} 100%{transform:scale(0.8)}
+.milestone-overlay.visible .ms-po-bg { opacity:0.97; }
+
+/* Aurora glow */
+.ms-po-aurora {
+  position:absolute; top:38%; left:50%;
+  transform:translate(-50%,-50%);
+  width:340px; height:340px; border-radius:50%;
+  background:radial-gradient(ellipse at center,rgba(124,58,237,.28) 0%,rgba(6,214,160,.12) 45%,transparent 70%);
+  pointer-events:none; opacity:0;
+  transition:opacity 0.6s ease 0.15s;
 }
-.milestone-emoji { font-size:52px; }
-.milestone-text  { font-size:22px; font-weight:900; color:#f8fafc; }
-.milestone-sub   { font-size:13px; font-weight:600; color:rgba(255,255,255,0.80); }
+.milestone-overlay.visible .ms-po-aurora {
+  opacity:1; animation:msPlanetAurora 3.5s ease-in-out infinite;
+}
+@keyframes msPlanetAurora {
+  0%,100%{ transform:translate(-50%,-50%) scale(1); opacity:.85; }
+  50%    { transform:translate(-50%,-50%) scale(1.18); opacity:1; }
+}
+
+/* Stars */
+.ms-po-stars { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+@keyframes msStarTwinkle { 0%,100%{opacity:.15} 50%{opacity:1} }
+
+/* Planet system */
+.ms-po-system {
+  position:relative; width:210px; height:210px;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0; margin-top:110px;
+  opacity:0; transform:scale(0.2) rotate(-15deg);
+}
+@keyframes msSysIn {
+  0%  { opacity:0; transform:scale(0.15) rotate(-20deg); }
+  55% { opacity:1; transform:scale(1.1) rotate(5deg); }
+  75% { transform:scale(0.95) rotate(-1.5deg); }
+  90% { transform:scale(1.02) rotate(0.5deg); }
+  100%{ opacity:1; transform:scale(1) rotate(0deg); }
+}
+
+/* Shockwaves */
+.ms-shockwave {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  border-radius:50%; border:2.5px solid; opacity:0; pointer-events:none;
+}
+.ms-sw1 { width:90px; height:90px; border-color:rgba(167,139,250,.95); }
+.ms-sw2 { width:90px; height:90px; border-color:rgba(6,214,160,.8); }
+.ms-sw3 { width:60px; height:60px; border-color:rgba(248,250,252,.5); }
+@keyframes msShockOut {
+  0%  { transform:translate(-50%,-50%) scale(0); opacity:.95; }
+  65% { opacity:.5; }
+  100%{ transform:translate(-50%,-50%) scale(4); opacity:0; }
+}
+
+/* Orb rings */
+.ms-po-ring { position:absolute; border-radius:50%; }
+.ms-ring-outer {
+  width:160px; height:160px;
+  border:1.5px solid transparent;
+  border-top-color:rgba(124,58,237,.65);
+  border-right-color:rgba(124,58,237,.2);
+  border-bottom-color:rgba(124,58,237,.4);
+  border-left-color:rgba(124,58,237,.1);
+  animation:msRspinCW 5.5s linear infinite;
+  filter:drop-shadow(0 0 8px rgba(124,58,237,.45));
+}
+.ms-ring-mid {
+  width:128px; height:128px;
+  border:1px solid transparent;
+  border-top-color:rgba(6,214,160,.6);
+  border-right-color:rgba(6,214,160,.15);
+  border-bottom-color:rgba(6,214,160,.35);
+  border-left-color:rgba(6,214,160,.08);
+  animation:msRspinCCW 3.8s linear infinite;
+  filter:drop-shadow(0 0 6px rgba(6,214,160,.35));
+}
+@keyframes msRspinCW  { to{ transform:rotate(360deg);  } }
+@keyframes msRspinCCW { to{ transform:rotate(-360deg); } }
+
+/* Core orb */
+.ms-po-orb {
+  width:92px; height:92px; border-radius:50%;
+  background:radial-gradient(circle at 38% 35%,rgba(220,210,255,.98) 0%,rgba(124,58,237,.92) 38%,rgba(20,5,50,.8) 100%);
+  box-shadow:0 0 0 1.5px rgba(167,139,250,.3),0 0 32px rgba(124,58,237,.9),0 0 80px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.4);
+  display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:3;
+  animation:msOrbGlow 2.2s ease-in-out infinite;
+}
+@keyframes msOrbGlow {
+  0%,100%{ box-shadow:0 0 0 1.5px rgba(167,139,250,.3),0 0 32px rgba(124,58,237,.9),0 0 80px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.4); transform:scale(1); }
+  50%    { box-shadow:0 0 0 1.5px rgba(167,139,250,.5),0 0 52px rgba(124,58,237,1),0 0 120px rgba(124,58,237,.65),inset 0 1px 0 rgba(255,255,255,.45); transform:scale(1.07); }
+}
+.ms-po-orb-emoji { font-size:38px; line-height:1; }
+
+/* Burst particles */
+.ms-bp-anchor { position:absolute; top:50%; left:50%; width:0; height:0; }
+.ms-bp {
+  position:absolute; width:13px; height:13px; border-radius:50%;
+  transform:translate(-50%,-50%); opacity:0; pointer-events:none;
+}
+@keyframes msBpFly0 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translateY(-100px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translateY(-88px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translateY(-96px) scale(.7)} }
+@keyframes msBpFly1 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(86px,-50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(76px,-44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(82px,-48px) scale(.7)} }
+@keyframes msBpFly2 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(86px,50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(76px,44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(82px,48px) scale(.7)} }
+@keyframes msBpFly3 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translateY(100px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translateY(88px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translateY(96px) scale(.7)} }
+@keyframes msBpFly4 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(-86px,50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(-76px,44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(-82px,48px) scale(.7)} }
+@keyframes msBpFly5 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(-86px,-50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(-76px,-44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(-82px,-48px) scale(.7)} }
+
+/* Orbit particles */
+.ms-po-orbit {
+  position:absolute; border-radius:50%;
+  display:flex; align-items:flex-start; justify-content:center;
+  top:50%; left:50%; opacity:0; transition:opacity 0.4s ease;
+}
+.ms-o1{width:128px;height:128px;margin:-64px 0 0 -64px;animation:msRspinCW 5.8s linear infinite;}
+.ms-o2{width:150px;height:150px;margin:-75px 0 0 -75px;animation:msRspinCCW 8.2s linear infinite;}
+.ms-o3{width:114px;height:114px;margin:-57px 0 0 -57px;animation:msRspinCW 4.9s linear infinite;}
+.ms-o4{width:140px;height:140px;margin:-70px 0 0 -70px;animation:msRspinCCW 9.4s linear infinite;}
+.ms-o5{width:108px;height:108px;margin:-54px 0 0 -54px;animation:msRspinCW 7.1s linear infinite;}
+.ms-o6{width:156px;height:156px;margin:-78px 0 0 -78px;animation:msRspinCCW 11.5s linear infinite;}
+.ms-po-particle{width:11px;height:11px;border-radius:50%;margin-top:-5.5px;}
+.ms-pp-kt{background:rgba(139,92,246,.95);box-shadow:0 0 12px rgba(139,92,246,.95),0 0 28px rgba(139,92,246,.55);}
+.ms-pp-yt{background:rgba(6,214,160,.95); box-shadow:0 0 12px rgba(6,214,160,.95), 0 0 28px rgba(6,214,160,.55);}
+.ms-pp-nv{background:rgba(59,130,246,.95);box-shadow:0 0 12px rgba(59,130,246,.95),0 0 28px rgba(59,130,246,.55);}
+.ms-pp-nn{background:rgba(245,158,11,.95);box-shadow:0 0 12px rgba(245,158,11,.95),0 0 28px rgba(245,158,11,.55);}
+.ms-pp-xh{background:rgba(168,85,247,.95); box-shadow:0 0 12px rgba(168,85,247,.95),0 0 28px rgba(168,85,247,.55);}
+.ms-pp-tn{background:rgba(244,63,94,.95);  box-shadow:0 0 12px rgba(244,63,94,.95), 0 0 28px rgba(244,63,94,.55);}
+
+/* Milestone text */
+.ms-po-text {
+  position:relative; z-index:10;
+  text-align:center; margin-top:28px;
+  display:flex; flex-direction:column; align-items:center;
+  padding:0 24px;
+}
+.ms-po-badge {
+  font-size:11px; letter-spacing:2.5px; text-transform:uppercase; font-weight:800;
+  color:rgba(6,214,160,.9); margin-bottom:16px;
+  opacity:0; transform:translateY(8px);
+}
+.ms-po-big-emoji {
+  font-size:64px; line-height:1; margin-bottom:16px;
+  opacity:0; transform:scale(.3) rotate(-20deg);
+  filter:drop-shadow(0 0 28px rgba(255,200,60,.6));
+}
+.ms-po-title {
+  font-size:26px; font-weight:800; line-height:1.15;
+  background:linear-gradient(135deg,#e9d5ff 0%,#06d6a0 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+  opacity:0; transform:scale(.8) translateY(14px);
+}
+.ms-po-sub {
+  font-size:16px; font-weight:500; color:rgba(255,255,255,.8); line-height:1.5;
+  opacity:0; transform:translateY(10px);
+  margin-bottom:4px;
+}
+.ms-po-xp {
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  width:100%; max-width:260px;
+  margin-top:28px;
+  opacity:0; transform:translateY(18px) scale(.88);
+}
+/* Progress bar */
+.ms-po-progress-wrap {
+  display:flex; align-items:center; width:100%; padding:0 4px;
+}
+.ms-po-progress-track {
+  flex:1; height:7px; border-radius:999px;
+  background:rgba(167,139,250,.2); overflow:hidden;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.3);
+}
+.ms-po-progress-fill {
+  height:100%; border-radius:999px; width:0;
+  background:linear-gradient(90deg,#7C3AED,#06d6a0);
+  transition:width .8s cubic-bezier(.34,1.2,.64,1);
+  box-shadow:0 0 10px rgba(124,58,237,.5);
+}
+.ms-po-progress-pct {
+  font-size:11px; font-weight:700;
+  color:rgba(196,181,253,.85); min-width:32px; text-align:right;
+}
+/* Stats pills */
+.ms-po-stat {
+  padding:6px 14px; border-radius:999px;
+  font-size:12px; font-weight:700; backdrop-filter:blur(12px);
+}
+.ms-po-stat-done {
+  background:rgba(124,58,237,.12); border:1px solid rgba(124,58,237,.35);
+  color:#c4b5fd; box-shadow:0 0 16px rgba(124,58,237,.15);
+}
+.ms-po-stat-left {
+  background:rgba(234,88,12,.08); border:1px solid rgba(234,88,12,.25);
+  color:rgba(253,186,116,.85);
+}
+/* Text entry animations */
+@keyframes msBadgeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes msEmojiIn {
+  0%  {opacity:0;transform:scale(.3) rotate(-20deg)}
+  60% {opacity:1;transform:scale(1.25) rotate(8deg)}
+  80% {transform:scale(.93) rotate(-3deg)}
+  100%{opacity:1;transform:scale(1) rotate(0)}
+}
+@keyframes msTitleIn  {
+  0%  {opacity:0;transform:scale(.8) translateY(14px)}
+  65% {opacity:1;transform:scale(1.04) translateY(-3px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+@keyframes msSubIn  { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+@keyframes msXpIn   {
+  0%  {opacity:0;transform:translateY(18px) scale(.88)}
+  65% {opacity:1;transform:translateY(-4px) scale(1.05)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Orbit discipline labels — counter-rotate to stay upright */
+.ms-orb-label {
+  position:absolute;
+  top:-18px; left:50%; transform:translateX(-50%);
+  font-size:12px; font-weight:700; white-space:nowrap;
+  color:rgba(255,255,255,.75);
+  background:rgba(15,5,40,.55); backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.12);
+  padding:2px 5px; border-radius:999px;
+  pointer-events:none; letter-spacing:.3px;
+  opacity:0; transition:opacity .4s ease .8s;
+}
+.milestone-overlay.visible .ms-orb-label { opacity:1; }
+/* Counter-rotate keyframes — include translateX(-50%) so centering is preserved */
+@keyframes msLabelCCW { from{ transform:translateX(-50%) rotate(0deg);    } to{ transform:translateX(-50%) rotate(-360deg); } }
+@keyframes msLabelCW  { from{ transform:translateX(-50%) rotate(0deg);    } to{ transform:translateX(-50%) rotate(360deg);  } }
+/* Each label counter-rotates at the exact same speed as its parent orbit */
+.ms-o1 .ms-orb-label { animation: msLabelCCW  5.8s linear infinite; }
+.ms-o2 .ms-orb-label { animation: msLabelCW   8.2s linear infinite; }
+.ms-o3 .ms-orb-label { animation: msLabelCCW  4.9s linear infinite; }
+.ms-o4 .ms-orb-label { animation: msLabelCW   9.4s linear infinite; }
+.ms-o5 .ms-orb-label { animation: msLabelCCW  7.1s linear infinite; }
+.ms-o6 .ms-orb-label { animation: msLabelCW  11.5s linear infinite; }
+
+/* Badge rebrand — teal accent để liên kết "scan/tech" */
+.ms-po-badge {
+  color:rgba(6,214,160,.9) !important;
+  letter-spacing:1.5px !important;
+}
+
+/* Confetti */
+.ms-confetti {
+  position:absolute; pointer-events:none; z-index:120; border-radius:2px;
+}
+@keyframes msCFall {
+  0%  { opacity:1; transform:translate(var(--cx),var(--cy)) rotate(0deg) scale(1); }
+  85% { opacity:.8; }
+  100%{ opacity:0; transform:translate(calc(var(--cx) + var(--dx)),calc(var(--cy) + var(--fall,640px))) rotate(var(--spin)) scale(.4); }
+}
 
 /* ===== FOOTER ===== */
 .quiz-footer {
@@ -2327,13 +2578,6 @@ body {
 [data-theme="light"] .counter-total { color: rgba(58,46,38,0.50) !important; }
 [data-theme="light"] .counter-sep { color: rgba(58,46,38,0.30) !important; }
 
-/* Mode indicator pill */
-[data-theme="light"] .mode-indicator {
-  background: rgba(255,252,245,0.70) !important;
-  border-color: rgba(232,220,194,0.55) !important;
-  color: #5C4A3D !important;
-}
-
 /* Story-bar progression segments */
 [data-theme="light"] .story-seg {
   background: rgba(58,46,38,0.10) !important;
@@ -2401,10 +2645,7 @@ body {
   border-top-color: rgba(232,220,194,0.50) !important;
 }
 [data-theme="light"] .swipe-hint span {
-  color: rgba(58,46,38,0.50) !important;
-}
-[data-theme="light"] .hint-hold {
-  color: rgba(58,46,38,0.45) !important;
+  color: rgba(58,46,38,0.78) !important;
 }
 
 /* Direction hints (AGREE / DISAGREE etc.) — boost contrast */
@@ -2429,25 +2670,6 @@ body {
   background: rgba(255,252,245,0.85) !important;
 }
 
-/* Spectrum mode track + thumb */
-[data-theme="light"] .spectrum-wrap {
-  border-top-color: rgba(2,116,190,0.30) !important;
-}
-[data-theme="light"] .spec-label-left { color: #C0392B !important; }
-[data-theme="light"] .spec-label-right { color: #059669 !important; }
-[data-theme="light"] .spectrum-thumb {
-  background: white !important;
-  border-color: #0274BE !important;
-  box-shadow: 0 2px 8px rgba(2,116,190,0.30) !important;
-}
-[data-theme="light"] .spectrum-value-label {
-  color: #1A1A1A !important;
-}
-[data-theme="light"] .spectrum-confirm-btn {
-  background: linear-gradient(135deg, #1E8EDB 0%, #0274BE 100%) !important;
-  color: white !important;
-}
-
 /* Disc-label (small text floating top of arena) */
 [data-theme="light"] .disc-label {
   color: rgba(58,46,38,0.55) !important;
@@ -2467,19 +2689,137 @@ body {
   color: #1A1A1A !important;
 }
 
-/* Milestone overlay — light mode: frosted cream panel, high-contrast text */
-[data-theme="light"] .milestone-content {
-  background: rgba(255,252,245,0.92) !important;
-  border-color: rgba(232,220,194,0.65) !important;
-  box-shadow: 0 8px 32px rgba(92,69,53,0.18), inset 0 1px 0 rgba(255,255,255,0.75) !important;
+/* ================================================================
+   MILESTONE OVERLAY — Light Mode "Trên Đỉnh Mây"
+   Sky gradient world: dark cosmos → twilight → golden sunrise → cream.
+   Mountains staggered + crowded. Cloud sea warm cream. Stars only in
+   cosmic zone. Orb: golden sunrise. Text on cream cloud background.
+   ================================================================ */
+
+/* Hide dark-mode bg / aurora / JS-generated stars */
+/* Light mode: warm gradient overlay softens dark sky top instead of transparent */
+[data-theme="light"] .ms-po-bg {
+  background: linear-gradient(to bottom,
+    rgba(237,233,254,.82) 0%,
+    rgba(221,214,254,.5) 25%,
+    rgba(254,243,199,.2) 60%,
+    transparent 100%
+  ) !important;
+  opacity: 1 !important;
 }
-[data-theme="light"] .milestone-text {
-  color: #1A1A1A !important;
-  font-weight: 900 !important;
+[data-theme="light"] .ms-po-aurora { opacity: 0 !important; animation: none !important; }
+[data-theme="light"] .ms-po-stars  { display: none !important; }
+
+/* Light scene SVG: full-screen world behind everything */
+.ms-light-scene {
+  display: none; position: absolute; inset: 0;
+  z-index: 0; pointer-events: none;
+  opacity: 0; transition: opacity 0.35s ease;
 }
-[data-theme="light"] .milestone-sub {
-  color: #5c4535 !important;
-  font-weight: 700 !important;
+[data-theme="light"] .ms-light-scene { display: block; }
+.milestone-overlay.visible .ms-light-scene { opacity: 1; }
+
+/* Shockwave rings: golden burst */
+[data-theme="light"] .ms-shockwave {
+  border-color: rgba(251,191,36,.72) !important;
+  box-shadow: 0 0 16px rgba(251,191,36,.35) !important;
+}
+
+/* Orbit rings: gold outer → lavender mid */
+[data-theme="light"] .ms-ring-outer {
+  border-top-color:    rgba(251,191,36,.70) !important;
+  border-right-color:  rgba(251,191,36,.20) !important;
+  border-bottom-color: rgba(251,191,36,.45) !important;
+  border-left-color:   rgba(251,191,36,.10) !important;
+  filter: drop-shadow(0 0 8px rgba(251,191,36,.48)) !important;
+}
+[data-theme="light"] .ms-ring-mid {
+  border-top-color:    rgba(167,139,250,.65) !important;
+  border-right-color:  rgba(167,139,250,.18) !important;
+  border-bottom-color: rgba(167,139,250,.40) !important;
+  border-left-color:   rgba(167,139,250,.08) !important;
+  filter: drop-shadow(0 0 6px rgba(167,139,250,.38)) !important;
+}
+
+/* Core orb: warm golden sunrise gradient */
+[data-theme="light"] .ms-po-orb {
+  background: radial-gradient(circle at 38% 35%,
+    rgba(255,250,205,.98) 0%,
+    rgba(251,191,36,.92)  28%,
+    rgba(124,58,237,.80)  65%,
+    rgba(12,4,28,.75)     100%
+  ) !important;
+  box-shadow:
+    0 0 0 1.5px rgba(251,191,36,.45),
+    0 0 32px  rgba(251,191,36,.85),
+    0 0 80px  rgba(251,191,36,.38),
+    0 0 120px rgba(124,58,237,.28),
+    inset 0 1px 0 rgba(255,255,255,.50) !important;
+  animation: msOrbGlowLight 2.2s ease-in-out infinite !important;
+}
+@keyframes msOrbGlowLight {
+  0%,100% {
+    box-shadow:
+      0 0 0 1.5px rgba(251,191,36,.45),
+      0 0 32px rgba(251,191,36,.85), 0 0 80px rgba(251,191,36,.38),
+      0 0 120px rgba(124,58,237,.28), inset 0 1px 0 rgba(255,255,255,.50);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1.5px rgba(251,191,36,.65),
+      0 0 52px rgba(251,191,36,1), 0 0 120px rgba(251,191,36,.52),
+      0 0 160px rgba(124,58,237,.38), inset 0 1px 0 rgba(255,255,255,.55);
+    transform: scale(1.07);
+  }
+}
+
+/* Badge: deep purple on cream cloud bg */
+[data-theme="light"] .ms-po-badge {
+  color: rgba(91,33,182,.78) !important;
+}
+
+/* Big emoji: golden drop-shadow */
+[data-theme="light"] .ms-po-big-emoji {
+  filter: drop-shadow(0 0 28px rgba(251,191,36,.65)) !important;
+}
+
+/* Title: gold → lavender → teal */
+[data-theme="light"] .ms-po-title {
+  background: linear-gradient(135deg, #fbbf24 0%, #c4b5fd 55%, #06d6a0 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* Sub text: dark navy, readable on cream cloud bg */
+[data-theme="light"] .ms-po-sub {
+  color: rgba(30,27,75,.62) !important;
+}
+
+/* Progress bar: light mode overrides */
+[data-theme="light"] .ms-po-progress-track {
+  background: rgba(30,27,75,.12) !important;
+}
+[data-theme="light"] .ms-po-progress-pct {
+  color: rgba(30,27,75,.65) !important;
+}
+[data-theme="light"] .ms-po-stat-done {
+  background: rgba(124,58,237,.10) !important;
+  border-color: rgba(124,58,237,.30) !important;
+  color: #4C1D95 !important;
+  box-shadow: none !important;
+}
+[data-theme="light"] .ms-po-stat-left {
+  background: rgba(234,88,12,.08) !important;
+  border-color: rgba(234,88,12,.22) !important;
+  color: #7C2D12 !important;
+}
+
+/* Orbit particles: gold */
+[data-theme="light"] .ms-pp-kt {
+  background: rgba(251,191,36,.95) !important;
+  box-shadow: 0 0 12px rgba(251,191,36,.95), 0 0 28px rgba(251,191,36,.55) !important;
 }
 
 /* Side panel (legend) */
@@ -2520,13 +2860,53 @@ body {
   color: rgba(92,69,53,0.55) !important;
 }
 [data-theme="light"] .tab-item.active {
-  background: rgba(2,116,190,0.15) !important;
-  color: #0274BE !important;
-  border-color: rgba(2,116,190,0.28) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.50) !important;
+  background: linear-gradient(135deg, rgba(24,99,220,0.18) 0%, rgba(155,93,229,0.18) 100%) !important;
+  color: #1863DC !important;
+  border-color: rgba(24,99,220,0.30) !important;
+  box-shadow: 0 0 10px rgba(24,99,220,0.12), inset 0 1px 0 rgba(255,255,255,0.50) !important;
 }
 [data-theme="light"] .tab-item:hover:not(.tab-disabled) {
   color: rgba(44,31,20,0.88) !important;
+}
+
+/* ── Moon + Astronaut scene (dark mode only) ── */
+.ms-moon-scene {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 220px;
+  pointer-events: none;
+  /* no overflow:hidden — milestone-overlay/mobile-screen handles clip */
+  z-index: 5;
+}
+[data-theme="light"] .ms-moon-scene { display: none; }
+
+.ms-moon-wrap {
+  position: absolute;
+  bottom: -267px; left: 50%;
+  width: 400px; height: 400px;
+  margin-left: -200px;
+  /* no rotation — static moon */
+}
+.ms-moon-svg { width: 100%; height: 100%; display: block; }
+
+.ms-astronaut {
+  position: absolute;
+  left: calc(50% - 30px);
+  bottom: 118px;
+  width: 60px; height: 80px;
+  animation: astroFloat 3s ease-in-out infinite;
+}
+/* Primary motion: gentle low-gravity float */
+@keyframes astroFloat {
+  0%,100% { transform: rotate(-7deg) translateY(0px);  }
+  50%     { transform: rotate(-7deg) translateY(-8px); }
+}
+/* Secondary: legs drift gently during float */
+.ms-astro-leg-l { animation: legDrift 3s ease-in-out infinite; transform-origin: 50% 0%; }
+.ms-astro-leg-r { animation: legDrift 3s ease-in-out infinite 0.2s; transform-origin: 50% 0%; }
+@keyframes legDrift {
+  0%,100% { transform: rotate(0deg); }
+  50%     { transform: rotate(4deg); }
 }
 
 /* ── TRANSITION: smooth theme switch ── */
@@ -2535,6 +2915,113 @@ body {
 }
 /* Disable transition for SVG / animations */
 svg *, canvas, video, img { transition: none !important; }
+
+/* ══════════════════════════════════════════════════════
+   SWIPE TUTORIAL OVERLAY — shown once on first visit
+   ══════════════════════════════════════════════════════ */
+.swipe-tutorial-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 200;
+  background: rgba(6, 6, 15, 0.88);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 32px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.swipe-tutorial-overlay.visible {
+  opacity: 1;
+  pointer-events: none; /* visual only — events pass through to dragOverlay below */
+}
+/* Only the dismiss button captures clicks */
+.swipe-tutorial-overlay.visible .stt-dismiss-btn {
+  pointer-events: auto;
+}
+.stt-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.stt-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: -20px;
+}
+.stt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+.stt-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.stt-arrow {
+  font-size: 22px;
+  line-height: 1;
+}
+.stt-item-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+.stt-item-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.stt-item.agree   { border-color: rgba(6,214,160,0.3);  }
+.stt-item.disagree{ border-color: rgba(255,71,87,0.3);   }
+.stt-item.strong  { border-color: rgba(24,99,220,0.35);  }
+.stt-item.skip    { border-color: rgba(107,107,154,0.25);}
+.stt-item.agree   .stt-arrow { color: var(--mint-500);   }
+.stt-item.disagree .stt-arrow{ color: var(--red-400);    }
+.stt-item.strong  .stt-arrow { color: var(--violet-400); }
+.stt-item.skip    .stt-arrow { color: var(--text-muted); }
+.stt-hold-tip {
+  background: rgba(24,99,220,0.1);
+  border: 1px solid rgba(24,99,220,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  color: var(--violet-400);
+  line-height: 1.5;
+}
+.stt-hold-tip strong { font-weight: 700; }
+.stt-dismiss-btn {
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 40px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(24,99,220,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.3px;
+}
+.stt-dismiss-btn:active { transform: scale(0.96); box-shadow: 0 3px 10px rgba(24,99,220,0.3); }
 
 </style>
 </head>
@@ -2566,6 +3053,36 @@ svg *, canvas, video, img { transition: none !important; }
             <div class="noise-overlay"></div>
           </div>
 
+          <!-- ░░ SWIPE TUTORIAL OVERLAY — shown once on first visit ░░ -->
+          <div class="swipe-tutorial-overlay" id="swipeTutorialOverlay">
+            <div class="stt-title">How to Answer ✦</div>
+            <p class="stt-subtitle">Swipe the card in 4 directions</p>
+            <div class="stt-grid">
+              <div class="stt-item agree">
+                <span class="stt-arrow">→</span>
+                <div class="stt-item-label">AGREE</div>
+                <div class="stt-item-desc">Swipe right</div>
+              </div>
+              <div class="stt-item disagree">
+                <span class="stt-arrow">←</span>
+                <div class="stt-item-label">DISAGREE</div>
+                <div class="stt-item-desc">Swipe left</div>
+              </div>
+              <div class="stt-item strong">
+                <span class="stt-arrow">↑</span>
+                <div class="stt-item-label">STRONGLY AGREE</div>
+                <div class="stt-item-desc">Swipe up</div>
+              </div>
+              <div class="stt-item skip">
+                <span class="stt-arrow">↓</span>
+                <div class="stt-item-label">SKIP / NEUTRAL</div>
+                <div class="stt-item-desc">Swipe down</div>
+              </div>
+            </div>
+
+            <button class="stt-dismiss-btn" id="sttDismissBtn" data-i18n="quiz.tutorial.dismiss">Got it — Let's go! 🚀</button>
+          </div>
+
           <!-- Status Bar -->
           <div class="status-bar">
             <span>9:41</span>
@@ -2587,10 +3104,6 @@ svg *, canvas, video, img { transition: none !important; }
                 <span class="counter-current" id="counterCurrent">1</span>
                 <span class="counter-sep">/</span>
                 <span class="counter-total" id="counterTotal">30</span>
-              </div>
-              <div class="mode-indicator" id="modeIndicator">
-                <span class="mode-dot"></span>
-                <span class="mode-label">Swipe</span>
               </div>
             </div>
             <div class="story-bar" id="storyBar"></div>
@@ -2631,37 +3144,15 @@ svg *, canvas, video, img { transition: none !important; }
                   </div>
                   <p class="q-text" id="qText">I enjoy solving problems through data analysis.</p>
 
-                  <!-- Spectrum mode -->
-                  <div class="spectrum-wrap" id="spectrumWrap">
-                    <div class="spectrum-labels">
-                      <span class="spec-label-left" data-i18n="quiz.spec.disagree">Disagree</span>
-                      <span class="spec-label-right" data-i18n="quiz.spec.agree">Agree</span>
-                    </div>
-                    <div class="spectrum-track" id="spectrumTrack">
-                      <div class="spectrum-thumb" id="spectrumThumb"></div>
-                    </div>
-                    <div class="spectrum-value-label" id="spectrumValueLabel" data-i18n="quiz.spec.neutral">Neutral</div>
-                    <button class="spectrum-confirm-btn" id="spectrumConfirmBtn" data-i18n="quiz.spec.confirm">Confirm ✓</button>
-                  </div>
-
                   <!-- Swipe hint -->
                   <div class="swipe-hint" id="swipeHint">
                     <span data-i18n="quiz.hint.drag">Drag to answer</span>
                     <span class="hint-arrows" data-i18n="quiz.hint.arrows">← →</span>
-                    <span class="hint-hold" data-i18n="quiz.hint.hold">Hold to set intensity</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Milestone overlay -->
-            <div class="milestone-overlay" id="milestoneOverlay">
-              <div class="milestone-content">
-                <div class="milestone-emoji" id="milestoneEmoji">&#x1F525;</div>
-                <div class="milestone-text" id="milestoneText">1/3 done!</div>
-                <div class="milestone-sub" id="milestoneSub">Keep going!</div>
-              </div>
-            </div>
           </div>
 
           <!-- ░░ GLASSMORPHISM FLOATING TAB BAR — BeyonDegrees flow ░░ -->
@@ -2722,10 +3213,356 @@ svg *, canvas, video, img { transition: none !important; }
                   <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
                 </svg>
               </span>
-              <span class="tab-label">Hoang Phuc</span>
+              <span class="tab-label"></span>
             </a>
 
           </nav>
+
+          <!-- ░░ MILESTONE OVERLAY — Planet Burst
+               Direct child of #mobileScreen so position:absolute inset:0
+               covers status bar, quiz content AND tab bar fully. ░░ -->
+          <div class="milestone-overlay" id="milestoneOverlay">
+            <!-- Hidden legacy elements (JS variable refs stay valid) -->
+            <div class="ms-legacy">
+              <div id="milestoneEmoji"></div>
+              <div id="milestoneText"></div>
+              <div id="milestoneSub"></div>
+            </div>
+
+            <!-- Space bg + aurora -->
+            <div class="ms-po-bg"></div>
+            <div class="ms-po-aurora" id="msPlanetAurora"></div>
+            <div class="ms-po-stars" id="msPlanetStars"></div>
+
+            <!-- Light mode: "Trên Đỉnh Mây" world scene -->
+            <div class="ms-light-scene" id="msPlanetLightScene">
+              <svg width="100%" height="100%" viewBox="0 0 120 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="msLsGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"   stop-color="#4C1D95"/>
+                    <stop offset="22%"  stop-color="#7C3AED"/>
+                    <stop offset="45%"  stop-color="#C026D3"/>
+                    <stop offset="65%"  stop-color="#EA580C"/>
+                    <stop offset="82%"  stop-color="#F59E0B"/>
+                    <stop offset="100%" stop-color="#FEF3C7"/>
+                  </linearGradient>
+                  <radialGradient id="msLsAtmos" cx="50%" cy="42%">
+                    <stop offset="0%"   stop-color="#FFFBEB" stop-opacity=".9"/>
+                    <stop offset="20%"  stop-color="#FDE68A" stop-opacity=".5"/>
+                    <stop offset="55%"  stop-color="#F59E0B" stop-opacity=".15"/>
+                    <stop offset="100%" stop-color="#F97316" stop-opacity="0"/>
+                  </radialGradient>
+                  <!-- Ocean: warm reflective sea for light mode — amber surface fading to soft violet -->
+                  <linearGradient id="msOceanGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"   stop-color="#FDE68A" stop-opacity=".55"/>
+                    <stop offset="22%"  stop-color="#F59E0B" stop-opacity=".45"/>
+                    <stop offset="45%"  stop-color="#EA580C" stop-opacity=".35"/>
+                    <stop offset="68%"  stop-color="#C026D3" stop-opacity=".25"/>
+                    <stop offset="100%" stop-color="#6D28D9" stop-opacity=".18"/>
+                  </linearGradient>
+                </defs>
+                <!-- Sky gradient -->
+                <rect width="120" height="220" fill="url(#msLsGrad)"/>
+                <!-- Atmospheric glow (orb area) -->
+                <ellipse cx="60" cy="92" rx="60" ry="60" fill="url(#msLsAtmos)"/>
+                <circle cx="60" cy="92" r="28" fill="none" stroke="rgba(255,251,235,.11)" stroke-width="3"/>
+                <!-- Stars: only in cosmic zone y=14→52, 3 rows fading down -->
+                <circle cx="7"   cy="16" r="1.1" fill="white" opacity=".85"/>
+                <circle cx="24"  cy="14" r=".7"  fill="white" opacity=".6"/>
+                <circle cx="42"  cy="17" r=".5"  fill="white" opacity=".45"/>
+                <circle cx="58"  cy="15" r=".9"  fill="white" opacity=".72"/>
+                <circle cx="72"  cy="18" r=".6"  fill="white" opacity=".5"/>
+                <circle cx="89"  cy="14" r="1.0" fill="white" opacity=".78"/>
+                <circle cx="103" cy="17" r=".5"  fill="white" opacity=".4"/>
+                <circle cx="115" cy="15" r=".8"  fill="white" opacity=".65"/>
+                <circle cx="3"   cy="28" r=".6"  fill="white" opacity=".5"/>
+                <circle cx="16"  cy="25" r=".9"  fill="white" opacity=".68"/>
+                <circle cx="31"  cy="30" r=".5"  fill="white" opacity=".38"/>
+                <circle cx="36"  cy="22" r=".5"  fill="white" opacity=".35"/>
+                <circle cx="47"  cy="26" r=".7"  fill="white" opacity=".55"/>
+                <circle cx="63"  cy="29" r="1.1" fill="white" opacity=".8"/>
+                <circle cx="77"  cy="34" r=".6"  fill="white" opacity=".4"/>
+                <circle cx="80"  cy="24" r=".5"  fill="white" opacity=".42"/>
+                <circle cx="94"  cy="28" r=".8"  fill="white" opacity=".62"/>
+                <circle cx="109" cy="25" r=".6"  fill="white" opacity=".48"/>
+                <circle cx="118" cy="30" r=".9"  fill="white" opacity=".58"/>
+                <circle cx="10"  cy="39" r=".7"  fill="white" opacity=".42"/>
+                <circle cx="38"  cy="37" r=".8"  fill="white" opacity=".48"/>
+                <circle cx="53"  cy="43" r=".5"  fill="white" opacity=".3"/>
+                <circle cx="70"  cy="38" r=".6"  fill="white" opacity=".38"/>
+                <circle cx="83"  cy="44" r=".9"  fill="white" opacity=".45"/>
+                <circle cx="98"  cy="40" r=".5"  fill="white" opacity=".3"/>
+                <circle cx="112" cy="43" r=".7"  fill="white" opacity=".38"/>
+                <circle cx="14"  cy="48" r=".5"  fill="white" opacity=".28"/>
+                <circle cx="58"  cy="50" r=".6"  fill="white" opacity=".25"/>
+                <!-- Ocean: calm sea reflecting the cosmic sky above -->
+                <!-- Ocean base fill -->
+                <rect x="0" y="162" width="120" height="58" fill="url(#msOceanGrad)"/>
+                <!-- ── SUNRISE ── sun center (60,167) r=12, peeking 5px above horizon y=162 -->
+                <!-- Dawn glow spreading into sky above horizon -->
+                <ellipse cx="60" cy="156" rx="52" ry="14" fill="rgba(253,224,71,.14)"/>
+                <ellipse cx="60" cy="159" rx="36" ry="8"  fill="rgba(251,191,36,.2)"/>
+                <ellipse cx="60" cy="161" rx="22" ry="4"  fill="rgba(252,211,77,.28)"/>
+                <!-- Sun glow halos -->
+                <circle cx="60" cy="167" r="26" fill="rgba(254,240,138,.1)"/>
+                <circle cx="60" cy="167" r="18" fill="rgba(253,224,71,.18)"/>
+                <circle cx="60" cy="167" r="13" fill="rgba(251,191,36,.26)"/>
+                <!-- Sun body: arc above horizon (intersects y=162 at x≈49 and x≈71) -->
+                <path d="M 49,162 A 12,12 0 0 1 71,162 Z" fill="rgba(254,240,138,.92)"/>
+                <path d="M 51,162 A 10,10 0 0 1 69,162 Z" fill="rgba(253,224,71,.88)"/>
+                <path d="M 54,162 A 7,7 0 0 1 66,162 Z"  fill="#FDE047"/>
+                <!-- Sun rays into sky (from edge of sun outward) -->
+                <line x1="60"   y1="154" x2="60"   y2="146" stroke="rgba(251,191,36,.5)"  stroke-width="1.4" stroke-linecap="round"/>
+                <line x1="66.5" y1="157" x2="70.5" y2="151" stroke="rgba(251,191,36,.4)"  stroke-width="1.1" stroke-linecap="round"/>
+                <line x1="53.5" y1="157" x2="49.5" y2="151" stroke="rgba(251,191,36,.4)"  stroke-width="1.1" stroke-linecap="round"/>
+                <line x1="71"   y1="161" x2="77"   y2="157" stroke="rgba(251,191,36,.28)" stroke-width=".9"  stroke-linecap="round"/>
+                <line x1="49"   y1="161" x2="43"   y2="157" stroke="rgba(251,191,36,.28)" stroke-width=".9"  stroke-linecap="round"/>
+                <!-- Horizon line: dim on sides, bright at sun -->
+                <line x1="0"  y1="162" x2="46"  y2="162" stroke="rgba(255,251,235,.45)" stroke-width=".9"/>
+                <line x1="74" y1="162" x2="120" y2="162" stroke="rgba(255,251,235,.45)" stroke-width=".9"/>
+                <line x1="46" y1="162" x2="74"  y2="162" stroke="rgba(254,240,138,.9)"  stroke-width="1.3"/>
+                <!-- Sun reflection on ocean: bright streak below horizon -->
+                <ellipse cx="60" cy="164.5" rx="18" ry=".9"  fill="rgba(253,224,71,.42)"/>
+                <ellipse cx="60" cy="167"   rx="11" ry=".65" fill="rgba(251,191,36,.28)"/>
+                <ellipse cx="60" cy="171"   rx="6"  ry=".4"  fill="rgba(245,158,11,.18)"/>
+                <!-- Wave ripples: near-horizontal, fading with depth -->
+                <path d="M 0,165 C 18,164.2 36,165.8 54,165 C 72,164.2 90,165.8 108,165 C 114,164.7 118,165.2 120,165" fill="none" stroke="rgba(255,248,220,.22)" stroke-width=".7"/>
+                <path d="M 0,169 C 15,168.3 32,170 50,169 C 68,168.2 86,170 104,169 C 112,168.6 117,169.3 120,169" fill="none" stroke="rgba(255,244,210,.16)" stroke-width=".6"/>
+                <path d="M 0,176 C 20,175.3 42,176.8 62,176 C 82,175.2 102,176.8 120,176" fill="none" stroke="rgba(200,134,10,.12)" stroke-width=".5"/>
+                <path d="M 0,186 C 22,185.4 46,186.8 68,186 C 90,185.3 108,186.6 120,186" fill="none" stroke="rgba(107,26,154,.1)"  stroke-width=".45"/>
+                <!-- Star reflections: stretched, faint, away from sun center -->
+                <ellipse cx="12"  cy="163.8" rx="2"   ry=".36" fill="rgba(255,255,255,.28)"/>
+                <ellipse cx="32"  cy="164.5" rx="1.6" ry=".3"  fill="rgba(255,255,255,.2)"/>
+                <ellipse cx="94"  cy="163.9" rx="1.8" ry=".33" fill="rgba(255,255,255,.24)"/>
+                <ellipse cx="112" cy="164.2" rx="1.6" ry=".3"  fill="rgba(255,255,255,.2)"/>
+                <!-- Cosmic reflections deeper in ocean -->
+                <ellipse cx="22"  cy="188" rx="10" ry=".55" fill="rgba(91,33,182,.12)"/>
+                <ellipse cx="94"  cy="193" rx="11" ry=".5"  fill="rgba(91,33,182,.1)"/>
+                <ellipse cx="55"  cy="206" rx="13" ry=".45" fill="rgba(46,16,101,.13)"/>
+              </svg>
+            </div>
+
+            <!-- Planet system -->
+            <div class="ms-po-system" id="msPlanetSystem">
+              <div class="ms-shockwave ms-sw1" id="msSw1"></div>
+              <div class="ms-shockwave ms-sw2" id="msSw2"></div>
+              <div class="ms-shockwave ms-sw3" id="msSw3"></div>
+              <div class="ms-po-ring ms-ring-outer"></div>
+              <div class="ms-po-ring ms-ring-mid"></div>
+              <div class="ms-po-orb">
+                <span class="ms-po-orb-emoji" id="msPlanetOrbEmoji">✨</span>
+              </div>
+              <div class="ms-bp-anchor">
+                <div class="ms-bp" id="msBp0" style="background:#8b5cf6;box-shadow:0 0 18px rgba(139,92,246,.95),0 0 40px rgba(139,92,246,.5)"></div>
+                <div class="ms-bp" id="msBp1" style="background:#06d6a0;box-shadow:0 0 18px rgba(6,214,160,.95),0 0 40px rgba(6,214,160,.5)"></div>
+                <div class="ms-bp" id="msBp2" style="background:#3b82f6;box-shadow:0 0 18px rgba(59,130,246,.95),0 0 40px rgba(59,130,246,.5)"></div>
+                <div class="ms-bp" id="msBp3" style="background:#f59e0b;box-shadow:0 0 18px rgba(245,158,11,.95),0 0 40px rgba(245,158,11,.5)"></div>
+                <div class="ms-bp" id="msBp4" style="background:#a855f7;box-shadow:0 0 18px rgba(168,85,247,.95),0 0 40px rgba(168,85,247,.5)"></div>
+                <div class="ms-bp" id="msBp5" style="background:#f43f5e;box-shadow:0 0 18px rgba(244,63,94,.95),0 0 40px rgba(244,63,94,.5)"></div>
+              </div>
+              <div class="ms-po-orbit ms-o1"><div class="ms-po-particle ms-pp-kt"></div><span class="ms-orb-label">Eng</span></div>
+              <div class="ms-po-orbit ms-o2"><div class="ms-po-particle ms-pp-yt"></div><span class="ms-orb-label">Health</span></div>
+              <div class="ms-po-orbit ms-o3"><div class="ms-po-particle ms-pp-nv"></div><span class="ms-orb-label">Hum</span></div>
+              <div class="ms-po-orbit ms-o4"><div class="ms-po-particle ms-pp-nn"></div><span class="ms-orb-label">Agri</span></div>
+              <div class="ms-po-orbit ms-o5"><div class="ms-po-particle ms-pp-xh"></div><span class="ms-orb-label">Social</span></div>
+              <div class="ms-po-orbit ms-o6"><div class="ms-po-particle ms-pp-tn"></div><span class="ms-orb-label">Sci</span></div>
+            </div>
+
+            <!-- Milestone text -->
+            <div class="ms-po-text">
+              <span class="ms-po-badge"     id="msPlanetBadge">MILESTONE</span>
+              <h2  class="ms-po-title"      id="msPlanetTitle">1/3 Done!</h2>
+              <p   class="ms-po-sub"        id="msPlanetSub">Keep going! 💪</p>
+              <div class="ms-po-xp" id="msPlanetXp">
+                <div class="ms-po-progress-wrap">
+                  <div class="ms-po-progress-track">
+                    <div class="ms-po-progress-fill" id="msPlanetProgressFill"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Moon + Astronaut (dark mode only) -->
+            <div class="ms-moon-scene" aria-hidden="true">
+              <div class="ms-moon-wrap">
+                <svg class="ms-moon-svg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <!-- Light from upper-left: bright left, dark right -->
+                    <radialGradient id="moonGrad" cx="32%" cy="28%" r="72%">
+                      <stop offset="0%"   stop-color="#eceef5"/>
+                      <stop offset="28%"  stop-color="#c8ccda"/>
+                      <stop offset="58%"  stop-color="#92979f"/>
+                      <stop offset="85%"  stop-color="#62666e"/>
+                      <stop offset="100%" stop-color="#45484f"/>
+                    </radialGradient>
+                    <!-- Crater floor: dark center, lighter rim -->
+                    <radialGradient id="cFloor" cx="50%" cy="50%">
+                      <stop offset="0%"   stop-color="#52565e"/>
+                      <stop offset="75%"  stop-color="#6a6e78"/>
+                      <stop offset="100%" stop-color="#80848e"/>
+                    </radialGradient>
+                    <!-- Shadow overlay: right side dark -->
+                    <radialGradient id="moonShadow" cx="78%" cy="52%" r="55%">
+                      <stop offset="0%"   stop-color="rgba(10,10,28,0.42)"/>
+                      <stop offset="100%" stop-color="rgba(10,10,28,0)"/>
+                    </radialGradient>
+                    <!-- Purple rim light gradient (BeyonDegrees brand) -->
+                    <radialGradient id="rimLight" cx="50%" cy="8%" r="60%">
+                      <stop offset="0%"   stop-color="rgba(139,92,246,0.55)"/>
+                      <stop offset="100%" stop-color="rgba(139,92,246,0)"/>
+                    </radialGradient>
+                  </defs>
+
+                  <!-- Moon body: directional light from upper-left -->
+                  <circle cx="90" cy="90" r="87" fill="url(#moonGrad)"/>
+
+                  <!-- Right-side shadow (terminator) -->
+                  <circle cx="90" cy="90" r="87" fill="url(#moonShadow)"/>
+
+                  <!-- ── Large craters (3) with raised rim effect ── -->
+                  <!-- Crater L1: upper-left zone, large -->
+                  <circle cx="50"  cy="62"  r="18" fill="none" stroke="rgba(200,205,215,0.22)" stroke-width="2.5"/>
+                  <circle cx="50"  cy="62"  r="16" fill="url(#cFloor)"/>
+                  <ellipse cx="46" cy="58"  rx="8"  ry="4"  fill="rgba(255,255,255,0.06)"/>
+                  <!-- Crater L2: upper-right, medium-large -->
+                  <circle cx="112" cy="44"  r="13" fill="none" stroke="rgba(185,190,200,0.2)" stroke-width="2"/>
+                  <circle cx="112" cy="44"  r="11" fill="url(#cFloor)"/>
+                  <ellipse cx="108" cy="40" rx="5.5" ry="2.8" fill="rgba(255,255,255,0.05)"/>
+                  <!-- Crater L3: left-centre, medium -->
+                  <circle cx="36"  cy="116" r="14" fill="none" stroke="rgba(185,190,200,0.18)" stroke-width="2"/>
+                  <circle cx="36"  cy="116" r="12" fill="url(#cFloor)"/>
+                  <ellipse cx="32" cy="112" rx="5"  ry="2.5" fill="rgba(255,255,255,0.04)"/>
+
+                  <!-- ── Small craters (5) ── -->
+                  <circle cx="138" cy="100" r="7"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.15)" stroke-width="1.2"/>
+                  <circle cx="74"  cy="130" r="6"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.12)" stroke-width="1"/>
+                  <circle cx="152" cy="62"  r="5"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.12)" stroke-width="0.8"/>
+                  <circle cx="25"  cy="82"  r="5"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.10)" stroke-width="0.8"/>
+                  <circle cx="96"  cy="145" r="6"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.10)" stroke-width="0.8"/>
+
+                  <!-- Left highlight band (light source reflection) -->
+                  <ellipse cx="44" cy="55" rx="22" ry="32" fill="rgba(255,255,255,0.055)" transform="rotate(-18,44,55)"/>
+
+                  <!-- ── Purple rim light (BeyonDegrees brand, top edge) ── -->
+                  <circle cx="90" cy="90" r="87" fill="url(#rimLight)"/>
+                  <!-- Sharper purple arc at very top -->
+                  <path d="M 16,90 A 74,74 0 0,1 164,90" fill="none" stroke="rgba(139,92,246,0.45)" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M 30,90 A 60,60 0 0,1 150,90" fill="none" stroke="rgba(167,139,250,0.25)" stroke-width="5" stroke-linecap="round"/>
+
+                  <!-- Moon edge -->
+                  <circle cx="90" cy="90" r="87" fill="none" stroke="rgba(139,92,246,0.12)" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <!-- Astronaut walking left → right -->
+              <div class="ms-astronaut" id="msAstronaut">
+                <svg class="ms-astro-svg" viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+                  <defs>
+                    <linearGradient id="asG1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#8B5CF6"/>
+                      <stop offset="100%" stop-color="#3B82F6"/>
+                    </linearGradient>
+                    <linearGradient id="asG2" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#6D28D9"/>
+                      <stop offset="100%" stop-color="#1D4ED8"/>
+                    </linearGradient>
+                    <linearGradient id="asG3" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#5B21B6"/>
+                      <stop offset="100%" stop-color="#312E81"/>
+                    </linearGradient>
+                    <linearGradient id="asGS" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="rgba(255,255,255,0.30)"/>
+                      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Back arm (far side) -->
+                  <rect x="5" y="32" width="7" height="12" rx="3.5" fill="url(#asG2)" opacity="0.65"/>
+                  <ellipse cx="8.5" cy="45.5" rx="4.5" ry="3.8" fill="#4C1D95" opacity="0.65"/>
+
+                  <!-- Body — small & cute relative to big head -->
+                  <rect x="13" y="30" width="22" height="19" rx="7.5" fill="url(#asG1)"/>
+                  <!-- Body top shine -->
+                  <rect x="13" y="30" width="22" height="10" rx="7.5" fill="url(#asGS)"/>
+                  <!-- Single clean stripe -->
+                  <rect x="13" y="41" width="22" height="2" fill="rgba(255,255,255,0.2)"/>
+
+                  <!-- Front arm (near side) -->
+                  <rect x="35" y="31" width="7" height="12" rx="3.5" fill="url(#asG1)"/>
+                  <rect x="35" y="31" width="7" height="6" rx="3.5" fill="url(#asGS)"/>
+                  <ellipse cx="38.5" cy="44.5" rx="4.8" ry="4" fill="url(#asG2)"/>
+                  <!-- Glove shine -->
+                  <ellipse cx="36.5" cy="42.5" rx="1.5" ry="0.9" fill="rgba(255,255,255,0.25)"/>
+
+                  <!-- Collar ring -->
+                  <rect x="18" y="28" width="13" height="3" rx="1.5" fill="#7C3AED"/>
+                  <rect x="18" y="28" width="13" height="1.5" rx="0.75" fill="rgba(255,255,255,0.2)"/>
+
+                  <!-- ── Helmet (BIG — ~47% of total height) ── -->
+                  <circle cx="24" cy="15" r="14.5" fill="white"/>
+                  <!-- Subtle rim -->
+                  <circle cx="24" cy="15" r="13.8" fill="none" stroke="rgba(196,181,253,0.35)" stroke-width="0.6"/>
+                  <!-- Top highlight -->
+                  <ellipse cx="18.5" cy="6" rx="7.5" ry="4" fill="rgba(255,255,255,0.35)"/>
+
+                  <!-- Visor — large, dark but not black, shows face -->
+                  <ellipse cx="25" cy="16.5" rx="10" ry="9.5" fill="#0c0b2e"/>
+                  <!-- Visor tint layer (depth) -->
+                  <ellipse cx="25" cy="16.5" rx="10" ry="9.5" fill="rgba(99,60,220,0.18)"/>
+                  <!-- Visor rim glow -->
+                  <ellipse cx="25" cy="16.5" rx="10" ry="9.5" fill="none" stroke="rgba(139,92,246,0.5)" stroke-width="0.8"/>
+                  <!-- Visor shine (top-left) -->
+                  <ellipse cx="19.5" cy="10.5" rx="4" ry="2.2" fill="rgba(255,255,255,0.22)" transform="rotate(-20,19.5,10.5)"/>
+                  <ellipse cx="28.5" cy="9.5" rx="1.6" ry="0.85" fill="rgba(255,255,255,0.12)"/>
+
+                  <!-- ── Face: Explorer gaze (looking up-right toward stars) ── -->
+                  <!-- Eye whites — big & expressive -->
+                  <ellipse cx="20.5" cy="17" rx="3.8" ry="4.2" fill="white"/>
+                  <ellipse cx="29.5" cy="17" rx="3.8" ry="4.2" fill="white"/>
+                  <!-- Pupils shifted UP-RIGHT: explorer looking at something exciting -->
+                  <circle cx="22.0" cy="15.6" r="2.5" fill="#1E1B4B"/>
+                  <circle cx="31.0" cy="15.6" r="2.5" fill="#1E1B4B"/>
+                  <!-- Primary shine -->
+                  <circle cx="23.0" cy="14.4" r="1.1" fill="white"/>
+                  <circle cx="32.0" cy="14.4" r="1.1" fill="white"/>
+                  <!-- Secondary tiny shine -->
+                  <circle cx="21.2" cy="17.0" r="0.5" fill="rgba(255,255,255,0.65)"/>
+                  <circle cx="30.2" cy="17.0" r="0.5" fill="rgba(255,255,255,0.65)"/>
+                  <!-- Eyebrows: raised high = excited/wondering -->
+                  <path d="M 17.5,11.5 Q 20.5,9.8 23.5,11.5" fill="none" stroke="#4338CA" stroke-width="1.2" stroke-linecap="round"/>
+                  <path d="M 26.5,11.5 Q 29.5,9.8 32.5,11.5" fill="none" stroke="#4338CA" stroke-width="1.2" stroke-linecap="round"/>
+                  <!-- Smile: wide, open joy -->
+                  <path d="M 18.5,22.5 Q 25,27.5 31.5,22.5" fill="none" stroke="#3730A3" stroke-width="1.3" stroke-linecap="round"/>
+                  <!-- Cheek blush — bigger/brighter for excitement -->
+                  <ellipse cx="16.5" cy="21.5" rx="3.2" ry="1.8" fill="rgba(251,113,133,0.38)"/>
+                  <ellipse cx="33.5" cy="21.5" rx="3.2" ry="1.8" fill="rgba(251,113,133,0.38)"/>
+                  <!-- Tiny sparkle in visor upper-right: what the explorer is looking at -->
+                  <path d="M 33,8 L 33.8,9.8 L 35.6,10.6 L 33.8,11.4 L 33,13.2 L 32.2,11.4 L 30.4,10.6 L 32.2,9.8 Z" fill="rgba(253,224,71,0.85)" />
+
+                  <!-- Antenna (simple, minimal) -->
+                  <line x1="32" y1="2.5" x2="30" y2="5.5" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
+                  <circle cx="32.5" cy="1.8" r="2" fill="#C4B5FD"/>
+                  <circle cx="32.5" cy="1.8" r="0.85" fill="white" opacity="0.9"/>
+
+                  <!-- ── Legs ── -->
+                  <!-- Back leg -->
+                  <rect x="15" y="49" width="8" height="11" rx="3.5" fill="url(#asG2)" opacity="0.75" class="ms-astro-leg-r"/>
+                  <!-- Front leg -->
+                  <rect x="24.5" y="49" width="9" height="12" rx="4" fill="url(#asG1)" class="ms-astro-leg-l"/>
+                  <rect x="25" y="49" width="4.5" height="5" rx="2.25" fill="rgba(255,255,255,0.2)" class="ms-astro-leg-l"/>
+
+                  <!-- ── Boots ── -->
+                  <!-- Back boot -->
+                  <rect x="12" y="58" width="14" height="5.5" rx="2.75" fill="url(#asG3)" opacity="0.8"/>
+                  <!-- Front boot -->
+                  <rect x="21.5" y="59.5" width="16" height="6" rx="3" fill="url(#asG3)"/>
+                  <!-- Boot shine -->
+                  <rect x="22.5" y="60" width="9" height="2" rx="1" fill="rgba(255,255,255,0.22)"/>
+                  <!-- Boot sole -->
+                  <rect x="21" y="64.5" width="17.5" height="1.5" rx="0.75" fill="rgba(0,0,0,0.2)"/>
+                </svg>
+              </div>
+            </div>
+          </div>
 
         </div><!-- /mobile-screen -->
       </div><!-- /device-frame -->
@@ -2738,8 +3575,85 @@ svg *, canvas, video, img { transition: none !important; }
   
   
   
+<script src="../../../shared/scripts/bd-profile.js"></script>
 <script src="../assertions-i18n.js"></script>
 <script src="../assertions.js"></script>
+
+<!-- ── Milestone patch: orbit labels + orb emoji dedup ── -->
+<script>
+(function () {
+  var _ORB_LABELS = {
+    en: { kt:'Eng',       yt:'Health',  nv:'Hum',      nn:'Agri',   xh:'Social', tn:'Sci'      },
+    vi: { kt:'Kỹ thuật',  yt:'Y tế',    nv:'Nhân văn', nn:'Nông nghiệp', xh:'Khoa học XH', tn:'Khoa học TN' },
+    hi: { kt:'इंजी.',     yt:'स्वास्थ्य', nv:'मानविकी', nn:'कृषि',  xh:'सामाजिक', tn:'विज्ञान' },
+    fr: { kt:'Ingé.',     yt:'Santé',   nv:'Hum.',     nn:'Agri.',  xh:'Social', tn:'Sciences' },
+    ar: { kt:'هندسة',     yt:'طب',      nv:'إنسانيات', nn:'زراعة', xh:'اجتماعي', tn:'علوم'    }
+  };
+  var _ORB_ORDER = ['kt','yt','nv','nn','xh','tn'];
+  var ORB_ALT = { '🔥':'⭐', '⚡':'🌟', '🎉':'💫', '🚀':'🪐' };
+
+  document.addEventListener('DOMContentLoaded', function () {
+    /* ── Orbit label i18n ── */
+    var labels = document.querySelectorAll('.ms-po-orbit .ms-orb-label');
+    function _applyOrbLabels() {
+      var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+      var table = _ORB_LABELS[lang] || _ORB_LABELS['en'];
+      labels.forEach(function(el, i) {
+        el.textContent = table[_ORB_ORDER[i]] || _ORB_ORDER[i];
+      });
+    }
+    if (labels.length) {
+      _applyOrbLabels();
+      var overlay = document.getElementById('milestoneOverlay');
+      if (overlay) {
+        new MutationObserver(function() {
+          if (overlay.classList.contains('visible')) _applyOrbLabels();
+        }).observe(overlay, { attributes: true, attributeFilter: ['class'] });
+      }
+    }
+
+    /* ── Orb emoji dedup ── */
+    var orbEl = document.getElementById('msPlanetOrbEmoji');
+    if (orbEl) {
+      new MutationObserver(function () {
+        var cur = (orbEl.textContent||'').trim();
+        if (ORB_ALT[cur]) orbEl.textContent = ORB_ALT[cur];
+      }).observe(orbEl, { childList:true, characterData:true, subtree:true });
+    }
+  });
+})();
+</script>
+
+
+<!-- ── i18n stat watcher: re-writes stat text in the active language when milestone JS sets it ── -->
+<script>
+(function () {
+  var _ST = {
+    done: { en:'✓ {n} done', vi:'✓ {n} câu xong', hi:'✓ {n} पूर्ण', fr:'✓ {n} terminé', ar:'✓ {n} مكتملة' },
+    left: { en:'→ {n} left', vi:'→ còn {n} câu',  hi:'→ {n} शेष',   fr:'→ {n} restant',  ar:'→ {n} متبقية'  }
+  };
+  function tStat(type, n) {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return (_ST[type][lang] || _ST[type].en).replace('{n}', n);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    function watchStat(id, type) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      new MutationObserver(function () {
+        var m = (el.textContent || '').match(/\d+/);
+        if (!m) return;
+        var want = tStat(type, m[0]);
+        if (el.textContent === want) return; /* already correct — stop here, prevents loop */
+        el.textContent = want;
+      }).observe(el, { childList: true, characterData: true, subtree: true });
+    }
+    watchStat('msPlanetStatDone', 'done');
+    watchStat('msPlanetStatLeft', 'left');
+  });
+})();
+</script>
+
 <script>
 /* utils */
 /* BeyonDegrees.ai — Shared Utilities */
@@ -3112,7 +4026,7 @@ window.PageTransition = PageTransition;
 /* screen */
 /* ============================================================
    quiz-card.js — BeyonDegrees Aurora Quiz System
-   Drag Spring Physics + Spectrum Tap + Aurora BGEngine
+   Drag Spring Physics + Aurora BGEngine
    ============================================================ */
 
 'use strict';
@@ -3121,7 +4035,7 @@ window.PageTransition = PageTransition;
    1. DISCIPLINE COLOR MAP
    ───────────────────────────────────────── */
 const DISC_EMOJIS = {
-  kt: '💻', nv: '📖', yt: '🩺', xh: '🌐', nn: '🌾', tn: '🧬',
+  kt: '⚙️', nv: '✏️', yt: '🏥', xh: '🤝', nn: '🌾', tn: '🧬',
 };
 
 const DISC_COLORS = {
@@ -3155,7 +4069,7 @@ const DISC_COLORS = {
     light: '#DDCFE2', lightAccent: '#856E92',
     lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #DDCFE2 60%, #CDB8D2 100%)',
     lightGlow: 'rgba(186,161,194,0.50)',
-    label: '🌐 Xã hội học',      next: 'nn'
+    label: '🌐 Social Sciences',  next: 'nn'
   },
   nn: {
     primary: '#f59e0b', dark: '#451a03', glow: 'rgba(245,158,11,0.5)',
@@ -3163,7 +4077,7 @@ const DISC_COLORS = {
     light: '#FAEEDA', lightAccent: '#B26344',
     lightBase: 'linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 50%, #F4C9A8 100%)',
     lightGlow: 'rgba(232,168,107,0.50)',
-    label: '🌿 Nông nghiệp',     next: 'tn'
+    label: '🌿 Agriculture',      next: 'tn'
   },
   tn: {
     primary: '#f43f5e', dark: '#4c0519', glow: 'rgba(244,63,94,0.5)',
@@ -3177,10 +4091,41 @@ const DISC_COLORS = {
 
 /* ─────────────────────────────────────────
    2. QUESTIONS BANK
-   Loaded dynamically from data/assertions.js (window.BD_ASSERTIONS).
-   Random 10 per stage each session: 10 discipline + 10 major + 10 university.
+   Built at runtime from window.BD_ASSERTIONS (assertions.js — auto-generated from CSV).
+   30 per session: 10 discipline (d) + 10 major (m) + 10 university (u).
+   Disc assigned round-robin: kt→nn→nv→tn→xh→yt→... for visual variety + balanced DNA.
    ───────────────────────────────────────── */
-const QUESTIONS = [
+const _DISC_ORDER = ['kt', 'nn', 'nv', 'tn', 'xh', 'yt'];
+
+function _shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildQuizSet() {
+  const src = window.BD_ASSERTIONS;
+  if (!src) return [];
+  const pick = (pool, n) =>
+    _shuffle(pool).slice(0, n).map((q, i) => ({
+      ...q,
+      disc: _DISC_ORDER[i % _DISC_ORDER.length]
+    }));
+  return [
+    ...pick(src.d || [], 10),
+    ...pick(src.m || [], 10),
+    ...pick(src.u || [], 10),
+  ];
+}
+
+/* ── LEGACY BANK (kept as reference only — DO NOT USE in production) ──────
+   The array below is the old hardcoded 30-question bank. It is no longer
+   used; QUESTIONS is now built dynamically by buildQuizSet() above.
+   ───────────────────────────────────────────────────────────────────────── */
+const _LEGACY_QUESTIONS = [
   { id:  1, disc: 'kt', text: 'I enjoy solving problems through data analysis.',
     vi: 'Tôi thích giải quyết vấn đề thông qua phân tích dữ liệu.',
     fr: "J'aime résoudre des problèmes par l'analyse de données.",
@@ -3332,6 +4277,10 @@ const QUESTIONS = [
     hi: 'नई सामग्री और नैनोटेक्नोलॉजी जीने का तरीका बदल देगी — मैं उसमें योगदान देना चाहता हूं।',
     ar: 'المواد الجديدة وتقنية النانو ستغير طريقة حياتنا — أريد المساهمة في ذلك.' },
 ];
+
+/* ── LIVE QUESTIONS (built from BD_ASSERTIONS) ── */
+const QUESTIONS = buildQuizSet();
+
 /* ── Language helpers ───────────────────────────────────────────
    Both read localStorage directly so they work on first paint,
    regardless of whether BDi18n.init() has run yet.
@@ -3342,17 +4291,28 @@ function _bdLang() {
 
 function getQText(q) {
   var lang = _bdLang();
-  if (q[lang]) return q[lang]; /* vi / fr / hi / ar — all stored inline */
-  return q.text;               /* fallback: English */
+  if (lang === 'vi' && q.vi) return q.vi;
+  if (q[lang]) return q[lang]; /* fr/hi/ar stored inline (legacy format) */
+  /* Check i18n lookup table (assertions-i18n.js — fr/hi/ar keyed by assertion id) */
+  if (window.BD_ASSERTIONS_I18N && window.BD_ASSERTIONS_I18N[lang] && window.BD_ASSERTIONS_I18N[lang][q.id])
+    return window.BD_ASSERTIONS_I18N[lang][q.id];
+  return q.text; /* fallback: English */
 }
 
-/* Disc chip label translation (uses BDi18n.t with temporary _lang override) */
-var _DISC_EMOJIS = { kt:'⚡', nv:'📚', yt:'⚕️', xh:'💡', nn:'🌱', tn:'🔬' };
+/* Disc chip label translation — inline table (quiz-card doesn't load shared i18n.js) */
+var _DISC_EMOJIS = { kt:'💻', nv:'📖', yt:'⚕️', xh:'🌍', nn:'🌱', tn:'🔬' };
+var _DISC_LABELS = {
+  en: { kt:'Engineering',       nv:'Humanities',    yt:'Health & Medicine', xh:'Social Sciences', nn:'Agriculture',    tn:'Natural Sciences' },
+  vi: { kt:'Kỹ thuật',          nv:'Nhân văn',      yt:'Y tế',              xh:'Khoa học XH',     nn:'Nông nghiệp',    tn:'Khoa học TN'      },
+  hi: { kt:'इंजीनियरिंग',      nv:'मानविकी',       yt:'चिकित्सा',          xh:'सामाजिक विज्ञान', nn:'कृषि',           tn:'प्राकृतिक विज्ञान'},
+  fr: { kt:'Ingénierie',        nv:'Sciences Hum.', yt:'Médecine',          xh:'Sciences Soc.',   nn:'Agriculture',    tn:'Sciences Nat.'    },
+  ar: { kt:'هندسة',             nv:'إنسانيات',      yt:'طب',                xh:'علوم اجتماعية',   nn:'زراعة',          tn:'علوم طبيعية'      }
+};
 function getDiscLabel(discKey) {
   var lang = _bdLang();
-  if (lang === 'en' || !window.BDi18n) return DISC_COLORS[discKey].label;
-  var translated = window.BDi18n.t.call({ _lang: lang }, 'disc.short.' + discKey);
-  return (_DISC_EMOJIS[discKey] || '') + ' ' + translated;
+  var table = _DISC_LABELS[lang] || _DISC_LABELS['en'];
+  var name  = table[discKey] || _DISC_LABELS['en'][discKey] || discKey;
+  return (_DISC_EMOJIS[discKey] || '') + ' ' + name;
 }
 /* ── START-QUESTION DETECTION ── */
 // sessionStorage bd_nextStart is the primary resume mechanism (set by result screens)
@@ -3378,9 +4338,6 @@ if (START_IDX === 0) {
     sessionStorage.removeItem('bd_scores');
   } catch(e) {}
 }
-// QUESTIONS stays as the full 30-question array — no slicing
-
-
 /* ─────────────────────────────────────────
    3. STATE
    ───────────────────────────────────────── */
@@ -3390,13 +4347,9 @@ const state = {
   scores: { agree: 0, strong: 0, neutral: 0, disagree: 0 },
   dna: { kt: 0, nv: 0, yt: 0, xh: 0, nn: 0, tn: 0 },
   isDragging: false,
-  isSpectrumMode: false,
-  holdTimer: null,
   hasMoved: false,
   startX: 0, startY: 0,
   currentX: 0, currentY: 0,
-  spectrumVal: 0,
-  spectrumDragging: false,
   isFlinging: false,
 };
 
@@ -3602,11 +4555,10 @@ const BGEngine = (() => {
    5. DOM REFS
    ───────────────────────────────────────── */
 let $activeCard, $dragOverlay, $qText, $disciplineTag, $qNumber;
-let $spectrumWrap, $spectrumThumb, $spectrumValueLabel, $spectrumConfirmBtn, $spectrumTrack;
 let $swipeHint, $hintRight, $hintLeft, $hintUp, $hintDown;
 let $counterCurrent, $agreeCount, $strongCount, $neutralCount, $disagreeCount;
 let $milestoneOverlay, $milestoneEmoji, $milestoneText, $milestoneSub;
-let $storyBar, $modeIndicator, $modeLabel, $undoBtn;
+let $storyBar, $undoBtn;
 
 /* ─────────────────────────────────────────
    6. INIT
@@ -3617,11 +4569,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $qText               = document.getElementById('qText');
   $disciplineTag       = document.getElementById('disciplineTag');
   $qNumber             = document.getElementById('qNumber');
-  $spectrumWrap        = document.getElementById('spectrumWrap');
-  $spectrumThumb       = document.getElementById('spectrumThumb');
-  $spectrumValueLabel  = document.getElementById('spectrumValueLabel');
-  $spectrumConfirmBtn  = document.getElementById('spectrumConfirmBtn');
-  $spectrumTrack       = document.getElementById('spectrumTrack');
   $swipeHint           = document.getElementById('swipeHint');
   $hintRight           = document.getElementById('hintRight');
   $hintLeft            = document.getElementById('hintLeft');
@@ -3637,8 +4584,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $milestoneText       = document.getElementById('milestoneText');
   $milestoneSub        = document.getElementById('milestoneSub');
   $storyBar            = document.getElementById('storyBar');
-  $modeIndicator       = document.getElementById('modeIndicator');
-  $modeLabel           = $modeIndicator ? $modeIndicator.querySelector('.mode-label') : null;
   $undoBtn             = document.getElementById('undoBtn');
 
   state.currentIndex = START_IDX;
@@ -3656,10 +4601,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (START_IDX > 0) updateDNA();
   loadCard(START_IDX);
   bindPointerEvents();
-  bindSpectrumEvents();
   bindKeyboard();
   if ($undoBtn) $undoBtn.addEventListener('click', undoLast);
-  if ($spectrumConfirmBtn) $spectrumConfirmBtn.addEventListener('click', confirmSpectrum);
   // Disciplines tab always points to discipline/match/ — freely accessible at any time
 });
 
@@ -3667,14 +4610,14 @@ document.addEventListener('DOMContentLoaded', () => {
    7. CARD LOADING
    ───────────────────────────────────────── */
 function loadCard(index) {
-  // Batch-end checkpoints: redirect to Loading after Q10, Q20
+  // Batch-end checkpoints: redirect to Loading after Q10, Q20, Q30
   if (index === 10 && START_IDX < 10) {
     showBatchDone(1); return;
   }
   if (index === 20 && START_IDX < 20) {
     showBatchDone(2); return;
   }
-  if (index >= QUESTIONS.length) { showFinished(); return; }
+  if (index >= QUESTIONS.length) { showBatchDone(3); return; }
   const q    = QUESTIONS[index];
   const disc = DISC_COLORS[q.disc];
 
@@ -3689,12 +4632,11 @@ function loadCard(index) {
   setCardTransform(0, 0, 0);
   $activeCard && ($activeCard.style.transition = '');
   resetHints();
-  exitSpectrumMode(true);
 
-  // First-card hint fades after 3s
-  if (index === 0 && $swipeHint) {
-    $swipeHint.style.opacity = '1';
-    setTimeout(() => { if ($swipeHint) $swipeHint.style.opacity = '0'; }, 3000);
+  // Show hint on Q1, hide from Q2 onward
+  if ($swipeHint) {
+    $swipeHint.style.transition = 'opacity 0.4s ease';
+    $swipeHint.style.opacity = index === 0 ? '1' : '0';
   }
 
   BGEngine.setDisc(q.disc);
@@ -3737,7 +4679,6 @@ function updateStoryBar(current) {
    ───────────────────────────────────────── */
 const THRESHOLD_X = 80;
 const THRESHOLD_Y = 60;
-const HOLD_MS     = 300;
 const ROT_COEF    = 0.065;
 const FLING_PX    = 540;
 
@@ -3750,7 +4691,7 @@ function bindPointerEvents() {
 }
 
 function onDown(e) {
-  if (state.isSpectrumMode || state.isFlinging) return;
+  if (state.isFlinging) return;
   e.preventDefault();
   $dragOverlay.setPointerCapture(e.pointerId);
 
@@ -3761,15 +4702,12 @@ function onDown(e) {
   state.currentX   = 0;
   state.currentY   = 0;
 
-  state.holdTimer = setTimeout(() => {
-    if (!state.hasMoved) enterSpectrumMode();
-  }, HOLD_MS);
-
+  /* Hide hint as soon as user starts interacting */
   if ($swipeHint) $swipeHint.style.opacity = '0';
 }
 
 function onMove(e) {
-  if (!state.isDragging || state.isSpectrumMode || state.isFlinging) return;
+  if (!state.isDragging || state.isFlinging) return;
   e.preventDefault();
 
   const dx = e.clientX - state.startX;
@@ -3777,7 +4715,6 @@ function onMove(e) {
 
   if (!state.hasMoved && Math.hypot(dx, dy) > 8) {
     state.hasMoved = true;
-    clearTimeout(state.holdTimer);
   }
   if (!state.hasMoved) return;
 
@@ -3791,9 +4728,8 @@ function onMove(e) {
 
 function onUp(e) {
   if (!state.isDragging) return;
-  clearTimeout(state.holdTimer);
   state.isDragging = false;
-  if (state.isSpectrumMode || state.isFlinging) return;
+  if (state.isFlinging) return;
 
   const dx = state.currentX;
   const dy = state.currentY;
@@ -3893,87 +4829,6 @@ function springBack() {
 }
 
 /* ─────────────────────────────────────────
-   12. SPECTRUM MODE
-   ───────────────────────────────────────── */
-function enterSpectrumMode() {
-  state.isSpectrumMode = true;
-  state.spectrumVal = 0;
-  // Disable drag-overlay so spectrum slider underneath is clickable
-  if ($dragOverlay) $dragOverlay.style.pointerEvents = 'none';
-  if ($spectrumWrap)  $spectrumWrap.classList.add('visible');
-  if ($swipeHint)     $swipeHint.style.opacity = '0';
-  if ($modeLabel)     $modeLabel.textContent = 'Spectrum';
-  if ($modeIndicator) $modeIndicator.classList.add('spectrum');
-  updateSpectrumUI(0);
-  if (typeof BD !== 'undefined' && BD.Toast) BD.Toast.show('Kéo để chọn mức độ chính xác 🎯', 2000);
-}
-
-function exitSpectrumMode(silent) {
-  state.isSpectrumMode = false;
-  state.spectrumDragging = false;
-  // Re-enable drag-overlay for swipe interactions
-  if ($dragOverlay) $dragOverlay.style.pointerEvents = 'all';
-  if ($spectrumWrap)  $spectrumWrap.classList.remove('visible');
-  if ($modeLabel)     $modeLabel.textContent = 'Swipe';
-  if ($modeIndicator) $modeIndicator.classList.remove('spectrum');
-  if (!silent) updateSpectrumUI(0);
-}
-
-function updateSpectrumUI(val) {
-  const pct = ((val + 1) / 2) * 100;
-  if ($spectrumThumb) $spectrumThumb.style.left = pct + '%';
-
-  const levels = [
-    { max: -0.55, label: 'Disagree',      color: 'var(--red-400)' },
-    { max: -0.15, label: 'Hơi không đồng ý',  color: '#ff6b81' },
-    { max:  0.15, label: 'Neutral',          color: 'var(--text-muted)' },
-    { max:  0.55, label: 'Agree',             color: 'var(--mint-500)' },
-    { max:  1.01, label: 'Rất đồng ý',         color: '#7c3aed' },
-  ];
-  const lvl = levels.find(l => val <= l.max) || levels[levels.length - 1];
-  if ($spectrumValueLabel) {
-    $spectrumValueLabel.textContent = lvl.label;
-    $spectrumValueLabel.style.color = lvl.color;
-  }
-  state.spectrumVal = val;
-}
-
-function bindSpectrumEvents() {
-  if (!$spectrumTrack) return;
-
-  const readPos = (e) => {
-    const rect = $spectrumTrack.getBoundingClientRect();
-    return Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width) * 2 - 1));
-  };
-
-  $spectrumTrack.addEventListener('pointerdown', (e) => {
-    if (!state.isSpectrumMode) return;
-    e.stopPropagation();
-    $spectrumTrack.setPointerCapture(e.pointerId);
-    state.spectrumDragging = true;
-    updateSpectrumUI(readPos(e));
-  });
-  $spectrumTrack.addEventListener('pointermove', (e) => {
-    if (!state.spectrumDragging) return;
-    updateSpectrumUI(readPos(e));
-  });
-  $spectrumTrack.addEventListener('pointerup', () => { state.spectrumDragging = false; });
-}
-
-function confirmSpectrum() {
-  const v = state.spectrumVal;
-  let dir;
-  if      (v <= -0.5)  dir = 'left';
-  else if (v <= -0.15) dir = 'left';
-  else if (v <=  0.15) dir = 'down';
-  else if (v <=  0.55) dir = 'right';
-  else                  dir = 'up';
-
-  exitSpectrumMode();
-  flingCard(dir);
-}
-
-/* ─────────────────────────────────────────
    13. ANSWER RECORDING
    ───────────────────────────────────────── */
 const DNA_WEIGHTS = { agree: 1, strong: 2, neutral: 0, disagree: -1 };
@@ -4029,14 +4884,42 @@ function advanceCard() {
 
   const done  = state.currentIndex;
   const total = QUESTIONS.length;
+  const _QT_TABLE = {
+    en: {
+      'quiz.milestone.1of3':     'You unlocked Stage 1',        'quiz.milestone.1of3.sub': 'Career DNA is forming…',
+      'quiz.milestone.2of3':     'You unlocked Stage 2',        'quiz.milestone.2of3.sub': 'Almost fully mapped…',
+      'quiz.milestone.3of3':     'Career DNA Fully Decoded!',   'quiz.milestone.3of3.sub': 'Your academic identity is ready.'
+    },
+    vi: {
+      'quiz.milestone.1of3':     'Bạn đã mở khóa Giai đoạn 1', 'quiz.milestone.1of3.sub': 'Career DNA đang hình thành…',
+      'quiz.milestone.2of3':     'Bạn đã mở khóa Giai đoạn 2', 'quiz.milestone.2of3.sub': 'Gần hoàn tất bản đồ rồi…',
+      'quiz.milestone.3of3':     'Career DNA Đã Giải Mã!',      'quiz.milestone.3of3.sub': 'Hồ sơ học thuật của bạn đã sẵn sàng.'
+    },
+    hi: {
+      'quiz.milestone.1of3':     'आपने स्टेज १ अनलॉक किया',   'quiz.milestone.1of3.sub': 'Career DNA बन रहा है…',
+      'quiz.milestone.2of3':     'आपने स्टेज २ अनलॉक किया',   'quiz.milestone.2of3.sub': 'लगभग पूरी तरह मैप हो गया…',
+      'quiz.milestone.3of3':     'Career DNA पूर्णतः डिकोड!',  'quiz.milestone.3of3.sub': 'आपकी शैक्षणिक पहचान तैयार है।'
+    },
+    fr: {
+      'quiz.milestone.1of3':     'Vous avez débloqué l\'Étape 1', 'quiz.milestone.1of3.sub': 'Career DNA en formation…',
+      'quiz.milestone.2of3':     'Vous avez débloqué l\'Étape 2', 'quiz.milestone.2of3.sub': 'Cartographie presque terminée…',
+      'quiz.milestone.3of3':     'Career DNA Entièrement Décodé !', 'quiz.milestone.3of3.sub': 'Votre profil académique est prêt.'
+    },
+    ar: {
+      'quiz.milestone.1of3':     'لقد أنهيت المرحلة ١',        'quiz.milestone.1of3.sub': 'الحمض النووي المهني يتشكّل…',
+      'quiz.milestone.2of3':     'لقد أنهيت المرحلة ٢',        'quiz.milestone.2of3.sub': 'الخريطة المهنية تكتمل قريباً…',
+      'quiz.milestone.3of3':     'تم فك شفرة Career DNA!',     'quiz.milestone.3of3.sub': 'هويتك الأكاديمية جاهزة.'
+    }
+  };
   const _qt = function(k) {
-    try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
-    return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
+    var l = _bdLang();
+    var tbl = _QT_TABLE[l] || _QT_TABLE['en'];
+    return tbl[k] || _QT_TABLE['en'][k] || k;
   };
   const MILESTONES = [
-    { at: Math.floor(total / 3),   emoji: '🔥', text: _qt('quiz.milestone.1of3'),  sub: _qt('quiz.milestone.1of3.sub') },
-    { at: Math.floor(total / 2),   emoji: '⚡', text: _qt('quiz.milestone.half'),   sub: _qt('quiz.milestone.half.sub') },
-    { at: Math.floor(total * 2/3), emoji: '🚀', text: _qt('quiz.milestone.2of3'),  sub: _qt('quiz.milestone.2of3.sub') },
+    { at: Math.floor(total / 3),   emoji: '🔥', text: _qt('quiz.milestone.1of3'), sub: _qt('quiz.milestone.1of3.sub') },
+    { at: Math.floor(total * 2/3), emoji: '🚀', text: _qt('quiz.milestone.2of3'), sub: _qt('quiz.milestone.2of3.sub') },
+    { at: total,                   emoji: '🏆', text: _qt('quiz.milestone.3of3'), sub: _qt('quiz.milestone.3of3.sub') },
   ];
 
   const hit = MILESTONES.find(m => m.at === done);
@@ -4049,15 +4932,217 @@ function advanceCard() {
 
 function showMilestone(emoji, text, sub, cb) {
   if (!$milestoneOverlay) { cb && cb(); return; }
+  // Keep legacy refs in sync (elements are hidden, no visual impact)
   if ($milestoneEmoji) $milestoneEmoji.textContent = emoji;
   if ($milestoneText)  $milestoneText.textContent  = text;
   if ($milestoneSub)   $milestoneSub.textContent   = sub;
-  $milestoneOverlay.classList.add('visible');
-  setTimeout(() => {
-    $milestoneOverlay.classList.remove('visible');
-    cb && cb();
-  }, 1900);
+  // Launch planet burst; callback fires after dismiss
+  _msPlanetShow(emoji, text, sub, cb);
 }
+
+/* ── Planet Burst Milestone Engine ─────────────────── */
+(function _initPlanetMilestone() {
+  'use strict';
+
+  /* One-time star setup */
+  var starsEl = document.getElementById('msPlanetStars');
+  if (starsEl && !starsEl._init) {
+    starsEl._init = true;
+    var styleEl = document.createElement('style');
+    styleEl.textContent = '@keyframes msStarTwinkle{0%,100%{opacity:.15}50%{opacity:1}}';
+    document.head.appendChild(styleEl);
+    for (var i = 0; i < 55; i++) {
+      var s = document.createElement('div');
+      var sz = Math.random() > 0.8 ? 2 : 1;
+      s.style.cssText = 'position:absolute;border-radius:50%;'
+        + 'width:' + sz + 'px;height:' + sz + 'px;'
+        + 'left:' + (Math.random()*100).toFixed(1) + '%;'
+        + 'top:'  + (Math.random()*100).toFixed(1) + '%;'
+        + 'background:rgba(255,255,255,' + (0.3+Math.random()*0.7).toFixed(2) + ');'
+        + 'animation:msStarTwinkle ' + (2+Math.random()*3).toFixed(1) + 's ease-in-out '
+        + (Math.random()*3).toFixed(1) + 's infinite;';
+      starsEl.appendChild(s);
+    }
+  }
+
+  var _pTimer = null;
+
+  window._msPlanetShow = function(emoji, text, sub, cb) {
+    var ov  = document.getElementById('milestoneOverlay');
+    var sys = document.getElementById('msPlanetSystem');
+    if (!ov || !sys) { cb && cb(); return; }
+
+    /* Reset */
+    _msPlanetReset();
+
+    /* Populate content */
+    var _BADGE_I18N = {
+      en: { '🔥': 'DNA SCAN · 1/3',      '⚡': 'DNA SCAN · ½',   '🚀': 'DNA SCAN · 2/3',      '🏆': 'DNA FULLY DECODED'          },
+      vi: { '🔥': 'QUÉT DNA · 1/3',      '⚡': 'QUÉT DNA · ½',   '🚀': 'QUÉT DNA · 2/3',      '🏆': 'DNA GIẢI MÃ HOÀN TOÀN'      },
+      hi: { '🔥': 'DNA स्कैन · १/३', '⚡': 'DNA स्कैन · ½', '🚀': 'DNA स्कैन · २/३', '🏆': 'DNA पूर्णतः डिकोड'           },
+      fr: { '🔥': 'SCAN ADN · 1/3',      '⚡': 'SCAN ADN · ½',   '🚀': 'SCAN ADN · 2/3',      '🏆': 'ADN ENTIÈREMENT DÉCODÉ'      },
+      ar: { '🔥': 'مسح DNA · ١/٣', '⚡': 'مسح DNA · ½', '🚀': 'مسح DNA · ٢/٣',  '🏆': 'تم فك شفرة DNA بالكامل'      }
+    };
+    var badgeMap = _BADGE_I18N[_bdLang()] || _BADGE_I18N['en'];
+    _msSet('msPlanetOrbEmoji',  emoji);
+    _msSet('msPlanetBigEmoji',  emoji);
+    _msSet('msPlanetTitle',     text);
+    _msSet('msPlanetSub',       sub);
+    _msSet('msPlanetBadge',     badgeMap[emoji] || 'MILESTONE');
+    /* Real progress stats from state — no fake XP */
+    var _done  = (typeof state !== 'undefined' && state.currentIndex) ? state.currentIndex : 0;
+    var _total = (typeof QUESTIONS !== 'undefined' && QUESTIONS.length) ? QUESTIONS.length : 30;
+    var _pct   = Math.round(_done / _total * 100);
+    var _left  = _total - _done;
+    var _pfill = document.getElementById('msPlanetProgressFill');
+    if (_pfill) {
+      _pfill.style.transition = 'none';
+      _pfill.style.width = '0';
+      void _pfill.offsetWidth;
+      _pfill.style.transition = '';
+      setTimeout(function() { _pfill.style.width = _pct + '%'; }, 120);
+    }
+    _msSet('msPlanetProgressPct', _pct + '%');
+    _msSet('msPlanetStatDone',    '✓ ' + _done + ' câu xong');
+    _msSet('msPlanetStatLeft',    '→ còn ' + _left + ' câu');
+
+    /* Show overlay */
+    ov.classList.add('visible');
+
+    /* t=80ms — system springs in */
+    _at(80, function() {
+      sys.style.animation = 'msSysIn .6s cubic-bezier(.34,1.25,.64,1) forwards';
+    });
+
+    /* t=320ms — shockwaves + burst particles */
+    _at(320, function() {
+      ['msSw1','msSw2','msSw3'].forEach(function(id, i) {
+        var el = document.getElementById(id);
+        if (el) el.style.animation = 'msShockOut ' + (.65+i*.1) + 's ease-out ' + (i*100) + 'ms forwards';
+      });
+      for (var b = 0; b < 6; b++) {
+        (function(idx) {
+          var bp = document.getElementById('msBp' + idx);
+          if (bp) bp.style.animation = 'msBpFly' + idx + ' .8s cubic-bezier(.34,1.1,.64,1) ' + (idx*28) + 'ms forwards';
+        })(b);
+      }
+    });
+
+    /* t=360ms — confetti */
+    _at(360, function() { _msConfetti(ov); });
+
+    /* t=580ms — orbit particles fade in */
+    _at(580, function() {
+      ov.querySelectorAll('.ms-po-orbit').forEach(function(el, i) {
+        setTimeout(function() { el.style.opacity = '1'; }, i * 45);
+      });
+    });
+
+    /* t=640ms — badge */
+    _at(640,  function() { _msAnim('msPlanetBadge',    'msBadgeIn .4s ease forwards'); });
+    /* t=780ms — big emoji */
+    _at(780,  function() { _msAnim('msPlanetBigEmoji', 'msEmojiIn .6s cubic-bezier(.34,1.3,.64,1) forwards'); });
+    /* t=960ms — title */
+    _at(960,  function() { _msAnim('msPlanetTitle',    'msTitleIn .55s cubic-bezier(.34,1.15,.64,1) forwards'); });
+    /* t=1160ms — sub */
+    _at(1160, function() { _msAnim('msPlanetSub',      'msSubIn .4s ease forwards'); });
+    /* t=1340ms — XP */
+    _at(1340, function() { _msAnim('msPlanetXp',       'msXpIn .55s cubic-bezier(.34,1.2,.64,1) forwards'); });
+
+    /* t=3400ms — auto dismiss */
+    _pTimer = setTimeout(function() { _msPlanetDismiss(ov, cb); }, 4300);
+
+    /* Tap to dismiss early */
+    ov.addEventListener('click', function _tapDismiss() {
+      ov.removeEventListener('click', _tapDismiss);
+      clearTimeout(_pTimer);
+      _msPlanetDismiss(ov, cb);
+    }, { once: true });
+  };
+
+  function _msPlanetDismiss(ov, cb) {
+    cb && cb();   /* fire cb FIRST — batch-end: schedules navigate at 300ms + body fade 280ms
+                                     mid-quiz: updates card content synchronously */
+    /* Delay overlay fade until AFTER PageTransition.fadeOut (280ms) completes.
+       - Batch-end (Q10/Q20): body is already opacity:0 by 320ms → quiz card invisible → no flash
+       - Mid-quiz (halfway): card already updated by cb(); overlay then fades to reveal new card */
+    setTimeout(function() {
+      ov.style.transition = 'opacity .4s ease';
+      ov.style.opacity    = '0';
+      setTimeout(function() {
+        ov.classList.remove('visible');
+        ov.style.opacity    = '';
+        ov.style.transition = '';
+        _msPlanetReset();
+      }, 420);
+    }, 320);
+  }
+
+  function _msPlanetReset() {
+    var sys = document.getElementById('msPlanetSystem');
+    if (sys) { sys.style.animation = 'none'; sys.style.opacity = '0'; sys.style.transform = 'scale(0.2) rotate(-15deg)'; void sys.offsetWidth; }
+    ['msSw1','msSw2','msSw3'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return; el.style.animation = 'none'; void el.offsetWidth;
+    });
+    for (var b = 0; b < 6; b++) {
+      var bp = document.getElementById('msBp' + b);
+      if (!bp) continue; bp.style.animation = 'none'; void bp.offsetWidth;
+    }
+    var ov = document.getElementById('milestoneOverlay');
+    if (ov) {
+      ov.querySelectorAll('.ms-po-orbit').forEach(function(el) { el.style.opacity = '0'; el.style.transition = 'none'; void el.offsetWidth; el.style.transition = ''; });
+      ov.querySelectorAll('.ms-confetti').forEach(function(el) { el.remove(); });
+    }
+    ['msPlanetBadge','msPlanetBigEmoji','msPlanetTitle','msPlanetSub','msPlanetXp'].forEach(function(id) {
+      var el = document.getElementById(id); if (!el) return; el.style.animation = 'none'; void el.offsetWidth;
+    });
+    /* Reset progress bar fill */
+    var _pf = document.getElementById('msPlanetProgressFill');
+    if (_pf) { _pf.style.transition = 'none'; _pf.style.width = '0'; void _pf.offsetWidth; _pf.style.transition = ''; }
+  }
+
+  var _CONFETTI_COLORS = ['#a78bfa','#06d6a0','#fbbf24','#f472b6','#60a5fa','#fb7185','#34d399'];
+  function _msConfetti(container) {
+    var fw = container.offsetWidth, fh = container.offsetHeight;
+    /* 5 waves across full screen — total ~180 particles */
+    var waves = [
+      { count: 45, cyMin: 0,       cyMax: fh*.20, baseDelay: 0.00 },
+      { count: 40, cyMin: fh*.15,  cyMax: fh*.40, baseDelay: 0.08 },
+      { count: 38, cyMin: fh*.35,  cyMax: fh*.60, baseDelay: 0.16 },
+      { count: 32, cyMin: fh*.55,  cyMax: fh*.78, baseDelay: 0.24 },
+      { count: 25, cyMin: 0,       cyMax: fh*.70, baseDelay: 0.40 }  /* late burst across all */
+    ];
+    waves.forEach(function(w) {
+      for (var i = 0; i < w.count; i++) {
+        (function() {
+          var el = document.createElement('div');
+          el.className = 'ms-confetti';
+          var cx    = (Math.random()*fw*1.15 - fw*.08).toFixed(0)+'px';
+          var cy    = (w.cyMin + Math.random()*(w.cyMax - w.cyMin)).toFixed(0)+'px';
+          var dx    = (Math.random()*320-160).toFixed(0)+'px';
+          var fall  = (480 + Math.random()*380).toFixed(0)+'px';
+          var spin  = (Math.random()*1080-540).toFixed(0)+'deg';
+          var dur   = (.55+Math.random()*1.5).toFixed(2)+'s';
+          var delay = (w.baseDelay + Math.random()*.55).toFixed(2)+'s';
+          var color = _CONFETTI_COLORS[Math.floor(Math.random()*_CONFETTI_COLORS.length)];
+          var size  = (4+Math.random()*9).toFixed(0)+'px';
+          el.style.cssText = 'left:0;top:0;width:'+size+';height:'+size
+            +';border-radius:'+(Math.random()>.4?'50%':'2px')
+            +';background:'+color
+            +';--cx:'+cx+';--cy:'+cy+';--dx:'+dx+';--spin:'+spin+';--fall:'+fall
+            +';animation:msCFall '+dur+' ease-out '+delay+' forwards;opacity:0;';
+          container.appendChild(el);
+          setTimeout(function() { el.remove(); }, (parseFloat(dur)+parseFloat(delay)+.6)*1000);
+        })();
+      }
+    });
+  }
+
+  function _at(ms, fn) { return setTimeout(fn, ms); }
+  function _msSet(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; }
+  function _msAnim(id, anim) { var el = document.getElementById(id); if (el) el.style.animation = anim; }
+})();
 
 /* ─────────────────────────────────────────
    15. UNDO
@@ -4086,11 +5171,6 @@ function undoLast() {
    ───────────────────────────────────────── */
 function bindKeyboard() {
   document.addEventListener('keydown', (e) => {
-    if (state.isSpectrumMode) {
-      if (e.key === 'Enter')  { e.preventDefault(); confirmSpectrum(); }
-      if (e.key === 'Escape') { e.preventDefault(); exitSpectrumMode(); }
-      return;
-    }
     const DIR_MAP = {
       ArrowRight: 'right', ArrowLeft: 'left',
       ArrowUp: 'up',       ArrowDown: 'down',
@@ -4124,111 +5204,212 @@ function loadQuizState() {
   } catch(e) {}
 }
 function showBatchDone(stage) {
-  if ($activeCard) {
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    var headColor = isLight ? '#1A1A1A' : '#f8fafc';
-    var subColor  = isLight ? '#5c4535'  : 'rgba(255,255,255,0.75)';
-    var _qt2 = function(k) {
-      try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
-      return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
-    };
-    var nDone   = (stage === 1 ? '10' : '20');
-    var textMsg = _qt2('quiz.batch.done').replace('{n}', nDone);
-    var subMsg  = _qt2('quiz.batch.analyzing');
-    $activeCard.style.transform = '';
-    $activeCard.innerHTML =
-      '<div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px 24px;">'
-      + '<div style="font-size:52px;line-height:1;">' + (stage === 1 ? '🏁' : '⚡') + '</div>'
-      + '<h2 style="font-size:20px;font-weight:800;color:' + headColor + ';margin:0;">' + textMsg + '</h2>'
-      + '<p style="font-size:14px;color:' + subColor + ';margin:0;">' + subMsg + '</p>'
-      + '</div>';
-  }
-  BGEngine.onFling();
+  // Save all quiz state before navigating
   saveQuizState();
-  try { sessionStorage.setItem('bd_nextStart', stage === 1 ? '11' : '21'); } catch(e) {}
-  setTimeout(() => { window.location.href = '../../onboarding/loading/index.html?stage=' + stage; }, 800);
+  try {
+    var qDone = stage * 10;
+    var prev = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    if (qDone > prev) localStorage.setItem('quizProgress', String(qDone));
+    var prevM = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    if (qDone > prevM) localStorage.setItem('quizMilestone', String(qDone));
+  } catch(e) {}
+
+  // Animate out, then navigate to AI loading screen
+  PageTransition.fadeOut(280);
+  setTimeout(function() {
+    window.location.href = '../../onboarding/loading/?stage=' + stage;
+  }, 300);
 }
 
-function showFinished() {
-  // All 30 questions done → Loading stage=3 → University Matches
-  if ($activeCard) {
-    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
-    var headColor = isLight ? '#1A1A1A' : '#f8fafc';
-    var subColor  = isLight ? '#5c4535'  : 'rgba(255,255,255,0.75)';
-    var _qt3 = function(k) {
-      try { var l = localStorage.getItem('bd-lang') || 'en'; } catch(e) { var l = 'en'; }
-      return (window.BDi18n && window.BDi18n.t.call({_lang: l}, k)) || k;
-    };
-    $activeCard.style.transform = '';
-    $activeCard.innerHTML =
-      '<div class="card-inner" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:32px 24px;">'
-      + '<div style="font-size:52px;line-height:1;">🎉</div>'
-      + '<h2 style="font-size:20px;font-weight:800;color:' + headColor + ';margin:0;">' + _qt3('quiz.all_done') + '</h2>'
-      + '<p style="font-size:14px;color:' + subColor + ';margin:0;">' + _qt3('quiz.all_analyzing') + '</p>'
-      + '</div>';
-  }
-  BGEngine.onFling();
-  saveQuizState();
-  setTimeout(() => { window.location.href = '../../onboarding/loading/index.html?stage=3'; }, 800);
-}
-
-</script>
-
-<script>
+/* ─────────────────────────────────────────
+   SWIPE TUTORIAL LOGIC
+   Shows once on first visit, dismissed via localStorage
+   ───────────────────────────────────────── */
 (function() {
-  function bdApplyTheme(resolved) {
-    document.documentElement.setAttribute('data-theme', resolved);
-    // Update toggle bg for light theme
-    var toggle = document.getElementById('bd-theme-toggle');
-    if (toggle) {
-      toggle.style.background = (resolved === 'light')
-        ? 'rgba(255,255,255,0.92)'
-        : 'rgba(10,10,26,0.85)';
-      toggle.style.borderColor = (resolved === 'light')
-        ? 'rgba(24,99,220,0.25)'
-        : 'rgba(24,99,220,0.35)';
-    }
+  var TUTORIAL_KEY = 'bd-quiz-tutorial-seen';
+
+  function showTutorial() {
+    var overlay = document.getElementById('swipeTutorialOverlay');
+    if (!overlay) return;
+    overlay.classList.add('visible');
   }
 
-  function bdSetTheme(pref) {
-    var resolved = pref;
-    if (pref === 'system') {
-      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    }
-    bdApplyTheme(resolved);
-    document.documentElement.setAttribute('data-theme-pref', pref);
-    try { localStorage.setItem('bd-theme', pref); } catch(e) {}
-    // Update button active states
-    var btns = { system:'bdt-system', light:'bdt-light', dark:'bdt-dark' };
-    Object.keys(btns).forEach(function(name) {
-      var el = document.getElementById(btns[name]);
-      if (!el) return;
-      if (name === pref) {
-        el.style.background = 'linear-gradient(135deg, var(--violet-600), var(--violet-500))';
-        el.style.color = '#fff';
-        el.style.boxShadow = '0 4px 12px rgba(24,99,220,0.4)';
-      } else {
-        el.style.background = 'transparent';
-        el.style.color = (resolved === 'light') ? 'rgba(26,26,46,0.55)' : 'rgba(255,255,255,0.5)';
-        el.style.boxShadow = 'none';
-      }
-    });
+  function dismissTutorial() {
+    var overlay = document.getElementById('swipeTutorialOverlay');
+    if (!overlay) return;
+    overlay.classList.remove('visible');
+    try { localStorage.setItem(TUTORIAL_KEY, '1'); } catch(e) {}
   }
 
-  window.bdSetTheme = bdSetTheme;
+  function initTutorial() {
+    var seen = false;
+    try { seen = !!localStorage.getItem(TUTORIAL_KEY); } catch(e) {}
+    if (!seen) {
+      // Small delay so quiz is fully painted first
+      setTimeout(showTutorial, 400);
 
-  // Init on load
-  var saved = 'dark';
-  try { saved = localStorage.getItem('bd-theme') || 'dark'; } catch(e) {}
-  bdSetTheme(saved);
+      // Auto-dismiss on first real swipe: dragOverlay receives the event
+      // (overlay is now pointer-events:none so events pass through directly)
+      setTimeout(function() {
+        var drag = document.getElementById('dragOverlay');
+        if (drag) {
+          drag.addEventListener('pointerdown', function onFirstSwipe() {
+            dismissTutorial();
+            drag.removeEventListener('pointerdown', onFirstSwipe);
+          });
+        }
+      }, 450); // slightly after showTutorial delay
+    }
 
-  // React to OS theme changes
-  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
-    var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
-    if (pref === 'system') bdSetTheme('system');
-  });
+    var btn = document.getElementById('sttDismissBtn');
+    if (btn) btn.addEventListener('click', dismissTutorial);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTutorial);
+  } else {
+    initTutorial();
+  }
 })();
+
+
+/* ─────────────────────────────────────────
+   QUIZ PROGRESS — localStorage RESUME (Fix #3)
+   Key: 'bd-quiz-progress' → { idx, dna, answers, scores }
+   Shows "Continue where you left off" banner on fresh load.
+   ───────────────────────────────────────── */
+(function() {
+  var LS_KEY = 'bd-quiz-progress';
+
+  /* 1. Patch saveQuizState to also persist full state to localStorage */
+  var _origSave = saveQuizState;
+  saveQuizState = function() {
+    _origSave.call(this);
+    try {
+      if (state.answers && state.answers.length > 0) {
+        localStorage.setItem(LS_KEY, JSON.stringify({
+          idx:     state.currentIndex,
+          dna:     state.dna,
+          answers: state.answers,
+          scores:  state.scores
+        }));
+      }
+    } catch(e) {}
+  };
+
+  /* 2. Patch loadCard to clear localStorage when quiz finishes */
+  var _origLoadCard = loadCard;
+  loadCard = function(index) {
+    if (typeof QUESTIONS !== 'undefined' && index >= QUESTIONS.length) {
+      try {
+        localStorage.removeItem(LS_KEY);
+        localStorage.removeItem('quizProgress');
+      } catch(e) {}
+    }
+    return _origLoadCard.call(this, index);
+  };
+
+  /* 3. Resume banner builder */
+  function buildBanner(savedIdx, savedTotal, savedCount) {
+    var mobile = document.querySelector('.mobile-screen');
+    if (!mobile) return null;
+
+    var css = document.createElement('style');
+    css.textContent =
+      '@keyframes bdResumeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}' +
+      '#bdResumeBanner{position:absolute;bottom:84px;left:12px;right:12px;' +
+        'background:linear-gradient(135deg,rgba(24,99,220,0.18),rgba(155,93,229,0.18));' +
+        'border:1px solid rgba(24,99,220,0.38);border-radius:16px;padding:14px;' +
+        'display:flex;align-items:center;gap:10px;z-index:160;' +
+        'backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);' +
+        'box-shadow:0 6px 28px rgba(0,0,0,0.28);' +
+        'animation:bdResumeIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;}' +
+      '#bdResumeBanner .rb-text{flex:1;min-width:0}' +
+      '#bdResumeBanner .rb-title{font-size:12.5px;font-weight:700;color:#f8fafc;margin-bottom:2px}' +
+      '#bdResumeBanner .rb-sub{font-size:10.5px;color:rgba(248,250,252,0.6)}' +
+      '#bdResumeBanner .rb-actions{display:flex;gap:6px;flex-shrink:0}' +
+      '#bdResumeBanner .rb-fresh{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);' +
+        'border-radius:9px;padding:5px 9px;font-size:10.5px;color:rgba(248,250,252,0.65);cursor:pointer}' +
+      '#bdResumeBanner .rb-resume{background:linear-gradient(135deg,#1863DC,#9B5DE5);border:none;' +
+        'border-radius:9px;padding:5px 12px;font-size:11.5px;font-weight:700;color:#fff;cursor:pointer}';
+    document.head.appendChild(css);
+
+    var _rt = function(k, vars) {
+      var s = (window.BDi18n ? BDi18n.t(k) : k) || k;
+      if (vars) Object.keys(vars).forEach(function(v) { s = s.replace('{'+v+'}', vars[v]); });
+      return s;
+    };
+    var banner = document.createElement('div');
+    banner.id = 'bdResumeBanner';
+    banner.innerHTML =
+      '<div class="rb-text">' +
+        '<div class="rb-title">' + _rt('quiz.resume.title') + '</div>' +
+        '<div class="rb-sub">' + _rt('quiz.resume.sub', { n: savedIdx + 1, total: savedTotal, count: savedCount }) + '</div>' +
+      '</div>' +
+      '<div class="rb-actions">' +
+        '<button class="rb-fresh" id="bdRbFresh">' + _rt('quiz.resume.start_over') + '</button>' +
+        '<button class="rb-resume" id="bdRbResume">' + _rt('quiz.resume.continue') + '</button>' +
+      '</div>';
+    mobile.appendChild(banner);
+    return banner;
+  }
+
+  /* 4. Restore saved quiz state */
+  function applyResume(saved) {
+    try {
+      state.dna          = saved.dna;
+      state.answers      = saved.answers;
+      state.scores       = saved.scores;
+      state.currentIndex = saved.idx;
+      updateScoreboard();
+      updateDNA();
+      loadCard(state.currentIndex);
+    } catch(e) {}
+  }
+
+  /* 5. Init — show banner if there's saved progress */
+  function initResume() {
+    if (typeof START_IDX !== 'undefined' && START_IDX > 0) return;
+
+    var raw;
+    try { raw = localStorage.getItem(LS_KEY); } catch(e) { return; }
+    if (!raw) return;
+
+    var saved;
+    try { saved = JSON.parse(raw); } catch(e) { return; }
+    if (!saved || !Array.isArray(saved.answers) || saved.answers.length === 0) return;
+
+    var savedIdx   = saved.idx   || 0;
+    var savedCount = saved.answers.length;
+    var savedTotal = (typeof QUESTIONS !== 'undefined') ? QUESTIONS.length : 20;
+
+    var banner = buildBanner(savedIdx, savedTotal, savedCount);
+    if (!banner) return;
+
+    var fresh  = document.getElementById('bdRbFresh');
+    var resume = document.getElementById('bdRbResume');
+
+    if (fresh) {
+      fresh.addEventListener('click', function() {
+        try { localStorage.removeItem(LS_KEY); } catch(e) {}
+        banner.remove();
+      });
+    }
+    if (resume) {
+      resume.addEventListener('click', function() {
+        banner.remove();
+        applyResume(saved);
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initResume);
+  } else {
+    initResume();
+  }
+})();
+
 </script>
-<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>

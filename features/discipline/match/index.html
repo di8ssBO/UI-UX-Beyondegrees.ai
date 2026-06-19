@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
   <script src="../../../shared/scripts/i18n.js"></script>
+<script src="../../../shared/scripts/bd-profile.js"></script>
 <style>
 /* ══ Constellation Sky ══════════════════════════════════════════════ */
 .cst-section { padding: 0 0 4px; }
@@ -118,8 +120,34 @@
       </div>
       <div class="ds-hdr">
         <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
-        <div style="width:30px;height:30px;border-radius:8px;background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <div class="app-menu-wrap">
+          <button class="app-menu-btn" aria-label="Menu">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="app-dropdown">
+            <div class="app-menu-section" data-i18n="menu.section_account">Account</div>
+            <a href="../../profile/edit/" class="app-menu-item" data-menu-action="my-account">
+              <span class="app-menu-icon app-menu-icon--account"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a4 4 0 014-4h8a4 4 0 014 4v2"/></svg></span>
+              <span data-i18n="menu.my_account">My Account</span>
+            </a>
+            <button class="app-menu-item" data-menu-action="leave-review">
+              <span class="app-menu-icon app-menu-icon--review"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+              <span data-i18n="menu.leave_review">Leave Review</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="share">
+              <span class="app-menu-icon app-menu-icon--share"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+              <span data-i18n="menu.share_archetype">Share Archetype</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="contact">
+              <span class="app-menu-icon app-menu-icon--contact"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+              <span data-i18n="menu.contact_us">Contact Us</span>
+            </button>
+            <div class="app-menu-divider"></div>
+            <button class="app-menu-item app-menu-item--danger" data-menu-action="reset">
+              <span class="app-menu-icon app-menu-icon--danger"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></span>
+              <span data-i18n="menu.reset_account">Reset Account</span>
+            </button>
+          </div>
         </div>
       </div>
       <div class="ds-body">
@@ -143,7 +171,7 @@
         <div id="discCardsWrap">
         <!-- Card 1 -->
         <div class="dc dc-kt"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#9881;&#65039;</div><div><div class="dc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="dc-rank">#1 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">💻</div><div><div class="dc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="dc-rank">#1 Ranked</div></div></div>
           <div style="text-align:right"><div class="dc-pct">94%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:94%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.kt">You possess strong analytical reasoning and a natural inclination toward systematic problem-solving and science innovation.</p>
@@ -159,7 +187,7 @@
         </div>
         <!-- Card 3 -->
         <div class="dc dc-yt"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129658;</div><div><div class="dc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="dc-rank">#3 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">⚕️</div><div><div class="dc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="dc-rank">#3 Ranked</div></div></div>
           <div style="text-align:right"><div class="dc-pct">64%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:64%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.yt">Your empathy and precision-oriented mindset suit healthcare and biomedical paths focused on improving human well-being.</p>
@@ -175,7 +203,7 @@
         </div>
         <!-- Card 5 -->
         <div class="dc dc-xh"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129504;</div><div><div class="dc-name" data-i18n="disc.name.xh">Social Sciences</div><div class="dc-rank">#5 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">🌍</div><div><div class="dc-name" data-i18n="disc.name.xh">Social Sciences</div><div class="dc-rank">#5 Ranked</div></div></div>
           <div style="text-align:right"><div class="dc-pct">34%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:34%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.xh">A deep interest in human behavior, societal structures, and interpersonal dynamics makes this a moderate-fit field for your profile.</p>
@@ -231,7 +259,7 @@
                 <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
               </svg>
             </span>
-            <span class="tab-label">Hoang Phuc</span>
+            <span class="tab-label"></span>
           </a>
         </nav>
       </div>
@@ -702,11 +730,15 @@
       /* Update data-i18n so i18n.js (loaded after this script) uses the correct key */
       cta.setAttribute('data-i18n', isContinue ? 'disc.cta.continue' : 'disc.cta.start');
       cta.textContent = isContinue ? t('disc.cta.continue') : t('disc.cta.start');
-      /* Continue Quiz → mint-500 (btn-success); Start Quiz → violet-600 (btn-primary) */
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
       if (isContinue) {
-        cta.style.background  = 'var(--mint-500)';
-        cta.style.color       = '#06060f';
-        cta.style.boxShadow   = '0 4px 16px rgba(6,214,160,.4)';
+        cta.style.background = isLight ? 'linear-gradient(135deg, #0D9488 0%, #0F766E 100%)' : 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)';
+        cta.style.color      = '#ffffff';
+        cta.style.boxShadow  = isLight ? '0 4px 14px rgba(13,148,136,0.32)' : '0 4px 16px rgba(124,58,237,.4)';
+      } else if (isLight) {
+        cta.style.background = 'linear-gradient(135deg, #0D9488 0%, #0F766E 100%)';
+        cta.style.color      = '#ffffff';
+        cta.style.boxShadow  = '0 4px 14px rgba(13,148,136,0.32)';
       }
       cta.addEventListener('click', function () {
         var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
@@ -716,5 +748,6 @@
   }
 })();
 </script>
+<script src="../../../shared/scripts/app-menu.js"></script>
 </body>
 </html>

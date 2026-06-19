@@ -197,6 +197,109 @@
 /* Disable transition for SVG / animations */
 svg *, canvas, video, img { transition: none !important; }
 
+/* ── SIDE CARDS STRIP ─────────────────────────────────────── */
+.side-cards-section {
+  margin: 18px 0 4px;
+}
+.side-cards-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary, rgba(248,250,252,0.5));
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.side-cards-track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.side-cards-track::-webkit-scrollbar { display: none; }
+
+.side-card {
+  flex: 0 0 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  position: relative;
+  overflow: hidden;
+}
+.side-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: inherit;
+}
+.side-card:active { transform: scale(0.96); }
+.side-card:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.07); }
+
+/* Per-card accent colours */
+.side-card--discipline { --sc-accent: #1863DC; }
+.side-card--university { --sc-accent: #9B5DE5; }
+.side-card--career     { --sc-accent: #2ECC71; }
+.side-card--share      { --sc-accent: #F59E0B; }
+
+.side-card::before { background: radial-gradient(circle at top left, rgba(var(--sc-accent, 24,99,220), 0.18), transparent 70%); }
+.side-card:hover::before { opacity: 1; }
+
+.sc-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sc-accent, var(--violet-400, #6BA3FF));
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.sc-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  line-height: 1.2;
+}
+.sc-desc {
+  font-size: 10px;
+  color: var(--text-secondary, rgba(248,250,252,0.55));
+  line-height: 1.35;
+  flex: 1;
+}
+.sc-arrow {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sc-accent, var(--violet-400, #6BA3FF));
+  align-self: flex-end;
+  margin-top: 2px;
+}
+
+/* Light mode overrides */
+[data-theme="light"] .side-card {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.09);
+}
+[data-theme="light"] .side-card:hover {
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.16);
+}
+[data-theme="light"] .sc-icon {
+  background: rgba(0,0,0,0.06);
+}
+
 </style>
 </head>
 <body>
@@ -435,6 +538,54 @@ svg *, canvas, video, img { transition: none !important; }
           <!-- CTA row -->
           <a href="../../major/recommendations/" class="cta-full btn btn-primary" data-i18n="results.cta.explore">Explore all matching majors →</a>
 
+          <!-- ░░ SIDE CARDS — horizontal scroll strip ░░ -->
+          <div class="side-cards-section">
+            <div class="side-cards-label">Explore More ✦</div>
+            <div class="side-cards-track">
+
+              <!-- Card 1: Discipline Match -->
+              <a href="../../discipline/match/" class="side-card side-card--discipline">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.7"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </div>
+                <div class="sc-title">Your Disciplines</div>
+                <div class="sc-desc">See which fields fit your personality</div>
+                <div class="sc-arrow">→</div>
+              </a>
+
+              <!-- Card 2: University Matches -->
+              <a href="../../university/matches/" class="side-card side-card--university">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+                </div>
+                <div class="sc-title">Universities</div>
+                <div class="sc-desc">Find your best-match institutions</div>
+                <div class="sc-arrow">→</div>
+              </a>
+
+              <!-- Card 3: Career Paths -->
+              <a href="../../major/recommendations/" class="side-card side-card--career">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="sc-title">Career Paths</div>
+                <div class="sc-desc">Explore salaries &amp; job outlooks</div>
+                <div class="sc-arrow">→</div>
+              </a>
+
+              <!-- Card 4: Share DNA -->
+              <button class="side-card side-card--share" id="scShareDna">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                </div>
+                <div class="sc-title">Share DNA</div>
+                <div class="sc-desc">Show your personality profile</div>
+                <div class="sc-arrow">↗</div>
+              </button>
+
+            </div><!-- /side-cards-track -->
+          </div><!-- /side-cards-section -->
+
           <div class="cta-ghost-row">
             <a href="../../quiz/quiz-card/" class="btn btn-ghost cta-ghost" data-i18n="results.cta.retake">↺ Retake Quiz</a>
             <button class="btn btn-ghost cta-ghost" id="saveResultBtn" data-i18n="results.cta.save">🔖 Save Results</button>
@@ -494,7 +645,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label">Hoang Phuc</span>
+            <span class="tab-label"></span>
           </a>
         </nav>
 
@@ -1023,36 +1174,48 @@ window.PageTransition = PageTransition;
 
     function step() {
       const t     = Math.min(1, (Date.now() - tStart) / DURATION);
-      const eased = 1 - Math.pow(1 - t, 3.5);
-      const val   = Math.round(eased * MATCH_PCT);
-      el.textContent = val;
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
+      const ea
+/* ── scShareDna side-card wiring (Fix #4) ── */
+(function() {
+  function initSideCards() {
+    var btn = document.getElementById('scShareDna');
+    if (!btn) return;
+
+    btn.addEventListener('click', function() {
+      /* Reuse the existing dnaShareBtn click if present */
+      var existing = document.getElementById('dnaShareBtn');
+      if (existing) { existing.click(); return; }
+
+      /* Fallback: Web Share API or clipboard copy */
+      var url  = window.location.href;
+      var text = 'Check out my BeyonDegrees academic DNA profile! ' + url;
+      if (navigator.share) {
+        navigator.share({ title: 'My BeyonDegrees DNA', text: text, url: url })
+          .catch(function() {});
+      } else {
+        try {
+          navigator.clipboard.writeText(url);
+          /* Toast if available */
+          if (window.Toast) Toast.success('Link copied!');
+          else alert('Link copied to clipboard!');
+        } catch(e) {}
+      }
+    });
   }
 
-  /* ══════════════════════════════════════════════════
-     DNA BARS — staggered fill
-  ══════════════════════════════════════════════════ */
-  function animateDNABars() {
-    DNA_DATA.forEach(({ disc, target }, i) => {
-      setTimeout(() => {
-        const bar = $('dsc-bar-' + disc);
-        const pct = $('dsc-pct-' + disc);
-        if (!bar) return;
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSideCards);
+  } else {
+    initSideCards();
+  }
+})();
+</script>
 
-        const ANIM_MS = 1100;
-        const tStart  = Date.now();
-
-        function step() {
-          const t     = Math.min(1, (Date.now() - tStart) / ANIM_MS);
-          const eased = 1 - Math.pow(1 - t, 3);
-          const val   = Math.round(eased * target);
-          bar.style.width = val + '%';
-          if (pct) pct.textContent = val + '%';
-          if (t < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
+<script src="../../../shared/scripts/i18n.js"></script>
+<script src="../../../shared/scripts/bd-profile.js"></script>
+</body>
+</html>
+    requestAnimationFrame(step);
       }, 1300 + i * 200); // start after hero animation (1.1s) + stagger
     });
   }

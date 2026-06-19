@@ -123,22 +123,40 @@ function showToast(msg, color) {
 
 // ─── MILESTONE CHECK ──────────────────────────────────
 function checkMilestone() {
+  const t = (window.BDi18n && window.BDi18n.t) ? window.BDi18n.t.bind(window.BDi18n) : (k => k);
   const milestones = {
-    10: { emoji: '🔥', text: '1/3 xong rồi!', sub: 'Đang hình thành hồ sơ...', bg: 'rgba(249,115,22,0.15)', border: 'rgba(249,115,22,0.4)' },
-    20: { emoji: '⚡', text: '2/3 hoàn thành!', sub: 'AI đang phân tích...', bg: 'rgba(124,58,237,0.15)', border: 'rgba(124,58,237,0.4)' },
-    30: { emoji: '🎉', text: 'Xong rồi!', sub: 'Đang tạo kết quả...', bg: 'rgba(6,214,160,0.15)', border: 'rgba(6,214,160,0.4)' },
+    10: { emoji: '🔥', titleKey: 'quiz.milestone.1of3', subKey: 'quiz.milestone.1of3.sub', bg: 'rgba(249,115,22,0.15)', border: 'rgba(249,115,22,0.4)' },
+    20: { emoji: '⚡', titleKey: 'quiz.milestone.2of3', subKey: 'quiz.milestone.2of3.sub', bg: 'rgba(124,58,237,0.15)', border: 'rgba(124,58,237,0.4)' },
+    30: { emoji: '🎉', titleKey: 'quiz.all_done',       subKey: 'quiz.batch.analyzing',    bg: 'rgba(6,214,160,0.15)',  border: 'rgba(6,214,160,0.4)'  },
   };
   const m = milestones[state.totalAnswered];
   if (!m) return;
 
   const overlay = document.getElementById('milestoneOverlay');
-  const content = overlay.querySelector('.milestone-content');
-  document.getElementById('milestoneEmoji').textContent = m.emoji;
-  document.getElementById('milestoneText').textContent = m.text;
-  document.getElementById('milestoneSub').textContent = m.sub;
-  content.style.background = m.bg;
-  content.style.borderColor = m.border;
+  const content = overlay ? overlay.querySelector('.milestone-content') : null;
 
+  // Legacy overlay elements (fallback)
+  const emojiEl = document.getElementById('milestoneEmoji');
+  const textEl  = document.getElementById('milestoneText');
+  const subEl   = document.getElementById('milestoneSub');
+  if (emojiEl) emojiEl.textContent = m.emoji;
+  if (textEl)  textEl.textContent  = t(m.titleKey);
+  if (subEl)   subEl.textContent   = t(m.subKey);
+  if (content) { content.style.background = m.bg; content.style.borderColor = m.border; }
+
+  // New planet-burst overlay elements — i18n stat counters
+  const done    = state.totalAnswered;
+  const left    = 30 - done;
+  const doneEl  = document.getElementById('msPlanetStatDone');
+  const leftEl  = document.getElementById('msPlanetStatLeft');
+  const titleEl = document.getElementById('msPlanetTitle');
+  const planetSubEl = document.getElementById('msPlanetSub');
+  if (doneEl)     doneEl.textContent     = t('quiz.stat.done').replace('{n}', done);
+  if (leftEl)     leftEl.textContent     = t('quiz.stat.left').replace('{n}', left);
+  if (titleEl)    titleEl.textContent    = t(m.titleKey);
+  if (planetSubEl) planetSubEl.textContent = t(m.subKey);
+
+  if (!overlay) return;
   overlay.classList.remove('show');
   void overlay.offsetWidth;
   overlay.classList.add('show');
