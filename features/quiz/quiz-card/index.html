@@ -3180,180 +3180,37 @@ const DISC_COLORS = {
    Loaded dynamically from data/assertions.js (window.BD_ASSERTIONS).
    Random 10 per stage each session: 10 discipline + 10 major + 10 university.
    ───────────────────────────────────────── */
-const QUESTIONS = [
-  { id:  1, disc: 'kt', text: 'I enjoy solving problems through data analysis.',
-    vi: 'Tôi thích giải quyết vấn đề thông qua phân tích dữ liệu.',
-    fr: "J'aime résoudre des problèmes par l'analyse de données.",
-    hi: 'मुझे डेटा विश्लेषण के माध्यम से समस्याओं को हल करने में आनंद आता है।',
-    ar: 'أستمتع بحل المشكلات من خلال تحليل البيانات.' },
-  { id:  2, disc: 'nv', text: 'I am passionate about literature and creative writing.',
-    vi: 'Tôi đam mê văn học và sáng tác.',
-    fr: 'Je suis passionné par la littérature et l\'écriture créative.',
-    hi: 'मैं साहित्य और रचनात्मक लेखन के प्रति जुनूनी हूं।',
-    ar: 'أنا شغوف بالأدب والكتابة الإبداعية.' },
-  { id:  3, disc: 'yt', text: 'I am interested in healthcare and medical research.',
-    vi: 'Tôi quan tâm đến chăm sóc sức khỏe và nghiên cứu y học.',
-    fr: 'Je m\'intéresse aux soins de santé et à la recherche médicale.',
-    hi: 'मुझे स्वास्थ्य देखभाल और चिकित्सा अनुसंधान में रुचि है।',
-    ar: 'أنا مهتم بالرعاية الصحية والبحث الطبي.' },
-  { id:  4, disc: 'kt', text: 'I enjoy working with data and building software solutions.',
-    vi: 'Tôi thích làm việc với dữ liệu và xây dựng các giải pháp phần mềm.',
-    fr: 'J\'aime travailler avec des données et créer des solutions logicielles.',
-    hi: 'मुझे डेटा के साथ काम करना और सॉफ्टवेयर समाधान बनाना पसंद है।',
-    ar: 'أستمتع بالعمل مع البيانات وبناء الحلول البرمجية.' },
-  { id:  5, disc: 'xh', text: 'I am curious about human behavior and social structures.',
-    vi: 'Tôi tò mò về hành vi con người và cấu trúc xã hội.',
-    fr: 'Je suis curieux du comportement humain et des structures sociales.',
-    hi: 'मैं मानव व्यवहार और सामाजिक संरचनाओं के बारे में जिज्ञासु हूं।',
-    ar: 'أنا فضولي بشأن السلوك البشري والهياكل الاجتماعية.' },
-  { id:  6, disc: 'nn', text: 'Protecting the environment and promoting sustainable development is my priority.',
-    vi: 'Bảo vệ môi trường và thúc đẩy phát triển bền vững là ưu tiên của tôi.',
-    fr: 'Protéger l\'environnement et promouvoir le développement durable est ma priorité.',
-    hi: 'पर्यावरण की रक्षा करना और सतत विकास को बढ़ावा देना मेरी प्राथमिकता है।',
-    ar: 'حماية البيئة وتعزيز التنمية المستدامة هي أولويتي.' },
-  { id:  7, disc: 'tn', text: 'I love conducting experiments and exploring natural laws.',
-    vi: 'Tôi thích thực hiện thí nghiệm và khám phá các quy luật tự nhiên.',
-    fr: 'J\'aime mener des expériences et explorer les lois naturelles.',
-    hi: 'मुझे प्रयोग करना और प्राकृतिक नियमों की खोज करना पसंद है।',
-    ar: 'أحب إجراء التجارب واستكشاف القوانين الطبيعية.' },
-  { id:  8, disc: 'nv', text: 'Historical research helps me understand the current world better.',
-    vi: 'Nghiên cứu lịch sử giúp tôi hiểu thế giới hiện tại tốt hơn.',
-    fr: 'La recherche historique m\'aide à mieux comprendre le monde actuel.',
-    hi: 'ऐतिहासिक शोध मुझे वर्तमान दुनिया को बेहतर ढंग से समझने में मदद करता है।',
-    ar: 'يساعدني البحث التاريخي على فهم العالم الحالي بشكل أفضل.' },
-  { id:  9, disc: 'yt', text: 'Caring for and helping patients is the most meaningful work for me.',
-    vi: 'Chăm sóc và giúp đỡ bệnh nhân là công việc có ý nghĩa nhất với tôi.',
-    fr: 'Soigner et aider les patients est le travail le plus significatif pour moi.',
-    hi: 'रोगियों की देखभाल करना और उनकी मदद करना मेरे लिए सबसे अर्थपूर्ण काम है।',
-    ar: 'رعاية المرضى ومساعدتهم هو أكثر عمل ذي معنى بالنسبة لي.' },
-  { id: 10, disc: 'kt', text: 'I like designing systems and optimizing processes.',
-    vi: 'Tôi thích thiết kế hệ thống và tối ưu hóa quy trình.',
-    fr: 'J\'aime concevoir des systèmes et optimiser les processus.',
-    hi: 'मुझे सिस्टम डिजाइन करना और प्रक्रियाओं को अनुकूलित करना पसंद है।',
-    ar: 'أحب تصميم الأنظمة وتحسين العمليات.' },
-  { id: 11, disc: 'xh', text: 'Working in teams and driving community development is my strength.',
-    vi: 'Làm việc nhóm và thúc đẩy sự phát triển cộng đồng là thế mạnh của tôi.',
-    fr: 'Travailler en équipe et stimuler le développement communautaire est mon point fort.',
-    hi: 'टीमों में काम करना और सामुदायिक विकास को बढ़ावा देना मेरी ताकत है।',
-    ar: 'العمل في فرق ودفع التنمية المجتمعية هي نقطة قوتي.' },
-  { id: 12, disc: 'nn', text: 'Biotechnology in agriculture is very appealing to me.',
-    vi: 'Công nghệ sinh học trong nông nghiệp rất hấp dẫn đối với tôi.',
-    fr: 'La biotechnologie en agriculture m\'attire beaucoup.',
-    hi: 'कृषि में जैव प्रौद्योगिकी मुझे बहुत आकर्षक लगती है।',
-    ar: 'التكنولوجيا الحيوية في الزراعة جذابة جداً بالنسبة لي.' },
-  { id: 13, disc: 'tn', text: 'Mathematics and physics are subjects I always find joy in.',
-    vi: 'Toán học và vật lý là những môn tôi luôn tìm thấy niềm vui.',
-    fr: 'Les mathématiques et la physique sont des matières qui me passionnent toujours.',
-    hi: 'गणित और भौतिकी ऐसे विषय हैं जिनमें मुझे हमेशा आनंद मिलता है।',
-    ar: 'الرياضيات والفيزياء مواد دائماً ما أجد فيها متعة.' },
-  { id: 14, disc: 'nv', text: 'Teaching and sharing knowledge with others is my passion.',
-    vi: 'Giảng dạy và chia sẻ kiến thức với người khác là đam mê của tôi.',
-    fr: 'Enseigner et partager mes connaissances avec les autres est ma passion.',
-    hi: 'दूसरों को पढ़ाना और ज्ञान साझा करना मेरा जुनून है।',
-    ar: 'التدريس ومشاركة المعرفة مع الآخرين هو شغفي.' },
-  { id: 15, disc: 'kt', text: 'I am interested in artificial intelligence and automation.',
-    vi: 'Tôi quan tâm đến trí tuệ nhân tạo và tự động hóa.',
-    fr: 'Je m\'intéresse à l\'intelligence artificielle et à l\'automatisation.',
-    hi: 'मुझे कृत्रिम बुद्धिमत्ता और स्वचालन में रुचि है।',
-    ar: 'أنا مهتم بالذكاء الاصطناعي والأتمتة.' },
-  { id: 16, disc: 'xh', text: 'I want to participate in building public policies.',
-    vi: 'Tôi muốn tham gia xây dựng các chính sách công.',
-    fr: 'Je veux participer à l\'élaboration des politiques publiques.',
-    hi: 'मैं सार्वजनिक नीतियों के निर्माण में भाग लेना चाहता हूं।',
-    ar: 'أريد المشاركة في بناء السياسات العامة.' },
-  { id: 17, disc: 'yt', text: 'Drug research and pharmaceutical formulation attract me.',
-    vi: 'Nghiên cứu thuốc và bào chế dược phẩm thu hút tôi.',
-    fr: 'La recherche sur les médicaments et la formulation pharmaceutique m\'attirent.',
-    hi: 'दवा अनुसंधान और फार्मास्युटिकल फॉर्मूलेशन मुझे आकर्षित करते हैं।',
-    ar: 'أبحاث الأدوية والتركيب الصيدلاني تجذبني.' },
-  { id: 18, disc: 'nn', text: 'I prefer working outdoors and near nature over working in an office.',
-    vi: 'Tôi thích làm việc ngoài trời và gần thiên nhiên hơn là làm việc trong văn phòng.',
-    fr: 'Je préfère travailler en plein air et près de la nature plutôt que dans un bureau.',
-    hi: 'मैं कार्यालय में काम करने के बजाय बाहर और प्रकृति के पास काम करना पसंद करता हूं।',
-    ar: 'أفضل العمل في الهواء الطلق وقريباً من الطبيعة على العمل في مكتب.' },
-  { id: 19, disc: 'tn', text: 'Chemistry and molecular biology are fields I want to explore deeply.',
-    vi: 'Hóa học và sinh học phân tử là những lĩnh vực tôi muốn khám phá sâu.',
-    fr: 'La chimie et la biologie moléculaire sont des domaines que je veux approfondir.',
-    hi: 'रसायन विज्ञान और आणविक जीव विज्ञान ऐसे क्षेत्र हैं जिन्हें मैं गहराई से खोजना चाहता हूं।',
-    ar: 'الكيمياء والأحياء الجزيئية مجالات أريد استكشافها بعمق.' },
-  { id: 20, disc: 'nv', text: 'Creating, writing, and storytelling is how I express myself.',
-    vi: 'Sáng tạo, viết lách và kể chuyện là cách tôi thể hiện bản thân.',
-    fr: 'Créer, écrire et raconter des histoires est ma façon de m\'exprimer.',
-    hi: 'बनाना, लिखना और कहानी सुनाना मेरी आत्म-अभिव्यक्ति का तरीका है।',
-    ar: 'الإبداع والكتابة ورواية القصص هي طريقتي في التعبير عن نفسي.' },
-  { id: 21, disc: 'kt', text: 'Information security and network protection are areas I want to specialize in.',
-    vi: 'An toàn thông tin và bảo vệ mạng là lĩnh vực tôi muốn chuyên sâu.',
-    fr: 'La sécurité de l\'information et la protection des réseaux sont des domaines dans lesquels je veux me spécialiser.',
-    hi: 'सूचना सुरक्षा और नेटवर्क सुरक्षा ऐसे क्षेत्र हैं जिनमें मैं विशेषज्ञता प्राप्त करना चाहता हूं।',
-    ar: 'أمن المعلومات وحماية الشبكات مجالات أريد التخصص فيها.' },
-  { id: 22, disc: 'xh', text: 'Economics helps me understand why some countries prosper while others fail.',
-    vi: 'Kinh tế học giúp tôi hiểu tại sao một số quốc gia phát triển trong khi những nước khác thất bại.',
-    fr: 'L\'économie m\'aide à comprendre pourquoi certains pays prospèrent pendant que d\'autres échouent.',
-    hi: 'अर्थशास्त्र मुझे यह समझने में मदद करता है कि कुछ देश समृद्ध क्यों होते हैं जबकि अन्य विफल होते हैं।',
-    ar: 'الاقتصاد يساعدني على فهم سبب ازدهار بعض البلدان بينما يفشل البعض الآخر.' },
-  { id: 23, disc: 'nn', text: 'I am concerned about how to produce safe food for millions of people.',
-    vi: 'Tôi quan tâm đến việc sản xuất thực phẩm an toàn cho hàng triệu người.',
-    fr: 'Je me préoccupe de la façon de produire des aliments sûrs pour des millions de personnes.',
-    hi: 'मुझे लाखों लोगों के लिए सुरक्षित भोजन कैसे उत्पादित किया जाए इसकी चिंता है।',
-    ar: 'أنا قلق بشأن كيفية إنتاج الغذاء الآمن لملايين الناس.' },
-  { id: 24, disc: 'yt', text: 'Rehabilitation and sports medicine are fields I am drawn to.',
-    vi: 'Phục hồi chức năng và y học thể thao là những lĩnh vực thu hút tôi.',
-    fr: 'La rééducation et la médecine du sport sont des domaines qui m\'attirent.',
-    hi: 'पुनर्वास और खेल चिकित्सा ऐसे क्षेत्र हैं जो मुझे आकर्षित करते हैं।',
-    ar: 'إعادة التأهيل والطب الرياضي مجالات أنجذب إليها.' },
-  { id: 25, disc: 'tn', text: 'I am interested in space exploration and astronomy.',
-    vi: 'Tôi quan tâm đến khám phá không gian và thiên văn học.',
-    fr: 'Je m\'intéresse à l\'exploration spatiale et à l\'astronomie.',
-    hi: 'मुझे अंतरिक्ष अन्वेषण और खगोल विज्ञान में रुचि है।',
-    ar: 'أنا مهتم باستكشاف الفضاء وعلم الفلك.' },
-  { id: 26, disc: 'nv', text: 'I am passionate about law and protecting human rights.',
-    vi: 'Tôi đam mê luật pháp và bảo vệ quyền con người.',
-    fr: 'Je suis passionné par le droit et la protection des droits humains.',
-    hi: 'मैं कानून और मानवाधिकारों की रक्षा के प्रति जुनूनी हूं।',
-    ar: 'أنا شغوف بالقانون وحماية حقوق الإنسان.' },
-  { id: 27, disc: 'kt', text: 'Electronics, microchips, and hardware are as fascinating to me as software.',
-    vi: 'Điện tử, vi mạch và phần cứng cũng hấp dẫn tôi không kém phần mềm.',
-    fr: 'L\'électronique, les micropuces et le matériel informatique me fascinent autant que les logiciels.',
-    hi: 'इलेक्ट्रॉनिक्स, माइक्रोचिप्स और हार्डवेयर मुझे सॉफ्टवेयर जितना ही आकर्षक लगते हैं।',
-    ar: 'الإلكترونيات والرقائق الدقيقة والأجهزة تبهرني بقدر ما يبهرني البرمجيات.' },
-  { id: 28, disc: 'xh', text: 'Psychology and understanding human behavior are what I am passionate about.',
-    vi: 'Tâm lý học và hiểu hành vi con người là điều tôi đam mê.',
-    fr: 'La psychologie et la compréhension du comportement humain sont ce qui me passionne.',
-    hi: 'मनोविज्ञान और मानव व्यवहार को समझना मेरे जुनून हैं।',
-    ar: 'علم النفس وفهم السلوك البشري هو ما أنا شغوف به.' },
-  { id: 29, disc: 'nn', text: 'Forests, oceans, and ecosystems need to be preserved — I want to be someone who works towards that.',
-    vi: 'Rừng, đại dương và hệ sinh thái cần được bảo tồn — tôi muốn là người làm việc hướng tới điều đó.',
-    fr: 'Les forêts, les océans et les écosystèmes doivent être préservés — je veux être quelqu\'un qui y contribue.',
-    hi: 'जंगलों, महासागरों और पारिस्थितिक तंत्रों को संरक्षित करने की जरूरत है — मैं उस दिशा में काम करने वाला बनना चाहता हूं।',
-    ar: 'الغابات والمحيطات والأنظمة البيئية تحتاج إلى الحفاظ عليها — أريد أن أكون شخصاً يعمل نحو ذلك.' },
-  { id: 30, disc: 'tn', text: 'New materials and nanotechnology will change the way we live — I want to contribute to that.',
-    vi: 'Vật liệu mới và công nghệ nano sẽ thay đổi cách chúng ta sống — tôi muốn đóng góp vào điều đó.',
-    fr: 'Les nouveaux matériaux et les nanotechnologies changeront notre façon de vivre — je veux y contribuer.',
-    hi: 'नई सामग्री और नैनोटेक्नोलॉजी जीने का तरीका बदल देगी — मैं उसमें योगदान देना चाहता हूं।',
-    ar: 'المواد الجديدة وتقنية النانو ستغير طريقة حياتنا — أريد المساهمة في ذلك.' },
-];
-/* ── Language helpers ───────────────────────────────────────────
-   Both read localStorage directly so they work on first paint,
-   regardless of whether BDi18n.init() has run yet.
-   ──────────────────────────────────────────────────────────── */
-function _bdLang() {
-  try { return localStorage.getItem('bd-lang') || 'en'; } catch(e) { return 'en'; }
+
+// Stage → aurora disc key (cycles for visual variety, not semantic)
+const _DISC_CYCLE = ['kt','nv','yt','xh','nn','tn'];
+const _STAGE_TAGS = { d: '🎯 Discipline', m: '📚 Major', u: '🏛️ University' };
+
+function buildQuizSet() {
+  if (!window.BD_ASSERTIONS) {
+    console.error('BD_ASSERTIONS not loaded — assertions.js missing?');
+    return [];
+  }
+  const _lang = (function(){try{return localStorage.getItem('bd-lang')||'en';}catch(e){return 'en';}}());
+  const _i18n = window.BD_ASSERTIONS_I18N;   // fr/hi/ar from assertions-i18n.js
+  const pick = (arr, n) => [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+  let ci = 0;
+  const wrap = (stage, items) => items.map(q => ({
+    id    : q.id,
+    text  : _lang === 'en'                              ? q.text              // English default
+          : (_i18n && _i18n[_lang] && _i18n[_lang][q.id]) ? _i18n[_lang][q.id] // fr/hi/ar lookup
+          : q[_lang] || q.text,                                               // vi inline or fallback
+    stage : stage,
+    tag   : _STAGE_TAGS[stage],
+    disc  : _DISC_CYCLE[ci++ % _DISC_CYCLE.length],  // visual only (aurora + DNA bar)
+  }));
+  return [
+    ...wrap('d', pick(BD_ASSERTIONS.d, 10)),
+    ...wrap('m', pick(BD_ASSERTIONS.m, 10)),
+    ...wrap('u', pick(BD_ASSERTIONS.u, 10)),
+  ];
 }
 
-function getQText(q) {
-  var lang = _bdLang();
-  if (q[lang]) return q[lang]; /* vi / fr / hi / ar — all stored inline */
-  return q.text;               /* fallback: English */
-}
-
-/* Disc chip label translation (uses BDi18n.t with temporary _lang override) */
-var _DISC_EMOJIS = { kt:'⚡', nv:'📚', yt:'⚕️', xh:'💡', nn:'🌱', tn:'🔬' };
-function getDiscLabel(discKey) {
-  var lang = _bdLang();
-  if (lang === 'en' || !window.BDi18n) return DISC_COLORS[discKey].label;
-  var translated = window.BDi18n.t.call({ _lang: lang }, 'disc.short.' + discKey);
-  return (_DISC_EMOJIS[discKey] || '') + ' ' + translated;
-}
+const QUESTIONS = buildQuizSet();
 /* ── START-QUESTION DETECTION ── */
 // sessionStorage bd_nextStart is the primary resume mechanism (set by result screens)
 // URL ?start=N is secondary fallback. Default: Q1 (START_IDX=0)
@@ -3678,10 +3535,10 @@ function loadCard(index) {
   const q    = QUESTIONS[index];
   const disc = DISC_COLORS[q.disc];
 
-  if ($qText)          $qText.textContent        = getQText(q);
+  if ($qText)          $qText.textContent        = q.text;
   if ($qNumber)        $qNumber.textContent       = String(index + 1).padStart(2, '0');
   if ($disciplineTag) {
-    $disciplineTag.textContent = q.tag || getDiscLabel(q.disc);
+    $disciplineTag.textContent = q.tag || disc.label;
     $disciplineTag.style.color = disc.primary;
   }
   if ($counterCurrent) $counterCurrent.textContent = String(index + 1);

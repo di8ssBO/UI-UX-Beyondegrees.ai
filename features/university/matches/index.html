@@ -3555,8 +3555,10 @@ function renderCard(u) {
         + '<button class="uc-save-btn' + (isSaved ? ' saved' : '') + '" onclick="toggleSave(\'' + u.id + '\')" title="' + (isSaved ? 'Unsave' : 'Save') + '">'
           + (isSaved ? '❤️' : '🤍')
         + '</button>'
+        + '<button class="uc-compare-btn' + (isCompare ? ' active' : '') + '" onclick="toggleCompare(\'' + u.id + '\')">'
+          + (isCompare ? '☑ Added' : '⊕ Compare')
+        + '</button>'
         + '<a class="uc-cta-btn" style="flex:1.3;text-align:center;text-decoration:none" href="../detail/index.html?id=' + u.id + '" data-i18n="uni.cta.view_program">' + t('uni.cta.view_program') + '</a>'
-        + '<button class="uc-expand-btn" id="uc-eb-' + u.id + '" onclick="toggleExpand(\'' + u.id + '\')" title="More details" aria-expanded="false">▾</button>'
       + '</div>'
 
     + '</div>'/* end uc-body */
@@ -4196,5 +4198,6 @@ document.getElementById('savedToggle').addEventListener('click', function() {
 })();
 
 </script>
+<script src="../../../shared/scripts/i18n.js"></script>
 </body>
 </html>
