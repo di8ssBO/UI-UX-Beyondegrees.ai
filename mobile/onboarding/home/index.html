@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <title>Home Screen — BeyonDegrees.ai</title>
+  <script>
+  /* Theme boot — runs before paint to prevent flash.
+     Priority: ?theme= query → localStorage('bd-theme') → existing html attr → 'dark' */
+  (function(){
+    var p;
+    try { p = new URL(location.href).searchParams.get('theme'); } catch(e) {}
+    if (p !== 'light' && p !== 'dark' && p !== 'system') p = null;
+    if (!p) { try { p = localStorage.getItem('bd-theme'); } catch(e) {} }
+    if (!p) p = document.documentElement.getAttribute('data-theme') || 'dark';
+    var r = p === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+      : p;
+    document.documentElement.setAttribute('data-theme', r);
+    document.documentElement.setAttribute('data-theme-pref', p);
+  })();
+  </script>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/components/interactive.css">
@@ -14,6 +29,7 @@
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="./style.css">
   <script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
 
 <style>
 
@@ -42,254 +58,23 @@
   --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
 }
 
-/* ── LIGHT MODE: official BeyonDegrees brand palette ── */
-:root[data-theme="light"] {
-  /* Brand blue stays — all other palette flips to light */
-  --violet-600: #1863DC;
-  --violet-500: #0274BE;
-  --violet-400: #1863DC;
-  --violet-300: #4A90E2;
-  --violet-200: #93BBFF;
-  --violet-100: #EEF4FB;
-  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.18);
-  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.10);
-  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.20);
-  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.15);
+/* Light-theme tokens & component rules live in:
+     design-system/tokens.css   (palette: cream/coral/sky/blush scales)
+     design-system/layout.css   (all component rules: bg, cards, buttons, etc.)
+   This block keeps only screen-specific overrides. */
 
-  /* Neutral scale flips */
-  --neutral-950: #FFFFFF;
-  --neutral-900: #F2F7FD;
-  --neutral-800: #E0ECFA;
-  --neutral-700: #C5D5E8;
-  --neutral-600: #A8BDD8;
-  --neutral-500: #808DAA;
-  --neutral-400: #5A6580;
-  --neutral-300: #3A3A4A;
-  --neutral-200: #1A1A2E;
-  --neutral-100: #0D0D1A;
-  --neutral-50:  #060610;
-
-  /* Semantic background tokens */
-  --bg-base:     #FFFFFF;
-  --bg-surface:  #F2F7FD;
-  --bg-elevated: #E0ECFA;
-  --bg-overlay:  #C5D5E8;
-
-  /* Text tokens */
-  --text-primary:   #1A1A2E;
-  --text-secondary: #3A3A4A;
-  --text-muted:     #808285;
-  --text-disabled:  #C0C0D0;
-
-  /* Mint stays readable on light bg */
-  --mint-500: #059669;
-  --mint-400: #10B981;
-  --mint-300: #34D399;
-
-  /* Orange */
-  --orange-500: #D95F02;
-  --orange-400: #F97316;
-}
-
-/* ── LIGHT MODE: body & global overrides ── */
+/* OUTSIDE — body stays dark even in light mode */
 [data-theme="light"] body {
-  background: linear-gradient(135deg, #FFFFFF 0%, #EEF4FB 55%, #FFFFFF 100%) !important;
-  color: #1A1A2E !important;
+  background: #06060f !important;
+  color: #f8fafc !important;
 }
 
-/* Hardcoded violet rgba chips → blue */
-[data-theme="light"] [style*="rgba(124, 58, 237"],
-[data-theme="light"] [style*="rgba(124,58,237"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
+/* Progress ring uses gradient stroke defined in SVG <defs id="ringGradLight"> */
+[data-theme="light"] .ring-fill {
+  stroke: url(#ringGradLight) !important;
 }
-
-/* Cards → white glass */
-[data-theme="light"] .card,
-[data-theme="light"] [class*="card"],
-[data-theme="light"] .quiz-card,
-[data-theme="light"] .result-card,
-[data-theme="light"] .discipline-card,
-[data-theme="light"] .major-card,
-[data-theme="light"] .uni-card,
-[data-theme="light"] .option-card,
-[data-theme="light"] .stat-card,
-[data-theme="light"] .info-card,
-[data-theme="light"] .feature-card {
-  background: rgba(255, 255, 255, 0.92) !important;
-  border-color: rgba(24, 99, 220, 0.15) !important;
-  box-shadow: 0 4px 24px rgba(24, 99, 220, 0.10) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .card:hover,
-[data-theme="light"] [class*="card"]:hover {
-  border-color: rgba(24, 99, 220, 0.35) !important;
-  box-shadow: 0 12px 40px rgba(24, 99, 220, 0.18) !important;
-}
-
-/* Nav / header / tab-bar */
-[data-theme="light"] nav,
-[data-theme="light"] header,
-[data-theme="light"] .nav-bar,
-[data-theme="light"] .tab-bar,
-[data-theme="light"] .top-nav,
-[data-theme="light"] .header {
-  background: rgba(255, 255, 255, 0.96) !important;
-  border-color: rgba(24, 99, 220, 0.12) !important;
-  box-shadow: 0 2px 16px rgba(24, 99, 220, 0.08) !important;
-}
-
-/* Tab items / nav links */
-[data-theme="light"] .tab-item,
-[data-theme="light"] .nav-link,
-[data-theme="light"] .nav-item {
-  color: #808285 !important;
-}
-[data-theme="light"] .tab-item.active,
-[data-theme="light"] .nav-link.active,
-[data-theme="light"] .tab-item:hover {
-  color: #1863DC !important;
-}
-
-/* Chips & tags */
-[data-theme="light"] .chip,
-[data-theme="light"] [class*="chip"],
-[data-theme="light"] [class*="tag"],
-[data-theme="light"] .badge {
-  background: rgba(24, 99, 220, 0.10) !important;
-  border-color: rgba(24, 99, 220, 0.25) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] [class*="chip-mint"],
-[data-theme="light"] [class*="tag-mint"],
-[data-theme="light"] [class*="chip-success"] {
-  background: rgba(5, 150, 105, 0.12) !important;
-  border-color: rgba(5, 150, 105, 0.30) !important;
-  color: #059669 !important;
-}
-
-/* Dividers */
-[data-theme="light"] .divider,
-[data-theme="light"] hr {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Inputs */
-[data-theme="light"] input,
-[data-theme="light"] textarea,
-[data-theme="light"] .input {
-  background: #FFFFFF !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1A1A2E !important;
-}
-[data-theme="light"] input::placeholder,
-[data-theme="light"] textarea::placeholder {
-  color: #A0A0B0 !important;
-}
-[data-theme="light"] input:focus,
-[data-theme="light"] textarea:focus {
-  border-color: #1863DC !important;
-  box-shadow: 0 0 0 3px rgba(24,99,220,0.15) !important;
-}
-
-/* Buttons: primary stays blue, ghost adapts */
-[data-theme="light"] .btn-ghost,
-[data-theme="light"] [class*="btn-ghost"] {
-  background: rgba(24, 99, 220, 0.08) !important;
-  border-color: rgba(24, 99, 220, 0.20) !important;
-  color: #1863DC !important;
-}
-[data-theme="light"] .btn-ghost:hover {
-  background: rgba(24, 99, 220, 0.14) !important;
-}
-
-/* Background orbs — soften for light mode */
-[data-theme="light"] .bg-orb,
-[data-theme="light"] [class*="orb"] {
-  opacity: 0.35 !important;
-}
-
-/* Progress bars */
-[data-theme="light"] .progress,
-[data-theme="light"] [class*="progress-track"],
-[data-theme="light"] [class*="progress-bg"] {
-  background: rgba(24, 99, 220, 0.12) !important;
-}
-
-/* Breadcrumb */
-[data-theme="light"] .breadcrumb-item { color: #808285 !important; }
-[data-theme="light"] .breadcrumb-item:hover,
-[data-theme="light"] .breadcrumb-item.active { color: #1863DC !important; }
-
-/* Text elements that may be hardcoded white */
-[data-theme="light"] h1,
-[data-theme="light"] h2,
-[data-theme="light"] h3,
-[data-theme="light"] h4 {
-  color: #1A1A2E;
-}
-[data-theme="light"] p,
-[data-theme="light"] li,
-[data-theme="light"] label,
-[data-theme="light"] td,
-[data-theme="light"] th {
-  color: #3A3A4A;
-}
-
-/* ── Background — light mode override ── */
-[data-theme="light"] .device-frame {
-  background: #eef2f7 !important;
-  border-color: #b8cce8 !important;
-  box-shadow:
-    0 0 0 1px #ccd6e8,
-    0 24px 64px rgba(0,0,0,0.12),
-    0 0 60px rgba(24,99,220,0.08) !important;
-}
-[data-theme="light"] .mobile-viewport {
-  background: #f0f4fb !important;
-}
-[data-theme="light"] .aurora-bg,
-[data-theme="light"] .blob {
-  opacity: 0 !important;
-  pointer-events: none;
-}
-[data-theme="light"] .mobile-header {
-  background: rgba(255,255,255,0.92) !important;
-  border-bottom-color: rgba(24,99,220,0.10) !important;
-}
-
-/* ── Discipline cards — text visible in light mode ── */
-[data-theme="light"] .discipline-card span {
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .discipline-card:hover {
-  background: rgba(24,99,220,0.10) !important;
-  border-color: rgba(24,99,220,0.35) !important;
-}
-[data-theme="light"] .section-label-mobile {
-  color: #1863DC !important;
-  opacity: 0.75;
-}
-
-/* ── Hero section text — visible in light mode ── */
-[data-theme="light"] .hero-section h2 {
-  color: #1A1A2E !important;
-}
-[data-theme="light"] .hero-section p {
-  color: #3A3A4A !important;
-}
-[data-theme="light"] .hero-section {
-  background: rgba(24,99,220,0.05) !important;
-  border-color: rgba(24,99,220,0.12) !important;
-  box-shadow: 0 4px 24px rgba(24,99,220,0.08) !important;
-}
-
-/* ── CTA secondary button — light mode ── */
-[data-theme="light"] .cta-section .btn-secondary {
-  background: rgba(24,99,220,0.07) !important;
-  border-color: rgba(24,99,220,0.18) !important;
-  color: #1863DC !important;
+[data-theme="light"] .hero-ring-svg circle:first-child {
+  stroke: rgba(232,220,194,0.70) !important;
 }
 
 /* ── TRANSITION: smooth theme switch ── */
@@ -334,7 +119,7 @@ svg *, canvas, video, img { transition: none !important; }
 </head>
 <body>
 <div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
-    <a href="../../../index.html" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
     <span class="breadcrumb-separator">/</span>
     <span class="breadcrumb-item active">Home Screen</span>
   </div>
@@ -360,8 +145,8 @@ svg *, canvas, video, img { transition: none !important; }
         <div class="status-bar">
           <span>9:41</span>
           <div class="status-icons">
-            <span>📶</span>
-            <span>🔋</span>
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
           </div>
         </div>
 
@@ -377,14 +162,21 @@ svg *, canvas, video, img { transition: none !important; }
             <!-- Progress Ring -->
             <div class="hero-ring-wrap">
               <svg class="hero-ring-svg" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ringGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#E89370"/>
+                    <stop offset="50%" stop-color="#0274BE"/>
+                    <stop offset="100%" stop-color="#075C9F"/>
+                  </linearGradient>
+                </defs>
                 <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
                 <circle id="heroRingFill" cx="38" cy="38" r="32" class="ring-fill"
                   stroke="#1863DC" stroke-width="3" stroke-linecap="round"/>
               </svg>
               <span id="heroEmoji">🚀</span>
             </div>
-            <p class="mobile-tagline" id="heroTagline" data-i18n="home.tagline">Discover your academic identity</p>
-            <h2 id="heroTitle" data-i18n="home.hero_q">What major are you interested in?</h2>
+            <p class="mobile-tagline" id="heroTagline">Discover your academic identity</p>
+            <h2 id="heroTitle">What major are you interested in?</h2>
             <p id="heroSub">Answer 30 questions and let AI find your perfect match.</p>
           </div>
         </section>
@@ -394,11 +186,11 @@ svg *, canvas, video, img { transition: none !important; }
           <h3 class="section-label-mobile" data-i18n="home.choose_disc">Choose 1 or more disciplines</h3>
           <div class="disciplines-grid">
             <div class="discipline-card" data-disc="kt" data-disc-id="72" style="--disc:#7c3aed">
-              <div class="discipline-icon">⚙️</div>
+              <div class="discipline-icon">💻</div>
               <span data-i18n="disc.short.kt">Engineering</span>
             </div>
             <div class="discipline-card" data-disc="yt" data-disc-id="73" style="--disc:#06d6a0">
-              <div class="discipline-icon">🩺</div>
+              <div class="discipline-icon">⚕️</div>
               <span data-i18n="disc.short.yt">Medical</span>
             </div>
             <div class="discipline-card" data-disc="tn" data-disc-id="71" style="--disc:#f43f5e">
@@ -410,11 +202,11 @@ svg *, canvas, video, img { transition: none !important; }
               <span data-i18n="disc.short.nn">Agricultural</span>
             </div>
             <div class="discipline-card" data-disc="xh" data-disc-id="75" style="--disc:#a855f7">
-              <div class="discipline-icon">🧠</div>
+              <div class="discipline-icon">🌍</div>
               <span data-i18n="disc.short.xh">Social Sci</span>
             </div>
             <div class="discipline-card" data-disc="nv" data-disc-id="76" style="--disc:#3b82f6">
-              <div class="discipline-icon">📜</div>
+              <div class="discipline-icon">📖</div>
               <span data-i18n="disc.short.nv">Humanities</span>
             </div>
           </div>
@@ -467,7 +259,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/><path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label">Hoang Phuc</span>
+            <span class="tab-label"></span>
           </a>
         </nav>
 
@@ -479,10 +271,374 @@ svg *, canvas, video, img { transition: none !important; }
   
   
   
-<script src="../../../shared/scripts/ui/utils.js"></script>
-<script src="../../../shared/scripts/ui/navigation.js"></script>
 <script>
-/* utils: loaded via shared/scripts/ui/utils.js + navigation.js */
+/* utils */
+/* BeyonDegrees.ai — Shared Utilities */
+
+// Toast Notification System
+const Toast = {
+  show(message, duration = 2000, type = 'info') {
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  },
+  
+  success(message, duration = 2000) {
+    this.show(message, duration, 'success');
+  },
+  
+  error(message, duration = 3000) {
+    this.show(message, duration, 'error');
+  },
+  
+  warning(message, duration = 2500) {
+    this.show(message, duration, 'warning');
+  }
+};
+
+// Clipboard Utilities
+const Clipboard = {
+  async copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      Toast.success(`Copied: ${text}`);
+      return true;
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      Toast.error('Failed to copy');
+      return false;
+    }
+  },
+  
+  async paste() {
+    try {
+      const text = await navigator.clipboard.readText();
+      return text;
+    } catch (err) {
+      console.error('Failed to paste:', err);
+      Toast.error('Failed to paste');
+      return null;
+    }
+  }
+};
+
+// Format Utilities
+const Format = {
+  percent(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? '0%' : `${Math.round(num)}%`;
+  },
+  
+  capitalize(str) {
+    if (typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  },
+  
+  pluralize(count, singular, plural) {
+    return count === 1 ? singular : plural;
+  },
+  
+  formatNumber(num) {
+    return new Intl.NumberFormat('en-US').format(num);
+  },
+  
+  formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
+  },
+  
+  formatTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(date));
+  },
+  
+  truncate(str, length = 50) {
+    if (typeof str !== 'string') return '';
+    return str.length > length ? str.substring(0, length) + '...' : str;
+  }
+};
+
+// DOM Utilities
+const DOM = {
+  query(selector) {
+    return document.querySelector(selector);
+  },
+  
+  queryAll(selector) {
+    return document.querySelectorAll(selector);
+  },
+  
+  create(tag, attributes = {}, content = '') {
+    const el = document.createElement(tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (key === 'className') {
+        el.className = value;
+      } else if (key === 'innerHTML') {
+        el.innerHTML = value;
+      } else if (key.startsWith('on')) {
+        el.addEventListener(key.slice(2).toLowerCase(), value);
+      } else {
+        el.setAttribute(key, value);
+      }
+    });
+    if (content) el.textContent = content;
+    return el;
+  },
+  
+  addClass(el, className) {
+    if (el) el.classList.add(className);
+    return el;
+  },
+  
+  removeClass(el, className) {
+    if (el) el.classList.remove(className);
+    return el;
+  },
+  
+  toggleClass(el, className) {
+    if (el) el.classList.toggle(className);
+    return el;
+  },
+  
+  hasClass(el, className) {
+    return el && el.classList.contains(className);
+  },
+  
+  setStyle(el, styles) {
+    if (el) Object.assign(el.style, styles);
+    return el;
+  }
+};
+
+// Event Utilities
+const Events = {
+  debounce(func, delay = 300) {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  },
+  
+  throttle(func, delay = 300) {
+    let lastCall = 0;
+    return function(...args) {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(this, args);
+      }
+    };
+  },
+  
+  on(element, event, handler) {
+    element && element.addEventListener(event, handler);
+  },
+  
+  off(element, event, handler) {
+    element && element.removeEventListener(event, handler);
+  },
+  
+  once(element, event, handler) {
+    const wrapper = (...args) => {
+      handler.apply(this, args);
+      element && element.removeEventListener(event, wrapper);
+    };
+    element && element.addEventListener(event, wrapper);
+  }
+};
+
+// Storage Utilities
+const Storage = {
+  setItem(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  getItem(key, defaultValue = null) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return defaultValue;
+    }
+  },
+  
+  removeItem(key) {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  clear() {
+    try {
+      localStorage.clear();
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  }
+};
+
+// Export as global namespace
+window.BD = {
+  Toast,
+  Clipboard,
+  Format,
+  DOM,
+  Events,
+  Storage
+};
+
+/* navigation */
+/* BeyonDegrees.ai — Navigation & Page Management */
+
+// Navigation Manager
+const Navigation = {
+  init() {
+    this.initBottomNav();
+    this.initSidebarNav();
+    this.initActiveState();
+    this.initScrollSpy();
+  },
+  
+  initBottomNav() {
+    const items = document.querySelectorAll('.bottom-nav-item');
+    items.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = item.getAttribute('href') || item.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initSidebarNav() {
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href') || link.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initActiveState() {
+    const currentPath = window.location.pathname;
+    
+    // Bottom nav items
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+      const href = item.getAttribute('href') || item.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Sidebar items
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      const href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  },
+  
+  initScrollSpy() {
+    const sections = document.querySelectorAll('[data-section]');
+    if (sections.length === 0) return;
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.getAttribute('data-section');
+          const navItem = document.querySelector(`[data-nav="${sectionId}"]`);
+          if (navItem) {
+            document.querySelectorAll('[data-nav]').forEach(item => {
+              item.classList.remove('active');
+            });
+            navItem.classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
+  },
+  
+  setActive(selector) {
+    document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
+  },
+  
+  goTo(path) {
+    window.location.href = path;
+  }
+};
+
+// Page transition utilities
+const PageTransition = {
+  fadeOut(duration = 300) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  },
+  
+  fadeIn(duration = 300) {
+    document.body.style.opacity = '1';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  Navigation.init();
+  document.body.style.opacity = '1';
+});
+
+// Global navigation export
+window.Nav = Navigation;
+window.PageTransition = PageTransition;
 
 /* screen */
 // Home Screen Interactions
@@ -490,85 +646,84 @@ svg *, canvas, video, img { transition: none !important; }
 document.addEventListener('DOMContentLoaded', () => {
   const disciplineCards = document.querySelectorAll('.discipline-card');
 
-  // Toggle discipline selection
+  // Toggle discipline selection with ripple
   disciplineCards.forEach(card => {
-    card.addEventListener('click', () => {
+    card.addEventListener('click', (e) => {
+      // Ripple from click point
+      const r = document.createElement('span');
+      r.className = 'dc-ripple';
+      const rect = card.getBoundingClientRect();
+      r.style.left = (e.clientX - rect.left) + 'px';
+      r.style.top  = (e.clientY - rect.top)  + 'px';
+      card.appendChild(r);
+      r.addEventListener('animationend', () => r.remove());
+
       card.classList.toggle('selected');
-      card.style.borderColor = card.classList.contains('selected')
-        ? 'var(--violet-600)'
-        : 'var(--neutral-700)';
-      card.style.background = card.classList.contains('selected')
-        ? 'rgba(24, 99, 220, 0.1)'
-        : 'var(--bg-surface)';
     });
   });
 
   // ── Progress-based state init ──────────────────────────────────────
   (function initProgress() {
-    const p   = parseInt(localStorage.getItem('quizProgress') || '0', 10);
-    const key = p >= 30 ? 30 : p >= 20 ? 20 : p >= 10 ? 10 : 0;
+    const p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    const m = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    // milestone (10/20/30) chỉ thay đổi khi hoàn thành hẳn 1 batch qua loading screen
+    // progress (1...) thay đổi sau mỗi câu trả lời, chỉ dùng để detect "đã bắt đầu quiz"
+    const key = m >= 30 ? 30 : m >= 20 ? 20 : m >= 10 ? 10 : p > 0 ? 1 : 0;
     const $   = id => document.getElementById(id);
 
     // Ring fill
     const C    = 201.1; // 2π × 32
-    const pcts = { 0: 0, 10: 0.333, 20: 0.667, 30: 1 };
+    const pcts = { 0: 0, 1: 0.05, 10: 0.333, 20: 0.667, 30: 1 };
     const ring = $('heroRingFill');
     if (ring) {
       ring.style.strokeDasharray  = C;
-      ring.style.strokeDashoffset = C * (1 - pcts[key]);
+      ring.style.strokeDashoffset = C * (1 - (pcts[key] ?? 0));
       if (key === 30) ring.style.stroke = '#f59e0b'; // gold = complete
     }
 
-    // Hero text (keys registered for i18n.js to re-apply on load)
+    // Hero text
+    const t = (window.BDi18n && window.BDi18n.t.bind(window.BDi18n)) || function(k){return k;};
     const STATES = {
-      0:  { emoji: '🚀',
-            tagline: 'Discover your academic identity',     taglineKey: 'home.state0.tagline',
-            title:   'What major are you interested in?',   titleKey:   'home.state0.title',
-            sub:     'Answer 30 questions and let AI find your perfect match.', subKey: 'home.state0.sub' },
-      10: { emoji: '🔥',
-            tagline: 'Quiz Stage 1 complete!',              taglineKey: 'home.state1.tagline',
-            title:   'Your top discipline is revealed 🔥',  titleKey:   'home.state1.title',
-            sub:     'Keep going! 20 more questions to unlock your Major matches.', subKey: 'home.state1.sub' },
-      20: { emoji: '⚡',
-            tagline: 'Quiz Stage 2 complete!',              taglineKey: 'home.state2.tagline',
-            title:   'AI found your Major matches ⚡',       titleKey:   'home.state2.title',
-            sub:     '10 more questions to unlock your University matches.', subKey: 'home.state2.sub' },
-      30: { emoji: '✨',
-            tagline: 'Profile complete!',                   taglineKey: 'home.state3.tagline',
-            title:   'Your academic identity is complete ✨', titleKey:  'home.state3.title',
-            sub:     'BeyonDegrees has found your perfect university matches.', subKey: 'home.state3.sub' },
+      0:  { emoji: '🚀', tagline: t('home.state0.tagline'),
+            title: t('home.state0.title'),
+            sub:   t('home.state0.sub') },
+      1:  { emoji: '💪', tagline: 'Great start! Keep going',
+            title: 'You\'re on your way to finding your match',
+            sub:   `Answered ${p} question${p>1?'s':''}. Pick up where you left off!` },
+      10: { emoji: '🔥', tagline: t('home.state1.tagline'),
+            title: t('home.state1.title'),
+            sub:   t('home.state1.sub') },
+      20: { emoji: '⚡', tagline: t('home.state2.tagline'),
+            title: t('home.state2.title'),
+            sub:   t('home.state2.sub') },
+      30: { emoji: '✨', tagline: t('home.state3.tagline'),
+            title: t('home.state3.title'),
+            sub:   t('home.state3.sub') },
     };
     const s = STATES[key];
     if ($('heroEmoji'))   $('heroEmoji').textContent   = s.emoji;
-    if ($('heroTagline')) { $('heroTagline').setAttribute('data-i18n', s.taglineKey); $('heroTagline').textContent = s.tagline; }
-    if ($('heroTitle'))   { $('heroTitle').setAttribute('data-i18n', s.titleKey);     $('heroTitle').textContent   = s.title; }
-    if ($('heroSub'))     { $('heroSub').setAttribute('data-i18n', s.subKey);         $('heroSub').textContent     = s.sub; }
+    if ($('heroTagline')) $('heroTagline').textContent = s.tagline;
+    if ($('heroTitle'))   $('heroTitle').textContent   = s.title;
+    if ($('heroSub'))     $('heroSub').textContent     = s.sub;
 
-    // Buttons — always compute resume URL dynamically from live quizProgress
-    const resumeUrl = p > 0 ? '../../quiz/quiz-card/?start=' + (p + 1) : '../../quiz/quiz-card/';
+    // Buttons
     const BTNS = {
-      0:  { b1: p > 0 ? 'Continue Quiz →' : 'Start Quiz →',
-            b1k: p > 0 ? 'home.cta.continue' : 'home.cta.start',
-            u1: resumeUrl, b2: null },
-      10: { b1: 'Continue Quiz →', b1k: 'home.cta.continue', u1: resumeUrl,
-            b2: { t: 'View Discipline Results ›', tk: 'home.cta.view_disc', u: '../../discipline/match/' } },
-      20: { b1: 'Continue Quiz →', b1k: 'home.cta.continue', u1: resumeUrl,
-            b2: { t: 'View Major Results ›',      tk: 'home.cta.view_major', u: '../../major/recommendations/' } },
-      30: { b1: 'View Match →',    b1k: 'home.cta.view_match', u1: '../../university/matches/',
-            b2: { t: 'View University Results ›', tk: 'home.cta.view_uni', u: '../../university/matches/' } },
+      0:  { b1: t('home.cta.start'),    u1: '../../quiz/quiz-card/', b2: null },
+      1:  { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`, b2: null },
+      10: { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`,
+            b2: { t: t('home.cta.view_disc'), u: '../../discipline/match/' } },
+      20: { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`,
+            b2: { t: t('home.cta.view_major'), u: '../../major/recommendations/' } },
+      30: { b1: t('home.cta.view_match'), u1: '../../university/matches/',
+            b2: { t: t('home.cta.view_uni'), u: '../../university/matches/' } },
     };
     const b    = BTNS[key];
     const btn1 = $('ctaPrimary');
     const btn2 = $('ctaSecondary');
-    if (btn1) {
-      btn1.setAttribute('data-i18n', b.b1k);
-      btn1.textContent = b.b1;
-      btn1.onclick = () => location.href = b.u1;
-    }
+    if (btn1) { btn1.textContent = b.b1; btn1.onclick = () => location.href = b.u1; }
     if (btn2) {
       if (b.b2) {
         btn2.style.display = 'block';
-        btn2.setAttribute('data-i18n', b.b2.tk);
         btn2.textContent   = b.b2.t;
         btn2.onclick       = () => location.href = b.b2.u;
       } else {
@@ -591,6 +746,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+
+  // ── Show reset-success toast if coming from Reset Account ──────────
+  try {
+    if (sessionStorage.getItem('bd_reset_success') === '1') {
+      sessionStorage.removeItem('bd_reset_success');
+      setTimeout(() => Toast.success('Your account has been reset successfully.'), 400);
+    }
+  } catch(e) {}
 });
 
 </script>
@@ -638,9 +801,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.bdSetTheme = bdSetTheme;
 
-  // Init on load
-  var saved = 'dark';
-  try { saved = localStorage.getItem('bd-theme') || 'dark'; } catch(e) {}
+  // Init on load — respect head boot script's data-theme-pref
+  var saved;
+  try { saved = localStorage.getItem('bd-theme'); } catch(e) {}
+  if (!saved) saved = document.documentElement.getAttribute('data-theme-pref') || 'dark';
   bdSetTheme(saved);
 
   // React to OS theme changes (only when user pref === 'system')
@@ -650,7 +814,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 </script>
-<script src="../../../shared/scripts/ui/i18n.js"></script>
-</body>
 
+</body>
 </html>

@@ -144,6 +144,13 @@
       'quiz.all_analyzing':       'AI is analyzing your results…',
       'quiz.undo_empty':          'Nothing to undo!',
       'quiz.see_result':          'See my results →',
+      'quiz.stat.done':            '✓ {n} done',
+      'quiz.stat.left':            '→ {n} left',
+      'quiz.tutorial.dismiss':     'Got it — Let\'s go! 🚀',
+      'quiz.resume.title':         'Resume where you left off ❖',
+      'quiz.resume.sub':           'Q{n} / {total} · {count} answers saved',
+      'quiz.resume.continue':      'Continue →',
+      'quiz.resume.start_over':    'Start over',
       'quiz.ready_sub':           'AI has analyzed {n} of your answers',
       /* Quiz */
       'quiz.hint.drag':       'Drag to answer',

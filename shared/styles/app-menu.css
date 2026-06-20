@@ -1,0 +1,247 @@
+/* ═══════════════════════════════════════════════════════════════
+   BeyonDegrees — App Hamburger Menu
+   Shared across Disciplines, Majors, Universities pages.
+   Usage: wrap the menu btn + dropdown in .app-menu-wrap
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Wrapper (position anchor) ── */
+.app-menu-wrap {
+  position: relative;
+}
+
+/* ── Trigger button ── */
+.app-menu-btn {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.75);
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  flex-shrink: 0;
+}
+.app-menu-btn:hover {
+  background: rgba(255,255,255,0.13);
+  border-color: rgba(255,255,255,0.20);
+  color: #fff;
+}
+.app-menu-btn.open {
+  background: rgba(24,99,220,0.20);
+  border-color: rgba(24,99,220,0.50);
+  color: #6BA3FF;
+}
+[data-theme="light"] .app-menu-btn {
+  background: rgba(255,255,255,0.90) !important;
+  border-color: rgba(0,0,0,0.10) !important;
+  color: #2c1f14 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .app-menu-btn.open {
+  background: rgba(24,99,220,0.10) !important;
+  border-color: rgba(24,99,220,0.30) !important;
+  color: #1863DC !important;
+}
+
+/* ── Dropdown panel ── */
+.app-dropdown {
+  position: fixed;
+  z-index: 9999;
+  width: 230px;
+
+  background: rgba(10, 12, 30, 0.97);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 8px;
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05) inset,
+    0 8px 24px rgba(0,0,0,0.55),
+    0 24px 64px rgba(0,0,0,0.65);
+
+  /* Hidden state */
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.95);
+  transform-origin: top right;
+  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34,1.2,0.64,1);
+}
+.app-dropdown.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+[data-theme="light"] .app-dropdown {
+  background: rgba(248,249,255,0.98) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.90) inset,
+    0 8px 24px rgba(0,0,0,0.12),
+    0 24px 48px rgba(0,0,0,0.10) !important;
+}
+[data-theme="light"] .app-dropdown::before {
+  background: rgba(248,249,255,0.98) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+}
+
+/* ── Section label ── */
+.app-menu-section {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: rgba(255,255,255,0.28);
+  padding: 6px 12px 4px;
+}
+[data-theme="light"] .app-menu-section { color: rgba(0,0,0,0.32) !important; }
+
+/* ── Menu item — base ── */
+.app-menu-item {
+  width: 100%;
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 11px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s;
+  text-align: left;
+  margin-bottom: 3px;
+}
+.app-menu-item:last-child { margin-bottom: 0; }
+.app-menu-item:active { transform: scale(0.97); }
+
+/* ── Per-action colored rows ── */
+
+/* My Account — blue */
+.app-menu-item[data-menu-action="my-account"] {
+  background: linear-gradient(135deg, rgba(24,99,220,0.55) 0%, rgba(37,117,255,0.40) 100%);
+  border-color: rgba(99,163,255,0.55);
+  color: #E0EEFF;
+  box-shadow: 0 2px 12px rgba(24,99,220,0.30), 0 0 0 1px rgba(99,163,255,0.15) inset;
+}
+.app-menu-item[data-menu-action="my-account"]:hover {
+  background: linear-gradient(135deg, rgba(24,99,220,0.72) 0%, rgba(37,117,255,0.58) 100%);
+  border-color: rgba(99,163,255,0.75);
+  color: #fff;
+}
+
+/* Leave Review — green */
+.app-menu-item[data-menu-action="leave-review"] {
+  background: linear-gradient(135deg, rgba(5,150,105,0.52) 0%, rgba(16,185,129,0.38) 100%);
+  border-color: rgba(52,211,153,0.55);
+  color: #D1FAF0;
+  box-shadow: 0 2px 12px rgba(16,185,129,0.28), 0 0 0 1px rgba(52,211,153,0.15) inset;
+}
+.app-menu-item[data-menu-action="leave-review"]:hover {
+  background: linear-gradient(135deg, rgba(5,150,105,0.70) 0%, rgba(16,185,129,0.56) 100%);
+  border-color: rgba(52,211,153,0.75);
+  color: #fff;
+}
+
+/* Share — purple */
+.app-menu-item[data-menu-action="share"] {
+  background: linear-gradient(135deg, rgba(109,40,217,0.52) 0%, rgba(139,92,246,0.40) 100%);
+  border-color: rgba(167,139,250,0.55);
+  color: #EDE9FE;
+  box-shadow: 0 2px 12px rgba(139,92,246,0.30), 0 0 0 1px rgba(167,139,250,0.15) inset;
+}
+.app-menu-item[data-menu-action="share"]:hover {
+  background: linear-gradient(135deg, rgba(109,40,217,0.70) 0%, rgba(139,92,246,0.58) 100%);
+  border-color: rgba(167,139,250,0.75);
+  color: #fff;
+}
+
+/* Contact — amber */
+.app-menu-item[data-menu-action="contact"] {
+  background: linear-gradient(135deg, rgba(180,110,0,0.52) 0%, rgba(245,158,11,0.38) 100%);
+  border-color: rgba(251,191,36,0.55);
+  color: #FEF3C7;
+  box-shadow: 0 2px 12px rgba(245,158,11,0.28), 0 0 0 1px rgba(251,191,36,0.15) inset;
+}
+.app-menu-item[data-menu-action="contact"]:hover {
+  background: linear-gradient(135deg, rgba(180,110,0,0.70) 0%, rgba(245,158,11,0.56) 100%);
+  border-color: rgba(251,191,36,0.75);
+  color: #fff;
+}
+
+/* Reset Account — red */
+.app-menu-item[data-menu-action="reset"],
+.app-menu-item--danger {
+  background: linear-gradient(135deg, rgba(185,28,28,0.52) 0%, rgba(239,68,68,0.38) 100%) !important;
+  border-color: rgba(252,165,165,0.50) !important;
+  color: #FEE2E2 !important;
+  box-shadow: 0 2px 12px rgba(239,68,68,0.28), 0 0 0 1px rgba(252,165,165,0.12) inset;
+}
+.app-menu-item[data-menu-action="reset"]:hover,
+.app-menu-item--danger:hover {
+  background: linear-gradient(135deg, rgba(185,28,28,0.70) 0%, rgba(239,68,68,0.58) 100%) !important;
+  border-color: rgba(252,165,165,0.70) !important;
+  color: #fff !important;
+}
+
+/* ── Light mode per-action overrides ── */
+[data-theme="light"] .app-menu-item[data-menu-action="my-account"] {
+  background: rgba(24,99,220,0.10) !important; border-color: rgba(24,99,220,0.22) !important; color: #1863DC !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="my-account"]:hover {
+  background: rgba(24,99,220,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="leave-review"] {
+  background: rgba(5,150,105,0.10) !important; border-color: rgba(5,150,105,0.22) !important; color: #059669 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="leave-review"]:hover {
+  background: rgba(5,150,105,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="share"] {
+  background: rgba(109,40,217,0.10) !important; border-color: rgba(109,40,217,0.22) !important; color: #7c3aed !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="share"]:hover {
+  background: rgba(109,40,217,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="contact"] {
+  background: rgba(217,119,6,0.10) !important; border-color: rgba(217,119,6,0.22) !important; color: #d97706 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="contact"]:hover {
+  background: rgba(217,119,6,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="reset"],
+[data-theme="light"] .app-menu-item--danger {
+  background: rgba(239,68,68,0.09) !important; border-color: rgba(239,68,68,0.20) !important; color: #dc2626 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="reset"]:hover,
+[data-theme="light"] .app-menu-item--danger:hover {
+  background: rgba(239,68,68,0.16) !important;
+}
+
+/* ── Item icon chip ── */
+.app-menu-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.app-menu-icon--account  { background: rgba(24,99,220,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(24,99,220,0.40); }
+.app-menu-icon--review   { background: rgba(5,150,105,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(16,185,129,0.36); }
+.app-menu-icon--share    { background: rgba(109,40,217,0.55);  color: #fff; box-shadow: 0 2px 8px rgba(139,92,246,0.40); }
+.app-menu-icon--contact  { background: rgba(180,110,0,0.60);   color: #fff; box-shadow: 0 2px 8px rgba(245,158,11,0.36); }
+.app-menu-icon--danger   { background: rgba(185,28,28,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.38); }
+
+[data-theme="light"] .app-menu-icon--account  { background: rgba(24,99,220,0.15) !important;  color: #1863DC !important; }
+[data-theme="light"] .app-menu-icon--review   { background: rgba(5,150,105,0.15) !important;   color: #059669 !important; }
+[data-theme="light"] .app-menu-icon--share    { background: rgba(109,40,217,0.15) !important;  color: #7c3aed !important; }
+[data-theme="light"] .app-menu-icon--contact  { background: rgba(217,119,6,0.15) !important;   color: #d97706 !important; }
+[data-theme="light"] .app-menu-icon--danger   { background: rgba(239,68,68,0.13) !important;   color: #dc2626 !important; }
+
+/* ── Divider ── */
+.app-menu-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 4px 8px 7px;
+}
+[data-theme="light"] .app-menu-divider { background: rgba(0,0,0,0.07) !important; }

@@ -14,8 +14,8 @@
   <link rel="stylesheet" href="../../../design-system/animations.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="./style.css">
-  <script src="../../../shared/scripts/data/loading-data.js"></script>
   <script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
 
 <style>
 
@@ -121,20 +121,10 @@ svg *, canvas, video, img { transition: none !important; }
         <!-- ░░ MAIN LOADING CONTENT ░░ -->
         <div class="loading-body">
 
-          <!-- Central AI Orb -->
-          <div class="orb-wrap">
-            <div class="orb-ring ring-outer" id="ringOuter"></div>
-            <div class="orb-ring ring-mid"   id="ringMid"></div>
-            <div class="orb-core"            id="orbCore">
-              <span class="orb-emoji" id="orbEmoji">✨</span>
-            </div>
-            <!-- Orbiting discipline particles -->
-            <div class="orbit orbit-1"><div class="particle p-kt"></div></div>
-            <div class="orbit orbit-2"><div class="particle p-yt"></div></div>
-            <div class="orbit orbit-3"><div class="particle p-nv"></div></div>
-            <div class="orbit orbit-4"><div class="particle p-nn"></div></div>
-            <div class="orbit orbit-5"><div class="particle p-xh"></div></div>
-            <div class="orbit orbit-6"><div class="particle p-tn"></div></div>
+          <!-- Main Character Canvas -->
+          <div class="mc-wrap">
+            <canvas id="mcCanvas" width="320" height="320"></canvas>
+            <div id="youPulseRing" class="you-pulse-ring"></div>
           </div>
 
           <!-- Phase text -->
@@ -142,6 +132,7 @@ svg *, canvas, video, img { transition: none !important; }
             <p class="phase-label" id="phaseLabel" data-i18n="loading.analyzing">Analyzing</p>
             <h2 class="phase-title" id="phaseTitle" data-i18n="loading.dna_title">Your Academic DNA</h2>
           </div>
+          <p class="ai-status" id="aiStatus"></p>
 
           <!-- Countdown + progress row -->
           <div class="meta-row">
@@ -159,7 +150,7 @@ svg *, canvas, video, img { transition: none !important; }
             <p class="dna-heading" data-i18n="loading.dna_forming">Academic DNA forming</p>
             <div class="dna-bars" id="dnaBars">
               <div class="dna-row">
-                <span class="dna-icon">💻</span>
+                <span class="dna-icon">⚙️</span>
                 <span class="dna-name" data-i18n="loading.dna.engineering">Engineering &amp; Tech</span>
                 <div class="dna-track"><div class="dna-fill dna-kt" id="bar-kt"></div></div>
                 <span class="dna-pct" id="pct-kt">0%</span>
@@ -171,7 +162,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <span class="dna-pct" id="pct-yt">0%</span>
               </div>
               <div class="dna-row">
-                <span class="dna-icon">📖</span>
+                <span class="dna-icon">✏️</span>
                 <span class="dna-name" data-i18n="loading.dna.humanities">Humanities</span>
                 <div class="dna-track"><div class="dna-fill dna-nv" id="bar-nv"></div></div>
                 <span class="dna-pct" id="pct-nv">0%</span>
@@ -247,7 +238,7 @@ svg *, canvas, video, img { transition: none !important; }
             </span>
             <span class="tab-label" data-i18n="nav.about_me">About me</span>
           </a>
-          <a href="../../discipline/match/" id="quizTabLink" class="tab-item active" data-tab="disciplines">
+          <a href="../../discipline/match/" id="quizTabLink" class="tab-item" data-tab="disciplines">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="9"/>
@@ -283,7 +274,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label">Hoang Phuc</span>
+            <span class="tab-label"></span>
           </a>
         </nav>
 
@@ -294,10 +285,374 @@ svg *, canvas, video, img { transition: none !important; }
   
   
   
-<script src="../../../shared/scripts/ui/utils.js"></script>
-<script src="../../../shared/scripts/ui/navigation.js"></script>
 <script>
-/* utils: loaded via shared/scripts/ui/utils.js + navigation.js */
+/* utils */
+/* BeyonDegrees.ai — Shared Utilities */
+
+// Toast Notification System
+const Toast = {
+  show(message, duration = 2000, type = 'info') {
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  },
+  
+  success(message, duration = 2000) {
+    this.show(message, duration, 'success');
+  },
+  
+  error(message, duration = 3000) {
+    this.show(message, duration, 'error');
+  },
+  
+  warning(message, duration = 2500) {
+    this.show(message, duration, 'warning');
+  }
+};
+
+// Clipboard Utilities
+const Clipboard = {
+  async copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      Toast.success(`Copied: ${text}`);
+      return true;
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      Toast.error('Failed to copy');
+      return false;
+    }
+  },
+  
+  async paste() {
+    try {
+      const text = await navigator.clipboard.readText();
+      return text;
+    } catch (err) {
+      console.error('Failed to paste:', err);
+      Toast.error('Failed to paste');
+      return null;
+    }
+  }
+};
+
+// Format Utilities
+const Format = {
+  percent(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? '0%' : `${Math.round(num)}%`;
+  },
+  
+  capitalize(str) {
+    if (typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  },
+  
+  pluralize(count, singular, plural) {
+    return count === 1 ? singular : plural;
+  },
+  
+  formatNumber(num) {
+    return new Intl.NumberFormat('en-US').format(num);
+  },
+  
+  formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
+  },
+  
+  formatTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(date));
+  },
+  
+  truncate(str, length = 50) {
+    if (typeof str !== 'string') return '';
+    return str.length > length ? str.substring(0, length) + '...' : str;
+  }
+};
+
+// DOM Utilities
+const DOM = {
+  query(selector) {
+    return document.querySelector(selector);
+  },
+  
+  queryAll(selector) {
+    return document.querySelectorAll(selector);
+  },
+  
+  create(tag, attributes = {}, content = '') {
+    const el = document.createElement(tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (key === 'className') {
+        el.className = value;
+      } else if (key === 'innerHTML') {
+        el.innerHTML = value;
+      } else if (key.startsWith('on')) {
+        el.addEventListener(key.slice(2).toLowerCase(), value);
+      } else {
+        el.setAttribute(key, value);
+      }
+    });
+    if (content) el.textContent = content;
+    return el;
+  },
+  
+  addClass(el, className) {
+    if (el) el.classList.add(className);
+    return el;
+  },
+  
+  removeClass(el, className) {
+    if (el) el.classList.remove(className);
+    return el;
+  },
+  
+  toggleClass(el, className) {
+    if (el) el.classList.toggle(className);
+    return el;
+  },
+  
+  hasClass(el, className) {
+    return el && el.classList.contains(className);
+  },
+  
+  setStyle(el, styles) {
+    if (el) Object.assign(el.style, styles);
+    return el;
+  }
+};
+
+// Event Utilities
+const Events = {
+  debounce(func, delay = 300) {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  },
+  
+  throttle(func, delay = 300) {
+    let lastCall = 0;
+    return function(...args) {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(this, args);
+      }
+    };
+  },
+  
+  on(element, event, handler) {
+    element && element.addEventListener(event, handler);
+  },
+  
+  off(element, event, handler) {
+    element && element.removeEventListener(event, handler);
+  },
+  
+  once(element, event, handler) {
+    const wrapper = (...args) => {
+      handler.apply(this, args);
+      element && element.removeEventListener(event, wrapper);
+    };
+    element && element.addEventListener(event, wrapper);
+  }
+};
+
+// Storage Utilities
+const Storage = {
+  setItem(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  getItem(key, defaultValue = null) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return defaultValue;
+    }
+  },
+  
+  removeItem(key) {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  clear() {
+    try {
+      localStorage.clear();
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  }
+};
+
+// Export as global namespace
+window.BD = {
+  Toast,
+  Clipboard,
+  Format,
+  DOM,
+  Events,
+  Storage
+};
+
+/* navigation */
+/* BeyonDegrees.ai — Navigation & Page Management */
+
+// Navigation Manager
+const Navigation = {
+  init() {
+    this.initBottomNav();
+    this.initSidebarNav();
+    this.initActiveState();
+    this.initScrollSpy();
+  },
+  
+  initBottomNav() {
+    const items = document.querySelectorAll('.bottom-nav-item');
+    items.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = item.getAttribute('href') || item.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initSidebarNav() {
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href') || link.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initActiveState() {
+    const currentPath = window.location.pathname;
+    
+    // Bottom nav items
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+      const href = item.getAttribute('href') || item.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Sidebar items
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      const href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  },
+  
+  initScrollSpy() {
+    const sections = document.querySelectorAll('[data-section]');
+    if (sections.length === 0) return;
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.getAttribute('data-section');
+          const navItem = document.querySelector(`[data-nav="${sectionId}"]`);
+          if (navItem) {
+            document.querySelectorAll('[data-nav]').forEach(item => {
+              item.classList.remove('active');
+            });
+            navItem.classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
+  },
+  
+  setActive(selector) {
+    document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
+  },
+  
+  goTo(path) {
+    window.location.href = path;
+  }
+};
+
+// Page transition utilities
+const PageTransition = {
+  fadeOut(duration = 300) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  },
+  
+  fadeIn(duration = 300) {
+    document.body.style.opacity = '1';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  Navigation.init();
+  document.body.style.opacity = '1';
+});
+
+// Global navigation export
+window.Nav = Navigation;
+window.PageTransition = PageTransition;
 
 /* screen */
 /* =====================================================
@@ -316,13 +671,52 @@ svg *, canvas, video, img { transition: none !important; }
     return k;
   };
 
+  /* Convert Western digits to locale numerals for hi/ar */
+  const _HI = ['०','१','२','३','४','५','६','७','८','९'];
+  const _AR = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  window.toLocaleNum = function(n) {
+    var lang = 'en';
+    try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
+    var map = lang === 'hi' ? _HI : lang === 'ar' ? _AR : null;
+    if (!map) return String(n);
+    return String(n).replace(/[0-9]/g, d => map[d]);
+  };
+  function toLocaleNum(n) { return window.toLocaleNum(n); }
+  function toLocalePct(n) { return toLocaleNum(n) + '%'; }
+
   /* ── Config ─────────────────────────────────────── */
   const TOTAL_DURATION = 25; // seconds
 
-  /* ── Shared loading data — imported via <script> tag above ── */
-  const PHASES       = window.BD_PHASES;
-  const DNA_SCHEDULE = window.BD_DNA_SCHEDULE;
-  const FUN_FACTS_LEN = 6; /* dot count stays local */
+  const PHASES = [
+    { label: 'loading.phase.analyzing',   title: 'loading.phase.title.dna' },
+    { label: 'loading.phase.evaluating',  title: 'loading.phase.title.strengths' },
+    { label: 'loading.phase.comparing',   title: 'loading.phase.title.majors' },
+    { label: 'loading.phase.calculating', title: 'loading.phase.title.compat' },
+    { label: 'loading.phase.finalizing',  title: 'loading.phase.title.results' },
+  ];
+
+  // DNA bar final values (%), staggered reveal start (seconds)
+  const DNA_SCHEDULE = [
+    { disc: 'kt', target: 78, start: 2.0 },
+    { disc: 'yt', target: 45, start: 4.5 },
+    { disc: 'nv', target: 62, start: 6.0 },
+    { disc: 'nn', target: 31, start: 8.5 },
+    { disc: 'xh', target: 55, start: 10.0 },
+    { disc: 'tn', target: 68, start: 12.5 },
+  ];
+
+  /* Fun facts — built lazily using t() so language is resolved at call-time */
+  function getFunFacts() {
+    return [
+      t('loading.ff.0'),
+      t('loading.ff.1'),
+      t('loading.ff.2'),
+      t('loading.ff.3'),
+      t('loading.ff.4'),
+      t('loading.ff.5'),
+    ];
+  }
+  const FUN_FACTS_LEN = 6; /* used for dot count */
 
   const MILESTONES = [
     { at: 5,  emoji: '🧬', titleKey: 'loading.milestone1.title', subKey: 'loading.milestone1.sub' },
@@ -373,12 +767,12 @@ svg *, canvas, video, img { transition: none !important; }
     // Reset phase text (no animation on reset)
     const label = $('phaseLabel');
     const title = $('phaseTitle');
-    if (label) { label.className = 'phase-label'; label.textContent = t(PHASES[0].i18nLabel); }
-    if (title) { title.className = 'phase-title'; title.textContent = t(PHASES[0].i18nTitle); }
+    if (label) { label.className = 'phase-label'; label.textContent = t(PHASES[0].label); }
+    if (title) { title.className = 'phase-title'; title.textContent = t(PHASES[0].title); }
 
     // Reset countdown
     const cdText = $('cdText');
-    if (cdText) cdText.textContent = t('loading.countdown').replace('{n}', TOTAL_DURATION);
+    if (cdText) cdText.textContent = t('loading.countdown').replace('{n}', toLocaleNum(TOTAL_DURATION));
 
     // Reset milestone toast
     const toast = $('milestoneToast');
@@ -416,7 +810,7 @@ svg *, canvas, video, img { transition: none !important; }
     const cdText = $('cdText');
     if (cdText) {
       const secs = Math.ceil(remaining);
-      cdText.textContent = secs > 0 ? t('loading.countdown').replace('{n}', secs) : t('loading.finalizing_text');
+      cdText.textContent = secs > 0 ? t('loading.countdown').replace('{n}', toLocaleNum(secs)) : t('loading.finalizing_text');
     }
 
     // --- Phase transitions (every 5s) ---
@@ -487,8 +881,8 @@ svg *, canvas, video, img { transition: none !important; }
     title.classList.add('out');
 
     setTimeout(() => {
-      label.textContent = t(p.i18nLabel);
-      title.textContent = t(p.i18nTitle);
+      label.textContent = t(p.label);
+      title.textContent = t(p.title);
       label.className   = 'phase-label in';
       title.className   = 'phase-title in';
 
@@ -506,6 +900,21 @@ svg *, canvas, video, img { transition: none !important; }
     const pct      = $('pct-' + disc);
     if (!bar || !pct) return;
 
+    // Visual: scan shimmer on active row
+    const row = bar.parentNode && bar.parentNode.parentNode;
+    if (row && row.classList) {
+      row.classList.add('scanning');
+      setTimeout(function() { row.classList.remove('scanning'); }, 1200);
+    }
+
+    // Visual: YOU pulse ring — data flowing into YOU
+    const ring = $('youPulseRing');
+    if (ring) {
+      ring.classList.remove('pulsing');
+      void ring.offsetWidth; // force reflow to restart animation
+      ring.classList.add('pulsing');
+    }
+
     const ANIM_MS  = 1400;
     const tStart   = Date.now();
 
@@ -514,7 +923,7 @@ svg *, canvas, video, img { transition: none !important; }
       const eased  = 1 - Math.pow(1 - t, 3); // ease-out cubic
       const value  = Math.round(eased * target);
       bar.style.width    = value + '%';
-      pct.textContent    = value + '%';
+      pct.textContent    = toLocalePct(value);
       if (t < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
@@ -626,9 +1035,12 @@ document.addEventListener('DOMContentLoaded', () => {
   } catch(e) {}
 
   const elCount  = document.getElementById('qCount');
+  const elTotal  = document.getElementById('qTotal');
   const elReady  = document.getElementById('readyCount');
-  if (elCount)  elCount.textContent  = qDone;
-  if (elReady)  elReady.textContent  = qDone;
+  const _ln = window.toLocaleNum || (n => String(n));
+  if (elCount) elCount.textContent = _ln(qDone);
+  if (elTotal) elTotal.textContent = _ln(30);
+  if (elReady) elReady.textContent = _ln(qDone);
   const btn = document.getElementById('readyBtn');
   if (btn) btn.href = RESULT_MAP[_STAGE] || '../../discipline/match/';
 });
@@ -690,6 +1102,251 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 })();
 </script>
-<script src="../../../shared/scripts/ui/i18n.js"></script>
+
+<!-- ── Nhân Vật Chính — Main Character Animation ── -->
+<script>
+(function () {
+  /* "YOU" word — translated per active language */
+  const YOU_WORDS = { en:'YOU', vi:'BẠN', hi:'आप', fr:'TOI', ar:'أنت' };
+  function getYouWord() {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return YOU_WORDS[lang] || 'YOU';
+  }
+
+  const COLORS       = ['#8b5cf6','#06d6a0','#60a5fa','#fbbf24','#c084fc','#22d3ee'];
+  const COLORS_LIGHT = ['#7c3aed','#059669','#2563eb','#d97706','#db2777','#0891b2'];
+  const ICONS        = ['💻','⚕️','📖','🌱','🌍','🔬'];
+  /* Discipline abbreviations — language-dependent */
+  const LABELS_MAP = {
+    en: ['KN','HE','PR','LA','SO','NA'],
+    vi: ['KT','YT','NV','NN','XH','TN'],
+    hi: ['ज्ञा','स्वा','व्यक्','भा','सा','प्र'],
+    fr: ['CO','SA','PE','LA','SO','NA'],
+    ar: ['مع','صح','شخ','لغ','اج','طب']
+  };
+  function getLabels() {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return LABELS_MAP[lang] || LABELS_MAP.en;
+  }
+  const LABELS = getLabels();
+  const TGT_A  = COLORS.map((_,i) => (i*60-90)*Math.PI/180);
+  function lightenHex(hex, amt) {
+    const n = parseInt(hex.slice(1),16);
+    const r = Math.min(255, ((n>>16)&255) + Math.round(255*amt));
+    const g = Math.min(255, ((n>>8)&255)  + Math.round(255*amt));
+    const b = Math.min(255, (n&255)       + Math.round(255*amt));
+    return `rgb(${r},${g},${b})`;
+  }
+  function darkenHex(hex, amt) {
+    const n = parseInt(hex.slice(1),16);
+    const r = Math.max(0, ((n>>16)&255) - Math.round(255*amt));
+    const g = Math.max(0, ((n>>8)&255)  - Math.round(255*amt));
+    const b = Math.max(0, (n&255)       - Math.round(255*amt));
+    return `rgb(${r},${g},${b})`;
+  }
+  const ez  = p => p<.5 ? 2*p*p : 1-(-2*p+2)**2/2;
+  const eo3 = p => 1-(1-p)**3;
+  const clp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const rng = (t,a,b) => clp((t-a)/(b-a),0,1);
+  const mix = (a,b,t) => a+(b-a)*t;
+
+  const tokens = LABELS.map((label,i) => ({
+    label, color: COLORS[i],
+    chaos0: Math.random()*Math.PI*2,
+    cDist:  22+Math.random()*32,
+    cSpeed: (0.45+Math.random()*0.55)*(Math.random()<.5?1:-1),
+  }));
+
+  const cvs = document.getElementById('mcCanvas');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const W = 160, H = 160, cx = W/2, cy = H/2, ORBIT_R = 46, CYCLE = 6000;
+  ctx.scale(2, 2);
+  let t0 = null;
+
+  function frame(now) {
+    if (!t0) t0 = now;
+    const abs = (now-t0)/1000;
+    const cyc = (now-t0) % CYCLE;
+    ctx.clearRect(0,0,W,H);
+
+    const settleP   = ez(rng(cyc, CYCLE*.15, CYCLE*.42));
+    const convergeP = eo3(rng(cyc, CYCLE*.42, CYCLE*.57));
+    const youP      = eo3(rng(cyc, CYCLE*.57, CYCLE*.76));
+    const youFadeP  = rng(cyc, CYCLE*.76, CYCLE*.85);
+    const scatterP  = eo3(rng(cyc, CYCLE*.83, CYCLE*.95));
+    const dimP      = rng(cyc, CYCLE*.95, CYCLE);
+
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+    // Icon fades in when dots settle into orbit, fades out as they converge
+    const iconAlpha = clp((settleP - 0.5) * 2, 0, 1) * clp(1 - convergeP * 2.5, 0, 1) * (scatterP > 0 ? 0 : 1);
+
+    tokens.forEach((tk,i) => {
+      const chaosA   = tk.chaos0 + tk.cSpeed*abs;
+      const settledA = TGT_A[i];
+      let da = settledA - chaosA;
+      da = ((da+Math.PI*3)%(Math.PI*2)) - Math.PI;
+      const displayA = scatterP>0 ? mix(settledA,chaosA,scatterP) : mix(chaosA,chaosA+da,settleP);
+      const displayDist = scatterP>0
+        ? mix(0,tk.cDist,scatterP)
+        : mix(mix(tk.cDist,ORBIT_R,settleP),0,convergeP);
+      const x = cx + displayDist*Math.cos(displayA);
+      const y = cy + displayDist*Math.sin(displayA);
+      const alpha = (scatterP>0 ? scatterP : (1-convergeP))*(1-dimP*.6);
+      const col = isLight ? COLORS_LIGHT[i] : COLORS[i];
+
+      if (isLight) {
+        ctx.save();
+        // Soft glow halo
+        // Soft color glow behind chip
+        ctx.globalAlpha = Math.max(0, alpha) * 0.15;
+        const glow = ctx.createRadialGradient(x,y,5,x,y,26);
+        glow.addColorStop(0, col);
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+        // Frosted glass white chip
+        ctx.globalAlpha = Math.max(0, alpha) * 0.92;
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.fill();
+        // Colored border ring
+        ctx.globalAlpha = Math.max(0, alpha) * 0.55;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.stroke();
+        // Icon always visible, full size
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(ICONS[i], x, y + 1);
+        ctx.restore();
+      } else {
+        ctx.save();
+        // Colored glow halo
+        ctx.globalAlpha = alpha * 0.22;
+        const glowD = ctx.createRadialGradient(x,y,5,x,y,26);
+        glowD.addColorStop(0, col);
+        glowD.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glowD;
+        ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+        // Dark glass chip — neutral background so icon always pops
+        ctx.globalAlpha = Math.max(0, alpha) * 0.88;
+        ctx.fillStyle = 'rgba(12,10,30,0.90)';
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.fill();
+        // Colored border ring
+        ctx.globalAlpha = Math.max(0, alpha) * 0.75;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.stroke();
+        // Icon — always visible on dark neutral background
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(ICONS[i], x, y + 1);
+        ctx.restore();
+      }
+    });
+
+    // Dashed orbit ring
+    if (settleP>.15 && convergeP<.8) {
+      ctx.save();
+      ctx.strokeStyle = `rgba(167,139,250,${Math.min(settleP,1-convergeP)*.22})`;
+      ctx.lineWidth = .5; ctx.setLineDash([3,6]);
+      ctx.beginPath(); ctx.arc(cx,cy,ORBIT_R,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
+
+    // YOU phase — glowing sphere orb
+    const ya = eo3(youP)*Math.max(0,1-youFadeP);
+    if (ya>.01) {
+      const rr = eo3(youP);
+      const R  = 38*rr;
+      ctx.save();
+      ctx.globalAlpha = ya;
+
+      if (isLight) {
+        // Light mode: purple sphere — keep purple per spec, softer halo (-13%)
+        const halo = ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*1.6);
+        halo.addColorStop(0, `rgba(205,164,255,${.19*ya})`);
+        halo.addColorStop(1, 'rgba(124,58,237,0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath(); ctx.arc(cx,cy,R*1.6,0,Math.PI*2); ctx.fill();
+
+        const sphere = ctx.createRadialGradient(cx-R*.28,cy-R*.28,0, cx,cy,R);
+        sphere.addColorStop(0,   `rgba(220,210,255,${.97*ya})`);
+        sphere.addColorStop(0.38,`rgba(205,164,255,${.85*ya})`);
+        sphere.addColorStop(1,   `rgba(30,10,80,${.70*ya})`);
+        ctx.fillStyle = sphere;
+        ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+      } else {
+        // Dark mode: deep cosmic purple, softer halo (-13%)
+        const halo = ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*1.7);
+        halo.addColorStop(0, `rgba(139,92,246,${.26*ya})`);
+        halo.addColorStop(1, 'rgba(139,92,246,0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath(); ctx.arc(cx,cy,R*1.7,0,Math.PI*2); ctx.fill();
+
+        const sphere = ctx.createRadialGradient(cx-R*.28,cy-R*.28,0, cx,cy,R);
+        sphere.addColorStop(0,   `rgba(220,210,255,${.97*ya})`);
+        sphere.addColorStop(0.38,`rgba(124,58,237,${.88*ya})`);
+        sphere.addColorStop(1,   `rgba(20,5,50,${.75*ya})`);
+        ctx.fillStyle = sphere;
+        ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+      }
+
+      // Specular highlight (shared)
+      const spec = ctx.createRadialGradient(cx-R*.52,cy-R*.50,0, cx-R*.35,cy-R*.35,R*.55);
+      spec.addColorStop(0, `rgba(255,255,255,${.42*ya})`);
+      spec.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = spec;
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+
+      // YOU word — localized
+      ctx.shadowColor = 'rgba(0,0,0,0.85)';
+      ctx.shadowBlur  = 8;
+      ctx.fillStyle   = '#ffffff';
+      ctx.font = `800 ${Math.round(15*rr+4)}px 'Plus Jakarta Sans','Inter',sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(getYouWord(), cx, cy);
+      ctx.restore();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+<!-- ── AI Status Text — rotating every 2.5s ── -->
+<script>
+(function () {
+  var STATUS = {
+    en: ['Analyzing your strengths...','Identifying strength clusters...','Connecting behavioral patterns...','Building Academic DNA...','Personalizing your results...'],
+    vi: ['Đang phân tích sở thích...','Đang xác định nhóm thế mạnh...','Đang kết nối các mẫu hành vi...','Đang xây dựng Academic DNA...','Đang cá nhân hóa kết quả...'],
+    hi: ['आपकी शक्तियों का विश्लेषण...','शक्ति समूहों की पहचान...','व्यवहार पैटर्न जोड़ रहे हैं...','Academic DNA बना रहे हैं...','परिणाम व्यक्तिगत कर रहे हैं...'],
+    fr: ['Analyse de vos points forts...','Identification des clusters...','Connexion des schémas comportementaux...','Construction de l\'ADN académique...','Personnalisation des résultats...'],
+    ar: ['تحليل نقاط قوتك...','تحديد مجموعات القوة...','ربط أنماط السلوك...','بناء الحمض النووي الأكاديمي...','تخصيص نتائجك...']
+  };
+  function getLang() { try { return localStorage.getItem('bd-lang') || 'en'; } catch(e) { return 'en'; } }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var el = document.getElementById('aiStatus');
+    if (!el) return;
+    var idx = 0;
+    function rotate() {
+      var msgs = STATUS[getLang()] || STATUS.en;
+      el.classList.add('fading');
+      setTimeout(function () {
+        el.textContent = msgs[idx % msgs.length];
+        el.classList.remove('fading');
+        idx++;
+      }, 320);
+    }
+    rotate();
+    setInterval(rotate, 2500);
+  });
+})();
+</script>
 </body>
 </html>
