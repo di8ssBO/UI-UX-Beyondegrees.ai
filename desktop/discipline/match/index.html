@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Discipline Match — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css">
 <style>
   .match-layout { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
   /* ── dc card (mobile .dc) ── */
@@ -160,8 +162,8 @@
     </div>
   </div>
 
-  <script src="../../../shared/scripts/i18n.js"></script>
-  <script src="../../assets/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
   <script>
     /* ── Dữ liệu nguyên văn mobile (rank, %, mô tả) ── */
     var DISCS = [

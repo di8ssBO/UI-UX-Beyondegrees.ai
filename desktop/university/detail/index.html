@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>University Detail — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css">
 <style>
   .ud-hero { display: flex; align-items: center; gap: 26px; padding: 40px; }
   .ud-hero .ic { width: 88px; height: 88px; border-radius: 22px; flex: none; display: grid; place-items: center; font-size: 42px;
@@ -390,14 +392,14 @@
     <div class="content fade-in" id="root"></div>
   </div>
 
-  <script src="../../../shared/scripts/majors-data.js"></script>
-  <script src="../../../shared/scripts/spec-data.js"></script>
-  <script src="../../../shared/scripts/spec-mock.js"></script>
-  <script src="../../../shared/scripts/uni-data.js"></script>
-  <script src="../../../shared/scripts/uni-detail-data.js"></script>
-  <script src="../../../shared/scripts/uni-img-map.js"></script>
-  <script src="../../../shared/scripts/i18n.js"></script>
-  <script src="../../assets/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/data/majors-data.js"></script>
+  <script src="../../../shared/scripts/data/spec-data.js"></script>
+  <script src="../../../shared/scripts/data/spec-mock.js"></script>
+  <script src="../../../shared/scripts/data/uni-data.js"></script>
+  <script src="../../../shared/scripts/data/uni-detail-data.js"></script>
+  <script src="../../../shared/scripts/data/uni-img-map.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
   <script>
     var id = BD.param('u', 'fulbright');
     var u = (window.UNI_DATA || []).find(function (x) { return x.id === id; }) || UNI_DATA[0];

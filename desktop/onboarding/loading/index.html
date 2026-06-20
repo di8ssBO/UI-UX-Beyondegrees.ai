@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Loading — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css">
 <style>
   .load-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; max-width: 1020px; margin: 0 auto; align-items: stretch; }
   /* ── Orb + phase (mobile .orb-wrap) ── */
@@ -137,26 +139,15 @@
     </div>
   </div>
 
-  <script src="../../../shared/scripts/i18n.js"></script>
-  <script src="../../assets/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/data/loading-data.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
   <script>
-    /* ── PHASES + DNA_SCHEDULE + FUN_FACTS — English (mobile i18n.js EN table) ── */
-    var PHASES = [
-      { label: 'Analyzing',   title: 'Your Academic DNA' },
-      { label: 'Evaluating',  title: 'Your Key Strengths' },
-      { label: 'Comparing',   title: 'Thousands of Majors' },
-      { label: 'Calculating', title: 'Your Compatibility' },
-      { label: 'Finalizing',  title: 'Results Tailored for You' }
-    ];
-    var DNA_SCHEDULE = [
-      { disc:'kt', ico:'💻', name:'Engineering & Tech',  target:78, start:2.0 },
-      { disc:'yt', ico:'🩺', name:'Health & Medicine',   target:45, start:4.5 },
-      { disc:'nv', ico:'📖', name:'Humanities',          target:62, start:6.0 },
-      { disc:'nn', ico:'🌾', name:'Agriculture',         target:31, start:8.5 },
-      { disc:'xh', ico:'🌐', name:'Social Sciences',     target:55, start:10.0 },
-      { disc:'tn', ico:'🧬', name:'Natural Sciences',    target:68, start:12.5 }
-    ];
-    var FUN_FACTS = [
+
+    /* ── Shared loading data ── */
+    var PHASES       = window.BD_PHASES;
+    var DNA_SCHEDULE = window.BD_DNA_SCHEDULE;
+    var FUN_FACTS    = [
       '73% of students switch majors after year one due to a poor initial choice.',
       'BeyonDegrees users make major decisions 3.2× more confidently than average.',
       'Only 18% of students have enough information about majors before deciding.',
@@ -164,7 +155,7 @@
       'The right major isn\'t just about grades — personality matters 2.4× more.',
       'BeyonDegrees has helped over 50,000 students discover their right path.'
     ];
-    var DURATION = 17; /* mobile: 17s blank screen solution */
+    var DURATION = 17;
 
     /* DNA rows */
     var rows = document.getElementById('dnaRows');

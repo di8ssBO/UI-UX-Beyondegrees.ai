@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Discipline Match — BeyonDegrees.ai</title>
+<script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+<script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+<style>
+/* ══ Constellation Sky ══════════════════════════════════════════════ */
+.cst-section { padding: 0 0 4px; }
+.cst-sky-wrap {
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+}
+.cst-caption {
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  padding: 8px 12px 10px;
+  font-style: italic;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.03em;
+  background: linear-gradient(to bottom, #020510, var(--bg-base, #0a0a1a));
+}
+#cstContainer { display: block; line-height: 0; }
+#cstContainer svg { display: block; width: 100%; }
+#cst-tooltip {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(8,10,32,0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 7px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  white-space: nowrap;
+  z-index: 10;
+  letter-spacing: 0.02em;
+}
+@keyframes cst-draw { to { stroke-dashoffset: 0; } }
+@keyframes cst-twinkle {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.2; }
+}
+@keyframes rdr-fade-in { from { opacity:0; } to { opacity:1; } }
+@keyframes rdr-pulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.75; }
+}
+@keyframes rdr-spin-in {
+  from { opacity:0; transform:scale(0.6); }
+  to   { opacity:1; transform:scale(1); }
+}
+
+/* ── Constellation light-theme — frosted glass on wave background ── */
+/* Sky-wrap becomes a soft floating "window" with rounded corners.
+   The SVG sky rect is transparent (see THEME.skyStops), so the wave
+   background flows behind, blurred through this frosted surface. */
+[data-theme="light"] .cst-section {
+  padding: 0 14px 4px !important;
+}
+[data-theme="light"] .cst-sky-wrap {
+  border-radius: 24px !important;
+  background: linear-gradient(180deg,
+    rgba(255,253,250,0.82) 0%,
+    rgba(253,248,242,0.76) 50%,
+    rgba(245,237,224,0.82) 100%);
+  -webkit-backdrop-filter: blur(26px) saturate(140%);
+  backdrop-filter: blur(26px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 2px 10px rgba(92,69,53,0.06),
+    0 14px 30px rgba(140,114,96,0.08);
+}
+[data-theme="light"] .cst-caption {
+  color: #5c4535 !important;
+  background: transparent !important;
+  padding: 10px 12px 14px !important;
+}
+[data-theme="light"] #cst-tooltip {
+  background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(253,248,242,0.96) 100%);
+  border: 1px solid rgba(201,107,85,0.32);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 4px 16px rgba(92,69,53,0.12);
+}
+</style>
+</head>
+<body>
+<div class="breadcrumb"><a href="#" class="breadcrumb-item">BeyonDegrees-UI</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-item active">Discipline Match</span></div>
+<div class="desktop-container">
+  <div class="device-frame"><div class="device-notch"></div>
+    <div class="mobile-screen"><div class="ds">
+      <div class="ds-aurora"></div>
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+        </div>
+      </div>
+      <div class="ds-hdr">
+        <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
+        <div style="width:30px;height:30px;border-radius:8px;background:var(--bg-surface);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+      </div>
+      <div class="ds-body">
+        <!-- ░░ CONSTELLATION SKY ░░ -->
+        <div class="cst-section">
+          <div class="cst-sky-wrap">
+            <div id="cstContainer"></div>
+          </div>
+          <p class="cst-caption" id="cstCaption" data-i18n="disc.caption">Complete the quiz to reveal your Academic DNA ✨</p>
+        </div>
+        <div class="ds-hl"><span data-i18n="disc.headline">Your Perfect</span><br><span class="ac" data-i18n="disc.headline_em">Disciplines</span></div>
+        <p class="ds-sub" data-i18n="disc.subtext">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
+        <!-- Lock banner — hiện khi quizProgress < 10 -->
+        <div id="discLockedBanner" style="display:none;margin:0 0 16px;padding:20px 16px;background:rgba(24,99,220,.1);border:1px solid rgba(24,99,220,.3);border-radius:16px;text-align:center;flex-direction:column;align-items:center;gap:10px">
+          <div style="font-size:28px">🔒</div>
+          <div style="font-size:15px;font-weight:800;color:var(--text-primary)" data-i18n="disc.lock_title">Discipline Match Locked</div>
+          <div id="discLockSubText" style="font-size:12px;color:var(--text-muted);line-height:1.5" data-i18n="disc.lock_sub">Complete 10 questions to unlock your Discipline results.</div>
+          <button id="discLockCta" style="margin-top:4px;padding:12px 24px;background:var(--violet-600);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(24,99,220,.4);transition:background .15s,box-shadow .15s" data-i18n="disc.cta.start">Start Quiz →</button>
+        </div>
+        <!-- Cards wrapper — blurred when locked -->
+        <div id="discCardsWrap">
+        <!-- Card 1 -->
+        <div class="dc dc-kt"><div class="dc-bar"></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#9881;&#65039;</div><div><div class="dc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="dc-rank">#1 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">94%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
+          <div class="dc-prog"><div class="dc-pfill" style="width:94%"></div></div>
+          <p class="dc-desc" data-i18n="disc.desc.kt">You possess strong analytical reasoning and a natural inclination toward systematic problem-solving and science innovation.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+        </div>
+        <!-- Card 2 -->
+        <div class="dc dc-tn"><div class="dc-bar"></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128300;</div><div><div class="dc-name" data-i18n="disc.name.tn">Natural Sciences</div><div class="dc-rank">#2 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">89%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
+          <div class="dc-prog"><div class="dc-pfill" style="width:89%"></div></div>
+          <p class="dc-desc" data-i18n="disc.desc.tn">Your curiosity about the physical world and mathematical approach to observation align with life and physical science paths.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+        </div>
+        <!-- Card 3 -->
+        <div class="dc dc-yt"><div class="dc-bar"></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129658;</div><div><div class="dc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="dc-rank">#3 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">64%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
+          <div class="dc-prog"><div class="dc-pfill" style="width:64%"></div></div>
+          <p class="dc-desc" data-i18n="disc.desc.yt">Your empathy and precision-oriented mindset suit healthcare and biomedical paths focused on improving human well-being.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+        </div>
+        <!-- Card 4 -->
+        <div class="dc dc-nn"><div class="dc-bar"></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#127806;</div><div><div class="dc-name" data-i18n="disc.name.nn">Agricultural Sciences</div><div class="dc-rank">#4 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">62%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
+          <div class="dc-prog"><div class="dc-pfill" style="width:62%"></div></div>
+          <p class="dc-desc" data-i18n="disc.desc.nn">A grounded approach to sustainability and life sciences positions you well for agronomy, food science, and environmental stewardship.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+        </div>
+        <!-- Card 5 -->
+        <div class="dc dc-xh"><div class="dc-bar"></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#129504;</div><div><div class="dc-name" data-i18n="disc.name.xh">Social Sciences</div><div class="dc-rank">#5 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">34%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
+          <div class="dc-prog"><div class="dc-pfill" style="width:34%"></div></div>
+          <p class="dc-desc" data-i18n="disc.desc.xh">A deep interest in human behavior, societal structures, and interpersonal dynamics makes this a moderate-fit field for your profile.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+        </div>
+        <!-- Card 6 -->
+        <div class="dc dc-nv"><div class="dc-bar"></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128214;</div><div><div class="dc-name" data-i18n="disc.name.nv">Humanities</div><div class="dc-rank">#6 Ranked</div></div></div>
+          <div style="text-align:right"><div class="dc-pct">32%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
+          <div class="dc-prog"><div class="dc-pfill" style="width:32%"></div></div>
+          <p class="dc-desc" data-i18n="disc.desc.nv">Your appreciation for language, culture, and critical thinking gives you a foundation in literature, philosophy, and history paths.</p>
+          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+        </div>
+        </div><!-- /discCardsWrap -->
+      </div>
+        <!-- ░░ FLOATING TAB BAR ░░ -->
+        <nav class="float-tab-bar" id="floatTabBar">
+          <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
+          </a>
+          <a href="../../discipline/match/" class="tab-item active" data-tab="t2">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+          </a>
+          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
+          </a>
+          <a href="../../university/matches/" class="tab-item" data-tab="t4">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
+          </a>
+          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
+              </svg>
+            </span>
+            <span class="tab-label">Hoang Phuc</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+/* ══ Academic DNA Radar Chart ═══════════════════════════════════════ */
+(function () {
+  var progress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
+  var milestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+  var CX = 160, CY = 190, MAX_R = 120;
+
+  /* ── Read real DNA scores from sessionStorage, fall back to demo ── */
+  var CARD_PCTS = (function () {
+    var demo = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
+    try {
+      var raw = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+      if (raw && Object.keys(raw).some(function (k) { return raw[k] > 0; })) {
+        var total = Object.keys(raw).reduce(function (s, k) { return s + (raw[k] || 0); }, 0) || 1;
+        var pcts = {};
+        ['kt', 'nv', 'yt', 'xh', 'nn', 'tn'].forEach(function (k) {
+          pcts[k] = Math.round(((raw[k] || 0) / total) * 100);
+        });
+        return pcts;
+      }
+    } catch (e) { /* keep demo */ }
+    return demo;
+  })();
+  function dnaPct(key) { return CARD_PCTS[key] || 70; }
+
+  /* ── Vertex colors — theme-aware.
+     Light mode preserves each discipline's characteristic hue family
+     (violet/rose/purple/blue/emerald/amber) but uses the 600-700 shade
+     for AA contrast on cream. Also aligns with each card's .dc-bar. ── */
+  var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  var DISC_COLORS = isLight ? {
+    kt:'#7c3aed',  /* violet-600  — Engineering & Tech     */
+    xh:'#9333ea',  /* purple-600  — Social Sciences        */
+    tn:'#e11d48',  /* rose-600    — Natural Sciences       */
+    nv:'#2563eb',  /* blue-600    — Humanities             */
+    yt:'#059669',  /* emerald-600 — Medical & Health       */
+    nn:'#d97706'   /* amber-600   — Agricultural Sciences  */
+  } : {
+    kt:'#4da6ff', xh:'#c084fc', tn:'#22d3ee',
+    nv:'#fdba74', yt:'#fb7185', nn:'#86efac'
+  };
+
+  /* Thứ tự xen kẽ cao-thấp → hình radar lồi lõm: 94→34→89→32→64→62 */
+  var DISC = [
+    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:DISC_COLORS.kt, pct:dnaPct('kt'), angle:0   },
+    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:DISC_COLORS.xh, pct:dnaPct('xh'), angle:60  },
+    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:DISC_COLORS.tn, pct:dnaPct('tn'), angle:120 },
+    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:DISC_COLORS.nv, pct:dnaPct('nv'), angle:180 },
+    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:DISC_COLORS.yt, pct:dnaPct('yt'), angle:240 },
+    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:DISC_COLORS.nn, pct:dnaPct('nn'), angle:300 },
+  ];
+
+  /* Xếp hạng để điều chỉnh độ sáng (rank 0 = cao nhất) */
+  var sortedByPct = DISC.slice().sort(function(a,b){ return b.pct - a.pct; });
+  var pctRank = {};
+  sortedByPct.forEach(function(d, i){ pctRank[d.key] = i; });
+
+  var formedCount = milestone >= 30 ? 6 : milestone >= 20 ? 4 : milestone >= 10 ? 2 : 0;
+  var formedKeys = {};
+  sortedByPct.slice(0, formedCount).forEach(function(d){ formedKeys[d.key] = true; });
+
+  function vtx(angleDeg, r) {
+    var rad = angleDeg * Math.PI / 180;
+    return [+(CX + r * Math.sin(rad)).toFixed(2), +(CY - r * Math.cos(rad)).toFixed(2)];
+  }
+
+  /* ── THEME palette — light = terracotta/cream, dark = neon midnight ─ */
+  var THEME = isLight ? {
+    /* Sky rect → fully transparent so the wave SVG background flows
+       through the radar. Container styling (frosted glass + rounded
+       corners) is now handled by .cst-sky-wrap CSS. */
+    skyStops:  [['0%','rgba(253,248,242,0)'],['50%','rgba(245,237,224,0)'],['100%','rgba(237,225,207,0)']],
+    /* Soft terracotta-tinted fill — primary brand of light mode */
+    fillStops: [['0%','rgba(201,107,85,0.22)'],['100%','rgba(201,107,85,0.04)']],
+    /* Warm sand stars instead of cool gray */
+    star:      function(i){ return 'rgba(140,114,96,'+(i%4===0?0.40:0.22)+')'; },
+    hexStrong: 'rgba(140,114,96,0.30)',
+    hexWeak:   'rgba(140,114,96,0.14)',
+    axisLine:  'rgba(140,114,96,0.12)',
+    centerLbl: 'rgba(92,69,53,0.30)',
+    nameOn:    '#2c1f14',
+    nameOff:   'rgba(44,31,20,0.30)',
+    ringColor: '#c96b55'   /* terracotta-600 — primary brand */
+  } : {
+    skyStops:  [['0%','#0f1d52'],['50%','#080e2e'],['100%','#020510']],
+    fillStops: [['0%','rgba(24,99,220,0.32)'],['100%','rgba(2,116,190,0.06)']],
+    star:      function(i){ return 'rgba(255,255,255,'+(i%4===0?0.3:0.15)+')'; },
+    hexStrong: 'rgba(255,255,255,0.18)',
+    hexWeak:   'rgba(255,255,255,0.07)',
+    axisLine:  'rgba(255,255,255,0.06)',
+    centerLbl: 'rgba(255,255,255,0.10)',
+    nameOn:    '#ffffff',
+    nameOff:   'rgba(255,255,255,0.18)',
+    ringColor: '#1863DC'
+  };
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 320 370');
+  svg.setAttribute('width', '100%');
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+
+  /* ── Defs ─────────────────────────────────────────────────────── */
+  var defs = document.createElementNS(NS, 'defs');
+
+  var skyGrad = document.createElementNS(NS, 'radialGradient');
+  skyGrad.setAttribute('id', 'rdr-sky'); skyGrad.setAttribute('cx', '50%');
+  skyGrad.setAttribute('cy', '45%'); skyGrad.setAttribute('r', '60%');
+  THEME.skyStops.forEach(function(p){
+    var s = document.createElementNS(NS,'stop');
+    s.setAttribute('offset',p[0]); s.setAttribute('stop-color',p[1]);
+    skyGrad.appendChild(s);
+  });
+  defs.appendChild(skyGrad);
+
+  var polyGrad = document.createElementNS(NS, 'radialGradient');
+  polyGrad.setAttribute('id', 'rdr-fill'); polyGrad.setAttribute('cx', '50%');
+  polyGrad.setAttribute('cy', '50%'); polyGrad.setAttribute('r', '50%');
+  THEME.fillStops.forEach(function(p){
+    var s = document.createElementNS(NS,'stop');
+    s.setAttribute('offset',p[0]); s.setAttribute('stop-color',p[1]);
+    polyGrad.appendChild(s);
+  });
+  defs.appendChild(polyGrad);
+
+  /* Glow filters: 3 mức sáng */
+  function makeGlow(id, dev) {
+    var f = document.createElementNS(NS, 'filter');
+    f.setAttribute('id', id);
+    f.setAttribute('x','-100%'); f.setAttribute('y','-100%');
+    f.setAttribute('width','300%'); f.setAttribute('height','300%');
+    var b = document.createElementNS(NS, 'feGaussianBlur');
+    b.setAttribute('stdDeviation', dev); b.setAttribute('result','gb');
+    var m = document.createElementNS(NS, 'feMerge');
+    ['gb','SourceGraphic'].forEach(function(inp){
+      var n = document.createElementNS(NS,'feMergeNode'); n.setAttribute('in',inp); m.appendChild(n);
+    });
+    f.appendChild(b); f.appendChild(m); defs.appendChild(f);
+  }
+  makeGlow('rdr-glow-bright', '4');   /* top 2 — sáng nhất */
+  makeGlow('rdr-glow-med',    '2.2'); /* hạng 3-4 */
+  makeGlow('rdr-glow-dim',    '1.2'); /* hạng 5-6 */
+
+  svg.appendChild(defs);
+
+  /* ── Nền sky ──────────────────────────────────────────────────── */
+  var bg = document.createElementNS(NS, 'rect');
+  bg.setAttribute('width','320'); bg.setAttribute('height','370');
+  bg.setAttribute('fill','url(#rdr-sky)');
+  svg.appendChild(bg);
+
+  /* ── Micro-stars ──────────────────────────────────────────────── */
+  [[12,32],[88,9],[138,18],[188,6],[298,38],[308,118],[292,198],
+   [42,388],[82,412],[28,352],[158,368],[228,352],[112,422],
+   [198,402],[278,318],[18,302],[58,338],[298,288],[152,58],
+   [242,135],[162,198],[308,398],[33,288],[248,428],[175,88],
+   [48,118],[295,155],[225,422],[68,405],[310,248]].forEach(function(pt,i){
+    var c = document.createElementNS(NS,'circle');
+    c.setAttribute('cx',pt[0]); c.setAttribute('cy',pt[1]);
+    c.setAttribute('r', i%3===0?'0.9':'0.55');
+    c.setAttribute('fill', THEME.star(i));
+    svg.appendChild(c);
+  });
+
+  /* ── Guide hexagon rings 33% / 66% / 100% ────────────────────── */
+  [0.333, 0.666, 1.0].forEach(function(frac, ri){
+    var r = MAX_R * frac;
+    var pts = DISC.map(function(d){ return vtx(d.angle,r).join(','); }).join(' ');
+    var hex = document.createElementNS(NS,'polygon');
+    hex.setAttribute('points', pts); hex.setAttribute('fill','none');
+    hex.setAttribute('stroke', ri===2 ? THEME.hexStrong : THEME.hexWeak);
+    hex.setAttribute('stroke-width', ri===2?'1':'0.7');
+    if (ri<2) hex.setAttribute('stroke-dasharray','3 4');
+    svg.appendChild(hex);
+  });
+
+  /* ── Axis lines ───────────────────────────────────────────────── */
+  DISC.forEach(function(d){
+    var tip = vtx(d.angle, MAX_R);
+    var line = document.createElementNS(NS,'line');
+    line.setAttribute('x1',CX); line.setAttribute('y1',CY);
+    line.setAttribute('x2',tip[0]); line.setAttribute('y2',tip[1]);
+    line.setAttribute('stroke', THEME.axisLine);
+    line.setAttribute('stroke-width','0.7');
+    svg.appendChild(line);
+  });
+
+  /* ── Points ───────────────────────────────────────────────────── */
+  var BASE_PCT   = 70;
+  var basePoints = DISC.map(function(d){ return vtx(d.angle, MAX_R * BASE_PCT / 100); });
+  var dataPoints = DISC.map(function(d){ return vtx(d.angle, MAX_R * d.pct  / 100); });
+  var basePtsStr = basePoints.map(function(p){ return p.join(','); }).join(' ');
+
+  /* Tính chu vi vòng 70% để set dashoffset */
+  var basePerim = 0;
+  for (var pi = 0; pi < basePoints.length; pi++) {
+    var pb1 = basePoints[pi], pb2 = basePoints[(pi+1) % basePoints.length];
+    basePerim += Math.hypot(pb2[0]-pb1[0], pb2[1]-pb1[1]);
+  }
+  basePerim = Math.ceil(basePerim) + 2;
+
+  /* ── DRAW RING: chỉ dùng để vẽ dashoffset, ẩn sau khi xong ─── */
+  /* Tách hẳn khỏi polygon morph để tránh gap khi perimeter thay đổi */
+  var drawRing = document.createElementNS(NS, 'polygon');
+  drawRing.setAttribute('points', basePtsStr);
+  drawRing.setAttribute('fill', 'none');
+  drawRing.setAttribute('stroke', THEME.ringColor);
+  drawRing.setAttribute('stroke-width', '1.8');
+  drawRing.setAttribute('stroke-linejoin', 'round');
+  drawRing.style.strokeDasharray  = basePerim;
+  drawRing.style.strokeDashoffset = basePerim;
+  drawRing.style.transition = 'stroke-dashoffset 1.1s ease, opacity 0.25s ease';
+  svg.appendChild(drawRing);
+
+  /* ── DATA POLYGON fill: luôn fully drawn, không dùng dasharray ─ */
+  var polyFill = document.createElementNS(NS, 'polygon');
+  polyFill.setAttribute('points', basePtsStr);
+  polyFill.setAttribute('fill', 'url(#rdr-fill)');
+  polyFill.setAttribute('stroke', 'none');
+  polyFill.style.opacity = '0';
+  svg.appendChild(polyFill);
+
+  /* ── DATA POLYGON stroke: luôn fully drawn, morph từ 70% → actual */
+  var polyStroke = document.createElementNS(NS, 'polygon');
+  polyStroke.setAttribute('points', basePtsStr);
+  polyStroke.setAttribute('fill', 'none');
+  polyStroke.setAttribute('stroke', THEME.ringColor);
+  polyStroke.setAttribute('stroke-width', '1.8');
+  polyStroke.setAttribute('stroke-linejoin', 'round');
+  polyStroke.style.opacity = '0'; /* ẩn trong pha 1, hiện khi bàn giao */
+  svg.appendChild(polyStroke);
+
+  /* ── Tooltip ──────────────────────────────────────────────────── */
+  var container = document.getElementById('cstContainer');
+  var tooltip = document.createElement('div');
+  tooltip.id = 'cst-tooltip';
+  if (container) { container.style.position = 'relative'; container.appendChild(tooltip); }
+
+  /* ── Vertex stars + labels (ẩn, hiện sau khi radar hoàn thiện) ─ */
+  var dotEls   = [];  /* circles */
+  var pctEls   = [];  /* t3 % texts */
+  var dotTargets = []; /* opacity đích mỗi dot */
+
+  DISC.forEach(function(d, i) {
+    var rank    = pctRank[d.key];          /* 0=cao nhất */
+    var isFormed = !!formedKeys[d.key];
+    var vx = dataPoints[i][0], vy = dataPoints[i][1];
+
+    /* Kích thước & độ sáng theo rank */
+    var starR    = rank === 0 ? 5.2 : rank === 1 ? 4.8 : rank === 2 ? 4.0 : rank === 3 ? 3.6 : 3.0;
+    var glowId   = rank <= 1 ? 'rdr-glow-bright' : rank <= 3 ? 'rdr-glow-med' : 'rdr-glow-dim';
+    var dotOpac  = rank === 0 ? 1.0 : rank === 1 ? 0.92 : rank === 2 ? 0.75 : rank === 3 ? 0.7 : 0.5;
+
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', vx); c.setAttribute('cy', vy); c.setAttribute('r', starR);
+    c.setAttribute('fill', d.color);
+    c.setAttribute('filter', 'url(#' + glowId + ')');
+    /* Chưa gắn animation twinkle — sẽ gắn sau ở phase 3 để không override opacity:0 */
+    c._twinkleAnim = 'cst-twinkle ' + (2.0 + rank * 0.35) + 's ease-in-out infinite ' + (i * 0.22).toFixed(2) + 's';
+    c.style.cursor = 'pointer';
+    c.style.opacity = '0';   /* ẩn cho đến phase 3 */
+    c.style.transition = 'opacity 0.45s ease';
+    c.addEventListener('click', (function(disc){
+      return function(){
+        tooltip.textContent = disc.myth;
+        tooltip.style.color = disc.color;
+        tooltip.style.borderColor = disc.color + '60';
+        tooltip.style.opacity = '1';
+        clearTimeout(tooltip._t);
+        tooltip._t = setTimeout(function(){ tooltip.style.opacity = '0'; }, 1800);
+        setTimeout(function(){
+          var card = document.querySelector('.dc-' + disc.key);
+          if (card) card.scrollIntoView({ behavior:'smooth', block:'start' });
+        }, 500);
+      };
+    })(d));
+    svg.appendChild(c);
+    dotEls.push(c);
+    dotTargets.push(dotOpac);
+
+    /* Labels cố định (t1, t2 giữ nguyên isFormed behavior) */
+    var labelR = MAX_R + 20;
+    var lpos = vtx(d.angle, labelR);
+    var lx = lpos[0], ly = lpos[1];
+
+    /* Constellation name (t1) removed per design — only discipline
+       name (t2) and percentage (t3) remain. */
+
+    var t2 = document.createElementNS(NS, 'text');
+    t2.setAttribute('x',lx); t2.setAttribute('y', ly + 4);
+    t2.setAttribute('fill', isFormed ? THEME.nameOn : THEME.nameOff);
+    t2.setAttribute('font-size','9.5'); t2.setAttribute('font-weight','700');
+    t2.setAttribute('text-anchor','middle');
+    t2.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
+    t2.textContent = d.name;
+    svg.appendChild(t2);
+
+    /* t3: % number — ẩn, xuất hiện pha cuối */
+    var t3 = document.createElementNS(NS, 'text');
+    t3.setAttribute('x',lx); t3.setAttribute('y', ly + 16);
+    t3.setAttribute('fill', d.color); t3.setAttribute('font-size','13');
+    t3.setAttribute('font-weight','800'); t3.setAttribute('text-anchor','middle');
+    t3.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
+    t3.textContent = d.pct + '%';
+    t3.style.opacity = '0';
+    t3.style.transition = 'opacity 0.45s ease';
+    svg.appendChild(t3);
+    pctEls.push(t3);
+  });
+
+  /* ── Center label ─────────────────────────────────────────────── */
+  var cLabel = document.createElementNS(NS, 'text');
+  cLabel.setAttribute('x',CX); cLabel.setAttribute('y',CY+4);
+  cLabel.setAttribute('fill', THEME.centerLbl);
+  cLabel.setAttribute('font-size','5'); cLabel.setAttribute('font-weight','600');
+  cLabel.setAttribute('text-anchor','middle'); cLabel.setAttribute('letter-spacing','1.5');
+  cLabel.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
+  cLabel.textContent = 'ACADEMIC DNA';
+  svg.appendChild(cLabel);
+
+  if (container) container.appendChild(svg);
+
+  /* Caption */
+  var capKey = milestone >= 30 ? 30 : milestone >= 20 ? 20 : milestone >= 10 ? 10 : 0;
+  var captions = {
+    0:  'Complete the quiz to reveal your Academic DNA ✨',
+    10: 'Top 2 disciplines revealed — tap a vertex star to explore 🔥',
+    20: '4 disciplines formed — 1 stage to complete your DNA ⚡',
+    30: 'Your complete Academic DNA — tap any vertex to explore 🌌',
+  };
+  var cap = document.getElementById('cstCaption');
+  if (cap) cap.textContent = captions[capKey];
+
+  /* ══ Ẩn radar hoàn toàn khi chưa hoàn thành 10 câu ════════════ */
+  if (progress < 10) {
+    var cstSection = document.querySelector('.cst-section');
+    if (cstSection) cstSection.style.display = 'none';
+    return;
+  }
+
+  /* ══ Animation sequence (chỉ chạy khi progress >= 10) ═══════════
+     Pha 1: drawRing vẽ dashoffset từ đỉnh trên ck đồng hồ         (1.1s)
+            polyFill đồng thời fade-in
+     Pha 2: drawRing ẩn, polyStroke (cùng hình 70%) hiện ngay lập tức
+            → morph polyFill + polyStroke từ 70% → actual %         (800ms)
+            (polyStroke không bao giờ có dasharray → luôn khép kín)
+     Pha 3: dots + % labels fade-in stagger
+  ══════════════════════════════════════════════════════════════════ */
+  function easeOutCubic(t){ return 1 - Math.pow(1-t, 3); }
+  function setPts(poly, pts){
+    poly.setAttribute('points', pts.map(function(p){ return p.join(','); }).join(' '));
+  }
+
+  var DRAW_DURATION  = 1100;  /* khớp với CSS transition của drawRing */
+  var MORPH_GAP      = 200;   /* gap ngắn sau draw, trước morph */
+  var MORPH_DURATION = 800;
+  var REVEAL_GAP     = 150;
+  var DOT_STAGGER    = 55;
+
+  /* Double-rAF: đảm bảo browser paint trạng thái ban đầu trước khi trigger */
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+
+      /* ── Pha 1: vẽ drawRing bằng dashoffset + fill fade-in ── */
+      drawRing.style.strokeDashoffset = '0';       /* trigger draw animation */
+      polyFill.style.transition = 'opacity 0.7s ease';
+      polyFill.style.opacity    = '0.75';
+
+      setTimeout(function() {
+        /* ── Bàn giao: drawRing ẩn, polyStroke hiện ngay tại hình 70% ── */
+        /* Không có khoảng trống vì cả 2 đều ở cùng tọa độ 70% hexagon */
+        drawRing.style.opacity   = '0';  /* fade out 0.25s (transition đã set) */
+        polyStroke.style.opacity = '1';  /* hiện ngay — không transition để tránh nhòe */
+
+        /* ── Pha 2: morph polyFill + polyStroke từ 70% → actual ── */
+        /* polyStroke không có dasharray → luôn hiển thị đầy đủ chu vi */
+        var morphStart = null;
+        function morphStep(ts) {
+          if (!morphStart) morphStart = ts;
+          var t = Math.min((ts - morphStart) / MORPH_DURATION, 1);
+          var e = easeOutCubic(t);
+          var pts = DISC.map(function(d, i) {
+            var bx = basePoints[i][0], by = basePoints[i][1];
+            var tx = dataPoints[i][0],  ty = dataPoints[i][1];
+            return [+(bx + (tx-bx)*e).toFixed(2), +(by + (ty-by)*e).toFixed(2)];
+          });
+          setPts(polyFill,   pts);
+          setPts(polyStroke, pts);
+          if (t < 1) {
+            requestAnimationFrame(morphStep);
+          } else {
+            /* ── Pha 3: reveal dots + % labels có stagger ── */
+            setTimeout(function() {
+              dotEls.forEach(function(el, i) {
+                setTimeout(function() {
+                  el.style.transition = 'none';
+                  el.style.opacity = String(dotTargets[i]);
+                  setTimeout(function() {
+                    el.style.animation = el._twinkleAnim;
+                  }, 60);
+                }, i * DOT_STAGGER);
+              });
+              pctEls.forEach(function(el, i) {
+                setTimeout(function() {
+                  el.style.opacity = '1';
+                }, i * DOT_STAGGER + 20);
+              });
+            }, REVEAL_GAP);
+          }
+        }
+        requestAnimationFrame(morphStep);
+      }, DRAW_DURATION + MORPH_GAP);
+    });
+  });
+})();
+</script>
+<script src="../../../shared/scripts/ui/discipline-nav.js"></script>
+
+
+<script src="../../../shared/scripts/ui/tab-lock.js"></script>
+<script>/* theme init */(function(){var s="light";try{s=localStorage.getItem("bd-theme")||"light";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script><script>
+(function () {
+  const DISC_MAP = { 'dc-kt':'kt', 'dc-tn':'tn', 'dc-xh':'xh', 'dc-nv':'nv', 'dc-yt':'yt', 'dc-nn':'nn' };
+  document.querySelectorAll('.dc').forEach(function (card) {
+    const discKey = Object.keys(DISC_MAP).find(function (cls) { return card.classList.contains(cls); });
+    if (!discKey) return;
+    const disc = DISC_MAP[discKey];
+    var btnEx = card.querySelector('.btn-ex');
+    var btnPw = card.querySelector('.btn-pw');
+    if (btnEx) btnEx.addEventListener('click', function () {
+      window.location.href = '../../discipline/why/index.html?disc=' + disc;
+    });
+    if (btnPw) btnPw.addEventListener('click', function () {
+      window.location.href = '../detail/' + disc + '.html';
+    });
+  });
+})();
+</script>
+<script>
+/* ── Discipline lock gate: ẩn/mờ cards khi quizProgress < 10 ── */
+(function () {
+  var progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+  if (progress < 10) {
+    var banner = document.getElementById('discLockedBanner');
+    var wrap   = document.getElementById('discCardsWrap');
+    var sub    = document.getElementById('discLockSubText');
+    var cta    = document.getElementById('discLockCta');
+
+    if (banner) { banner.style.display = 'flex'; }
+    if (wrap)   {
+      wrap.style.opacity      = '0.22';
+      wrap.style.filter       = 'blur(2px)';
+      wrap.style.pointerEvents = 'none';
+      wrap.style.userSelect   = 'none';
+    }
+
+    var rem = 10 - progress;
+    var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+    if (sub) sub.innerHTML = 'Complete <strong style="color:var(--text-primary)">' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</strong> to unlock your Discipline results.';
+    if (cta) {
+      var isContinue = progress > 0;
+      /* Update data-i18n so i18n.js (loaded after this script) uses the correct key */
+      cta.setAttribute('data-i18n', isContinue ? 'disc.cta.continue' : 'disc.cta.start');
+      cta.textContent = isContinue ? t('disc.cta.continue') : t('disc.cta.start');
+      /* Continue Quiz → mint-500 (btn-success); Start Quiz → violet-600 (btn-primary) */
+      if (isContinue) {
+        cta.style.background  = 'var(--mint-500)';
+        cta.style.color       = '#06060f';
+        cta.style.boxShadow   = '0 4px 16px rgba(6,214,160,.4)';
+      }
+      cta.addEventListener('click', function () {
+        var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+        window.location.href = p > 0 ? '../../quiz/quiz-card/?start=' + (p + 1) : '../../quiz/quiz-card/';
+      });
+    }
+  }
+})();
+</script>
+<script src="../../../shared/scripts/ui/i18n.js"></script>
+</body>
+</html>

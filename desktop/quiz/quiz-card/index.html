@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Quiz — BeyonDegrees.ai</title>
+<title>Quiz &mdash; BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css">
 <style>
-  .quiz-wrap { max-width: 860px; margin: 0 auto; }
-  /* ── Header (mobile .quiz-header) ── */
+  /* ── Quiz wrap ── */
+  .quiz-wrap { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ── Header ── */
   .quiz-header {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 12px;
@@ -33,7 +37,8 @@
   }
   :root[data-theme="light"] .mode-indicator { background: #fdf8f2; border-color: #e8e0d5; }
   .mode-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint-500); }
-  /* Score row (mobile .score-chip) */
+
+  /* ── Score chips ── */
   .score-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
   .score-chip {
     display: flex; align-items: center; gap: 5px; padding: 4px 12px;
@@ -48,7 +53,7 @@
   :root[data-theme="light"] .score-chip.neutral { color:#8c7260; background:#fdf8f2; border-color:#e8e0d5; }
   :root[data-theme="light"] .score-chip.disagree{ color:#be123c; background:rgba(225,29,72,0.08); border-color:rgba(225,29,72,0.22); }
 
-  /* ── Card arena (mobile .card-arena) ── */
+  /* ── Card arena ── */
   .card-arena {
     position: relative; height: 460px; margin-top: 18px;
     display: flex; align-items: center; justify-content: center;
@@ -59,6 +64,7 @@
     color: rgba(255,255,255,0.3); pointer-events: none; transition: color .5s;
   }
   :root[data-theme="light"] .disc-label { color: #8c7260; }
+
   /* Direction hints */
   .dir-hint {
     position: absolute; z-index: 50; font-size: 14px; font-weight: 900;
@@ -66,15 +72,15 @@
     opacity: 0; pointer-events: none; text-transform: uppercase;
     transition: opacity .12s, transform .12s;
   }
-  .hint-right { right: 0;  top: 50%; transform: translateY(-50%) scale(.85); color: var(--mint-500); border: 2px solid var(--mint-500); }
-  .hint-left  { left: 0;   top: 50%; transform: translateY(-50%) scale(.85); color: var(--red-500);  border: 2px solid var(--red-500); }
-  .hint-up    { top: 26px; left: 50%; transform: translateX(-50%) scale(.85); color: var(--violet-400); border: 2px solid var(--violet-400); }
+  .hint-right { right: 0;    top: 50%; transform: translateY(-50%) scale(.85); color: var(--mint-500); border: 2px solid var(--mint-500); }
+  .hint-left  { left: 0;    top: 50%; transform: translateY(-50%) scale(.85); color: var(--red-500);  border: 2px solid var(--red-500); }
+  .hint-up    { top: 26px;  left: 50%; transform: translateX(-50%) scale(.85); color: var(--violet-400); border: 2px solid var(--violet-400); }
   .hint-down  { bottom: 8px; left: 50%; transform: translateX(-50%) scale(.85); color: #9d9dbf; border: 2px solid #6b6b9a; }
   .dir-hint.visible { opacity: 1; }
   .hint-right.visible, .hint-left.visible { transform: translateY(-50%) scale(1); }
   .hint-up.visible, .hint-down.visible { transform: translateX(-50%) scale(1); }
 
-  /* Card stack */
+  /* ── Card stack ── */
   .card-stack { position: relative; width: 520px; height: 360px; }
   .q-card {
     position: absolute; inset: 0; border-radius: 24px;
@@ -104,47 +110,36 @@
     font-size: 26px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.4;
     color: rgba(255,255,255,0.96);
   }
+
+  /* Swipe hint: visible Q1 only, fades out after */
   .swipe-hint {
     display: flex; align-items: center; justify-content: center; gap: 14px;
     font-size: 12px; color: rgba(255,255,255,0.40); font-weight: 600;
+    transition: opacity 0.5s ease;
   }
+  .swipe-hint.hidden { opacity: 0; pointer-events: none; }
   .swipe-hint .hint-arrows { font-weight: 900; letter-spacing: 2px; }
-  /* light-mode card: pastel gradient theo ngành (set bằng JS lightBase) */
+
+  /* Light mode card */
   :root[data-theme="light"] .q-card .discipline-tag { background: rgba(255,255,255,0.75); color: #2c1f14; }
   :root[data-theme="light"] .q-card .q-number { color: rgba(44,31,20,0.45); }
   :root[data-theme="light"] .q-card .q-text { color: #2c1f14; }
   :root[data-theme="light"] .q-card .swipe-hint { color: rgba(44,31,20,0.45); }
   :root[data-theme="light"] .q-card .card-placeholder { color: rgba(44,31,20,0.25); }
 
-  /* ── Desktop action buttons (thay cho swipe tay) ── */
-  .action-bar { display: flex; gap: 12px; justify-content: center; margin-top: 26px; }
-  .action-btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 22px; border-radius: 14px; font-size: 14px; font-weight: 800;
-    background: rgba(255,255,255,0.05); backdrop-filter: blur(8px);
-    transition: all .15s;
+  /* ── Discipline Color Field ── */
+  /* Sits inside .content as position:absolute so it stays within the main area */
+  .content { position: relative; }
+  #colorField {
+    position: absolute; inset: -40px -80px;
+    z-index: 0; pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.8s ease, background 1.5s ease;
+    border-radius: 0;
   }
-  .act-disagree { color: var(--red-400);   border: 1.5px solid rgba(255,71,87,0.40); }
-  .act-neutral  { color: #9d9dbf;          border: 1.5px solid rgba(107,107,154,0.40); }
-  .act-agree    { color: var(--mint-500);  border: 1.5px solid rgba(6,214,160,0.40); }
-  .act-strong   { color: var(--violet-400);border: 1.5px solid rgba(124,58,237,0.45); }
-  .act-disagree:hover { background: rgba(255,71,87,0.14); transform: translateY(-2px); }
-  .act-neutral:hover  { background: rgba(107,107,154,0.14); transform: translateY(-2px); }
-  .act-agree:hover    { background: rgba(6,214,160,0.14); transform: translateY(-2px); }
-  .act-strong:hover   { background: rgba(124,58,237,0.16); transform: translateY(-2px); }
-  :root[data-theme="light"] .action-btn { background: rgba(255,255,255,0.85); }
-  :root[data-theme="light"] .act-disagree { color:#be123c; border-color:rgba(225,29,72,0.40); }
-  :root[data-theme="light"] .act-neutral  { color:#8c7260; border-color:#d8ccbf; }
-  :root[data-theme="light"] .act-agree    { color:#047857; border-color:rgba(5,150,105,0.40); }
-  :root[data-theme="light"] .act-strong   { color:#075c9f; border-color:rgba(2,116,190,0.40); }
-  .kbd-hint { text-align: center; margin-top: 12px; font-size: 11px; color: var(--text-muted); }
-  .kbd-hint kbd {
-    padding: 2px 7px; border-radius: 5px; font-family: inherit; font-size: 10px; font-weight: 700;
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-  }
-  :root[data-theme="light"] .kbd-hint kbd { background: #fdf8f2; border-color: #e8e0d5; }
+  #colorField.disc-active { opacity: 1; }
 
-  /* Milestone overlay */
+  /* ── Milestone overlay ── */
   .milestone-overlay {
     position: fixed; inset: 0; z-index: 200; display: none;
     align-items: center; justify-content: center;
@@ -161,15 +156,19 @@
 <body class="app" data-page="quiz" data-crumb="Quiz">
   <div class="main">
     <div class="content fade-in">
+
+      <!-- Discipline color field: ambient background wash per discipline -->
+      <div id="colorField"></div>
+
       <div class="quiz-wrap">
 
         <!-- Header: undo + counter + mode -->
         <header class="quiz-header">
-          <button class="undo-btn" id="undoBtn" title="Undo">↩</button>
+          <button class="undo-btn" id="undoBtn" title="Undo">&#8617;</button>
           <div class="counter-wrap">
             <span class="counter-current" id="qCur">1</span><span class="muted"> / </span><span class="muted" id="qTotal">30</span>
           </div>
-          <div class="mode-indicator"><span class="mode-dot"></span> Tap / Drag</div>
+          <div class="mode-indicator"><span class="mode-dot"></span> Drag &amp; Swipe</div>
         </header>
 
         <!-- Story bar: 1 segment per question -->
@@ -177,23 +176,23 @@
 
         <!-- Score chips -->
         <div class="score-row">
-          <div class="score-chip agree"><span>✓</span><span id="agreeCount">0</span></div>
-          <div class="score-chip strong"><span>⚡</span><span id="strongCount">0</span></div>
-          <div class="score-chip neutral"><span>–</span><span id="neutralCount">0</span></div>
-          <div class="score-chip disagree"><span>✕</span><span id="disagreeCount">0</span></div>
+          <div class="score-chip agree"><span>&#10003;</span><span id="agreeCount">0</span></div>
+          <div class="score-chip strong"><span>&#9889;</span><span id="strongCount">0</span></div>
+          <div class="score-chip neutral"><span>&ndash;</span><span id="neutralCount">0</span></div>
+          <div class="score-chip disagree"><span>&#10005;</span><span id="disagreeCount">0</span></div>
         </div>
 
         <!-- Card arena -->
         <div class="card-arena" id="cardArena">
-          <div class="dir-hint hint-right" id="hintRight">AGREE ✓</div>
-          <div class="dir-hint hint-left"  id="hintLeft">DISAGREE ✕</div>
-          <div class="dir-hint hint-up"    id="hintUp">STRONGLY AGREE ⚡</div>
-          <div class="dir-hint hint-down"  id="hintDown">NEUTRAL –</div>
+          <div class="dir-hint hint-right" id="hintRight">AGREE &#10003;</div>
+          <div class="dir-hint hint-left"  id="hintLeft">DISAGREE &#10005;</div>
+          <div class="dir-hint hint-up"    id="hintUp">STRONGLY AGREE &#9889;</div>
+          <div class="dir-hint hint-down"  id="hintDown">NEUTRAL &ndash;</div>
           <div class="disc-label" id="discLabel"></div>
 
           <div class="card-stack">
-            <div class="q-card back-2" id="backCard2"><div class="card-inner"><div class="card-placeholder">●●●</div></div></div>
-            <div class="q-card back-1" id="backCard1"><div class="card-inner"><div class="card-placeholder">●●●</div></div></div>
+            <div class="q-card back-2" id="backCard2"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
+            <div class="q-card back-1" id="backCard1"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
             <div class="q-card active-card" id="activeCard">
               <div class="card-inner">
                 <div class="card-top-row">
@@ -201,99 +200,39 @@
                   <span class="q-number" id="qNumber">01</span>
                 </div>
                 <p class="q-text" id="qText"></p>
-                <div class="swipe-hint">
+                <!-- Drag hint: only visible on Q1 -->
+                <div class="swipe-hint" id="swipeHint">
                   <span>Drag to answer</span>
-                  <span class="hint-arrows">← →</span>
-                  <span>or use buttons below</span>
+                  <span class="hint-arrows">&#8592; &#8594;</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Desktop action buttons -->
-        <div class="action-bar">
-          <button class="action-btn act-disagree" data-dir="left">✕ Disagree</button>
-          <button class="action-btn act-neutral"  data-dir="down">– Neutral</button>
-          <button class="action-btn act-agree"    data-dir="right">✓ Agree</button>
-          <button class="action-btn act-strong"   data-dir="up">⚡ Strongly Agree</button>
-        </div>
-        <div class="kbd-hint">Shortcuts: <kbd>←</kbd> Disagree · <kbd>→</kbd> Agree · <kbd>↑</kbd> Strong · <kbd>↓</kbd> Neutral · <kbd>Z</kbd> Undo</div>
-      </div>
-    </div>
-  </div>
+      </div><!-- /.quiz-wrap -->
+    </div><!-- /.content -->
+  </div><!-- /.main -->
 
   <!-- Milestone overlay -->
   <div class="milestone-overlay" id="milestoneOverlay">
     <div class="milestone-content">
-      <div class="milestone-emoji" id="milestoneEmoji">🔥</div>
+      <div class="milestone-emoji" id="milestoneEmoji">&#128293;</div>
       <div class="milestone-text" id="milestoneText">1/3 done!</div>
       <div class="milestone-sub" id="milestoneSub">Keep going!</div>
     </div>
   </div>
 
-  <script src="../../../shared/scripts/i18n.js"></script>
-  <script src="../../assets/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/data/disc-config.js"></script>
+  <script src="../../../shared/scripts/data/questions-static.js"></script>
   <script>
-    /* ── 30 câu hỏi — nguyên văn từ mobile QUESTIONS bank ── */
-    var QUESTIONS = [
-      { id: 1,  disc:'kt', text:'I enjoy solving problems through data analysis.' },
-      { id: 2,  disc:'nv', text:'I am passionate about literature and creative writing.' },
-      { id: 3,  disc:'yt', text:'I am interested in healthcare and medical research.' },
-      { id: 4,  disc:'kt', text:'I enjoy working with data and building software solutions.' },
-      { id: 5,  disc:'xh', text:'I am curious about human behavior and social structures.' },
-      { id: 6,  disc:'nn', text:'Protecting the environment and promoting sustainable development is my priority.' },
-      { id: 7,  disc:'tn', text:'I love conducting experiments and exploring natural laws.' },
-      { id: 8,  disc:'nv', text:'Historical research helps me understand the current world better.' },
-      { id: 9,  disc:'yt', text:'Caring for and helping patients is the most meaningful work for me.' },
-      { id: 10, disc:'kt', text:'I like designing systems and optimizing processes.' },
-      { id: 11, disc:'xh', text:'Working in teams and driving community development is my strength.' },
-      { id: 12, disc:'nn', text:'Biotechnology in agriculture is very appealing to me.' },
-      { id: 13, disc:'tn', text:'Mathematics and physics are subjects I always find joy in.' },
-      { id: 14, disc:'nv', text:'Teaching and sharing knowledge with others is my passion.' },
-      { id: 15, disc:'kt', text:'I am interested in artificial intelligence and automation.' },
-      { id: 16, disc:'xh', text:'I want to participate in building public policies.' },
-      { id: 17, disc:'yt', text:'Drug research and pharmaceutical formulation attract me.' },
-      { id: 18, disc:'nn', text:'I prefer working outdoors and near nature over working in an office.' },
-      { id: 19, disc:'tn', text:'Chemistry and molecular biology are fields I want to explore deeply.' },
-      { id: 20, disc:'nv', text:'Creating, writing, and storytelling is how I express myself.' },
-      { id: 21, disc:'kt', text:'Information security and network protection are areas I want to specialize in.' },
-      { id: 22, disc:'xh', text:'Economics helps me understand why some countries prosper while others fail.' },
-      { id: 23, disc:'nn', text:'I am concerned about how to produce safe food for millions of people.' },
-      { id: 24, disc:'yt', text:'Rehabilitation and sports medicine are fields I am drawn to.' },
-      { id: 25, disc:'tn', text:'I am interested in space exploration and astronomy.' },
-      { id: 26, disc:'nv', text:'I am passionate about law and protecting human rights.' },
-      { id: 27, disc:'kt', text:'Electronics, microchips, and hardware are as fascinating to me as software.' },
-      { id: 28, disc:'xh', text:'Psychology and understanding human behavior are what I am passionate about.' },
-      { id: 29, disc:'nn', text:'Forests, oceans, and ecosystems need to be preserved — I want to be someone who works towards that.' },
-      { id: 30, disc:'tn', text:'New materials and nanotechnology will change the way we live — I want to contribute to that.' }
-    ];
+    /* aliases — keep existing code working without changes */
+    var DISC_COLORS = window.BD_DISC_COLORS;
+    var DISC_NAMES  = window.BD_DISC_NAMES;
+    var QUESTIONS   = window.BD_QUESTIONS_STATIC;
 
-    /* ── DISC_COLORS — nguyên văn từ mobile ── */
-    var DISC_COLORS = {
-      kt: { primary:'#7c3aed', dark:'#2d1267', glow:'rgba(24,99,220,0.5)',
-            lightBase:'linear-gradient(180deg, #FFFCF5 0%, #ECE2EE 60%, #DDCFE2 100%)', lightGlow:'rgba(160,136,171,0.45)',
-            label:'⚡ Engineering & Tech' },
-      nv: { primary:'#3b82f6', dark:'#1e3a8a', glow:'rgba(59,130,246,0.5)',
-            lightBase:'linear-gradient(180deg, #FFFCF5 0%, #DCE8EF 60%, #C2D5E0 100%)', lightGlow:'rgba(143,181,204,0.50)',
-            label:'📚 Humanities' },
-      yt: { primary:'#06d6a0', dark:'#064e3b', glow:'rgba(6,214,160,0.5)',
-            lightBase:'linear-gradient(180deg, #FFFCF5 0%, #DCE7DE 60%, #C5D8C9 100%)', lightGlow:'rgba(146,178,153,0.50)',
-            label:'⚕️ Health & Medicine' },
-      xh: { primary:'#a855f7', dark:'#3b0764', glow:'rgba(168,85,247,0.5)',
-            lightBase:'linear-gradient(180deg, #FFFCF5 0%, #DDCFE2 60%, #CDB8D2 100%)', lightGlow:'rgba(186,161,194,0.50)',
-            label:'🌐 Social Sciences' },
-      nn: { primary:'#f59e0b', dark:'#451a03', glow:'rgba(245,158,11,0.5)',
-            lightBase:'linear-gradient(180deg, #FFFCF5 0%, #FAEEDA 50%, #F4C9A8 100%)', lightGlow:'rgba(232,168,107,0.50)',
-            label:'🌿 Agriculture' },
-      tn: { primary:'#f43f5e', dark:'#4c0519', glow:'rgba(244,63,94,0.5)',
-            lightBase:'linear-gradient(180deg, #FFFCF5 0%, #F5E0D5 60%, #EDCDC0 100%)', lightGlow:'rgba(197,136,122,0.50)',
-            label:'🔬 Natural Sciences' }
-    };
-    var DISC_NAMES = {
-      kt:'Engineering & Technology', nv:'Humanities', yt:'Medical & Health Sciences',
-      xh:'Social Sciences', nn:'Agricultural Sciences', tn:'Natural Sciences'
-    };
 
     /* Resume từ tiến độ đã lưu (chuyển tab sidebar rồi quay lại không bị reset) */
     var idx = (function () {
