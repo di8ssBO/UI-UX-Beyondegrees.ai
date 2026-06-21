@@ -297,6 +297,45 @@
     document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
 
     initNavProgress();
+    initSidebarPin();
+  }
+
+  /* ── Keep sidebar expanded after a tab switch — ONLY when the
+     navigation was started from inside the sidebar ──
+     A click on any sidebar link flags the next page (sessionStorage);
+     that page then loads with the rail expanded and collapses back the
+     moment the pointer moves outside it. Navigations that start anywhere
+     else (content CTAs, links, redirects) leave the rail collapsed. */
+  function initSidebarPin() {
+    var sb = document.getElementById('bd-sidebar');
+    if (!sb) return;
+
+    /* Mark sidebar-originated navigations for the next page. */
+    sb.addEventListener('click', function (e) {
+      if (e.target.closest && e.target.closest('a[href]')) {
+        try { sessionStorage.setItem('bd-nav-from-sidebar', '1'); } catch (e2) {}
+      }
+    });
+
+    /* Only pin if we arrived here via a sidebar click. */
+    var fromSidebar = false;
+    try {
+      fromSidebar = sessionStorage.getItem('bd-nav-from-sidebar') === '1';
+      sessionStorage.removeItem('bd-nav-from-sidebar');
+    } catch (e) {}
+    if (!fromSidebar) return;
+
+    sb.classList.add('bd-pinned');
+    function unpin() {
+      sb.classList.remove('bd-pinned');
+      document.removeEventListener('mousemove', onMove, true);
+      sb.removeEventListener('mouseleave', unpin);
+    }
+    function onMove(e) {
+      if (!sb.contains(e.target)) unpin();
+    }
+    sb.addEventListener('mouseleave', unpin);
+    document.addEventListener('mousemove', onMove, true);
   }
 
   /* ── Navigation progress bar (seamless page transitions) ── */

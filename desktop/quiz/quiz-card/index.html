@@ -120,6 +120,21 @@
   .swipe-hint.hidden { opacity: 0; pointer-events: none; }
   .swipe-hint .hint-arrows { font-weight: 900; letter-spacing: 2px; }
 
+  /* Swipe-guide arrow: flies out in the demoed direction */
+  .guide-arrow {
+    position: absolute; top: 50%; left: 50%;
+    pointer-events: none; z-index: 60; opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  .guide-arrow-svg { width: 184px; height: auto; display: block; }
+  /* Moderate-speed glide: pops in at center, then slides smoothly away (comet trail) */
+  .guide-arrow.fly { animation: guideArrowFly 0.9s cubic-bezier(0.22,0.61,0.36,1) both; }
+  @keyframes guideArrowFly {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.45); }
+    22%  { opacity: 1; transform: translate(-50%, -50%) scale(1.18); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--ax, 0px)), calc(-50% + var(--ay, 0px))) scale(1.06); }
+  }
+
   /* Light mode card */
   :root[data-theme="light"] .q-card .discipline-tag { background: rgba(255,255,255,0.75); color: #2c1f14; }
   :root[data-theme="light"] .q-card .q-number { color: rgba(44,31,20,0.45); }
@@ -189,6 +204,18 @@
           <div class="dir-hint hint-up"    id="hintUp">STRONGLY AGREE &#9889;</div>
           <div class="dir-hint hint-down"  id="hintDown">NEUTRAL &ndash;</div>
           <div class="disc-label" id="discLabel"></div>
+          <div class="guide-arrow" id="guideArrow">
+            <svg class="guide-arrow-svg" id="guideArrowSvg" viewBox="0 0 120 48" aria-hidden="true">
+              <defs>
+                <linearGradient id="guideArrowGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0"    stop-color="currentColor" stop-opacity="0"/>
+                  <stop offset="0.45" stop-color="currentColor" stop-opacity="0.45"/>
+                  <stop offset="1"    stop-color="currentColor" stop-opacity="1"/>
+                </linearGradient>
+              </defs>
+              <path d="M6,18 L74,18 L74,5 L114,24 L74,43 L74,30 L6,30 Z" fill="url(#guideArrowGrad)" stroke-linejoin="round"/>
+            </svg>
+          </div>
 
           <div class="card-stack">
             <div class="q-card back-2" id="backCard2"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
@@ -302,27 +329,48 @@
       $('strongCount').textContent = counts.up;
       $('neutralCount').textContent = counts.down;
       $('disagreeCount').textContent = counts.left;
+      /* Static swipe hint only on the very first question */
+      var sh = $('swipeHint'); if (sh) sh.classList.toggle('hidden', idx > 0);
       localStorage.setItem('quizProgress', idx);
       localStorage.setItem('quizCounts', JSON.stringify(counts));
       localStorage.setItem('quizAnswerLog', JSON.stringify(answerLog));
     }
 
-    var FLING = { right:'translate(620px,-40px) rotate(18deg)', left:'translate(-620px,-40px) rotate(-18deg)',
-                  up:'translate(0,-560px) rotate(4deg)', down:'translate(0,560px) rotate(-4deg)' };
+    /* Fling target: viewport-relative so the card always clears the whole
+       screen regardless of window width (fixed px left it stuck mid-screen
+       on wide desktops). Mirrors mobile's full fly-off. */
+    function flingTransform(dir) {
+      var w = window.innerWidth, h = window.innerHeight;
+      switch (dir) {
+        case 'right': return 'translate(' + (w + 240) + 'px,-60px) rotate(20deg)';
+        case 'left':  return 'translate(' + (-(w + 240)) + 'px,-60px) rotate(-20deg)';
+        case 'up':    return 'translate(20px,' + (-(h + 240)) + 'px) rotate(5deg)';
+        case 'down':  return 'translate(0,' + (h + 240) + 'px) rotate(0deg)';
+      }
+      return '';
+    }
 
     function answer(dir) {
       var card = $('activeCard');
       if (card.dataset.busy) return;
+      stopGuide();
       card.dataset.busy = '1';
       counts[dir]++; answerLog.push(dir);
       showHint(dir, true); setTimeout(function () { showHint(dir, false); }, 280);
       card.classList.add('fling');
-      card.style.transform = FLING[dir];
+      card.style.transform = flingTransform(dir);
       card.style.opacity = '0';
       setTimeout(function () {
         idx++;
+        /* Snap the card straight to center with NO transition, then load the
+           next question — so the new card appears in the middle instead of
+           sliding back in from the throw direction (mobile parity). */
         card.classList.remove('fling');
-        card.style.transform = ''; card.style.opacity = '';
+        card.style.transition = 'none';
+        card.style.transform = '';
+        card.style.opacity = '';
+        void card.offsetWidth; /* force reflow so the snap is instant */
+        card.style.transition = ''; /* restore base transition for next drag/fling */
         delete card.dataset.busy;
         if (idx === 10 || idx === 20) milestone(idx);
         if (idx >= 30) { localStorage.setItem('quizMilestone', 30); return finish(); }
@@ -375,7 +423,7 @@
     /* Mouse drag (swipe parity) */
     (function drag() {
       var card = $('activeCard'), sx = 0, sy = 0, dx = 0, dy = 0, on = false;
-      card.addEventListener('mousedown', function (e) { on = true; sx = e.clientX; sy = e.clientY; e.preventDefault(); });
+      card.addEventListener('mousedown', function (e) { stopGuide(); on = true; sx = e.clientX; sy = e.clientY; e.preventDefault(); });
       document.addEventListener('mousemove', function (e) {
         if (!on) return;
         dx = e.clientX - sx; dy = e.clientY - sy;
@@ -401,8 +449,67 @@
     new MutationObserver(function () { render(); })
       .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
+    /* ── Swipe guide: one-time demo nudge on the very first card ──
+       The card gently leans right (flash AGREE) then left (flash DISAGREE)
+       to show it can be swiped. Cancels instantly on any interaction. */
+    var guideActive = false, guideTimer = null, guideDone = false;
+    var ARROW_ROT    = { right:'rotate(0deg)', left:'rotate(180deg)', up:'rotate(-90deg)', down:'rotate(90deg)' };
+    var ARROW_COLOR  = { right:'var(--mint-500)', left:'var(--red-500)', up:'var(--violet-400)', down:'#9d9dbf' };
+    var ARROW_OFFSET = { right:['250px','0px'], left:['-250px','0px'], up:['0px','-185px'], down:['0px','185px'] };
+    function playArrow(dir) {
+      var a = $('guideArrow'); if (!a) return;
+      var svg = $('guideArrowSvg');
+      if (svg) {
+        svg.style.color = ARROW_COLOR[dir];                       /* gradient uses currentColor */
+        svg.style.transform = ARROW_ROT[dir];                     /* point the right-facing arrow */
+        svg.style.filter = 'drop-shadow(0 0 22px ' + ARROW_COLOR[dir] + ')'; /* colored glow */
+      }
+      a.style.setProperty('--ax', ARROW_OFFSET[dir][0]);
+      a.style.setProperty('--ay', ARROW_OFFSET[dir][1]);
+      a.classList.remove('fly'); void a.offsetWidth; a.classList.add('fly');
+    }
+    function stopGuide() {
+      guideDone = true;
+      if (!guideActive) return;
+      guideActive = false;
+      if (guideTimer) { clearTimeout(guideTimer); guideTimer = null; }
+      ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+      var a = $('guideArrow'); if (a) a.classList.remove('fly');
+      var card = $('activeCard');
+      if (card && !card.dataset.busy) { card.style.transition = ''; card.style.transform = ''; }
+    }
+    function swipeGuide() {
+      if (guideDone || idx !== 0) return;
+      var card = $('activeCard');
+      if (!card) return;
+      guideDone = true; guideActive = true;
+      /* Demo all 4 directions: AGREE → / DISAGREE ← / STRONGLY AGREE ↑ / NEUTRAL ↓ */
+      var seq = [
+        { t: 'translate(78px,0) rotate(6deg)',   hint: 'right' },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(-78px,0) rotate(-6deg)', hint: 'left'  },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(0,-58px) rotate(0deg)',  hint: 'up'    },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(0,54px) rotate(0deg)',   hint: 'down'  },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   }
+      ];
+      var i = 0;
+      card.style.transition = 'transform 0.5s cubic-bezier(0.34,1.2,0.64,1)';
+      (function step() {
+        if (!guideActive) return;
+        var s = seq[i++];
+        card.style.transform = s.t;
+        ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+        if (s.hint) { showHint(s.hint, true); playArrow(s.hint); }
+        guideTimer = setTimeout(i < seq.length ? step : stopGuide, s.hint ? 640 : 340);
+      })();
+    }
+
     buildStoryBar();
     render();
+    /* kick off the guide shortly after first paint (skipped if resuming) */
+    setTimeout(swipeGuide, 750);
   </script>
 </body>
 </html>

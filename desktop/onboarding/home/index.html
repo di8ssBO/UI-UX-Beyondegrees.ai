@@ -1,435 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- Anti-FOUC: apply saved theme before first paint -->
-<script>(function(){var s=localStorage.getItem('bd-theme')||'dark';var r=s==='system'?(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):s;document.documentElement.setAttribute('data-theme',r);document.documentElement.setAttribute('data-theme-pref',s);})()</script>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About me &mdash; BeyonDegrees.ai</title>
-
-<!-- Shared Design System -->
-<link rel="stylesheet" href="../../../design-system/tokens.css">
-<link rel="stylesheet" href="../../../design-system/base.css">
-<link rel="stylesheet" href="../../../design-system/animations.css">
-
-<!-- Desktop Shell -->
-<link rel="stylesheet" href="../../_shell/desktop-shell.css">
-
+<title>About me — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
 <style>
-/* ── Hero Card: 2-column on desktop ── */
-.hero-card {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 40px;
-  align-items: center;
-  background: rgba(18,18,31,0.65);
-  backdrop-filter: blur(20px) saturate(140%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 20px;
-  padding: 36px 40px;
-  margin-bottom: 32px;
-}
-:root[data-theme="light"] .hero-card {
-  background: rgba(255,255,255,0.82);
-  border-color: rgba(92,74,61,0.10);
-  box-shadow: 0 4px 24px rgba(92,74,61,0.07);
-}
+  /* ── Hero (mobile .hero-section → desktop 2 cột trong 1 card) ── */
+  .hero-card { padding: 48px; display: grid; grid-template-columns: 130px 1fr; gap: 36px; align-items: center; }
+  .hero-ring-wrap { position: relative; width: 116px; height: 116px; }
+  .hero-ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .hero-ring-wrap #heroEmoji {
+    position: absolute; inset: 0; display: grid; place-items: center; font-size: 44px;
+    filter: drop-shadow(0 4px 12px rgba(124,58,237,0.4));
+  }
+  :root[data-theme="light"] .hero-ring-wrap #heroEmoji { filter: drop-shadow(0 4px 12px rgba(201,107,85,0.30)); }
+  .hero-tagline { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  :root[data-theme="light"] .hero-tagline { color: #6b5440; }
+  .hero-card h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; margin: 6px 0 4px; color: var(--text-primary); }
+  .hero-card .hero-sub { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+  :root[data-theme="light"] .hero-card h1 { color: #2c1f14; }
+  :root[data-theme="light"] .hero-card .hero-sub { color: #5c4535; font-weight: 500; }
+  .cta-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
 
-/* Progress ring */
-.hero-ring-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 140px;
-}
-.hero-ring-svg-wrap {
-  position: relative;
-  width: 120px; height: 120px;
-}
-.hero-ring-svg {
-  width: 100%; height: 100%;
-  transform: rotate(-90deg);
-}
-.ring-track { opacity: 0.08; }
-#heroRingFill {
-  stroke-dasharray: 301.6;
-  stroke-dashoffset: 301.6;
-  stroke: #1863DC;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.34,1.56,0.64,1), stroke 0.4s ease;
-}
-:root[data-theme="light"] #heroRingFill { stroke: #0274BE; }
-#heroEmoji {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  font-size: 44px;
-  filter: drop-shadow(0 4px 14px rgba(24,99,220,0.45));
-}
-:root[data-theme="light"] #heroEmoji { filter: drop-shadow(0 4px 12px rgba(2,116,190,0.25)); }
-
-.hero-pct {
-  font-size: 13px; font-weight: 800;
-  color: var(--violet-400);
-  letter-spacing: 0.5px;
-}
-:root[data-theme="light"] .hero-pct { color: var(--violet-600); }
-
-/* Hero text side */
-.hero-text { display: flex; flex-direction: column; gap: 10px; }
-.hero-tagline {
-  font-size: 11px; font-weight: 900;
-  letter-spacing: 2.5px; text-transform: uppercase;
-  color: rgba(107,163,255,0.80);
-}
-:root[data-theme="light"] .hero-tagline { color: rgba(2,116,190,0.75); }
-.hero-title {
-  font-size: 28px; font-weight: 900;
-  letter-spacing: -0.5px; line-height: 1.25;
-  color: var(--text-primary);
-  margin: 0;
-}
-:root[data-theme="light"] .hero-title { color: #1A1A1A; }
-.hero-sub {
-  font-size: 15px; line-height: 1.6;
-  color: var(--text-secondary);
-  max-width: 520px;
-}
-:root[data-theme="light"] .hero-sub { color: #3A2E26; }
-
-/* CTA row */
-.cta-row {
-  display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap;
-}
-
-/* ── Disciplines Section ── */
-.disc-section-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 18px;
-}
-.disc-count-badge {
-  font-size: 12px; font-weight: 800;
-  padding: 4px 14px; border-radius: 20px;
-  background: rgba(24,99,220,0.15);
-  border: 1px solid rgba(24,99,220,0.30);
-  color: var(--violet-400);
-  opacity: 0;
-  transform: scale(0.7);
-  transition: opacity 0.2s ease, transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
-  pointer-events: none;
-}
-:root[data-theme="light"] .disc-count-badge {
-  background: rgba(2,116,190,0.10);
-  border-color: rgba(2,116,190,0.28);
-  color: var(--violet-600);
-}
-.disc-count-badge.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
-
-/* Discipline grid: 3 columns */
-.disciplines-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 1100px) {
-  .disciplines-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.discipline-card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(16px) saturate(130%);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 28px 20px;
-  text-align: center;
-  cursor: pointer; user-select: none;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px;
-  position: relative; overflow: hidden;
-  transition:
-    background 0.22s ease,
-    border-color 0.22s ease,
-    transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
-    box-shadow 0.22s ease;
-}
-/* Light mode discipline cards */
-:root[data-theme="light"] .discipline-card {
-  background: #fff;
-  border-color: color-mix(in srgb, var(--disc,#1863DC) 28%, rgba(220,210,200,0.55));
-  box-shadow: 0 2px 8px rgba(92,74,61,0.06);
-}
-:root[data-theme="light"] .discipline-card::before {
-  content: "";
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--disc,#1863DC) 75%, #fff), var(--disc,#1863DC));
-}
-:root[data-theme="light"] .discipline-card::after {
-  content: "";
-  position: absolute; bottom: -30%; right: -20%;
-  width: 75%; height: 90%; border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--disc,#1863DC) 18%, transparent) 0%, transparent 70%);
-  filter: blur(18px); z-index: 0; pointer-events: none; opacity: 0.60;
-}
-:root[data-theme="light"] .discipline-card > * { position: relative; z-index: 2; }
-
-.discipline-icon { font-size: 34px; line-height: 1; }
-.discipline-card > span {
-  font-size: 14px; font-weight: 800;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.3;
-}
-:root[data-theme="light"] .discipline-card > span { color: #1A1A1A; }
-
-/* Hover */
-.discipline-card:hover {
-  background: color-mix(in srgb, var(--disc,#1863DC) 14%, rgba(255,255,255,0.06));
-  border-color: color-mix(in srgb, var(--disc,#1863DC) 40%, transparent);
-  transform: translateY(-4px) scale(1.025);
-  box-shadow: 0 10px 28px color-mix(in srgb, var(--disc,#1863DC) 22%, transparent);
-}
-:root[data-theme="light"] .discipline-card:hover {
-  border-color: color-mix(in srgb, var(--disc,#1863DC) 55%, transparent);
-  box-shadow: 0 8px 24px color-mix(in srgb, var(--disc,#1863DC) 26%, transparent);
-}
-
-/* Selected */
-.discipline-card.selected {
-  background: color-mix(in srgb, var(--disc,#1863DC) 18%, rgba(18,18,31,0.7));
-  border-color: color-mix(in srgb, var(--disc,#1863DC) 55%, transparent);
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--disc,#1863DC) 18%, transparent),
-    0 8px 24px color-mix(in srgb, var(--disc,#1863DC) 20%, transparent);
-}
-:root[data-theme="light"] .discipline-card.selected {
-  background: linear-gradient(135deg,
-    color-mix(in srgb, var(--disc,#1863DC) 12%, #fff),
-    color-mix(in srgb, var(--disc,#1863DC) 20%, #fff));
-  border-color: color-mix(in srgb, var(--disc,#1863DC) 55%, transparent);
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--disc,#1863DC) 18%, transparent),
-    0 10px 24px color-mix(in srgb, var(--disc,#1863DC) 28%, transparent);
-}
-:root[data-theme="light"] .discipline-card.selected > span {
-  color: color-mix(in srgb, var(--disc,#1863DC) 65%, #1A1A1A);
-  font-weight: 900;
-}
-
-/* Checkmark spring-in */
-.disc-check {
-  position: absolute; top: 10px; right: 10px;
-  width: 22px; height: 22px; border-radius: 50%;
-  background: var(--disc,#1863DC); color: #fff;
-  font-size: 10px; font-weight: 900;
-  display: grid; place-items: center;
-  opacity: 0; transform: scale(0.3) rotate(-30deg);
-  transition: opacity 0.18s ease, transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
-  box-shadow: 0 2px 8px color-mix(in srgb, var(--disc,#1863DC) 55%, transparent);
-  z-index: 3;
-}
-.discipline-card.selected .disc-check { opacity: 1; transform: scale(1) rotate(0deg); }
+  /* ── Disciplines (mobile .discipline-card 2 cột → desktop 3 cột) ── */
+  .section-label-mobile {
+    font-size: 11px; font-weight: 800; letter-spacing: 2.5px;
+    color: rgba(167,139,250,0.75); text-transform: uppercase;
+    display: block; text-align: center; margin: 40px 0 18px;
+  }
+  :root[data-theme="light"] .section-label-mobile { color: #a84e30; font-weight: 900; }
+  .disciplines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 1100px) { .disciplines-grid { grid-template-columns: repeat(2, 1fr); } }
+  .discipline-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 26px 18px;
+    text-align: center; cursor: pointer; user-select: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
+    transition: background .25s ease, border-color .25s ease,
+      transform .2s cubic-bezier(0.34,1.56,0.64,1), box-shadow .25s ease;
+    position: relative; overflow: hidden;
+  }
+  .discipline-icon { font-size: 32px; line-height: 1; }
+  .discipline-card span { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.8); line-height: 1.3; }
+  /* dark: tint theo --disc như mobile */
+  .discipline-card:hover {
+    background: color-mix(in srgb, var(--disc) 14%, rgba(255,255,255,0.06));
+    border-color: color-mix(in srgb, var(--disc) 40%, transparent);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--disc) 25%, transparent), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .discipline-card.selected {
+    background: color-mix(in srgb, var(--disc) 18%, rgba(255,255,255,0.06));
+    border-color: color-mix(in srgb, var(--disc) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--disc) 15%, transparent),
+      0 8px 24px color-mix(in srgb, var(--disc) 20%, transparent);
+  }
+  /* light: trắng + strip 3px + halo + icon glow (mobile parity) */
+  :root[data-theme="light"] .discipline-card {
+    background: #ffffff;
+    border: 1px solid color-mix(in srgb, var(--disc) 32%, rgba(232,224,213,0.65));
+    box-shadow: inset 0 1px 0 #fff, 0 2px 6px rgba(58,46,38,0.05),
+      0 6px 16px color-mix(in srgb, var(--disc) 12%, rgba(92,69,53,0.06));
+  }
+  :root[data-theme="light"] .discipline-card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 1;
+    background: linear-gradient(90deg,
+      color-mix(in srgb, var(--disc) 80%, #fff) 0%,
+      var(--disc) 50%,
+      color-mix(in srgb, var(--disc) 75%, #000) 100%);
+  }
+  :root[data-theme="light"] .discipline-card::after {
+    content: ""; position: absolute; bottom: -30%; right: -20%;
+    width: 75%; height: 90%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--disc) 20%, transparent) 0%, transparent 70%);
+    filter: blur(18px); z-index: 0; pointer-events: none; opacity: 0.65;
+  }
+  :root[data-theme="light"] .discipline-card > * { position: relative; z-index: 2; }
+  :root[data-theme="light"] .discipline-icon {
+    filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--disc) 32%, transparent));
+  }
+  :root[data-theme="light"] .discipline-card span { color: #2c1f14; font-weight: 800; }
+  :root[data-theme="light"] .discipline-card:hover {
+    border-color: color-mix(in srgb, var(--disc) 60%, transparent);
+    box-shadow: inset 0 1px 0 #fff, 0 4px 10px rgba(58,46,38,0.08),
+      0 12px 32px color-mix(in srgb, var(--disc) 28%, transparent);
+  }
+  :root[data-theme="light"] .discipline-card:hover span { color: color-mix(in srgb, var(--disc) 65%, #2c1f14); }
+  :root[data-theme="light"] .discipline-card.selected {
+    background: linear-gradient(135deg,
+      color-mix(in srgb, var(--disc) 14%, #fff) 0%,
+      color-mix(in srgb, var(--disc) 22%, #fff) 100%);
+    border-color: color-mix(in srgb, var(--disc) 60%, transparent);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.85),
+      0 0 0 3px color-mix(in srgb, var(--disc) 22%, transparent),
+      0 10px 24px color-mix(in srgb, var(--disc) 30%, transparent);
+  }
+  :root[data-theme="light"] .discipline-card.selected span { color: color-mix(in srgb, var(--disc) 70%, #2c1f14); }
 </style>
 </head>
-<body data-page="home" data-crumb="About me">
+<body class="app" data-page="home" data-crumb="About me">
+  <div class="main">
+    <div class="content fade-in">
 
-  <!-- Full-page Aurora -->
-  <div class="aurora-bg" id="auroraBg">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-    <div class="blob blob-4"></div>
-  </div>
-
-  <!-- Sidebar (JS renders) -->
-  <aside class="sidebar" id="bdSidebar"></aside>
-
-  <!-- Main layout -->
-  <div class="desktop-layout">
-    <header class="topbar" id="bdTopbar"></header>
-
-    <main class="main-content fade-in" id="bdMain">
-
-      <!-- ── Hero Card ── -->
-      <section class="hero-card">
-        <!-- Progress Ring -->
+      <!-- HERO — đúng nội dung mobile hero-section -->
+      <section class="card glass-hero hero-card">
         <div class="hero-ring-wrap">
-          <div class="hero-ring-svg-wrap">
-            <svg class="hero-ring-svg" viewBox="0 0 120 120" fill="none">
-              <circle class="ring-track" cx="60" cy="60" r="48" stroke="white" stroke-width="4"/>
-              <circle id="heroRingFill" cx="60" cy="60" r="48" stroke-width="4" stroke-linecap="round"
-                fill="none"/>
-            </svg>
-            <div id="heroEmoji">&#128640;</div>
-          </div>
-          <div class="hero-pct" id="heroPct">0%</div>
+          <svg viewBox="0 0 76 76" fill="none">
+            <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+            <circle id="heroRingFill" cx="38" cy="38" r="32"
+              stroke="#1863DC" stroke-width="3" stroke-linecap="round" fill="none"/>
+          </svg>
+          <span id="heroEmoji">🚀</span>
         </div>
-
-        <!-- Hero text + CTA -->
-        <div class="hero-text">
+        <div>
           <p class="hero-tagline" id="heroTagline">Discover your academic identity</p>
-          <h1 class="hero-title" id="heroTitle">What major are you interested in?</h1>
+          <h1 id="heroTitle">What major are you interested in?</h1>
           <p class="hero-sub" id="heroSub">Answer 30 questions and let AI find your perfect match.</p>
           <div class="cta-row">
-            <a href="../../quiz/quiz-card/" class="bd-btn bd-btn-primary" id="ctaPrimary">Start Quiz &rarr;</a>
-            <a href="#" class="bd-btn bd-btn-ghost" id="ctaSecondary" style="display:none;"></a>
+            <button class="btn btn-primary" id="ctaPrimary">Start Quiz →</button>
+            <button class="btn btn-ghost" id="ctaSecondary" style="display:none;"></button>
           </div>
         </div>
       </section>
 
-      <!-- ── Discipline Selection ── -->
-      <div class="disc-section-header">
-        <p class="bd-section-label">Choose your disciplines</p>
-        <div class="disc-count-badge" id="discCountBadge">0 selected</div>
-      </div>
-
-      <div class="disciplines-grid">
+      <!-- DISCIPLINES — 6 ngành, đúng icon + tên + màu mobile -->
+      <h3 class="section-label-mobile">Choose 1 or more disciplines</h3>
+      <div class="disciplines-grid fade-in-stagger">
         <div class="discipline-card" data-disc="kt" style="--disc:#7c3aed">
-          <div class="disc-check">&#10003;</div>
-          <div class="discipline-icon">&#9881;&#65039;</div>
-          <span>Engineering &amp; Tech</span>
+          <div class="discipline-icon">⚙️</div><span>Engineering</span>
         </div>
         <div class="discipline-card" data-disc="yt" style="--disc:#06d6a0">
-          <div class="disc-check">&#10003;</div>
-          <div class="discipline-icon">&#129658;</div>
-          <span>Medical &amp; Health</span>
+          <div class="discipline-icon">🩺</div><span>Medical</span>
         </div>
         <div class="discipline-card" data-disc="tn" style="--disc:#f43f5e">
-          <div class="disc-check">&#10003;</div>
-          <div class="discipline-icon">&#128300;</div>
-          <span>Natural Sciences</span>
+          <div class="discipline-icon">🔬</div><span>Natural Sci</span>
         </div>
         <div class="discipline-card" data-disc="nn" style="--disc:#f59e0b">
-          <div class="disc-check">&#10003;</div>
-          <div class="discipline-icon">&#127807;</div>
-          <span>Agricultural Sci</span>
+          <div class="discipline-icon">🌱</div><span>Agricultural</span>
         </div>
         <div class="discipline-card" data-disc="xh" style="--disc:#a855f7">
-          <div class="disc-check">&#10003;</div>
-          <div class="discipline-icon">&#129504;</div>
-          <span>Social Sciences</span>
+          <div class="discipline-icon">🧠</div><span>Social Sci</span>
         </div>
         <div class="discipline-card" data-disc="nv" style="--disc:#3b82f6">
-          <div class="disc-check">&#10003;</div>
-          <div class="discipline-icon">&#128220;</div>
-          <span>Humanities</span>
+          <div class="discipline-icon">📜</div><span>Humanities</span>
         </div>
       </div>
 
-    </main>
+    </div>
   </div>
 
-  <!-- Scripts -->
   <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop-shell.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
   <script>
-    /* ── Discipline Selection ── */
-    var DISC_KEY = 'selectedDisciplines';
-    var badge = document.getElementById('discCountBadge');
-
-    function getSelected() {
-      try { var r = JSON.parse(localStorage.getItem(DISC_KEY) || '[]'); return Array.isArray(r) ? r : []; }
-      catch (e) { return []; }
-    }
-    function saveSelected(arr) {
-      try { localStorage.setItem(DISC_KEY, JSON.stringify(arr)); } catch (e) {}
-    }
-    function updateDiscUI() {
-      var sel = getSelected();
-      document.querySelectorAll('.discipline-card').forEach(function (c) {
-        c.classList.toggle('selected', sel.indexOf(c.getAttribute('data-disc')) !== -1);
-      });
-      if (badge) {
-        badge.textContent = sel.length + ' selected';
-        badge.classList.toggle('visible', sel.length > 0);
-      }
-    }
+    /* Discipline selection toggle (mobile parity) */
     document.querySelectorAll('.discipline-card').forEach(function (card) {
-      card.addEventListener('click', function () {
-        var disc = card.getAttribute('data-disc');
-        var sel = getSelected();
-        var i = sel.indexOf(disc);
-        if (i === -1) sel.push(disc); else sel.splice(i, 1);
-        saveSelected(sel); updateDiscUI();
-      });
+      card.addEventListener('click', function () { card.classList.toggle('selected'); });
     });
-    updateDiscUI();
 
-    /* ── Progress State (quiz milestone → ring + hero text + CTA) ── */
+    /* Progress-based hero state — same logic & copy as mobile initProgress() */
     (function initProgress() {
-      var p = parseInt(localStorage.getItem('quizProgress') || '0', 10) || 0;
-      var milestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10) || 0;
-      var key = milestone >= 30 ? 30 : milestone >= 20 ? 20 : milestone >= 10 ? 10 : 0;
+      var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+      var m = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+      var key = m >= 30 ? 30 : m >= 20 ? 20 : m >= 10 ? 10 : p > 0 ? 1 : 0;
 
-      /* Ring: circumference = 2 * pi * 48 = 301.59 */
-      var C = 301.59;
-      var pcts = { 0: 0, 10: 0.333, 20: 0.667, 30: 1 };
+      var C = 201.1; /* 2π × 32 */
+      var pcts = { 0: 0, 1: 0.05, 10: 0.333, 20: 0.667, 30: 1 };
       var ring = document.getElementById('heroRingFill');
-      var pctPct = Math.round((p / 30) * 100);
+      ring.style.strokeDasharray = C;
+      ring.style.strokeDashoffset = C * (1 - (pcts[key] || 0));
+      if (key === 30) ring.style.stroke = '#f59e0b'; /* gold = complete */
 
-      if (ring) {
-        ring.style.strokeDasharray = C;
-        ring.style.strokeDashoffset = C; /* start at 0% */
-        if (key === 30) ring.style.stroke = '#f59e0b'; /* gold = complete */
-        /* Double rAF: trigger CSS transition after paint */
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            ring.style.strokeDashoffset = C * (1 - pcts[key]);
-          });
-        });
-      }
-      var pctEl = document.getElementById('heroPct');
-      if (pctEl) pctEl.textContent = pctPct + '%';
-
-      /* Hero text */
       var STATES = {
-        0:  { emoji: '&#128640;', tagline: 'Discover your academic identity',
+        0:  { emoji: '🚀', tagline: 'Discover your academic identity',
               title: 'What major are you interested in?',
               sub: 'Answer 30 questions and let AI find your perfect match.' },
-        10: { emoji: '&#128293;', tagline: 'Quiz Stage 1 complete!',
-              title: 'Your top discipline is revealed &#128293;',
+        1:  { emoji: '💪', tagline: 'Great start! Keep going',
+              title: "You're on your way to finding your match",
+              sub: 'Answered ' + p + ' question' + (p > 1 ? 's' : '') + '. Pick up where you left off!' },
+        10: { emoji: '🔥', tagline: 'Quiz Stage 1 complete!',
+              title: 'Your top discipline is revealed 🔥',
               sub: 'Keep going! 20 more questions to unlock your Major matches.' },
-        20: { emoji: '&#9889;', tagline: 'Quiz Stage 2 complete!',
-              title: 'AI found your Major matches &#9889;',
+        20: { emoji: '⚡', tagline: 'Quiz Stage 2 complete!',
+              title: 'AI found your Major matches ⚡',
               sub: '10 more questions to unlock your University matches.' },
-        30: { emoji: '&#10024;', tagline: 'Profile complete!',
-              title: 'Your academic identity is complete &#10024;',
-              sub: 'BeyonDegrees has found your perfect university matches.' },
+        30: { emoji: '✨', tagline: 'Profile complete!',
+              title: 'Your academic identity is complete ✨',
+              sub: 'BeyonDegrees has found your perfect university matches.' }
       };
       var s = STATES[key];
-      var emojiEl   = document.getElementById('heroEmoji');
-      var taglineEl = document.getElementById('heroTagline');
-      var titleEl   = document.getElementById('heroTitle');
-      var subEl     = document.getElementById('heroSub');
-      if (emojiEl)   emojiEl.innerHTML = s.emoji;
-      if (taglineEl) taglineEl.textContent = s.tagline;
-      if (titleEl)   titleEl.innerHTML = s.title;
-      if (subEl)     subEl.textContent = s.sub;
+      document.getElementById('heroEmoji').textContent = s.emoji;
+      document.getElementById('heroTagline').textContent = s.tagline;
+      document.getElementById('heroTitle').textContent = s.title;
+      document.getElementById('heroSub').textContent = s.sub;
 
-      /* CTA */
-      var resumeUrl = p > 0 ? '../../quiz/quiz-card/?start=' + (p + 1) : '../../quiz/quiz-card/';
       var BTNS = {
-        0:  { b1: p > 0 ? 'Continue Quiz &rarr;' : 'Start Quiz &rarr;', u1: resumeUrl, b2: null },
-        10: { b1: 'Continue Quiz &rarr;', u1: resumeUrl,
-              b2: { t: 'View Disciplines &#8250;', u: '../../discipline/match/' } },
-        20: { b1: 'Continue Quiz &rarr;', u1: resumeUrl,
-              b2: { t: 'View Majors &#8250;', u: '../../major/recommendations/' } },
-        30: { b1: 'View Universities &rarr;', u1: '../../university/matches/',
-              b2: { t: 'View Majors &#8250;', u: '../../major/recommendations/' } },
+        0:  { b1: 'Start Quiz →', u1: '../../quiz/quiz-card/', b2: null },
+        1:  { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: null },
+        10: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: { t: 'View Discipline Results ›', u: '../../discipline/match/' } },
+        20: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: { t: 'View Major Results ›', u: '../../major/recommendations/' } },
+        30: { b1: 'View Match →', u1: '../../university/matches/', b2: { t: 'View University Results ›', u: '../../university/matches/' } }
       };
       var b = BTNS[key];
       var btn1 = document.getElementById('ctaPrimary');
       var btn2 = document.getElementById('ctaSecondary');
-      if (btn1) { btn1.innerHTML = b.b1; btn1.href = b.u1; }
-      if (btn2) {
-        if (b.b2) {
-          btn2.style.display = 'inline-flex';
-          btn2.innerHTML = b.b2.t;
-          btn2.href = b.b2.u;
-        } else {
-          btn2.style.display = 'none';
-        }
+      btn1.textContent = b.b1;
+      btn1.onclick = function () { location.href = b.u1; };
+      if (b.b2) {
+        btn2.style.display = 'inline-flex';
+        btn2.textContent = b.b2.t;
+        btn2.onclick = function () { location.href = b.b2.u; };
       }
     })();
   </script>
