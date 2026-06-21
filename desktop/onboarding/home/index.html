@@ -37,75 +37,101 @@
   .disciplines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   @media (max-width: 1100px) { .disciplines-grid { grid-template-columns: repeat(2, 1fr); } }
   .discipline-card {
-    background: rgba(255,255,255,0.06);
+    background: color-mix(in srgb, var(--disc) 9%, rgba(255,255,255,0.04));
     backdrop-filter: blur(16px) saturate(140%);
     -webkit-backdrop-filter: blur(16px) saturate(140%);
-    border: 1px solid rgba(255,255,255,0.09);
+    border: 1.5px solid rgba(255,255,255,0.09);
     border-radius: 14px;
     padding: 26px 18px;
     text-align: center; cursor: pointer; user-select: none;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.06);
-    transition: background .25s ease, border-color .25s ease,
-      transform .2s cubic-bezier(0.34,1.56,0.64,1), box-shadow .25s ease;
+    justify-self: center;
+    width: 100%;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2), 0 1px 0 rgba(255,255,255,0.06) inset;
+    transition: background .28s ease, border-color .28s ease,
+      transform .32s cubic-bezier(0.34,1.56,0.64,1), box-shadow .28s ease, opacity .25s ease,
+      width .28s ease;
     position: relative; overflow: hidden;
+    transform-origin: center;
   }
-  .discipline-icon { font-size: 32px; line-height: 1; }
-  .discipline-card span { font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.8); line-height: 1.3; }
-  /* dark: tint theo --disc như mobile */
-  .discipline-card:hover {
-    background: color-mix(in srgb, var(--disc) 14%, rgba(255,255,255,0.06));
-    border-color: color-mix(in srgb, var(--disc) 40%, transparent);
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 8px 24px color-mix(in srgb, var(--disc) 25%, transparent), inset 0 1px 0 rgba(255,255,255,0.1);
+  .discipline-icon { font-size: 32px; line-height: 1; transition: transform .32s cubic-bezier(0.34,1.56,0.64,1); }
+  .discipline-card.selected .discipline-icon { transform: scale(1.15); }
+  .discipline-card span {
+    font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); line-height: 1.3;
+    transition: color .25s ease, font-weight .2s ease;
   }
+  .discipline-card.selected span { color: #ffffff; font-weight: 800; }
+  /* dark: match mobile per-discipline tint */
+  .discipline-card:hover:not(.selected) {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-2px) scale(1.02);
+  }
+  /* selected: mobile float + discipline glow */
   .discipline-card.selected {
-    background: color-mix(in srgb, var(--disc) 18%, rgba(255,255,255,0.06));
-    border-color: color-mix(in srgb, var(--disc) 55%, transparent);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--disc) 15%, transparent),
-      0 8px 24px color-mix(in srgb, var(--disc) 20%, transparent);
+    width: calc(100% - 14px);
+    transform: translateY(-8px) scale(1.06);
+    background: color-mix(in srgb, var(--disc) 18%, rgba(6,6,18,0.85));
+    border-color: var(--disc);
+    border-width: 2px;
+    box-shadow:
+      0 20px 48px rgba(0,0,0,0.45),
+      0 0 0 1px var(--disc),
+      0 6px 32px color-mix(in srgb, var(--disc) 50%, transparent);
   }
-  /* light: trắng + strip 3px + halo + icon glow (mobile parity) */
+  /* dim unselected cards once any card is selected */
+  .disciplines-grid.has-selection .discipline-card:not(.selected),
+  .disciplines-grid:has(.discipline-card.selected) .discipline-card:not(.selected) {
+    transform: translateY(6px) scale(0.95);
+    opacity: 0.45;
+  }
+  /* ripple from click point */
+  @keyframes dcRippleAnim { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(18); opacity: 0; } }
+  .dc-ripple {
+    position: absolute; border-radius: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    background: rgba(255,255,255,0.35); pointer-events: none; z-index: 3;
+    animation: dcRippleAnim .5s ease-out forwards;
+  }
+  .disciplines-grid.has-selection > .discipline-card {
+    animation: none;
+  }
+  /* light: match mobile gradient tint */
   :root[data-theme="light"] .discipline-card {
-    background: #ffffff;
-    border: 1px solid color-mix(in srgb, var(--disc) 32%, rgba(232,224,213,0.65));
-    box-shadow: inset 0 1px 0 #fff, 0 2px 6px rgba(58,46,38,0.05),
-      0 6px 16px color-mix(in srgb, var(--disc) 12%, rgba(92,69,53,0.06));
+    background: linear-gradient(145deg, #ffffff 35%, color-mix(in srgb, var(--disc, #c96b55) 13%, #ffffff) 100%);
+    border: 1.5px solid color-mix(in srgb, var(--disc, #c96b55) 26%, rgba(200,185,170,0.35));
+    box-shadow: 0 2px 8px rgba(80,50,30,0.07);
   }
-  :root[data-theme="light"] .discipline-card::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 1;
-    background: linear-gradient(90deg,
-      color-mix(in srgb, var(--disc) 80%, #fff) 0%,
-      var(--disc) 50%,
-      color-mix(in srgb, var(--disc) 75%, #000) 100%);
+  :root[data-theme="light"] .discipline-card:hover:not(.selected) {
+    background: linear-gradient(145deg, #ffffff 15%, color-mix(in srgb, var(--disc, #c96b55) 20%, #ffffff) 100%);
+    border-color: color-mix(in srgb, var(--disc, #c96b55) 48%, rgba(200,185,170,0.4));
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--disc, #c96b55) 18%, rgba(80,50,30,0.09));
   }
-  :root[data-theme="light"] .discipline-card::after {
-    content: ""; position: absolute; bottom: -30%; right: -20%;
-    width: 75%; height: 90%; border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--disc) 20%, transparent) 0%, transparent 70%);
-    filter: blur(18px); z-index: 0; pointer-events: none; opacity: 0.65;
-  }
-  :root[data-theme="light"] .discipline-card > * { position: relative; z-index: 2; }
-  :root[data-theme="light"] .discipline-icon {
-    filter: drop-shadow(0 2px 6px color-mix(in srgb, var(--disc) 32%, transparent));
-  }
-  :root[data-theme="light"] .discipline-card span { color: #2c1f14; font-weight: 800; }
-  :root[data-theme="light"] .discipline-card:hover {
-    border-color: color-mix(in srgb, var(--disc) 60%, transparent);
-    box-shadow: inset 0 1px 0 #fff, 0 4px 10px rgba(58,46,38,0.08),
-      0 12px 32px color-mix(in srgb, var(--disc) 28%, transparent);
-  }
-  :root[data-theme="light"] .discipline-card:hover span { color: color-mix(in srgb, var(--disc) 65%, #2c1f14); }
   :root[data-theme="light"] .discipline-card.selected {
-    background: linear-gradient(135deg,
-      color-mix(in srgb, var(--disc) 14%, #fff) 0%,
-      color-mix(in srgb, var(--disc) 22%, #fff) 100%);
-    border-color: color-mix(in srgb, var(--disc) 60%, transparent);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.85),
-      0 0 0 3px color-mix(in srgb, var(--disc) 22%, transparent),
-      0 10px 24px color-mix(in srgb, var(--disc) 30%, transparent);
+    background: linear-gradient(145deg, color-mix(in srgb, var(--disc, #c96b55) 8%, #ffffff) 0%, color-mix(in srgb, var(--disc, #c96b55) 24%, #ffffff) 100%);
+    border-color: var(--disc, #c96b55);
+    border-width: 2px;
+    box-shadow:
+      0 20px 48px rgba(80,50,30,0.16),
+      0 0 0 1px var(--disc, #c96b55),
+      0 6px 32px color-mix(in srgb, var(--disc, #c96b55) 38%, transparent);
   }
-  :root[data-theme="light"] .discipline-card.selected span { color: color-mix(in srgb, var(--disc) 70%, #2c1f14); }
+  :root[data-theme="light"] .discipline-card span { color: #2c1f14; }
+  :root[data-theme="light"] .discipline-card.selected span { color: var(--disc, #c96b55); font-weight: 800; }
+  .discipline-card[data-disc] {
+    border-color: color-mix(in srgb, var(--disc, #7c3aed) 24%, rgba(255,255,255,0.09));
+  }
+  .discipline-card[data-disc]:hover {
+    background: color-mix(in srgb, var(--disc, #7c3aed) 14%, rgba(255,255,255,0.06));
+    border-color: color-mix(in srgb, var(--disc, #7c3aed) 40%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--disc, #7c3aed) 25%, transparent),
+                0 1px 0 rgba(255,255,255,0.1) inset;
+  }
+  .discipline-card[data-disc].selected {
+    background: color-mix(in srgb, var(--disc, #7c3aed) 18%, rgba(255,255,255,0.06));
+    border-color: color-mix(in srgb, var(--disc, #7c3aed) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--disc, #7c3aed) 15%, transparent),
+                0 8px 24px color-mix(in srgb, var(--disc, #7c3aed) 20%, transparent);
+  }
 </style>
 </head>
 <body class="app" data-page="home" data-crumb="About me">
@@ -162,10 +188,28 @@
   <script src="../../../shared/scripts/ui/i18n.js"></script>
   <script src="../../_shell/desktop.js?v=3"></script>
   <script>
-    /* Discipline selection toggle (mobile parity) */
+    /* Discipline selection toggle + ripple from click point (mobile parity) */
+    var disciplineGrid = document.querySelector('.disciplines-grid');
+    function syncDisciplineGridState() {
+      if (!disciplineGrid) return;
+      disciplineGrid.classList.toggle('has-selection', !!disciplineGrid.querySelector('.discipline-card.selected'));
+    }
+
     document.querySelectorAll('.discipline-card').forEach(function (card) {
-      card.addEventListener('click', function () { card.classList.toggle('selected'); });
+      card.addEventListener('click', function (e) {
+        if (disciplineGrid) disciplineGrid.classList.remove('fade-in-stagger');
+        var r = document.createElement('span');
+        r.className = 'dc-ripple';
+        var rect = card.getBoundingClientRect();
+        r.style.left = (e.clientX - rect.left) + 'px';
+        r.style.top  = (e.clientY - rect.top)  + 'px';
+        card.appendChild(r);
+        r.addEventListener('animationend', function () { r.remove(); });
+        card.classList.toggle('selected');
+        syncDisciplineGridState();
+      });
     });
+    syncDisciplineGridState();
 
     /* Progress-based hero state — same logic & copy as mobile initProgress() */
     (function initProgress() {

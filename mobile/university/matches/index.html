@@ -3525,16 +3525,6 @@ function renderCard(u) {
   /* type chip */
   var typeClass = u.type === 'pub' ? 'pub' : (u.type === 'priv' ? 'priv' : 'intl');
 
-  /* programs — up to 3 */
-  var progHtml = '';
-  var shown = Math.min(u.programs.length, 3);
-  for (var i = 0; i < shown; i++) {
-    progHtml += '<span class="uc-prog-chip">' + u.programs[i] + '</span>';
-  }
-  if (u.programs.length > 3) {
-    progHtml += '<span class="uc-prog-chip more">+' + (u.programs.length - 3) + '</span>';
-  }
-
   /* logo — fills hero area */
   var iconUrl = getUniIcon(u.id);
   var heroFillHtml = iconUrl
@@ -3587,24 +3577,13 @@ function renderCard(u) {
           + (isSaved ? '❤️' : '🤍')
         + '</button>'
         + '<a class="uc-cta-btn" style="flex:1.3;text-align:center;text-decoration:none" href="../detail/index.html?id=' + u.id + '" data-i18n="uni.cta.view_program">' + t('uni.cta.view_program') + '</a>'
-        + '<button class="uc-expand-btn" id="uc-eb-' + u.id + '" onclick="toggleExpand(\'' + u.id + '\')" title="More details" aria-expanded="false">▾</button>'
+        /* Compare — toggle hiện sẵn (select-to-compare), thao tác 1 chạm */
+        + '<button class="uc-compare-btn' + (isCompare ? ' active' : '') + '" onclick="toggleCompare(\'' + u.id + '\')" aria-pressed="' + (isCompare ? 'true' : 'false') + '">'
+          + (isCompare ? '☑ Added' : '⊕ Compare')
+        + '</button>'
       + '</div>'
 
     + '</div>'/* end uc-body */
-
-    /* ── TIER 3: Explore (hidden by default, toggle with ▾) ── */
-    + '<div class="uc-explore" id="uc-explore-' + u.id + '">'
-      + '<div class="uc-explore-inner">'
-        + '<div class="uc-explore-lbl">Programs</div>'
-        + '<div class="uc-programs">' + progHtml + '</div>'
-        + '<div class="uc-explore-footer">'
-          + '<div class="uc-employment">Employment: <strong>' + u.employment + '</strong></div>'
-          + '<button class="uc-compare-btn' + (isCompare ? ' active' : '') + '" onclick="toggleCompare(\'' + u.id + '\')">'
-            + (isCompare ? '☑ Added' : '⊕ Compare')
-          + '</button>'
-        + '</div>'
-      + '</div>'
-    + '</div>'
 
   + '</div>';
 }
@@ -3873,14 +3852,6 @@ function selectFsAid(v) {
 /* ══════════════════════════════════════════════════════════
    SAVE / BOOKMARK
 ══════════════════════════════════════════════════════════ */
-function toggleExpand(id) {
-  var panel = document.getElementById('uc-explore-' + id);
-  var btn   = document.getElementById('uc-eb-' + id);
-  if (!panel) return;
-  var open = panel.classList.toggle('open');
-  if (btn) btn.classList.toggle('open', open);
-}
-
 function toggleSave(id) {
   var idx = _saved.indexOf(id);
   if (idx >= 0) _saved.splice(idx, 1);

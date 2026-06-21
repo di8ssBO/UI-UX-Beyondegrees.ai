@@ -146,11 +146,11 @@
   window.BD = window.BD || {};
   BD.disciplines = {
     kt: { name: 'Engineering & Technology',  short: 'Engineering',  icon: '⚙️', accClass: 'acc-kt', match: 92 },
-    yt: { name: 'Medical & Health Sciences', short: 'Medical',      icon: '\U0001fa7a', accClass: 'acc-yt', match: 78 },
-    tn: { name: 'Natural Sciences',          short: 'Natural Sci',  icon: '\U0001f52c', accClass: 'acc-tn', match: 71 },
-    xh: { name: 'Social Sciences',           short: 'Social Sci',   icon: '\U0001f9e0', accClass: 'acc-xh', match: 64 },
-    nv: { name: 'Humanities',                short: 'Humanities',   icon: '\U0001f4dc', accClass: 'acc-nv', match: 58 },
-    nn: { name: 'Agricultural Sciences',     short: 'Agricultural', icon: '\U0001f331', accClass: 'acc-nn', match: 43 }
+    yt: { name: 'Medical & Health Sciences', short: 'Medical',      icon: '🩺', accClass: 'acc-yt', match: 78 },
+    tn: { name: 'Natural Sciences',          short: 'Natural Sci',  icon: '🔬', accClass: 'acc-tn', match: 71 },
+    xh: { name: 'Social Sciences',           short: 'Social Sci',   icon: '🧠', accClass: 'acc-xh', match: 64 },
+    nv: { name: 'Humanities',                short: 'Humanities',   icon: '📜', accClass: 'acc-nv', match: 58 },
+    nn: { name: 'Agricultural Sciences',     short: 'Agricultural', icon: '🌱', accClass: 'acc-nn', match: 43 }
   };
 
   /* ── i18n helper ────────────────────────────────────────── */
@@ -204,9 +204,9 @@
   function getGreeting() {
     var h = new Date().getHours();
     var g, em;
-    if      (h < 6)  { g = 'Good night';     em = '\U0001f319'; }
+    if      (h < 6)  { g = 'Good night';     em = '🌙'; }
     else if (h < 12) { g = 'Good morning';   em = '☀️'; }
-    else if (h < 18) { g = 'Good afternoon'; em = '\U0001f525'; }
+    else if (h < 18) { g = 'Good afternoon'; em = '🔥'; }
     else             { g = 'Good evening';   em = '✨'; }
     var uname = '';
     try { uname = localStorage.getItem('bd-username') || ''; } catch (e) {}

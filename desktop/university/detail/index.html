@@ -88,11 +88,29 @@
   :root[data-theme="light"] .ud-apply-btn:hover { background: linear-gradient(135deg, #f2b09d 0%, #d97f66 50%, #c96b55 100%); }
 
   /* ── Majors Offered — 2 cột (bố cục cũ) + màu y hệt mobile ── */
-  .ud-programs-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px; }
-  @media (max-width: 980px) { .ud-programs-list { grid-template-columns: 1fr; } }
+  /* Khung bao quanh danh sách major (parity mobile .ud-programs-list) */
+  .ud-programs-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+    background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; overflow: hidden; }
+  :root[data-theme="light"] .ud-programs-list {
+    background: linear-gradient(180deg, rgba(127,168,190,0.06) 0%, rgba(74,135,168,0.10) 100%);
+    border-color: rgba(74,135,168,0.28); }
+  /* Đường kẻ mỏng giữa các major: kẻ ngang giữa các hàng (trừ hàng đầu) + kẻ dọc giữa 2 cột */
+  .ud-programs-list .ml-item { border-top: 1px solid rgba(255,255,255,.06); }
+  .ud-programs-list .ml-item:nth-child(1),
+  .ud-programs-list .ml-item:nth-child(2) { border-top: none; }
+  .ud-programs-list .ml-item:nth-child(even) { border-left: 1px solid rgba(255,255,255,.06); }
+  :root[data-theme="light"] .ud-programs-list .ml-item { border-top-color: rgba(74,135,168,0.16); }
+  :root[data-theme="light"] .ud-programs-list .ml-item:nth-child(even) { border-left-color: rgba(74,135,168,0.16); }
+  @media (max-width: 980px) {
+    .ud-programs-list { grid-template-columns: 1fr; }
+    /* 1 cột: hàng thứ 2 trở đi đều cần kẻ trên, bỏ kẻ dọc */
+    .ud-programs-list .ml-item:nth-child(2) { border-top: 1px solid rgba(255,255,255,.06); }
+    .ud-programs-list .ml-item:nth-child(even) { border-left: none; }
+    :root[data-theme="light"] .ud-programs-list .ml-item:nth-child(2) { border-top-color: rgba(74,135,168,0.16); }
+  }
   .ml-item {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px; border-radius: 14px; min-width: 0; overflow: hidden;
+    padding: 14px 16px; border-radius: 0; min-width: 0; overflow: hidden;
     cursor: pointer; transition: background .15s ease;
   }
   .ml-item:hover { background: rgba(255,255,255,.04); }
