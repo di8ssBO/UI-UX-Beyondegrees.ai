@@ -227,16 +227,18 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 3px;
-  padding: 7px 8px;
+  padding: 7px 10px;
   border-radius: 999px;
   text-decoration: none !important;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.58);
   transition:
     color 0.2s ease,
-    background 0.3s cubic-bezier(0.34,1.3,0.64,1);
+    background 0.3s cubic-bezier(0.34,1.3,0.64,1),
+    padding 0.25s ease,
+    flex 0.25s ease;
   cursor: pointer;
-  min-width: 42px;
-  flex-shrink: 0;
+  min-width: 0;
+  flex: 1 1 0;
   -webkit-tap-highlight-color: transparent;
   outline: none;
 }
@@ -245,12 +247,16 @@ body {
   text-decoration: none !important;
 }
 .tab-item.active {
-  background: rgba(255,255,255,0.13);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(24,99,220,0.50) 0%, rgba(155,93,229,0.50) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
-  border: 1px solid rgba(255,255,255,0.16);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset;
+  border: 1px solid rgba(155,93,229,0.45);
+  box-shadow:
+    0 0 12px rgba(155,93,229,0.25),
+    0 1px 0 rgba(255,255,255,0.12) inset;
+  padding: 7px 14px;
+  flex: 0 0 auto;
 }
 .tab-item:active:not(.tab-disabled) { transform: scale(0.92); }
 
@@ -265,6 +271,7 @@ body {
 }
 .tab-item.active .tab-icon svg { transform: scale(1.1); }
 
+/* Label only visible on active tab */
 .tab-label {
   font-size: 9px;
   font-weight: 700;
@@ -273,6 +280,15 @@ body {
   white-space: nowrap;
   position: relative;
   z-index: 1;
+  display: none;
+}
+.tab-item.active .tab-label {
+  display: block;
+  animation: tabLabelIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes tabLabelIn {
+  from { opacity: 0; transform: scale(0.7) translateY(4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .tab-disabled {
@@ -293,7 +309,7 @@ body {
 }
 
 /* ════════════════════════════════════════════════════════════════
-   LIGHT MODE — shared rules for ALL mobile/ screens
+   LIGHT MODE — shared rules for ALL features/ screens
    Outside (body, device-frame, notch): STAYS DARK (no change)
    Inside  (mobile-screen, components):  pastel cream/peach/sky
 
@@ -395,10 +411,10 @@ html[data-theme="light"] body {
   color: rgba(58,46,38,0.52) !important;
 }
 [data-theme="light"] .tab-item.active {
-  background: linear-gradient(135deg, rgba(2,116,190,0.10) 0%, rgba(2,116,190,0.18) 100%) !important;
-  color: #0274BE !important;
-  border-color: rgba(2,116,190,0.25) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.40) !important;
+  background: linear-gradient(135deg, rgba(24,99,220,0.18) 0%, rgba(155,93,229,0.18) 100%) !important;
+  color: #1863DC !important;
+  border-color: rgba(24,99,220,0.30) !important;
+  box-shadow: 0 0 10px rgba(24,99,220,0.12), inset 0 1px 0 rgba(255,255,255,0.50) !important;
 }
 [data-theme="light"] .tab-item:hover:not(.tab-disabled) {
   color: rgba(58,46,38,0.85) !important;
@@ -515,35 +531,47 @@ html[data-theme="light"] body {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.70), 0 8px 20px rgba(214,122,92,0.25), 0 14px 36px rgba(214,122,92,0.18) !important;
 }
 
-/* ─── Buttons: Primary (brand blue gradient) ──────────────── */
+/* ─── Buttons: Primary (teal gradient) ──────────────────── */
 [data-theme="light"] .btn-primary,
 [data-theme="light"] .cta-primary,
-[data-theme="light"] .cta-btn:not(.cta-continue) {
-  background: linear-gradient(135deg, #1E8EDB 0%, #0274BE 50%, #075C9F 100%) !important;
+[data-theme="light"] .cta-btn:not(.cta-continue),
+[data-theme="light"] .lock-cta:not(.cta-continue) {
+  background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%) !important;
   color: #fff !important;
   border: none !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    0 4px 14px rgba(2,116,190,0.30),
-    0 8px 24px rgba(2,116,190,0.18) !important;
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 4px 14px rgba(13,148,136,0.32),
+    0 8px 24px rgba(15,118,110,0.20) !important;
 }
 [data-theme="light"] .btn-primary:hover,
 [data-theme="light"] .cta-primary:hover,
-[data-theme="light"] .cta-btn:hover:not(.cta-continue) {
-  background: linear-gradient(135deg, #4FA7E5 0%, #1E8EDB 50%, #0274BE 100%) !important;
+[data-theme="light"] .cta-btn:hover:not(.cta-continue),
+[data-theme="light"] .lock-cta:hover:not(.cta-continue) {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.35),
-    0 6px 18px rgba(2,116,190,0.40),
-    0 12px 32px rgba(2,116,190,0.25) !important;
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 6px 18px rgba(13,148,136,0.42),
+    0 12px 32px rgba(15,118,110,0.28) !important;
 }
 
-/* ─── Buttons: Continue / Success (mint gradient) ─────────── */
-[data-theme="light"] .cta-btn.cta-continue {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+/* ─── Buttons: Continue / Progress (teal gradient) ────────── */
+[data-theme="light"] .cta-btn.cta-continue,
+[data-theme="light"] .lock-cta.cta-continue {
+  background: linear-gradient(135deg, #0D9488 0%, #0F766E 100%) !important;
   color: #fff !important;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    0 4px 14px rgba(5,150,105,0.30) !important;
+    inset 0 1px 0 rgba(255,255,255,0.22),
+    0 4px 14px rgba(13,148,136,0.32),
+    0 8px 24px rgba(15,118,110,0.20) !important;
+}
+[data-theme="light"] .cta-btn.cta-continue:hover,
+[data-theme="light"] .lock-cta.cta-continue:hover {
+  background: linear-gradient(135deg, #14B8A6 0%, #0D9488 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.30),
+    0 6px 18px rgba(13,148,136,0.42),
+    0 12px 32px rgba(15,118,110,0.28) !important;
 }
 
 /* ─── Buttons: Secondary / Ghost (coral) ─────────────────── */
