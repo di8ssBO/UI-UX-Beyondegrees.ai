@@ -3,7 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Home Screen — BeyonDegrees.ai</title>
+  <title>BeyonDegrees.ai</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/mobile/manifest.json">
+  <meta name="theme-color" content="#1a0533">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BeyonDegrees">
+  <link rel="apple-touch-icon" href="/shared/icons/icon-180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/shared/icons/icon-167.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/shared/icons/icon-152.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/shared/icons/icon-192.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/mobile/' })
+          .catch(err => console.warn('SW registration failed:', err));
+      });
+    }
+  </script>
   <script>
   /* Theme boot — runs before paint to prevent flash.
      Priority: ?theme= query → localStorage('bd-theme') → existing html attr → 'dark' */
