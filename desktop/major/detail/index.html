@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Major Detail — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  /* Back button (mobile parity → history.back()) */
+  .md-back { margin-bottom: 18px; }
+
+  /* ── Hero ── */
+  .md-hero { display: flex; align-items: center; gap: 28px; padding: 38px 44px; position: relative; overflow: hidden; }
+  .md-hero::after {
+    content: ''; position: absolute; top: -50%; right: -12%;
+    width: 58%; height: 160%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 18%, transparent) 0%, transparent 70%);
+    filter: blur(32px); pointer-events: none;
+  }
+  .md-hero > * { position: relative; z-index: 1; }
+  .md-hero .ic { width: 88px; height: 88px; border-radius: 24px; flex: none; display: grid; place-items: center; font-size: 42px;
+    background: color-mix(in srgb, var(--acc) 15%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 32%, transparent); }
+  .md-hero-text { flex: 1; min-width: 0; }
+  .md-hero h1 { font-size: 30px; font-weight: 900; line-height: 1.2; color: var(--text-primary); }
+
+  /* Match ring — stroke + number colored by match magnitude (set inline) */
+  .md-ringwrap { margin-left: auto; flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .md-ring { position: relative; width: 104px; height: 104px; }
+  .md-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
+  .md-ring-track { fill: none; stroke: color-mix(in srgb, var(--text-muted) 28%, transparent); stroke-width: 7; }
+  .md-ring-fill { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 1s var(--ease-out); }
+  .md-ring-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    font-size: 26px; font-weight: 900; line-height: 1; }
+  .md-ring-cap { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+
+  /* ── Body: specializations (left) + Why-match CTA rail (right) ── */
+  .md-layout { display: grid; grid-template-columns: 1fr 300px; gap: 22px; align-items: start; margin-top: 22px; }
+  .md-main { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+  .md-rail { position: sticky; top: 78px; display: flex; flex-direction: column; gap: 18px; }
+  @media (max-width: 980px) {
+    .md-layout { grid-template-columns: 1fr; }
+    .md-rail { position: static; }
+  }
+
+  /* About */
+  .md-about { padding: 28px 32px; }
+  .md-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.8; }
+
+  /* Specializations — vertical list down the left */
+  .md-specs { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+  .spec-card { display: flex; align-items: flex-start; gap: 16px; padding: 18px 22px; }
+  .spec-card .em { font-size: 30px; line-height: 1; flex: none; margin-top: 2px; }
+  .spec-card .spec-body { flex: 1; min-width: 0; }
+  .spec-card b { display: block; font-size: 15px; color: var(--text-primary); }
+  .spec-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 4px; }
+  .spec-tag { display: inline-flex; margin-top: 10px; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+
+  /* Why I match — button tinted with the discipline accent color */
+  .why-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px 22px; border-radius: 14px;
+    font-size: 15px; font-weight: 800; color: #fff; text-align: center; text-decoration: none;
+    background: linear-gradient(135deg, var(--acc), color-mix(in srgb, var(--acc) 68%, #000));
+    border: 1px solid color-mix(in srgb, var(--acc) 55%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--acc) 35%, transparent);
+    transition: transform .2s var(--ease-out), box-shadow .2s, filter .2s;
+  }
+  .why-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px color-mix(in srgb, var(--acc) 45%, transparent); filter: brightness(1.06); }
+  .why-btn .why-emoji { font-size: 17px; }
+  .why-btn .why-arrow { display: flex; }
+
+  /* Rail stat card (e.g., Average Salary) */
+  .md-stat { display: flex; align-items: center; gap: 14px; padding: 18px 20px; }
+  .md-stat .stat-ic { width: 46px; height: 46px; border-radius: 12px; flex: none; display: grid; place-items: center; font-size: 22px;
+    background: color-mix(in srgb, var(--acc) 14%, transparent); border: 1px solid color-mix(in srgb, var(--acc) 28%, transparent); }
+  .md-stat .stat-val { font-size: 22px; font-weight: 900; color: var(--text-primary); line-height: 1; }
+  .md-stat .stat-lbl { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
+  /* Related majors (same discipline) */
+  .md-related { padding: 18px 20px; }
+  .md-related .rel-title { font-size: 11px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
+  .md-related a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; text-decoration: none;
+    color: var(--text-secondary); font-size: 13px; font-weight: 600; transition: background .15s, color .15s; }
+  .md-related a:hover { background: color-mix(in srgb, var(--acc) 10%, transparent); color: var(--text-primary); }
+  .md-related a .rel-ic { font-size: 16px; flex: none; }
+  .md-related a .rel-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .md-related a .rel-arrow { color: var(--acc-pct); font-weight: 900; flex: none; }
+
+  /* Lock / loading fallback */
+  .lock-note { text-align: center; padding: 60px 20px; }
+  .lock-note .em { font-size: 48px; }
+</style>
+</head>
+<body class="app" data-page="majors" data-crumb="Major Detail">
+  <div class="main">
+    <div class="content fade-in" id="root"></div>
+  </div>
+
+  <script src="../../../shared/scripts/data/majors-data.js"></script>
+  <script src="../../../shared/scripts/data/spec-data.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script>
+    var MOCK_PCT = {
+      'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
+      'Electrical engineering, Electronic engineering, Information engineering':94,
+      'Engineering':91,'Environmental biotechnology':79,'Environmental engineering':81,
+      'Industrial biotechnology':76,'Materials engineering':84,'Mechanical engineering':88,
+      'Medical engineering':82,'Nano-technology':87,'Other engineering and technologies':75,
+      'Biological sciences':86,'Chemical sciences':84,'Computer and information sciences':89,
+      'Earth and related Environmental sciences':79,'Mathematics':92,'Mathematics and Statistics':90,
+      'Physical sciences':87,
+      'Basic medicine':50,'Clinical medicine':56,'Health sciences':62,'Medical biotechnology':64,
+      'Nursing':47,'Other medical sciences':45,
+      'Agricultural biotechnology':62,'Agriculture, forestry and fishery':50,'Animal and dairy science':46,
+      'Behavioral Sciences':30,'Business':28,'Economics and business':34,'Education':20,
+      'Educational sciences':18,'Helms School of Government':24,'Law':16,'Political science':22,
+      'Psychology':32,'Sciences':19,'Social and economic geography':14,'Sociology':26,
+      'Arts and Sciences':26,'Communication and the Arts':22,'English':30,'History':20,
+      'History and archaeology':16,'Languages and literature':24,'Music':18,
+      'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
+    };
+    var DISC_LABEL = {
+      kt:'⚙️ Engineering', tn:'🔬 Natural Sci', yt:'🩺 Medical',
+      nn:'🌱 Agricultural', xh:'🧠 Social Sci', nv:'📜 Humanities'
+    };
+    /* Placeholder average salary per discipline (no real data in dataset) */
+    var MOCK_SALARY = { kt:'$75K', tn:'$68K', yt:'$82K', nn:'$58K', xh:'$60K', nv:'$52K' };
+
+    var wanted = BD.param('major', 'Computer and information sciences');
+    var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
+    var major = _MAJORS.find(function (m) { return m.title === wanted; })
+             || _MAJORS.find(function (m) { return m.title === 'Computer and information sciences'; });
+    var root = document.getElementById('root');
+
+    /* Back về trang trước đó (giống mobile history.back()), fallback majors.html */
+    function goBack() { if (history.length > 1) history.back(); else location.href = '../../major/recommendations/'; }
+    window.goBack = goBack;
+    var backBtn = '<button class="btn btn-ghost md-back" onclick="goBack()">← Back</button>';
+
+    if (!major) {
+      root.innerHTML = backBtn + '<div class="card lock-note"><div class="em">⏳</div>' +
+        '<h2 class="mt-4" style="font-weight:900;">Loading…</h2>' +
+        '<p class="muted mt-2">Complete the quiz to unlock major details.</p>' +
+        '<a class="btn btn-primary mt-6" href="../../quiz/quiz-card/">Finish Quiz →</a></div>';
+    } else {
+      document.title = major.title + ' — BeyonDegrees.ai';
+      var pct = MOCK_PCT[major.title] != null ? MOCK_PCT[major.title] : 50;
+      /* mobile: desc tách câu, lấy các câu >30 ký tự */
+      var sentences = major.desc.replace(/\n/g, ' ').split(/(?<=[.!?])\s+/).filter(function (s) { return s.length > 30; });
+      var specs = (window.SPECIALIZATIONS || {})[major.id] || [];
+
+      var specCards = specs.map(function (sp, i) {
+        var t = (window.TAG_STYLES || {})[sp.tag] || { bg:'rgba(200,200,224,.08)', border:'rgba(200,200,224,.2)', text:'#c8c8e0' };
+        return '<a class="card hoverable spec-card" href="../../major/spec-detail/?major=' + encodeURIComponent(major.title) + '&spec=' + i + '">' +
+          '<span class="em">' + sp.icon + '</span>' +
+          '<div class="spec-body">' +
+            '<b>' + sp.name + '</b><p>' + sp.desc + '</p>' +
+            '<span class="spec-tag" style="background:' + t.bg + ';border:1px solid ' + t.border + ';color:' + t.text + ';">' + sp.tag + '</span>' +
+          '</div>' +
+        '</a>';
+      }).join('');
+
+      /* Match ring geometry (r=46 → circumference) + magnitude color */
+      var ringC = 2 * Math.PI * 46;
+      var ringOff = ringC * (1 - pct / 100);
+      var pctColor = pct >= 75 ? '#06d6a0'   /* high  → green  */
+                   : pct >= 50 ? '#f59e0b'   /* mid   → amber  */
+                   : pct >= 25 ? '#f97316'   /* low   → orange */
+                   :             '#ef4444';  /* v.low → red    */
+      var ring =
+        '<div class="md-ringwrap">' +
+          '<div class="md-ring">' +
+            '<svg viewBox="0 0 104 104">' +
+              '<circle class="md-ring-track" cx="52" cy="52" r="46"/>' +
+              '<circle class="md-ring-fill" cx="52" cy="52" r="46" stroke="' + pctColor + '" stroke-dasharray="' + ringC.toFixed(1) + '" stroke-dashoffset="' + ringOff.toFixed(1) + '"/>' +
+            '</svg>' +
+            '<b class="md-ring-num" style="color:' + pctColor + '">' + pct + '%</b>' +
+          '</div>' +
+          '<span class="md-ring-cap">Match</span>' +
+        '</div>';
+
+      var hero =
+        '<div class="card glass-hero md-hero">' +
+          '<div class="ic">' + (major.icon || '🎓') + '</div>' +
+          '<div class="md-hero-text">' +
+            '<span class="chip violet">' + DISC_LABEL[major.discCode] + '</span>' +
+            '<h1 class="mt-2">' + major.title + '</h1>' +
+          '</div>' +
+          ring +
+        '</div>';
+
+      var about =
+        '<div class="card md-about">' +
+          '<span class="section-label">About this major</span>' +
+          '<p class="md-desc mt-4">' + sentences.slice(0, 5).join(' ') + '</p>' +
+        '</div>';
+
+      var specsBlock = specs.length
+        ? '<div>' +
+            '<div class="section-title">Specializations <span class="hint">— choose a specialization track</span></div>' +
+            '<div class="md-specs fade-in-stagger">' + specCards + '</div>' +
+          '</div>'
+        : '';
+
+      var why =
+        '<a class="why-btn" href="../../major/why/?major=' + encodeURIComponent(major.title) + '" title="See how your quiz answers align with this major">' +
+          '<span class="why-emoji">🔍</span>' +
+          '<span>Why I match this major?</span>' +
+          '<span class="why-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
+        '</a>';
+
+      /* Average Salary stat (placeholder per discipline) */
+      var salary = MOCK_SALARY[major.discCode] || '$75K';
+      var salaryCard =
+        '<div class="card md-stat">' +
+          '<div class="stat-ic">💰</div>' +
+          '<div><div class="stat-val">' + salary + '</div><div class="stat-lbl">Average Salary</div></div>' +
+        '</div>';
+
+      /* Related majors in the same discipline (real data) — fills the rail */
+      var related = _MAJORS.filter(function (m) {
+        return m.discCode === major.discCode && m.title !== major.title;
+      }).slice(0, 6);
+      var relTitle = (DISC_LABEL[major.discCode] || 'this field').replace(/^\S+\s/, '');
+      var relatedCard = related.length
+        ? '<div class="card md-related">' +
+            '<div class="rel-title">More in ' + relTitle + '</div>' +
+            related.map(function (m) {
+              return '<a href="../../major/detail/?major=' + encodeURIComponent(m.title) + '">' +
+                '<span class="rel-ic">' + (m.icon || '🎓') + '</span>' +
+                '<span class="rel-name">' + m.title + '</span>' +
+                '<span class="rel-arrow">›</span></a>';
+            }).join('') +
+          '</div>'
+        : '';
+
+      root.innerHTML = backBtn +
+        '<div class="acc-' + major.discCode + '">' +
+          hero +
+          '<div class="md-layout">' +
+            '<div class="md-main">' + about + specsBlock + '</div>' +
+            '<div class="md-rail">' + why + salaryCard + relatedCard + '</div>' +
+          '</div>' +
+        '</div>';
+    }
+  </script>
+</body>
+</html>

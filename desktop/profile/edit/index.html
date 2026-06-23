@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Profile — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  .pe-head { display: flex; align-items: center; gap: 20px; padding: 30px 32px; }
+  .pe-avatar { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
+    font-size: 24px; font-weight: 900; color: #fff; flex: none;
+    background: linear-gradient(135deg, var(--violet-600), var(--violet-400));
+    box-shadow: 0 6px 20px rgba(124,58,237,0.40); }
+  :root[data-theme="light"] .pe-avatar { background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 6px 20px rgba(201,107,85,0.35); }
+  .arch { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .arch a { color: var(--violet-400); font-weight: 800; }
+  :root[data-theme="light"] .arch a { color: #a84e30; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .field label { display: block; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+  :root[data-theme="light"] .field label { color: #a84e30; }
+  .field .note { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
+  .field.full { grid-column: 1 / -1; }
+  /* Segmented (mobile "I want to study") */
+  .seg { display: flex; gap: 8px; }
+  .seg button {
+    flex: 1; padding: 11px; border-radius: 12px; font-size: 13px; font-weight: 700;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary);
+    transition: all .15s;
+  }
+  .seg button.on {
+    background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+    border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+  }
+  :root[data-theme="light"] .seg button { background: rgba(255,255,255,0.85); border-color: #e8e0d5; color: #5c4535; }
+  :root[data-theme="light"] .seg button.on { background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 4px 14px rgba(201,107,85,0.35); }
+  .check-row { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-secondary); }
+  .check-row input { width: 17px; height: 17px; accent-color: #7c3aed; }
+  :root[data-theme="light"] .check-row input { accent-color: #c96b55; }
+  .danger-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-danger { color: var(--red-400); border: 1px solid rgba(255,71,87,0.40); background: rgba(255,71,87,0.07); }
+  .btn-danger:hover { background: rgba(255,71,87,0.15); }
+  /* Reset modal (mobile parity) */
+  .modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center;
+    background: rgba(6,6,15,0.72); backdrop-filter: blur(10px); }
+  :root[data-theme="light"] .modal { background: rgba(245,237,224,0.82); }
+  .modal.show { display: flex; }
+  .modal .box { max-width: 420px; text-align: center; padding: 36px; animation: fadeUp .4s var(--ease-out) both; }
+  .modal h3 { font-size: 20px; font-weight: 900; color: var(--text-primary); }
+  .modal p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-top: 10px; }
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); padding: 12px 22px; border-radius: 999px;
+    background: var(--mint-500); color: #06281e; font-weight: 800; font-size: 14px;
+    box-shadow: 0 8px 24px rgba(6,214,160,0.40); transition: transform .35s cubic-bezier(.2,1.4,.4,1); z-index: 999; }
+  :root[data-theme="light"] .toast { background: #4a9e7a; color: #fff; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body class="app" data-page="profile" data-crumb="Profile · Edit Profile">
+  <div class="main">
+    <div class="content fade-in" style="max-width: 820px;">
+      <a class="btn btn-ghost" href="../../profile/overview/" style="margin-bottom:18px;">← Back</a>
+      <h1 class="page-title">Edit Profile</h1>
+
+      <div class="card glass-hero pe-head mt-6">
+        <div class="pe-avatar">HP</div>
+        <div class="arch">Academic Archetype: <a href="../../quiz/quiz-card/">Find Out</a></div>
+      </div>
+
+      <div class="card mt-6">
+        <div class="form-grid">
+          <div class="field"><label>First Name</label><input class="input" value="Hoang"></div>
+          <div class="field"><label>Last Name</label><input class="input" value="Phuc"></div>
+          <div class="field full"><label>Email</label>
+            <input class="input" type="email" value="hoangphuc@beyondegrees.ai" disabled>
+            <div class="note">Contact support to change the email.</div>
+          </div>
+          <div class="field full"><label>Location</label><input class="input" value="Ho Chi Minh City, Vietnam"></div>
+          <div class="field full"><label>I want to study</label>
+            <div class="seg" id="segStudy">
+              <button class="on">Abroad</button><button>In my country</button><button>Either</button>
+            </div>
+          </div>
+          <div class="field full"><label>I'm working toward a...</label>
+            <div class="seg" id="segDegree">
+              <button class="on">Bachelor's Degree</button><button>Master's Degree</button>
+              <button>PhD / Doctorate</button><button>Associate's Degree</button>
+            </div>
+          </div>
+          <div class="field full">
+            <label class="check-row" style="display:flex;text-transform:none;letter-spacing:0;font-size:14px;">
+              <input type="checkbox"> I already know what I want to study
+            </label>
+          </div>
+        </div>
+        <div class="flex mt-8" style="gap:12px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="saveBtn">Save Changes</button>
+          <button class="btn btn-ghost">Leave Review</button>
+        </div>
+      </div>
+
+      <div class="card mt-6">
+        <span class="section-label">Danger zone</span>
+        <div class="danger-row mt-4">
+          <button class="btn btn-danger" id="resetBtn">Reset Account</button>
+          <button class="btn btn-ghost">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset modal (mobile parity) -->
+  <div class="modal" id="resetModal">
+    <div class="card box">
+      <h3>Reset Account?</h3>
+      <p>This will clear <b>all quiz progress</b> and all your answers.<br>You'll start fresh from <b>Question 1</b>.</p>
+      <div class="flex mt-6" style="gap:10px;justify-content:center;">
+        <button class="btn btn-danger" id="resetConfirm">Reset &amp; Start Over</button>
+        <button class="btn btn-ghost" id="resetCancel">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast">✅ Profile saved!</div>
+
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script>
+    ['segStudy', 'segDegree'].forEach(function (id) {
+      var seg = document.getElementById(id);
+      seg.addEventListener('click', function (e) {
+        if (e.target.tagName !== 'BUTTON') return;
+        seg.querySelectorAll('button').forEach(function (b) { b.classList.remove('on'); });
+        e.target.classList.add('on');
+      });
+    });
+    document.getElementById('saveBtn').onclick = function () {
+      var t = document.getElementById('toast');
+      t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2200);
+    };
+    var modal = document.getElementById('resetModal');
+    document.getElementById('resetBtn').onclick = function () { modal.classList.add('show'); };
+    document.getElementById('resetCancel').onclick = function () { modal.classList.remove('show'); };
+    document.getElementById('resetConfirm').onclick = function () {
+      localStorage.removeItem('quizProgress');
+      localStorage.removeItem('quizMilestone');
+      location.href = '../../onboarding/home/';
+    };
+  </script>
+</body>
+</html>

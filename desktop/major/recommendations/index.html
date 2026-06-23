@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Major Recommendations — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  /* ════════════════════════════════════════════════════════════
+     Major Recommendations — desktop port of mobile recommendations.
+     Mọi component giữ nguyên (demand chip · filter chips · hero ·
+     accordion Top/Also/Explore · list row · continue/finish ·
+     locked state + teaser). Chỉ đổi bố trí & kích thước cho desktop.
+     ════════════════════════════════════════════════════════════ */
+
+  /* ── Filter chips (mobile .fc) ── */
+  .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+  .fc {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text-secondary); cursor: pointer; backdrop-filter: blur(8px);
+    transition: all var(--tr-fast); white-space: nowrap;
+  }
+  .fc:hover { color: var(--text-primary); border-color: rgba(124,58,237,0.45); }
+  .fc.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.28); color: var(--text-primary); }
+  .fc .fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c,#888); flex: none; }
+  .fc .fc-pct { font-size: 12px; font-weight: 800; opacity: .95; }
+  :root[data-theme="light"] .fc { background: rgba(253,248,242,0.88); border-color: #e8e0d5; color: #5c4535; }
+  :root[data-theme="light"] .fc:hover { border-color: rgba(201,107,85,0.45); color: #a84e30; }
+  :root[data-theme="light"] .fc[data-disc]:not([data-disc="all"]).active {
+    background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,0.55));
+    border-color: color-mix(in srgb, var(--c) 45%, transparent);
+    color: color-mix(in srgb, var(--c) 35%, #2c1f14);
+  }
+  :root[data-theme="light"] .fc[data-disc="all"].active {
+    background: rgba(201,107,85,.18); border-color: rgba(201,107,85,.40); color: #a84e30;
+  }
+
+  /* ── Hero Major Card (mobile .hero-maj) ── */
+  .hero-maj {
+    position: relative; overflow: hidden; cursor: pointer;
+    background: linear-gradient(135deg, rgba(var(--disc-rgb),.08) 0%, rgba(var(--disc-rgb),.16) 100%);
+    border: 1px solid rgba(var(--disc-rgb),.30); border-radius: 22px;
+    padding: 30px 32px; margin: 24px 0 26px; --disc-rgb: 6,214,160;
+    transition: transform var(--tr-base), box-shadow var(--tr-base), border-color var(--tr-base);
+  }
+  .hero-maj:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(var(--disc-rgb),.22); }
+  .hero-maj::before {
+    content: ''; position: absolute; top: -40%; right: -8%; width: 48%; height: 130%;
+    background: radial-gradient(ellipse, rgba(var(--disc-rgb),.18) 0%, transparent 70%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .hm-disc-badge {
+    display: inline-flex; align-items: center; gap: 7px; margin-bottom: 12px; position: relative;
+    font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em;
+  }
+  .hm-disc-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .hm-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 16px; position: relative; }
+  .hm-name { font-size: 30px; font-weight: 900; color: var(--text-primary); line-height: 1.12; letter-spacing: -0.4px; }
+  .hm-pctwrap { text-align: right; flex: none; }
+  .hm-pct { font-size: 42px; font-weight: 900; color: var(--disc-color, var(--mint-400)); line-height: 1; }
+  .hm-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-top: 4px; }
+  .hm-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; position: relative; }
+  .hm-tags:empty { display: none; }
+  .hm-tag {
+    padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    background: rgba(var(--disc-rgb),.12); border: 1px solid rgba(var(--disc-rgb),.28); color: var(--disc-color, var(--mint-400));
+  }
+  .hm-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 13px 26px; border-radius: 14px; position: relative;
+    background: linear-gradient(90deg, var(--disc-color, var(--mint-500)), var(--violet-500));
+    border: none; font-size: 14px; font-weight: 800; color: #fff; cursor: pointer;
+    transition: filter var(--tr-fast), transform var(--tr-fast);
+  }
+  .hm-cta:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  /* light hero — brand-image palette + match-% accent (mobile parity) */
+  :root[data-theme="light"] .hero-maj {
+    background:
+      radial-gradient(ellipse 90% 65% at 95% 0%, rgba(232,145,122,0.42) 0%, transparent 65%),
+      radial-gradient(ellipse 85% 60% at 5% 100%, rgba(163,194,211,0.45) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 50% at 100% 90%, rgba(168,200,196,0.36) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 45% at 0% 20%, rgba(196,217,229,0.30) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 55% at 50% 50%, color-mix(in srgb, rgb(var(--disc-rgb)) 22%, transparent) 0%, transparent 75%),
+      linear-gradient(135deg, #fdf8f2 0%, #fceae4 30%, #f5ede0 70%, #e0ecf3 100%);
+    border-color: color-mix(in srgb, rgb(var(--disc-rgb)) 34%, rgba(232,224,213,0.6));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.55),
+      0 4px 16px color-mix(in srgb, rgb(var(--disc-rgb)) 18%, transparent),
+      0 12px 30px rgba(140,114,96,0.10);
+  }
+  :root[data-theme="light"] .hero-maj::before {
+    background: radial-gradient(ellipse, color-mix(in srgb, rgb(var(--disc-rgb)) 45%, transparent) 0%, transparent 70%); opacity: .40;
+  }
+  :root[data-theme="light"] .hm-disc-badge { color: #5c4535; }
+  :root[data-theme="light"] .hm-pct { color: color-mix(in srgb, rgb(var(--disc-rgb)) 55%, #2c1f14); }
+  :root[data-theme="light"] .hm-lbl { color: #8c7260; }
+  :root[data-theme="light"] .hm-tag {
+    background: color-mix(in srgb, rgb(var(--disc-rgb)) 14%, rgba(255,255,255,0.7));
+    border-color: color-mix(in srgb, rgb(var(--disc-rgb)) 35%, transparent);
+    color: color-mix(in srgb, rgb(var(--disc-rgb)) 50%, #2c1f14);
+  }
+  :root[data-theme="light"] .hm-cta {
+    background: linear-gradient(135deg, #c96b55 0%, #a84e30 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), 0 4px 14px rgba(201,107,85,0.32);
+  }
+
+  /* ── Accordion sections (mobile .acc-*) ── */
+  .acc-section { margin-bottom: 14px; }
+  .acc-hdr {
+    display: flex; align-items: center; justify-content: space-between; padding: 15px 20px;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09); border-radius: 16px;
+    cursor: pointer; user-select: none; transition: background var(--tr-fast);
+  }
+  .acc-hdr:hover { background: rgba(255,255,255,0.07); }
+  .acc-hdr.open { border-radius: 16px 16px 0 0; border-bottom-color: transparent; }
+  .acc-title-wrap { display: flex; align-items: center; gap: 11px; }
+  .acc-icon { font-size: 20px; }
+  .acc-title { font-size: 16px; font-weight: 800; color: var(--text-primary); }
+  .acc-count { font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 999px; background: rgba(255,255,255,0.08); color: var(--text-muted); }
+  .acc-chevron { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: transform var(--tr-base); }
+  .acc-hdr.open .acc-chevron { transform: rotate(180deg); }
+  .acc-body {
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.09); border-top: none;
+    border-radius: 0 0 16px 16px; overflow: hidden; max-height: 0; transition: max-height .4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .acc-body.open { max-height: 4000px; }
+  .acc-inner { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; padding: 6px; }
+  .acc-empty { grid-column: 1 / -1; padding: 20px; text-align: center; font-size: 13px; color: var(--text-muted); font-style: italic; }
+  .acc-hint { grid-column: 1 / -1; padding: 14px 18px 12px; font-size: 12px; color: var(--text-muted); line-height: 1.55; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 6px; }
+  @media (max-width: 880px) { .acc-inner { grid-template-columns: 1fr; } }
+  :root[data-theme="light"] .acc-hdr {
+    background: rgba(253,248,242,0.92); border-color: rgba(232,224,213,0.70);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.60), 0 2px 8px rgba(92,69,53,0.04);
+  }
+  :root[data-theme="light"] .acc-hdr:hover { background: rgba(245,237,224,0.88); }
+  :root[data-theme="light"] .acc-title { color: #2c1f14; }
+  :root[data-theme="light"] .acc-count { background: rgba(140,114,96,.16); color: #5c4535; }
+  :root[data-theme="light"] .acc-chevron { color: #8c7260; }
+  :root[data-theme="light"] .acc-body { background: rgba(253,248,242,0.92); border-color: rgba(232,224,213,0.70); border-top: none; }
+  :root[data-theme="light"] .acc-hint { color: #8c7260; border-top-color: rgba(232,224,213,0.55); }
+  :root[data-theme="light"] .acc-empty { color: #8c7260; }
+
+  /* ── Major list row (mobile .ml-item) ── */
+  .ml-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 13px 16px; border-radius: 12px; cursor: pointer; transition: background var(--tr-fast);
+    min-width: 0; /* cho phép grid track co lại → tên dài cắt ellipsis, 2 cột đều nhau */
+  }
+  .ml-item:hover { background: rgba(124,58,237,0.10); }
+  .ml-left { display: flex; align-items: center; gap: 13px; flex: 1; min-width: 0; }
+  .ml-ico { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex: none; }
+  .ml-info { flex: 1; min-width: 0; }
+  .disc-badge { display: inline-flex; align-items: center; gap: 5px; margin-bottom: 3px; }
+  .disc-badge .d-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bc,#888); flex: none; }
+  .disc-badge .d-name { font-size: 9.5px; font-weight: 800; color: var(--bc,#888); letter-spacing: .05em; text-transform: uppercase; opacity: .9; }
+  .ml-name { font-size: 15px; font-weight: 700; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ml-sub { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ml-right { display: flex; align-items: center; gap: 6px; flex: none; }
+  .ml-pct { font-size: 18px; font-weight: 800; }
+  .ml-chev { color: var(--text-muted); display: flex; }
+  .pct-high { color: var(--mint-500); }
+  .pct-mid  { color: var(--orange-400); }
+  .pct-low  { color: var(--text-muted); }
+  :root[data-theme="light"] .ml-item:hover { background: rgba(201,107,85,0.10); }
+  :root[data-theme="light"] .pct-high { color: #2f6f53; }
+  :root[data-theme="light"] .pct-mid  { color: #b45309; }
+  :root[data-theme="light"] .pct-low  { color: #a89282; }
+
+  /* ── No results ── */
+  #no-results { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; gap: 12px; text-align: center; }
+  #no-results .nr-icon { font-size: 44px; }
+  #no-results .nr-text { font-size: 15px; color: var(--text-muted); }
+
+  /* ── Continue / Finish Quiz (mobile .continue-btn) ── */
+  .continue-wrap { display: flex; justify-content: center; margin-top: 32px; }
+  .continue-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 15px 44px; border: none; border-radius: 999px; cursor: pointer;
+    background: linear-gradient(135deg, var(--mint-500), var(--mint-300)); color: #06281e;
+    font-size: 15px; font-weight: 800; box-shadow: 0 6px 20px rgba(6,214,160,0.35);
+    transition: transform var(--tr-fast), box-shadow var(--tr-fast);
+  }
+  .continue-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(6,214,160,0.45); }
+  :root[data-theme="light"] .continue-btn { background: linear-gradient(135deg, #4a9e7a, #2f6f53); color: #fff; box-shadow: 0 4px 16px rgba(74,158,122,0.32); }
+
+  /* ── Locked state (mobile .locked-state) ── */
+  .locked-state { display: none; }
+  .locked-state.show { display: block; }
+  .lock-banner {
+    max-width: 640px; margin: 12px auto 30px; padding: 34px 28px;
+    background: rgba(124,58,237,.10); border: 1px solid rgba(124,58,237,.30); border-radius: 20px;
+    text-align: center; display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .lock-banner .lock-emoji { font-size: 40px; }
+  .lock-banner .lock-title { font-size: 21px; font-weight: 800; color: var(--text-primary); }
+  .lock-banner .lock-sub { font-size: 14px; color: var(--text-muted); line-height: 1.6; max-width: 440px; }
+  .lock-banner .lock-sub strong { color: var(--text-primary); }
+  .lock-cta-btn {
+    margin-top: 6px; padding: 13px 30px; border: none; border-radius: 999px; cursor: pointer;
+    background: var(--violet-600); color: #fff; font-size: 15px; font-weight: 700;
+    box-shadow: 0 4px 16px rgba(124,58,237,.4); transition: transform var(--tr-fast), background var(--tr-fast);
+  }
+  .lock-cta-btn:hover { transform: translateY(-2px); background: var(--violet-500); }
+  :root[data-theme="light"] .lock-banner { background: rgba(201,107,85,.10); border-color: rgba(201,107,85,.32); }
+  :root[data-theme="light"] .lock-cta-btn { background: #c96b55; box-shadow: 0 4px 16px rgba(201,107,85,.32); }
+  :root[data-theme="light"] .lock-cta-btn:hover { background: #a84e30; }
+
+  /* ── Teaser locked cards (mobile .teaser-*) ── */
+  .teaser-label { display: flex; align-items: center; gap: 7px; max-width: 760px; margin: 0 auto 10px; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+  .teaser-wrap { max-width: 760px; margin: 0 auto; opacity: .55; filter: blur(1px); pointer-events: none; user-select: none; }
+  .teaser-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .teaser-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; }
+  .teaser-card .tc-left { display: flex; align-items: center; gap: 12px; }
+  .teaser-card .tc-ico { width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.06); display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .teaser-card .tc-name { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+  .teaser-card .tc-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .teaser-card .tc-pct { font-size: 18px; font-weight: 800; color: var(--mint-400); }
+  @media (max-width: 880px) { .teaser-list { grid-template-columns: 1fr; } }
+  :root[data-theme="light"] .teaser-card { background: rgba(253,248,242,0.55); border-color: rgba(232,224,213,0.55); }
+  :root[data-theme="light"] .teaser-card .tc-ico { background: rgba(140,114,96,.12); }
+  :root[data-theme="light"] .teaser-card .tc-pct { color: #2f6f53; }
+</style>
+</head>
+<body class="app" data-page="majors" data-crumb="Major Recommendations">
+  <div class="main">
+    <div class="content fade-in">
+
+      <!-- ── Locked state: hiện khi đã trả lời < 20 câu ── -->
+      <div class="locked-state" id="lockedState">
+        <div class="lock-banner">
+          <div class="lock-emoji">🔒</div>
+          <div class="lock-title">Major Match Locked</div>
+          <div class="lock-sub" id="lockSubText">Complete more questions to unlock your best-fit majors.</div>
+          <button class="lock-cta-btn" id="lockCta">Start Quiz →</button>
+        </div>
+        <div class="teaser-label">🔮 Preview</div>
+        <div class="teaser-wrap">
+          <div class="teaser-list">
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">🤖</div><div><div class="tc-name">Artificial Intelligence</div><div class="tc-sub">Machine Learning &amp; Neural Networks</div></div></div>
+              <span class="tc-pct">??%</span>
+            </div>
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">📊</div><div><div class="tc-name">Data Science</div><div class="tc-sub">Analysis &amp; Insights</div></div></div>
+              <span class="tc-pct">??%</span>
+            </div>
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">💻</div><div><div class="tc-name">Software Engineering</div><div class="tc-sub">Development &amp; Architecture</div></div></div>
+              <span class="tc-pct">??%</span>
+            </div>
+            <div class="teaser-card">
+              <div class="tc-left"><div class="tc-ico">🔬</div><div><div class="tc-name">Biotechnology</div><div class="tc-sub">Life Sciences &amp; Research</div></div></div>
+              <span class="tc-pct">??%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Main content: hiện khi đã trả lời ≥ 20 câu ── -->
+      <div id="mainContent" style="display:none">
+        <span class="ai-chip">🔥 High Demand</span>
+        <h1 class="page-title mt-4">Majors Made <span class="ac">For You</span></h1>
+        <p class="page-sub">Discover majors tailored to your interests and strengths.</p>
+
+        <!-- Filter chips: fc-pct = điểm discipline (DISC_SCORES), màu theo mức match -->
+        <div class="filter-chips" id="filterChips">
+          <button class="fc active" data-disc="all">All</button>
+          <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span>Engineering</span><span class="fc-pct"></span></button>
+          <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span>Natural Sci</span><span class="fc-pct"></span></button>
+          <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span>Medical</span><span class="fc-pct"></span></button>
+          <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span>Agricultural</span><span class="fc-pct"></span></button>
+          <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span>Social Sci</span><span class="fc-pct"></span></button>
+          <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span>Humanities</span><span class="fc-pct"></span></button>
+        </div>
+
+        <!-- Hero card -->
+        <div class="hero-maj" id="heroCard" onclick="goToDetail()">
+          <div class="hm-disc-badge"><span class="hm-disc-dot" id="heroDiscDot"></span><span id="heroDiscName"></span></div>
+          <div class="hm-top">
+            <div class="hm-name" id="heroName"></div>
+            <div class="hm-pctwrap"><div class="hm-pct" id="heroPct"></div><div class="hm-lbl">Compatibility</div></div>
+          </div>
+          <div class="hm-tags" id="heroTags"></div>
+          <button class="hm-cta" type="button" onclick="event.stopPropagation();goToDetail()">View Career Paths →</button>
+        </div>
+
+        <!-- No results -->
+        <div id="no-results">
+          <div class="nr-icon">🔍</div>
+          <div class="nr-text">No majors found for this filter</div>
+        </div>
+
+        <!-- Accordion: Top Picks -->
+        <div class="acc-section" id="secTop">
+          <div class="acc-hdr open" onclick="toggleAcc('top')">
+            <div class="acc-title-wrap"><span class="acc-icon">🎯</span><span class="acc-title">Top Picks</span><span class="acc-count" id="cntTop">0</span></div>
+            <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </div>
+          <div class="acc-body open" id="bodyTop"><div class="acc-inner" id="listTop"></div></div>
+        </div>
+
+        <!-- Accordion: Also Fits -->
+        <div class="acc-section" id="secMid">
+          <div class="acc-hdr" onclick="toggleAcc('mid')">
+            <div class="acc-title-wrap"><span class="acc-icon">💡</span><span class="acc-title">Also Fits</span><span class="acc-count" id="cntMid">0</span></div>
+            <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </div>
+          <div class="acc-body" id="bodyMid"><div class="acc-inner" id="listMid"></div></div>
+        </div>
+
+        <!-- Accordion: Explore More -->
+        <div class="acc-section" id="secLow">
+          <div class="acc-hdr" onclick="toggleAcc('low')">
+            <div class="acc-title-wrap"><span class="acc-icon">🌐</span><span class="acc-title">Explore More</span><span class="acc-count" id="cntLow">0</span></div>
+            <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </div>
+          <div class="acc-body" id="bodyLow">
+            <div class="acc-inner" id="listLow"></div>
+            <div class="acc-hint">💬 Those majors are not your primary strengths, but you can still study them if you're passionate.</div>
+          </div>
+        </div>
+
+        <!-- Continue / Finish Quiz -->
+        <div class="continue-wrap" id="continueWrap">
+          <button class="continue-btn" id="continueBtn">Continue Quiz →</button>
+        </div>
+      </div><!-- /mainContent -->
+
+    </div>
+  </div>
+
+  <!-- Data thật từ app gốc — 50 majors + disciplines từ CSV (bản copy nội bộ desktop) -->
+  <script src="../../../shared/scripts/data/majors-data.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script>
+    /* ── DISC_CODE → display info (từ DISCIPLINES) ── */
+    var DISC = {};
+    Object.values(DISCIPLINES).forEach(function (d) {
+      DISC[d.code] = { name: d.short, fullName: d.title, color: d.color, icon: d.icon };
+    });
+
+    /* Điểm % từng discipline — đồng bộ discipline-match (mobile parity) */
+    var DISC_SCORES = JSON.parse(localStorage.getItem('discScores') || 'null')
+      || { kt:94, tn:89, yt:64, nn:62, xh:34, nv:32 };
+
+    /* MOCK_PCT — nguyên văn mobile recommendations */
+    var MOCK_PCT = {
+      'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
+      'Electrical engineering, Electronic engineering, Information engineering':94,
+      'Engineering':91,'Environmental biotechnology':79,'Environmental engineering':81,
+      'Industrial biotechnology':76,'Materials engineering':84,'Mechanical engineering':88,
+      'Medical engineering':82,'Nano-technology':87,'Other engineering and technologies':75,
+      'Biological sciences':86,'Chemical sciences':84,'Computer and information sciences':89,
+      'Earth and related Environmental sciences':79,'Mathematics':92,'Mathematics and Statistics':90,
+      'Physical sciences':87,
+      'Basic medicine':50,'Clinical medicine':56,'Health sciences':62,'Medical biotechnology':64,
+      'Nursing':47,'Other medical sciences':45,
+      'Agricultural biotechnology':62,'Agriculture, forestry and fishery':50,'Animal and dairy science':46,
+      'Behavioral Sciences':30,'Business':28,'Economics and business':34,'Education':20,
+      'Educational sciences':18,'Helms School of Government':24,'Law':16,'Political science':22,
+      'Psychology':32,'Sciences':19,'Social and economic geography':14,'Sociology':26,
+      'Arts and Sciences':26,'Communication and the Arts':22,'English':30,'History':20,
+      'History and archaeology':16,'Languages and literature':24,'Music':18,
+      'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
+    };
+
+    var MAJORS = MAJORS_DATA.map(function (m) {
+      return {
+        id: m.id, name: m.title, icon: m.icon, disc: m.discCode,
+        sub: m.desc.length > 64 ? m.desc.slice(0, 64).replace(/\s\S+$/, '') + '…' : m.desc,
+        pct: MOCK_PCT[m.title] != null ? MOCK_PCT[m.title] : 50,
+        tags: []
+      };
+    });
+
+    /* ── State ── */
+    var activeDisc = 'all';
+    var accState = { top: true, mid: false, low: false };
+    var CHEV = '<span class="ml-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></span>';
+    var $ = function (id) { return document.getElementById(id); };
+
+    /* ── Tiến độ quiz — kết hợp quizProgress (0–29) + quizMilestone (10/20/30) ── */
+    var rawProgress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
+    var rawMilestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    var answered = rawMilestone >= 30 ? 30 : Math.max(rawProgress, rawMilestone);
+
+    function pctClass(p) { return p >= 70 ? 'pct-high' : p >= 40 ? 'pct-mid' : 'pct-low'; }
+    function pctColor(p) {
+      if (p >= 70) return { color:'#06d6a0', rgb:'6,214,160' };
+      if (p >= 40) return { color:'#f59e0b', rgb:'245,158,11' };
+      return            { color:'#ef4444', rgb:'239,68,68' };
+    }
+
+    function renderCard(m) {
+      var d = DISC[m.disc];
+      return '<div class="ml-item" data-major="' + encodeURIComponent(m.name) + '" onclick="cardTap(this)">' +
+        '<div class="ml-left">' +
+          '<div class="ml-ico" style="background:color-mix(in srgb,' + d.color + ' 16%,transparent)">' + m.icon + '</div>' +
+          '<div class="ml-info">' +
+            '<div class="disc-badge" style="--bc:' + d.color + '"><span class="d-dot"></span><span class="d-name">' + d.name + '</span></div>' +
+            '<div class="ml-name">' + m.name + '</div>' +
+            '<div class="ml-sub">' + m.sub + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ml-right"><span class="ml-pct ' + pctClass(m.pct) + '">' + m.pct + '%</span>' + CHEV + '</div>' +
+      '</div>';
+    }
+
+    function cardTap(el) {
+      el.style.background = 'rgba(255,255,255,.08)';
+      setTimeout(function () { location.href = '../../major/detail/?major=' + el.dataset.major; }, 120);
+    }
+
+    function goToDetail() {
+      var m = $('heroCard').dataset.major;
+      if (m) location.href = '../../major/detail/?major=' + m;
+    }
+
+    function getFiltered() {
+      return activeDisc === 'all' ? MAJORS : MAJORS.filter(function (m) { return m.disc === activeDisc; });
+    }
+
+    function render() {
+      var filtered = getFiltered().slice().sort(function (a, b) { return b.pct - a.pct; });
+      var top = filtered.filter(function (m) { return m.pct >= 70; });
+      var mid = filtered.filter(function (m) { return m.pct >= 40 && m.pct < 70; });
+      var low = filtered.filter(function (m) { return m.pct < 40; });
+
+      var noResults = $('no-results'), heroCard = $('heroCard');
+      if (filtered.length === 0) {
+        noResults.style.display = 'flex';
+        heroCard.style.display = 'none';
+      } else {
+        noResults.style.display = 'none';
+        heroCard.style.display = '';
+        var hero = filtered[0], hd = DISC[hero.disc], pc = pctColor(hero.pct);
+        heroCard.dataset.major = encodeURIComponent(hero.name);
+        heroCard.style.setProperty('--disc-rgb', pc.rgb);
+        heroCard.style.setProperty('--disc-color', pc.color);
+        $('heroDiscDot').style.background = hd.color;
+        $('heroDiscName').textContent = hd.fullName;
+        $('heroName').textContent = hero.name;
+        $('heroPct').textContent = hero.pct + '%';
+        $('heroTags').innerHTML = (hero.tags || [])
+          .map(function (t, i) { return '<span class="hm-tag' + (i===1?' v':i===2?' n':'') + '">' + t + '</span>'; }).join('');
+      }
+
+      [['top', top], ['mid', mid], ['low', low]].forEach(function (pair) {
+        var tier = pair[0], list = pair[1], Key = tier.charAt(0).toUpperCase() + tier.slice(1);
+        $('list' + Key).innerHTML = list.length ? list.map(renderCard).join('') : '<div class="acc-empty">No majors here</div>';
+        $('cnt' + Key).textContent = list.length;
+        $('sec' + Key).style.display = list.length === 0 ? 'none' : '';
+      });
+    }
+
+    function toggleAcc(tier) {
+      accState[tier] = !accState[tier];
+      var Key = tier.charAt(0).toUpperCase() + tier.slice(1);
+      var body = $('body' + Key);
+      body.previousElementSibling.classList.toggle('open', accState[tier]);
+      body.classList.toggle('open', accState[tier]);
+    }
+
+    /* Inject discipline % vào filter chip + sort theo DISC_SCORES */
+    function updateChipPcts() {
+      var scroll = $('filterChips');
+      var allChip = scroll.querySelector('.fc[data-disc="all"]');
+      var chips = Array.prototype.slice.call(scroll.querySelectorAll('.fc[data-disc]:not([data-disc="all"])'));
+      chips.forEach(function (chip) {
+        var pct = DISC_SCORES[chip.dataset.disc] != null ? DISC_SCORES[chip.dataset.disc] : 0;
+        var el = chip.querySelector('.fc-pct');
+        if (el) { el.textContent = pct + '%'; el.style.color = pctColor(pct).color; }
+      });
+      var order = Object.keys(DISC_SCORES);
+      chips.sort(function (a, b) { return order.indexOf(a.dataset.disc) - order.indexOf(b.dataset.disc); });
+      chips.forEach(function (chip) { scroll.appendChild(chip); });
+      if (allChip) scroll.insertBefore(allChip, scroll.firstChild);
+    }
+
+    /* ── Locked (< 20 câu) vs Unlocked ── */
+    if (answered < 20) {
+      $('lockedState').classList.add('show');
+      var lockSub = $('lockSubText'), lockCta = $('lockCta');
+      if (answered < 10) {
+        var rem1 = 10 - answered;
+        lockSub.innerHTML = 'Complete <strong>' + rem1 + ' more question' + (rem1 !== 1 ? 's' : '') + '</strong> to unlock Discipline results first.';
+        lockCta.textContent = answered > 0 ? 'Continue Quiz →' : 'Start Quiz →';
+      } else {
+        var rem2 = 20 - answered;
+        lockSub.innerHTML = 'Complete <strong>' + rem2 + ' more question' + (rem2 !== 1 ? 's' : '') + '</strong> to unlock your best-fit majors.';
+        lockCta.textContent = 'Continue Quiz →';
+      }
+      lockCta.addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
+    } else {
+      $('mainContent').style.display = '';
+      render();
+      updateChipPcts();
+
+      $('filterChips').addEventListener('click', function (e) {
+        var chip = e.target.closest('.fc[data-disc]');
+        if (!chip) return;
+        document.querySelectorAll('.fc[data-disc]').forEach(function (c) { c.classList.remove('active'); });
+        chip.classList.add('active');
+        activeDisc = chip.dataset.disc;
+        /* reset accordion: top open, others closed */
+        ['top','mid','low'].forEach(function (t) {
+          var open = t === 'top', Key = t.charAt(0).toUpperCase() + t.slice(1), body = $('body' + Key);
+          accState[t] = open;
+          body.previousElementSibling.classList.toggle('open', open);
+          body.classList.toggle('open', open);
+        });
+        render();
+      });
+
+      /* Continue / Finish / ẩn theo tiến độ (mobile parity) */
+      var continueWrap = $('continueWrap'), continueBtn = $('continueBtn');
+      if (answered >= 30) {
+        continueWrap.style.display = 'none';
+      } else {
+        continueBtn.textContent = 'Finish Quiz →';
+        continueBtn.addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
+      }
+    }
+
+    /* Re-render khi đổi theme (giữ màu hero/pct đúng) */
+    new MutationObserver(function () { if (answered >= 20) render(); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  </script>
+</body>
+</html>

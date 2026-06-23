@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AI Loading Screen — BeyonDegrees.ai</title>
+  <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEYONDEGREES.AI — THEME SYSTEM v1.0
+   Dark (default) | Light | System
+   Violet → Brand Blue #1863DC migration applied in dark mode
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── DARK MODE: map violet palette → official brand blue ── */
+:root,
+:root[data-theme="dark"] {
+  --violet-950: #06091A;
+  --violet-900: #0A0F28;
+  --violet-800: #0F2060;
+  --violet-700: #1358C4;
+  --violet-600: #1863DC;
+  --violet-500: #0274BE;
+  --violet-400: #6BA3FF;
+  --violet-300: #93BBFF;
+  --violet-200: #B8D4FF;
+  --violet-100: #DCE9FF;
+  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.35);
+  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.20);
+  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.40);
+  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
+}
+
+/* Light-mode palette + component rules live in ./style.css
+   (Wave SVG wallpaper + Terracotta/Blue/Sage/Sand palette) */
+
+/* ── LIGHT MODE: body stays DARK (outside frame) ── */
+[data-theme="light"] body {
+  background: #06060f !important;
+  color: #f8fafc !important;
+}
+[data-theme="light"] .breadcrumb-item { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+
+/* Text element fallbacks (only when no specific component rule applies) */
+[data-theme="light"] .loading-body h1,
+[data-theme="light"] .loading-body h2,
+[data-theme="light"] .loading-body h3,
+[data-theme="light"] .loading-body h4 { color: #2c1f14; }
+
+/* ── TRANSITION: smooth theme switch ── */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.3s ease;
+}
+/* Disable transition for SVG / animations */
+svg *, canvas, video, img { transition: none !important; }
+
+</style>
+</head>
+<body>
+<div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="../../onboarding/home/" class="breadcrumb-item">Screens</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-item active">AI Loading</span>
+  </div>
+
+  <div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-item active">AI Loading Screen</span>
+  </div>
+
+  <div class="desktop-container">
+    <div class="device-frame">
+      <div class="device-notch"></div>
+
+      <div class="mobile-screen" id="mobileScreen">
+
+        <!-- ░░ AURORA BACKGROUND ░░ -->
+        <div class="aurora-bg" id="auroraBg">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="blob blob-3"></div>
+          <div class="blob blob-4"></div>
+          <div class="noise-overlay"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="status-icons">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+          </div>
+        </div>
+
+        <!-- ░░ STORY-BAR PROGRESS (Experiment A — TikTok style) ░░ -->
+        <div class="story-bar-wrap" id="storyBarWrap">
+          <div class="story-seg" id="seg0"></div>
+          <div class="story-seg" id="seg1"></div>
+          <div class="story-seg" id="seg2"></div>
+          <div class="story-seg" id="seg3"></div>
+          <div class="story-seg" id="seg4"></div>
+        </div>
+
+        <!-- ░░ MAIN LOADING CONTENT ░░ -->
+        <div class="loading-body">
+
+          <!-- Main Character Canvas -->
+          <div class="mc-wrap">
+            <canvas id="mcCanvas" width="320" height="320"></canvas>
+            <div id="youPulseRing" class="you-pulse-ring"></div>
+          </div>
+
+          <!-- Phase text -->
+          <div class="phase-wrap">
+            <p class="phase-label" id="phaseLabel" data-i18n="loading.analyzing">Analyzing</p>
+            <h2 class="phase-title" id="phaseTitle" data-i18n="loading.dna_title">Your Academic DNA</h2>
+          </div>
+          <p class="ai-status" id="aiStatus"></p>
+
+          <!-- Countdown + progress row -->
+          <div class="meta-row">
+            <div class="countdown-chip" id="countdownChip">
+              <span class="cd-dot"></span>
+              <span id="cdText">~25 seconds left</span>
+            </div>
+            <div class="questions-chip">
+              <span id="qCount">?</span>/<span id="qTotal">30</span> <span data-i18n="loading.questions_done">questions ✓</span>
+            </div>
+          </div>
+
+          <!-- DNA Discipline Bars -->
+          <div class="dna-card glass-card">
+            <p class="dna-heading" data-i18n="loading.dna_forming">Academic DNA forming</p>
+            <div class="dna-bars" id="dnaBars">
+              <div class="dna-row">
+                <span class="dna-icon">⚙️</span>
+                <span class="dna-name" data-i18n="loading.dna.engineering">Engineering &amp; Tech</span>
+                <div class="dna-track"><div class="dna-fill dna-kt" id="bar-kt"></div></div>
+                <span class="dna-pct" id="pct-kt">0%</span>
+              </div>
+              <div class="dna-row">
+                <span class="dna-icon">🩺</span>
+                <span class="dna-name" data-i18n="loading.dna.health">Health &amp; Medicine</span>
+                <div class="dna-track"><div class="dna-fill dna-yt" id="bar-yt"></div></div>
+                <span class="dna-pct" id="pct-yt">0%</span>
+              </div>
+              <div class="dna-row">
+                <span class="dna-icon">✏️</span>
+                <span class="dna-name" data-i18n="loading.dna.humanities">Humanities</span>
+                <div class="dna-track"><div class="dna-fill dna-nv" id="bar-nv"></div></div>
+                <span class="dna-pct" id="pct-nv">0%</span>
+              </div>
+              <div class="dna-row">
+                <span class="dna-icon">🌾</span>
+                <span class="dna-name" data-i18n="loading.dna.agriculture">Agriculture</span>
+                <div class="dna-track"><div class="dna-fill dna-nn" id="bar-nn"></div></div>
+                <span class="dna-pct" id="pct-nn">0%</span>
+              </div>
+              <div class="dna-row">
+                <span class="dna-icon">🌐</span>
+                <span class="dna-name" data-i18n="loading.dna.social">Social Sciences</span>
+                <div class="dna-track"><div class="dna-fill dna-xh" id="bar-xh"></div></div>
+                <span class="dna-pct" id="pct-xh">0%</span>
+              </div>
+              <div class="dna-row">
+                <span class="dna-icon">🧬</span>
+                <span class="dna-name" data-i18n="loading.dna.natural">Natural Sciences</span>
+                <div class="dna-track"><div class="dna-fill dna-tn" id="bar-tn"></div></div>
+                <span class="dna-pct" id="pct-tn">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fun Fact Carousel -->
+          <div class="funfact-wrap glass-card" id="funfactWrap">
+            <span class="ff-badge" data-i18n="loading.did_you_know">💡 Did you know?</span>
+            <p class="ff-text" id="ffText">73% of students switch majors after year one due to a poor initial choice.</p>
+            <div class="ff-dots" id="ffDots">
+              <span class="ff-dot active"></span>
+              <span class="ff-dot"></span>
+              <span class="ff-dot"></span>
+              <span class="ff-dot"></span>
+              <span class="ff-dot"></span>
+              <span class="ff-dot"></span>
+            </div>
+          </div>
+
+        </div><!-- /loading-body -->
+
+        <!-- ░░ MILESTONE TOAST ░░ -->
+        <div class="milestone-toast" id="milestoneToast">
+          <span class="ms-emoji" id="msEmoji">🔥</span>
+          <div>
+            <p class="ms-title" id="msTitle" data-i18n="loading.done">Analysis complete!</p>
+            <p class="ms-sub"   id="msSub" data-i18n="loading.compiling">Compiling your results...</p>
+          </div>
+        </div>
+
+        <!-- ░░ READY OVERLAY ░░ -->
+        <div class="ready-overlay" id="readyOverlay">
+          <div class="ready-content">
+            <div class="ready-emoji">🎉</div>
+            <h2 class="ready-title" data-i18n="loading.ready">Results are ready!</h2>
+            <p class="ready-sub" id="readySub">AI has analyzed <span id="readyCount">?</span> of your answers</p>
+            <a href="#" id="readyBtn" class="btn btn-primary ready-btn" data-i18n="quiz.see_result" onclick="goToResult();return false;">
+              See my results →
+            </a>
+            <button class="btn-ghost replay-btn" id="replayBtn" data-i18n="loading.replay_demo">↺ Replay demo</button>
+          </div>
+        </div>
+
+        <!-- Tab Bar -->
+        <nav class="float-tab-bar" id="floatTabBar">
+          <a href="../../onboarding/home/" class="tab-item" data-tab="about">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="8" r="3.5"/>
+                <path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
+                <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
+          </a>
+          <a href="../../discipline/match/" id="quizTabLink" class="tab-item" data-tab="disciplines">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+          </a>
+          <a href="../../major/recommendations/" class="tab-item" data-tab="majors">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
+          </a>
+          <a href="../../university/matches/" class="tab-item" data-tab="universities">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
+          </a>
+          <a href="../../profile/overview/" class="tab-item" data-tab="account">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="7.5" r="3.5"/>
+                <path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/>
+                <circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
+                <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="tab-label"></span>
+          </a>
+        </nav>
+
+      </div><!-- /mobile-screen -->
+    </div><!-- /device-frame -->
+  </div><!-- /desktop-container -->
+
+  
+  
+  
+<script>
+/* utils */
+/* BeyonDegrees.ai — Shared Utilities */
+
+// Toast Notification System
+const Toast = {
+  show(message, duration = 2000, type = 'info') {
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  },
+  
+  success(message, duration = 2000) {
+    this.show(message, duration, 'success');
+  },
+  
+  error(message, duration = 3000) {
+    this.show(message, duration, 'error');
+  },
+  
+  warning(message, duration = 2500) {
+    this.show(message, duration, 'warning');
+  }
+};
+
+// Clipboard Utilities
+const Clipboard = {
+  async copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      Toast.success(`Copied: ${text}`);
+      return true;
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      Toast.error('Failed to copy');
+      return false;
+    }
+  },
+  
+  async paste() {
+    try {
+      const text = await navigator.clipboard.readText();
+      return text;
+    } catch (err) {
+      console.error('Failed to paste:', err);
+      Toast.error('Failed to paste');
+      return null;
+    }
+  }
+};
+
+// Format Utilities
+const Format = {
+  percent(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? '0%' : `${Math.round(num)}%`;
+  },
+  
+  capitalize(str) {
+    if (typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  },
+  
+  pluralize(count, singular, plural) {
+    return count === 1 ? singular : plural;
+  },
+  
+  formatNumber(num) {
+    return new Intl.NumberFormat('en-US').format(num);
+  },
+  
+  formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
+  },
+  
+  formatTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(date));
+  },
+  
+  truncate(str, length = 50) {
+    if (typeof str !== 'string') return '';
+    return str.length > length ? str.substring(0, length) + '...' : str;
+  }
+};
+
+// DOM Utilities
+const DOM = {
+  query(selector) {
+    return document.querySelector(selector);
+  },
+  
+  queryAll(selector) {
+    return document.querySelectorAll(selector);
+  },
+  
+  create(tag, attributes = {}, content = '') {
+    const el = document.createElement(tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (key === 'className') {
+        el.className = value;
+      } else if (key === 'innerHTML') {
+        el.innerHTML = value;
+      } else if (key.startsWith('on')) {
+        el.addEventListener(key.slice(2).toLowerCase(), value);
+      } else {
+        el.setAttribute(key, value);
+      }
+    });
+    if (content) el.textContent = content;
+    return el;
+  },
+  
+  addClass(el, className) {
+    if (el) el.classList.add(className);
+    return el;
+  },
+  
+  removeClass(el, className) {
+    if (el) el.classList.remove(className);
+    return el;
+  },
+  
+  toggleClass(el, className) {
+    if (el) el.classList.toggle(className);
+    return el;
+  },
+  
+  hasClass(el, className) {
+    return el && el.classList.contains(className);
+  },
+  
+  setStyle(el, styles) {
+    if (el) Object.assign(el.style, styles);
+    return el;
+  }
+};
+
+// Event Utilities
+const Events = {
+  debounce(func, delay = 300) {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  },
+  
+  throttle(func, delay = 300) {
+    let lastCall = 0;
+    return function(...args) {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(this, args);
+      }
+    };
+  },
+  
+  on(element, event, handler) {
+    element && element.addEventListener(event, handler);
+  },
+  
+  off(element, event, handler) {
+    element && element.removeEventListener(event, handler);
+  },
+  
+  once(element, event, handler) {
+    const wrapper = (...args) => {
+      handler.apply(this, args);
+      element && element.removeEventListener(event, wrapper);
+    };
+    element && element.addEventListener(event, wrapper);
+  }
+};
+
+// Storage Utilities
+const Storage = {
+  setItem(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  getItem(key, defaultValue = null) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return defaultValue;
+    }
+  },
+  
+  removeItem(key) {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  clear() {
+    try {
+      localStorage.clear();
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  }
+};
+
+// Export as global namespace
+window.BD = {
+  Toast,
+  Clipboard,
+  Format,
+  DOM,
+  Events,
+  Storage
+};
+
+/* navigation */
+/* BeyonDegrees.ai — Navigation & Page Management */
+
+// Navigation Manager
+const Navigation = {
+  init() {
+    this.initBottomNav();
+    this.initSidebarNav();
+    this.initActiveState();
+    this.initScrollSpy();
+  },
+  
+  initBottomNav() {
+    const items = document.querySelectorAll('.bottom-nav-item');
+    items.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = item.getAttribute('href') || item.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initSidebarNav() {
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href') || link.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initActiveState() {
+    const currentPath = window.location.pathname;
+    
+    // Bottom nav items
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+      const href = item.getAttribute('href') || item.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Sidebar items
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      const href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  },
+  
+  initScrollSpy() {
+    const sections = document.querySelectorAll('[data-section]');
+    if (sections.length === 0) return;
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.getAttribute('data-section');
+          const navItem = document.querySelector(`[data-nav="${sectionId}"]`);
+          if (navItem) {
+            document.querySelectorAll('[data-nav]').forEach(item => {
+              item.classList.remove('active');
+            });
+            navItem.classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
+  },
+  
+  setActive(selector) {
+    document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
+  },
+  
+  goTo(path) {
+    window.location.href = path;
+  }
+};
+
+// Page transition utilities
+const PageTransition = {
+  fadeOut(duration = 300) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  },
+  
+  fadeIn(duration = 300) {
+    document.body.style.opacity = '1';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  Navigation.init();
+  document.body.style.opacity = '1';
+});
+
+// Global navigation export
+window.Nav = Navigation;
+window.PageTransition = PageTransition;
+
+/* screen */
+/* =====================================================
+   AI LOADING SCREEN ENGINE — BeyonDegrees.ai
+   25-second timeline filling the OpenAI wait with
+   DNA analysis, milestones, and fun facts.
+   ===================================================== */
+
+(function () {
+  'use strict';
+
+  const t = function(k) {
+    var lang = 'en';
+    try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
+    if (window.BDi18n) return window.BDi18n.t.call({ _lang: lang }, k);
+    return k;
+  };
+
+  /* Convert Western digits to locale numerals for hi/ar */
+  const _HI = ['०','१','२','३','४','५','६','७','८','९'];
+  const _AR = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  window.toLocaleNum = function(n) {
+    var lang = 'en';
+    try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
+    var map = lang === 'hi' ? _HI : lang === 'ar' ? _AR : null;
+    if (!map) return String(n);
+    return String(n).replace(/[0-9]/g, d => map[d]);
+  };
+  function toLocaleNum(n) { return window.toLocaleNum(n); }
+  function toLocalePct(n) { return toLocaleNum(n) + '%'; }
+
+  /* ── Config ─────────────────────────────────────── */
+  const TOTAL_DURATION = 25; // seconds
+
+  const PHASES = [
+    { label: 'loading.phase.analyzing',   title: 'loading.phase.title.dna' },
+    { label: 'loading.phase.evaluating',  title: 'loading.phase.title.strengths' },
+    { label: 'loading.phase.comparing',   title: 'loading.phase.title.majors' },
+    { label: 'loading.phase.calculating', title: 'loading.phase.title.compat' },
+    { label: 'loading.phase.finalizing',  title: 'loading.phase.title.results' },
+  ];
+
+  // DNA bar final values (%), staggered reveal start (seconds)
+  const DNA_SCHEDULE = [
+    { disc: 'kt', target: 78, start: 2.0 },
+    { disc: 'yt', target: 45, start: 4.5 },
+    { disc: 'nv', target: 62, start: 6.0 },
+    { disc: 'nn', target: 31, start: 8.5 },
+    { disc: 'xh', target: 55, start: 10.0 },
+    { disc: 'tn', target: 68, start: 12.5 },
+  ];
+
+  /* Fun facts — built lazily using t() so language is resolved at call-time */
+  function getFunFacts() {
+    return [
+      t('loading.ff.0'),
+      t('loading.ff.1'),
+      t('loading.ff.2'),
+      t('loading.ff.3'),
+      t('loading.ff.4'),
+      t('loading.ff.5'),
+    ];
+  }
+  const FUN_FACTS_LEN = 6; /* used for dot count */
+
+  const MILESTONES = [
+    { at: 5,  emoji: '🧬', titleKey: 'loading.milestone1.title', subKey: 'loading.milestone1.sub' },
+    { at: 12, emoji: '⚡', titleKey: 'loading.milestone2.title', subKey: 'loading.milestone2.sub' },
+    { at: 20, emoji: '🎯', titleKey: 'loading.milestone3.title', subKey: 'loading.milestone3.sub' },
+  ];
+
+  /* ── State ──────────────────────────────────────── */
+  let startTime      = null;
+  let rafId          = null;
+  let currentPhase   = -1;
+  let currentFact    = 0;
+  let factIntervalId = null;
+  let dnaFired       = {};   // track which DNA bars have started
+
+  /* ── Utils ──────────────────────────────────────── */
+  function $(id) { return document.getElementById(id); }
+
+  /* ── Entry Point ────────────────────────────────── */
+  function init() {
+    startTime    = Date.now();
+    currentPhase = -1;
+    dnaFired     = {};
+
+    // Reset story bar
+    for (let i = 0; i < 5; i++) {
+      const seg = $('seg' + i);
+      if (!seg) continue;
+      seg.className = 'story-seg';
+      const existing = seg.querySelector('.seg-fill');
+      if (!existing) {
+        const fill = document.createElement('div');
+        fill.className = 'seg-fill';
+        seg.appendChild(fill);
+      } else {
+        existing.style.width = '0%';
+      }
+    }
+
+    // Reset DNA bars
+    DNA_SCHEDULE.forEach(({ disc }) => {
+      const bar = $('bar-' + disc);
+      const pct = $('pct-' + disc);
+      if (bar) bar.style.width = '0%';
+      if (pct) pct.textContent = '0%';
+    });
+
+    // Reset phase text (no animation on reset)
+    const label = $('phaseLabel');
+    const title = $('phaseTitle');
+    if (label) { label.className = 'phase-label'; label.textContent = t(PHASES[0].label); }
+    if (title) { title.className = 'phase-title'; title.textContent = t(PHASES[0].title); }
+
+    // Reset countdown
+    const cdText = $('cdText');
+    if (cdText) cdText.textContent = t('loading.countdown').replace('{n}', toLocaleNum(TOTAL_DURATION));
+
+    // Reset milestone toast
+    const toast = $('milestoneToast');
+    if (toast) toast.classList.remove('visible');
+
+    // Reset ready overlay
+    const overlay = $('readyOverlay');
+    if (overlay) overlay.classList.remove('visible');
+
+    // Fun facts
+    if (factIntervalId) clearInterval(factIntervalId);
+    currentFact = 0;
+    renderFunFact(0, false); // no fade on first render
+    factIntervalId = setInterval(() => {
+      currentFact = (currentFact + 1) % FUN_FACTS_LEN;
+      renderFunFact(currentFact, true);
+    }, 4400);
+
+    // Schedule milestones
+    MILESTONES.forEach(m => {
+      setTimeout(() => showMilestone(m), m.at * 1000);
+    });
+
+    // Kick off RAF loop
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(tick);
+  }
+
+  /* ── Main tick loop ─────────────────────────────── */
+  function tick() {
+    const elapsed   = (Date.now() - startTime) / 1000;
+    const remaining = Math.max(0, TOTAL_DURATION - elapsed);
+
+    // --- Countdown ---
+    const cdText = $('cdText');
+    if (cdText) {
+      const secs = Math.ceil(remaining);
+      cdText.textContent = secs > 0 ? t('loading.countdown').replace('{n}', toLocaleNum(secs)) : t('loading.finalizing_text');
+    }
+
+    // --- Phase transitions (every 5s) ---
+    const newPhase = Math.min(4, Math.floor(elapsed / 5));
+    if (newPhase !== currentPhase) {
+      if (currentPhase >= 0) {
+        // Mark completed segment as fully done
+        sealSegment(currentPhase);
+      }
+      currentPhase = newPhase;
+      transitionPhase(newPhase);
+    }
+
+    // --- Live fill for current segment ---
+    if (currentPhase >= 0 && currentPhase < 5) {
+      const phaseElapsed  = elapsed - currentPhase * 5;
+      const phaseFraction = Math.min(1, phaseElapsed / 5);
+      setSegmentFill(currentPhase, phaseFraction);
+    }
+
+    // --- DNA bars (staggered start) ---
+    DNA_SCHEDULE.forEach(({ disc, target, start }) => {
+      if (!dnaFired[disc] && elapsed >= start) {
+        dnaFired[disc] = true;
+        animateDNABar(disc, target);
+      }
+    });
+
+    // --- Continue or finish ---
+    if (elapsed < TOTAL_DURATION) {
+      rafId = requestAnimationFrame(tick);
+    } else {
+      sealAllSegments();
+      setTimeout(showReady, 600);
+    }
+  }
+
+  /* ── Story bar helpers ──────────────────────────── */
+  function setSegmentFill(segIndex, fraction) {
+    const seg = $('seg' + segIndex);
+    if (!seg) return;
+    const fill = seg.querySelector('.seg-fill');
+    if (fill) fill.style.width = (fraction * 100).toFixed(1) + '%';
+  }
+
+  function sealSegment(segIndex) {
+    const seg = $('seg' + segIndex);
+    if (!seg) return;
+    seg.classList.add('done');
+    const fill = seg.querySelector('.seg-fill');
+    if (fill) fill.style.width = '100%';
+  }
+
+  function sealAllSegments() {
+    for (let i = 0; i < 5; i++) sealSegment(i);
+  }
+
+  /* ── Phase text transition ──────────────────────── */
+  function transitionPhase(phase) {
+    const p     = PHASES[phase];
+    if (!p) return;
+    const label = $('phaseLabel');
+    const title = $('phaseTitle');
+    if (!label || !title) return;
+
+    // Fade out
+    label.classList.add('out');
+    title.classList.add('out');
+
+    setTimeout(() => {
+      label.textContent = t(p.label);
+      title.textContent = t(p.title);
+      label.className   = 'phase-label in';
+      title.className   = 'phase-title in';
+
+      // Remove animation class after it plays
+      setTimeout(() => {
+        label.className = 'phase-label';
+        title.className = 'phase-title';
+      }, 350);
+    }, 230);
+  }
+
+  /* ── DNA bar animation ──────────────────────────── */
+  function animateDNABar(disc, target) {
+    const bar      = $('bar-' + disc);
+    const pct      = $('pct-' + disc);
+    if (!bar || !pct) return;
+
+    // Visual: scan shimmer on active row
+    const row = bar.parentNode && bar.parentNode.parentNode;
+    if (row && row.classList) {
+      row.classList.add('scanning');
+      setTimeout(function() { row.classList.remove('scanning'); }, 1200);
+    }
+
+    // Visual: YOU pulse ring — data flowing into YOU
+    const ring = $('youPulseRing');
+    if (ring) {
+      ring.classList.remove('pulsing');
+      void ring.offsetWidth; // force reflow to restart animation
+      ring.classList.add('pulsing');
+    }
+
+    const ANIM_MS  = 1400;
+    const tStart   = Date.now();
+
+    function step() {
+      const t      = Math.min(1, (Date.now() - tStart) / ANIM_MS);
+      const eased  = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const value  = Math.round(eased * target);
+      bar.style.width    = value + '%';
+      pct.textContent    = toLocalePct(value);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ── Fun Facts ──────────────────────────────────── */
+  function renderFunFact(index, animated) {
+    const text = $('ffText');
+    const dots = document.querySelectorAll('.ff-dot');
+    if (!text) return;
+    const facts = getFunFacts();
+    const fact  = facts[index] || facts[0];
+
+    if (!animated) {
+      text.textContent = fact;
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+      return;
+    }
+
+    text.classList.add('fading');
+    setTimeout(() => {
+      text.textContent = fact;
+      text.classList.remove('fading');
+      dots.forEach((d, i) => d.classList.toggle('active', i === index));
+    }, 290);
+  }
+
+  /* ── Milestone Toast ────────────────────────────── */
+  function showMilestone(m) {
+    const toast = $('milestoneToast');
+    const emoji = $('msEmoji');
+    const mTitle = $('msTitle');
+    const mSub   = $('msSub');
+    if (!toast) return;
+
+    if (emoji)  emoji.textContent  = m.emoji;
+    if (mTitle) mTitle.textContent = t(m.titleKey);
+    if (mSub)   mSub.textContent   = t(m.subKey);
+
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 3200);
+  }
+
+  /* ── Ready Overlay ──────────────────────────────── */
+  function showReady() {
+    if (factIntervalId) { clearInterval(factIntervalId); factIntervalId = null; }
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+
+    /* Translate ready-sub with readyCount placeholder */
+    const subEl = $('readySub');
+    const cntEl = $('readyCount');
+    if (subEl && window.BDi18n) {
+      var lang = 'en';
+      try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
+      var n = cntEl ? cntEl.textContent : '?';
+      var tpl = window.BDi18n.t.call({_lang: lang}, 'quiz.ready_sub');
+      subEl.innerHTML = tpl.replace('{n}', '<span id="readyCount">' + n + '</span>');
+    }
+
+    const overlay = $('readyOverlay');
+    if (overlay) overlay.classList.add('visible');
+  }
+
+  /* ── Replay Button ──────────────────────────────── */
+  function bindReplay() {
+    const btn = $('replayBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const overlay = $('readyOverlay');
+      if (overlay) overlay.classList.remove('visible');
+      setTimeout(init, 450);
+    });
+  }
+
+  /* ── Bootstrap ──────────────────────────────────── */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { bindReplay(); init(); });
+  } else {
+    bindReplay();
+    init();
+  }
+
+})();
+
+/* ── STAGE-AWARE NAVIGATION ── */
+const _urlParams = new URLSearchParams(window.location.search);
+const _STAGE = parseInt(_urlParams.get('stage') || '1', 10);
+const RESULT_MAP = {
+  1: '../../discipline/match/',
+  2: '../../major/recommendations/',
+  3: '../../university/matches/'
+};
+const STAGE_Q_COUNT = { 1: 10, 2: 20, 3: 30 };
+function goToResult() {
+  window.location.href = RESULT_MAP[_STAGE] || '../../discipline/match/';
+}
+// Auto-update counts and btn href based on stage
+document.addEventListener('DOMContentLoaded', () => {
+  const qDone = STAGE_Q_COUNT[_STAGE] || 30;
+
+  // ── Persist quiz progress so result screens can gate content ──
+  try {
+    const prev = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    if (qDone > prev) localStorage.setItem('quizProgress', qDone);
+    // quizMilestone chỉ được set khi hoàn thành hẳn 1 batch (10/20/30 câu)
+    // home screen dùng milestone này để quyết định state hiển thị
+    const prevM = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    if (qDone > prevM) localStorage.setItem('quizMilestone', String(qDone));
+  } catch(e) {}
+
+  const elCount  = document.getElementById('qCount');
+  const elTotal  = document.getElementById('qTotal');
+  const elReady  = document.getElementById('readyCount');
+  const _ln = window.toLocaleNum || (n => String(n));
+  if (elCount) elCount.textContent = _ln(qDone);
+  if (elTotal) elTotal.textContent = _ln(30);
+  if (elReady) elReady.textContent = _ln(qDone);
+  const btn = document.getElementById('readyBtn');
+  if (btn) btn.href = RESULT_MAP[_STAGE] || '../../discipline/match/';
+});
+
+</script>
+
+<script>
+(function() {
+  function bdApplyTheme(resolved) {
+    document.documentElement.setAttribute('data-theme', resolved);
+    // Update toggle bg for light theme
+    var toggle = document.getElementById('bd-theme-toggle');
+    if (toggle) {
+      toggle.style.background = (resolved === 'light')
+        ? 'rgba(255,255,255,0.92)'
+        : 'rgba(10,10,26,0.85)';
+      toggle.style.borderColor = (resolved === 'light')
+        ? 'rgba(24,99,220,0.25)'
+        : 'rgba(24,99,220,0.35)';
+    }
+  }
+
+  function bdSetTheme(pref) {
+    var resolved = pref;
+    if (pref === 'system') {
+      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    bdApplyTheme(resolved);
+    document.documentElement.setAttribute('data-theme-pref', pref);
+    try { localStorage.setItem('bd-theme', pref); } catch(e) {}
+    // Update button active states
+    var btns = { system:'bdt-system', light:'bdt-light', dark:'bdt-dark' };
+    Object.keys(btns).forEach(function(name) {
+      var el = document.getElementById(btns[name]);
+      if (!el) return;
+      if (name === pref) {
+        el.style.background = 'linear-gradient(135deg, var(--violet-600), var(--violet-500))';
+        el.style.color = '#fff';
+        el.style.boxShadow = '0 4px 12px rgba(24,99,220,0.4)';
+      } else {
+        el.style.background = 'transparent';
+        el.style.color = (resolved === 'light') ? 'rgba(26,26,46,0.55)' : 'rgba(255,255,255,0.5)';
+        el.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  window.bdSetTheme = bdSetTheme;
+
+  // Init on load
+  var saved = 'dark';
+  try { saved = localStorage.getItem('bd-theme') || 'dark'; } catch(e) {}
+  bdSetTheme(saved);
+
+  // React to OS theme changes
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+    var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
+    if (pref === 'system') bdSetTheme('system');
+  });
+})();
+</script>
+
+<!-- ── Nhân Vật Chính — Main Character Animation ── -->
+<script>
+(function () {
+  /* "YOU" word — translated per active language */
+  const YOU_WORDS = { en:'YOU', vi:'BẠN', hi:'आप', fr:'TOI', ar:'أنت' };
+  function getYouWord() {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return YOU_WORDS[lang] || 'YOU';
+  }
+
+  const COLORS       = ['#8b5cf6','#06d6a0','#60a5fa','#fbbf24','#c084fc','#22d3ee'];
+  const COLORS_LIGHT = ['#7c3aed','#059669','#2563eb','#d97706','#db2777','#0891b2'];
+  const ICONS        = ['💻','⚕️','📖','🌱','🌍','🔬'];
+  /* Discipline abbreviations — language-dependent */
+  const LABELS_MAP = {
+    en: ['KN','HE','PR','LA','SO','NA'],
+    vi: ['KT','YT','NV','NN','XH','TN'],
+    hi: ['ज्ञा','स्वा','व्यक्','भा','सा','प्र'],
+    fr: ['CO','SA','PE','LA','SO','NA'],
+    ar: ['مع','صح','شخ','لغ','اج','طب']
+  };
+  function getLabels() {
+    var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) { lang = 'en'; }
+    return LABELS_MAP[lang] || LABELS_MAP.en;
+  }
+  const LABELS = getLabels();
+  const TGT_A  = COLORS.map((_,i) => (i*60-90)*Math.PI/180);
+  function lightenHex(hex, amt) {
+    const n = parseInt(hex.slice(1),16);
+    const r = Math.min(255, ((n>>16)&255) + Math.round(255*amt));
+    const g = Math.min(255, ((n>>8)&255)  + Math.round(255*amt));
+    const b = Math.min(255, (n&255)       + Math.round(255*amt));
+    return `rgb(${r},${g},${b})`;
+  }
+  function darkenHex(hex, amt) {
+    const n = parseInt(hex.slice(1),16);
+    const r = Math.max(0, ((n>>16)&255) - Math.round(255*amt));
+    const g = Math.max(0, ((n>>8)&255)  - Math.round(255*amt));
+    const b = Math.max(0, (n&255)       - Math.round(255*amt));
+    return `rgb(${r},${g},${b})`;
+  }
+  const ez  = p => p<.5 ? 2*p*p : 1-(-2*p+2)**2/2;
+  const eo3 = p => 1-(1-p)**3;
+  const clp = (v,a,b) => Math.max(a,Math.min(b,v));
+  const rng = (t,a,b) => clp((t-a)/(b-a),0,1);
+  const mix = (a,b,t) => a+(b-a)*t;
+
+  const tokens = LABELS.map((label,i) => ({
+    label, color: COLORS[i],
+    chaos0: Math.random()*Math.PI*2,
+    cDist:  22+Math.random()*32,
+    cSpeed: (0.45+Math.random()*0.55)*(Math.random()<.5?1:-1),
+  }));
+
+  const cvs = document.getElementById('mcCanvas');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const W = 160, H = 160, cx = W/2, cy = H/2, ORBIT_R = 46, CYCLE = 6000;
+  ctx.scale(2, 2);
+  let t0 = null;
+
+  function frame(now) {
+    if (!t0) t0 = now;
+    const abs = (now-t0)/1000;
+    const cyc = (now-t0) % CYCLE;
+    ctx.clearRect(0,0,W,H);
+
+    const settleP   = ez(rng(cyc, CYCLE*.15, CYCLE*.42));
+    const convergeP = eo3(rng(cyc, CYCLE*.42, CYCLE*.57));
+    const youP      = eo3(rng(cyc, CYCLE*.57, CYCLE*.76));
+    const youFadeP  = rng(cyc, CYCLE*.76, CYCLE*.85);
+    const scatterP  = eo3(rng(cyc, CYCLE*.83, CYCLE*.95));
+    const dimP      = rng(cyc, CYCLE*.95, CYCLE);
+
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+    // Icon fades in when dots settle into orbit, fades out as they converge
+    const iconAlpha = clp((settleP - 0.5) * 2, 0, 1) * clp(1 - convergeP * 2.5, 0, 1) * (scatterP > 0 ? 0 : 1);
+
+    tokens.forEach((tk,i) => {
+      const chaosA   = tk.chaos0 + tk.cSpeed*abs;
+      const settledA = TGT_A[i];
+      let da = settledA - chaosA;
+      da = ((da+Math.PI*3)%(Math.PI*2)) - Math.PI;
+      const displayA = scatterP>0 ? mix(settledA,chaosA,scatterP) : mix(chaosA,chaosA+da,settleP);
+      const displayDist = scatterP>0
+        ? mix(0,tk.cDist,scatterP)
+        : mix(mix(tk.cDist,ORBIT_R,settleP),0,convergeP);
+      const x = cx + displayDist*Math.cos(displayA);
+      const y = cy + displayDist*Math.sin(displayA);
+      const alpha = (scatterP>0 ? scatterP : (1-convergeP))*(1-dimP*.6);
+      const col = isLight ? COLORS_LIGHT[i] : COLORS[i];
+
+      if (isLight) {
+        ctx.save();
+        // Soft glow halo
+        // Soft color glow behind chip
+        ctx.globalAlpha = Math.max(0, alpha) * 0.15;
+        const glow = ctx.createRadialGradient(x,y,5,x,y,26);
+        glow.addColorStop(0, col);
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+        // Frosted glass white chip
+        ctx.globalAlpha = Math.max(0, alpha) * 0.92;
+        ctx.fillStyle = 'rgba(255,255,255,0.95)';
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.fill();
+        // Colored border ring
+        ctx.globalAlpha = Math.max(0, alpha) * 0.55;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.stroke();
+        // Icon always visible, full size
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(ICONS[i], x, y + 1);
+        ctx.restore();
+      } else {
+        ctx.save();
+        // Colored glow halo
+        ctx.globalAlpha = alpha * 0.22;
+        const glowD = ctx.createRadialGradient(x,y,5,x,y,26);
+        glowD.addColorStop(0, col);
+        glowD.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glowD;
+        ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+        // Dark glass chip — neutral background so icon always pops
+        ctx.globalAlpha = Math.max(0, alpha) * 0.88;
+        ctx.fillStyle = 'rgba(12,10,30,0.90)';
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.fill();
+        // Colored border ring
+        ctx.globalAlpha = Math.max(0, alpha) * 0.75;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x,y,17,0,Math.PI*2); ctx.stroke();
+        // Icon — always visible on dark neutral background
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.font = "14px sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(ICONS[i], x, y + 1);
+        ctx.restore();
+      }
+    });
+
+    // Dashed orbit ring
+    if (settleP>.15 && convergeP<.8) {
+      ctx.save();
+      ctx.strokeStyle = `rgba(167,139,250,${Math.min(settleP,1-convergeP)*.22})`;
+      ctx.lineWidth = .5; ctx.setLineDash([3,6]);
+      ctx.beginPath(); ctx.arc(cx,cy,ORBIT_R,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
+
+    // YOU phase — glowing sphere orb
+    const ya = eo3(youP)*Math.max(0,1-youFadeP);
+    if (ya>.01) {
+      const rr = eo3(youP);
+      const R  = 38*rr;
+      ctx.save();
+      ctx.globalAlpha = ya;
+
+      if (isLight) {
+        // Light mode: purple sphere — keep purple per spec, softer halo (-13%)
+        const halo = ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*1.6);
+        halo.addColorStop(0, `rgba(205,164,255,${.19*ya})`);
+        halo.addColorStop(1, 'rgba(124,58,237,0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath(); ctx.arc(cx,cy,R*1.6,0,Math.PI*2); ctx.fill();
+
+        const sphere = ctx.createRadialGradient(cx-R*.28,cy-R*.28,0, cx,cy,R);
+        sphere.addColorStop(0,   `rgba(220,210,255,${.97*ya})`);
+        sphere.addColorStop(0.38,`rgba(205,164,255,${.85*ya})`);
+        sphere.addColorStop(1,   `rgba(30,10,80,${.70*ya})`);
+        ctx.fillStyle = sphere;
+        ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+      } else {
+        // Dark mode: deep cosmic purple, softer halo (-13%)
+        const halo = ctx.createRadialGradient(cx,cy,R*.6,cx,cy,R*1.7);
+        halo.addColorStop(0, `rgba(139,92,246,${.26*ya})`);
+        halo.addColorStop(1, 'rgba(139,92,246,0)');
+        ctx.fillStyle = halo;
+        ctx.beginPath(); ctx.arc(cx,cy,R*1.7,0,Math.PI*2); ctx.fill();
+
+        const sphere = ctx.createRadialGradient(cx-R*.28,cy-R*.28,0, cx,cy,R);
+        sphere.addColorStop(0,   `rgba(220,210,255,${.97*ya})`);
+        sphere.addColorStop(0.38,`rgba(124,58,237,${.88*ya})`);
+        sphere.addColorStop(1,   `rgba(20,5,50,${.75*ya})`);
+        ctx.fillStyle = sphere;
+        ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+      }
+
+      // Specular highlight (shared)
+      const spec = ctx.createRadialGradient(cx-R*.52,cy-R*.50,0, cx-R*.35,cy-R*.35,R*.55);
+      spec.addColorStop(0, `rgba(255,255,255,${.42*ya})`);
+      spec.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = spec;
+      ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill();
+
+      // YOU word — localized
+      ctx.shadowColor = 'rgba(0,0,0,0.85)';
+      ctx.shadowBlur  = 8;
+      ctx.fillStyle   = '#ffffff';
+      ctx.font = `800 ${Math.round(15*rr+4)}px 'Plus Jakarta Sans','Inter',sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(getYouWord(), cx, cy);
+      ctx.restore();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+<!-- ── AI Status Text — rotating every 2.5s ── -->
+<script>
+(function () {
+  var STATUS = {
+    en: ['Analyzing your strengths...','Identifying strength clusters...','Connecting behavioral patterns...','Building Academic DNA...','Personalizing your results...'],
+    vi: ['Đang phân tích sở thích...','Đang xác định nhóm thế mạnh...','Đang kết nối các mẫu hành vi...','Đang xây dựng Academic DNA...','Đang cá nhân hóa kết quả...'],
+    hi: ['आपकी शक्तियों का विश्लेषण...','शक्ति समूहों की पहचान...','व्यवहार पैटर्न जोड़ रहे हैं...','Academic DNA बना रहे हैं...','परिणाम व्यक्तिगत कर रहे हैं...'],
+    fr: ['Analyse de vos points forts...','Identification des clusters...','Connexion des schémas comportementaux...','Construction de l\'ADN académique...','Personnalisation des résultats...'],
+    ar: ['تحليل نقاط قوتك...','تحديد مجموعات القوة...','ربط أنماط السلوك...','بناء الحمض النووي الأكاديمي...','تخصيص نتائجك...']
+  };
+  function getLang() { try { return localStorage.getItem('bd-lang') || 'en'; } catch(e) { return 'en'; } }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var el = document.getElementById('aiStatus');
+    if (!el) return;
+    var idx = 0;
+    function rotate() {
+      var msgs = STATUS[getLang()] || STATUS.en;
+      el.classList.add('fading');
+      setTimeout(function () {
+        el.textContent = msgs[idx % msgs.length];
+        el.classList.remove('fading');
+        idx++;
+      }, 320);
+    }
+    rotate();
+    setInterval(rotate, 2500);
+  });
+})();
+</script>
+</body>
+</html>

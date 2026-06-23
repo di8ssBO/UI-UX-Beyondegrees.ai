@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About me — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  /* ── Hero (mobile .hero-section → desktop 2 cột trong 1 card) ── */
+  .hero-card { padding: 48px; display: grid; grid-template-columns: 130px 1fr; gap: 36px; align-items: center; }
+  .hero-ring-wrap { position: relative; width: 116px; height: 116px; }
+  .hero-ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .hero-ring-wrap #heroEmoji {
+    position: absolute; inset: 0; display: grid; place-items: center; font-size: 44px;
+    filter: drop-shadow(0 4px 12px rgba(124,58,237,0.4));
+  }
+  :root[data-theme="light"] .hero-ring-wrap #heroEmoji { filter: drop-shadow(0 4px 12px rgba(201,107,85,0.30)); }
+  .hero-tagline { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  :root[data-theme="light"] .hero-tagline { color: #6b5440; }
+  .hero-card h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.25; margin: 6px 0 4px; color: var(--text-primary); }
+  .hero-card .hero-sub { font-size: 15px; color: var(--text-secondary); line-height: 1.6; }
+  :root[data-theme="light"] .hero-card h1 { color: #2c1f14; }
+  :root[data-theme="light"] .hero-card .hero-sub { color: #5c4535; font-weight: 500; }
+  .cta-row { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+
+  /* ── Disciplines (mobile .discipline-card 2 cột → desktop 3 cột) ── */
+  .section-label-mobile {
+    font-size: 11px; font-weight: 800; letter-spacing: 2.5px;
+    color: rgba(167,139,250,0.75); text-transform: uppercase;
+    display: block; text-align: center; margin: 40px 0 18px;
+  }
+  :root[data-theme="light"] .section-label-mobile { color: #a84e30; font-weight: 900; }
+  .disciplines-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 1100px) { .disciplines-grid { grid-template-columns: repeat(2, 1fr); } }
+  .discipline-card {
+    background: color-mix(in srgb, var(--disc) 9%, rgba(255,255,255,0.04));
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1.5px solid rgba(255,255,255,0.09);
+    border-radius: 14px;
+    padding: 26px 18px;
+    text-align: center; cursor: pointer; user-select: none;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    justify-self: center;
+    width: 100%;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2), 0 1px 0 rgba(255,255,255,0.06) inset;
+    transition: background .28s ease, border-color .28s ease,
+      transform .32s cubic-bezier(0.34,1.56,0.64,1), box-shadow .28s ease, opacity .25s ease,
+      width .28s ease;
+    position: relative; overflow: hidden;
+    transform-origin: center;
+  }
+  .discipline-icon { font-size: 32px; line-height: 1; transition: transform .32s cubic-bezier(0.34,1.56,0.64,1); }
+  .discipline-card.selected .discipline-icon { transform: scale(1.15); }
+  .discipline-card span {
+    font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.75); line-height: 1.3;
+    transition: color .25s ease, font-weight .2s ease;
+  }
+  .discipline-card.selected span { color: #ffffff; font-weight: 800; }
+  /* dark: match mobile per-discipline tint */
+  .discipline-card:hover:not(.selected) {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.18);
+    transform: translateY(-2px) scale(1.02);
+  }
+  /* selected: mobile float + discipline glow */
+  .discipline-card.selected {
+    width: calc(100% - 14px);
+    transform: translateY(-8px) scale(1.06);
+    background: color-mix(in srgb, var(--disc) 18%, rgba(6,6,18,0.85));
+    border-color: var(--disc);
+    border-width: 2px;
+    box-shadow:
+      0 20px 48px rgba(0,0,0,0.45),
+      0 0 0 1px var(--disc),
+      0 6px 32px color-mix(in srgb, var(--disc) 50%, transparent);
+  }
+  /* dim unselected cards once any card is selected */
+  .disciplines-grid.has-selection .discipline-card:not(.selected),
+  .disciplines-grid:has(.discipline-card.selected) .discipline-card:not(.selected) {
+    transform: translateY(6px) scale(0.95);
+    opacity: 0.45;
+  }
+  /* ripple from click point */
+  @keyframes dcRippleAnim { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(18); opacity: 0; } }
+  .dc-ripple {
+    position: absolute; border-radius: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    background: rgba(255,255,255,0.35); pointer-events: none; z-index: 3;
+    animation: dcRippleAnim .5s ease-out forwards;
+  }
+  .disciplines-grid.has-selection > .discipline-card {
+    animation: none;
+  }
+  /* light: match mobile gradient tint */
+  :root[data-theme="light"] .discipline-card {
+    background: linear-gradient(145deg, #ffffff 35%, color-mix(in srgb, var(--disc, #c96b55) 13%, #ffffff) 100%);
+    border: 1.5px solid color-mix(in srgb, var(--disc, #c96b55) 26%, rgba(200,185,170,0.35));
+    box-shadow: 0 2px 8px rgba(80,50,30,0.07);
+  }
+  :root[data-theme="light"] .discipline-card:hover:not(.selected) {
+    background: linear-gradient(145deg, #ffffff 15%, color-mix(in srgb, var(--disc, #c96b55) 20%, #ffffff) 100%);
+    border-color: color-mix(in srgb, var(--disc, #c96b55) 48%, rgba(200,185,170,0.4));
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--disc, #c96b55) 18%, rgba(80,50,30,0.09));
+  }
+  :root[data-theme="light"] .discipline-card.selected {
+    background: linear-gradient(145deg, color-mix(in srgb, var(--disc, #c96b55) 8%, #ffffff) 0%, color-mix(in srgb, var(--disc, #c96b55) 24%, #ffffff) 100%);
+    border-color: var(--disc, #c96b55);
+    border-width: 2px;
+    box-shadow:
+      0 20px 48px rgba(80,50,30,0.16),
+      0 0 0 1px var(--disc, #c96b55),
+      0 6px 32px color-mix(in srgb, var(--disc, #c96b55) 38%, transparent);
+  }
+  :root[data-theme="light"] .discipline-card span { color: #2c1f14; }
+  :root[data-theme="light"] .discipline-card.selected span { color: var(--disc, #c96b55); font-weight: 800; }
+  .discipline-card[data-disc] {
+    border-color: color-mix(in srgb, var(--disc, #7c3aed) 24%, rgba(255,255,255,0.09));
+  }
+  .discipline-card[data-disc]:hover {
+    background: color-mix(in srgb, var(--disc, #7c3aed) 14%, rgba(255,255,255,0.06));
+    border-color: color-mix(in srgb, var(--disc, #7c3aed) 40%, transparent);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--disc, #7c3aed) 25%, transparent),
+                0 1px 0 rgba(255,255,255,0.1) inset;
+  }
+  .discipline-card[data-disc].selected {
+    background: color-mix(in srgb, var(--disc, #7c3aed) 18%, rgba(255,255,255,0.06));
+    border-color: color-mix(in srgb, var(--disc, #7c3aed) 55%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--disc, #7c3aed) 15%, transparent),
+                0 8px 24px color-mix(in srgb, var(--disc, #7c3aed) 20%, transparent);
+  }
+</style>
+</head>
+<body class="app" data-page="home" data-crumb="About me">
+  <div class="main">
+    <div class="content fade-in">
+
+      <!-- HERO — đúng nội dung mobile hero-section -->
+      <section class="card glass-hero hero-card">
+        <div class="hero-ring-wrap">
+          <svg viewBox="0 0 76 76" fill="none">
+            <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+            <circle id="heroRingFill" cx="38" cy="38" r="32"
+              stroke="#1863DC" stroke-width="3" stroke-linecap="round" fill="none"/>
+          </svg>
+          <span id="heroEmoji">🚀</span>
+        </div>
+        <div>
+          <p class="hero-tagline" id="heroTagline">Discover your academic identity</p>
+          <h1 id="heroTitle">What major are you interested in?</h1>
+          <p class="hero-sub" id="heroSub">Answer 30 questions and let AI find your perfect match.</p>
+          <div class="cta-row">
+            <button class="btn btn-primary" id="ctaPrimary">Start Quiz →</button>
+            <button class="btn btn-ghost" id="ctaSecondary" style="display:none;"></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- DISCIPLINES — 6 ngành, đúng icon + tên + màu mobile -->
+      <h3 class="section-label-mobile">Choose 1 or more disciplines</h3>
+      <div class="disciplines-grid fade-in-stagger">
+        <div class="discipline-card" data-disc="kt" style="--disc:#7c3aed">
+          <div class="discipline-icon">⚙️</div><span>Engineering</span>
+        </div>
+        <div class="discipline-card" data-disc="yt" style="--disc:#06d6a0">
+          <div class="discipline-icon">🩺</div><span>Medical</span>
+        </div>
+        <div class="discipline-card" data-disc="tn" style="--disc:#f43f5e">
+          <div class="discipline-icon">🔬</div><span>Natural Sci</span>
+        </div>
+        <div class="discipline-card" data-disc="nn" style="--disc:#f59e0b">
+          <div class="discipline-icon">🌱</div><span>Agricultural</span>
+        </div>
+        <div class="discipline-card" data-disc="xh" style="--disc:#a855f7">
+          <div class="discipline-icon">🧠</div><span>Social Sci</span>
+        </div>
+        <div class="discipline-card" data-disc="nv" style="--disc:#3b82f6">
+          <div class="discipline-icon">📜</div><span>Humanities</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script>
+    /* Discipline selection toggle + ripple from click point (mobile parity) */
+    var disciplineGrid = document.querySelector('.disciplines-grid');
+    function syncDisciplineGridState() {
+      if (!disciplineGrid) return;
+      disciplineGrid.classList.toggle('has-selection', !!disciplineGrid.querySelector('.discipline-card.selected'));
+    }
+
+    document.querySelectorAll('.discipline-card').forEach(function (card) {
+      card.addEventListener('click', function (e) {
+        if (disciplineGrid) disciplineGrid.classList.remove('fade-in-stagger');
+        var r = document.createElement('span');
+        r.className = 'dc-ripple';
+        var rect = card.getBoundingClientRect();
+        r.style.left = (e.clientX - rect.left) + 'px';
+        r.style.top  = (e.clientY - rect.top)  + 'px';
+        card.appendChild(r);
+        r.addEventListener('animationend', function () { r.remove(); });
+        card.classList.toggle('selected');
+        syncDisciplineGridState();
+      });
+    });
+    syncDisciplineGridState();
+
+    /* Progress-based hero state — same logic & copy as mobile initProgress() */
+    (function initProgress() {
+      var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+      var m = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+      var key = m >= 30 ? 30 : m >= 20 ? 20 : m >= 10 ? 10 : p > 0 ? 1 : 0;
+
+      var C = 201.1; /* 2π × 32 */
+      var pcts = { 0: 0, 1: 0.05, 10: 0.333, 20: 0.667, 30: 1 };
+      var ring = document.getElementById('heroRingFill');
+      ring.style.strokeDasharray = C;
+      ring.style.strokeDashoffset = C * (1 - (pcts[key] || 0));
+      if (key === 30) ring.style.stroke = '#f59e0b'; /* gold = complete */
+
+      var STATES = {
+        0:  { emoji: '🚀', tagline: 'Discover your academic identity',
+              title: 'What major are you interested in?',
+              sub: 'Answer 30 questions and let AI find your perfect match.' },
+        1:  { emoji: '💪', tagline: 'Great start! Keep going',
+              title: "You're on your way to finding your match",
+              sub: 'Answered ' + p + ' question' + (p > 1 ? 's' : '') + '. Pick up where you left off!' },
+        10: { emoji: '🔥', tagline: 'Quiz Stage 1 complete!',
+              title: 'Your top discipline is revealed 🔥',
+              sub: 'Keep going! 20 more questions to unlock your Major matches.' },
+        20: { emoji: '⚡', tagline: 'Quiz Stage 2 complete!',
+              title: 'AI found your Major matches ⚡',
+              sub: '10 more questions to unlock your University matches.' },
+        30: { emoji: '✨', tagline: 'Profile complete!',
+              title: 'Your academic identity is complete ✨',
+              sub: 'BeyonDegrees has found your perfect university matches.' }
+      };
+      var s = STATES[key];
+      document.getElementById('heroEmoji').textContent = s.emoji;
+      document.getElementById('heroTagline').textContent = s.tagline;
+      document.getElementById('heroTitle').textContent = s.title;
+      document.getElementById('heroSub').textContent = s.sub;
+
+      var BTNS = {
+        0:  { b1: 'Start Quiz →', u1: '../../quiz/quiz-card/', b2: null },
+        1:  { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: null },
+        10: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: { t: 'View Discipline Results ›', u: '../../discipline/match/' } },
+        20: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: { t: 'View Major Results ›', u: '../../major/recommendations/' } },
+        30: { b1: 'View Match →', u1: '../../university/matches/', b2: { t: 'View University Results ›', u: '../../university/matches/' } }
+      };
+      var b = BTNS[key];
+      var btn1 = document.getElementById('ctaPrimary');
+      var btn2 = document.getElementById('ctaSecondary');
+      btn1.textContent = b.b1;
+      btn1.onclick = function () { location.href = b.u1; };
+      if (b.b2) {
+        btn2.style.display = 'inline-flex';
+        btn2.textContent = b.b2.t;
+        btn2.onclick = function () { location.href = b.b2.u; };
+      }
+    })();
+  </script>
+</body>
+</html>

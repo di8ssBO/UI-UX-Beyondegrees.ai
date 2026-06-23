@@ -251,6 +251,29 @@ svg *, canvas, video, img { transition: none !important; }
 
   <main class="main-content">
 
+    <!-- DESKTOP VERSION -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title">Desktop Version</h2>
+        <p class="section-description">Full desktop experience &mdash; sidebar navigation, wide layouts, light mode</p>
+      </div>
+      <div class="cards-grid">
+        <div class="project-card">
+          <div class="card-header">
+            <div class="card-icon">&#128421;</div>
+            <div style="flex:1">
+              <h3 class="card-title">Desktop App</h3>
+              <p class="card-description">Open the full desktop version &mdash; onboarding, quiz, results, disciplines, majors, universities, and profile in a wide sidebar layout</p>
+            </div>
+          </div>
+          <div class="card-footer">
+            <span class="file-count">Sidebar nav &middot; Desktop</span>
+            <a href="./desktop/index.html" class="card-link">Mo file &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- DESIGN SYSTEM -->
     <section class="section">
       <div class="section-header">
@@ -317,7 +340,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">390 x 844px &middot; Mobile</span>
-            <a href="./features/onboarding/home/index.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./mobile/onboarding/home/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card mint">
@@ -330,7 +353,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">30 questions &middot; 4 directions</span>
-            <a href="./features/quiz/quiz-card/index.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./mobile/quiz/quiz-card/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card mint">
@@ -343,7 +366,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">GenZ loading experience</span>
-            <a href="./features/onboarding/loading/index.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./mobile/onboarding/loading/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card mint">
@@ -356,7 +379,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Reveal animation &middot; Score cards</span>
-            <a href="./features/results/match-reveal/index.html" class="card-link mint">Mo file &rarr;</a>
+            <a href="./mobile/results/match-reveal/index.html" class="card-link mint">Mo file &rarr;</a>
           </div>
         </div>
       </div>
@@ -379,7 +402,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Match scores &middot; Career data</span>
-            <a href="./features/discipline/match/index.html" class="card-link coral">Mo file &rarr;</a>
+            <a href="./mobile/discipline/match/index.html" class="card-link coral">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card coral">
@@ -392,7 +415,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">AI-ranked majors</span>
-            <a href="./features/major/recommendations/index.html" class="card-link coral">Mo file &rarr;</a>
+            <a href="./mobile/major/recommendations/index.html" class="card-link coral">Mo file &rarr;</a>
           </div>
         </div>
         <div class="project-card coral">
@@ -405,7 +428,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
           <div class="card-footer">
             <span class="file-count">Admission fit &middot; Rankings</span>
-            <a href="./features/university/matches/index.html" class="card-link coral">Mo file &rarr;</a>
+            <a href="./mobile/university/matches/index.html" class="card-link coral">Mo file &rarr;</a>
           </div>
         </div>
       </div>
@@ -422,8 +445,8 @@ svg *, canvas, video, img { transition: none !important; }
     <p>BeyonDegrees.ai Frontend &mdash; Vanilla HTML/CSS/JS &middot; Week 02 &middot; 7 Screens</p>
   </footer>
 
-  <script src="./shared/scripts/utils.js"></script>
-  <script src="./shared/scripts/navigation.js"></script>
+  <script src="./shared/scripts/ui/utils.js"></script>
+  <script src="./shared/scripts/ui/navigation.js"></script>
 
 <script>
 (function() {
@@ -480,7 +503,7 @@ svg *, canvas, video, img { transition: none !important; }
   });
 })();
 </script>
-<script src="./shared/scripts/i18n.js"></script>
+<script src="./shared/scripts/ui/i18n.js"></script>
 
 </body>
 </html>

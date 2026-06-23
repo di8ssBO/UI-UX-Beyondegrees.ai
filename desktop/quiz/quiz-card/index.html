@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz &mdash; BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  /* ── Quiz wrap ── */
+  .quiz-wrap { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ── Header ── */
+  .quiz-header {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    margin-bottom: 12px;
+  }
+  .quiz-header .undo-btn { justify-self: start; }
+  .quiz-header .counter-wrap { justify-self: center; text-align: center; }
+  .quiz-header .mode-indicator { justify-self: end; }
+  .undo-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+    color: var(--text-muted); display: grid; place-items: center;
+    backdrop-filter: blur(4px); transition: all .2s; font-size: 15px;
+  }
+  .undo-btn:hover { border-color: var(--violet-500); color: var(--violet-400); }
+  :root[data-theme="light"] .undo-btn { background: #fdf8f2; border-color: #e8e0d5; }
+  :root[data-theme="light"] .undo-btn:hover { border-color: #c96b55; color: #a84e30; }
+  .counter-wrap { font-size: 14px; font-weight: 700; color: var(--text-secondary); }
+  .counter-current { color: var(--violet-400); font-size: 18px; }
+  :root[data-theme="light"] .counter-current { color: #a84e30; }
+  .mode-indicator {
+    display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 999px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px;
+  }
+  :root[data-theme="light"] .mode-indicator { background: #fdf8f2; border-color: #e8e0d5; }
+  .mode-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint-500); }
+
+  /* ── Score chips ── */
+  .score-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+  .score-chip {
+    display: flex; align-items: center; gap: 5px; padding: 4px 12px;
+    border-radius: 999px; font-size: 12px; font-weight: 700; backdrop-filter: blur(8px);
+  }
+  .score-chip.agree   { background: rgba(6,214,160,0.12);   color: var(--mint-500);  border: 1px solid rgba(6,214,160,0.25); }
+  .score-chip.strong  { background: rgba(124,58,237,0.12);  color: var(--violet-400); border: 1px solid rgba(124,58,237,0.25); }
+  .score-chip.neutral { background: rgba(107,107,154,0.12); color: #9d9dbf;          border: 1px solid rgba(107,107,154,0.2); }
+  .score-chip.disagree{ background: rgba(255,71,87,0.12);   color: var(--red-400);   border: 1px solid rgba(255,71,87,0.25); }
+  :root[data-theme="light"] .score-chip.agree   { color:#047857; background:rgba(5,150,105,0.10); border-color:rgba(5,150,105,0.25); }
+  :root[data-theme="light"] .score-chip.strong  { color:#075c9f; background:rgba(2,116,190,0.08); border-color:rgba(2,116,190,0.25); }
+  :root[data-theme="light"] .score-chip.neutral { color:#8c7260; background:#fdf8f2; border-color:#e8e0d5; }
+  :root[data-theme="light"] .score-chip.disagree{ color:#be123c; background:rgba(225,29,72,0.08); border-color:rgba(225,29,72,0.22); }
+
+  /* ── Card arena ── */
+  .card-arena {
+    position: relative; height: 540px; margin-top: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* Direction hints — big gradient pills with a colored glow + pop-in */
+  .dir-hint {
+    position: absolute; z-index: 50; font-size: 19px; font-weight: 900;
+    padding: 16px 34px; border-radius: 18px; letter-spacing: 1.5px;
+    opacity: 0; pointer-events: none; text-transform: uppercase;
+    color: #fff; border: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.22);
+    transition: opacity .14s;
+  }
+  .hint-right {
+    right: 0; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, #0ad99f, #06b083);
+    box-shadow: 0 14px 38px rgba(6,214,160,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .hint-left {
+    left: 0; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, #ff8a94, #e23748);
+    box-shadow: 0 14px 38px rgba(255,71,87,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .hint-up {
+    top: 12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #a47bff, #7c3aed);
+    box-shadow: 0 14px 38px rgba(124,58,237,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .hint-down {
+    bottom: 12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #aeaecb, #6b6b9a);
+    box-shadow: 0 14px 38px rgba(107,107,154,0.45), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .dir-hint.visible { opacity: 1; }
+  .hint-right.visible, .hint-left.visible { animation: hintPopY .3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .hint-up.visible, .hint-down.visible    { animation: hintPopX .3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes hintPopY {
+    0%   { opacity: 0; transform: translateY(-50%) scale(.55); }
+    60%  { opacity: 1; transform: translateY(-50%) scale(1.18); }
+    100% { opacity: 1; transform: translateY(-50%) scale(1); }
+  }
+  @keyframes hintPopX {
+    0%   { opacity: 0; transform: translateX(-50%) scale(.55); }
+    60%  { opacity: 1; transform: translateX(-50%) scale(1.18); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  }
+
+  /* ── Card stack ── */
+  .card-stack { position: relative; width: 640px; height: 440px; }
+  .q-card {
+    position: absolute; inset: 0; border-radius: 24px;
+    background: #2d1267;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.07), 0 30px 80px rgba(24,99,220,0.5);
+    transition: transform .35s cubic-bezier(0.34,1.2,0.64,1), opacity .35s, background .6s, box-shadow .6s;
+    user-select: none;
+  }
+  .q-card.back-1 { transform: scale(.95) translateY(16px); opacity: .55; z-index: 1; }
+  .q-card.back-2 { transform: scale(.90) translateY(32px); opacity: .30; z-index: 0; }
+  .q-card.active-card { z-index: 2; cursor: grab; }
+  .q-card.active-card:active { cursor: grabbing; }
+  .q-card.fling { transition: transform .45s ease-in, opacity .45s ease-in; }
+  .card-inner { position: relative; height: 100%; padding: 44px 48px; display: flex; flex-direction: column; }
+  .card-placeholder { display: grid; place-items: center; height: 100%; color: rgba(255,255,255,0.2); font-size: 13px; letter-spacing: 4px; }
+  .q-text {
+    flex: 1; display: flex; align-items: center;
+    font-size: 31px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.45;
+    color: rgba(255,255,255,0.96);
+  }
+
+  /* Swipe hint: visible Q1 only, fades out after */
+  .swipe-hint {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    font-size: 12px; color: rgba(255,255,255,0.40); font-weight: 600;
+    transition: opacity 0.5s ease;
+  }
+  .swipe-hint.hidden { opacity: 0; pointer-events: none; }
+  .swipe-hint .hint-arrows { font-weight: 900; letter-spacing: 2px; }
+
+  /* Swipe-guide arrow: flies out in the demoed direction */
+  .guide-arrow {
+    position: absolute; top: 50%; left: 50%;
+    pointer-events: none; z-index: 60; opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  .guide-arrow-svg { width: 184px; height: auto; display: block; }
+  /* Moderate-speed glide: pops in at center, then slides smoothly away (comet trail) */
+  .guide-arrow.fly { animation: guideArrowFly 0.9s cubic-bezier(0.22,0.61,0.36,1) both; }
+  @keyframes guideArrowFly {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.45); }
+    22%  { opacity: 1; transform: translate(-50%, -50%) scale(1.18); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--ax, 0px)), calc(-50% + var(--ay, 0px))) scale(1.06); }
+  }
+
+  /* Light mode card */
+  :root[data-theme="light"] .q-card .q-text { color: #2c1f14; }
+  :root[data-theme="light"] .q-card .swipe-hint { color: rgba(44,31,20,0.45); }
+  :root[data-theme="light"] .q-card .card-placeholder { color: rgba(44,31,20,0.25); }
+
+  /* ── Discipline Color Field ── */
+  /* Sits inside .content as position:absolute so it stays within the main area */
+  .content { position: relative; }
+  #colorField {
+    position: absolute; inset: -40px -80px;
+    z-index: 0; pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.8s ease, background 1.5s ease;
+    border-radius: 0;
+  }
+  #colorField.disc-active { opacity: 1; }
+
+  /* ── Milestone overlay ── */
+  .milestone-overlay {
+    position: fixed; inset: 0; z-index: 200; display: none;
+    align-items: center; justify-content: center;
+    background: rgba(6,6,15,0.72); backdrop-filter: blur(10px);
+  }
+  :root[data-theme="light"] .milestone-overlay { background: rgba(245,237,224,0.80); }
+  .milestone-overlay.show { display: flex; }
+  .milestone-content { text-align: center; animation: fadeUp .5s var(--ease-out) both; }
+  .milestone-emoji { font-size: 72px; }
+  .milestone-text { font-size: 30px; font-weight: 900; margin-top: 12px; }
+  .milestone-sub { font-size: 15px; color: var(--text-secondary); margin-top: 6px; }
+</style>
+</head>
+<body class="app" data-page="quiz" data-crumb="Quiz">
+  <div class="main">
+    <div class="content fade-in">
+
+      <!-- Discipline color field: ambient background wash per discipline -->
+      <div id="colorField"></div>
+
+      <div class="quiz-wrap">
+
+        <!-- Header: undo + counter + mode -->
+        <header class="quiz-header">
+          <button class="undo-btn" id="undoBtn" title="Undo">&#8617;</button>
+          <div class="counter-wrap">
+            <span class="counter-current" id="qCur">1</span><span class="muted"> / </span><span class="muted" id="qTotal">30</span>
+          </div>
+          <div class="mode-indicator"><span class="mode-dot"></span> Drag &amp; Swipe</div>
+        </header>
+
+        <!-- Story bar: 1 segment per question -->
+        <div class="story-bar" id="storyBar"></div>
+
+        <!-- Score chips -->
+        <div class="score-row">
+          <div class="score-chip agree"><span>&#10003;</span><span id="agreeCount">0</span></div>
+          <div class="score-chip strong"><span>&#9889;</span><span id="strongCount">0</span></div>
+          <div class="score-chip neutral"><span>&ndash;</span><span id="neutralCount">0</span></div>
+          <div class="score-chip disagree"><span>&#10005;</span><span id="disagreeCount">0</span></div>
+        </div>
+
+        <!-- Card arena -->
+        <div class="card-arena" id="cardArena">
+          <div class="dir-hint hint-right" id="hintRight">AGREE &#10003;</div>
+          <div class="dir-hint hint-left"  id="hintLeft">DISAGREE &#10005;</div>
+          <div class="dir-hint hint-up"    id="hintUp">STRONGLY AGREE &#9889;</div>
+          <div class="dir-hint hint-down"  id="hintDown">NEUTRAL &ndash;</div>
+          <div class="guide-arrow" id="guideArrow">
+            <svg class="guide-arrow-svg" id="guideArrowSvg" viewBox="0 0 120 48" aria-hidden="true">
+              <defs>
+                <linearGradient id="guideArrowGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0"    stop-color="currentColor" stop-opacity="0"/>
+                  <stop offset="0.45" stop-color="currentColor" stop-opacity="0.45"/>
+                  <stop offset="1"    stop-color="currentColor" stop-opacity="1"/>
+                </linearGradient>
+              </defs>
+              <path d="M6,18 L74,18 L74,5 L114,24 L74,43 L74,30 L6,30 Z" fill="url(#guideArrowGrad)" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="card-stack">
+            <div class="q-card back-2" id="backCard2"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
+            <div class="q-card back-1" id="backCard1"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
+            <div class="q-card active-card" id="activeCard">
+              <div class="card-inner">
+                <p class="q-text" id="qText"></p>
+                <!-- Drag hint: only visible on Q1 -->
+                <div class="swipe-hint" id="swipeHint">
+                  <span>Drag to answer</span>
+                  <span class="hint-arrows">&#8592; &#8594;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.quiz-wrap -->
+    </div><!-- /.content -->
+  </div><!-- /.main -->
+
+  <!-- Milestone overlay -->
+  <div class="milestone-overlay" id="milestoneOverlay">
+    <div class="milestone-content">
+      <div class="milestone-emoji" id="milestoneEmoji">&#128293;</div>
+      <div class="milestone-text" id="milestoneText">1/3 done!</div>
+      <div class="milestone-sub" id="milestoneSub">Keep going!</div>
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/data/disc-config.js"></script>
+  <script src="../../../shared/scripts/data/questions-static.js"></script>
+  <script>
+    /* aliases — keep existing code working without changes */
+    var DISC_COLORS = window.BD_DISC_COLORS;
+    var DISC_NAMES  = window.BD_DISC_NAMES;
+    var QUESTIONS   = window.BD_QUESTIONS_STATIC;
+
+
+    /* Resume từ tiến độ đã lưu (chuyển tab sidebar rồi quay lại không bị reset) */
+    var idx = (function () {
+      var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+      return (isNaN(p) || p < 0 || p >= QUESTIONS.length) ? 0 : p;
+    })();
+    var answerLog = (function () {
+      try { var a = JSON.parse(localStorage.getItem('quizAnswerLog') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+    })();
+    var counts = (function () {
+      try {
+        var c = JSON.parse(localStorage.getItem('quizCounts') || 'null');
+        if (c && typeof c === 'object') return { right:c.right||0, up:c.up||0, down:c.down||0, left:c.left||0 };
+      } catch (e) {}
+      return { right:0, up:0, down:0, left:0 };
+    })();
+    var $ = function (id) { return document.getElementById(id); };
+
+    function isLight() { return document.documentElement.getAttribute('data-theme') === 'light'; }
+
+    function styleCard(el, disc) {
+      var c = DISC_COLORS[disc];
+      if (isLight()) {
+        el.style.background = c.lightBase;
+        el.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.6), 0 30px 80px ' + c.lightGlow;
+        el.style.borderColor = 'rgba(255,255,255,0.75)';
+      } else {
+        el.style.background =
+          'radial-gradient(ellipse 90% 80% at 30% 35%, ' + c.glow + ' 0%, transparent 70%), ' + c.dark;
+        el.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.07), 0 30px 80px ' + c.glow;
+        el.style.borderColor = 'rgba(255,255,255,0.10)';
+      }
+    }
+
+    function setAurora(disc) {
+      var c = DISC_COLORS[disc], r = document.documentElement.style;
+      r.setProperty('--blob-p1', c.glow);
+      r.setProperty('--blob-p2', 'rgba(59,130,246,0.3)');
+      r.setProperty('--blob-p4', c.glow);
+    }
+
+    function buildStoryBar() {
+      var bar = $('storyBar');
+      var html = '';
+      for (var i = 0; i < QUESTIONS.length; i++) html += '<div class="story-seg"></div>';
+      bar.innerHTML = html;
+    }
+
+    function render() {
+      var q = QUESTIONS[idx];
+      if (!q) return finish();
+      $('qCur').textContent = idx + 1;
+      $('qText').textContent = q.text;
+      styleCard($('activeCard'), q.disc);
+      if (QUESTIONS[idx + 1]) styleCard($('backCard1'), QUESTIONS[idx + 1].disc);
+      if (QUESTIONS[idx + 2]) styleCard($('backCard2'), QUESTIONS[idx + 2].disc);
+      setAurora(q.disc);
+      /* story bar: 1 segment per question */
+      var segs = $('storyBar').children;
+      for (var i = 0; i < segs.length; i++) segs[i].className = 'story-seg' + (i < idx ? ' done' : (i === idx ? ' active' : ''));
+      /* counts */
+      $('agreeCount').textContent = counts.right;
+      $('strongCount').textContent = counts.up;
+      $('neutralCount').textContent = counts.down;
+      $('disagreeCount').textContent = counts.left;
+      /* Static swipe hint only on the very first question */
+      var sh = $('swipeHint'); if (sh) sh.classList.toggle('hidden', idx > 0);
+      localStorage.setItem('quizProgress', idx);
+      localStorage.setItem('quizCounts', JSON.stringify(counts));
+      localStorage.setItem('quizAnswerLog', JSON.stringify(answerLog));
+    }
+
+    /* Fling target: viewport-relative so the card always clears the whole
+       screen regardless of window width (fixed px left it stuck mid-screen
+       on wide desktops). Mirrors mobile's full fly-off. */
+    function flingTransform(dir) {
+      var w = window.innerWidth, h = window.innerHeight;
+      switch (dir) {
+        case 'right': return 'translate(' + (w + 240) + 'px,-60px) rotate(20deg)';
+        case 'left':  return 'translate(' + (-(w + 240)) + 'px,-60px) rotate(-20deg)';
+        case 'up':    return 'translate(20px,' + (-(h + 240)) + 'px) rotate(5deg)';
+        case 'down':  return 'translate(0,' + (h + 240) + 'px) rotate(0deg)';
+      }
+      return '';
+    }
+
+    function answer(dir) {
+      var card = $('activeCard');
+      if (card.dataset.busy) return;
+      stopGuide();
+      card.dataset.busy = '1';
+      counts[dir]++; answerLog.push(dir);
+      showHint(dir, true); setTimeout(function () { showHint(dir, false); }, 280);
+      card.classList.add('fling');
+      card.style.transform = flingTransform(dir);
+      card.style.opacity = '0';
+      setTimeout(function () {
+        idx++;
+        /* Snap the card straight to center with NO transition, then load the
+           next question — so the new card appears in the middle instead of
+           sliding back in from the throw direction (mobile parity). */
+        card.classList.remove('fling');
+        card.style.transition = 'none';
+        card.style.transform = '';
+        card.style.opacity = '';
+        void card.offsetWidth; /* force reflow so the snap is instant */
+        card.style.transition = ''; /* restore base transition for next drag/fling */
+        delete card.dataset.busy;
+        if (idx === 10 || idx === 20) milestone(idx);
+        if (idx >= 30) { localStorage.setItem('quizMilestone', 30); return finish(); }
+        render();
+      }, 430);
+    }
+
+    function milestone(n) {
+      localStorage.setItem('quizMilestone', n);
+      $('milestoneEmoji').textContent = n === 10 ? '🔥' : '⚡';
+      $('milestoneText').textContent = (n / 10) + '/3 done!';
+      $('milestoneSub').textContent = n === 10
+        ? 'Your top discipline is revealed — keep going!'
+        : 'AI found your Major matches — 10 questions left!';
+      var ov = $('milestoneOverlay');
+      ov.classList.add('show');
+      setTimeout(function () { ov.classList.remove('show'); }, 1600);
+    }
+
+    function finish() { location.href = '../../onboarding/loading/'; }
+
+    function showHint(dir, on) {
+      var map = { right:'hintRight', left:'hintLeft', up:'hintUp', down:'hintDown' };
+      $(map[dir]).classList.toggle('visible', on);
+    }
+
+    /* Undo (mobile parity) */
+    function undo() {
+      if (!answerLog.length || idx === 0) return;
+      var last = answerLog.pop();
+      counts[last]--; idx--;
+      render();
+    }
+    $('undoBtn').onclick = undo;
+
+    /* Action buttons */
+    document.querySelectorAll('.action-btn').forEach(function (b) {
+      b.onclick = function () { answer(b.dataset.dir); };
+      b.onmouseenter = function () { showHint(b.dataset.dir, true); };
+      b.onmouseleave = function () { showHint(b.dataset.dir, false); };
+    });
+
+    /* Keyboard */
+    document.addEventListener('keydown', function (e) {
+      var k = { ArrowRight:'right', ArrowLeft:'left', ArrowUp:'up', ArrowDown:'down' }[e.key];
+      if (k) { e.preventDefault(); answer(k); }
+      if (e.key === 'z' || e.key === 'Z') undo();
+    });
+
+    /* Mouse drag (swipe parity) */
+    (function drag() {
+      var card = $('activeCard'), sx = 0, sy = 0, dx = 0, dy = 0, on = false;
+      card.addEventListener('mousedown', function (e) { stopGuide(); on = true; sx = e.clientX; sy = e.clientY; e.preventDefault(); });
+      document.addEventListener('mousemove', function (e) {
+        if (!on) return;
+        dx = e.clientX - sx; dy = e.clientY - sy;
+        card.style.transition = 'none';
+        card.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + dx / 24 + 'deg)';
+        showHint('right', dx > 70); showHint('left', dx < -70);
+        showHint('up', dy < -70 && Math.abs(dx) < 70); showHint('down', dy > 70 && Math.abs(dx) < 70);
+      });
+      document.addEventListener('mouseup', function () {
+        if (!on) return; on = false;
+        card.style.transition = '';
+        ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+        if (dx > 110) answer('right');
+        else if (dx < -110) answer('left');
+        else if (dy < -110) answer('up');
+        else if (dy > 110) answer('down');
+        else card.style.transform = '';
+        dx = dy = 0;
+      });
+    })();
+
+    /* Re-style cards khi đổi theme */
+    new MutationObserver(function () { render(); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    /* ── Swipe guide: one-time demo nudge on the very first card ──
+       The card gently leans right (flash AGREE) then left (flash DISAGREE)
+       to show it can be swiped. Cancels instantly on any interaction. */
+    var guideActive = false, guideTimer = null, guideDone = false;
+    var ARROW_ROT    = { right:'rotate(0deg)', left:'rotate(180deg)', up:'rotate(-90deg)', down:'rotate(90deg)' };
+    var ARROW_COLOR  = { right:'var(--mint-500)', left:'var(--red-500)', up:'var(--violet-400)', down:'#9d9dbf' };
+    var ARROW_OFFSET = { right:['250px','0px'], left:['-250px','0px'], up:['0px','-185px'], down:['0px','185px'] };
+    function playArrow(dir) {
+      var a = $('guideArrow'); if (!a) return;
+      var svg = $('guideArrowSvg');
+      if (svg) {
+        svg.style.color = ARROW_COLOR[dir];                       /* gradient uses currentColor */
+        svg.style.transform = ARROW_ROT[dir];                     /* point the right-facing arrow */
+        svg.style.filter = 'drop-shadow(0 0 22px ' + ARROW_COLOR[dir] + ')'; /* colored glow */
+      }
+      a.style.setProperty('--ax', ARROW_OFFSET[dir][0]);
+      a.style.setProperty('--ay', ARROW_OFFSET[dir][1]);
+      a.classList.remove('fly'); void a.offsetWidth; a.classList.add('fly');
+    }
+    function stopGuide() {
+      guideDone = true;
+      if (!guideActive) return;
+      guideActive = false;
+      if (guideTimer) { clearTimeout(guideTimer); guideTimer = null; }
+      ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+      var a = $('guideArrow'); if (a) a.classList.remove('fly');
+      var card = $('activeCard');
+      if (card && !card.dataset.busy) { card.style.transition = ''; card.style.transform = ''; }
+    }
+    function swipeGuide() {
+      if (guideDone || idx !== 0) return;
+      var card = $('activeCard');
+      if (!card) return;
+      guideDone = true; guideActive = true;
+      /* Demo all 4 directions: AGREE → / DISAGREE ← / STRONGLY AGREE ↑ / NEUTRAL ↓ */
+      var seq = [
+        { t: 'translate(78px,0) rotate(6deg)',   hint: 'right' },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(-78px,0) rotate(-6deg)', hint: 'left'  },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(0,-58px) rotate(0deg)',  hint: 'up'    },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(0,54px) rotate(0deg)',   hint: 'down'  },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   }
+      ];
+      var i = 0;
+      card.style.transition = 'transform 0.5s cubic-bezier(0.34,1.2,0.64,1)';
+      (function step() {
+        if (!guideActive) return;
+        var s = seq[i++];
+        card.style.transform = s.t;
+        ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+        if (s.hint) { showHint(s.hint, true); playArrow(s.hint); }
+        guideTimer = setTimeout(i < seq.length ? step : stopGuide, s.hint ? 640 : 340);
+      })();
+    }
+
+    buildStoryBar();
+    render();
+    /* kick off the guide shortly after first paint (skipped if resuming) */
+    setTimeout(swipeGuide, 750);
+  </script>
+</body>
+</html>

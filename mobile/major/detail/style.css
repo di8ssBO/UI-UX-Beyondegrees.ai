@@ -1,0 +1,546 @@
+﻿/* major-detail — screen-specific styles */
+
+/* ═══════════════════════════════════════════════════════════
+   Reset & Base
+═══════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;-webkit-font-smoothing:antialiased}
+body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-body)}
+
+/* ═══════════════════════════════════════════════════════════
+   Desktop container / Device frame
+═══════════════════════════════════════════════════════════ */
+.desktop-container{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 20%,rgba(124,58,237,.06) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 40% at 80% 80%,rgba(6,214,160,.04) 0%,transparent 70%),
+    var(--bg-base);
+}
+/* device-frame, device-notch, mobile-screen → layout.css */
+
+/* ═══════════════════════════════════════════════════════════
+   Breadcrumb (desktop)
+═══════════════════════════════════════════════════════════ */
+.breadcrumb{
+  display:flex;align-items:center;gap:6px;padding:16px 24px 0;
+  font-size:12px;position:absolute;top:0;left:0;
+}
+.breadcrumb-item{color:var(--text-muted);text-decoration:none}
+.breadcrumb-item.active{color:var(--text-secondary)}
+.breadcrumb-separator{color:var(--text-muted)}
+
+/* ═══════════════════════════════════════════════════════════
+   Status Bar
+═══════════════════════════════════════════════════════════ */
+.status-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:14px 20px 4px;font-size:12px;font-weight:600;
+  color:var(--text-secondary);flex-shrink:0;position:relative;z-index:10;
+}
+.status-icons{display:flex;gap:6px;align-items:center}
+
+/* ═══════════════════════════════════════════════════════════
+   Page Header
+═══════════════════════════════════════════════════════════ */
+.page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:4px 20px 12px;flex-shrink:0;position:relative;z-index:10;
+}
+.btn-icon{
+  width:36px;height:36px;border-radius:var(--radius-md);
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--text-primary);transition:background var(--t-fast);
+  -webkit-tap-highlight-color:transparent;border:none;
+}
+.btn-icon:active{background:rgba(255,255,255,.14);transform:scale(.93)}
+.page-title{font-size:17px;font-weight:800;color:var(--text-primary);letter-spacing:-.02em}
+
+/* ═══════════════════════════════════════════════════════════
+   Hero Section
+═══════════════════════════════════════════════════════════ */
+.hero{
+  position:relative;margin:0 16px 0;height:190px;
+  border-radius:var(--radius-xl);overflow:hidden;flex-shrink:0;
+}
+.hero-aurora{position:absolute;inset:0}
+.hero-waves{position:absolute;inset:0;overflow:hidden;opacity:.75}
+.hero-waves svg{width:100%;height:100%}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 25%,rgba(6,3,10,.25) 55%,rgba(6,3,10,.75) 100%);
+}
+.hero-label{position:absolute;bottom:16px;left:18px;right:18px}
+.hero-label-top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:7px}
+.hero-label-name{
+  font-size:24px;font-weight:900;color:#fff;letter-spacing:-.03em;
+  line-height:1.1;text-shadow:0 2px 16px rgba(0,0,0,.6);flex:1;min-width:0;
+}
+.hero-match{text-align:right;flex-shrink:0}
+.hero-match-pct{font-size:28px;font-weight:900;line-height:1;color:var(--disc-light)}
+.hero-match-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.45);
+  letter-spacing:.1em;text-transform:uppercase;text-align:right}
+.hero-label-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--disc-bg);border:1px solid var(--disc-border);
+  border-radius:var(--radius-full);padding:3px 10px;
+  font-size:10px;font-weight:700;color:var(--disc-light);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Scrollable Body
+═══════════════════════════════════════════════════════════ */
+.detail-body{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;padding:20px 18px 12px;
+}
+.detail-body::-webkit-scrollbar{display:none}
+
+/* ─── OVERVIEW CARD (mirrors udm-desc-card from spec-in-uni view) ───
+   Transparent sage tint background + 4px sage strip left + frosted blur */
+.detail-overview-card {
+  position: relative;
+  overflow: hidden;
+  background: rgba(106,150,144,0.10);
+  border: 1px solid rgba(106,150,144,0.30);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.detail-overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 4px;
+  background: #6a9690;
+}
+
+/* Collapsible bullets — hide ENTIRE bullets list when data-collapsed="true" */
+.detail-overview-card .detail-bullets[data-collapsed="true"] {
+  display: none;
+}
+.detail-overview-card .detail-bullets {
+  margin-top: 10px;
+}
+
+/* Show more / Show less toggle button — full width, between desc and bullets */
+.detail-overview-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin: 10px 0 0;
+  padding: 8px 0;
+  background: rgba(106,150,144,0.10);
+  border: 1px solid rgba(106,150,144,0.25);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: #6a9690;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.detail-overview-toggle:hover {
+  background: rgba(106,150,144,0.18);
+  border-color: rgba(106,150,144,0.40);
+  color: #3a5c56;
+}
+.detail-overview-toggle .toggle-arrow {
+  transition: transform .25s cubic-bezier(.4,0,.2,1);
+}
+.detail-overview-toggle.open .toggle-arrow {
+  transform: rotate(180deg);
+}
+
+/* Tagline */
+.detail-desc{
+  font-size:15px;font-weight:700;line-height:1.55;
+  color:var(--text-primary);margin-bottom:12px;letter-spacing:-.01em;
+}
+
+/* Bullet list */
+.detail-bullets{display:flex;flex-direction:column;gap:11px;margin-bottom:24px}
+.detail-bullet{display:flex;align-items:flex-start;gap:10px;
+  font-size:13px;line-height:1.55;color:var(--text-secondary)}
+.bullet-check{
+  flex-shrink:0;width:20px;height:20px;border-radius:50%;
+  background:var(--disc-bg);border:1px solid var(--disc-border);
+  display:flex;align-items:center;justify-content:center;margin-top:1px;
+}
+.bullet-check svg{width:11px;height:11px}
+
+/* Section header */
+.section-header{
+  font-size:18px;font-weight:800;color:var(--text-primary);
+  letter-spacing:-.02em;margin-bottom:14px;
+}
+
+/* ── Why I Match banner ──────────────────────────────────── */
+.why-banner{
+  display:flex;align-items:center;gap:14px;
+  background:var(--disc-bg);border:1px solid var(--disc-border);
+  border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:24px;
+  cursor:pointer;text-decoration:none;
+  transition:background var(--t-fast),transform var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.why-banner:active{background:rgba(255,255,255,.08);transform:scale(.98)}
+.why-icon-box{
+  width:40px;height:40px;border-radius:var(--radius-md);flex-shrink:0;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.why-text{flex:1;min-width:0}
+.why-title{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.why-sub{font-size:11px;color:var(--text-muted)}
+.why-arrow{flex-shrink:0;color:var(--disc-light)}
+
+/* ── Specialization Cards ────────────────────────────────── */
+.spec-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.spec-card{
+  display:flex;align-items:center;gap:14px;
+  background:var(--bg-surface);border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--radius-lg);padding:14px 16px;
+  cursor:pointer;transition:background var(--t-fast),border-color var(--t-fast);
+  -webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;
+}
+.spec-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--disc-primary);border-radius:var(--radius-lg) 0 0 var(--radius-lg);
+}
+.spec-card:active{background:rgba(255,255,255,.05);border-color:var(--disc-border)}
+.spec-icon{
+  width:40px;height:40px;border-radius:var(--radius-md);flex-shrink:0;
+  background:var(--disc-bg);border:1px solid var(--disc-border);
+  display:flex;align-items:center;justify-content:center;font-size:19px;
+}
+.spec-info{flex:1;min-width:0}
+.spec-name{
+  font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.spec-sub{font-size:11px;color:var(--text-muted);line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.spec-tag{
+  display:inline-flex;align-items:center;border-radius:20px;padding:2px 9px;
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  margin-top:5px;border:1px solid transparent;
+}
+.spec-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.spec-arrow{color:var(--text-muted);transition:transform var(--t-fast),color var(--t-fast)}
+.spec-card:active .spec-arrow{transform:translateX(3px);color:var(--disc-primary)}
+
+/* ═══════════════════════════════════════════════════════════
+   CTA Button
+═══════════════════════════════════════════════════════════ */
+.cta-wrap{padding:0 18px 12px;flex-shrink:0}
+.cta-btn{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;padding:15px 20px;
+  background:linear-gradient(135deg,var(--disc-primary),var(--disc-light));
+  color:#fff;border-radius:var(--radius-full);
+  font-size:15px;font-weight:800;letter-spacing:.01em;
+  text-decoration:none;cursor:pointer;border:none;
+  box-shadow:0 6px 24px var(--disc-glow-sm),0 1px 0 rgba(255,255,255,.18) inset;
+  transition:transform var(--t-fast),box-shadow var(--t-fast);
+  -webkit-tap-highlight-color:transparent;
+}
+.cta-btn:active{transform:scale(.97);box-shadow:0 3px 12px var(--disc-glow-sm)}
+
+/* float-tab-bar + tab-item styles → design-system/layout.css */
+
+/* ═══════════════════════════════════════════════════════════
+   Not-found state
+═══════════════════════════════════════════════════════════ */
+.not-found{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  flex:1;gap:12px;padding:60px 24px;text-align:center;
+}
+.not-found-icon{font-size:48px;opacity:.35}
+.not-found-title{font-size:16px;font-weight:700;color:var(--text-secondary)}
+.not-found-sub{font-size:12px;color:var(--text-muted);line-height:1.7}
+.not-found-sub code{background:rgba(167,139,250,.15);border-radius:4px;
+  padding:1px 6px;font-family:monospace;font-size:11px}
+
+/* ═══════════════════════════════════════════════════════════
+   Hero animations
+═══════════════════════════════════════════════════════════ */
+@keyframes waveFlow{
+  0%{transform:translateX(0) skewY(-2deg) scaleY(1)}
+  50%{transform:translateX(-8%) skewY(0deg) scaleY(1.05)}
+  100%{transform:translateX(0) skewY(-2deg) scaleY(1)}
+}
+@keyframes waveFlow2{
+  0%{transform:translateX(0) skewY(1deg)}
+  50%{transform:translateX(6%) skewY(-1deg)}
+  100%{transform:translateX(0) skewY(1deg)}
+}
+@keyframes heroGlow{0%,100%{opacity:.55}50%{opacity:.85}}
+.hero-wave-1{animation:waveFlow 8s ease-in-out infinite;transform-origin:center}
+.hero-wave-2{animation:waveFlow2 6s ease-in-out infinite 1s;transform-origin:center}
+.hero-glow-pulse{animation:heroGlow 4s ease-in-out infinite}
+
+/* ═══════════════════════════════════════════════════════════
+   Responsive
+═══════════════════════════════════════════════════════════ */
+@media(max-width:480px){
+  .desktop-container{padding:0;background:var(--bg-base)}
+  .device-frame{width:100%;height:100vh;border-radius:0;border:none;box-shadow:none}
+  .device-notch{display:none}
+  .status-bar{padding-top:8px}
+  .breadcrumb{display:none}
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LIGHT MODE — wave SVG bg + vivid disc-colored hero + frosted glass
+   Each major has its own discipline color (set via JS --disc-primary
+   etc.). The hero now uses that disc color at 38% mix for a vivid
+   pastel — no longer the pale "color-mix(disc-dark @18%)" issue.
+   Spec icons cycle through 4 palette hues per index.
+   ════════════════════════════════════════════════════════════════ */
+
+/* Outside stays dark */
+[data-theme="light"] body { background:#06060f !important; color:#f8fafc !important; }
+[data-theme="light"] .desktop-container { background:#06060f !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color:rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color:rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .device-frame { border-color:#1a1a2e !important; }
+
+/* Inside — wave SVG wallpaper (shared) */
+[data-theme="light"] .mobile-screen {
+  background:
+    url('../../../shared/bg-light.svg') center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+
+/* Status bar + header */
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
+[data-theme="light"] .btn-icon {
+  background: rgba(255,253,250,0.90) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  backdrop-filter: blur(18px) saturate(135%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .btn-icon:active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,253,250,0.85)) !important;
+}
+[data-theme="light"] .page-title { color: #2c1f14 !important; }
+
+/* ── Hero — BRAND IMAGE palette waves + disc identity overlay ──
+   Same brand-image gradient as discipline/detail. JS sets
+   --disc-primary inline; we override the JS-set DARK .hero-aurora
+   with palette colors + disc tint via !important. */
+[data-theme="light"] .hero {
+  background:
+    /* Terracotta-400 wave top-right */
+    radial-gradient(ellipse 95% 70% at 95% 0%, rgba(232,145,122,0.45) 0%, transparent 65%),
+    /* Dusty Blue-300 wave bottom-left */
+    radial-gradient(ellipse 90% 65% at 5% 100%, rgba(163,194,211,0.48) 0%, transparent 65%),
+    /* Sage-300 accent bottom-right */
+    radial-gradient(ellipse 55% 55% at 100% 85%, rgba(168,200,196,0.40) 0%, transparent 65%),
+    /* Blue-200 subtle top-left */
+    radial-gradient(ellipse 50% 45% at 0% 25%, rgba(196,217,229,0.32) 0%, transparent 65%),
+    /* DISC IDENTITY center tint */
+    radial-gradient(ellipse 65% 60% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 24%, transparent) 0%,
+      transparent 75%),
+    /* Cream base */
+    linear-gradient(135deg, #fdf8f2 0%, #fceae4 28%, #f5ede0 65%, #e0ecf3 100%) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.55),
+    0 4px 16px color-mix(in srgb, var(--disc-primary) 18%, transparent),
+    0 12px 30px rgba(140,114,96,0.12) !important;
+}
+[data-theme="light"] .hero-aurora {
+  /* Beats JS-set inline DARK gradient via !important */
+  background:
+    radial-gradient(ellipse 100% 75% at 25% 35%,
+      rgba(232,145,122,0.32) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 75% 60% at 85% 75%,
+      rgba(163,194,211,0.38) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 50%,
+      color-mix(in srgb, var(--disc-primary) 28%, transparent) 0%,
+      transparent 70%),
+    linear-gradient(160deg, rgba(253,248,242,0.50) 0%, rgba(245,237,224,0.40) 100%) !important;
+}
+[data-theme="light"] .hero-waves { opacity:0.55 !important; }
+[data-theme="light"] .hero-overlay {
+  background: linear-gradient(to bottom,
+    transparent 40%,
+    color-mix(in srgb, var(--disc-dark) 10%, rgba(253,248,242,0.40)) 75%,
+    color-mix(in srgb, var(--disc-dark) 20%, rgba(245,237,224,0.75)) 100%) !important;
+}
+[data-theme="light"] .hero-label-name {
+  color: color-mix(in srgb, var(--disc-primary) 30%, #2c1f14) !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.50);
+}
+[data-theme="light"] .hero-match-pct {
+  color: color-mix(in srgb, var(--disc-primary) 60%, #2c1f14) !important;
+}
+[data-theme="light"] .hero-match-label {
+  color: #5c4535 !important;
+}
+[data-theme="light"] .hero-label-tag {
+  background: color-mix(in srgb, var(--disc-primary) 22%, rgba(255,255,255,0.65)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 45%, transparent) !important;
+  color: color-mix(in srgb, var(--disc-primary) 50%, #2c1f14) !important;
+}
+
+/* ── Detail body ── */
+[data-theme="light"] .detail-body { background: transparent !important; }
+
+/* Overview card — light mode (sage frosted glass) */
+[data-theme="light"] .detail-overview-card {
+  background: rgba(168,200,196,0.20) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
+  border: 1px solid rgba(106,150,144,0.45) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.50) !important;
+}
+[data-theme="light"] .detail-overview-card .detail-desc { color: #2c1f14 !important; font-weight: 700 !important; }
+[data-theme="light"] .detail-overview-card .detail-bullet { color: #2c1f14 !important; font-weight: 500 !important; }
+[data-theme="light"] .detail-overview-toggle {
+  color: #3a5c56 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .detail-overview-toggle:hover { color: #1e3330 !important; }
+[data-theme="light"] .detail-desc { color: #2c1f14 !important; }
+[data-theme="light"] .detail-bullet { color: #5c4535 !important; }
+[data-theme="light"] .section-header { color: #2c1f14 !important; }
+
+/* ── Bullet check — disc-tinted ── */
+[data-theme="light"] .bullet-check {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.6)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 40%, transparent) !important;
+}
+
+/* ── Why I Match banner — frosted, disc accent ── */
+[data-theme="light"] .why-banner {
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 25%, rgba(232,224,213,0.55)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px color-mix(in srgb, var(--disc-primary) 8%, rgba(140,114,96,0.06)) !important;
+}
+[data-theme="light"] .why-banner:active {
+  background: color-mix(in srgb, var(--disc-primary) 10%, rgba(253,248,242,0.85)) !important;
+}
+[data-theme="light"] .why-icon-box {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.6)) !important;
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 38%, transparent) !important;
+}
+[data-theme="light"] .why-title { color: #2c1f14 !important; }
+[data-theme="light"] .why-sub { color: #8c7260 !important; }
+[data-theme="light"] .why-arrow {
+  color: color-mix(in srgb, var(--disc-primary) 55%, #2c1f14) !important;
+}
+
+/* ── Specialization cards — frosted glass + 4-hue icon rotation ── */
+[data-theme="light"] .spec-card {
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px rgba(140,114,96,0.07) !important;
+}
+[data-theme="light"] .spec-card::before {
+  background: var(--disc-primary) !important;
+  opacity: 0.85;
+}
+[data-theme="light"] .spec-card:active {
+  background: color-mix(in srgb, var(--disc-primary) 8%, rgba(253,248,242,0.85)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 35%, rgba(232,224,213,0.6)) !important;
+}
+[data-theme="light"] .spec-name { color: #2c1f14 !important; }
+[data-theme="light"] .spec-sub { color: #5c4535 !important; }
+[data-theme="light"] .spec-arrow { color: #a89282 !important; }
+
+/* Spec icon — 4 palette hues rotating */
+[data-theme="light"] .spec-card:nth-child(4n+1) .spec-icon {
+  background: rgba(201,107,85,0.16) !important;
+  border-color: rgba(201,107,85,0.38) !important;
+}
+[data-theme="light"] .spec-card:nth-child(4n+2) .spec-icon {
+  background: rgba(74,135,168,0.16) !important;
+  border-color: rgba(74,135,168,0.38) !important;
+}
+[data-theme="light"] .spec-card:nth-child(4n+3) .spec-icon {
+  background: rgba(106,150,144,0.16) !important;
+  border-color: rgba(106,150,144,0.38) !important;
+}
+[data-theme="light"] .spec-card:nth-child(4n+4) .spec-icon {
+  background: rgba(217,160,64,0.16) !important;
+  border-color: rgba(217,160,64,0.38) !important;
+}
+
+/* Spec tag — keep semantic, ensure readable on cream */
+[data-theme="light"] .spec-tag {
+  background: rgba(140,114,96,0.12) !important;
+  border-color: rgba(140,114,96,0.32) !important;
+  color: #5c4535 !important;
+}
+
+/* ── CTA — vivid disc-colored, beats layout.css blue ── */
+[data-theme="light"] .mobile-screen .cta-btn:not(.cta-continue),
+[data-theme="light"] .cta-btn:not(.cta-continue) {
+  background: linear-gradient(135deg,
+    var(--disc-primary) 0%,
+    color-mix(in srgb, var(--disc-primary) 75%, var(--disc-dark, #2c1f14)) 100%) !important;
+  color: #fff !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.25),
+    0 4px 14px color-mix(in srgb, var(--disc-primary) 30%, transparent),
+    0 10px 26px color-mix(in srgb, var(--disc-primary) 18%, transparent) !important;
+}
+[data-theme="light"] .mobile-screen .cta-btn:not(.cta-continue):hover,
+[data-theme="light"] .cta-btn:not(.cta-continue):hover {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--disc-primary) 85%, #ffffff) 0%,
+    var(--disc-primary) 100%) !important;
+}
+
+/* Quiz CTA (Finish Quiz button — uses inline violet style by default) */
+[data-theme="light"] #quizCtaBtn {
+  background: linear-gradient(135deg, #c96b55 0%, #a84e30 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 20px rgba(201,107,85,.35) !important;
+}
+
+/* ── Float tab bar — frosted cream ── */
+[data-theme="light"] .mobile-screen .float-tab-bar {
+  background: linear-gradient(135deg, rgba(255,253,250,0.92) 0%, rgba(245,237,224,0.88) 100%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(150%);
+  backdrop-filter: blur(28px) saturate(150%);
+  border-color: rgba(232,224,213,0.75) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.60),
+    0 -2px 12px rgba(201,107,85,0.06),
+    0 6px 20px rgba(140,114,96,0.10) !important;
+}
+[data-theme="light"] .mobile-screen .tab-item { color: rgba(92,69,53,0.55) !important; }
+[data-theme="light"] .mobile-screen .tab-item.active {
+  background: color-mix(in srgb, var(--disc-primary) 18%, rgba(255,255,255,0.5)) !important;
+  color: color-mix(in srgb, var(--disc-primary) 50%, #2c1f14) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 32%, transparent) !important;
+}
+
+/* Not-found state */
+[data-theme="light"] .not-found-title { color: #2c1f14 !important; }
+[data-theme="light"] .not-found-sub { color: #5c4535 !important; }
+[data-theme="light"] .not-found-icon { opacity: 0.50 !important; }

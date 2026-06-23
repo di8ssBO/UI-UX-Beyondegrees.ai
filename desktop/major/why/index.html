@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why I Match — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  /* ── Cấu trúc y hệt discipline/why (hero · AI box · assertions · breakdown · tabs) ── */
+  .why-layout { display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start; }
+  .why-hero { display: flex; align-items: center; gap: 24px; padding: 32px; position: relative; overflow: hidden; }
+  .why-hero::after {
+    content: ''; position: absolute; top: -40%; right: -10%;
+    width: 55%; height: 140%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 18%, transparent) 0%, transparent 70%);
+    filter: blur(30px); pointer-events: none;
+  }
+  .why-hero > * { position: relative; z-index: 1; }
+  .why-hero .ico { width: 72px; height: 72px; border-radius: 18px; display: grid; place-items: center; font-size: 34px; flex: none;
+    background: color-mix(in srgb, var(--acc) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 32%, transparent); }
+  .why-hero h1 { font-size: 26px; font-weight: 900; color: var(--text-primary); }
+  .why-hero .rank { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-top: 3px; }
+  .why-pct { margin-left: auto; text-align: center; }
+  .why-pct b { font-size: 42px; font-weight: 900; color: var(--acc-pct); line-height: 1; }
+  .why-pct span { display: block; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .ai-box { margin-top: 20px; padding: 18px 20px; border-radius: 14px;
+    background: color-mix(in srgb, var(--acc) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--acc) 26%, transparent); }
+  .ai-box .lbl { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--acc-pct); }
+  .ai-box p { font-size: 14px; line-height: 1.7; color: var(--text-secondary); margin-top: 8px; }
+  .as-row { display: flex; align-items: center; gap: 14px; padding: 13px 0; }
+  .as-row p { flex: 1; font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+  .as-chip { flex: none; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 999px; }
+  .as-chip.agree    { background: rgba(6,214,160,0.12);   color: var(--mint-500);   border: 1px solid rgba(6,214,160,0.25); }
+  .as-chip.strong   { background: rgba(124,58,237,0.12);  color: var(--violet-400); border: 1px solid rgba(124,58,237,0.3); }
+  .as-chip.neutral  { background: rgba(107,107,154,0.12); color: #9d9dbf;           border: 1px solid rgba(107,107,154,0.2); }
+  .as-chip.disagree { background: rgba(255,71,87,0.12);   color: var(--red-400);    border: 1px solid rgba(255,71,87,0.25); }
+  :root[data-theme="light"] .as-chip.agree    { color:#047857; background:rgba(5,150,105,0.10); border-color:rgba(5,150,105,0.25); }
+  :root[data-theme="light"] .as-chip.strong   { color:#075c9f; background:rgba(2,116,190,0.08); border-color:rgba(2,116,190,0.25); }
+  :root[data-theme="light"] .as-chip.neutral  { color:#8c7260; background:#fdf8f2; border-color:#e8e0d5; }
+  :root[data-theme="light"] .as-chip.disagree { color:#be123c; background:rgba(225,29,72,0.08); border-color:rgba(225,29,72,0.22); }
+  .bd-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; font-size: 14px; font-weight: 700; }
+  .bd-row b { font-size: 18px; font-weight: 900; }
+</style>
+</head>
+<body class="app" data-page="majors" data-crumb="Why I Match">
+  <div class="main">
+    <div class="content fade-in" id="root"></div>
+  </div>
+
+  <script src="../../../shared/scripts/data/majors-data.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script>
+    /* ── % match — nguyên văn major/detail & major/recommendations ── */
+    var MOCK_PCT = {
+      'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
+      'Electrical engineering, Electronic engineering, Information engineering':94,
+      'Engineering':91,'Environmental biotechnology':79,'Environmental engineering':81,
+      'Industrial biotechnology':76,'Materials engineering':84,'Mechanical engineering':88,
+      'Medical engineering':82,'Nano-technology':87,'Other engineering and technologies':75,
+      'Biological sciences':86,'Chemical sciences':84,'Computer and information sciences':89,
+      'Earth and related Environmental sciences':79,'Mathematics':92,'Mathematics and Statistics':90,
+      'Physical sciences':87,
+      'Basic medicine':50,'Clinical medicine':56,'Health sciences':62,'Medical biotechnology':64,
+      'Nursing':47,'Other medical sciences':45,
+      'Agricultural biotechnology':62,'Agriculture, forestry and fishery':50,'Animal and dairy science':46,
+      'Behavioral Sciences':30,'Business':28,'Economics and business':34,'Education':20,
+      'Educational sciences':18,'Helms School of Government':24,'Law':16,'Political science':22,
+      'Psychology':32,'Sciences':19,'Social and economic geography':14,'Sociology':26,
+      'Arts and Sciences':26,'Communication and the Arts':22,'English':30,'History':20,
+      'History and archaeology':16,'Languages and literature':24,'Music':18,
+      'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
+    };
+
+    /* ── Insight + assertions theo ngành cha (mobile DISC_DATA, discipline/why) —
+       quiz chỉ thu thập tín hiệu ở cấp ngành nên "vì sao match" của 1 major
+       được giải thích bằng đúng tín hiệu ngành cha của nó. ── */
+    var DISC_DATA = {
+      kt: { ico:'⚙️', name:'Engineering & Technology',
+        insight:"Your answers show a strong pull toward building, optimizing, and innovating. You think in systems — and that's exactly what this field needs.",
+        assertions:[
+          { text:'I enjoy solving problems by analysing data.', answer:'agree' },
+          { text:"Programming or building software is something I'd love to do daily.", answer:'strong' },
+          { text:'I like designing systems and optimising processes.', answer:'strong' },
+          { text:'AI and automation are shaping the future the way I want.', answer:'agree' },
+          { text:'Cybersecurity and network safety is something I want to specialise in.', answer:'neutral' },
+          { text:'Electronics, chips, and hardware excite me as much as software.', answer:'agree' } ] },
+      tn: { ico:'🔬', name:'Natural Sciences',
+        insight:'Your quiz responses reveal a strong alignment with evidence-based thinking, scientific curiosity, and a drive to understand the natural world from the ground up.',
+        assertions:[
+          { text:'I love experiments and discovering natural laws.', answer:'strong' },
+          { text:'Maths and physics are subjects I genuinely enjoy.', answer:'agree' },
+          { text:'Chemistry and molecular biology are fields I want to go deep in.', answer:'agree' },
+          { text:'I want to explore the universe and study astronomy.', answer:'strong' },
+          { text:'New materials and nanotechnology will change lives — I want to be part of that.', answer:'agree' },
+          { text:'I prefer being creative rather than following structured processes.', answer:'disagree' } ] },
+      xh: { ico:'🧠', name:'Social Sciences',
+        insight:"You're wired to understand people and systems. Your answers show a natural curiosity about why societies work the way they do — and how to make them better.",
+        assertions:[
+          { text:"I'm curious about human behaviour and social structures.", answer:'strong' },
+          { text:'Teamwork and empowering communities is one of my strengths.', answer:'agree' },
+          { text:'I want to be involved in building public policy.', answer:'agree' },
+          { text:'Economics helps me understand why nations thrive or fail.', answer:'strong' },
+          { text:'Psychology and understanding human behaviour is my passion.', answer:'agree' },
+          { text:'I prefer practical, hands-on work over theory.', answer:'disagree' } ] },
+      nv: { ico:'📖', name:'Humanities',
+        insight:"You engage deeply with ideas, narratives, and the human condition. Your responses suggest you're a thinker who finds meaning in language, history, and moral questions.",
+        assertions:[
+          { text:'Reading literature and poetry gives me deep, meaningful emotions.', answer:'strong' },
+          { text:'Studying history helps me understand the present better.', answer:'agree' },
+          { text:'Teaching and passing knowledge to others is my passion.', answer:'agree' },
+          { text:'Writing, storytelling, and creative expression is how I express myself.', answer:'strong' },
+          { text:'Law and protecting human rights are core values for me.', answer:'agree' },
+          { text:'I enjoy studying people more than studying things.', answer:'neutral' } ] },
+      yt: { ico:'🩺', name:'Medical & Health Sciences',
+        insight:'Your care for human well-being and interest in biological systems makes this a natural path. You scored high on empathy and precision — exactly what it demands.',
+        assertions:[
+          { text:'I care about community health and how to prevent diseases.', answer:'agree' },
+          { text:'Caring for and helping sick people is the most meaningful work to me.', answer:'strong' },
+          { text:'Pharmaceutical research and drug development interests me.', answer:'agree' },
+          { text:"Rehabilitation and sports medicine is a field I'm aiming for.", answer:'neutral' },
+          { text:'I prefer being creative rather than following structured processes.', answer:'disagree' },
+          { text:'I like asking big questions about life and meaning.', answer:'agree' } ] },
+      nn: { ico:'🌾', name:'Agricultural Sciences',
+        insight:'Your connection to sustainability and the natural world shows up clearly. You care about feeding people, protecting ecosystems, and working in ways that feel grounded and real.',
+        assertions:[
+          { text:"I'm curious about farming and food systems.", answer:'agree' },
+          { text:'Environmental protection and sustainable development are my priorities.', answer:'strong' },
+          { text:'Biotech in agriculture fascinates me.', answer:'neutral' },
+          { text:'I prefer working outdoors and close to nature over an office.', answer:'agree' },
+          { text:'I care about how food is safely produced for millions of people.', answer:'strong' },
+          { text:'Forests, oceans, and ecosystems need protecting — I want to do that.', answer:'agree' } ] }
+    };
+    var LABELS = { agree:'Agree ✓', strong:'Strong ⚡', neutral:'Neutral –', disagree:'Disagree ✕' };
+
+    var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
+    var wanted = BD.param('major', 'Computer and information sciences');
+    var major = _MAJORS.find(function (m) { return m.title === wanted; })
+             || _MAJORS.find(function (m) { return m.title === 'Computer and information sciences'; })
+             || _MAJORS[0];
+    var dc = major.discCode;
+    var d = DISC_DATA[dc] || DISC_DATA.kt;
+    var pct = MOCK_PCT[major.title] != null ? MOCK_PCT[major.title] : 50;
+    document.title = 'Why I Match — ' + major.title;
+
+    /* Xếp hạng trong nhóm ngành cha (mobile parity style "#N Ranked Match") */
+    var siblings = _MAJORS.filter(function (m) { return m.discCode === dc; })
+      .map(function (m) { return { m: m, pct: MOCK_PCT[m.title] != null ? MOCK_PCT[m.title] : 50 }; })
+      .sort(function (a, b) { return b.pct - a.pct; });
+    var rank = siblings.findIndex(function (s) { return s.m.id === major.id; }) + 1;
+    var rankLabel = '#' + (rank || 1) + ' Ranked in ' + d.name;
+
+    function goBack() { if (history.length > 1) history.back(); else location.href = '../../major/recommendations/'; }
+    window.goBack = goBack;
+
+    var counts = { agree:0, strong:0, neutral:0, disagree:0 };
+    d.assertions.forEach(function (a) { counts[a.answer]++; });
+
+    var assertRows = d.assertions.map(function (a) {
+      return '<div class="as-row row-line"><p>' + a.text + '</p>' +
+        '<span class="as-chip ' + a.answer + '">' + LABELS[a.answer] + '</span></div>';
+    }).join('');
+
+    document.getElementById('root').innerHTML =
+      '<div class="acc-' + dc + '">' +
+        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
+        '<h1 class="page-title">Why I Match 🔍</h1>' +
+        '<div class="why-layout mt-6">' +
+          '<div>' +
+            '<div class="card why-hero">' +
+              '<div class="ico">' + (major.icon || '🎓') + '</div>' +
+              '<div><h1>' + major.title + '</h1><div class="rank">' + rankLabel + '</div></div>' +
+              '<div class="why-pct"><b>' + pct + '%</b><span>Match</span></div>' +
+            '</div>' +
+            '<div class="ai-box">' +
+              '<div class="lbl">✦ AI Analysis</div>' +
+              '<p>' + d.insight + '</p>' +
+            '</div>' +
+            '<div class="card mt-6">' +
+              '<span class="section-label">Answered assertions</span>' +
+              '<div class="mt-4">' + assertRows + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div>' +
+            '<div class="card">' +
+              '<span class="section-label">Response breakdown</span>' +
+              '<div class="mt-4">' +
+                '<div class="bd-row row-line"><span class="as-chip agree">Agree ✓</span><b>' + counts.agree + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip strong">Strong agree ⚡</span><b>' + counts.strong + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip neutral">Neutral –</span><b>' + counts.neutral + '</b></div>' +
+                '<div class="bd-row"><span class="as-chip disagree">Disagree ✕</span><b>' + counts.disagree + '</b></div>' +
+              '</div>' +
+            '</div>' +
+            '<a class="btn btn-primary mt-6" style="width:100%;" href="../../major/detail/?major=' + encodeURIComponent(major.title) + '">Explore this major →</a>' +
+            '<a class="btn btn-ghost mt-2" style="width:100%;margin-top:10px;" href="../../major/recommendations/">← Back to results</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  </script>
+</body>
+</html>

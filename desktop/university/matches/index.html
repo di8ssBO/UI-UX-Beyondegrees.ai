@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>University Matches — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css">
+<style>
+  .uni-layout { display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: start; }
+  @media (max-width: 900px) { .uni-layout { grid-template-columns: 1fr; } }
+  /* Sort pills */
+  .sort-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .sort-pill {
+    padding: 8px 15px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text-secondary); cursor: pointer; backdrop-filter: blur(8px); transition: all .15s;
+  }
+  .sort-pill.on {
+    background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+    border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,0.40);
+  }
+  :root[data-theme="light"] .sort-pill { background: rgba(255,255,255,0.85); border-color: #e8e0d5; color: #5c4535; }
+  :root[data-theme="light"] .sort-pill.on { background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 4px 14px rgba(201,107,85,0.38); }
+  /* Filter panel */
+  .fil-group { margin-bottom: 18px; }
+  .fil-group .lb { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; display: block; }
+  .fil-opt { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; }
+  .fil-opt input { accent-color: #7c3aed; }
+  :root[data-theme="light"] .fil-opt input { accent-color: #c96b55; }
+  .fil-scroll { max-height: 196px; overflow-y: auto; padding-right: 4px; }
+  .fil-scroll::-webkit-scrollbar { width: 5px; }
+  .fil-scroll::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 4px; }
+  .clear-link { font-size: 12px; font-weight: 700; color: var(--violet-400); cursor: pointer; }
+  :root[data-theme="light"] .clear-link { color: #a84e30; }
+
+  /* ── University card — màu sắc theo mobile ── */
+  .uni-card { padding: 18px; }
+  .uc-hero { display: flex; align-items: center; gap: 14px; }
+  /* white logo substrate (mobile .uc-hero-logo-wrap) */
+  .uc-logo { width: 54px; height: 54px; border-radius: 14px; flex: none; display: grid; place-items: center; font-size: 27px; overflow: hidden;
+    background: #ffffff; border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 6px rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.20); }
+  .uc-logo img { width: 40px; height: 40px; object-fit: contain; }
+  .uc-logo .em { font-size: 27px; line-height: 1; }
+  .uc-hinfo { flex: 1; min-width: 0; }
+  .uc-name { font-size: 16px; font-weight: 800; color: var(--text-primary); line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .uc-metarow { display: flex; align-items: center; gap: 7px; margin-top: 6px; flex-wrap: wrap; }
+  .uc-loc { font-size: 12px; color: var(--text-muted); }
+  .uc-type-chip { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid; }
+  .uc-type-chip.pub  { color: var(--mint-400);   background: rgba(6,214,160,.10);  border-color: rgba(6,214,160,.25); }
+  .uc-type-chip.priv { color: #fb923c;           background: rgba(251,146,60,.10); border-color: rgba(251,146,60,.25); }
+  .uc-type-chip.intl { color: var(--violet-300); background: rgba(24,99,220,.12);  border-color: rgba(24,99,220,.25); }
+  :root[data-theme="light"] .uc-type-chip.pub  { color: #2f6f53; background: rgba(74,158,122,.12); border-color: rgba(74,158,122,.30); }
+  :root[data-theme="light"] .uc-type-chip.priv { color: #a84e30; background: rgba(201,107,85,.10); border-color: rgba(201,107,85,.30); }
+  :root[data-theme="light"] .uc-type-chip.intl { color: #075c9f; background: rgba(2,116,190,.08); border-color: rgba(2,116,190,.25); }
+  /* match badge — transparent, colored number (mobile) */
+  .uc-match { flex: none; text-align: center; min-width: 46px; }
+  .uc-match-val { font-size: 19px; font-weight: 900; line-height: 1; }
+  .uc-match-lbl { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .uc-match.mh .uc-match-val { color: var(--mint-400); }
+  .uc-match.mm .uc-match-val { color: var(--orange-400); }
+  .uc-match.ml .uc-match-val { color: var(--red-400); }
+  :root[data-theme="light"] .uc-match.mh .uc-match-val { color: #4a9e7a; }
+  :root[data-theme="light"] .uc-match.mm .uc-match-val { color: #d9a040; }
+  :root[data-theme="light"] .uc-match.ml .uc-match-val { color: #c45540; }
+  /* stats strip — dusty blue + sage (mobile .uc-stats) */
+  .uc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 16px; padding: 14px 12px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(74,135,168,0.20) 0%, rgba(106,150,144,0.12) 100%);
+    border: 1px solid rgba(74,135,168,0.32); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
+  .uc-stat { text-align: center; padding: 0 12px; }
+  .uc-stat:not(:last-child) { border-right: 1px solid rgba(74,135,168,0.32); }
+  .uc-stat .v { font-size: 14px; font-weight: 800; color: var(--text-primary); line-height: 1.3; }
+  .uc-stat .l { font-size: 10px; font-weight: 700; color: #8fb5cc; margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+  :root[data-theme="light"] .uc-stats { background: #c4d9e5; border-color: #a3c2d3; box-shadow: inset 0 1px 0 rgba(255,255,255,0.45); }
+  :root[data-theme="light"] .uc-stat:not(:last-child) { border-right-color: #a3c2d3; }
+  :root[data-theme="light"] .uc-stat .v { color: #2c1f14; }
+  :root[data-theme="light"] .uc-stat .l { color: #2f6a8c; }
+  /* actions: Save · View Programs (→ detail) · Compare */
+  .uc-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+  .uc-save { width: 40px; height: 40px; border-radius: 11px; flex: none; display: grid; place-items: center; font-size: 16px;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted); cursor: pointer; transition: all .15s; }
+  .uc-save.on { color: #fb7185; border-color: rgba(251,113,133,0.5); background: rgba(251,113,133,0.10); }
+  /* Compare — toggle có nhãn rõ ràng (select-to-compare, hiện sẵn, không cần bung thẻ) */
+  .uc-cmp { height: 40px; padding: 0 14px; border-radius: 11px; flex: none;
+    display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; white-space: nowrap;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary); cursor: pointer; transition: all .15s; }
+  .uc-cmp:hover:not(:disabled) { color: var(--text-primary); border-color: rgba(124,58,237,0.40); }
+  .uc-cmp.on  { color: var(--violet-300); border-color: rgba(124,58,237,0.5); background: rgba(124,58,237,0.14); }
+  .uc-cmp:disabled { opacity: .4; cursor: not-allowed; }
+  :root[data-theme="light"] .uc-save { background: #fdf8f2; border-color: #e8e0d5; }
+  :root[data-theme="light"] .uc-cmp { background: #fdf8f2; border-color: #e8e0d5; color: #5c4535; }
+  :root[data-theme="light"] .uc-cmp:hover:not(:disabled) { border-color: rgba(201,107,85,0.45); color: #a84e30; }
+  :root[data-theme="light"] .uc-cmp.on { color: #2f6a8c; border-color: rgba(74,135,168,0.5); background: rgba(127,168,190,0.18); }
+  .uc-view { flex: 1; height: 40px; border-radius: 11px; text-decoration: none; font-size: 13px; font-weight: 800;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    background: linear-gradient(90deg, rgba(24,99,220,0.28), rgba(6,214,160,0.20)); border: 1px solid rgba(24,99,220,0.38); color: var(--violet-300);
+    transition: all .15s; }
+  .uc-view:hover { transform: translateY(-1px); border-color: rgba(24,99,220,0.55); }
+  :root[data-theme="light"] .uc-view { background: linear-gradient(90deg, rgba(201,107,85,0.14), rgba(74,158,122,0.12)); border-color: rgba(201,107,85,0.32); color: #a84e30; }
+
+  /* ── Light mode: rotating 6-hue band per card (mobile palette identity) ── */
+  :root[data-theme="light"] .uni-card:nth-child(6n+1) { background: linear-gradient(180deg, rgba(253,248,242,0.95) 52%, rgba(248,207,194,0.55) 100%); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+2) { background: linear-gradient(180deg, rgba(253,248,242,0.95) 52%, rgba(216,204,191,0.55) 100%); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+3) { background: linear-gradient(180deg, rgba(253,248,242,0.95) 52%, rgba(196,217,229,0.55) 100%); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+4) { background: linear-gradient(180deg, rgba(253,248,242,0.95) 52%, rgba(244,201,193,0.55) 100%); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+5) { background: linear-gradient(180deg, rgba(253,248,242,0.95) 52%, rgba(197,217,215,0.55) 100%); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+6) { background: linear-gradient(180deg, rgba(253,248,242,0.95) 52%, rgba(245,219,170,0.55) 100%); }
+  /* logo dome tint theo hue từng thẻ (light) */
+  :root[data-theme="light"] .uni-card:nth-child(6n+1) .uc-logo { box-shadow: inset 0 2px 3px #fff, inset 0 -5px 10px rgba(201,107,85,0.15), inset 0 0 0 1px rgba(201,107,85,0.22), 0 4px 10px rgba(201,107,85,0.10); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+2) .uc-logo { box-shadow: inset 0 2px 3px #fff, inset 0 -5px 10px rgba(107,84,64,0.15),  inset 0 0 0 1px rgba(107,84,64,0.22),  0 4px 10px rgba(107,84,64,0.10); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+3) .uc-logo { box-shadow: inset 0 2px 3px #fff, inset 0 -5px 10px rgba(47,106,140,0.15), inset 0 0 0 1px rgba(47,106,140,0.22), 0 4px 10px rgba(47,106,140,0.10); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+4) .uc-logo { box-shadow: inset 0 2px 3px #fff, inset 0 -5px 10px rgba(196,85,64,0.15),  inset 0 0 0 1px rgba(196,85,64,0.22),  0 4px 10px rgba(196,85,64,0.10); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+5) .uc-logo { box-shadow: inset 0 2px 3px #fff, inset 0 -5px 10px rgba(74,158,122,0.15), inset 0 0 0 1px rgba(74,158,122,0.22), 0 4px 10px rgba(74,158,122,0.10); }
+  :root[data-theme="light"] .uni-card:nth-child(6n+6) .uc-logo { box-shadow: inset 0 2px 3px #fff, inset 0 -5px 10px rgba(217,160,64,0.15), inset 0 0 0 1px rgba(217,160,64,0.22), 0 4px 10px rgba(217,160,64,0.10); }
+
+  .res-count { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+  .saved-chip { margin-left: auto; cursor: pointer; }
+  .saved-chip.on { background: rgba(251,113,133,0.12); border-color: rgba(251,113,133,0.3); color: #fb7185; }
+
+  /* Locked state (quizProgress < 30) */
+  .lock-banner {
+    display: flex; align-items: center; gap: 18px; padding: 22px 26px; margin-bottom: 18px;
+    background: rgba(124,58,237,.10); border: 1px solid rgba(124,58,237,.30); border-radius: 18px;
+  }
+  .lock-banner .lk-ic { font-size: 34px; flex: none; }
+  .lock-banner .lk-title { font-size: 17px; font-weight: 800; color: var(--text-primary); }
+  .lock-banner .lk-sub { font-size: 13px; color: var(--text-muted); line-height: 1.55; margin-top: 3px; }
+  .lock-banner .lk-sub strong { color: var(--text-primary); }
+  .lock-banner .lk-cta {
+    margin-left: auto; flex: none; padding: 12px 26px; border: none; border-radius: 999px; cursor: pointer;
+    background: var(--violet-600); color: #fff; font-size: 14px; font-weight: 800; box-shadow: 0 4px 16px rgba(124,58,237,.4);
+    transition: transform var(--tr-fast), background var(--tr-fast);
+  }
+  .lock-banner .lk-cta:hover { transform: translateY(-2px); background: var(--violet-500); }
+  :root[data-theme="light"] .lock-banner { background: rgba(201,107,85,.10); border-color: rgba(201,107,85,.32); }
+  :root[data-theme="light"] .lock-banner .lk-cta { background: #c96b55; box-shadow: 0 4px 16px rgba(201,107,85,.32); }
+  :root[data-theme="light"] .lock-banner .lk-cta:hover { background: #a84e30; }
+  .uni-card.locked { opacity: .55; filter: blur(2px); pointer-events: none; user-select: none; }
+
+  /* Compare tray + overlay */
+  .cmp-tray {
+    /* căn theo bề rộng sidebar thu gọn (76px) — sidebar chỉ nở 256px khi hover */
+    position: fixed; left: 76px; right: 0; bottom: 0; z-index: 90; display: none;
+    align-items: center; gap: 16px; padding: 14px 32px;
+    background: rgba(13,13,26,0.92); border-top: 1px solid rgba(124,58,237,0.3);
+    backdrop-filter: blur(20px) saturate(160%);
+  }
+  .cmp-tray.show { display: flex; }
+  @media (max-width: 760px) { .cmp-tray { left: 0; } }
+  :root[data-theme="light"] .cmp-tray { background: rgba(253,248,242,0.95); border-top-color: rgba(201,107,85,0.3); }
+  .cmp-tray .ct-lbl { font-size: 13px; font-weight: 800; color: var(--text-primary); }
+  .cmp-tray .ct-pills { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; }
+  .cmp-tray .ct-pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
+    background: rgba(124,58,237,0.14); border: 1px solid rgba(124,58,237,0.3); font-size: 12px; font-weight: 700; color: var(--violet-300); }
+  .cmp-tray .ct-pill .x { cursor: pointer; opacity: .7; }
+  :root[data-theme="light"] .cmp-tray .ct-pill { background: rgba(2,116,190,0.08); border-color: rgba(2,116,190,0.25); color: #075c9f; }
+  .cmp-overlay { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center;
+    background: rgba(6,6,15,0.75); backdrop-filter: blur(8px); padding: 30px; }
+  :root[data-theme="light"] .cmp-overlay { background: rgba(245,237,224,0.82); }
+  .cmp-overlay.show { display: flex; }
+  .cmp-modal { width: 100%; max-width: 940px; max-height: 88vh; overflow: auto; padding: 26px 28px; }
+
+  /* ── Compare content — vertical-compare (đồng nhất mobile, lưới 2 cột cho desktop) ── */
+  .dcmp { display: flex; flex-direction: column; gap: 16px; }
+  /* School strip — thẻ trường (logo + tên + %match), đổi màu sage/blue/terra */
+  .dcmp-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  .dcmp-school { position: relative; min-width: 0; padding: 16px 16px 14px; border-radius: 16px;
+    border: 1.5px solid var(--vc-border); background: var(--vc-bg);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 8px 22px rgba(0,0,0,.16); }
+  .dcmp-school .ds-logo { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; overflow: hidden;
+    background: #fff; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 3px 10px rgba(0,0,0,.22); margin-bottom: 10px; }
+  .dcmp-school .ds-logo img { width: 32px; height: 32px; object-fit: contain; }
+  .dcmp-school .ds-logo .em { font-size: 22px; line-height: 1; }
+  .dcmp-school .ds-name { font-size: 13px; font-weight: 800; color: var(--text-primary); line-height: 1.3;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 34px; }
+  .dcmp-school .ds-match { margin-top: 8px; font-size: 24px; font-weight: 900; letter-spacing: -.02em; color: var(--vc-accent); }
+  .dcmp-school .ds-match small { font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-left: 6px; }
+  .dcmp-school .ds-remove { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 8px; flex: none;
+    display: grid; place-items: center; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06);
+    color: var(--text-muted); font-size: 11px; cursor: pointer; transition: all .15s; }
+  .dcmp-school .ds-remove:hover { color: #fff; background: rgba(255,71,87,.32); border-color: rgba(255,71,87,.55); }
+  /* Sections — mỗi tiêu chí một thẻ màu, xếp lưới 2 cột */
+  .dcmp-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 620px) { .dcmp-sections { grid-template-columns: 1fr; } }
+  .dcmp-sec { --vc-accent: var(--violet-400); --vc-soft: rgba(255,255,255,.06); --vc-border: rgba(255,255,255,.10); --vc-bg: rgba(255,255,255,.04);
+    border: 1.5px solid var(--vc-border); border-radius: 16px; overflow: hidden; background: var(--vc-bg);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 8px 20px rgba(0,0,0,.14); }
+  .dcmp-sec.full { grid-column: 1 / -1; }
+  .dcmp-head { display: flex; align-items: center; gap: 11px; padding: 13px 16px; border-bottom: 1px solid var(--vc-border); }
+  .dcmp-head .ic { width: 36px; height: 36px; border-radius: 11px; flex: none; display: grid; place-items: center;
+    background: var(--vc-soft); color: var(--vc-accent); font-size: 17px; }
+  .dcmp-head .ti { font-size: 12.5px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; color: var(--text-primary); }
+  .dcmp-head .su { font-size: 10.5px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+  .dcmp-rows { display: flex; flex-direction: column; }
+  .dcmp-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(90px,42%); gap: 10px; align-items: center; padding: 11px 16px; border-top: 1px solid rgba(255,255,255,.05); }
+  .dcmp-row:first-child { border-top: 0; }
+  .dcmp-row .rn { min-width: 0; display: flex; align-items: center; gap: 8px; }
+  .dcmp-row .rn .em { font-size: 16px; flex: none; }
+  .dcmp-row .rn b { font-size: 13px; font-weight: 800; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dcmp-row .rv { font-size: 13px; font-weight: 800; color: var(--text-secondary); text-align: right; overflow-wrap: anywhere; }
+  .dcmp-row.match .rv { font-size: 22px; font-weight: 900; letter-spacing: -.03em; color: var(--vc-accent); }
+  .dcmp-row.best .rv { color: var(--vc-accent); }
+  .dcmp-best { display: inline-flex; margin-left: 7px; padding: 2px 7px; border-radius: 999px; background: var(--vc-soft); color: var(--vc-accent);
+    font-size: 8.5px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; vertical-align: 2px; }
+  /* accent variants (dùng chung cho school + section) */
+  .dcmp-terra { --vc-accent:#e8917a; --vc-border:rgba(201,107,85,.30); --vc-soft:rgba(201,107,85,.16); --vc-bg:linear-gradient(135deg,rgba(201,107,85,.13),rgba(255,255,255,.04)); }
+  .dcmp-blue  { --vc-accent:#6ba3ff; --vc-border:rgba(24,99,220,.30); --vc-soft:rgba(24,99,220,.15); --vc-bg:linear-gradient(135deg,rgba(24,99,220,.13),rgba(255,255,255,.04)); }
+  .dcmp-sage  { --vc-accent:#06d6a0; --vc-border:rgba(6,214,160,.28); --vc-soft:rgba(6,214,160,.14); --vc-bg:linear-gradient(135deg,rgba(6,214,160,.12),rgba(255,255,255,.04)); }
+  .dcmp-sand  { --vc-accent:#f0c878; --vc-border:rgba(140,114,96,.32); --vc-soft:rgba(140,114,96,.16); --vc-bg:linear-gradient(135deg,rgba(140,114,96,.14),rgba(255,255,255,.04)); }
+  /* Light theme — palette ấm (parity mobile) */
+  :root[data-theme="light"] .dcmp-school { box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 6px 18px rgba(92,69,53,.08); }
+  :root[data-theme="light"] .dcmp-sec { box-shadow: inset 0 1px 0 rgba(255,255,255,.78), 0 2px 8px rgba(92,69,53,.06), 0 12px 28px rgba(140,114,96,.11); }
+  :root[data-theme="light"] .dcmp-terra { --vc-accent:#a84e30; --vc-border:rgba(201,107,85,.42); --vc-soft:rgba(201,107,85,.14); --vc-bg:linear-gradient(135deg,rgba(252,234,228,.94),rgba(255,253,250,.86)); }
+  :root[data-theme="light"] .dcmp-blue  { --vc-accent:#2f6a8c; --vc-border:rgba(74,135,168,.42); --vc-soft:rgba(74,135,168,.14); --vc-bg:linear-gradient(135deg,rgba(224,236,243,.94),rgba(255,253,250,.86)); }
+  :root[data-theme="light"] .dcmp-sage  { --vc-accent:#2f6f53; --vc-border:rgba(106,150,144,.42); --vc-soft:rgba(106,150,144,.16); --vc-bg:linear-gradient(135deg,rgba(226,237,236,.95),rgba(255,253,250,.86)); }
+  :root[data-theme="light"] .dcmp-sand  { --vc-accent:#6b5440; --vc-border:rgba(140,114,96,.42); --vc-soft:rgba(140,114,96,.16); --vc-bg:linear-gradient(135deg,rgba(240,233,223,.96),rgba(255,253,250,.88)); }
+  :root[data-theme="light"] .dcmp-row { border-top-color: rgba(140,114,96,.14); }
+  :root[data-theme="light"] .dcmp-row .rv { color: #2c1f14; }
+  :root[data-theme="light"] .dcmp-row.match .rv,
+  :root[data-theme="light"] .dcmp-row.best .rv { color: var(--vc-accent); }
+  :root[data-theme="light"] .dcmp-school .ds-remove { background: #fdf8f2; border-color: #e8e0d5; }
+</style>
+</head>
+<body class="app" data-page="universities" data-crumb="University Matches">
+  <div class="main">
+    <div class="content fade-in">
+      <h1 class="page-title">Best Universities <span class="ac">For You</span></h1>
+      <p class="page-sub">Top institutions matching your academic profile, curated by our advanced matching engine.</p>
+
+      <div class="uni-layout mt-8">
+        <!-- FILTERS -->
+        <div class="card" style="position:sticky;top:90px;">
+          <div class="flex between">
+            <span class="section-label">Filters</span>
+            <span class="clear-link" id="clearAll">Clear all</span>
+          </div>
+          <div class="fil-group mt-4" id="filRegion">
+            <span class="lb">Region</span>
+            <label class="fil-opt"><input type="checkbox" value="asia" checked> Asia</label>
+            <label class="fil-opt"><input type="checkbox" value="america" checked> America</label>
+            <label class="fil-opt"><input type="checkbox" value="europe" checked> Europe</label>
+            <label class="fil-opt"><input type="checkbox" value="africa" checked> Africa</label>
+            <label class="fil-opt"><input type="checkbox" value="oceania" checked> Oceania</label>
+          </div>
+          <div class="fil-group" id="filCountryGroup">
+            <span class="lb">Country</span>
+            <div class="fil-scroll" id="filCountry"></div>
+          </div>
+          <div class="fil-group" id="filAid">
+            <span class="lb">Financial Aid</span>
+            <label class="fil-opt"><input type="checkbox" value="full" checked> Full Scholarship</label>
+            <label class="fil-opt"><input type="checkbox" value="need" checked> Need-Based Aid</label>
+            <label class="fil-opt"><input type="checkbox" value="merit" checked> Merit Scholarship</label>
+          </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div>
+          <div class="flex" style="flex-wrap:wrap;gap:10px;">
+            <div class="sort-row" id="sortRow">
+              <button class="sort-pill on" data-sort="match">↓ Best Match</button>
+              <button class="sort-pill" data-sort="mix">⚡ Diverse Mix</button>
+              <button class="sort-pill" data-sort="employment">↓ Employment</button>
+              <button class="sort-pill" data-sort="az">↓ A → Z</button>
+            </div>
+            <span class="chip saved-chip" id="savedChip">🤍 Saved <b id="savedCount">0</b></span>
+          </div>
+          <div class="res-count mt-4"><b id="resCount">—</b> universities</div>
+          <div id="lockWrap"></div>
+          <div class="grid grid-2 mt-4" id="uniGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare tray -->
+  <div class="cmp-tray" id="cmpTray">
+    <span class="ct-lbl">Compare <b id="cmpCount">0</b>/3</span>
+    <div class="ct-pills" id="cmpPills"></div>
+    <button class="btn btn-ghost" id="cmpClear" style="padding:8px 16px;">Clear</button>
+    <button class="btn btn-primary" id="cmpGo" style="padding:8px 18px;">Compare →</button>
+  </div>
+
+  <!-- Compare overlay -->
+  <div class="cmp-overlay" id="cmpOverlay">
+    <div class="card cmp-modal">
+      <div class="flex between" style="margin-bottom:18px;">
+        <h2 style="font-size:20px;font-weight:900;color:var(--text-primary);">Compare Universities <span id="cmpTitleN" style="color:var(--text-muted);font-weight:700;font-size:14px;"></span></h2>
+        <button class="btn btn-ghost" id="cmpClose" style="padding:8px 16px;">✕ Close</button>
+      </div>
+      <div id="cmpTableWrap"></div>
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/data/uni-data.js"></script>
+  <script src="../../../shared/scripts/data/uni-img-map.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../_shell/desktop.js?v=3"></script>
+  <script>
+    function getRegion(country) {
+      var asia = ['Vietnam','Singapore','Japan','South Korea','China','Hong Kong','Malaysia','Thailand','India','Taiwan'];
+      var america = ['USA','United States','Canada','Brazil','Mexico'];
+      var europe = ['UK','United Kingdom','Germany','France','Netherlands','Switzerland','Sweden','Finland','Italy','Spain'];
+      var africa = ['Kenya','Nigeria','South Africa','Egypt','Morocco'];
+      var oceania = ['Australia','New Zealand'];
+      if (asia.indexOf(country) > -1) return 'asia';
+      if (america.indexOf(country) > -1) return 'america';
+      if (europe.indexOf(country) > -1) return 'europe';
+      if (africa.indexOf(country) > -1) return 'africa';
+      if (oceania.indexOf(country) > -1) return 'oceania';
+      return 'asia';
+    }
+    function matchCls(m) { return m >= 85 ? 'mh' : m >= 70 ? 'mm' : 'ml'; }
+    /* logo trường thật (UNI_IMG_MAP) → fallback emoji u.icon */
+    function uniLogo(u) {
+      var map = (typeof UNI_IMG_MAP !== 'undefined') ? UNI_IMG_MAP : (window.UNI_IMG_MAP || {});
+      var im = map[u.id] || { icon: null };
+      return im.icon
+        ? '<img src="' + im.icon + '" alt="' + u.name + ' logo" onerror="this.style.display=\'none\';this.parentNode.querySelector(\'.em\').style.display=\'block\'"><span class="em" style="display:none">' + u.icon + '</span>'
+        : '<span class="em">' + u.icon + '</span>';
+    }
+
+    var saved = {};
+    var compare = [];
+    var showSaved = false;
+    var sortMode = 'match';
+
+    var rawProgress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
+    var rawMilestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    var answered = rawMilestone >= 30 ? 30 : Math.max(rawProgress, rawMilestone);
+    var locked = answered < 30;
+
+    (function buildCountryFilter() {
+      var countries = [];
+      UNI_DATA.forEach(function (u) { if (countries.indexOf(u.country) < 0) countries.push(u.country); });
+      countries.sort();
+      document.getElementById('filCountry').innerHTML = countries.map(function (c) {
+        return '<label class="fil-opt" data-region="' + getRegion(c) + '"><input type="checkbox" value="' + c + '" checked> ' + c + '</label>';
+      }).join('');
+    })();
+
+    function checkedVals(sel) {
+      var out = []; document.querySelectorAll(sel).forEach(function (i) { if (i.checked) out.push(i.value); }); return out;
+    }
+
+    function filtered() {
+      var regs = checkedVals('#filRegion input');
+      var ctrys = checkedVals('#filCountry input');
+      var aids = checkedVals('#filAid input');
+      var list = UNI_DATA.filter(function (u) {
+        return regs.indexOf(getRegion(u.country)) > -1 &&
+               ctrys.indexOf(u.country) > -1 &&
+               aids.indexOf(u.aidType || 'merit') > -1;
+      });
+      if (showSaved) list = list.filter(function (u) { return saved[u.id]; });
+      if (sortMode === 'match') list.sort(function (a, b) { return b.match - a.match; });
+      else if (sortMode === 'employment') list.sort(function (a, b) { return parseInt(b.employment) - parseInt(a.employment); });
+      else if (sortMode === 'az') list.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      else if (sortMode === 'mix') {
+        var byC = {}; list.forEach(function (u) { (byC[u.country] = byC[u.country] || []).push(u); });
+        Object.keys(byC).forEach(function (c) { byC[c].sort(function (a, b) { return b.match - a.match; }); });
+        var out = [], more = true;
+        while (more) {
+          more = false;
+          Object.keys(byC).forEach(function (c) { if (byC[c].length) { out.push(byC[c].shift()); more = true; } });
+        }
+        list = out;
+      }
+      return list;
+    }
+
+    function syncCountryByRegion() {
+      var regs = checkedVals('#filRegion input');
+      document.querySelectorAll('#filCountry .fil-opt').forEach(function (lab) {
+        lab.style.display = regs.indexOf(lab.dataset.region) > -1 ? '' : 'none';
+      });
+    }
+
+    /* ── Card: View Programs → vào thẳng university-detail ── */
+    function cardHTML(u) {
+      var matchTxt = locked ? '??' : (u.match + '%');
+      var detailHref = locked ? 'javascript:void 0' : ('../../university/detail/?u=' + u.id);
+      var compareHas = compare.indexOf(u.id) > -1;
+      var cmpDisabled = !compareHas && compare.length >= 3;
+      return '<div class="card uni-card' + (locked ? ' locked' : '') + '">' +
+        '<div class="uc-hero">' +
+          '<div class="uc-logo">' + uniLogo(u) + '</div>' +
+          '<div class="uc-hinfo">' +
+            '<div class="uc-name">' + u.name + '</div>' +
+            '<div class="uc-metarow"><span class="uc-loc">📍 ' + u.loc + '</span>' +
+              '<span class="uc-type-chip ' + (u.type === 'pub' ? 'pub' : u.type === 'priv' ? 'priv' : 'intl') + '">' + u.typeLabel + '</span></div>' +
+          '</div>' +
+          '<div class="uc-match ' + matchCls(u.match) + '"><div class="uc-match-val">' + matchTxt + '</div><div class="uc-match-lbl">MATCH</div></div>' +
+        '</div>' +
+        '<div class="uc-stats">' +
+          '<div class="uc-stat"><div class="v">' + u.ranking + '</div><div class="l">Ranking</div></div>' +
+          '<div class="uc-stat"><div class="v">' + u.tuition + '</div><div class="l">Annual Tuition</div></div>' +
+        '</div>' +
+        '<div class="uc-actions">' +
+          '<button class="uc-save' + (saved[u.id] ? ' on' : '') + '" data-id="' + u.id + '" title="Save">' + (saved[u.id] ? '♥' : '♡') + '</button>' +
+          '<a class="uc-view" href="' + detailHref + '">View Programs →</a>' +
+          '<button class="uc-cmp' + (compareHas ? ' on' : '') + '" data-id="' + u.id + '" title="' + (cmpDisabled ? 'Compare list full (max 3)' : 'Add to compare') + '"' + (cmpDisabled ? ' disabled' : '') + '>' + (compareHas ? '✓ Added' : '⇄ Compare') + '</button>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function render() {
+      var list = filtered();
+      document.getElementById('resCount').textContent = list.length;
+
+      var lw = document.getElementById('lockWrap');
+      if (locked) {
+        var rem = 30 - answered;
+        lw.innerHTML =
+          '<div class="lock-banner">' +
+            '<span class="lk-ic">🔒</span>' +
+            '<div><div class="lk-title">University Matches Locked</div>' +
+            '<div class="lk-sub">Complete <strong>' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</strong> to unlock your best-fit universities.</div></div>' +
+            '<button class="lk-cta" id="lkCta">' + (answered > 0 ? 'Continue Quiz →' : 'Start Quiz →') + '</button>' +
+          '</div>';
+        document.getElementById('lkCta').onclick = function () { location.href = '../../quiz/quiz-card/'; };
+      } else { lw.innerHTML = ''; }
+
+      var g = document.getElementById('uniGrid');
+      g.innerHTML = list.map(cardHTML).join('');
+
+      if (!locked) {
+        g.querySelectorAll('.uc-save').forEach(function (h) {
+          h.onclick = function () {
+            saved[h.dataset.id] = !saved[h.dataset.id];
+            document.getElementById('savedCount').textContent =
+              Object.keys(saved).filter(function (k) { return saved[k]; }).length;
+            render();
+          };
+        });
+        g.querySelectorAll('.uc-cmp').forEach(function (b) {
+          b.onclick = function () { toggleCompare(b.dataset.id); };
+        });
+      }
+      renderCmpTray();
+    }
+
+    /* ── Compare (max 3) ── */
+    function toggleCompare(id) {
+      var i = compare.indexOf(id);
+      if (i > -1) compare.splice(i, 1);
+      else { if (compare.length >= 3) return; compare.push(id); }
+      render();
+    }
+    function uniById(id) { return UNI_DATA.find(function (u) { return u.id === id; }); }
+    function renderCmpTray() {
+      var tray = document.getElementById('cmpTray');
+      tray.classList.toggle('show', compare.length > 0);
+      document.getElementById('cmpPills').innerHTML = compare.map(function (id) {
+        var u = uniById(id);
+        return '<span class="ct-pill">' + u.icon + ' ' + u.name + ' <span class="x" data-id="' + id + '">✕</span></span>';
+      }).join('');
+      document.querySelectorAll('#cmpPills .x').forEach(function (x) { x.onclick = function () { toggleCompare(x.dataset.id); }; });
+      document.getElementById('cmpCount').textContent = compare.length;
+      var go = document.getElementById('cmpGo');
+      if (compare.length < 2) {
+        go.disabled = true; go.style.opacity = '.5';
+        go.textContent = compare.length === 1 ? 'Select 1 more' : 'Compare →';
+      } else {
+        go.disabled = false; go.style.opacity = '1';
+        go.textContent = 'Compare ' + compare.length + ' →';
+      }
+    }
+    function openCompare() {
+      if (compare.length < 2) return;
+      renderCompare();
+      document.getElementById('cmpOverlay').classList.add('show');
+    }
+
+    /* Vertical-compare (đồng nhất mobile): dải thẻ trường + section theo tiêu chí, tô đậm "Best" */
+    function renderCompare() {
+      var us = compare.map(uniById).filter(Boolean);
+      if (us.length < 2) { document.getElementById('cmpOverlay').classList.remove('show'); return; }
+      var SK = ['sage', 'blue', 'terra'];
+      var bestMatch = Math.max.apply(null, us.map(function (u) { return u.match; }));
+      var bestEmp   = Math.max.apply(null, us.map(function (u) { return parseInt(u.employment) || 0; }));
+      function shortName(u) { return u.name.split(' ').slice(0, 3).join(' '); }
+
+      var strip = '<div class="dcmp-strip">' + us.map(function (u, i) {
+        return '<div class="dcmp-school dcmp-' + SK[i % SK.length] + '">' +
+          '<button class="ds-remove" data-id="' + u.id + '" title="Remove from compare">✕</button>' +
+          '<div class="ds-logo">' + uniLogo(u) + '</div>' +
+          '<div class="ds-name">' + u.name + '</div>' +
+          '<div class="ds-match">' + u.match + '%<small>Match</small></div>' +
+        '</div>';
+      }).join('') + '</div>';
+
+      function section(o) {
+        var rows = us.map(function (u) {
+          var info = o.fn(u);
+          return '<div class="dcmp-row' + (o.match ? ' match' : '') + (info.best ? ' best' : '') + '">' +
+            '<div class="rn"><span class="em">' + (u.icon || '🎓') + '</span><b>' + shortName(u) + '</b></div>' +
+            '<div class="rv">' + info.val + (info.best ? '<span class="dcmp-best">Best</span>' : '') + '</div>' +
+          '</div>';
+        }).join('');
+        return '<div class="dcmp-sec dcmp-' + o.kind + (o.full ? ' full' : '') + '">' +
+          '<div class="dcmp-head"><div class="ic">' + o.icon + '</div>' +
+            '<div><div class="ti">' + o.label + '</div><div class="su">' + o.sub + '</div></div></div>' +
+          '<div class="dcmp-rows">' + rows + '</div>' +
+        '</div>';
+      }
+
+      var secs = '<div class="dcmp-sections">' +
+        section({ kind:'terra', full:true, match:true, icon:'🎯', label:'Match Score', sub:'AI compatibility with your profile',
+          fn:function (u) { return { val:u.match + '%', best:u.match === bestMatch }; } }) +
+        section({ kind:'blue', icon:'🏅', label:'Ranking', sub:'Global university rank',
+          fn:function (u) { return { val:u.ranking, best:false }; } }) +
+        section({ kind:'sage', icon:'💼', label:'Employment', sub:'Graduate employment rate',
+          fn:function (u) { return { val:u.employment, best:(parseInt(u.employment) || 0) === bestEmp }; } }) +
+        section({ kind:'sand', icon:'💰', label:'Tuition', sub:'Annual cost',
+          fn:function (u) { return { val:u.tuition, best:false }; } }) +
+        section({ kind:'terra', icon:'🎁', label:'Financial Aid', sub:'Scholarship & support',
+          fn:function (u) { return { val:u.aid, best:false }; } }) +
+        section({ kind:'blue', full:true, icon:'👥', label:'Students', sub:'Total enrollment',
+          fn:function (u) { return { val:u.students || '—', best:false }; } }) +
+      '</div>';
+
+      document.getElementById('cmpTableWrap').innerHTML = '<div class="dcmp">' + strip + secs + '</div>';
+      var titleN = document.getElementById('cmpTitleN');
+      if (titleN) titleN.textContent = '· ' + us.length + ' selected';
+
+      /* Gỡ trường ngay trong bảng so sánh → cập nhật cả lưới thẻ + thanh compare */
+      document.querySelectorAll('#cmpTableWrap .ds-remove').forEach(function (b) {
+        b.onclick = function () {
+          toggleCompare(b.dataset.id);
+          if (compare.length < 2) document.getElementById('cmpOverlay').classList.remove('show');
+          else renderCompare();
+        };
+      });
+    }
+
+    /* ── Wiring ── */
+    document.getElementById('sortRow').addEventListener('click', function (e) {
+      var p = e.target.closest('.sort-pill'); if (!p) return;
+      document.querySelectorAll('.sort-pill').forEach(function (x) { x.classList.remove('on'); });
+      p.classList.add('on'); sortMode = p.dataset.sort; render();
+    });
+    document.getElementById('filRegion').addEventListener('change', function () { syncCountryByRegion(); render(); });
+    document.getElementById('filCountry').addEventListener('change', render);
+    document.getElementById('filAid').addEventListener('change', render);
+    document.getElementById('clearAll').onclick = function () {
+      document.querySelectorAll('.fil-opt input').forEach(function (i) { i.checked = true; });
+      syncCountryByRegion(); render();
+    };
+    document.getElementById('savedChip').onclick = function () {
+      showSaved = !showSaved;
+      this.classList.toggle('on', showSaved);
+      this.firstChild.textContent = showSaved ? '♥ Saved ' : '🤍 Saved ';
+      render();
+    };
+    document.getElementById('cmpClear').onclick = function () { compare = []; render(); };
+    document.getElementById('cmpGo').onclick = openCompare;
+    document.getElementById('cmpClose').onclick = function () { document.getElementById('cmpOverlay').classList.remove('show'); };
+    document.getElementById('cmpOverlay').onclick = function (e) { if (e.target === this) this.classList.remove('show'); };
+
+    new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    syncCountryByRegion();
+    render();
+  </script>
+</body>
+</html>

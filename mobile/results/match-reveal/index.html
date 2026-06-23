@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Results Screen — BeyonDegrees.ai</title>
+  <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="./style.css">
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEYONDEGREES.AI — THEME SYSTEM v1.0
+   Dark (default) | Light | System
+   Violet → Brand Blue #1863DC migration applied in dark mode
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── DARK MODE: map violet palette → official brand blue ── */
+:root,
+:root[data-theme="dark"] {
+  --violet-950: #06091A;
+  --violet-900: #0A0F28;
+  --violet-800: #0F2060;
+  --violet-700: #1358C4;
+  --violet-600: #1863DC;
+  --violet-500: #0274BE;
+  --violet-400: #6BA3FF;
+  --violet-300: #93BBFF;
+  --violet-200: #B8D4FF;
+  --violet-100: #DCE9FF;
+  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.35);
+  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.20);
+  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.40);
+  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
+}
+
+/* Light-mode token overrides live in design-system/tokens.css */
+
+/* ── LIGHT MODE: body & global overrides ── */
+[data-theme="light"] body {
+  background: #06060f !important;
+  color: #f8fafc !important;
+}
+
+/* Hardcoded violet rgba chips → blue */
+[data-theme="light"] [style*="rgba(124, 58, 237"],
+[data-theme="light"] [style*="rgba(124,58,237"] {
+  background: rgba(24, 99, 220, 0.12) !important;
+  border-color: rgba(24, 99, 220, 0.25) !important;
+  color: #1863DC !important;
+}
+
+/* Cards → white glass */
+[data-theme="light"] .card,
+[data-theme="light"] [class*="card"],
+[data-theme="light"] .quiz-card,
+[data-theme="light"] .result-card,
+[data-theme="light"] .discipline-card,
+[data-theme="light"] .major-card,
+[data-theme="light"] .uni-card,
+[data-theme="light"] .option-card,
+[data-theme="light"] .stat-card,
+[data-theme="light"] .info-card,
+[data-theme="light"] .feature-card {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(24, 99, 220, 0.15) !important;
+  box-shadow: 0 4px 24px rgba(24, 99, 220, 0.10) !important;
+  color: #1A1A2E !important;
+}
+[data-theme="light"] .card:hover,
+[data-theme="light"] [class*="card"]:hover {
+  border-color: rgba(24, 99, 220, 0.35) !important;
+  box-shadow: 0 12px 40px rgba(24, 99, 220, 0.18) !important;
+}
+
+/* Nav / header / tab-bar */
+[data-theme="light"] nav,
+[data-theme="light"] header,
+[data-theme="light"] .nav-bar,
+[data-theme="light"] .tab-bar,
+[data-theme="light"] .top-nav,
+[data-theme="light"] .header {
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-color: rgba(24, 99, 220, 0.12) !important;
+  box-shadow: 0 2px 16px rgba(24, 99, 220, 0.08) !important;
+}
+
+/* Tab items / nav links */
+[data-theme="light"] .tab-item,
+[data-theme="light"] .nav-link,
+[data-theme="light"] .nav-item {
+  color: #808285 !important;
+}
+[data-theme="light"] .tab-item.active,
+[data-theme="light"] .nav-link.active,
+[data-theme="light"] .tab-item:hover {
+  color: #1863DC !important;
+}
+
+/* Chips & tags */
+[data-theme="light"] .chip,
+[data-theme="light"] [class*="chip"],
+[data-theme="light"] [class*="tag"],
+[data-theme="light"] .badge {
+  background: rgba(24, 99, 220, 0.10) !important;
+  border-color: rgba(24, 99, 220, 0.25) !important;
+  color: #1863DC !important;
+}
+[data-theme="light"] [class*="chip-mint"],
+[data-theme="light"] [class*="tag-mint"],
+[data-theme="light"] [class*="chip-success"] {
+  background: rgba(5, 150, 105, 0.12) !important;
+  border-color: rgba(5, 150, 105, 0.30) !important;
+  color: #059669 !important;
+}
+
+/* Dividers */
+[data-theme="light"] .divider,
+[data-theme="light"] hr {
+  background: rgba(24, 99, 220, 0.12) !important;
+}
+
+/* Inputs */
+[data-theme="light"] input,
+[data-theme="light"] textarea,
+[data-theme="light"] .input {
+  background: #FFFFFF !important;
+  border-color: rgba(24, 99, 220, 0.20) !important;
+  color: #1A1A2E !important;
+}
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder {
+  color: #A0A0B0 !important;
+}
+[data-theme="light"] input:focus,
+[data-theme="light"] textarea:focus {
+  border-color: #1863DC !important;
+  box-shadow: 0 0 0 3px rgba(24,99,220,0.15) !important;
+}
+
+/* Buttons: primary stays blue, ghost adapts */
+[data-theme="light"] .btn-ghost,
+[data-theme="light"] [class*="btn-ghost"] {
+  background: rgba(24, 99, 220, 0.08) !important;
+  border-color: rgba(24, 99, 220, 0.20) !important;
+  color: #1863DC !important;
+}
+[data-theme="light"] .btn-ghost:hover {
+  background: rgba(24, 99, 220, 0.14) !important;
+}
+
+/* Background orbs — soften for light mode */
+[data-theme="light"] .bg-orb,
+[data-theme="light"] [class*="orb"] {
+  opacity: 0.35 !important;
+}
+
+/* Progress bars */
+[data-theme="light"] .progress,
+[data-theme="light"] [class*="progress-track"],
+[data-theme="light"] [class*="progress-bg"] {
+  background: rgba(24, 99, 220, 0.12) !important;
+}
+
+/* Breadcrumb */
+[data-theme="light"] .breadcrumb-item { color: #808285 !important; }
+[data-theme="light"] .breadcrumb-item:hover,
+[data-theme="light"] .breadcrumb-item.active { color: #1863DC !important; }
+
+/* Text elements that may be hardcoded white */
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+[data-theme="light"] h4 {
+  color: #1A1A2E;
+}
+[data-theme="light"] p,
+[data-theme="light"] li,
+[data-theme="light"] label,
+[data-theme="light"] td,
+[data-theme="light"] th {
+  color: #3A3A4A;
+}
+
+/* ── TRANSITION: smooth theme switch ── */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.3s ease;
+}
+/* Disable transition for SVG / animations */
+svg *, canvas, video, img { transition: none !important; }
+
+/* ── SIDE CARDS STRIP ─────────────────────────────────────── */
+.side-cards-section {
+  margin: 18px 0 4px;
+}
+.side-cards-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary, rgba(248,250,252,0.5));
+  margin-bottom: 10px;
+  padding: 0 2px;
+}
+.side-cards-track {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.side-cards-track::-webkit-scrollbar { display: none; }
+
+.side-card {
+  flex: 0 0 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 14px 12px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  position: relative;
+  overflow: hidden;
+}
+.side-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  border-radius: inherit;
+}
+.side-card:active { transform: scale(0.96); }
+.side-card:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.07); }
+
+/* Per-card accent colours */
+.side-card--discipline { --sc-accent: #1863DC; }
+.side-card--university { --sc-accent: #9B5DE5; }
+.side-card--career     { --sc-accent: #2ECC71; }
+.side-card--share      { --sc-accent: #F59E0B; }
+
+.side-card::before { background: radial-gradient(circle at top left, rgba(var(--sc-accent, 24,99,220), 0.18), transparent 70%); }
+.side-card:hover::before { opacity: 1; }
+
+.sc-icon {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.07);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sc-accent, var(--violet-400, #6BA3FF));
+  flex-shrink: 0;
+  margin-bottom: 2px;
+}
+.sc-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary, #f8fafc);
+  line-height: 1.2;
+}
+.sc-desc {
+  font-size: 10px;
+  color: var(--text-secondary, rgba(248,250,252,0.55));
+  line-height: 1.35;
+  flex: 1;
+}
+.sc-arrow {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--sc-accent, var(--violet-400, #6BA3FF));
+  align-self: flex-end;
+  margin-top: 2px;
+}
+
+/* Light mode overrides */
+[data-theme="light"] .side-card {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.09);
+}
+[data-theme="light"] .side-card:hover {
+  background: rgba(0,0,0,0.08);
+  border-color: rgba(0,0,0,0.16);
+}
+[data-theme="light"] .sc-icon {
+  background: rgba(0,0,0,0.06);
+}
+
+</style>
+</head>
+<body>
+<div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <span class="breadcrumb-separator">/</span>
+    <a href="../../onboarding/home/" class="breadcrumb-item">Screens</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-item active">Results</span>
+  </div>
+
+  <div class="desktop-container">
+    <div class="device-frame">
+      <div class="device-notch"></div>
+
+      <div class="mobile-screen" id="mobileScreen">
+
+        <!-- ░░ CONFETTI CANVAS ░░ -->
+        <canvas class="confetti-canvas" id="confettiCanvas"></canvas>
+
+        <!-- ░░ AURORA BACKGROUND ░░ -->
+        <div class="aurora-bg" id="auroraBg">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="blob blob-3"></div>
+          <div class="blob blob-4"></div>
+          <div class="noise-overlay"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span>9:41</span>
+          <div class="status-icons">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+          </div>
+        </div>
+
+        <!-- ░░ STORY BAR — Fully filled ░░ -->
+        <div class="story-bar-wrap">
+          <div class="story-seg done"><div class="seg-fill"></div></div>
+          <div class="story-seg done"><div class="seg-fill"></div></div>
+          <div class="story-seg done"><div class="seg-fill"></div></div>
+          <div class="story-seg done"><div class="seg-fill"></div></div>
+          <div class="story-seg done"><div class="seg-fill"></div></div>
+        </div>
+
+        <!-- ░░ ACTION ROW ░░ -->
+        <div class="action-row">
+          <a href="../../onboarding/loading/" class="action-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 12H5M12 5l-7 7 7 7"/>
+            </svg>
+          </a>
+          <div class="action-center">
+            <span class="action-title">Kết quả của bạn</span>
+          </div>
+          <button class="action-btn" id="topShareBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- ░░ SCROLLABLE RESULTS BODY ░░ -->
+        <div class="results-body" id="resultsBody">
+
+          <!-- ── Match Hero ── -->
+          <div class="match-hero" id="matchHero">
+            <div class="match-disc-chip" id="matchDiscChip">
+              <span>💻</span>
+              <span data-i18n="disc.name.kt">Engineering &amp; Technology</span>
+            </div>
+
+            <div class="match-pct-ring" id="matchRing">
+              <div class="match-pct-wrap">
+                <span class="match-pct" id="matchPct">0</span>
+                <span class="match-pct-sym">%</span>
+              </div>
+              <div class="match-label" data-i18n="results.match_label">Match Rate</div>
+            </div>
+
+            <div class="match-badge" id="matchBadge">
+              <span class="badge-star">⭐</span>
+              <span>Top 12% best match</span>
+            </div>
+          </div>
+
+          <!-- ── Headline ── -->
+          <div class="result-headline" id="resultHeadline">
+            <h2 class="result-title">Bạn sinh ra để làm về<br><span class="hl-disc">công nghệ</span> ✨</h2>
+            <p class="result-sub">AI đã phân tích 30 câu trả lời và xác định DNA học thuật của bạn với độ chính xác cao.</p>
+          </div>
+
+          <!-- ── Academic DNA Card (Experiment C — Shareable) ── -->
+          <div class="dna-share-card" id="dnaShareCard">
+            <div class="dsc-glow"></div>
+
+            <div class="dsc-header">
+              <div class="dsc-header-left">
+                <p class="dsc-label" data-i18n="results.dna.label">Academic DNA</p>
+                <p class="dsc-name">Phan Văn Hoang Phuc</p>
+              </div>
+              <button class="dsc-share-btn" id="dnaShareBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+                <span data-i18n="results.dna.share">Share</span>
+              </button>
+            </div>
+
+            <div class="dsc-bars" id="dscBars">
+              <div class="dsc-row">
+                <span class="dsc-icon">💻</span>
+                <span class="dsc-name" data-i18n="results.dna.kt">Eng &amp; Tech</span>
+                <div class="dsc-track"><div class="dsc-fill dna-kt" id="dsc-bar-kt"></div></div>
+                <span class="dsc-pct" id="dsc-pct-kt">0%</span>
+              </div>
+              <div class="dsc-row">
+                <span class="dsc-icon">🧬</span>
+                <span class="dsc-name" data-i18n="results.dna.tn">Natural Sci</span>
+                <div class="dsc-track"><div class="dsc-fill dna-tn" id="dsc-bar-tn"></div></div>
+                <span class="dsc-pct" id="dsc-pct-tn">0%</span>
+              </div>
+              <div class="dsc-row">
+                <span class="dsc-icon">📖</span>
+                <span class="dsc-name" data-i18n="results.dna.nv">Humanities</span>
+                <div class="dsc-track"><div class="dsc-fill dna-nv" id="dsc-bar-nv"></div></div>
+                <span class="dsc-pct" id="dsc-pct-nv">0%</span>
+              </div>
+              <div class="dsc-row">
+                <span class="dsc-icon">🌐</span>
+                <span class="dsc-name" data-i18n="results.dna.xh">Social Sci</span>
+                <div class="dsc-track"><div class="dsc-fill dna-xh" id="dsc-bar-xh"></div></div>
+                <span class="dsc-pct" id="dsc-pct-xh">0%</span>
+              </div>
+              <div class="dsc-row">
+                <span class="dsc-icon">🩺</span>
+                <span class="dsc-name" data-i18n="results.dna.yt">Med &amp; Health</span>
+                <div class="dsc-track"><div class="dsc-fill dna-yt" id="dsc-bar-yt"></div></div>
+                <span class="dsc-pct" id="dsc-pct-yt">0%</span>
+              </div>
+              <div class="dsc-row">
+                <span class="dsc-icon">🌾</span>
+                <span class="dsc-name" data-i18n="results.dna.nn">Agriculture</span>
+                <div class="dsc-track"><div class="dsc-fill dna-nn" id="dsc-bar-nn"></div></div>
+                <span class="dsc-pct" id="dsc-pct-nn">0%</span>
+              </div>
+            </div>
+
+            <div class="dsc-footer">
+              <span class="dsc-logo">✦ BeyonDegrees.ai</span>
+              <span class="dsc-date">24/04/2026</span>
+            </div>
+          </div>
+
+          <!-- ── Top 3 Ngành Recommended ── -->
+          <div class="section-header">
+            <span class="section-label" data-i18n="results.section.top_majors">Your Top Majors</span>
+          </div>
+
+          <!-- Major Card 1 — Primary match -->
+          <div class="major-card glass-card major-primary">
+            <div class="major-rank">1</div>
+            <div class="major-body">
+              <div class="major-top">
+                <div class="major-icon">💻</div>
+                <div class="major-info">
+                  <p class="major-name">Khoa học Máy tính</p>
+                  <p class="major-unis">FPT, Bách Khoa, VinUni...</p>
+                </div>
+                <div class="major-match-chip major-match-high">87%</div>
+              </div>
+              <p class="major-desc">Thiết kế thuật toán, xây dựng phần mềm và giải quyết bài toán phức tạp bằng công nghệ.</p>
+              <div class="major-tags">
+                <span class="major-tag">💰 Lương trung bình 28M+/tháng</span>
+                <span class="major-tag">📈 Nhu cầu tuyển dụng +40%/năm</span>
+              </div>
+              <div class="major-actions">
+                <button class="major-cta" data-i18n="results.major.view_path">View Path →</button>
+                <button class="major-save">♡</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Major Card 2 -->
+          <div class="major-card glass-card">
+            <div class="major-rank">2</div>
+            <div class="major-body">
+              <div class="major-top">
+                <div class="major-icon">🤖</div>
+                <div class="major-info">
+                  <p class="major-name">Trí tuệ Nhân tạo</p>
+                  <p class="major-unis">RMIT, Tự nhiên, Duy Tân...</p>
+                </div>
+                <div class="major-match-chip major-match-mid">82%</div>
+              </div>
+              <p class="major-desc">Xây dựng mô hình AI và machine learning để giải quyết bài toán thực tiễn.</p>
+              <div class="major-tags">
+                <span class="major-tag">💰 Lương 25–45M/tháng</span>
+                <span class="major-tag">🔥 Ngành hot nhất 2025</span>
+              </div>
+              <div class="major-actions">
+                <button class="major-cta" data-i18n="results.major.view_path">View Path →</button>
+                <button class="major-save">♡</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Major Card 3 -->
+          <div class="major-card glass-card">
+            <div class="major-rank">3</div>
+            <div class="major-body">
+              <div class="major-top">
+                <div class="major-icon">📊</div>
+                <div class="major-info">
+                  <p class="major-name">Khoa học Dữ liệu</p>
+                  <p class="major-unis">VinUni, BK, ĐH Mở...</p>
+                </div>
+                <div class="major-match-chip major-match-low">76%</div>
+              </div>
+              <p class="major-desc">Phân tích và khai thác dữ liệu lớn để đưa ra quyết định kinh doanh thông minh.</p>
+              <div class="major-tags">
+                <span class="major-tag">💰 Lương 22–38M/tháng</span>
+                <span class="major-tag">📊 Cơ hội quốc tế cao</span>
+              </div>
+              <div class="major-actions">
+                <button class="major-cta" data-i18n="results.major.view_path">View Path →</button>
+                <button class="major-save">♡</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA row -->
+          <a href="../../major/recommendations/" class="cta-full btn btn-primary" data-i18n="results.cta.explore">Explore all matching majors →</a>
+
+          <!-- ░░ SIDE CARDS — horizontal scroll strip ░░ -->
+          <div class="side-cards-section">
+            <div class="side-cards-label">Explore More ✦</div>
+            <div class="side-cards-track">
+
+              <!-- Card 1: Discipline Match -->
+              <a href="../../discipline/match/" class="side-card side-card--discipline">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.7"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+                </div>
+                <div class="sc-title">Your Disciplines</div>
+                <div class="sc-desc">See which fields fit your personality</div>
+                <div class="sc-arrow">→</div>
+              </a>
+
+              <!-- Card 2: University Matches -->
+              <a href="../../university/matches/" class="side-card side-card--university">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+                </div>
+                <div class="sc-title">Universities</div>
+                <div class="sc-desc">Find your best-match institutions</div>
+                <div class="sc-arrow">→</div>
+              </a>
+
+              <!-- Card 3: Career Paths -->
+              <a href="../../major/recommendations/" class="side-card side-card--career">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="sc-title">Career Paths</div>
+                <div class="sc-desc">Explore salaries &amp; job outlooks</div>
+                <div class="sc-arrow">→</div>
+              </a>
+
+              <!-- Card 4: Share DNA -->
+              <button class="side-card side-card--share" id="scShareDna">
+                <div class="sc-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                </div>
+                <div class="sc-title">Share DNA</div>
+                <div class="sc-desc">Show your personality profile</div>
+                <div class="sc-arrow">↗</div>
+              </button>
+
+            </div><!-- /side-cards-track -->
+          </div><!-- /side-cards-section -->
+
+          <div class="cta-ghost-row">
+            <a href="../../quiz/quiz-card/" class="btn btn-ghost cta-ghost" data-i18n="results.cta.retake">↺ Retake Quiz</a>
+            <button class="btn btn-ghost cta-ghost" id="saveResultBtn" data-i18n="results.cta.save">🔖 Save Results</button>
+          </div>
+
+          <div class="results-footer">
+            <p>✦ Powered by BeyonDegrees.ai</p>
+          </div>
+
+        </div><!-- /results-body -->
+
+        <!-- Tab Bar -->
+        <nav class="float-tab-bar" id="floatTabBar">
+          <a href="../../onboarding/home/" class="tab-item" data-tab="about">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="8" r="3.5"/>
+                <path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
+                <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
+          </a>
+          <a href="../../discipline/match/" class="tab-item" data-tab="disciplines">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+          </a>
+          <a href="../../major/recommendations/" class="tab-item" data-tab="majors">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
+          </a>
+          <a href="../../university/matches/" class="tab-item" data-tab="universities">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
+          </a>
+          <a href="../../profile/overview/" class="tab-item" data-tab="account">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="7.5" r="3.5"/>
+                <path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/>
+                <circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
+                <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="tab-label"></span>
+          </a>
+        </nav>
+
+      </div><!-- /mobile-screen -->
+    </div><!-- /device-frame -->
+  </div><!-- /desktop-container -->
+
+  
+  
+  
+<script>
+/* utils */
+/* BeyonDegrees.ai — Shared Utilities */
+const t = k => window.BDi18n ? BDi18n.t(k) : k;
+
+// Toast Notification System
+const Toast = {
+  show(message, duration = 2000, type = 'info') {
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  },
+  
+  success(message, duration = 2000) {
+    this.show(message, duration, 'success');
+  },
+  
+  error(message, duration = 3000) {
+    this.show(message, duration, 'error');
+  },
+  
+  warning(message, duration = 2500) {
+    this.show(message, duration, 'warning');
+  }
+};
+
+// Clipboard Utilities
+const Clipboard = {
+  async copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      Toast.success(`Copied: ${text}`);
+      return true;
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      Toast.error(t('err.copy_failed'));
+      return false;
+    }
+  },
+  
+  async paste() {
+    try {
+      const text = await navigator.clipboard.readText();
+      return text;
+    } catch (err) {
+      console.error('Failed to paste:', err);
+      Toast.error(t('err.paste_failed'));
+      return null;
+    }
+  }
+};
+
+// Format Utilities
+const Format = {
+  percent(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? '0%' : `${Math.round(num)}%`;
+  },
+  
+  capitalize(str) {
+    if (typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  },
+  
+  pluralize(count, singular, plural) {
+    return count === 1 ? singular : plural;
+  },
+  
+  formatNumber(num) {
+    return new Intl.NumberFormat('en-US').format(num);
+  },
+  
+  formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
+  },
+  
+  formatTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(date));
+  },
+  
+  truncate(str, length = 50) {
+    if (typeof str !== 'string') return '';
+    return str.length > length ? str.substring(0, length) + '...' : str;
+  }
+};
+
+// DOM Utilities
+const DOM = {
+  query(selector) {
+    return document.querySelector(selector);
+  },
+  
+  queryAll(selector) {
+    return document.querySelectorAll(selector);
+  },
+  
+  create(tag, attributes = {}, content = '') {
+    const el = document.createElement(tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (key === 'className') {
+        el.className = value;
+      } else if (key === 'innerHTML') {
+        el.innerHTML = value;
+      } else if (key.startsWith('on')) {
+        el.addEventListener(key.slice(2).toLowerCase(), value);
+      } else {
+        el.setAttribute(key, value);
+      }
+    });
+    if (content) el.textContent = content;
+    return el;
+  },
+  
+  addClass(el, className) {
+    if (el) el.classList.add(className);
+    return el;
+  },
+  
+  removeClass(el, className) {
+    if (el) el.classList.remove(className);
+    return el;
+  },
+  
+  toggleClass(el, className) {
+    if (el) el.classList.toggle(className);
+    return el;
+  },
+  
+  hasClass(el, className) {
+    return el && el.classList.contains(className);
+  },
+  
+  setStyle(el, styles) {
+    if (el) Object.assign(el.style, styles);
+    return el;
+  }
+};
+
+// Event Utilities
+const Events = {
+  debounce(func, delay = 300) {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  },
+  
+  throttle(func, delay = 300) {
+    let lastCall = 0;
+    return function(...args) {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(this, args);
+      }
+    };
+  },
+  
+  on(element, event, handler) {
+    element && element.addEventListener(event, handler);
+  },
+  
+  off(element, event, handler) {
+    element && element.removeEventListener(event, handler);
+  },
+  
+  once(element, event, handler) {
+    const wrapper = (...args) => {
+      handler.apply(this, args);
+      element && element.removeEventListener(event, wrapper);
+    };
+    element && element.addEventListener(event, wrapper);
+  }
+};
+
+// Storage Utilities
+const Storage = {
+  setItem(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  getItem(key, defaultValue = null) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return defaultValue;
+    }
+  },
+  
+  removeItem(key) {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  clear() {
+    try {
+      localStorage.clear();
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  }
+};
+
+// Export as global namespace
+window.BD = {
+  Toast,
+  Clipboard,
+  Format,
+  DOM,
+  Events,
+  Storage
+};
+
+/* navigation */
+/* BeyonDegrees.ai — Navigation & Page Management */
+
+// Navigation Manager
+const Navigation = {
+  init() {
+    this.initBottomNav();
+    this.initSidebarNav();
+    this.initActiveState();
+    this.initScrollSpy();
+  },
+  
+  initBottomNav() {
+    const items = document.querySelectorAll('.bottom-nav-item');
+    items.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = item.getAttribute('href') || item.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initSidebarNav() {
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href') || link.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initActiveState() {
+    const currentPath = window.location.pathname;
+    
+    // Bottom nav items
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+      const href = item.getAttribute('href') || item.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Sidebar items
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      const href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  },
+  
+  initScrollSpy() {
+    const sections = document.querySelectorAll('[data-section]');
+    if (sections.length === 0) return;
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.getAttribute('data-section');
+          const navItem = document.querySelector(`[data-nav="${sectionId}"]`);
+          if (navItem) {
+            document.querySelectorAll('[data-nav]').forEach(item => {
+              item.classList.remove('active');
+            });
+            navItem.classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
+  },
+  
+  setActive(selector) {
+    document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
+  },
+  
+  goTo(path) {
+    window.location.href = path;
+  }
+};
+
+// Page transition utilities
+const PageTransition = {
+  fadeOut(duration = 300) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  },
+  
+  fadeIn(duration = 300) {
+    document.body.style.opacity = '1';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  Navigation.init();
+  document.body.style.opacity = '1';
+});
+
+// Global navigation export
+window.Nav = Navigation;
+window.PageTransition = PageTransition;
+
+/* screen */
+/* =====================================================
+   RESULTS SCREEN ENGINE — BeyonDegrees.ai
+   - Confetti burst on load
+   - Animated match % counter
+   - Staggered DNA bar fill
+   - Share card interaction
+   ===================================================== */
+
+(function () {
+  'use strict';
+
+  /* ── Data ───────────────────────────────────────── */
+  const MATCH_PCT = 87;
+
+  const DNA_DATA = [
+    { disc: 'kt', target: 78 },
+    { disc: 'tn', target: 68 },
+    { disc: 'nv', target: 62 },
+    { disc: 'xh', target: 55 },
+    { disc: 'yt', target: 45 },
+    { disc: 'nn', target: 31 },
+  ];
+
+  /* ── Utils ──────────────────────────────────────── */
+  function $(id) { return document.getElementById(id); }
+
+  /* ══════════════════════════════════════════════════
+     CONFETTI ENGINE
+     Canvas confetti — runs for ~4s then stops
+  ══════════════════════════════════════════════════ */
+  function launchConfetti() {
+    const canvas = $('confettiCanvas');
+    if (!canvas) return;
+
+    const screen = document.getElementById('mobileScreen');
+    const W = screen ? screen.offsetWidth  : 370;
+    const H = screen ? screen.offsetHeight : 780;
+    canvas.width  = W;
+    canvas.height = H;
+
+    const ctx    = canvas.getContext('2d');
+    const COLORS = [
+      '#a78bfa', '#7c3aed', '#c4b5fd',   // violet
+      '#06d6a0', '#34d399',               // mint
+      '#fbbf24', '#f97316',               // amber/orange
+      '#60a5fa', '#3b82f6',               // blue
+      '#fb7185', '#f43f5e',               // rose
+    ];
+
+    const SHAPES = ['rect', 'circle', 'ribbon'];
+    const N      = 80;
+
+    /* Particle class */
+    function Particle(delay) {
+      this.reset(delay);
+    }
+    Particle.prototype.reset = function (delay) {
+      this.x      = Math.random() * W;
+      this.y      = -10 - Math.random() * 60 - (delay || 0) * 120;
+      this.vx     = (Math.random() - 0.5) * 2.5;
+      this.vy     = 2.5 + Math.random() * 3;
+      this.vr     = (Math.random() - 0.5) * 8;
+      this.r      = Math.random() * 360;
+      this.w      = 7 + Math.random() * 6;
+      this.h      = this.w * (0.4 + Math.random() * 0.6);
+      this.color  = COLORS[Math.floor(Math.random() * COLORS.length)];
+      this.shape  = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+      this.alpha  = 0.85 + Math.random() * 0.15;
+      this.dead   = false;
+      this.wobble = Math.random() * Math.PI * 2;
+      this.wobbleSpeed = 0.05 + Math.random() * 0.05;
+    };
+    Particle.prototype.update = function () {
+      this.wobble += this.wobbleSpeed;
+      this.x  += this.vx + Math.sin(this.wobble) * 0.8;
+      this.y  += this.vy;
+      this.r  += this.vr;
+      this.vy += 0.06; // gravity
+      if (this.y > H + 20) this.dead = true;
+    };
+    Particle.prototype.draw = function (ctx) {
+      ctx.save();
+      ctx.globalAlpha = this.alpha;
+      ctx.translate(this.x, this.y);
+      ctx.rotate(this.r * Math.PI / 180);
+      ctx.fillStyle = this.color;
+
+      if (this.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(0, 0, this.w / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (this.shape === 'ribbon') {
+        ctx.beginPath();
+        ctx.moveTo(-this.w / 2, 0);
+        ctx.quadraticCurveTo(0, this.h, this.w / 2, 0);
+        ctx.quadraticCurveTo(0, -this.h, -this.w / 2, 0);
+        ctx.fill();
+      } else {
+        ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+      }
+      ctx.restore();
+    };
+
+    /* Init particles with staggered delays */
+    let particles = [];
+    for (let i = 0; i < N; i++) {
+      particles.push(new Particle(i / N));
+    }
+
+    const START     = Date.now();
+    const DURATION  = 3800; // ms confetti runs
+    let   rafId     = null;
+
+    function loop() {
+      const elapsed = Date.now() - START;
+      ctx.clearRect(0, 0, W, H);
+
+      particles.forEach(p => {
+        p.update();
+        p.draw(ctx);
+      });
+
+      // Remove dead particles
+      particles = particles.filter(p => !p.dead);
+
+      if (elapsed < DURATION || particles.length > 0) {
+        rafId = requestAnimationFrame(loop);
+      } else {
+        ctx.clearRect(0, 0, W, H);
+      }
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+
+  /* ══════════════════════════════════════════════════
+     MATCH % COUNTER
+     Count up from 0 to MATCH_PCT over 1.5s with ease-out
+  ══════════════════════════════════════════════════ */
+  function animateMatchPct() {
+    const el    = $('matchPct');
+    if (!el) return;
+
+    const DURATION = 1500;
+    const tStart   = Date.now();
+
+    function step() {
+      const t     = Math.min(1, (Date.now() - tStart) / DURATION);
+      const ea
+/* ── scShareDna side-card wiring (Fix #4) ── */
+(function() {
+  function initSideCards() {
+    var btn = document.getElementById('scShareDna');
+    if (!btn) return;
+
+    btn.addEventListener('click', function() {
+      /* Reuse the existing dnaShareBtn click if present */
+      var existing = document.getElementById('dnaShareBtn');
+      if (existing) { existing.click(); return; }
+
+      /* Fallback: Web Share API or clipboard copy */
+      var url  = window.location.href;
+      var text = 'Check out my BeyonDegrees academic DNA profile! ' + url;
+      if (navigator.share) {
+        navigator.share({ title: 'My BeyonDegrees DNA', text: text, url: url })
+          .catch(function() {});
+      } else {
+        try {
+          navigator.clipboard.writeText(url);
+          /* Toast if available */
+          if (window.Toast) Toast.success('Link copied!');
+          else alert('Link copied to clipboard!');
+        } catch(e) {}
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSideCards);
+  } else {
+    initSideCards();
+  }
+})();
+</script>
+
+<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
+</body>
+</html>
+    requestAnimationFrame(step);
+      }, 1300 + i * 200); // start after hero animation (1.1s) + stagger
+    });
+  }
+
+  /* ══════════════════════════════════════════════════
+     SHARE INTERACTION
+  ══════════════════════════════════════════════════ */
+  function bindShare() {
+    // Create toast element
+    const screen = document.getElementById('mobileScreen');
+    const toast  = document.createElement('div');
+    toast.className = 'share-toast';
+    var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+    toast.textContent = t('results.share_toast');
+    if (screen) screen.appendChild(toast);
+
+    function showToast() {
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 2400);
+    }
+
+    const dnaBtn  = $('dnaShareBtn');
+    const topBtn  = $('topShareBtn');
+    if (dnaBtn) dnaBtn.addEventListener('click', () => { window.location.href = '../../results/dna-card.html'; });
+    if (topBtn) topBtn.addEventListener('click', () => { window.location.href = '../../results/dna-card.html'; });
+  }
+
+  /* ══════════════════════════════════════════════════
+     SAVE BUTTON micro-interaction
+  ══════════════════════════════════════════════════ */
+  function bindSave() {
+    const btn = $('saveResultBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+      btn.textContent = t('results.cta.saved');
+      btn.style.color = 'var(--mint-400)';
+      btn.style.borderColor = 'rgba(6,214,160,0.3)';
+      setTimeout(() => {
+        btn.textContent = t('results.cta.save');
+        btn.style.color = '';
+        btn.style.borderColor = '';
+      }, 2000);
+    });
+  }
+
+  /* ── Bootstrap ──────────────────────────────────── */
+  function init() {
+    // Small delay so the page renders first
+    setTimeout(launchConfetti,    150);
+    setTimeout(animateMatchPct,   500);
+    setTimeout(animateDNABars,    0);
+    bindShare();
+    bindSave();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+})();
+
+</script>
+
+<script>
+(function() {
+  function bdApplyTheme(resolved) {
+    document.documentElement.setAttribute('data-theme', resolved);
+    // Update toggle bg for light theme
+    var toggle = document.getElementById('bd-theme-toggle');
+    if (toggle) {
+      toggle.style.background = (resolved === 'light')
+        ? 'rgba(255,255,255,0.92)'
+        : 'rgba(10,10,26,0.85)';
+      toggle.style.borderColor = (resolved === 'light')
+        ? 'rgba(24,99,220,0.25)'
+        : 'rgba(24,99,220,0.35)';
+    }
+  }
+
+  function bdSetTheme(pref) {
+    var resolved = pref;
+    if (pref === 'system') {
+      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    bdApplyTheme(resolved);
+    document.documentElement.setAttribute('data-theme-pref', pref);
+    try { localStorage.setItem('bd-theme', pref); } catch(e) {}
+    // Update button active states
+    var btns = { system:'bdt-system', light:'bdt-light', dark:'bdt-dark' };
+    Object.keys(btns).forEach(function(name) {
+      var el = document.getElementById(btns[name]);
+      if (!el) return;
+      if (name === pref) {
+        el.style.background = 'linear-gradient(135deg,#1863DC,#0274BE)';
+        el.style.color = '#fff';
+        el.style.boxShadow = '0 4px 12px rgba(24,99,220,0.4)';
+      } else {
+        el.style.background = 'transparent';
+        el.style.color = (resolved === 'light') ? 'rgba(26,26,46,0.55)' : 'rgba(255,255,255,0.5)';
+        el.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  window.bdSetTheme = bdSetTheme;
+
+  // Init on load
+  var saved = 'dark';
+  try { saved = localStorage.getItem('bd-theme') || 'dark'; } catch(e) {}
+  bdSetTheme(saved);
+
+  // React to OS theme changes
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+    var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
+    if (pref === 'system') bdSetTheme('system');
+  });
+})();
+</script>
+<script src="../../../shared/scripts/ui/i18n.js"></script>
+</body>
+</html>
