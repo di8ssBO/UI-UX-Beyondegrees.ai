@@ -8,38 +8,32 @@
 <title>AI Loading — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=3">
 <style>
   .load-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 24px; max-width: 1020px; margin: 0 auto; align-items: stretch; }
-  /* ── Orb + phase (mobile .orb-wrap) ── */
+  /* ── Orb + phase ── */
   .orb-card { text-align: center; padding: 40px 32px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-  .orb-wrap { position: relative; width: 190px; height: 190px; margin-bottom: 28px; }
-  .orb-core {
-    position: absolute; inset: 40px; border-radius: 50%;
-    display: grid; place-items: center; font-size: 42px;
-    background: radial-gradient(circle at 35% 30%, var(--violet-400), var(--violet-700));
-    box-shadow: 0 0 50px rgba(124,58,237,0.55), inset 0 2px 12px rgba(255,255,255,0.25);
-    animation: orbPulse 3s ease-in-out infinite;
+  /* Main-character canvas (mobile parity): discipline chips orbit, converge
+     into a glowing "YOU" sphere, then scatter — looping. */
+  .mc-wrap { position: relative; width: 190px; height: 194px; margin: 0 auto 24px; flex-shrink: 0; }
+  #mcCanvas { display: block; width: 190px; height: 190px; }
+  .you-pulse-ring {
+    position: absolute; top: 50%; left: 50%;
+    width: 130px; height: 130px; margin: -65px 0 0 -65px;
+    border-radius: 50%; border: 2px solid transparent; pointer-events: none; opacity: 0;
   }
-  :root[data-theme="light"] .orb-core {
-    background: radial-gradient(circle at 35% 30%, #F2B09D, #C96B55);
-    box-shadow: 0 0 50px rgba(201,107,85,0.45), inset 0 2px 12px rgba(255,255,255,0.35);
+  .you-pulse-ring.pulsing { animation: youPulse 1.6s ease-out forwards; }
+  @keyframes youPulse {
+    0%   { opacity:1; transform:scale(0.45); border-color:rgba(139,92,246,0.7); box-shadow:0 0 0 0 rgba(139,92,246,0.35); }
+    55%  { opacity:0.5; transform:scale(0.95); border-color:rgba(139,92,246,0.25); box-shadow:0 0 18px 6px rgba(139,92,246,0.12); }
+    100% { opacity:0; transform:scale(1.3); border-color:transparent; box-shadow:0 0 28px 14px rgba(139,92,246,0); }
   }
-  @keyframes orbPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.06)} }
-  .orb-ring { position: absolute; inset: 18px; border-radius: 50%; border: 1px dashed rgba(167,139,250,0.35); animation: ringSpin 14s linear infinite; }
-  .orb-ring.r2 { inset: 2px; border-color: rgba(6,214,160,0.25); animation-duration: 22s; animation-direction: reverse; }
-  :root[data-theme="light"] .orb-ring { border-color: rgba(201,107,85,0.35); }
-  :root[data-theme="light"] .orb-ring.r2 { border-color: rgba(106,150,144,0.40); }
-  @keyframes ringSpin { to { transform: rotate(360deg); } }
-  .orbit { position: absolute; top: 50%; left: 50%; animation: orbitSpin linear infinite; }
-  .orbit span { position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); font-size: 17px; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3)); }
-  .o1 { width: 150px; height: 150px; margin: -75px 0 0 -75px; animation-duration: 5.8s; }
-  .o2 { width: 178px; height: 178px; margin: -89px 0 0 -89px; animation-duration: 8.2s; animation-direction: reverse; }
-  .o3 { width: 136px; height: 136px; margin: -68px 0 0 -68px; animation-duration: 4.9s; }
-  .o4 { width: 168px; height: 168px; margin: -84px 0 0 -84px; animation-duration: 9.4s; animation-direction: reverse; }
-  .o5 { width: 128px; height: 128px; margin: -64px 0 0 -64px; animation-duration: 7.1s; }
-  .o6 { width: 188px; height: 188px; margin: -94px 0 0 -94px; animation-duration: 11.5s; }
-  @keyframes orbitSpin { to { transform: rotate(360deg); } }
+  :root[data-theme="light"] .you-pulse-ring.pulsing { animation: youPulseLight 1.6s ease-out forwards; }
+  @keyframes youPulseLight {
+    0%   { opacity:1; transform:scale(0.45); border-color:rgba(124,58,237,0.65); box-shadow:0 0 0 0 rgba(124,58,237,0.28); }
+    55%  { opacity:0.45; transform:scale(0.95); border-color:rgba(124,58,237,0.2); box-shadow:0 0 16px 6px rgba(124,58,237,0.08); }
+    100% { opacity:0; transform:scale(1.3); border-color:transparent; box-shadow:0 0 24px 12px rgba(124,58,237,0); }
+  }
   .phase-label {
     font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase;
     color: rgba(167,139,250,0.75);
@@ -94,15 +88,9 @@
 
         <!-- Orb + phases -->
         <div class="card glass-hero orb-card">
-          <div class="orb-wrap">
-            <div class="orb-ring"></div><div class="orb-ring r2"></div>
-            <div class="orbit o1"><span>💻</span></div>
-            <div class="orbit o2"><span>🩺</span></div>
-            <div class="orbit o3"><span>📖</span></div>
-            <div class="orbit o4"><span>🌾</span></div>
-            <div class="orbit o5"><span>🌐</span></div>
-            <div class="orbit o6"><span>🧬</span></div>
-            <div class="orb-core">✨</div>
+          <div class="mc-wrap">
+            <canvas id="mcCanvas" width="320" height="320"></canvas>
+            <div id="youPulseRing" class="you-pulse-ring"></div>
           </div>
           <div class="phase-label" id="phaseLabel">Analyzing</div>
           <div class="phase-title" id="phaseTitle">Your Academic DNA</div>
@@ -126,23 +114,43 @@
     </div>
   </div>
 
-  <!-- Results ready -->
+  <!-- Stage complete / Results ready (stage-aware) -->
   <div class="done-overlay" id="doneOverlay">
     <div class="done-box">
-      <div class="big">🎉</div>
-      <h2>Results are ready!</h2>
-      <p>AI has analyzed <b>30</b> of your answers</p>
+      <div class="big" id="doneEmoji">🎉</div>
+      <h2 id="doneTitle">Results are ready!</h2>
+      <p>AI has analyzed <b id="doneCount">30</b> of your answers</p>
       <div class="row">
-        <a class="btn btn-primary" href="../../results/match-reveal/">See my results →</a>
+        <a class="btn btn-primary" id="doneBtn" href="../../results/match-reveal/">See my results →</a>
         <button class="btn btn-ghost" onclick="location.reload()">↺ Replay demo</button>
       </div>
     </div>
   </div>
 
   <script src="../../../shared/scripts/data/loading-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
+  <script src="../../_shell/desktop.js?v=6"></script>
   <script>
+
+    /* ── Stage-aware setup: this loading screen runs after every 10-question
+       batch. ?stage=1|2 return to the quiz; ?stage=3 (default) → results. ── */
+    var STAGE = parseInt(new URLSearchParams(location.search).get('stage') || '3', 10);
+    if (STAGE !== 1 && STAGE !== 2 && STAGE !== 3) STAGE = 3;
+    var STAGE_DONE = STAGE * 10;
+    var STAGE_INFO = {
+      1: { emoji: '🔥', title: 'Stage 1 complete!', btn: 'Continue quiz →', href: '../../quiz/quiz-card/' },
+      2: { emoji: '🚀', title: 'Stage 2 complete!', btn: 'Continue quiz →', href: '../../quiz/quiz-card/' },
+      3: { emoji: '🎉', title: 'Results are ready!', btn: 'See my results →', href: '../../results/match-reveal/' }
+    }[STAGE];
+    (function applyStage() {
+      var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+      set('qDone', STAGE_DONE);
+      set('doneCount', STAGE_DONE);
+      set('doneEmoji', STAGE_INFO.emoji);
+      set('doneTitle', STAGE_INFO.title);
+      var b = document.getElementById('doneBtn');
+      if (b) { b.textContent = STAGE_INFO.btn; b.setAttribute('href', STAGE_INFO.href); }
+    })();
 
     /* ── Shared loading data ── */
     var PHASES       = window.BD_PHASES;
@@ -182,8 +190,16 @@
       Array.prototype.forEach.call(dots.children, function (d, i) { d.className = i === curFact ? 'on' : ''; });
     }, 3400);
 
+    /* Pulse the YOU ring when data flows into the main character */
+    function pulseYouRing() {
+      var ring = document.getElementById('youPulseRing');
+      if (!ring) return;
+      ring.classList.remove('pulsing'); void ring.offsetWidth; ring.classList.add('pulsing');
+    }
+
     /* Main loop */
     var t0 = Date.now();
+    var dnaFired = {};
     var iv = setInterval(function () {
       var t = (Date.now() - t0) / 1000;
       var pr = Math.min(t / DURATION, 1);
@@ -194,6 +210,7 @@
       document.getElementById('phaseTitle').textContent = PHASES[ph].title;
       DNA_SCHEDULE.forEach(function (d) {
         if (t > d.start) {
+          if (!dnaFired[d.disc]) { dnaFired[d.disc] = true; pulseYouRing(); }
           var p = Math.min((t - d.start) / 4, 1) * d.target;
           document.getElementById('dna-' + d.disc).style.width = p + '%';
           document.getElementById('dnap-' + d.disc).textContent = Math.round(p) + '%';
@@ -204,6 +221,161 @@
         setTimeout(function () { document.getElementById('doneOverlay').classList.add('show'); }, 500);
       }
     }, 120);
+  </script>
+
+  <!-- ── Main Character canvas animation (ported from mobile) ── -->
+  <script>
+  (function () {
+    var YOU_WORDS = { en:'YOU', vi:'BẠN', hi:'आप', fr:'TOI', ar:'أنت' };
+    function getYouWord() {
+      var lang; try { lang = localStorage.getItem('bd-lang') || 'en'; } catch (e) { lang = 'en'; }
+      return YOU_WORDS[lang] || 'YOU';
+    }
+
+    var COLORS       = ['#8b5cf6','#06d6a0','#60a5fa','#fbbf24','#c084fc','#22d3ee'];
+    var COLORS_LIGHT = ['#7c3aed','#059669','#2563eb','#d97706','#db2777','#0891b2'];
+    var ICONS        = ['💻','⚕️','📖','🌱','🌍','🔬'];
+
+    var TGT_A = COLORS.map(function (_, i) { return (i * 60 - 90) * Math.PI / 180; });
+    var ez  = function (p) { return p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; };
+    var eo3 = function (p) { return 1 - Math.pow(1 - p, 3); };
+    var clp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+    var rng = function (t, a, b) { return clp((t - a) / (b - a), 0, 1); };
+    var mix = function (a, b, t) { return a + (b - a) * t; };
+
+    var tokens = COLORS.map(function (color) {
+      return {
+        color: color,
+        chaos0: Math.random() * Math.PI * 2,
+        cDist:  22 + Math.random() * 32,
+        cSpeed: (0.45 + Math.random() * 0.55) * (Math.random() < .5 ? 1 : -1)
+      };
+    });
+
+    var cvs = document.getElementById('mcCanvas');
+    if (!cvs) return;
+    var ctx = cvs.getContext('2d');
+    var W = 160, H = 160, cx = W / 2, cy = H / 2, ORBIT_R = 46, CYCLE = 6000;
+    ctx.scale(2, 2);
+    var t0 = null;
+
+    function frame(now) {
+      if (!t0) t0 = now;
+      var abs = (now - t0) / 1000;
+      var cyc = (now - t0) % CYCLE;
+      ctx.clearRect(0, 0, W, H);
+
+      var settleP   = ez(rng(cyc, CYCLE * .15, CYCLE * .42));
+      var convergeP = eo3(rng(cyc, CYCLE * .42, CYCLE * .57));
+      var youP      = eo3(rng(cyc, CYCLE * .57, CYCLE * .76));
+      var youFadeP  = rng(cyc, CYCLE * .76, CYCLE * .85);
+      var scatterP  = eo3(rng(cyc, CYCLE * .83, CYCLE * .95));
+      var dimP      = rng(cyc, CYCLE * .95, CYCLE);
+
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+
+      tokens.forEach(function (tk, i) {
+        var chaosA   = tk.chaos0 + tk.cSpeed * abs;
+        var settledA = TGT_A[i];
+        var da = settledA - chaosA;
+        da = ((da + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+        var displayA = scatterP > 0 ? mix(settledA, chaosA, scatterP) : mix(chaosA, chaosA + da, settleP);
+        var displayDist = scatterP > 0
+          ? mix(0, tk.cDist, scatterP)
+          : mix(mix(tk.cDist, ORBIT_R, settleP), 0, convergeP);
+        var x = cx + displayDist * Math.cos(displayA);
+        var y = cy + displayDist * Math.sin(displayA);
+        var alpha = (scatterP > 0 ? scatterP : (1 - convergeP)) * (1 - dimP * .6);
+        var col = isLight ? COLORS_LIGHT[i] : COLORS[i];
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, alpha) * (isLight ? 0.15 : 0.22);
+        var glow = ctx.createRadialGradient(x, y, 5, x, y, 26);
+        glow.addColorStop(0, col);
+        glow.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = glow;
+        ctx.beginPath(); ctx.arc(x, y, 26, 0, Math.PI * 2); ctx.fill();
+
+        ctx.globalAlpha = Math.max(0, alpha) * (isLight ? 0.92 : 0.88);
+        ctx.fillStyle = isLight ? 'rgba(255,255,255,0.95)' : 'rgba(12,10,30,0.90)';
+        ctx.beginPath(); ctx.arc(x, y, 17, 0, Math.PI * 2); ctx.fill();
+
+        ctx.globalAlpha = Math.max(0, alpha) * (isLight ? 0.55 : 0.75);
+        ctx.strokeStyle = col;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x, y, 17, 0, Math.PI * 2); ctx.stroke();
+
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.font = '14px sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(ICONS[i], x, y + 1);
+        ctx.restore();
+      });
+
+      // Dashed orbit ring
+      if (settleP > .15 && convergeP < .8) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(167,139,250,' + (Math.min(settleP, 1 - convergeP) * .22) + ')';
+        ctx.lineWidth = .5; ctx.setLineDash([3, 6]);
+        ctx.beginPath(); ctx.arc(cx, cy, ORBIT_R, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
+
+      // YOU phase — glowing sphere orb
+      var ya = eo3(youP) * Math.max(0, 1 - youFadeP);
+      if (ya > .01) {
+        var rr = eo3(youP);
+        var R  = 38 * rr;
+        ctx.save();
+        ctx.globalAlpha = ya;
+
+        if (isLight) {
+          var haloL = ctx.createRadialGradient(cx, cy, R * .6, cx, cy, R * 1.6);
+          haloL.addColorStop(0, 'rgba(205,164,255,' + (.19 * ya) + ')');
+          haloL.addColorStop(1, 'rgba(124,58,237,0)');
+          ctx.fillStyle = haloL;
+          ctx.beginPath(); ctx.arc(cx, cy, R * 1.6, 0, Math.PI * 2); ctx.fill();
+
+          var sphereL = ctx.createRadialGradient(cx - R * .28, cy - R * .28, 0, cx, cy, R);
+          sphereL.addColorStop(0,    'rgba(220,210,255,' + (.97 * ya) + ')');
+          sphereL.addColorStop(0.38, 'rgba(205,164,255,' + (.85 * ya) + ')');
+          sphereL.addColorStop(1,    'rgba(30,10,80,'    + (.70 * ya) + ')');
+          ctx.fillStyle = sphereL;
+          ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+        } else {
+          var haloD = ctx.createRadialGradient(cx, cy, R * .6, cx, cy, R * 1.7);
+          haloD.addColorStop(0, 'rgba(139,92,246,' + (.26 * ya) + ')');
+          haloD.addColorStop(1, 'rgba(139,92,246,0)');
+          ctx.fillStyle = haloD;
+          ctx.beginPath(); ctx.arc(cx, cy, R * 1.7, 0, Math.PI * 2); ctx.fill();
+
+          var sphereD = ctx.createRadialGradient(cx - R * .28, cy - R * .28, 0, cx, cy, R);
+          sphereD.addColorStop(0,    'rgba(220,210,255,' + (.97 * ya) + ')');
+          sphereD.addColorStop(0.38, 'rgba(124,58,237,'  + (.88 * ya) + ')');
+          sphereD.addColorStop(1,    'rgba(20,5,50,'     + (.75 * ya) + ')');
+          ctx.fillStyle = sphereD;
+          ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+        }
+
+        var spec = ctx.createRadialGradient(cx - R * .52, cy - R * .50, 0, cx - R * .35, cy - R * .35, R * .55);
+        spec.addColorStop(0, 'rgba(255,255,255,' + (.42 * ya) + ')');
+        spec.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = spec;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+
+        ctx.shadowColor = 'rgba(0,0,0,0.85)';
+        ctx.shadowBlur  = 8;
+        ctx.fillStyle   = '#ffffff';
+        ctx.font = "800 " + Math.round(15 * rr + 4) + "px 'Plus Jakarta Sans','Inter',sans-serif";
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(getYouWord(), cx, cy);
+        ctx.restore();
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
   </script>
 </body>
 </html>

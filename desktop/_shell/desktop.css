@@ -151,15 +151,14 @@ img { display:block; max-width:100%; }
 .nav-item svg { width:18px; height:18px; flex:none; }
 .sidebar-footer { margin-top:auto; white-space:nowrap; opacity:0; transition:opacity .15s ease; }
 .sidebar:hover .sidebar-footer { opacity:1; }
-.side-stats { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:var(--s3) var(--s2); }
-.side-stat {
-  background:rgba(124,58,237,0.08); border:1px solid rgba(124,58,237,0.18);
-  border-radius:12px; padding:10px 8px; text-align:center;
-}
-.side-stat b { display:block; font-size:18px; font-weight:900; color:var(--violet-400); line-height:1.1; }
-.side-stat span { font-size:10px; color:var(--text-muted); font-weight:500; }
-:root[data-theme="light"] .side-stat { background:rgba(2,116,190,0.07); border-color:rgba(2,116,190,0.18); }
-:root[data-theme="light"] .side-stat b { color:#075c9f; }
+/* Account nav (profile + settings) pinned to the bottom of the sidebar,
+   where the old side-stats block used to be. Nav icons stay visible in the
+   collapsed rail; labels reveal on hover/pin like the rest of the nav. */
+.sidebar-bottom { margin-top:auto; }
+/* Reset Account — nav-item styled button with a destructive (red) hover */
+.nav-reset { width:100%; background:transparent; cursor:pointer; font-family:inherit; text-align:left; }
+.nav-reset:hover { background:rgba(255,71,87,0.10); color:var(--red-400); border-color:rgba(255,71,87,0.25); }
+:root[data-theme="light"] .nav-reset:hover { background:rgba(225,29,72,0.08); color:#be123c; border-color:rgba(225,29,72,0.22); }
 
 /* ── Topbar ────────────────────────────────────────────────── */
 .main { display:flex; flex-direction:column; min-width:0; }
@@ -560,6 +559,11 @@ button:focus-visible, a:focus-visible { border-radius:10px; }
 .side-disc-badge .badge-icon  { font-size:18px; flex:none; }
 .side-disc-badge .badge-label { font-size:12px; font-weight:800; color:var(--acc-light,var(--violet-400)); }
 .side-disc-badge .badge-pct   { font-size:11px; color:var(--text-muted); margin-left:auto; }
+/* Hidden in the collapsed rail (would overflow 76px), revealed when expanded */
+.side-disc-badge { opacity:0; transition:opacity .15s ease; }
+.sidebar:hover .side-disc-badge,
+.sidebar.bd-pinned .side-disc-badge,
+.sidebar:focus-within .side-disc-badge { opacity:1; }
 
 /* ── Button: stronger hover lift for GenZ tactile feel ──────── */
 .btn-primary:active { transform:scale(0.97) !important; }

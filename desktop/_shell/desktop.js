@@ -157,6 +157,12 @@
   function tr(key, fallback) {
     return (window.BDi18n && typeof window.BDi18n.t === 'function') ? window.BDi18n.t(key) : fallback;
   }
+  /* Like tr(), but falls back to the default when the key is missing —
+     BDi18n.t() echoes the key back when it has no translation for it. */
+  function trOr(key, fallback) {
+    var v = tr(key, fallback);
+    return (!v || v === key) ? fallback : v;
+  }
 
   /* ── Live stats from localStorage (mobile-compatible keys) ─ */
   function getLiveStats() {
@@ -216,19 +222,24 @@
   }
 
   /* ── Nav config ─────────────────────────────────────────── */
+  /* main = top of the sidebar; account = pinned to the bottom */
   function buildNav() {
-    return [
-      { sec: tr('sidebar.explore', 'Explore') },
-      { id: 'home',         href: '../../onboarding/home/',        label: tr('nav.about_me', 'About me'),       icon: 'M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10' },
-      { id: 'quiz',         href: '../../quiz/quiz-card/',         label: tr('nav.quiz', 'Quiz'),               icon: 'M9 9a3 3 0 115.8 1c-.7.8-1.8 1.2-1.8 2.5M12 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0' },
-      { sec: tr('sidebar.results', 'Results') },
-      { id: 'disciplines',  href: '../../discipline/match/',       label: tr('nav.disciplines', 'Disciplines'), icon: 'M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3M12 12l8-4.5M12 12v9M12 12L4 7.5' },
-      { id: 'majors',       href: '../../major/recommendations/',  label: tr('nav.majors', 'Majors'),           icon: 'M12 14l9-5-9-5-9 5 9 5zm0 0v7m-6.5-3.5V11.5' },
-      { id: 'universities', href: '../../university/matches/',     label: tr('nav.universities', 'Universities'), icon: 'M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6' },
-      { sec: tr('sidebar.account', 'Account') },
-      { id: 'profile',      href: '../../profile/overview/',       label: 'Hoang Phuc',                         icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0' },
-      { id: 'settings',     href: '../../profile/settings/',       label: tr('nav.settings', 'Settings'),       icon: 'M12 15a3 3 0 100-6 3 3 0 000 6zm7.4-3a7.4 7.4 0 00-.1-1.2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 00-2-1.2L14.5 3h-5l-.4 2.6a7.4 7.4 0 00-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 000 2.4l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 002 1.2l.4 2.6h5l.4-2.6a7.4 7.4 0 002-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2z' }
-    ];
+    return {
+      main: [
+        { sec: tr('sidebar.explore', 'Explore') },
+        { id: 'home',         href: '../../onboarding/home/',        label: tr('nav.about_me', 'About me'),       icon: 'M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10' },
+        { id: 'quiz',         href: '../../quiz/quiz-card/',         label: tr('nav.quiz', 'Quiz'),               icon: 'M9 9a3 3 0 115.8 1c-.7.8-1.8 1.2-1.8 2.5M12 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0' },
+        { sec: tr('sidebar.results', 'Results') },
+        { id: 'disciplines',  href: '../../discipline/match/',       label: tr('nav.disciplines', 'Disciplines'), icon: 'M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3M12 12l8-4.5M12 12v9M12 12L4 7.5' },
+        { id: 'majors',       href: '../../major/recommendations/',  label: tr('nav.majors', 'Majors'),           icon: 'M12 14l9-5-9-5-9 5 9 5zm0 0v7m-6.5-3.5V11.5' },
+        { id: 'universities', href: '../../university/matches/',     label: tr('nav.universities', 'Universities'), icon: 'M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6' }
+      ],
+      account: [
+        { sec: tr('sidebar.account', 'Account') },
+        { id: 'profile',      href: '../../profile/overview/',       label: 'Hoang Phuc',                         icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0' },
+        { id: 'settings',     href: '../../profile/settings/',       label: tr('nav.settings', 'Settings'),       icon: 'M12 15a3 3 0 100-6 3 3 0 000 6zm7.4-3a7.4 7.4 0 00-.1-1.2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 00-2-1.2L14.5 3h-5l-.4 2.6a7.4 7.4 0 00-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 000 2.4l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 002 1.2l.4 2.6h5l.4-2.6a7.4 7.4 0 002-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2z' }
+      ]
+    };
   }
 
   function icon(d) {
@@ -241,12 +252,17 @@
     var crumb = document.body.getAttribute('data-crumb') || '';
     var stats = getLiveStats();
 
-    var nav = buildNav().map(function (n) {
-      if (n.sec) return '<div class="nav-section-label">' + n.sec + '</div>';
-      var active = n.id === page ? ' active' : '';
-      return '<a class="nav-item' + active + '" href="' + n.href + '" title="' + n.label + '">'
-        + icon(n.icon) + '<span class="nav-label">' + n.label + '</span></a>';
-    }).join('');
+    var navData = buildNav();
+    var renderNav = function (arr) {
+      return arr.map(function (n) {
+        if (n.sec) return '<div class="nav-section-label">' + n.sec + '</div>';
+        var active = n.id === page ? ' active' : '';
+        return '<a class="nav-item' + active + '" href="' + n.href + '" title="' + n.label + '">'
+          + icon(n.icon) + '<span class="nav-label">' + n.label + '</span></a>';
+      }).join('');
+    };
+    var nav        = renderNav(navData.main);
+    var accountNav = renderNav(navData.account);
 
     /* Discipline badge — visible after quiz milestone >= 10 */
     var discBadge = '';
@@ -263,12 +279,13 @@
       '<aside class="sidebar" id="bd-sidebar">'
       + '<a class="sidebar-logo" href="../../onboarding/home/"><span class="logo-mark">BD</span><span class="logo-text">BeyonDegrees.ai</span></a>'
       + nav
-      + '<div class="sidebar-footer">'
+      + '<div class="sidebar-bottom">'
       +   discBadge
-      +   '<div class="side-stats">'
-      +     '<div class="side-stat"><b>' + stats.answered + '/30</b><span>' + tr('sidebar.questions', 'Questions') + '</span></div>'
-      +     '<div class="side-stat"><b>' + stats.topMatchPct + '</b><span>' + tr('sidebar.top_match', 'Top match') + '</span></div>'
-      +   '</div>'
+      +   accountNav
+      +   '<button class="nav-item nav-reset" id="bd-reset-account" type="button" title="' + trOr('sidebar.reset', 'Reset Account') + '">'
+      +     icon('M23 4v6h-6M20.49 15a9 9 0 1 1-2.12-9.36L23 10')
+      +     '<span class="nav-label">' + trOr('sidebar.reset', 'Reset Account') + '</span>'
+      +   '</button>'
       + '</div>'
       + '</aside>';
 
@@ -295,6 +312,21 @@
     document.body.insertAdjacentHTML('afterbegin', sidebar);
     if (main) main.insertAdjacentHTML('afterbegin', topbar);
     document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
+
+    /* Reset Account — clears all quiz progress + answers, back to the start */
+    var resetBtn = document.getElementById('bd-reset-account');
+    if (resetBtn) resetBtn.addEventListener('click', function () {
+      var msg = trOr('sidebar.reset_confirm',
+        'Reset account? This clears all quiz progress and answers, and starts over from Question 1.');
+      if (!window.confirm(msg)) return;
+      try {
+        localStorage.removeItem('quizProgress');
+        localStorage.removeItem('quizMilestone');
+        localStorage.removeItem('quizCounts');
+        localStorage.removeItem('quizAnswerLog');
+      } catch (e) {}
+      window.location.href = '../../onboarding/home/';
+    });
 
     initNavProgress();
     initSidebarPin();
