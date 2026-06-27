@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../_shell/desktop.css?v=3">
 <style>
+  .content { max-width: 1280px; }
   .ud-hero { display: flex; align-items: center; gap: 26px; padding: 40px; }
   .ud-hero .ic { width: 88px; height: 88px; border-radius: 22px; flex: none; display: grid; place-items: center; font-size: 42px;
     background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10); }
@@ -87,26 +88,35 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), 0 4px 14px rgba(201,107,85,0.38), 0 10px 26px rgba(201,107,85,0.24); }
   :root[data-theme="light"] .ud-apply-btn:hover { background: linear-gradient(135deg, #f2b09d 0%, #d97f66 50%, #c96b55 100%); }
 
+  /* ── Save button ── */
+  .ud-save-btn { transition: background var(--tr-fast), border-color var(--tr-fast), color var(--tr-fast), transform .15s; }
+  .ud-save-btn.saved {
+    background: rgba(251,113,133,0.14); border-color: rgba(251,113,133,0.38); color: #fb7185;
+  }
+  :root[data-theme="light"] .ud-save-btn.saved {
+    background: rgba(225,29,72,0.10); border-color: rgba(225,29,72,0.32); color: #be123c;
+  }
+
   /* ── Majors Offered — 2 cột (bố cục cũ) + màu y hệt mobile ── */
   /* Khung bao quanh danh sách major (parity mobile .ud-programs-list) */
   .ud-programs-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
-    background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.07); border-radius: 14px; overflow: hidden; }
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 14px; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.08); }
   :root[data-theme="light"] .ud-programs-list {
-    background: linear-gradient(180deg, rgba(127,168,190,0.06) 0%, rgba(74,135,168,0.10) 100%);
-    border-color: rgba(74,135,168,0.28); }
-  /* Đường kẻ mỏng giữa các major: kẻ ngang giữa các hàng (trừ hàng đầu) + kẻ dọc giữa 2 cột */
-  .ud-programs-list .ml-item { border-top: 1px solid rgba(255,255,255,.06); }
+    background: rgba(253,248,242,0.92); border-color: rgba(232,224,213,0.75);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 2px 8px rgba(92,69,53,0.06), 0 8px 24px rgba(140,114,96,0.08); }
+  .ud-programs-list .ml-item { border-top: 1px solid rgba(255,255,255,.10); }
   .ud-programs-list .ml-item:nth-child(1),
   .ud-programs-list .ml-item:nth-child(2) { border-top: none; }
-  .ud-programs-list .ml-item:nth-child(even) { border-left: 1px solid rgba(255,255,255,.06); }
-  :root[data-theme="light"] .ud-programs-list .ml-item { border-top-color: rgba(74,135,168,0.16); }
-  :root[data-theme="light"] .ud-programs-list .ml-item:nth-child(even) { border-left-color: rgba(74,135,168,0.16); }
+  .ud-programs-list .ml-item:nth-child(even) { border-left: 1px solid rgba(255,255,255,.10); }
+  :root[data-theme="light"] .ud-programs-list .ml-item { border-top-color: rgba(232,224,213,0.75); }
+  :root[data-theme="light"] .ud-programs-list .ml-item:nth-child(even) { border-left-color: rgba(232,224,213,0.75); }
   @media (max-width: 980px) {
     .ud-programs-list { grid-template-columns: 1fr; }
-    /* 1 cột: hàng thứ 2 trở đi đều cần kẻ trên, bỏ kẻ dọc */
-    .ud-programs-list .ml-item:nth-child(2) { border-top: 1px solid rgba(255,255,255,.06); }
+    .ud-programs-list .ml-item:nth-child(2) { border-top: 1px solid rgba(255,255,255,.10); }
     .ud-programs-list .ml-item:nth-child(even) { border-left: none; }
-    :root[data-theme="light"] .ud-programs-list .ml-item:nth-child(2) { border-top-color: rgba(74,135,168,0.16); }
+    :root[data-theme="light"] .ud-programs-list .ml-item:nth-child(2) { border-top-color: rgba(232,224,213,0.75); }
   }
   .ml-item {
     display: flex; align-items: center; justify-content: space-between;
@@ -140,17 +150,16 @@
   :root[data-theme="light"] .ml-pct.pct-low  { color: #8c7260; }
   .ud-view-all {
     width: 100%; margin-top: 4px; padding: 11px; border-radius: 11px;
-    background: rgba(24,99,220,.08); border: 1px solid rgba(24,99,220,.18); color: var(--violet-300);
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.70);
     font-size: 13px; font-weight: 800; font-family: inherit; text-align: center; cursor: pointer;
     display: block; transition: background .15s;
   }
-  .ud-view-all:hover { background: rgba(24,99,220,.14); }
+  .ud-view-all:hover { background: rgba(255,255,255,0.12); color: #fff; }
   :root[data-theme="light"] .ud-view-all {
-    background: linear-gradient(135deg, rgba(74,135,168,0.14) 0%, rgba(74,135,168,0.26) 100%);
-    border-color: rgba(74,135,168,0.45); color: #2f6a8c; font-weight: 800;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.50), 0 2px 6px rgba(74,135,168,0.12);
+    background: rgba(255,255,255,0.85); border-color: rgba(74,135,168,0.40); color: #2f6a8c; font-weight: 800;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 2px 8px rgba(92,69,53,0.06);
   }
-  :root[data-theme="light"] .ud-view-all:hover { background: linear-gradient(135deg, rgba(74,135,168,0.20) 0%, rgba(74,135,168,0.36) 100%); }
+  :root[data-theme="light"] .ud-view-all:hover { background: rgba(127,168,190,0.18); border-color: rgba(74,135,168,0.55); color: #173650; }
 
   /* ── Major × University view (mobile renderMajorInUni parity) ── */
   /* ── Major × University — card LOGO riêng (nền trắng) + caption (major/ngành/%match) NẰM DƯỚI card ── */
@@ -190,9 +199,6 @@
   .mxu-lcard-cap h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.4px; color: #1f1810; line-height: 1.15; }
   .mxu-lcard-cap .mxu-disc-chip { margin-top: 9px; }
   /* tiêu đề major (dưới photo-hero) */
-  .mxu-majhead { margin-top: 22px; }
-  .mxu-majhead h1 { font-size: 30px; font-weight: 800; letter-spacing: -0.5px; color: var(--text-primary); line-height: 1.15; }
-  .mxu-majhead .mxu-disc-chip { margin-top: 10px; }
   /* ── Thẻ % match (AI Match banner, port mobile) ── */
   .mxu-card2 { position: relative; width: 100%; border-radius: var(--r-xl); padding: 26px 30px; overflow: hidden;
     background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 12px 36px rgba(0,0,0,0.22); }
@@ -267,6 +273,63 @@
   .mxu-spec-tag { display: inline-flex; margin-top: 8px; padding: 3px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 800; }
   .mxu-chev { color: var(--text-muted); font-size: 22px; flex: none; }
 
+  .acc-kt { --acc:#7c3aed; --acc-light:#a78bfa; --acc-pct:#a78bfa; }
+  .acc-tn { --acc:#f43f5e; --acc-light:#fb7185; --acc-pct:#fb7185; }
+  .acc-yt { --acc:#06d6a0; --acc-light:#34d399; --acc-pct:#6ee7b7; }
+  .acc-nn { --acc:#f59e0b; --acc-light:#fbbf24; --acc-pct:#fcd34d; }
+  .acc-xh { --acc:#a855f7; --acc-light:#c084fc; --acc-pct:#d8b4fe; }
+  .acc-nv { --acc:#3b82f6; --acc-light:#60a5fa; --acc-pct:#93c5fd; }
+  :root[data-theme="light"] .acc-kt { --acc:#7c3aed; --acc-light:#a78bfa; --acc-pct:#6d28d9; }
+  :root[data-theme="light"] .acc-tn { --acc:#e11d48; --acc-light:#fb7185; --acc-pct:#be123c; }
+  :root[data-theme="light"] .acc-yt { --acc:#059669; --acc-light:#6ee7b7; --acc-pct:#047857; }
+  :root[data-theme="light"] .acc-nn { --acc:#d97706; --acc-light:#fbbf24; --acc-pct:#b45309; }
+  :root[data-theme="light"] .acc-xh { --acc:#9333ea; --acc-light:#c084fc; --acc-pct:#7e22ce; }
+  :root[data-theme="light"] .acc-nv { --acc:#2563eb; --acc-light:#93c5fd; --acc-pct:#1d4ed8; }
+
+  .mxu-band { position: relative; margin-top: 22px; padding: 24px 30px 24px 34px;
+    border-radius: var(--r-xl); overflow: hidden;
+    background:
+      radial-gradient(ellipse 70% 120% at 0% 0%, color-mix(in srgb, var(--acc) 16%, transparent) 0%, transparent 60%),
+      color-mix(in srgb, var(--acc) 7%, var(--bg-surface));
+    border: 1px solid color-mix(in srgb, var(--acc) 28%, transparent);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--acc) 10%, transparent), inset 0 1px 0 rgba(255,255,255,0.10); }
+  :root[data-theme="light"] .mxu-band { box-shadow: 0 10px 30px color-mix(in srgb, var(--acc) 14%, transparent), inset 0 1px 0 rgba(255,255,255,0.65); }
+  .mxu-band::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 6px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--acc) 85%, #fff), var(--acc) 55%, color-mix(in srgb, var(--acc) 75%, #000)); }
+  .mxu-band .mxu-crumb { font-size: 12px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--acc-pct); margin-bottom: 10px; }
+  .mxu-band h1 { font-size: 33px; font-weight: 900; letter-spacing: -0.7px; line-height: 1.1; color: var(--text-primary); text-wrap: balance; }
+  .mxu-band .mxu-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+  .mxu-grid { display: grid; grid-template-columns: minmax(0,1fr) 344px; gap: 24px; align-items: start; margin-top: 22px; }
+  .mxu-main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+  .mxu-rail { position: sticky; top: 84px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .mxu-main .sec-head .meta { font-weight: 600; }
+  .mxu-spec-grid { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+  .mxu-spec-grid .mxu-spec { border-radius: var(--r-lg); align-items: flex-start; flex-direction: row; gap: 16px; padding: 18px 22px; min-height: 0; }
+  .mxu-spec-grid .mxu-spec-ic { width: auto; height: auto; border-radius: 0; background: transparent; box-shadow: none; font-size: 30px; line-height: 1; margin-top: 2px; }
+  .mxu-spec-grid .mxu-spec-info { display: block; }
+  .mxu-spec-grid .mxu-spec-name { font-size: 15px; line-height: 1.35; }
+  .mxu-spec-grid .mxu-spec-sub { display: block; -webkit-line-clamp: unset; overflow: visible; font-size: 13px; line-height: 1.6; margin-top: 4px; }
+  .mxu-spec-grid .mxu-spec-tag { margin-top: 10px; }
+  .mxu-spec-grid .mxu-spec:hover {
+    transform: translateY(-4px) scale(1.01) !important;
+    border-color: color-mix(in srgb, var(--acc) 48%, transparent) !important;
+    background: color-mix(in srgb, var(--acc) 9%, var(--bg-surface)) !important;
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--acc) 24%, transparent) !important; }
+  .mxu-spec-grid .mxu-chev { display: none; }
+  .ud-actions--rail { flex-direction: column; align-items: stretch; gap: 10px; margin-top: 0; }
+  .ud-actions--rail .btn { width: 100%; }
+  .mxu-rail .mxu-card2 { min-height: 260px; padding: 26px 24px; display: flex; align-items: center; }
+  .mxu-rail .mxu-card2 .mmc { width: 100%; }
+  .sp-hero-stats { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 14px; margin-top: 16px; }
+  .sp-hero-stats .sp-stat { padding: 22px 24px; }
+  .sp-hero-stats .sp-stat-value { font-size: 32px; }
+  .sp-hero-stats .sp-stat.primary .sp-stat-value { font-size: 42px; letter-spacing: -1px; }
+  .sp-rail .card { min-width: 0; }
+  .wts-grid.wts-wide { grid-template-columns: repeat(auto-fill, minmax(236px,1fr)); }
+  @media (max-width: 1000px) { .mxu-grid { grid-template-columns: 1fr; } .mxu-rail { position: static; } }
+  @media (max-width: 720px) { .sp-hero-stats { grid-template-columns: 1fr; } }
+
   /* ── University-context badge (logo trường thật + "at {uni}") dùng cho major×uni & spec×uni ── */
   .ux-ctx { display: inline-flex; align-items: center; gap: 9px; margin-top: 10px; }
   .ux-logo { width: 30px; height: 30px; border-radius: 9px; flex: none; display: grid; place-items: center; overflow: hidden;
@@ -312,18 +375,9 @@
   .ud-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
 
   /* ── Spec × University view (mobile renderSpecInUni / spec-detail combined) ── */
-  .sp-hero { display: flex; align-items: center; gap: 24px; padding: 36px 40px; position: relative; overflow: hidden; }
-  .sp-hero .ic { width: 76px; height: 76px; border-radius: 20px; flex: none; display: grid; place-items: center; font-size: 36px;
-    background: color-mix(in srgb, var(--acc) 15%, transparent); border: 1px solid color-mix(in srgb, var(--acc) 32%, transparent); }
-  .sp-hero h1 { font-size: 26px; font-weight: 900; color: var(--text-primary); }
-  .sp-crumb { font-size: 13px; color: var(--text-muted); font-weight: 600; }
-  .sp-uctx { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-  .sp-uctx b { color: var(--text-primary); }
   .sp-h { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 800; color: var(--text-primary); }
   .sp-h .em { font-size: 18px; }
   .sp-sub { font-size: 12.5px; color: var(--text-muted); font-weight: 600; margin-top: 4px; }
-  .sp-stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 16px; }
-  @media (max-width: 760px) { .sp-stat-grid { grid-template-columns: 1fr; } }
   .sp-stat { padding: 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); }
   :root[data-theme="light"] .sp-stat { background: #fdf8f2; border-color: #e8e0d5; }
   .sp-stat.primary { background: color-mix(in srgb, var(--acc) 12%, transparent); border-color: color-mix(in srgb, var(--acc) 30%, transparent); }
@@ -419,7 +473,9 @@
   <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
   <script src="../../_shell/desktop.js?v=6"></script>
   <script>
-    var id = BD.param('u', 'fulbright');
+    var query = new URLSearchParams(location.search);
+    var majorModeRequested = query.has('major');
+    var id = BD.param('u', majorModeRequested ? 'mit' : 'fulbright');
     var u = (window.UNI_DATA || []).find(function (x) { return x.id === id; }) || UNI_DATA[0];
     var d = (window.UNI_DETAIL || {})[u.id] || {};
     document.title = u.name + ' — BeyonDegrees.ai';
@@ -510,6 +566,7 @@
 
     /* ?major=… → "major × university"; thêm &spec=… → "spec × university" (giống mobile, đều ở university/detail) */
     var majorParam = BD.param('major', '');
+    if (majorModeRequested && !majorParam) majorParam = 'Mechanical engineering';
     var major = majorParam ? _MAJORS.find(function (m) { return m.title === majorParam; }) : null;
     var hasSpec = new URLSearchParams(location.search).has('spec');
     var specIdx = parseInt(BD.param('spec', '0'), 10) || 0;
@@ -609,56 +666,61 @@
       }).join('');
 
       document.getElementById('root').innerHTML =
-        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
+        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">&#8592; Back</button>' +
         '<div class="acc-' + dc + '">' +
           photoHeroHTML(pct) +
-          '<div class="mxu-majhead">' +
-            '<div class="sp-crumb">' + (DISC_LABEL[dc] || '') + ' · ' + major.title + '</div>' +
-            '<h1 class="mt-2">' + spec.name + '</h1>' +
-            '<span class="spec-tag chip mt-2" style="background:' + t.bg + ';border-color:' + t.border + ';color:' + t.text + ';">' + spec.tag + '</span>' +
+          '<div class="mxu-band">' +
+            '<div class="mxu-crumb">' + (DISC_LABEL[dc] || '') + ' &middot; ' + major.title + '</div>' +
+            '<h1>' + spec.name + '</h1>' +
+            '<div class="mxu-meta"><span class="spec-tag chip" style="background:' + t.bg + ';border-color:' + t.border + ';color:' + t.text + ';">' + spec.tag + '</span></div>' +
           '</div>' +
-          '<div class="card mt-6"><div class="sp-h"><span class="em">💰</span>Salary &amp; Outcomes</div>' +
-            '<div class="sp-stat-grid">' +
-              '<div class="sp-stat primary"><div class="sp-stat-label">Average Salary</div><div class="sp-stat-value">' + md.avgSalary + '</div><div class="sp-stat-meta">per year · with experience</div></div>' +
-              '<div class="sp-stat"><div class="sp-stat-label">Entry Level</div><div class="sp-stat-value">' + md.entrySalary + '</div><div class="sp-stat-meta">per year · starting</div></div>' +
-              '<div class="sp-stat"><div class="sp-stat-label">Employment Rate</div><div class="sp-stat-value">' + md.employment + '</div><div class="sp-stat-meta">within 6 months of graduation</div></div>' +
-            '</div></div>' +
-          (spec.desc ? '<div class="card mt-6"><div class="sp-h"><span class="em">📋</span>Overview</div><p class="sp-overview">' + spec.desc + '</p></div>' : '') +
-          '<div class="grid grid-2 mt-6">' +
-            '<div class="card"><div class="sp-h"><span class="em">💼</span>Career Outcomes</div><div class="sp-sub">' + md.careers.length + ' job paths</div><div class="skill-chips career-chips">' + chips(md.careers) + '</div></div>' +
-            '<div class="card"><div class="sp-h"><span class="em">⚡</span>Required Skills</div><div class="sp-sub">Core competencies &amp; tools</div>' +
-              '<div class="sp-skill-group" style="margin-top:14px;"><span class="sp-glabel">Core Competencies</span><div class="skill-chips">' + chips(md.coreSkills) + '</div></div>' +
-              '<div class="sp-skill-group"><span class="sp-glabel">Tools &amp; Software</span><div class="skill-chips">' + chips(md.tools) + '</div></div></div>' +
+          '<div class="mxu-grid">' +
+            '<div class="mxu-main">' +
+              '<div class="card"><div class="sp-h"><span class="em">&#128176;</span>Salary &amp; Outcomes</div>' +
+                '<div class="sp-hero-stats">' +
+                  '<div class="sp-stat primary"><div class="sp-stat-label">Average Salary</div><div class="sp-stat-value">' + md.avgSalary + '</div><div class="sp-stat-meta">per year &middot; with experience</div></div>' +
+                  '<div class="sp-stat"><div class="sp-stat-label">Entry Level</div><div class="sp-stat-value">' + md.entrySalary + '</div><div class="sp-stat-meta">per year &middot; starting</div></div>' +
+                  '<div class="sp-stat"><div class="sp-stat-label">Employment Rate</div><div class="sp-stat-value">' + md.employment + '</div><div class="sp-stat-meta">within 6 months of graduation</div></div>' +
+                '</div></div>' +
+              (spec.desc ? '<div class="card"><div class="sp-h"><span class="em">&#128203;</span>Overview</div><p class="sp-overview">' + spec.desc + '</p></div>' : '') +
+              '<div class="grid grid-2">' +
+                '<div class="card"><div class="sp-h"><span class="em">&#128188;</span>Career Outcomes</div><div class="sp-sub">' + md.careers.length + ' job paths</div><div class="skill-chips career-chips">' + chips(md.careers) + '</div></div>' +
+                '<div class="card"><div class="sp-h"><span class="em">&#9889;</span>Required Skills</div><div class="sp-sub">Core competencies &amp; tools</div>' +
+                  '<div class="sp-skill-group" style="margin-top:14px;"><span class="sp-glabel">Core Competencies</span><div class="skill-chips">' + chips(md.coreSkills) + '</div></div>' +
+                  '<div class="sp-skill-group"><span class="sp-glabel">Tools &amp; Software</span><div class="skill-chips">' + chips(md.tools) + '</div></div></div>' +
+              '</div>' +
+              '<div class="card"><div class="sp-h"><span class="em">&#129517;</span>Learning Path</div><div class="sp-sub">Admission requirements, exams, and language needs</div>' +
+                '<div class="req-block row-line" style="margin-top:8px;"><b>&#127891; Admission</b><p>' + md.admission + '</p></div>' +
+                '<div class="req-block row-line"><b>&#128221; Exams &amp; certificates</b><p>' + md.exams + '</p></div>' +
+                '<div class="req-block"><b>&#127760; Language</b><p>' + md.language + '</p></div></div>' +
+            '</div>' +
+            '<div class="mxu-rail sp-rail">' +
+              '<div class="card"><div class="sp-h"><span class="em">&#128640;</span>Apply at ' + u.name + '</div>' +
+                '<div class="sp-sub">Study ' + spec.name + ' at ' + u.name + ' &middot; ' + u.loc + '</div>' +
+                '<div class="flex mt-4" style="gap:10px;"><a class="btn btn-primary" href="' + (d.site ? 'https://' + d.site : '?u=' + u.id) + '"' + (d.site ? ' target="_blank" rel="noopener"' : '') + '>Apply at ' + u.name + ' &#8594;</a></div></div>' +
+            '</div>' +
           '</div>' +
-          '<div class="card mt-6"><div class="sp-h"><span class="em">🧭</span>Learning Path</div><div class="sp-sub">Admission requirements, exams, and language needs</div>' +
-            '<div class="req-block row-line" style="margin-top:8px;"><b>🎓 Admission</b><p>' + md.admission + '</p></div>' +
-            '<div class="req-block row-line"><b>📝 Exams &amp; certificates</b><p>' + md.exams + '</p></div>' +
-            '<div class="req-block"><b>🌐 Language</b><p>' + md.language + '</p></div></div>' +
-          '<div class="card mt-6"><div class="sp-h"><span class="em">🚀</span>Apply at ' + u.name + '</div>' +
-            '<div class="sp-sub">Study ' + spec.name + ' at ' + u.name + ' · ' + u.loc + '</div>' +
-            '<div class="flex mt-4" style="gap:10px;"><a class="btn btn-primary" href="' + (d.site ? 'https://' + d.site : '?u=' + u.id) + '"' + (d.site ? ' target="_blank" rel="noopener"' : '') + '>Apply at ' + u.name + ' →</a></div></div>' +
           '<div class="card mt-6"><div class="sp-h"><span class="em">🏛️</span>Where to Study</div><div class="wts-grid">' + wts + '</div></div>' +
-          '<div class="flex mt-8" style="gap:12px;"><a class="btn btn-ghost" href="?u=' + u.id + '&major=' + encodeURIComponent(major.title) + '">← ' + major.title + ' at ' + u.name + '</a></div>' +
+          '<div class="flex mt-8" style="gap:12px;"><a class="btn btn-ghost" href="?u=' + u.id + '&major=' + encodeURIComponent(major.title) + '">&#8592; ' + major.title + ' at ' + u.name + '</a></div>' +
         '</div>';
     }
 
-    /* ── Major × University (mobile renderMajorInUni) — major trong ngữ cảnh trường + list specialization → spec×uni ── */
     function renderMajorInUni() {
-      var disc = _DISC[String(major.discId)] || { title: 'General', color: '#6b6b9a', icon: '🎓', short: 'General' };
-      var dc = major.discCode || '';
+      var disc = _DISC[String(major.discId)] || { title: 'General', color: '#6b6b9a', icon: '&#127891;', short: 'General' };
+      var dc = major.discCode || 'tn';
       var specs = _SPECS[major.id] || [];
       var pct = ((major.id * 17 + 31) % 30) + 62;
       var barCls = pct >= 70 ? 'green' : pct >= 50 ? 'yellow' : 'red';
       var factors = [
-        { label: '✓ World Ranking', type: 'good' },
-        { label: '✓ Aid Available', type: 'good' },
-        { label: u.aidType === 'full' ? '✓ Full Scholarship' : u.aidType === 'need' ? '✓ Need-Based Aid' : '★ Merit Aid', type: 'good' },
-        { label: pct >= 70 ? '✓ Profile Fit' : '~ Partial Fit', type: pct >= 70 ? 'good' : 'mid' }
+        { label: '&#10003; World Ranking', type: 'good' },
+        { label: '&#10003; Aid Available', type: 'good' },
+        { label: u.aidType === 'full' ? '&#10003; Full Scholarship' : u.aidType === 'need' ? '&#10003; Need-Based Aid' : '&#9733; Merit Aid', type: 'good' },
+        { label: pct >= 70 ? '&#10003; Profile Fit' : '~ Partial Fit', type: pct >= 70 ? 'good' : 'mid' }
       ];
       var factorsHtml = factors.map(function (f) {
         return '<span class="mmc-factor' + (f.type === 'mid' ? ' mid' : f.type === 'weak' ? ' weak' : '') + '">' + f.label + '</span>';
       }).join('');
-      document.title = major.title + ' at ' + u.name + ' — BeyonDegrees.ai';
+      document.title = major.title + ' at ' + u.name + ' - BeyonDegrees.ai';
 
       var specCards = specs.map(function (sp, i) {
         var t = _TAGS[sp.tag] || { bg: 'rgba(200,200,224,.08)', border: 'rgba(200,200,224,.2)', text: '#c8c8e0' };
@@ -669,42 +731,50 @@
             '<div class="mxu-spec-sub">' + sp.desc + '</div>' +
             '<span class="mxu-spec-tag" style="background:' + t.bg + ';border:1px solid ' + t.border + ';color:' + t.text + ';">' + sp.tag + '</span>' +
           '</div>' +
-          '<span class="mxu-chev">›</span>' +
+          '<span class="mxu-chev">&rsaquo;</span>' +
         '</a>';
       }).join('');
 
-      var descShort = major.desc.length > 320 ? major.desc.slice(0, 320).replace(/\s\S+$/, '') + '…' : major.desc;
-
+      var majorDesc = major.desc || '';
+      var descShort = majorDesc.length > 320 ? majorDesc.slice(0, 320).replace(/\s\S+$/, '') + '...' : majorDesc;
       document.getElementById('root').innerHTML =
-        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
+        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">&#8592; Back</button>' +
         '<div class="acc-' + dc + '">' +
           photoHeroHTML(pct) +
-          '<div class="mxu-majhead">' +
+          '<div class="mxu-band">' +
             '<h1>' + major.title + '</h1>' +
-            '<span class="mxu-disc-chip">' + (disc.icon || '') + ' ' + disc.title + '</span>' +
+            '<div class="mxu-meta"><span class="mxu-disc-chip">' + (disc.icon || '') + ' ' + disc.title + '</span></div>' +
           '</div>' +
-          '<div class="mxu-card2 mt-6">' +
-            '<div class="mmc">' +
-              '<div class="mmc-top">' +
-                '<span class="mmc-chip">★ AI Match</span>' +
+          '<div class="mxu-grid">' +
+            '<div class="mxu-main">' +
+              '<div class="card mxu-about">' +
+                '<div class="sec-head"><span class="em">&#127963;&#65039;</span>About this major</div>' +
+                '<p class="ud-p">' + descShort + '</p>' +
               '</div>' +
-              '<div class="mmc-score"><span class="mmc-pct">' + pct + '%</span><span class="mmc-sub">Overall<br>match score</span></div>' +
-              '<div class="mmc-bar"><div class="mmc-fill ' + barCls + '" style="width:' + pct + '%"></div></div>' +
-              '<div class="mmc-factors">' + factorsHtml + '</div>' +
+              '<div>' +
+                '<div class="sec-head"><span>Specializations</span><span class="meta">&mdash; at ' + u.name + '</span></div>' +
+                (specs.length
+                  ? '<div class="mxu-spec-grid">' + specCards + '</div>'
+                  : '<div class="card mt-4"><p class="ud-p">Specialization details coming soon.</p></div>') +
+              '</div>' +
+            '</div>' +
+            '<div class="mxu-rail">' +
+              '<div class="mxu-card2">' +
+                '<div class="mmc">' +
+                  '<div class="mmc-top">' +
+                    '<span class="mmc-chip">&#9733; AI Match</span>' +
+                  '</div>' +
+                  '<div class="mmc-score"><span class="mmc-pct">' + pct + '%</span><span class="mmc-sub">Overall<br>match score</span></div>' +
+                  '<div class="mmc-bar"><div class="mmc-fill ' + barCls + '" style="width:' + pct + '%"></div></div>' +
+                  '<div class="mmc-factors">' + factorsHtml + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="ud-actions ud-actions--rail">' +
+                '<a class="btn btn-primary" href="' + (d.site ? 'https://' + d.site : '#') + '"' + (d.site ? ' target="_blank" rel="noopener"' : '') + '>Apply Now &#8594;</a>' +
+                '<a class="btn btn-ghost" href="../../major/why/?major=' + encodeURIComponent(major.title) + '">Why match &#8594;</a>' +
+              '</div>' +
             '</div>' +
           '</div>' +
-          '<div class="ud-actions">' +
-            '<a class="btn btn-primary" href="' + (d.site ? 'https://' + d.site : '#') + '"' + (d.site ? ' target="_blank" rel="noopener"' : '') + '>Apply Now →</a>' +
-            '<a class="btn btn-ghost" href="../../major/why/?major=' + encodeURIComponent(major.title) + '">Why match →</a>' +
-          '</div>' +
-          '<div class="card mxu-about mt-6">' +
-            '<div class="sec-head"><span class="em">🏛️</span>About this major</div>' +
-            '<p class="ud-p">' + descShort + '</p>' +
-          '</div>' +
-          '<div class="section-title">Specializations <span class="hint">— at ' + u.name + '</span></div>' +
-          (specs.length
-            ? '<div class="grid grid-2 mt-4">' + specCards + '</div>'
-            : '<div class="card mt-4"><p class="ud-p">Specialization details coming soon.</p></div>') +
         '</div>';
     }
 
@@ -729,68 +799,74 @@
         : u.aidType === 'merit'
           ? 'Merit-based financial aid and scholarships available for outstanding academic achievements. Contact admissions for eligibility and application procedures.'
           : 'Need-based financial aid available. Meets 100% of demonstrated financial need for admitted students. Expected family contribution applies.';
+      var savedUnis = JSON.parse(localStorage.getItem('bd-saved-unis') || '{}');
+      var isSaved = !!savedUnis[u.id];
+
       document.getElementById('root').innerHTML =
         '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
         photoHeroHTML(u.match) +
-        '<div class="mxu-card2 mt-6">' +
-          '<div class="mmc">' +
-            '<div class="mmc-top"><span class="mmc-chip">★ AI Match</span><a class="mmc-why" href="../../university/why/?u=' + u.id + '">Why match →</a></div>' +
-            '<div class="mmc-score"><span class="mmc-pct">' + u.match + '%</span><span class="mmc-sub">Overall<br>match score</span></div>' +
-            '<div class="mmc-bar"><div class="mmc-fill ' + barCls + '" style="width:' + u.match + '%"></div></div>' +
-            '<div class="mmc-factors">' + factorsHtml + '</div>' +
-          '</div>' +
+
+        /* Action buttons */
+        '<div class="ud-actions">' +
+          '<button class="btn btn-ghost ud-save-btn' + (isSaved ? ' saved' : '') + '" id="udSaveBtn" type="button">' + (isSaved ? '♥ Saved' : '♡ Save') + '</button>' +
+          (d.site
+            ? '<a class="btn btn-ghost" href="https://' + d.site + '" target="_blank" rel="noopener">🌐 Visit Website</a>'
+            : '<button class="btn btn-ghost" type="button">🌐 Visit Website</button>') +
         '</div>' +
 
-        '<div class="grid grid-2 mt-6">' +
-          '<div class="card">' +
-            '<div class="sec-head"><span class="em">🏛️</span>About</div>' +
-            '<p class="ud-p">' + (d.about || '—') + '</p>' +
-          '</div>' +
-          '<div class="card">' +
-            '<div class="sec-head"><span class="em">🎓</span>Campus &amp; Student Life</div>' +
-            '<p class="ud-p">' + (d.life || '—') + '</p>' +
-          '</div>' +
-        '</div>' +
+        /* Two-column layout: content (trái) + sidebar (phải) */
+        '<div style="display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:start;margin-top:22px">' +
 
-        '<div class="card mt-6">' +
-          '<div class="sec-head"><span class="em">📚</span>Majors Offered<span class="meta">' + (MAJOR_LIST.length || (u.programs || []).length) + ' majors</span></div>' +
-          majorsOfferedHTML() +
-        '</div>' +
-
-        '<div class="grid grid-2 mt-6">' +
-          '<div class="card">' +
-            '<div class="sec-head"><span class="em">💰</span>Tuition &amp; Financials</div>' +
-            '<div class="ud-stats-grid">' +
-              '<div class="ud-stat-card"><div class="ud-stat-lbl">Annual Tuition</div><div class="ud-stat-val" style="font-size:14px">' + u.tuition + '</div></div>' +
-              '<div class="ud-stat-card"><div class="ud-stat-lbl">Avg. Salary</div><div class="ud-stat-val accent">' + u.salary + '</div></div>' +
-              '<div class="ud-stat-card"><div class="ud-stat-lbl">Total Students</div><div class="ud-stat-val">' + u.students + '</div></div>' +
-              '<div class="ud-stat-card"><div class="ud-stat-lbl">Employment Rate</div><div class="ud-stat-val accent">' + u.employment + '</div></div>' +
+          /* LEFT: Overview + Majors */
+          '<div style="display:flex;flex-direction:column;gap:22px;min-width:0">' +
+            '<div class="card">' +
+              '<div class="sec-head"><span class="em">🏛️</span>Overview</div>' +
+              '<p class="ud-p">' + (d.about || '—') + '</p>' +
             '</div>' +
-            '<div class="ud-aid-badge ' + aidCls + '">' + aidEmoji + ' ' + u.aid + '</div>' +
-            '<div class="ud-aid-text">' + aidText + '</div>' +
-            '<div class="ud-loan-row">' +
-              '<div class="ud-loan-icon">💳</div>' +
-              '<div><div class="ud-loan-label">Loan</div><div class="ud-loan-val">' + (d.loan || 'Student loan available') + '</div></div>' +
+            '<div>' +
+              '<div class="sec-head"><span class="em">🎓</span>Majors Offered<span class="meta">' + (MAJOR_LIST.length || (u.programs || []).length) + ' programs</span></div>' +
+              majorsOfferedHTML() +
             '</div>' +
           '</div>' +
-          '<div class="card">' +
-            '<div class="sec-head"><span class="em">📋</span>Admissions</div>' +
-            '<div class="ud-admit-stats">' +
-              '<div class="ud-admit-stat"><div class="ud-admit-val" style="color:' + getMatchColor(u.match) + '">' + (d.accept || '—') + '</div><div class="ud-admit-lbl">Accept Rate</div></div>' +
-              '<div class="ud-admit-stat"><div class="ud-admit-val">' + (d.intl || '—') + '</div><div class="ud-admit-lbl">Intl. Students</div></div>' +
-              '<div class="ud-admit-stat"><div class="ud-admit-val" style="font-size:13px;color:var(--violet-300)">' + (d.deadline || '—') + '</div><div class="ud-admit-lbl">App Deadline</div></div>' +
+
+          /* RIGHT sidebar: sticky */
+          '<div style="position:sticky;top:80px;display:flex;flex-direction:column;gap:18px">' +
+            /* AI Match */
+            '<div class="card">' +
+              '<div class="mmc-top"><span class="mmc-chip">★ AI Match</span><a class="mmc-why" href="../../university/why/?u=' + u.id + '">Why? →</a></div>' +
+              '<div class="mmc-score" style="margin-top:14px"><span class="mmc-pct">' + u.match + '%</span><span class="mmc-sub">Excellent fit<br>for your profile</span></div>' +
+              '<div class="mmc-bar" style="margin-top:14px"><div class="mmc-fill ' + barCls + '" style="width:' + u.match + '%"></div></div>' +
+              '<div class="mmc-factors" style="margin-top:0">' + factorsHtml + '</div>' +
             '</div>' +
-            '<div class="ud-site-row"><div class="ud-site-icon">🌐</div><div class="ud-site-url">' + (d.site || '—') + '</div></div>' +
+
+            /* Tuition & Financials */
+            '<div class="card">' +
+              '<div class="sec-head"><span class="em">💰</span>Tuition &amp; Financials</div>' +
+              '<div class="ud-stats-grid">' +
+                '<div class="ud-stat-card"><div class="ud-stat-lbl">Annual Tuition</div><div class="ud-stat-val" style="font-size:14px">' + u.tuition + '</div></div>' +
+                '<div class="ud-stat-card"><div class="ud-stat-lbl">Avg. Salary</div><div class="ud-stat-val accent">' + u.salary + '</div></div>' +
+              '</div>' +
+              '<div class="ud-aid-badge ' + aidCls + '">' + aidEmoji + ' ' + u.aid + '</div>' +
+              '<p class="ud-aid-text">' + aidText + '</p>' +
+            '</div>' +
+
+            /* Admissions */
+            '<div class="card">' +
+              '<div class="sec-head"><span class="em">📋</span>Admissions</div>' +
+              '<div class="ud-admit-stats">' +
+                '<div class="ud-admit-stat"><div class="ud-admit-val" style="color:' + getMatchColor(u.match) + '">' + (d.accept || '—') + '</div><div class="ud-admit-lbl">Accept</div></div>' +
+                '<div class="ud-admit-stat"><div class="ud-admit-val">' + (d.intl || '—') + '</div><div class="ud-admit-lbl">Intl.</div></div>' +
+                '<div class="ud-admit-stat"><div class="ud-admit-val" style="font-size:13px">' + (d.deadline || '—') + '</div><div class="ud-admit-lbl">Deadline</div></div>' +
+              '</div>' +
+            '</div>' +
+
+            /* Apply Now */
             '<button class="ud-apply-btn" type="button" onclick="window.open(\'https://' + (d.site || '#') + '\', \'_blank\')">Apply Now →</button>' +
           '</div>' +
-        '</div>' +
 
-        '<div class="card mt-6">' +
-          '<div class="sec-head"><span class="em">✈️</span>Immigration Support</div>' +
-          '<p class="ud-p">' + (d.support || '—') + '</p>' +
         '</div>';
 
-      /* View-all toggle — bật/tắt từng item "more" riêng để 2 cột luôn cân bằng */
+      /* View-all toggle */
       var btn = document.getElementById('moBtn');
       if (btn) {
         btn.onclick = function () {
@@ -798,6 +874,22 @@
           var open = extras.length && extras[0].style.display !== 'none';
           extras.forEach(function (el) { el.style.display = open ? 'none' : ''; });
           btn.textContent = open ? ('View all ' + MAJOR_LIST.length + ' majors →') : 'Show less ↑';
+        };
+      }
+
+      /* Save button */
+      var saveBtn = document.getElementById('udSaveBtn');
+      if (saveBtn) {
+        saveBtn.onclick = function () {
+          var sv = JSON.parse(localStorage.getItem('bd-saved-unis') || '{}');
+          sv[u.id] = !sv[u.id];
+          if (!sv[u.id]) delete sv[u.id];
+          localStorage.setItem('bd-saved-unis', JSON.stringify(sv));
+          var on = !!sv[u.id];
+          saveBtn.classList.toggle('saved', on);
+          saveBtn.textContent = on ? '♥ Saved' : '♡ Save';
+          saveBtn.style.transform = 'scale(1.13)';
+          setTimeout(function () { saveBtn.style.transform = ''; }, 180);
         };
       }
     }

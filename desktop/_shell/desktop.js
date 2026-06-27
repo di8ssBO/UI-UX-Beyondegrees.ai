@@ -313,12 +313,37 @@
     if (main) main.insertAdjacentHTML('afterbegin', topbar);
     document.querySelector('.theme-toggle').addEventListener('click', toggleTheme);
 
-    /* Reset Account — clears all quiz progress + answers, back to the start */
+    /* Reset modal — inject once into body */
+    document.body.insertAdjacentHTML('beforeend',
+      '<div class="bd-modal" id="bd-reset-modal">' +
+        '<div class="card bd-mbox">' +
+          '<h3>Reset Account?</h3>' +
+          '<p>This will clear <b>all quiz progress</b> and all your answers.<br>You\'ll start fresh from <b>Question 1</b>.</p>' +
+          '<div class="bd-mbtns">' +
+            '<button class="btn btn-danger" id="bd-reset-confirm">Reset &amp; Start Over</button>' +
+            '<button class="btn btn-ghost" id="bd-reset-cancel">Cancel</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>');
+
+    var resetModal   = document.getElementById('bd-reset-modal');
+    var resetConfirm = document.getElementById('bd-reset-confirm');
+    var resetCancel  = document.getElementById('bd-reset-cancel');
+
+    /* Reset Account — opens modal instead of window.confirm */
     var resetBtn = document.getElementById('bd-reset-account');
-    if (resetBtn) resetBtn.addEventListener('click', function () {
-      var msg = trOr('sidebar.reset_confirm',
-        'Reset account? This clears all quiz progress and answers, and starts over from Question 1.');
-      if (!window.confirm(msg)) return;
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function () {
+        resetModal.classList.add('show');
+      });
+    }
+    resetCancel.addEventListener('click', function () {
+      resetModal.classList.remove('show');
+    });
+    resetModal.addEventListener('click', function (e) {
+      if (e.target === resetModal) resetModal.classList.remove('show');
+    });
+    resetConfirm.addEventListener('click', function () {
       try {
         localStorage.removeItem('quizProgress');
         localStorage.removeItem('quizMilestone');

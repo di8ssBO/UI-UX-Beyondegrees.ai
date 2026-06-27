@@ -325,7 +325,7 @@
         : '<span class="em">' + u.icon + '</span>';
     }
 
-    var saved = {};
+    var saved = JSON.parse(localStorage.getItem('bd-saved-unis') || '{}');
     var compare = [];
     var showSaved = false;
     var sortMode = 'match';
@@ -433,6 +433,8 @@
         g.querySelectorAll('.uc-save').forEach(function (h) {
           h.onclick = function () {
             saved[h.dataset.id] = !saved[h.dataset.id];
+            if (!saved[h.dataset.id]) delete saved[h.dataset.id];
+            localStorage.setItem('bd-saved-unis', JSON.stringify(saved));
             document.getElementById('savedCount').textContent =
               Object.keys(saved).filter(function (k) { return saved[k]; }).length;
             render();

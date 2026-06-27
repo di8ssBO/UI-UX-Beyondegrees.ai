@@ -17,28 +17,60 @@
      locked state + teaser). Chỉ đổi bố trí & kích thước cho desktop.
      ════════════════════════════════════════════════════════════ */
 
-  /* ── Filter chips (mobile .fc) ── */
-  .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
-  .fc {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700;
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
-    color: var(--text-secondary); cursor: pointer; backdrop-filter: blur(8px);
-    transition: all var(--tr-fast); white-space: nowrap;
+  /* ── Two-column layout: filter sidebar (trái) + kết quả (phải) ── */
+  .rec-layout { display: flex; align-items: flex-start; gap: 24px; margin-top: 22px; }
+  .rec-sidebar { flex: none; width: 248px; position: sticky; top: 80px; }
+  .rec-main { flex: 1; min-width: 0; }
+  @media (max-width: 880px) {
+    .rec-layout { flex-direction: column; gap: 16px; }
+    .rec-sidebar { width: 100%; position: static; }
   }
-  .fc:hover { color: var(--text-primary); border-color: rgba(124,58,237,0.45); }
-  .fc.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.28); color: var(--text-primary); }
-  .fc .fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c,#888); flex: none; }
-  .fc .fc-pct { font-size: 12px; font-weight: 800; opacity: .95; }
-  :root[data-theme="light"] .fc { background: rgba(253,248,242,0.88); border-color: #e8e0d5; color: #5c4535; }
-  :root[data-theme="light"] .fc:hover { border-color: rgba(201,107,85,0.45); color: #a84e30; }
-  :root[data-theme="light"] .fc[data-disc]:not([data-disc="all"]).active {
-    background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,0.55));
-    border-color: color-mix(in srgb, var(--c) 45%, transparent);
-    color: color-mix(in srgb, var(--c) 35%, #2c1f14);
+
+  /* ── Sidebar card wrapper ── */
+  .sidebar-card {
+    padding: 20px; border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    background: rgba(255,255,255,0.04);
+  }
+  .sidebar-label {
+    font-size: 11px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 12px;
+  }
+  :root[data-theme="light"] .sidebar-card {
+    background: rgba(253,248,242,0.96);
+    border-color: rgba(232,224,213,0.70);
+    box-shadow: 0 2px 12px rgba(92,69,53,0.06), inset 0 1px 0 rgba(255,255,255,0.70);
+  }
+  :root[data-theme="light"] .sidebar-label { color: #8c7260; }
+
+  /* ── Filter chips — hàng dọc, dạng row card ── */
+  .filter-chips { display: flex; flex-direction: column; gap: 6px; }
+  .fc {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 11px; font-size: 13.5px; font-weight: 700;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10);
+    color: var(--text-secondary); cursor: pointer;
+    transition: all var(--tr-fast); white-space: nowrap; width: 100%;
+    box-sizing: border-box;
+  }
+  .fc:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); color: var(--text-primary); }
+  .fc.active { background: rgba(124,58,237,0.14); border-color: rgba(124,58,237,0.34); color: var(--text-primary); }
+  .fc[data-disc="all"].active { background: rgba(124,58,237,0.14); border-color: rgba(124,58,237,0.34); color: #c4b5fd; font-weight: 800; }
+  .fc .fc-label { flex: 1; }
+  .fc .fc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c,#888); flex: none; }
+  .fc .fc-pct { font-size: 12.5px; font-weight: 800; margin-left: auto; }
+
+  /* ── Light mode overrides ── */
+  :root[data-theme="light"] .fc {
+    background: rgba(253,248,242,0.55); border-color: rgba(232,224,213,0.60); color: #5c4535;
+  }
+  :root[data-theme="light"] .fc:hover { background: rgba(245,237,224,0.80); border-color: rgba(201,107,85,0.30); color: #3c2a1e; }
+  :root[data-theme="light"] .fc.active {
+    background: rgba(201,107,85,0.14); border-color: rgba(201,107,85,0.34); color: #a84e30; font-weight: 800;
   }
   :root[data-theme="light"] .fc[data-disc="all"].active {
-    background: rgba(201,107,85,.18); border-color: rgba(201,107,85,.40); color: #a84e30;
+    background: rgba(201,107,85,0.14); border-color: rgba(201,107,85,0.34); color: #a84e30;
   }
 
   /* ── Hero Major Card (mobile .hero-maj) ── */
@@ -46,7 +78,7 @@
     position: relative; overflow: hidden; cursor: pointer;
     background: linear-gradient(135deg, rgba(var(--disc-rgb),.08) 0%, rgba(var(--disc-rgb),.16) 100%);
     border: 1px solid rgba(var(--disc-rgb),.30); border-radius: 22px;
-    padding: 30px 32px; margin: 24px 0 26px; --disc-rgb: 6,214,160;
+    padding: 30px 32px; margin: 0 0 26px; --disc-rgb: 6,214,160;
     transition: transform var(--tr-base), box-shadow var(--tr-base), border-color var(--tr-base);
   }
   .hero-maj:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(var(--disc-rgb),.22); }
@@ -267,16 +299,24 @@
         <h1 class="page-title mt-4">Majors Made <span class="ac">For You</span></h1>
         <p class="page-sub">Discover majors tailored to your interests and strengths.</p>
 
-        <!-- Filter chips: fc-pct = điểm discipline (DISC_SCORES), màu theo mức match -->
-        <div class="filter-chips" id="filterChips">
-          <button class="fc active" data-disc="all">All</button>
-          <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span>Engineering</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span>Natural Sci</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span>Medical</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span>Agricultural</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span>Social Sci</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span>Humanities</span><span class="fc-pct"></span></button>
-        </div>
+        <!-- Two-column: filter chips (trái) + kết quả (phải) -->
+        <div class="rec-layout">
+        <aside class="rec-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-label">Filter by discipline</div>
+            <!-- Filter chips: fc-pct = điểm discipline (DISC_SCORES), màu theo mức match -->
+            <div class="filter-chips" id="filterChips">
+              <button class="fc active" data-disc="all"><span class="fc-label">All majors</span></button>
+              <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span class="fc-label">Engineering</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span class="fc-label">Natural Sci</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span class="fc-label">Medical</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span class="fc-label">Agricultural</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span class="fc-label">Social Sci</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span class="fc-label">Humanities</span><span class="fc-pct"></span></button>
+            </div>
+          </div>
+        </aside>
+        <div class="rec-main">
 
         <!-- Hero card -->
         <div class="hero-maj" id="heroCard" onclick="goToDetail()">
@@ -329,6 +369,9 @@
         <div class="continue-wrap" id="continueWrap">
           <button class="continue-btn" id="continueBtn">Continue Quiz →</button>
         </div>
+
+        </div><!-- /rec-main -->
+        </div><!-- /rec-layout -->
       </div><!-- /mainContent -->
 
     </div>

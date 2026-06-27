@@ -45,10 +45,14 @@
 
   /* ══ Constellation Sky — nguyên văn mobile (cấu trúc + hiệu ứng) ══ */
   .cst-section { padding: 0; }
-  .cst-sky-wrap { border-radius: 24px; overflow: hidden; position: relative; }
+  .cst-sky-wrap {
+    border-radius: 24px; overflow: hidden; position: relative;
+    border: 1px solid rgba(255,255,255,0.09);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.30), 0 8px 28px rgba(0,0,0,0.20);
+  }
   .cst-caption {
-    text-align: center; font-size: 12px; color: rgba(255,255,255,0.4);
-    padding: 8px 12px 10px; font-style: italic; font-family: 'Plus Jakarta Sans', sans-serif;
+    text-align: center; font-size: 12px; color: rgba(255,255,255,0.45);
+    padding: 10px 16px 14px; font-style: italic; font-family: 'Plus Jakarta Sans', sans-serif;
     letter-spacing: 0.03em; background: linear-gradient(to bottom, #020510, #0a0a1a);
   }
   #cstContainer { display: block; line-height: 0; }
@@ -152,8 +156,8 @@
             <div class="cst-section">
               <div class="cst-sky-wrap">
                 <div id="cstContainer"></div>
+                <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your Academic DNA ✨</p>
               </div>
-              <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your Academic DNA ✨</p>
             </div>
           </div>
         </div>
