@@ -1909,57 +1909,49 @@ body {
   align-items:center; justify-content:center; overflow:hidden;
 }
 
-/* Direction hints — big gradient pills with a colored glow + pop-in */
+/* Direction hints — small badges pinned to arena edges, always visible */
 .dir-hint {
-  position:absolute; z-index:50; font-size:17px; font-weight:900;
-  padding:13px 26px; border-radius:16px; letter-spacing:1.5px;
+  position:absolute; z-index:50;
+  font-size:11px; font-weight:800;
+  padding:5px 11px; border-radius:8px; letter-spacing:0.8px;
   opacity:0; pointer-events:none; text-transform:uppercase;
-  color:#fff; border:none;
-  text-shadow:0 1px 4px rgba(0,0,0,0.22);
-  transition:opacity 0.14s;
+  color:#fff;
+  transition:opacity 0.15s ease;
 }
+/* AGREE — right edge, vertically centered */
 .hint-right {
-  right:14px; top:50%; transform:translateY(-50%);
-  background:linear-gradient(135deg,#0ad99f,#06b083);
-  box-shadow:0 12px 32px rgba(6,214,160,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  right:8px; top:50%; transform:translateY(-50%);
+  background:rgba(6,214,160,0.90);
+  box-shadow:0 2px 10px rgba(6,214,160,0.35);
 }
+/* DISAGREE — left edge, vertically centered */
 .hint-left {
-  left:14px; top:50%; transform:translateY(-50%);
-  background:linear-gradient(135deg,#ff8a94,#e23748);
-  box-shadow:0 12px 32px rgba(255,71,87,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  left:8px; top:50%; transform:translateY(-50%);
+  background:rgba(226,55,72,0.90);
+  box-shadow:0 2px 10px rgba(255,71,87,0.35);
 }
+/* STRONGLY AGREE — top edge, horizontally centered */
 .hint-up {
-  top:20px; left:50%; transform:translateX(-50%);
-  background:linear-gradient(135deg,#a47bff,#7c3aed);
-  box-shadow:0 12px 32px rgba(124,58,237,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  top:8px; left:50%; transform:translateX(-50%);
+  background:rgba(124,58,237,0.90);
+  box-shadow:0 2px 10px rgba(124,58,237,0.35);
 }
+/* NEUTRAL — bottom edge, horizontally centered */
 .hint-down {
-  bottom:64px; left:50%; transform:translateX(-50%);
-  background:linear-gradient(135deg,#aeaecb,#6b6b9a);
-  box-shadow:0 12px 32px rgba(107,107,154,0.45), inset 0 0 0 1px rgba(255,255,255,0.18);
+  bottom:8px; left:50%; transform:translateX(-50%);
+  background:rgba(107,107,154,0.90);
+  box-shadow:0 2px 10px rgba(107,107,154,0.35);
 }
 .dir-hint.visible { opacity:1; }
-.hint-right.visible, .hint-left.visible { animation:hintPopY 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
-.hint-up.visible, .hint-down.visible    { animation:hintPopX 0.3s cubic-bezier(0.34,1.56,0.64,1) both; }
-@keyframes hintPopY {
-  0%   { opacity:0; transform:translateY(-50%) scale(.55); }
-  60%  { opacity:1; transform:translateY(-50%) scale(1.18); }
-  100% { opacity:1; transform:translateY(-50%) scale(1); }
-}
-@keyframes hintPopX {
-  0%   { opacity:0; transform:translateX(-50%) scale(.55); }
-  60%  { opacity:1; transform:translateX(-50%) scale(1.18); }
-  100% { opacity:1; transform:translateX(-50%) scale(1); }
-}
 
 /* Card Stack */
-.card-stack { position:relative; width:336px; height:420px; }
+.card-stack { position:relative; width:336px; height:300px; }
 .q-card {
   position:absolute; inset:0;
   background:rgba(18,18,31,0.75);
   backdrop-filter:blur(20px);
   border:1px solid rgba(255,255,255,0.09);
-  border-radius:20px; padding:24px;
+  border-radius:20px; padding:28px 24px 20px;
   display:flex; flex-direction:column;
   cursor:grab; user-select:none;
   transform-origin:center bottom;
@@ -1987,9 +1979,9 @@ body {
 .drag-overlay:active { cursor:grabbing; }
 
 /* Card content */
-.card-inner { display:flex; flex-direction:column; gap:16px; height:100%; }
+.card-inner { display:flex; flex-direction:column; gap:12px; height:100%; }
 .q-text {
-  font-size:19px; font-weight:700; line-height:1.55;
+  font-size:22px; font-weight:700; line-height:1.5;
   color:var(--text-primary); flex:1; margin:0; display:flex; align-items:center;
 }
 .card-placeholder { color:var(--neutral-600); font-size:22px; letter-spacing:4px; text-align:center; margin:auto; }
@@ -3102,7 +3094,7 @@ svg *, canvas, video, img { transition: none !important; }
           <!-- Card Arena -->
           <div class="card-arena" id="cardArena">
 
-            <!-- Direction hints -->
+            <!-- Direction hints — edges of arena, always visible regardless of card position -->
             <div class="dir-hint hint-right" id="hintRight" data-i18n="quiz.swipe.agree">AGREE ✓</div>
             <div class="dir-hint hint-left"  id="hintLeft"  data-i18n="quiz.swipe.disagree">DISAGREE ✕</div>
             <div class="dir-hint hint-up"    id="hintUp"    data-i18n="quiz.swipe.strong">STRONGLY AGREE ⚡</div>
@@ -4276,6 +4268,22 @@ function getQText(q) {
   return q.text; /* fallback: English */
 }
 
+/* Swipe hint translation — inline table (quiz-card doesn't load shared i18n.js) */
+var _HINT_I18N = {
+  en: { agree: 'AGREE ✓',          disagree: 'DISAGREE ✕',      strong: 'STRONGLY AGREE ⚡', neutral: 'NEUTRAL –'     },
+  vi: { agree: 'ĐỒNG Ý ✓',         disagree: 'KHÔNG ĐỒNG Ý ✕',  strong: 'RẤT ĐỒNG Ý ⚡',    neutral: 'TRUNG LẬP –'   },
+  hi: { agree: 'सहमत ✓',           disagree: 'असहमत ✕',          strong: 'पूर्ण सहमत ⚡',     neutral: 'तटस्थ –'       },
+  fr: { agree: 'D\'ACCORD ✓',      disagree: 'PAS D\'ACCORD ✕',  strong: 'TOUT À FAIT ⚡',    neutral: 'NEUTRE –'      },
+  ar: { agree: 'موافق ✓',          disagree: 'غير موافق ✕',      strong: 'موافق تماماً ⚡',   neutral: 'محايد –'       }
+};
+function applyHintI18n() {
+  var t = _HINT_I18N[_bdLang()] || _HINT_I18N['en'];
+  if ($hintRight) $hintRight.textContent = t.agree;
+  if ($hintLeft)  $hintLeft.textContent  = t.disagree;
+  if ($hintUp)    $hintUp.textContent    = t.strong;
+  if ($hintDown)  $hintDown.textContent  = t.neutral;
+}
+
 /* Disc chip label translation — inline table (quiz-card doesn't load shared i18n.js) */
 var _DISC_EMOJIS = { kt:'💻', nv:'📖', yt:'⚕️', xh:'🌍', nn:'🌱', tn:'🔬' };
 var _DISC_LABELS = {
@@ -4551,6 +4559,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $hintLeft            = document.getElementById('hintLeft');
   $hintUp              = document.getElementById('hintUp');
   $hintDown            = document.getElementById('hintDown');
+  applyHintI18n();
   $counterCurrent      = document.getElementById('counterCurrent');
   $agreeCount          = document.getElementById('agreeCount');
   $strongCount         = document.getElementById('strongCount');

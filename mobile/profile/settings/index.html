@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <!-- Prevent RTL layout flash -->
+  <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
   <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <title>Account Settings — BeyonDegrees.ai</title>
   <link rel="stylesheet" href="../../../design-system/tokens.css">
@@ -16,7 +17,7 @@
 <style>
 :root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
 /* Light-mode token overrides live in design-system/tokens.css */
-[data-theme="light"] body{background:#06060f!important;color:#f8fafc!important}
+[data-theme="light"] body{background:#06060f!important}
 *,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
 svg *,canvas,video,img{transition:none!important}
 
@@ -318,7 +319,7 @@ body { background: #06060f; }
 
     <div class="mobile-viewport">
       <div class="status-bar">
-        <span>9:41</span>
+        <span id="statusTime">9:41</span>
         <div class="status-icons">
           <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
           <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
@@ -511,7 +512,8 @@ function bdApplyTheme(r){document.documentElement.setAttribute('data-theme',r);}
 
 function updateThemeUI(pref){
   var el=document.getElementById('theme-row-value');
-  if(el) el.textContent=window.BDi18n?BDi18n.t('settings.theme.'+pref):({dark:'Dark',light:'Light',system:'System'}[pref]||'Dark');
+  var _THEME_FB={dark:'Dark',light:'Light',system:'System'};
+  if(el) el.textContent=window.BDi18n?BDi18n.t('settings.theme.'+pref):(_THEME_FB[pref]||_THEME_FB.dark);
   document.querySelectorAll('.sheet-option[data-pref]').forEach(function(o){
     o.setAttribute('data-selected', o.dataset.pref===pref?'true':'false');
   });
@@ -556,7 +558,8 @@ function selectLang(code){
 }
 function updateLangUI(code){
   var meta=window.BDi18n?BDi18n.LANGS[code]:null;
-  var name=meta?meta.nativeName:'English';
+  var _LANG_FB={en:'English',vi:'Tiếng Việt',hi:'हिन्दी',fr:'Français',ar:'العربية'};
+  var name=meta?meta.nativeName:(_LANG_FB[code]||code);
   var el=document.getElementById('lang-row-value');
   if(el) el.textContent=name;
   document.querySelectorAll('.sheet-option[data-lang-opt]').forEach(function(o){
@@ -580,6 +583,18 @@ window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',func
   var pref=document.documentElement.getAttribute('data-theme-pref')||'dark';
   if(pref==='system') bdSetTheme('system');
 });
+
+/* ── Dynamic status bar clock ── */
+(function(){
+  function updateClock(){
+    var el=document.getElementById('statusTime');
+    if(!el) return;
+    var now=new Date(), h=now.getHours(), m=now.getMinutes();
+    el.textContent=h+':'+(m<10?'0':'')+m;
+  }
+  updateClock();
+  setInterval(updateClock,30000);
+})();
 </script>
 <script src="../../../shared/scripts/ui/i18n.js"></script>
 </body>

@@ -3575,7 +3575,7 @@ body {
 
 <!-- Breadcrumb (desktop only) -->
 <div class="breadcrumb">
-  <a href="../matches/" class="breadcrumb-item">Universities</a>
+  <a href="../matches/" class="breadcrumb-item" data-i18n="nav.universities">Universities</a>
   <span class="breadcrumb-separator">/</span>
   <span class="breadcrumb-item active" id="bcTitle">Detail</span>
 </div>
@@ -3648,13 +3648,13 @@ body {
               <svg width="9" height="9" viewBox="0 0 10 10" fill="none">
                 <path d="M5 1L6.2 3.5L9 3.8L7 5.7L7.5 8.5L5 7.2L2.5 8.5L3 5.7L1 3.8L3.8 3.5Z" fill="currentColor"/>
               </svg>
-              AI Match
+              <span data-i18n="uni.detail.ai_match">AI Match</span>
             </span>
             <button class="ud-mb-see" onclick="renderWhyMatch(_currentUni)" data-i18n="uni.detail.why_match_btn">Why match →</button>
           </div>
           <div class="ud-mb-score-row">
             <span class="ud-mb-pct" id="udMbPct">—</span>
-            <span class="ud-mb-sub">Overall<br>match score</span>
+            <span class="ud-mb-sub" data-i18n="uni.detail.match_sub">Overall<br>match score</span>
           </div>
           <div class="ud-mb-bar-track">
             <div class="ud-mb-bar-fill" id="udMbBarFill" style="width:0%"></div>
@@ -3669,7 +3669,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon violet">📍</div>
-              <div class="ud-sec-title">Location</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.location">Location</div>
             </div>
             <div class="ud-loc-row">
               <div class="ud-loc-icon-wrap" id="udLocFlag">🌍</div>
@@ -3684,7 +3684,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon violet">🏛️</div>
-              <div class="ud-sec-title">About</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.about">About</div>
             </div>
             <div class="ud-meta-chips" id="udMetaChips"></div>
             <div class="ud-about-text" id="udAboutText">—</div>
@@ -3695,7 +3695,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon mint">📚</div>
-              <div class="ud-sec-title">Majors Offered</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.majors">Majors Offered</div>
             </div>
             <div class="ud-programs-list" id="udPrograms" style="background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);border-radius:12px;overflow:hidden"></div>
             <div id="udViewAllWrap"></div>
@@ -3705,7 +3705,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon orange">💰</div>
-              <div class="ud-sec-title">Tuition & Financials</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.tuition_fin">Tuition & Financials</div>
             </div>
             <div class="ud-stats-grid" id="udTuitionStats"></div>
             <div id="udAidBadge"></div>
@@ -3713,7 +3713,7 @@ body {
             <div class="ud-loan-row">
               <div class="ud-loan-icon">💳</div>
               <div>
-                <div class="ud-loan-label">Loan</div>
+                <div class="ud-loan-label" data-i18n="uni.detail.loan">Loan</div>
                 <div class="ud-loan-val" id="udLoanVal">Student loan available</div>
               </div>
             </div>
@@ -3723,7 +3723,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon blue">🎓</div>
-              <div class="ud-sec-title">Campus & Student Life</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.campus">Campus & Student Life</div>
             </div>
             <div class="ud-life-chips" id="udLifeChips"></div>
             <div class="ud-life-text" id="udLifeText">—</div>
@@ -3733,7 +3733,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon violet">📋</div>
-              <div class="ud-sec-title">Admissions</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.admissions">Admissions</div>
             </div>
             <div class="ud-admit-stats" id="udAdmitStats"></div>
             <div class="ud-site-row">
@@ -3747,7 +3747,7 @@ body {
           <div class="ud-section">
             <div class="ud-sec-hd">
               <div class="ud-sec-icon pink">✈️</div>
-              <div class="ud-sec-title">Immigration Support</div>
+              <div class="ud-sec-title" data-i18n="uni.detail.sec.immigration">Immigration Support</div>
             </div>
             <div class="ud-support-text" id="udSupportText">—</div>
           </div>
@@ -3815,7 +3815,7 @@ body {
                 <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label"></span>
+            <span class="tab-label" data-i18n="nav.account">Account</span>
           </a>
 
       </nav>
@@ -4481,7 +4481,7 @@ function render(u) {
         '<div class="ml-info">' +
           '<div class="disc-badge" style="--bc:' + pdclr + '">' +
             '<span class="d-dot"></span>' +
-            '<span class="d-name">' + (pdisc.short || pdisc.title) + '</span>' +
+            '<span class="d-name">' + (pdisc.code ? t('disc.short.' + pdisc.code) : (pdisc.short || pdisc.title)) + '</span>' +
           '</div>' +
           '<div class="ml-name">' + pm.title + '</div>' +
           '<div class="ml-sub">' + psub + '</div>' +
@@ -4533,19 +4533,19 @@ function render(u) {
   /* ── Tuition stats ── */
   document.getElementById('udTuitionStats').innerHTML =
     '<div class="ud-stat-card">' +
-      '<div class="ud-stat-lbl">Annual Tuition</div>' +
+      '<div class="ud-stat-lbl">' + t('uni.detail.stat.tuition') + '</div>' +
       '<div class="ud-stat-val" style="font-size:11px">' + u.tuition + '</div>' +
     '</div>' +
     '<div class="ud-stat-card">' +
-      '<div class="ud-stat-lbl">Avg. Salary</div>' +
+      '<div class="ud-stat-lbl">' + t('uni.detail.stat.salary') + '</div>' +
       '<div class="ud-stat-val accent">' + u.salary + '</div>' +
     '</div>' +
     '<div class="ud-stat-card">' +
-      '<div class="ud-stat-lbl">Total Students</div>' +
+      '<div class="ud-stat-lbl">' + t('uni.detail.stat.students') + '</div>' +
       '<div class="ud-stat-val">' + u.students + '</div>' +
     '</div>' +
     '<div class="ud-stat-card">' +
-      '<div class="ud-stat-lbl">Employment Rate</div>' +
+      '<div class="ud-stat-lbl">' + t('uni.detail.stat.employment') + '</div>' +
       '<div class="ud-stat-val accent">' + u.employment + '</div>' +
     '</div>';
 
@@ -4556,14 +4556,14 @@ function render(u) {
     '<div class="ud-aid-badge ' + aidCls + '">' + aidEmoji + ' ' + u.aid + '</div>';
   document.getElementById('udAidText').textContent =
     u.aidType === 'full'
-      ? 'Full scholarship covering tuition, housing, and living expenses. Awarded based on financial need and academic merit. Apply separately through the financial aid office.'
+      ? t('uni.detail.aid.full')
       : u.aidType === 'merit'
-        ? 'Merit-based financial aid and scholarships available for outstanding academic achievements. Contact admissions for eligibility and application procedures.'
-        : 'Need-based financial aid available. Meets 100% of demonstrated financial need for admitted students. Expected family contribution applies.';
+        ? t('uni.detail.aid.merit')
+        : t('uni.detail.aid.need');
   document.getElementById('udLoanVal').textContent = det.loan;
 
   /* ── Campus life ── */
-  var chips = [u.students + ' Students', det.intl + ' International', '🏠 Housing', '🎓 Clubs'];
+  var chips = [u.students + ' ' + t('uni.detail.life.students'), det.intl + ' ' + t('uni.detail.life.intl'), t('uni.detail.life.housing'), t('uni.detail.life.clubs')];
   document.getElementById('udLifeChips').innerHTML = chips.map(function(c) {
     return '<span class="ud-life-chip">' + c + '</span>';
   }).join('');
@@ -4573,15 +4573,15 @@ function render(u) {
   document.getElementById('udAdmitStats').innerHTML =
     '<div class="ud-admit-stat">' +
       '<div class="ud-admit-val" style="color:' + getMatchColor(u.match) + '">' + det.accept + '</div>' +
-      '<div class="ud-admit-lbl">Accept Rate</div>' +
+      '<div class="ud-admit-lbl">' + t('uni.detail.stat.accept') + '</div>' +
     '</div>' +
     '<div class="ud-admit-stat">' +
       '<div class="ud-admit-val">' + det.intl + '</div>' +
-      '<div class="ud-admit-lbl">Intl. Students</div>' +
+      '<div class="ud-admit-lbl">' + t('uni.detail.stat.intl') + '</div>' +
     '</div>' +
     '<div class="ud-admit-stat">' +
       '<div class="ud-admit-val" style="font-size:11px;color:var(--violet-300)">' + det.deadline + '</div>' +
-      '<div class="ud-admit-lbl">App Deadline</div>' +
+      '<div class="ud-admit-lbl">' + t('uni.detail.stat.deadline') + '</div>' +
     '</div>';
 
   document.getElementById('udSiteUrl').textContent = det.site;
@@ -4695,7 +4695,7 @@ function renderMajorInUni(u, major) {
       '</div>' +
       '<span class="udm-match-pct ml-pct ' + udmPctCls + '">' +
         '<span class="udm-match-pct-num">' + udmPct + '<small>%</small></span>' +
-        '<span class="udm-match-pct-lbl">Match</span>' +
+        '<span class="udm-match-pct-lbl">' + t('uni.detail.match') + '</span>' +
       '</span>' +
     '</div>' +
     '<div class="udm-body">' +
@@ -4703,13 +4703,13 @@ function renderMajorInUni(u, major) {
         '<div class="udm-desc">' + shortDesc + '</div>' +
         (bullHtml
           ? '<button class="udm-desc-toggle" id="udmDescToggle" type="button" aria-expanded="false">' +
-              '<span class="udm-desc-toggle-lbl">Show Highlights</span>' +
+              '<span class="udm-desc-toggle-lbl">' + t('uni.detail.show_highlights') + '</span>' +
               '<svg class="udm-desc-toggle-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
             '</button>' +
             '<div class="udm-bullets" id="udmBullets">' + bullHtml + '</div>'
           : '') +
       '</div>' +
-      '<div class="udm-sec-hd">Specializations</div>' +
+      '<div class="udm-sec-hd">' + t('uni.detail.specializations') + '</div>' +
       '<div class="udm-spec-list">' + specHtml + '</div>' +
     '</div>';
 
@@ -4723,7 +4723,7 @@ function renderMajorInUni(u, major) {
       togBtn.classList.toggle('open', nowOpen);
       togBtn.setAttribute('aria-expanded', String(nowOpen));
       var lblEl = togBtn.querySelector('.udm-desc-toggle-lbl');
-      if (lblEl) lblEl.textContent = nowOpen ? 'Hide Highlights' : 'Show Highlights';
+      if (lblEl) lblEl.textContent = nowOpen ? t('uni.detail.hide_highlights') : t('uni.detail.show_highlights');
     };
   }
 
@@ -4818,10 +4818,10 @@ var _SIUS_MOCK = {
 };
 
 var _DEGREE_PROGRAMS = [
-  {label:"Bachelor's Degree", dur:'4 years', icon:'🎓'},
-  {label:"Master's Degree",   dur:'2 years', icon:'📜'},
-  {label:"Doctoral Degree",   dur:'4–6 years', icon:'🔬'},
-  {label:"Associate's Degree",dur:'2 years', icon:'📋'},
+  {key:'uni.detail.deg.bachelor', dur:'4 years', icon:'🎓'},
+  {key:'uni.detail.deg.master',   dur:'2 years', icon:'📜'},
+  {key:'uni.detail.deg.doctoral', dur:'4–6 years', icon:'🔬'},
+  {key:'uni.detail.deg.associate',dur:'2 years', icon:'📋'},
 ];
 
 function siusToggleAcc(el) {
@@ -4874,7 +4874,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
   var degHtml = _DEGREE_PROGRAMS.map(function(d) {
     return '<div class="sius-deg-chip">' +
       '<span style="font-size:14px">' + d.icon + '</span>' +
-      '<span><b>' + d.label + '</b><span class="sius-deg-dur"> · ' + d.dur + '</span></span>' +
+      '<span><b>' + t(d.key) + '</b><span class="sius-deg-dur"> · ' + d.dur + '</span></span>' +
     '</div>';
   }).join('');
 
@@ -4888,10 +4888,11 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
   var toolHtml = md.tools.map(function(s) { return '<span class="sius-tool-chip">' + s + '</span>'; }).join('');
 
   /* Accordion */
+  var _ta2 = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
   var accItems = [
-    {icon:'📋', title:'Admission Requirements', body: md.admission},
-    {icon:'📝', title:'Exams & Certifications',  body: md.exams},
-    {icon:'🌐', title:'Language Requirements',   body: md.language},
+    {icon:'📋', title:_ta2('spec.acc.admission'), body: md.admission},
+    {icon:'📝', title:_ta2('spec.acc.exams'),     body: md.exams},
+    {icon:'🌐', title:_ta2('spec.acc.language'),  body: md.language},
   ];
   var accHtml = accItems.map(function(a) {
     return '<div class="sius-acc-item">' +
@@ -4920,15 +4921,15 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
   var contactHtml =
     '<div class="sius-contact-block">' +
       '<div class="sius-contact-row">' +
-        '<span class="sius-contact-lbl">✉️ Email</span>' +
+        '<span class="sius-contact-lbl">' + t('uni.detail.contact.email') + '</span>' +
         '<span class="sius-contact-val">' + cont.email + '</span>' +
       '</div>' +
       '<div class="sius-contact-row">' +
-        '<span class="sius-contact-lbl">📞 Phone</span>' +
+        '<span class="sius-contact-lbl">' + t('uni.detail.contact.phone') + '</span>' +
         '<span class="sius-contact-val">' + cont.phone + '</span>' +
       '</div>' +
       '<div class="sius-contact-row" style="border-bottom:none">' +
-        '<span class="sius-contact-lbl">🛂 Intl Support</span>' +
+        '<span class="sius-contact-lbl">' + t('uni.detail.contact.intl') + '</span>' +
         '<span class="sius-contact-val">' + (det.support || 'International student services available.') + '</span>' +
       '</div>' +
     '</div>';
@@ -4973,18 +4974,18 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
           '</div>' +
           '<div class="uc-match-badge ' + tuMatchClass + '">' +
             '<div class="uc-match-val">' + tuMatch + '%</div>' +
-            '<div class="uc-match-lbl">MATCH</div>' +
+            '<div class="uc-match-lbl">' + t('uni.detail.match_label') + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="uc-body">' +
           '<div class="uc-stats">' +
             '<div class="uc-stat">' +
               '<div class="uc-stat-val">' + tuRanking + '</div>' +
-              '<div class="uc-stat-lbl">Ranking</div>' +
+              '<div class="uc-stat-lbl">' + t('uni.detail.ranking') + '</div>' +
             '</div>' +
             '<div class="uc-stat">' +
-              '<div class="uc-stat-val">' + (tu.tuition || 'N/A') + '</div>' +
-              '<div class="uc-stat-lbl">Annual Tuition</div>' +
+              '<div class="uc-stat-val">' + (tu.tuition || t('uni.na')) + '</div>' +
+              '<div class="uc-stat-lbl">' + t('uni.detail.tuition_lbl') + '</div>' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -5012,7 +5013,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       + visible.map(function(s){ return '<span class="'+cls+'">'+s+'</span>'; }).join('');
     if (hidden.length) {
       html += hidden.map(function(s){ return '<span class="'+cls+' sius-pill-overflow" hidden>'+s+'</span>'; }).join('');
-      html += '<button class="sius-pill-more" onclick="siusTogglePillOverflow(this)" aria-expanded="false">+' + hidden.length + ' more</button>';
+      html += '<button class="sius-pill-more" onclick="siusTogglePillOverflow(this)" aria-expanded="false">' + t('uni.detail.pill_more').replace('{n}', hidden.length) + '</button>';
     }
     return html + '</div>';
   }
@@ -5048,7 +5049,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       '<div class="ud-section">' +
         '<div class="ud-sec-hd">' +
           '<div class="ud-sec-icon violet">📍</div>' +
-          '<div class="ud-sec-title">Location</div>' +
+          '<div class="ud-sec-title" data-i18n="uni.detail.sec.location">Location</div>' +
         '</div>' +
         '<div class="ud-loc-row">' +
           '<div class="ud-loc-icon-wrap">' + (CTRY_FLAGS[u.country] || '🌍') + '</div>' +
@@ -5065,19 +5066,19 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
         '<h2 class="sius-sec-title">' + t('uni.detail.sec_salary') + '</h2>' +
         '<div class="sius-stat-grid">' +
           '<div class="sius-stat-card sius-stat-card-primary">' +
-            '<div class="sius-stat-card-label">Average Salary</div>' +
+            '<div class="sius-stat-card-label">' + t('spec.avg_salary') + '</div>' +
             '<div class="sius-stat-card-value">' + md.avgSalary + '</div>' +
-            '<div class="sius-stat-card-meta">per year · with experience</div>' +
+            '<div class="sius-stat-card-meta">' + t('spec.meta.avg') + '</div>' +
           '</div>' +
           '<div class="sius-stat-card sius-stat-card-blue">' +
-            '<div class="sius-stat-card-label">Entry Level</div>' +
+            '<div class="sius-stat-card-label">' + t('spec.entry_salary') + '</div>' +
             '<div class="sius-stat-card-value">' + md.entrySalary + '</div>' +
-            '<div class="sius-stat-card-meta">per year · starting</div>' +
+            '<div class="sius-stat-card-meta">' + t('spec.meta.entry') + '</div>' +
           '</div>' +
           '<div class="sius-stat-card sius-stat-card-sage">' +
-            '<div class="sius-stat-card-label">Employment</div>' +
+            '<div class="sius-stat-card-label">' + t('spec.employment_rate') + '</div>' +
             '<div class="sius-stat-card-value">' + md.employment + '</div>' +
-            '<div class="sius-stat-card-meta">within 6 months</div>' +
+            '<div class="sius-stat-card-meta">' + t('spec.meta.employ') + '</div>' +
           '</div>' +
         '</div>' +
       '</section>' +
@@ -5099,7 +5100,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
           '</div>' +
           '<div class="sius-sec-head-text">' +
             '<h2 class="sius-sec-title">' + t('uni.detail.sec_career') + '</h2>' +
-            '<span class="sius-sec-sub-lbl">' + md.careers.length + ' job paths · click to view</span>' +
+            '<span class="sius-sec-sub-lbl">' + t('uni.detail.career_count').replace('{n}', md.careers.length) + '</span>' +
           '</div>' +
           '<span class="sius-sec-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
         '</button>' +
@@ -5114,7 +5115,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
           '</div>' +
           '<div class="sius-sec-head-text">' +
             '<h2 class="sius-sec-title">' + t('uni.detail.sec_programs') + '</h2>' +
-            '<span class="sius-sec-sub-lbl">Available study programs &amp; duration</span>' +
+            '<span class="sius-sec-sub-lbl">' + t('uni.detail.programs_sub') + '</span>' +
           '</div>' +
           '<span class="sius-sec-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
         '</button>' +
@@ -5131,17 +5132,17 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
           '</div>' +
           '<div class="sius-sec-head-text">' +
             '<h2 class="sius-sec-title">' + t('uni.detail.sec_skills') + '</h2>' +
-            '<span class="sius-sec-sub-lbl">Core competencies &amp; tools</span>' +
+            '<span class="sius-sec-sub-lbl">' + t('uni.detail.skills_sub') + '</span>' +
           '</div>' +
           '<span class="sius-sec-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>' +
         '</button>' +
         '<div class="sius-sec-content"><div class="sius-sec-content-inner">' +
           '<div class="sius-skill-group">' +
-            '<h3 class="sius-skill-group-title">Core Competencies</h3>' +
+            '<h3 class="sius-skill-group-title">' + t('uni.detail.skill_group.core') + '</h3>' +
             corePillsHtml +
           '</div>' +
           '<div class="sius-skill-group">' +
-            '<h3 class="sius-skill-group-title">Tools &amp; Software</h3>' +
+            '<h3 class="sius-skill-group-title">' + t('uni.detail.skill_group.tools') + '</h3>' +
             toolPillsHtml +
           '</div>' +
         '</div></div>' +
@@ -5165,7 +5166,7 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       '<section class="sius-sec sius-sec-last">' +
         '<div class="sius-sec-header">' +
           '<h2 class="sius-sec-title">' + t('uni.detail.sec_other') + '</h2>' +
-          '<span class="sius-sec-meta">offering this specialization</span>' +
+          '<span class="sius-sec-meta">' + t('uni.detail.spec.other_meta') + '</span>' +
         '</div>' +
         topUniHtml +
       '</section>' +
@@ -5396,12 +5397,12 @@ function renderWhyMatch(u) {
   /* Score breakdown bars */
   function barW(n) { return Math.round(n / total * 100); }
   var barsData = [
-    { label: 'Strongly Agree', cls: 'uwm-fill-strong',   val: counts.strong },
-    { label: 'Agree',          cls: 'uwm-fill-agree',    val: counts.agree },
-    { label: 'Neutral',        cls: 'uwm-fill-neutral',  val: counts.neutral },
-    { label: 'Disagree',       cls: 'uwm-fill-disagree', val: counts.disagree }
+    { label: t('uni.detail.why.strong'),   cls: 'uwm-fill-strong',   val: counts.strong },
+    { label: t('uni.detail.why.agree'),    cls: 'uwm-fill-agree',    val: counts.agree },
+    { label: t('uni.detail.why.neutral'),  cls: 'uwm-fill-neutral',  val: counts.neutral },
+    { label: t('uni.detail.why.disagree'), cls: 'uwm-fill-disagree', val: counts.disagree }
   ];
-  var scoreHtml = '<div class="uwm-score-wrap"><div class="uwm-score-title">Response Summary</div>';
+  var scoreHtml = '<div class="uwm-score-wrap"><div class="uwm-score-title">' + t('uni.detail.why.summary') + '</div>';
   for (var bi = 0; bi < barsData.length; bi++) {
     if (bi === 3 && counts.disagree === 0) continue;
     var bd = barsData[bi];
@@ -5418,10 +5419,10 @@ function renderWhyMatch(u) {
 
   /* Assertion cards */
   var ANSWER_CFG = {
-    strong:  { cls: 'uwm-strong',   badge: 'uwm-b-strong',   label: 'Strongly Agree' },
-    agree:   { cls: 'uwm-agree',    badge: 'uwm-b-agree',    label: 'Agree' },
-    neutral: { cls: 'uwm-neutral',  badge: 'uwm-b-neutral',  label: 'Neutral' },
-    disagree:{ cls: 'uwm-disagree', badge: 'uwm-b-disagree', label: 'Disagree' }
+    strong:  { cls: 'uwm-strong',   badge: 'uwm-b-strong',   label: t('uni.detail.why.strong') },
+    agree:   { cls: 'uwm-agree',    badge: 'uwm-b-agree',    label: t('uni.detail.why.agree') },
+    neutral: { cls: 'uwm-neutral',  badge: 'uwm-b-neutral',  label: t('uni.detail.why.neutral') },
+    disagree:{ cls: 'uwm-disagree', badge: 'uwm-b-disagree', label: t('uni.detail.why.disagree') }
   };
   var assertHtml = '';
   for (var aii = 0; aii < assertions.length; aii++) {
@@ -5451,22 +5452,22 @@ function renderWhyMatch(u) {
         '<div class="uwm-disc-label"><span class="uwm-disc-dot"></span>' + heroLabel + '</div>' +
         '<div>' +
           '<div class="uwm-pct">' + u.match + '%</div>' +
-          '<div class="uwm-pct-label">Match Score</div>' +
+          '<div class="uwm-pct-label">' + t('uni.detail.why.match_score') + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="uwm-insight">' +
-        '<div class="uwm-insight-tag">✦ AI Insight</div>' +
+        '<div class="uwm-insight-tag">✦ ' + t('uni.detail.why.ai_insight') + '</div>' +
         '<div>' + insight + '</div>' +
       '</div>' +
     '</div>' +
     '<div class="uwm-body">' +
-      '<div class="uwm-sec-hd">Score Breakdown</div>' +
+      '<div class="uwm-sec-hd">' + t('uni.detail.why.breakdown') + '</div>' +
       scoreHtml +
-      '<div class="uwm-sec-hd">Quiz Responses</div>' +
+      '<div class="uwm-sec-hd">' + t('uni.detail.why.responses') + '</div>' +
       '<div class="uwm-assertions">' + assertHtml + '</div>' +
       '<button class="uwm-back-btn" onclick="_restoreUniView()">' +
         '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>' +
-        ' Back to ' + backLabel +
+        ' ' + t('uni.detail.why.back_to').replace('{name}', backLabel) +
       '</button>' +
     '</div>';
 
@@ -5564,17 +5565,21 @@ window.addEventListener('popstate', function() {
   }
 });
 
+(function(){
+  function uc(){var el=document.getElementById('timeDisplay');if(!el)return;var n=new Date(),h=n.getHours(),m=n.getMinutes();el.textContent=h+':'+(m<10?'0':'')+m;}
+  uc();setInterval(uc,30000);
+})();
+
+/* ── Early i18n sync ───────────────────────────────────────────────────────
+   i18n.js registers BDi18n.init() on DOMContentLoaded (fires AFTER this
+   script executes), so BDi18n._lang is still 'en' when renderUni() runs.
+   Force-init here so t() calls inside render functions use the saved lang.
+─────────────────────────────────────────────────────────────────────────── */
+if (window.BDi18n) BDi18n.init();
+
 (function init() {
   /* Disable browser scroll restoration so our scrollTop=0 is never overridden */
   if (history.scrollRestoration) history.scrollRestoration = 'manual';
-
-  /* Clock */
-  function tick() {
-    var d = new Date(), h = d.getHours(), m = d.getMinutes();
-    document.getElementById('timeDisplay').textContent = h + ':' + (m < 10 ? '0' : '') + m;
-  }
-  tick();
-  setInterval(tick, 30000);
 
   /* Parse URL params */
   var params = {};

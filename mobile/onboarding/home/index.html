@@ -86,7 +86,6 @@
 /* OUTSIDE — body stays dark even in light mode */
 [data-theme="light"] body {
   background: #06060f !important;
-  color: #f8fafc !important;
 }
 
 /* Progress ring uses gradient stroke defined in SVG <defs id="ringGradLight"> */
@@ -163,7 +162,7 @@ svg *, canvas, video, img { transition: none !important; }
 
         <!-- Status Bar -->
         <div class="status-bar">
-          <span>9:41</span>
+          <span id="statusTime">9:41</span>
           <div class="status-icons">
             <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
             <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
@@ -195,9 +194,9 @@ svg *, canvas, video, img { transition: none !important; }
               </svg>
               <span id="heroEmoji">🚀</span>
             </div>
-            <p class="mobile-tagline" id="heroTagline">Discover your academic identity</p>
-            <h2 id="heroTitle">What major are you interested in?</h2>
-            <p id="heroSub">Answer 30 questions and let AI find your perfect match.</p>
+            <p class="mobile-tagline" id="heroTagline" data-i18n="home.state0.tagline">Discover your academic identity</p>
+            <h2 id="heroTitle" data-i18n="home.state0.title">What major are you interested in?</h2>
+            <p id="heroSub" data-i18n="home.state0.sub">Answer 30 questions and let AI find your perfect match.</p>
           </div>
         </section>
 
@@ -234,7 +233,7 @@ svg *, canvas, video, img { transition: none !important; }
 
         <!-- CTA Buttons -->
         <section class="cta-section">
-          <button class="btn btn-primary" id="ctaPrimary" style="width:100%;">Start Quiz →</button>
+          <button class="btn btn-primary" id="ctaPrimary" style="width:100%;" data-i18n="home.cta.start">Start Quiz →</button>
           <button class="btn btn-secondary" id="ctaSecondary" style="width:100%;display:none;"></button>
         </section>
 
@@ -332,11 +331,12 @@ const Clipboard = {
   async copy(text) {
     try {
       await navigator.clipboard.writeText(text);
-      Toast.success(`Copied: ${text}`);
+      var _ct = window.BDi18n ? BDi18n.t('err.copy_success') : 'Copied';
+      Toast.success(_ct + ': ' + text);
       return true;
     } catch (err) {
       console.error('Failed to copy:', err);
-      Toast.error('Failed to copy');
+      Toast.error(window.BDi18n ? BDi18n.t('err.copy_failed') : 'Failed to copy');
       return false;
     }
   },
@@ -347,7 +347,7 @@ const Clipboard = {
       return text;
     } catch (err) {
       console.error('Failed to paste:', err);
-      Toast.error('Failed to paste');
+      Toast.error(window.BDi18n ? BDi18n.t('err.paste_failed') : 'Failed to paste');
       return null;
     }
   }
@@ -702,14 +702,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Hero text
-    const t = (window.BDi18n && window.BDi18n.t.bind(window.BDi18n)) || function(k){return k;};
+    var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
     const STATES = {
       0:  { emoji: '🚀', tagline: t('home.state0.tagline'),
             title: t('home.state0.title'),
             sub:   t('home.state0.sub') },
-      1:  { emoji: '💪', tagline: 'Great start! Keep going',
-            title: 'You\'re on your way to finding your match',
-            sub:   `Answered ${p} question${p>1?'s':''}. Pick up where you left off!` },
+      1:  { emoji: '💪', tagline: t('home.state1_start.tagline'),
+            title: t('home.state1_start.title'),
+            sub:   t('home.state1_start.sub').replace('{n}', p) },
       10: { emoji: '🔥', tagline: t('home.state1.tagline'),
             title: t('home.state1.title'),
             sub:   t('home.state1.sub') },
@@ -771,9 +771,22 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     if (sessionStorage.getItem('bd_reset_success') === '1') {
       sessionStorage.removeItem('bd_reset_success');
-      setTimeout(() => Toast.success('Your account has been reset successfully.'), 400);
+      var _t = window.BDi18n ? BDi18n.t.bind(BDi18n) : function(k){return k;};
+      setTimeout(() => Toast.success(_t('home.reset_success')), 400);
     }
   } catch(e) {}
+
+  // ── Dynamic status bar clock ──
+  (function() {
+    function updateClock() {
+      var el = document.getElementById('statusTime');
+      if (!el) return;
+      var now = new Date(), h = now.getHours(), m = now.getMinutes();
+      el.textContent = h + ':' + (m < 10 ? '0' : '') + m;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+  })();
 });
 
 </script>

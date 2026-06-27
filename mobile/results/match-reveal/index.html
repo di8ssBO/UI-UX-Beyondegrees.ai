@@ -47,7 +47,6 @@
 /* ── LIGHT MODE: body & global overrides ── */
 [data-theme="light"] body {
   background: #06060f !important;
-  color: #f8fafc !important;
 }
 
 /* Hardcoded violet rgba chips → blue */
@@ -331,7 +330,7 @@ svg *, canvas, video, img { transition: none !important; }
 
         <!-- Status Bar -->
         <div class="status-bar">
-          <span>9:41</span>
+          <span id="statusTime">9:41</span>
           <div class="status-icons">
             <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
             <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
@@ -355,7 +354,7 @@ svg *, canvas, video, img { transition: none !important; }
             </svg>
           </a>
           <div class="action-center">
-            <span class="action-title">Kết quả của bạn</span>
+            <span class="action-title" data-i18n="results.page_title">Your Results</span>
           </div>
           <button class="action-btn" id="topShareBtn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -385,14 +384,14 @@ svg *, canvas, video, img { transition: none !important; }
 
             <div class="match-badge" id="matchBadge">
               <span class="badge-star">⭐</span>
-              <span>Top 12% best match</span>
+              <span data-i18n="results.badge_top12">Top 12% best match</span>
             </div>
           </div>
 
           <!-- ── Headline ── -->
           <div class="result-headline" id="resultHeadline">
-            <h2 class="result-title">Bạn sinh ra để làm về<br><span class="hl-disc">công nghệ</span> ✨</h2>
-            <p class="result-sub">AI đã phân tích 30 câu trả lời và xác định DNA học thuật của bạn với độ chính xác cao.</p>
+            <h2 class="result-title" id="resultTitle"></h2>
+            <p class="result-sub" id="resultSub" data-i18n="results.headline_sub">AI analyzed 30 answers and identified your academic DNA with high precision.</p>
           </div>
 
           <!-- ── Academic DNA Card (Experiment C — Shareable) ── -->
@@ -402,7 +401,7 @@ svg *, canvas, video, img { transition: none !important; }
             <div class="dsc-header">
               <div class="dsc-header-left">
                 <p class="dsc-label" data-i18n="results.dna.label">Academic DNA</p>
-                <p class="dsc-name">Phan Văn Hoang Phuc</p>
+                <p class="dsc-name" id="dscName"></p>
               </div>
               <button class="dsc-share-btn" id="dnaShareBtn">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -454,7 +453,7 @@ svg *, canvas, video, img { transition: none !important; }
 
             <div class="dsc-footer">
               <span class="dsc-logo">✦ BeyonDegrees.ai</span>
-              <span class="dsc-date">24/04/2026</span>
+              <span class="dsc-date" id="dscDate"></span>
             </div>
           </div>
 
@@ -540,7 +539,7 @@ svg *, canvas, video, img { transition: none !important; }
 
           <!-- ░░ SIDE CARDS — horizontal scroll strip ░░ -->
           <div class="side-cards-section">
-            <div class="side-cards-label">Explore More ✦</div>
+            <div class="side-cards-label" data-i18n="results.explore_more">Explore More ✦</div>
             <div class="side-cards-track">
 
               <!-- Card 1: Discipline Match -->
@@ -548,8 +547,8 @@ svg *, canvas, video, img { transition: none !important; }
                 <div class="sc-icon">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.7"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
                 </div>
-                <div class="sc-title">Your Disciplines</div>
-                <div class="sc-desc">See which fields fit your personality</div>
+                <div class="sc-title" data-i18n="results.sc.disc_title">Your Disciplines</div>
+                <div class="sc-desc" data-i18n="results.sc.disc_desc">See which fields fit your personality</div>
                 <div class="sc-arrow">→</div>
               </a>
 
@@ -558,8 +557,8 @@ svg *, canvas, video, img { transition: none !important; }
                 <div class="sc-icon">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
                 </div>
-                <div class="sc-title">Universities</div>
-                <div class="sc-desc">Find your best-match institutions</div>
+                <div class="sc-title" data-i18n="results.sc.uni_title">Universities</div>
+                <div class="sc-desc" data-i18n="results.sc.uni_desc">Find your best-match institutions</div>
                 <div class="sc-arrow">→</div>
               </a>
 
@@ -568,8 +567,8 @@ svg *, canvas, video, img { transition: none !important; }
                 <div class="sc-icon">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 </div>
-                <div class="sc-title">Career Paths</div>
-                <div class="sc-desc">Explore salaries &amp; job outlooks</div>
+                <div class="sc-title" data-i18n="results.sc.career_title">Career Paths</div>
+                <div class="sc-desc" data-i18n="results.sc.career_desc">Explore salaries &amp; job outlooks</div>
                 <div class="sc-arrow">→</div>
               </a>
 
@@ -578,8 +577,8 @@ svg *, canvas, video, img { transition: none !important; }
                 <div class="sc-icon">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 </div>
-                <div class="sc-title">Share DNA</div>
-                <div class="sc-desc">Show your personality profile</div>
+                <div class="sc-title" data-i18n="results.sc.share_title">Share DNA</div>
+                <div class="sc-desc" data-i18n="results.sc.share_desc">Show your personality profile</div>
                 <div class="sc-arrow">↗</div>
               </button>
 
@@ -592,7 +591,7 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
 
           <div class="results-footer">
-            <p>✦ Powered by BeyonDegrees.ai</p>
+            <p data-i18n="results.footer">✦ Powered by BeyonDegrees.ai</p>
           </div>
 
         </div><!-- /results-body -->
@@ -645,7 +644,7 @@ svg *, canvas, video, img { transition: none !important; }
                 <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label"></span>
+            <span class="tab-label" data-i18n="nav.account">Account</span>
           </a>
         </nav>
 
@@ -659,7 +658,7 @@ svg *, canvas, video, img { transition: none !important; }
 <script>
 /* utils */
 /* BeyonDegrees.ai — Shared Utilities */
-const t = k => window.BDi18n ? BDi18n.t(k) : k;
+var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 
 // Toast Notification System
 const Toast = {
@@ -698,7 +697,8 @@ const Clipboard = {
   async copy(text) {
     try {
       await navigator.clipboard.writeText(text);
-      Toast.success(`Copied: ${text}`);
+      var _cs = window.BDi18n ? BDi18n.t('err.copy_success') : 'Copied';
+      Toast.success(_cs + ': ' + text);
       return true;
     } catch (err) {
       console.error('Failed to copy:', err);
@@ -1174,87 +1174,63 @@ window.PageTransition = PageTransition;
 
     function step() {
       const t     = Math.min(1, (Date.now() - tStart) / DURATION);
-      const ea
-/* ── scShareDna side-card wiring (Fix #4) ── */
-(function() {
-  function initSideCards() {
-    var btn = document.getElementById('scShareDna');
-    if (!btn) return;
-
-    btn.addEventListener('click', function() {
-      /* Reuse the existing dnaShareBtn click if present */
-      var existing = document.getElementById('dnaShareBtn');
-      if (existing) { existing.click(); return; }
-
-      /* Fallback: Web Share API or clipboard copy */
-      var url  = window.location.href;
-      var text = 'Check out my BeyonDegrees academic DNA profile! ' + url;
-      if (navigator.share) {
-        navigator.share({ title: 'My BeyonDegrees DNA', text: text, url: url })
-          .catch(function() {});
-      } else {
-        try {
-          navigator.clipboard.writeText(url);
-          /* Toast if available */
-          if (window.Toast) Toast.success('Link copied!');
-          else alert('Link copied to clipboard!');
-        } catch(e) {}
-      }
-    });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSideCards);
-  } else {
-    initSideCards();
-  }
-})();
-</script>
-
-<script src="../../../shared/scripts/ui/i18n.js"></script>
-<script src="../../../shared/scripts/ui/bd-profile.js"></script>
-</body>
-</html>
+      const ea    = 1 - Math.pow(1 - t, 3); /* ease-out cubic */
+      el.textContent = Math.round(ea * MATCH_PCT);
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = MATCH_PCT;
+    }
     requestAnimationFrame(step);
-      }, 1300 + i * 200); // start after hero animation (1.1s) + stagger
+  }
+
+  /* ══════════════════════════════════════════════════
+     DNA BARS ANIMATION
+     Staggered fill: starts 1.3s after page load, 200ms apart
+  ══════════════════════════════════════════════════ */
+  function animateDNABars() {
+    DNA_DATA.forEach(function(item, i) {
+      setTimeout(function() {
+        var bar = document.getElementById('dsc-bar-' + item.disc);
+        var pct = document.getElementById('dsc-pct-' + item.disc);
+        if (bar) bar.style.width = item.target + '%';
+        if (pct) pct.textContent = item.target + '%';
+      }, 1300 + i * 200);
     });
+  }
+
+  /* ══════════════════════════════════════════════════
+     HEADLINE — set from i18n + top disc
+  ══════════════════════════════════════════════════ */
+  function setHeadline() {
+    var titleEl = document.getElementById('resultTitle');
+    if (!titleEl) return;
+    var discName = window.BDi18n ? BDi18n.t('disc.name.kt') : 'Engineering & Technology';
+    var pre      = window.BDi18n ? BDi18n.t('results.headline_pre') : 'You were born for';
+    titleEl.innerHTML = pre + '<br><span class="hl-disc">' + discName + '</span> ✨';
   }
 
   /* ══════════════════════════════════════════════════
      SHARE INTERACTION
   ══════════════════════════════════════════════════ */
   function bindShare() {
-    // Create toast element
-    const screen = document.getElementById('mobileScreen');
-    const toast  = document.createElement('div');
-    toast.className = 'share-toast';
-    var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
-    toast.textContent = t('results.share_toast');
-    if (screen) screen.appendChild(toast);
-
-    function showToast() {
-      toast.classList.add('visible');
-      setTimeout(() => toast.classList.remove('visible'), 2400);
-    }
-
-    const dnaBtn  = $('dnaShareBtn');
-    const topBtn  = $('topShareBtn');
-    if (dnaBtn) dnaBtn.addEventListener('click', () => { window.location.href = '../../results/dna-card.html'; });
-    if (topBtn) topBtn.addEventListener('click', () => { window.location.href = '../../results/dna-card.html'; });
+    var dnaBtn = $('dnaShareBtn');
+    var topBtn = $('topShareBtn');
+    if (dnaBtn) dnaBtn.addEventListener('click', function() { window.location.href = '../../results/dna-card.html'; });
+    if (topBtn) topBtn.addEventListener('click', function() { window.location.href = '../../results/dna-card.html'; });
   }
 
   /* ══════════════════════════════════════════════════
      SAVE BUTTON micro-interaction
   ══════════════════════════════════════════════════ */
   function bindSave() {
-    const btn = $('saveResultBtn');
+    var btn = $('saveResultBtn');
     if (!btn) return;
-    btn.addEventListener('click', () => {
-      var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+    btn.addEventListener('click', function() {
+      btn.setAttribute('data-i18n', 'results.cta.saved');
       btn.textContent = t('results.cta.saved');
       btn.style.color = 'var(--mint-400)';
       btn.style.borderColor = 'rgba(6,214,160,0.3)';
-      setTimeout(() => {
+      setTimeout(function() {
+        btn.setAttribute('data-i18n', 'results.cta.save');
         btn.textContent = t('results.cta.save');
         btn.style.color = '';
         btn.style.borderColor = '';
@@ -1264,10 +1240,10 @@ window.PageTransition = PageTransition;
 
   /* ── Bootstrap ──────────────────────────────────── */
   function init() {
-    // Small delay so the page renders first
-    setTimeout(launchConfetti,    150);
-    setTimeout(animateMatchPct,   500);
-    setTimeout(animateDNABars,    0);
+    setHeadline();
+    setTimeout(launchConfetti,  150);
+    setTimeout(animateMatchPct, 500);
+    setTimeout(animateDNABars,  0);
     bindShare();
     bindSave();
   }
@@ -1280,24 +1256,46 @@ window.PageTransition = PageTransition;
 
 })();
 
+/* ── scShareDna side-card ── */
+(function() {
+  function initSideCards() {
+    var btn = document.getElementById('scShareDna');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      var existing = document.getElementById('dnaShareBtn');
+      if (existing) { existing.click(); return; }
+      var url        = window.location.href;
+      var shareTitle = window.BDi18n ? BDi18n.t('results.sc.share_title') : 'My BeyonDegrees DNA';
+      var shareText  = (window.BDi18n ? BDi18n.t('results.sc.share_text') : 'Check out my BeyonDegrees academic DNA profile!') + ' ' + url;
+      if (navigator.share) {
+        navigator.share({ title: shareTitle, text: shareText, url: url }).catch(function() {});
+      } else {
+        try {
+          navigator.clipboard.writeText(url);
+          if (window.Toast) Toast.success(window.BDi18n ? BDi18n.t('dna.toast_copy') : 'Link copied!');
+        } catch(e) {}
+      }
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSideCards);
+  } else {
+    initSideCards();
+  }
+})();
 </script>
 
 <script>
+/* ── Theme System ── */
 (function() {
   function bdApplyTheme(resolved) {
     document.documentElement.setAttribute('data-theme', resolved);
-    // Update toggle bg for light theme
     var toggle = document.getElementById('bd-theme-toggle');
     if (toggle) {
-      toggle.style.background = (resolved === 'light')
-        ? 'rgba(255,255,255,0.92)'
-        : 'rgba(10,10,26,0.85)';
-      toggle.style.borderColor = (resolved === 'light')
-        ? 'rgba(24,99,220,0.25)'
-        : 'rgba(24,99,220,0.35)';
+      toggle.style.background  = (resolved === 'light') ? 'rgba(255,255,255,0.92)' : 'rgba(10,10,26,0.85)';
+      toggle.style.borderColor = (resolved === 'light') ? 'rgba(24,99,220,0.25)'   : 'rgba(24,99,220,0.35)';
     }
   }
-
   function bdSetTheme(pref) {
     var resolved = pref;
     if (pref === 'system') {
@@ -1306,7 +1304,6 @@ window.PageTransition = PageTransition;
     bdApplyTheme(resolved);
     document.documentElement.setAttribute('data-theme-pref', pref);
     try { localStorage.setItem('bd-theme', pref); } catch(e) {}
-    // Update button active states
     var btns = { system:'bdt-system', light:'bdt-light', dark:'bdt-dark' };
     Object.keys(btns).forEach(function(name) {
       var el = document.getElementById(btns[name]);
@@ -1322,21 +1319,52 @@ window.PageTransition = PageTransition;
       }
     });
   }
-
   window.bdSetTheme = bdSetTheme;
-
-  // Init on load
   var saved = 'dark';
   try { saved = localStorage.getItem('bd-theme') || 'dark'; } catch(e) {}
   bdSetTheme(saved);
-
-  // React to OS theme changes
   window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
     var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
     if (pref === 'system') bdSetTheme('system');
   });
 })();
+
+/* ── Dynamic clock ── */
+(function() {
+  function updateClock() {
+    var el = document.getElementById('statusTime');
+    if (!el) return;
+    var now = new Date(), h = now.getHours(), m = now.getMinutes();
+    el.textContent = h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+})();
+
+/* ── Profile name + DNA card date ── */
+(function() {
+  function applyProfile() {
+    /* Name */
+    var nameEl = document.getElementById('dscName');
+    if (nameEl && typeof BDProfile !== 'undefined') {
+      nameEl.textContent = BDProfile.getDisplayName();
+    }
+    /* Date */
+    var dateEl = document.getElementById('dscDate');
+    if (dateEl) {
+      var now = new Date();
+      dateEl.textContent = now.getDate() + '/' + (now.getMonth() + 1) + '/' + now.getFullYear();
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyProfile);
+  } else {
+    applyProfile();
+  }
+})();
 </script>
+
 <script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
 </body>
 </html>

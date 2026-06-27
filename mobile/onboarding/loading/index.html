@@ -50,7 +50,6 @@
 /* ── LIGHT MODE: body stays DARK (outside frame) ── */
 [data-theme="light"] body {
   background: #06060f !important;
-  color: #f8fafc !important;
 }
 [data-theme="light"] .breadcrumb-item { color: rgba(255,255,255,0.45) !important; }
 [data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
@@ -102,7 +101,7 @@ svg *, canvas, video, img { transition: none !important; }
 
         <!-- Status Bar -->
         <div class="status-bar">
-          <span>9:41</span>
+          <span id="statusTime">9:41</span>
           <div class="status-icons">
             <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
             <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
@@ -138,7 +137,7 @@ svg *, canvas, video, img { transition: none !important; }
           <div class="meta-row">
             <div class="countdown-chip" id="countdownChip">
               <span class="cd-dot"></span>
-              <span id="cdText">~25 seconds left</span>
+              <span id="cdText"></span>
             </div>
             <div class="questions-chip">
               <span id="qCount">?</span>/<span id="qTotal">30</span> <span data-i18n="loading.questions_done">questions ✓</span>
@@ -191,7 +190,7 @@ svg *, canvas, video, img { transition: none !important; }
           <!-- Fun Fact Carousel -->
           <div class="funfact-wrap glass-card" id="funfactWrap">
             <span class="ff-badge" data-i18n="loading.did_you_know">💡 Did you know?</span>
-            <p class="ff-text" id="ffText">73% of students switch majors after year one due to a poor initial choice.</p>
+            <p class="ff-text" id="ffText"></p>
             <div class="ff-dots" id="ffDots">
               <span class="ff-dot active"></span>
               <span class="ff-dot"></span>
@@ -203,15 +202,6 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
 
         </div><!-- /loading-body -->
-
-        <!-- ░░ MILESTONE TOAST ░░ -->
-        <div class="milestone-toast" id="milestoneToast">
-          <span class="ms-emoji" id="msEmoji">🔥</span>
-          <div>
-            <p class="ms-title" id="msTitle" data-i18n="loading.done">Analysis complete!</p>
-            <p class="ms-sub"   id="msSub" data-i18n="loading.compiling">Compiling your results...</p>
-          </div>
-        </div>
 
         <!-- ░░ READY OVERLAY ░░ -->
         <div class="ready-overlay" id="readyOverlay">
@@ -326,11 +316,12 @@ const Clipboard = {
   async copy(text) {
     try {
       await navigator.clipboard.writeText(text);
-      Toast.success(`Copied: ${text}`);
+      var _cs = window.BDi18n ? BDi18n.t('err.copy_success') : 'Copied';
+      Toast.success(_cs + ': ' + text);
       return true;
     } catch (err) {
       console.error('Failed to copy:', err);
-      Toast.error('Failed to copy');
+      Toast.error(window.BDi18n ? BDi18n.t('err.copy_failed') : 'Failed to copy');
       return false;
     }
   },
@@ -341,7 +332,7 @@ const Clipboard = {
       return text;
     } catch (err) {
       console.error('Failed to paste:', err);
-      Toast.error('Failed to paste');
+      Toast.error(window.BDi18n ? BDi18n.t('err.paste_failed') : 'Failed to paste');
       return null;
     }
   }
@@ -654,6 +645,18 @@ document.addEventListener('DOMContentLoaded', () => {
 window.Nav = Navigation;
 window.PageTransition = PageTransition;
 
+/* ── Dynamic status bar clock ── */
+(function() {
+  function updateClock() {
+    var el = document.getElementById('statusTime');
+    if (!el) return;
+    var now = new Date(), h = now.getHours(), m = now.getMinutes();
+    el.textContent = h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+})();
+
 /* screen */
 /* =====================================================
    AI LOADING SCREEN ENGINE — BeyonDegrees.ai
@@ -664,7 +667,7 @@ window.PageTransition = PageTransition;
 (function () {
   'use strict';
 
-  const t = function(k) {
+  var t = function(k) {
     var lang = 'en';
     try { lang = localStorage.getItem('bd-lang') || 'en'; } catch(e) {}
     if (window.BDi18n) return window.BDi18n.t.call({ _lang: lang }, k);
@@ -790,11 +793,6 @@ window.PageTransition = PageTransition;
       currentFact = (currentFact + 1) % FUN_FACTS_LEN;
       renderFunFact(currentFact, true);
     }, 4400);
-
-    // Schedule milestones
-    MILESTONES.forEach(m => {
-      setTimeout(() => showMilestone(m), m.at * 1000);
-    });
 
     // Kick off RAF loop
     if (rafId) cancelAnimationFrame(rafId);
@@ -949,22 +947,6 @@ window.PageTransition = PageTransition;
       text.classList.remove('fading');
       dots.forEach((d, i) => d.classList.toggle('active', i === index));
     }, 290);
-  }
-
-  /* ── Milestone Toast ────────────────────────────── */
-  function showMilestone(m) {
-    const toast = $('milestoneToast');
-    const emoji = $('msEmoji');
-    const mTitle = $('msTitle');
-    const mSub   = $('msSub');
-    if (!toast) return;
-
-    if (emoji)  emoji.textContent  = m.emoji;
-    if (mTitle) mTitle.textContent = t(m.titleKey);
-    if (mSub)   mSub.textContent   = t(m.subKey);
-
-    toast.classList.add('visible');
-    setTimeout(() => toast.classList.remove('visible'), 3200);
   }
 
   /* ── Ready Overlay ──────────────────────────────── */
