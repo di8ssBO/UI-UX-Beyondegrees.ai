@@ -54,9 +54,12 @@
   </div>
 
   <script src="../../../shared/scripts/data/uni-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script>
+    /* i18n helper */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+
     /* ── Match-tier theme (mobile UNI_MATCH_COLORS/getMatchTheme) ── */
     var UNI_MATCH_COLORS = {
       high: { primary:'#1863DC', light:'#6BA3FF' },
@@ -131,7 +134,7 @@
       }
       return a;
     }
-    var LABELS = { agree:'Agree ✓', strong:'Strong ⚡', neutral:'Neutral –', disagree:'Disagree ✕' };
+    var LABELS = { agree:t('why.lbl_agree'), strong:t('why.lbl_strong'), neutral:t('why.lbl_neutral'), disagree:t('why.lbl_disagree') };
 
     var id = BD.param('u', 'fulbright');
     var u = (window.UNI_DATA || []).find(function (x) { return x.id === id; }) || UNI_DATA[0];
@@ -152,36 +155,36 @@
 
     document.getElementById('root').innerHTML =
       '<div style="--acc:' + theme.primary + ';--acc-pct:' + theme.light + ';">' +
-        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
-        '<h1 class="page-title">Why I Match 🔍</h1>' +
+        '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">' + t('common.back') + '</button>' +
+        '<h1 class="page-title">' + t('disc.why.page_title') + '</h1>' +
         '<div class="why-layout mt-6">' +
           '<div>' +
             '<div class="card why-hero">' +
               '<div class="ico">' + (u.icon || '🎓') + '</div>' +
               '<div><h1>' + u.name + '</h1><div class="rank">' + (u.ranking || '') + '</div></div>' +
-              '<div class="why-pct"><b>' + u.match + '%</b><span>Match</span></div>' +
+              '<div class="why-pct"><b>' + u.match + '%</b><span>' + t('disc.match') + '</span></div>' +
             '</div>' +
             '<div class="ai-box">' +
-              '<div class="lbl">✦ AI Analysis</div>' +
+              '<div class="lbl">' + t('why.ai_analysis') + '</div>' +
               '<p>' + getUniInsight(u) + '</p>' +
             '</div>' +
             '<div class="card mt-6">' +
-              '<span class="section-label">Answered assertions</span>' +
+              '<span class="section-label">' + t('why.answered') + '</span>' +
               '<div class="mt-4">' + assertRows + '</div>' +
             '</div>' +
           '</div>' +
           '<div>' +
             '<div class="card">' +
-              '<span class="section-label">Response breakdown</span>' +
+              '<span class="section-label">' + t('why.breakdown') + '</span>' +
               '<div class="mt-4">' +
-                '<div class="bd-row row-line"><span class="as-chip agree">Agree ✓</span><b>' + counts.agree + '</b></div>' +
-                '<div class="bd-row row-line"><span class="as-chip strong">Strong agree ⚡</span><b>' + counts.strong + '</b></div>' +
-                '<div class="bd-row row-line"><span class="as-chip neutral">Neutral –</span><b>' + counts.neutral + '</b></div>' +
-                '<div class="bd-row"><span class="as-chip disagree">Disagree ✕</span><b>' + counts.disagree + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip agree">' + t('why.lbl_agree') + '</span><b>' + counts.agree + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip strong">' + t('why.bd_strong') + '</span><b>' + counts.strong + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip neutral">' + t('why.lbl_neutral') + '</span><b>' + counts.neutral + '</b></div>' +
+                '<div class="bd-row"><span class="as-chip disagree">' + t('why.lbl_disagree') + '</span><b>' + counts.disagree + '</b></div>' +
               '</div>' +
             '</div>' +
-            '<a class="btn btn-primary mt-6" style="width:100%;" href="../../university/detail/?u=' + u.id + '">Explore this university →</a>' +
-            '<a class="btn btn-ghost mt-2" style="width:100%;margin-top:10px;" href="../../university/matches/">← Back to results</a>' +
+            '<a class="btn btn-primary mt-6" style="width:100%;" href="../../university/detail/?u=' + u.id + '">' + t('why.explore_uni') + '</a>' +
+            '<a class="btn btn-ghost mt-2" style="width:100%;margin-top:10px;" href="../../university/matches/">' + t('common.back_results') + '</a>' +
           '</div>' +
         '</div>' +
       '</div>';

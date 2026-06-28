@@ -405,10 +405,10 @@
 
         <!-- Card arena -->
         <div class="card-arena" id="cardArena">
-          <div class="dir-hint hint-right" id="hintRight">AGREE &#10003;</div>
-          <div class="dir-hint hint-left"  id="hintLeft">DISAGREE &#10005;</div>
-          <div class="dir-hint hint-up"    id="hintUp">STRONGLY AGREE &#9889;</div>
-          <div class="dir-hint hint-down"  id="hintDown">NEUTRAL &ndash;</div>
+          <div class="dir-hint hint-right" id="hintRight" data-i18n="quiz.swipe.agree">AGREE &#10003;</div>
+          <div class="dir-hint hint-left"  id="hintLeft" data-i18n="quiz.swipe.disagree">DISAGREE &#10005;</div>
+          <div class="dir-hint hint-up"    id="hintUp" data-i18n="quiz.swipe.strong">STRONGLY AGREE &#9889;</div>
+          <div class="dir-hint hint-down"  id="hintDown" data-i18n="quiz.swipe.neutral">NEUTRAL &ndash;</div>
           <div class="guide-arrow" id="guideArrow">
             <svg class="guide-arrow-svg" id="guideArrowSvg" viewBox="0 0 120 48" aria-hidden="true">
               <defs>
@@ -430,7 +430,7 @@
                 <p class="q-text" id="qText"></p>
                 <!-- Drag hint: only visible on Q1 -->
                 <div class="swipe-hint" id="swipeHint">
-                  <span>Drag to answer</span>
+                  <span data-i18n="quiz.hint.drag">Drag to answer</span>
                   <span class="hint-arrows">&#8592; &#8594;</span>
                 </div>
               </div>
@@ -540,17 +540,17 @@
         <div class="ms-bp" id="msBp4" style="background:#a855f7;box-shadow:0 0 18px rgba(168,85,247,.95),0 0 40px rgba(168,85,247,.5)"></div>
         <div class="ms-bp" id="msBp5" style="background:#f43f5e;box-shadow:0 0 18px rgba(244,63,94,.95),0 0 40px rgba(244,63,94,.5)"></div>
       </div>
-      <div class="ms-po-orbit ms-o1"><div class="ms-po-particle ms-pp-kt"></div><span class="ms-orb-label">Eng</span></div>
-      <div class="ms-po-orbit ms-o2"><div class="ms-po-particle ms-pp-yt"></div><span class="ms-orb-label">Health</span></div>
-      <div class="ms-po-orbit ms-o3"><div class="ms-po-particle ms-pp-nv"></div><span class="ms-orb-label">Hum</span></div>
-      <div class="ms-po-orbit ms-o4"><div class="ms-po-particle ms-pp-nn"></div><span class="ms-orb-label">Agri</span></div>
-      <div class="ms-po-orbit ms-o5"><div class="ms-po-particle ms-pp-xh"></div><span class="ms-orb-label">Social</span></div>
-      <div class="ms-po-orbit ms-o6"><div class="ms-po-particle ms-pp-tn"></div><span class="ms-orb-label">Sci</span></div>
+      <div class="ms-po-orbit ms-o1"><div class="ms-po-particle ms-pp-kt"></div><span class="ms-orb-label" data-i18n="quiz.orbit_eng">Eng</span></div>
+      <div class="ms-po-orbit ms-o2"><div class="ms-po-particle ms-pp-yt"></div><span class="ms-orb-label" data-i18n="quiz.orbit_health">Health</span></div>
+      <div class="ms-po-orbit ms-o3"><div class="ms-po-particle ms-pp-nv"></div><span class="ms-orb-label" data-i18n="quiz.orbit_hum">Hum</span></div>
+      <div class="ms-po-orbit ms-o4"><div class="ms-po-particle ms-pp-nn"></div><span class="ms-orb-label" data-i18n="quiz.orbit_agri">Agri</span></div>
+      <div class="ms-po-orbit ms-o5"><div class="ms-po-particle ms-pp-xh"></div><span class="ms-orb-label" data-i18n="quiz.orbit_social">Social</span></div>
+      <div class="ms-po-orbit ms-o6"><div class="ms-po-particle ms-pp-tn"></div><span class="ms-orb-label" data-i18n="quiz.orbit_sci">Sci</span></div>
     </div>
 
     <!-- Milestone text -->
     <div class="ms-po-text">
-      <span class="ms-po-badge"     id="msPlanetBadge">MILESTONE</span>
+      <span class="ms-po-badge"     id="msPlanetBadge" data-i18n="quiz.ms_label">MILESTONE</span>
       <div class="ms-po-big-emoji"  id="msPlanetBigEmoji">✨</div>
       <h2  class="ms-po-title"      id="msPlanetTitle">1/3 Done!</h2>
       <p   class="ms-po-sub"        id="msPlanetSub">Keep going! 💪</p>
@@ -561,7 +561,7 @@
           </div>
         </div>
       </div>
-      <div class="ms-po-hint">Click to continue →</div>
+      <div class="ms-po-hint" data-i18n="quiz.ms_click">Click to continue →</div>
     </div>
 
     <!-- Moon + Astronaut (dark mode only) -->
@@ -670,11 +670,14 @@
     </div>
   </div>
 
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script src="../../../shared/scripts/data/disc-config.js"></script>
   <script src="../../../shared/scripts/data/questions-static.js"></script>
   <script>
+    /* i18n helper */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+
     /* aliases — keep existing code working without changes */
     var DISC_COLORS = window.BD_DISC_COLORS;
     var DISC_NAMES  = window.BD_DISC_NAMES;
@@ -738,7 +741,9 @@
       var q = QUESTIONS[idx];
       if (!q) return finish();
       $('qCur').textContent = idx + 1;
-      $('qText').textContent = q.text;
+      var qKey = 'quiz.q.' + q.id;
+      var qTr = t(qKey);
+      $('qText').textContent = (qTr && qTr !== qKey) ? qTr : q.text;
       styleCard($('activeCard'), q.disc);
       if (QUESTIONS[idx + 1]) styleCard($('backCard1'), QUESTIONS[idx + 1].disc);
       if (QUESTIONS[idx + 2]) styleCard($('backCard2'), QUESTIONS[idx + 2].disc);
@@ -821,9 +826,9 @@
 
     /* ── Planet Burst Milestone Engine (ported from mobile) ───────── */
     var MS_COPY = {
-      1: { emoji: '🔥', badge: 'DNA SCAN · 1/3',     title: 'Stage 1 unlocked!',  sub: 'Your Career DNA is forming…' },
-      2: { emoji: '🚀', badge: 'DNA SCAN · 2/3',     title: 'Stage 2 unlocked!',  sub: 'Almost fully mapped — keep going!' },
-      3: { emoji: '🏆', badge: 'DNA FULLY DECODED',  title: 'Career DNA Decoded!', sub: 'Your academic identity is ready.' }
+      1: { emoji: '🔥', badge: t('quiz.ms_badge1'), title: t('quiz.ms_title1'), sub: t('quiz.ms_sub1') },
+      2: { emoji: '🚀', badge: t('quiz.ms_badge2'), title: t('quiz.ms_title2'), sub: t('quiz.ms_sub2') },
+      3: { emoji: '🏆', badge: t('quiz.ms_badge3'), title: t('quiz.ms_title3'), sub: t('quiz.ms_sub3') }
     };
     var _msTimer = null;
 

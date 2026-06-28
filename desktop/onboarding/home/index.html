@@ -160,34 +160,38 @@
       </section>
 
       <!-- DISCIPLINES — 6 ngành, đúng icon + tên + màu mobile -->
-      <h3 class="section-label-mobile">Choose 1 or more disciplines</h3>
+      <h3 class="section-label-mobile" data-i18n="home.choose_disc">Choose 1 or more disciplines</h3>
       <div class="disciplines-grid fade-in-stagger">
         <div class="discipline-card" data-disc="kt" style="--disc:#7c3aed">
-          <div class="discipline-icon">⚙️</div><span>Engineering</span>
+          <div class="discipline-icon">⚙️</div><span data-i18n="disc.short.kt">Engineering</span>
         </div>
         <div class="discipline-card" data-disc="yt" style="--disc:#06d6a0">
-          <div class="discipline-icon">🩺</div><span>Medical</span>
+          <div class="discipline-icon">🩺</div><span data-i18n="disc.short.yt">Medical</span>
         </div>
         <div class="discipline-card" data-disc="tn" style="--disc:#f43f5e">
-          <div class="discipline-icon">🔬</div><span>Natural Sci</span>
+          <div class="discipline-icon">🔬</div><span data-i18n="disc.short.tn">Natural Sci</span>
         </div>
         <div class="discipline-card" data-disc="nn" style="--disc:#f59e0b">
-          <div class="discipline-icon">🌱</div><span>Agricultural</span>
+          <div class="discipline-icon">🌱</div><span data-i18n="disc.short.nn">Agricultural</span>
         </div>
         <div class="discipline-card" data-disc="xh" style="--disc:#a855f7">
-          <div class="discipline-icon">🧠</div><span>Social Sci</span>
+          <div class="discipline-icon">🧠</div><span data-i18n="disc.short.xh">Social Sci</span>
         </div>
         <div class="discipline-card" data-disc="nv" style="--disc:#3b82f6">
-          <div class="discipline-icon">📜</div><span>Humanities</span>
+          <div class="discipline-icon">📜</div><span data-i18n="disc.short.nv">Humanities</span>
         </div>
       </div>
 
     </div>
   </div>
 
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script>
+    /* i18n helpers */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     /* Discipline selection toggle + ripple from click point (mobile parity) */
     var disciplineGrid = document.querySelector('.disciplines-grid');
     function syncDisciplineGridState() {
@@ -225,21 +229,21 @@
       if (key === 30) ring.style.stroke = '#f59e0b'; /* gold = complete */
 
       var STATES = {
-        0:  { emoji: '🚀', tagline: 'Discover your academic identity',
-              title: 'What major are you interested in?',
-              sub: 'Answer 30 questions and let AI find your perfect match.' },
-        1:  { emoji: '💪', tagline: 'Great start! Keep going',
-              title: "You're on your way to finding your match",
-              sub: 'Answered ' + p + ' question' + (p > 1 ? 's' : '') + '. Pick up where you left off!' },
-        10: { emoji: '🔥', tagline: 'Quiz Stage 1 complete!',
-              title: 'Your top discipline is revealed 🔥',
-              sub: 'Keep going! 20 more questions to unlock your Major matches.' },
-        20: { emoji: '⚡', tagline: 'Quiz Stage 2 complete!',
-              title: 'AI found your Major matches ⚡',
-              sub: '10 more questions to unlock your University matches.' },
-        30: { emoji: '✨', tagline: 'Profile complete!',
-              title: 'Your academic identity is complete ✨',
-              sub: 'BeyonDegrees has found your perfect university matches.' }
+        0:  { emoji: '🚀', tagline: t('home.state0.tagline'),
+              title: t('home.state0.title'),
+              sub: t('home.state0.sub') },
+        1:  { emoji: '💪', tagline: t('home.state_started_tagline'),
+              title: t('home.state_started_title'),
+              sub: tf('home.state_started_sub', { n: p }) },
+        10: { emoji: '🔥', tagline: t('home.state1.tagline'),
+              title: t('home.state1.title'),
+              sub: t('home.state1.sub') },
+        20: { emoji: '⚡', tagline: t('home.state2.tagline'),
+              title: t('home.state2.title'),
+              sub: t('home.state2.sub') },
+        30: { emoji: '✨', tagline: t('home.state3.tagline'),
+              title: t('home.state3.title'),
+              sub: t('home.state3.sub') }
       };
       var s = STATES[key];
       document.getElementById('heroEmoji').textContent = s.emoji;
@@ -248,11 +252,11 @@
       document.getElementById('heroSub').textContent = s.sub;
 
       var BTNS = {
-        0:  { b1: 'Start Quiz →', u1: '../../quiz/quiz-card/', b2: null },
-        1:  { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: null },
-        10: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: { t: 'View Discipline Results ›', u: '../../discipline/match/' } },
-        20: { b1: 'Continue Quiz →', u1: '../../quiz/quiz-card/', b2: { t: 'View Major Results ›', u: '../../major/recommendations/' } },
-        30: { b1: 'View Match →', u1: '../../university/matches/', b2: { t: 'View University Results ›', u: '../../university/matches/' } }
+        0:  { b1: t('disc.cta.start'), u1: '../../quiz/quiz-card/', b2: null },
+        1:  { b1: t('home.cta.continue'), u1: '../../quiz/quiz-card/', b2: null },
+        10: { b1: t('home.cta.continue'), u1: '../../quiz/quiz-card/', b2: { t: t('home.cta.view_disc'), u: '../../discipline/match/' } },
+        20: { b1: t('home.cta.continue'), u1: '../../quiz/quiz-card/', b2: { t: t('home.cta.view_major'), u: '../../major/recommendations/' } },
+        30: { b1: t('home.cta.view_match'), u1: '../../university/matches/', b2: { t: t('home.cta.view_uni'), u: '../../university/matches/' } }
       };
       var b = BTNS[key];
       var btn1 = document.getElementById('ctaPrimary');

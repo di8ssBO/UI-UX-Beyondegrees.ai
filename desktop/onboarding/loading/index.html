@@ -96,15 +96,15 @@
           <div class="phase-title" id="phaseTitle">Your Academic DNA</div>
           <div class="time-left" id="timeLeft">~25 seconds left</div>
           <div class="bar mt-6" style="width:100%;"><span id="mainBar" style="width:3%"></span></div>
-          <div class="q-progress"><b id="qDone">30</b> / 30 questions ✓</div>
+          <div class="q-progress"><b id="qDone">30</b> / 30 <span data-i18n="loading.questions_done">questions ✓</span></div>
         </div>
 
         <!-- DNA forming + fun facts -->
         <div class="card">
-          <div class="dna-title">🧬 Academic DNA forming</div>
+          <div class="dna-title">🧬 <span data-i18n="loading.dna_forming">Academic DNA forming</span></div>
           <div id="dnaRows"></div>
           <div class="fact-card">
-            <div class="fk">💡 Did you know?</div>
+            <div class="fk" data-i18n="loading.did_you_know">💡 Did you know?</div>
             <p id="factText">73% of students switch majors after year one due to a poor initial choice.</p>
             <div class="fact-dots" id="factDots"></div>
           </div>
@@ -119,18 +119,21 @@
     <div class="done-box">
       <div class="big" id="doneEmoji">🎉</div>
       <h2 id="doneTitle">Results are ready!</h2>
-      <p>AI has analyzed <b id="doneCount">30</b> of your answers</p>
+      <p id="doneSub">AI has analyzed <b id="doneCount">30</b> of your answers</p>
       <div class="row">
         <a class="btn btn-primary" id="doneBtn" href="../../results/match-reveal/">See my results →</a>
-        <button class="btn btn-ghost" onclick="location.reload()">↺ Replay demo</button>
+        <button class="btn btn-ghost" onclick="location.reload()" data-i18n="loading.replay_demo">↺ Replay demo</button>
       </div>
     </div>
   </div>
 
   <script src="../../../shared/scripts/data/loading-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script>
+    /* i18n helpers — named tr()/tf() (this file uses local `t` for elapsed time) */
+    function tr(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : tr(k); }
 
     /* ── Stage-aware setup: this loading screen runs after every 10-question
        batch. ?stage=1|2 return to the quiz; ?stage=3 (default) → results. ── */
@@ -138,9 +141,9 @@
     if (STAGE !== 1 && STAGE !== 2 && STAGE !== 3) STAGE = 3;
     var STAGE_DONE = STAGE * 10;
     var STAGE_INFO = {
-      1: { emoji: '🔥', title: 'Stage 1 complete!', btn: 'Continue quiz →', href: '../../quiz/quiz-card/' },
-      2: { emoji: '🚀', title: 'Stage 2 complete!', btn: 'Continue quiz →', href: '../../quiz/quiz-card/' },
-      3: { emoji: '🎉', title: 'Results are ready!', btn: 'See my results →', href: '../../results/match-reveal/' }
+      1: { emoji: '🔥', title: tr('loading.stage1_title'), btn: tr('loading.continue_quiz'), href: '../../quiz/quiz-card/' },
+      2: { emoji: '🚀', title: tr('loading.stage2_title'), btn: tr('loading.continue_quiz'), href: '../../quiz/quiz-card/' },
+      3: { emoji: '🎉', title: tr('loading.ready'), btn: tr('quiz.see_result'), href: '../../results/match-reveal/' }
     }[STAGE];
     (function applyStage() {
       var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
@@ -148,6 +151,8 @@
       set('doneCount', STAGE_DONE);
       set('doneEmoji', STAGE_INFO.emoji);
       set('doneTitle', STAGE_INFO.title);
+      var sub = document.getElementById('doneSub');
+      if (sub) sub.innerHTML = tf('quiz.ready_sub', { n: '<b id="doneCount">' + STAGE_DONE + '</b>' });
       var b = document.getElementById('doneBtn');
       if (b) { b.textContent = STAGE_INFO.btn; b.setAttribute('href', STAGE_INFO.href); }
     })();
@@ -156,13 +161,11 @@
     var PHASES       = window.BD_PHASES;
     var DNA_SCHEDULE = window.BD_DNA_SCHEDULE;
     var FUN_FACTS    = [
-      '73% of students switch majors after year one due to a poor initial choice.',
-      'BeyonDegrees users make major decisions 3.2× more confidently than average.',
-      'Only 18% of students have enough information about majors before deciding.',
-      'AI analyzes 47 data dimensions from your 30 answers.',
-      'The right major isn\'t just about grades — personality matters 2.4× more.',
-      'BeyonDegrees has helped over 50,000 students discover their right path.'
+      tr('loading.ff.0'), tr('loading.ff.1'), tr('loading.ff.2'),
+      tr('loading.ff.3'), tr('loading.ff.4'), tr('loading.ff.5')
     ];
+    /* discipline code → translated DNA-bar name */
+    var DNA_NAME_KEY = { kt:'loading.dna.engineering', yt:'loading.dna.health', nv:'loading.dna.humanities', nn:'loading.dna.agriculture', xh:'loading.dna.social', tn:'loading.dna.natural' };
     var DURATION = 17;
 
     /* DNA rows */
@@ -172,11 +175,13 @@
       el.className = 'dna-row acc-' + d.disc;
       el.innerHTML =
         '<div class="ico">' + d.ico + '</div>' +
-        '<div class="name">' + d.name + '</div>' +
+        '<div class="name">' + (DNA_NAME_KEY[d.disc] ? tr(DNA_NAME_KEY[d.disc]) : d.name) + '</div>' +
         '<div class="bar"><span class="dc-pfill" id="dna-' + d.disc + '" style="width:0%"></span></div>' +
         '<div class="pct" id="dnap-' + d.disc + '">0%</div>';
       rows.appendChild(el);
     });
+    /* initial fun fact in the active language */
+    var _ft = document.getElementById('factText'); if (_ft) _ft.textContent = FUN_FACTS[0];
 
     /* Fact dots */
     var dots = document.getElementById('factDots');
@@ -204,10 +209,10 @@
       var t = (Date.now() - t0) / 1000;
       var pr = Math.min(t / DURATION, 1);
       document.getElementById('mainBar').style.width = (pr * 100) + '%';
-      document.getElementById('timeLeft').textContent = '~' + Math.max(0, Math.ceil(DURATION - t)) + ' seconds left';
+      document.getElementById('timeLeft').textContent = tf('loading.countdown', { n: Math.max(0, Math.ceil(DURATION - t)) });
       var ph = Math.min(Math.floor(pr * PHASES.length), PHASES.length - 1);
-      document.getElementById('phaseLabel').textContent = PHASES[ph].label;
-      document.getElementById('phaseTitle').textContent = PHASES[ph].title;
+      document.getElementById('phaseLabel').textContent = tr(PHASES[ph].i18nLabel);
+      document.getElementById('phaseTitle').textContent = tr(PHASES[ph].i18nTitle);
       DNA_SCHEDULE.forEach(function (d) {
         if (t > d.start) {
           if (!dnaFired[d.disc]) { dnaFired[d.disc] = true; pulseYouRing(); }

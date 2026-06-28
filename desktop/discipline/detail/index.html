@@ -134,9 +134,13 @@
   </div>
 
   <script src="../../../shared/scripts/data/majors-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script>
+    /* i18n helpers */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     /* ── Nội dung nguyên văn từ 6 file mobile detail/(kt|tn|xh|nv|yt|nn).html ── */
     var DETAIL = {
       kt: { ico:'⚙️', name:'Engineering & Technology', rank:'#1 Ranked Match', match:94,
@@ -232,7 +236,7 @@
     if (locked) {
       var rem = 20 - answered;
       lockBanner = '<div class="rm-locked-banner" id="rmLock"><span class="lk">🔒</span>' +
-        '<span>Complete <b>' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</b> to unlock your major matches.</span></div>';
+        '<span>' + tf('disc.detail.lock_majors', { n: rem }) + '</span></div>';
     }
 
     var dPct = disciplineMatchPct(key);
@@ -241,32 +245,32 @@
 
     document.getElementById('root').innerHTML =
       '<div class="acc-' + key + ' dd-page">' +
-        '<button class="btn btn-ghost dd-back" onclick="goBack()">← Back</button>' +
+        '<button class="btn btn-ghost dd-back" onclick="goBack()">' + t('common.back') + '</button>' +
         '<div class="card glass-hero dd-hero">' +
           '<div class="dd-hero-main">' +
             '<div class="big-ico">' + d.ico + '</div>' +
             '<div>' +
-              '<h1>' + d.name + '</h1>' +
+              '<h1>' + t('disc.name.' + key) + '</h1>' +
               '<div class="dd-hero-meta">' +
-                '<span class="chip violet dd-rank">🏅 ' + d.rank + '</span>' +
+                '<span class="chip violet dd-rank">🏅 ' + tf('disc.detail.ranked_match', { n: parseInt(d.rank.replace(/\D/g, ''), 10) || 1 }) + '</span>' +
               '</div>' +
             '</div>' +
           '</div>' +
           '<div class="dd-match-ring ' + dTone + '" style="--match-angle:' + dAngle + ';">' +
-            '<div class="dd-match-core"><span class="dd-match-val">' + dPct + '%</span><span class="dd-match-lbl">Match</span></div>' +
+            '<div class="dd-match-core"><span class="dd-match-val">' + dPct + '%</span><span class="dd-match-lbl">' + t('disc.match') + '</span></div>' +
           '</div>' +
         '</div>' +
         '<div class="dd-detail-layout mt-6">' +
           '<div class="card dd-discipline-card">' +
-            '<span class="section-label">Discipline overview</span>' +
-            '<div class="dd-section-title">What this discipline covers</div>' +
+            '<span class="section-label">' + t('disc.detail.overview_label') + '</span>' +
+            '<div class="dd-section-title">' + t('disc.detail.covers') + '</div>' +
             '<div class="dd-overview">' + overview + '</div>' +
-            '<a class="dd-why-btn" href="../../discipline/why/?d=' + key + '">Why match</a>' +
+            '<a class="dd-why-btn" href="../../discipline/why/?d=' + key + '">' + t('disc.detail.why_btn') + '</a>' +
           '</div>' +
           '<div class="dd-majors-panel">' +
             '<div class="dd-section-head">' +
-              '<div class="dd-section-title">Related Majors</div>' +
-              '<span class="hint">— ' + relMajors.length + ' majors in ' + d.name + '</span>' +
+              '<div class="dd-section-title">' + t('disc.detail.related') + '</div>' +
+              '<span class="hint">' + tf('disc.detail.related_count', { n: relMajors.length, name: t('disc.name.' + key) }) + '</span>' +
             '</div>' +
             '<div class="rm-grid">' + rmCards + '</div>' +
             lockBanner +

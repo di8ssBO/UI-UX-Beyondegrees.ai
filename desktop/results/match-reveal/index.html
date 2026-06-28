@@ -98,15 +98,15 @@
         <!-- HERO -->
         <div class="card glass-hero rv-hero">
           <div class="rv-ico">💻</div>
-          <div class="rv-disc">Engineering &amp; Technology</div>
+          <div class="rv-disc" data-i18n="disc.name.kt">Engineering &amp; Technology</div>
           <div class="rv-pct"><span id="pct">0</span>%</div>
-          <div class="rv-mr">Match Rate</div>
-          <div class="rv-top12"><span class="chip orange">⭐ Top 12% best match</span></div>
-          <div class="rv-born">You were born for <em>technology</em></div>
-          <p class="rv-sub">✨ AI analyzed your 30 answers and identified your academic DNA with high accuracy.</p>
+          <div class="rv-mr" data-i18n="results.match_label">Match Rate</div>
+          <div class="rv-top12"><span class="chip orange" data-i18n="results.top12">⭐ Top 12% best match</span></div>
+          <div class="rv-born"><span data-i18n="results.born_a">You were born for</span> <em data-i18n="results.born_em">technology</em></div>
+          <p class="rv-sub" data-i18n="results.ai_analyzed">✨ AI analyzed your 30 answers and identified your academic DNA with high accuracy.</p>
           <div class="rv-ctas">
-            <a class="btn btn-primary" href="../../discipline/match/">View full analysis →</a>
-            <a class="btn btn-ghost" href="../../discipline/why/">Why do I match?</a>
+            <a class="btn btn-primary" href="../../discipline/match/" data-i18n="results.view_full">View full analysis →</a>
+            <a class="btn btn-ghost" href="../../discipline/why/" data-i18n="results.why_match">Why do I match?</a>
           </div>
         </div>
 
@@ -114,10 +114,10 @@
         <div class="card dna-card">
           <div class="dsc-head">
             <div>
-              <div class="dsc-title">Academic DNA</div>
+              <div class="dsc-title" data-i18n="results.dna.label">Academic DNA</div>
               <div class="dsc-name-big">Hoang Phuc</div>
             </div>
-            <button class="dsc-share-btn" id="shareBtn">⤴ Share</button>
+            <button class="dsc-share-btn" id="shareBtn">⤴ <span data-i18n="results.dna.share">Share</span></button>
           </div>
           <div id="dnaRows"></div>
           <div class="dsc-foot"><b>✦ BeyonDegrees.ai</b><span>24/04/2026</span></div>
@@ -125,24 +125,27 @@
       </div>
 
       <!-- TOP MAJORS -->
-      <div class="section-title">Your Top Majors</div>
+      <div class="section-title" data-i18n="results.section.top_majors">Your Top Majors</div>
       <div class="grid grid-3 fade-in-stagger" id="majorCards"></div>
 
       <div style="text-align:center;margin-top:26px;">
-        <a class="btn btn-primary" href="../../major/recommendations/">Explore all matching majors →</a>
+        <a class="btn btn-primary" href="../../major/recommendations/" data-i18n="results.cta.explore">Explore all matching majors →</a>
       </div>
       <div class="bottom-ctas">
-        <a class="btn btn-ghost" href="../../quiz/quiz-card/">↺ Retake Quiz</a>
-        <button class="btn btn-ghost" id="saveBtn">🔖 Save Results</button>
+        <a class="btn btn-ghost" href="../../quiz/quiz-card/" data-i18n="results.cta.retake">↺ Retake Quiz</a>
+        <button class="btn btn-ghost" id="saveBtn" data-i18n="results.cta.save">🔖 Save Results</button>
       </div>
-      <div class="powered">✦ Powered by BeyonDegrees.ai</div>
+      <div class="powered" data-i18n="results.powered">✦ Powered by BeyonDegrees.ai</div>
 
     </div>
   </div>
 
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script>
+    /* i18n helper */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+
     /* ── Data — adapted from mobile script.js ── */
     var MATCH_PCT = 87;
     var DNA_DATA = [
@@ -171,7 +174,7 @@
       var el = document.createElement('div');
       el.className = 'dsc-row acc-' + d.disc;
       el.innerHTML =
-        '<span class="em">' + d.em + '</span><span class="nm">' + d.name + '</span>' +
+        '<span class="em">' + d.em + '</span><span class="nm">' + t('results.dna.' + d.disc) + '</span>' +
         '<div class="bar"><span class="dc-pfill" id="dscb-' + d.disc + '" style="width:0%"></span></div>' +
         '<span class="pc" id="dscp-' + d.disc + '">0%</span>';
       rows.appendChild(el);
@@ -196,7 +199,7 @@
         '<span class="pc">' + m.pct + '%</span></div>' +
         '<div class="mj-desc">' + m.desc + '</div>' +
         '<div class="mj-tags">' + m.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
-        '<div class="mj-foot"><a class="mj-view" href="../../major/detail/?major=' + encodeURIComponent(m.name) + '">View Path →</a>' +
+        '<div class="mj-foot"><a class="mj-view" href="../../major/detail/?major=' + encodeURIComponent(m.name) + '">' + t('results.major.view_path') + '</a>' +
         '<button class="mj-heart">♡</button></div>';
       el.querySelector('.mj-heart').onclick = function () {
         this.classList.toggle('on');
@@ -241,7 +244,7 @@
       })();
     })();
 
-    document.getElementById('saveBtn').onclick = function () { this.textContent = '✓ Saved!'; };
+    document.getElementById('saveBtn').onclick = function () { this.textContent = t('results.cta.saved'); };
     document.getElementById('shareBtn').onclick = function () { this.textContent = '✓ Copied'; };
   </script>
 </body>

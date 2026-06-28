@@ -266,11 +266,11 @@
       <div class="locked-state" id="lockedState">
         <div class="lock-banner">
           <div class="lock-emoji">🔒</div>
-          <div class="lock-title">Major Match Locked</div>
+          <div class="lock-title" data-i18n="major.lock_title">Major Match Locked</div>
           <div class="lock-sub" id="lockSubText">Complete more questions to unlock your best-fit majors.</div>
           <button class="lock-cta-btn" id="lockCta">Start Quiz →</button>
         </div>
-        <div class="teaser-label">🔮 Preview</div>
+        <div class="teaser-label" data-i18n="disc.preview">🔮 Preview</div>
         <div class="teaser-wrap">
           <div class="teaser-list">
             <div class="teaser-card">
@@ -295,24 +295,24 @@
 
       <!-- ── Main content: hiện khi đã trả lời ≥ 20 câu ── -->
       <div id="mainContent" style="display:none">
-        <span class="ai-chip">🔥 High Demand</span>
-        <h1 class="page-title mt-4">Majors Made <span class="ac">For You</span></h1>
-        <p class="page-sub">Discover majors tailored to your interests and strengths.</p>
+        <span class="ai-chip" data-i18n="major.demand_high">🔥 High Demand</span>
+        <h1 class="page-title mt-4" data-i18n="major.headline">Majors Made For You</h1>
+        <p class="page-sub" data-i18n="major.subtext">Discover majors tailored to your interests and strengths.</p>
 
         <!-- Two-column: filter chips (trái) + kết quả (phải) -->
         <div class="rec-layout">
         <aside class="rec-sidebar">
           <div class="sidebar-card">
-            <div class="sidebar-label">Filter by discipline</div>
+            <div class="sidebar-label" data-i18n="major.filter_by">Filter by discipline</div>
             <!-- Filter chips: fc-pct = điểm discipline (DISC_SCORES), màu theo mức match -->
             <div class="filter-chips" id="filterChips">
-              <button class="fc active" data-disc="all"><span class="fc-label">All majors</span></button>
-              <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span class="fc-label">Engineering</span><span class="fc-pct"></span></button>
-              <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span class="fc-label">Natural Sci</span><span class="fc-pct"></span></button>
-              <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span class="fc-label">Medical</span><span class="fc-pct"></span></button>
-              <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span class="fc-label">Agricultural</span><span class="fc-pct"></span></button>
-              <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span class="fc-label">Social Sci</span><span class="fc-pct"></span></button>
-              <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span class="fc-label">Humanities</span><span class="fc-pct"></span></button>
+              <button class="fc active" data-disc="all"><span class="fc-label" data-i18n="major.all_majors">All majors</span></button>
+              <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.eng">Engineering</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.natural">Natural Sci</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.medical">Medical</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.agri">Agricultural</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.social">Social Sci</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.humanities">Humanities</span><span class="fc-pct"></span></button>
             </div>
           </div>
         </aside>
@@ -323,22 +323,22 @@
           <div class="hm-disc-badge"><span class="hm-disc-dot" id="heroDiscDot"></span><span id="heroDiscName"></span></div>
           <div class="hm-top">
             <div class="hm-name" id="heroName"></div>
-            <div class="hm-pctwrap"><div class="hm-pct" id="heroPct"></div><div class="hm-lbl">Compatibility</div></div>
+            <div class="hm-pctwrap"><div class="hm-pct" id="heroPct"></div><div class="hm-lbl" data-i18n="major.compat">Compatibility</div></div>
           </div>
           <div class="hm-tags" id="heroTags"></div>
-          <button class="hm-cta" type="button" onclick="event.stopPropagation();goToDetail()">View Career Paths →</button>
+          <button class="hm-cta" type="button" onclick="event.stopPropagation();goToDetail()" data-i18n="major.view_career">View Career Paths →</button>
         </div>
 
         <!-- No results -->
         <div id="no-results">
           <div class="nr-icon">🔍</div>
-          <div class="nr-text">No majors found for this filter</div>
+          <div class="nr-text" data-i18n="major.no_results">No majors found for this filter</div>
         </div>
 
         <!-- Accordion: Top Picks -->
         <div class="acc-section" id="secTop">
           <div class="acc-hdr open" onclick="toggleAcc('top')">
-            <div class="acc-title-wrap"><span class="acc-icon">🎯</span><span class="acc-title">Top Picks</span><span class="acc-count" id="cntTop">0</span></div>
+            <div class="acc-title-wrap"><span class="acc-icon">🎯</span><span class="acc-title" data-i18n="major.top_picks">Top Picks</span><span class="acc-count" id="cntTop">0</span></div>
             <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </div>
           <div class="acc-body open" id="bodyTop"><div class="acc-inner" id="listTop"></div></div>
@@ -347,7 +347,7 @@
         <!-- Accordion: Also Fits -->
         <div class="acc-section" id="secMid">
           <div class="acc-hdr" onclick="toggleAcc('mid')">
-            <div class="acc-title-wrap"><span class="acc-icon">💡</span><span class="acc-title">Also Fits</span><span class="acc-count" id="cntMid">0</span></div>
+            <div class="acc-title-wrap"><span class="acc-icon">💡</span><span class="acc-title" data-i18n="major.also_fits">Also Fits</span><span class="acc-count" id="cntMid">0</span></div>
             <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </div>
           <div class="acc-body" id="bodyMid"><div class="acc-inner" id="listMid"></div></div>
@@ -356,12 +356,12 @@
         <!-- Accordion: Explore More -->
         <div class="acc-section" id="secLow">
           <div class="acc-hdr" onclick="toggleAcc('low')">
-            <div class="acc-title-wrap"><span class="acc-icon">🌐</span><span class="acc-title">Explore More</span><span class="acc-count" id="cntLow">0</span></div>
+            <div class="acc-title-wrap"><span class="acc-icon">🌐</span><span class="acc-title" data-i18n="major.explore_more">Explore More</span><span class="acc-count" id="cntLow">0</span></div>
             <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </div>
           <div class="acc-body" id="bodyLow">
             <div class="acc-inner" id="listLow"></div>
-            <div class="acc-hint">💬 Those majors are not your primary strengths, but you can still study them if you're passionate.</div>
+            <div class="acc-hint">💬 <span data-i18n="major.explore_hint">Those majors are not your primary strengths, but you can still study them if you're passionate.</span></div>
           </div>
         </div>
 
@@ -379,9 +379,13 @@
 
   <!-- Data thật từ app gốc — 50 majors + disciplines từ CSV (bản copy nội bộ desktop) -->
   <script src="../../../shared/scripts/data/majors-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
-  <script src="../../_shell/desktop.js?v=6"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=7"></script>
   <script>
+    /* i18n helpers */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     /* ── DISC_CODE → display info (từ DISCIPLINES) ── */
     var DISC = {};
     Object.values(DISCIPLINES).forEach(function (d) {
@@ -446,7 +450,7 @@
         '<div class="ml-left">' +
           '<div class="ml-ico" style="background:color-mix(in srgb,' + d.color + ' 16%,transparent)">' + m.icon + '</div>' +
           '<div class="ml-info">' +
-            '<div class="disc-badge" style="--bc:' + d.color + '"><span class="d-dot"></span><span class="d-name">' + d.name + '</span></div>' +
+            '<div class="disc-badge" style="--bc:' + d.color + '"><span class="d-dot"></span><span class="d-name">' + t('disc.short.' + m.disc) + '</span></div>' +
             '<div class="ml-name">' + m.name + '</div>' +
             '<div class="ml-sub">' + m.sub + '</div>' +
           '</div>' +
@@ -487,7 +491,7 @@
         heroCard.style.setProperty('--disc-rgb', pc.rgb);
         heroCard.style.setProperty('--disc-color', pc.color);
         $('heroDiscDot').style.background = hd.color;
-        $('heroDiscName').textContent = hd.fullName;
+        $('heroDiscName').textContent = t('disc.name.' + hero.disc);
         $('heroName').textContent = hero.name;
         $('heroPct').textContent = hero.pct + '%';
         $('heroTags').innerHTML = (hero.tags || [])
@@ -496,7 +500,7 @@
 
       [['top', top], ['mid', mid], ['low', low]].forEach(function (pair) {
         var tier = pair[0], list = pair[1], Key = tier.charAt(0).toUpperCase() + tier.slice(1);
-        $('list' + Key).innerHTML = list.length ? list.map(renderCard).join('') : '<div class="acc-empty">No majors here</div>';
+        $('list' + Key).innerHTML = list.length ? list.map(renderCard).join('') : '<div class="acc-empty">' + t('major.no_here') + '</div>';
         $('cnt' + Key).textContent = list.length;
         $('sec' + Key).style.display = list.length === 0 ? 'none' : '';
       });
@@ -532,12 +536,12 @@
       var lockSub = $('lockSubText'), lockCta = $('lockCta');
       if (answered < 10) {
         var rem1 = 10 - answered;
-        lockSub.innerHTML = 'Complete <strong>' + rem1 + ' more question' + (rem1 !== 1 ? 's' : '') + '</strong> to unlock Discipline results first.';
-        lockCta.textContent = answered > 0 ? 'Continue Quiz →' : 'Start Quiz →';
+        lockSub.textContent = tf('major.lock_disc_first', { n: rem1 });
+        lockCta.textContent = answered > 0 ? t('major.cta.continue') : t('disc.cta.start');
       } else {
         var rem2 = 20 - answered;
-        lockSub.innerHTML = 'Complete <strong>' + rem2 + ' more question' + (rem2 !== 1 ? 's' : '') + '</strong> to unlock your best-fit majors.';
-        lockCta.textContent = 'Continue Quiz →';
+        lockSub.textContent = tf('major.lock_sub_n', { n: rem2 });
+        lockCta.textContent = t('major.cta.continue');
       }
       lockCta.addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
     } else {
@@ -566,7 +570,7 @@
       if (answered >= 30) {
         continueWrap.style.display = 'none';
       } else {
-        continueBtn.textContent = 'Finish Quiz →';
+        continueBtn.textContent = t('major.cta.finish');
         continueBtn.addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
       }
     }

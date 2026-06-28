@@ -95,6 +95,11 @@
       LANGS: FALLBACK_LANGS,
       _lang: fallbackLang(),
       t: function (key) { return fallbackValue(this._lang, key) || key; },
+      tf: function (key, vars) {
+        var s = this.t(key);
+        if (vars) Object.keys(vars).forEach(function (k) { s = s.split('{' + k + '}').join(vars[k]); });
+        return s;
+      },
       apply: function (lang) {
         if (!FALLBACK_T[lang]) lang = 'en';
         this._lang = lang;
@@ -119,10 +124,10 @@
       init: function () { this.apply(fallbackLang()); },
       current: function () { return this._lang; }
     };
+    /* Match the shared engine: set _lang immediately, re-apply on DOMContentLoaded. */
+    window.BDi18n.init();
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', function () { window.BDi18n.init(); });
-    } else {
-      window.BDi18n.init();
     }
   }
 
@@ -317,11 +322,11 @@
     document.body.insertAdjacentHTML('beforeend',
       '<div class="bd-modal" id="bd-reset-modal">' +
         '<div class="card bd-mbox">' +
-          '<h3>Reset Account?</h3>' +
-          '<p>This will clear <b>all quiz progress</b> and all your answers.<br>You\'ll start fresh from <b>Question 1</b>.</p>' +
+          '<h3>' + trOr('edit.reset_title', 'Reset Account?') + '</h3>' +
+          '<p>' + trOr('edit.reset_body', 'This will clear all quiz progress and all your answers. You\'ll start fresh from Question 1.') + '</p>' +
           '<div class="bd-mbtns">' +
-            '<button class="btn btn-danger" id="bd-reset-confirm">Reset &amp; Start Over</button>' +
-            '<button class="btn btn-ghost" id="bd-reset-cancel">Cancel</button>' +
+            '<button class="btn btn-danger" id="bd-reset-confirm">' + trOr('edit.reset_confirm', 'Reset & Start Over') + '</button>' +
+            '<button class="btn btn-ghost" id="bd-reset-cancel">' + trOr('edit.cancel', 'Cancel') + '</button>' +
           '</div>' +
         '</div>' +
       '</div>');
