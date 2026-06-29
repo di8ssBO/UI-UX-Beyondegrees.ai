@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Academic DNA Card — BeyonDegrees.ai</title>
+  <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
   <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
@@ -280,7 +281,7 @@
         <div class="logo-icon">B</div>
         <span class="logo-text">BeyonDegrees.ai</span>
       </div>
-      <div class="page-title">Academic DNA · Shareable Card</div>
+      <div class="page-title" data-i18n="dna.page_title">Academic DNA · Shareable Card</div>
     </div>
 
     <!-- DNA Card -->
@@ -290,15 +291,15 @@
 
         <!-- Card Header -->
         <div class="card-header">
-          <div class="card-label">🧬 Academic DNA</div>
+          <div class="card-label" data-i18n="dna.card_label">🧬 Academic DNA</div>
           <div class="card-badge">✨</div>
         </div>
 
         <!-- Main Stat -->
         <div class="main-stat">
-          <span class="main-pct" id="mainPct">67%</span>
-          <div class="main-disc" id="mainDisc">Engineering &amp; Tech</div>
-          <div class="main-sub" id="mainSub">Your strongest academic match</div>
+          <span class="main-pct" id="mainPct"></span>
+          <div class="main-disc" id="mainDisc"></div>
+          <div class="main-sub" id="mainSub" data-i18n="dna.main_sub">Your strongest academic match</div>
         </div>
 
         <!-- DNA Bars -->
@@ -308,28 +309,26 @@
 
         <!-- Tagline -->
         <div class="tagline">
-          <div class="tagline-text" id="taglineText">
-            Your Academic DNA: <strong>67% Engineering</strong> | <strong>52% Humanities</strong>
-          </div>
+          <div class="tagline-text" id="taglineText"></div>
         </div>
 
         <!-- Share -->
-        <div class="share-label">Share your results</div>
+        <div class="share-label" data-i18n="dna.share_label">Share your results</div>
         <div class="share-row">
           <button class="share-btn share-instagram" onclick="handleShare('instagram')">
-            <span>📸</span> Instagram
+            <span>📸</span> <span data-i18n="dna.share_instagram">Instagram</span>
           </button>
           <button class="share-btn share-tiktok" onclick="handleShare('tiktok')">
-            <span>🎵</span> TikTok
+            <span>🎵</span> <span data-i18n="dna.share_tiktok">TikTok</span>
           </button>
           <button class="share-btn share-copy" onclick="handleShare('copy')">
-            <span>🔗</span> Copy
+            <span>🔗</span> <span data-i18n="dna.share_copy">Copy</span>
           </button>
         </div>
 
         <!-- CTA -->
-        <a href="../onboarding/home/" class="cta-btn">
-          Discover yours <span>→</span>
+        <a href="../onboarding/home/" class="cta-btn" data-i18n="dna.cta">
+          Discover yours →
         </a>
 
       </div>
@@ -337,84 +336,76 @@
 
     <!-- Controls -->
     <div class="controls">
-      <button class="ctrl-btn active" id="btn0" onclick="loadProfile(0)">👤 Tech Profile</button>
-      <button class="ctrl-btn" id="btn1" onclick="loadProfile(1)">🎨 Arts Profile</button>
-      <button class="ctrl-btn" id="btn2" onclick="loadProfile(2)">🔬 Science Profile</button>
+      <button class="ctrl-btn active" id="btn0" onclick="loadProfile(0)">👤 <span data-i18n="dna.ctrl_tech">Tech Profile</span></button>
+      <button class="ctrl-btn" id="btn1" onclick="loadProfile(1)">🎨 <span data-i18n="dna.ctrl_arts">Arts Profile</span></button>
+      <button class="ctrl-btn" id="btn2" onclick="loadProfile(2)">🔬 <span data-i18n="dna.ctrl_science">Science Profile</span></button>
     </div>
 
     <div class="bottom-hint">
-      ← <a href="./match-reveal/">Back to Results</a> &nbsp;·&nbsp; <a href="../../">All Screens</a>
+      ← <a href="./match-reveal/" data-i18n="dna.back">Back to Results</a> &nbsp;·&nbsp; <a href="../../" data-i18n="dna.all_screens">All Screens</a>
     </div>
 
   </div>
 
   <!-- Toast -->
-  <div class="toast" id="toast">✓ Link copied to clipboard!</div>
+  <div class="toast" id="toast"></div>
 
   <script>
-    const t = k => window.BDi18n ? BDi18n.t(k) : k;
+    var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
+    // Bar field keys (translated at render time)
+    const BAR_KEYS = [
+      { icon: '⚡', key: 'dna.bar.eng',     cls: 'bar-blue'   },
+      { icon: '📚', key: 'dna.bar.hum',     cls: 'bar-violet' },
+      { icon: '🔬', key: 'dna.bar.sci',     cls: 'bar-teal'   },
+      { icon: '🩺', key: 'dna.bar.health',  cls: 'bar-mint'   },
+      { icon: '🌐', key: 'dna.bar.social',  cls: 'bar-orange' },
+      { icon: '🌾', key: 'dna.bar.agri',    cls: 'bar-green'  },
+    ];
+
+    // PROFILES: pct values per profile, bar order by BAR_KEYS index
     const PROFILES = [
       {
-        name: 'Tech Profile',
         mainPct: '67%',
-        mainDisc: 'Engineering &amp; Tech',
-        mainSub: 'Your strongest academic match',
-        tagline: 'Your Academic DNA: <strong>67% Engineering</strong> | <strong>52% Humanities</strong>',
-        bars: [
-          { icon: '⚡', name: 'Engineering & Tech',  pct: 67, cls: 'bar-blue'   },
-          { icon: '📚', name: 'Humanities',           pct: 52, cls: 'bar-violet' },
-          { icon: '🔬', name: 'Natural Sciences',     pct: 48, cls: 'bar-teal'   },
-          { icon: '🩺', name: 'Health & Medicine',    pct: 35, cls: 'bar-mint'   },
-          { icon: '🌐', name: 'Social Sciences',      pct: 30, cls: 'bar-orange' },
-          { icon: '🌾', name: 'Agriculture',           pct: 15, cls: 'bar-green'  },
-        ]
+        discKey: 'dna.disc.eng',
+        taglineKey: 'dna.tagline.tech',
+        // bar pct by BAR_KEYS index: eng, hum, sci, health, social, agri
+        barPcts: [67, 52, 48, 35, 30, 15],
+        barOrder: [0, 1, 2, 3, 4, 5],
       },
       {
-        name: 'Arts Profile',
         mainPct: '81%',
-        mainDisc: 'Humanities',
-        mainSub: 'Your strongest academic match',
-        tagline: 'Your Academic DNA: <strong>81% Humanities</strong> | <strong>60% Social Sciences</strong>',
-        bars: [
-          { icon: '📚', name: 'Humanities',           pct: 81, cls: 'bar-violet' },
-          { icon: '🌐', name: 'Social Sciences',      pct: 60, cls: 'bar-orange' },
-          { icon: '⚡', name: 'Engineering & Tech',   pct: 38, cls: 'bar-blue'   },
-          { icon: '🩺', name: 'Health & Medicine',    pct: 32, cls: 'bar-mint'   },
-          { icon: '🔬', name: 'Natural Sciences',     pct: 28, cls: 'bar-teal'   },
-          { icon: '🌾', name: 'Agriculture',           pct: 12, cls: 'bar-green'  },
-        ]
+        discKey: 'dna.disc.hum',
+        taglineKey: 'dna.tagline.arts',
+        barPcts: [38, 81, 28, 32, 60, 12],
+        barOrder: [1, 4, 0, 3, 2, 5],
       },
       {
-        name: 'Science Profile',
         mainPct: '74%',
-        mainDisc: 'Natural Sciences',
-        mainSub: 'Your strongest academic match',
-        tagline: 'Your Academic DNA: <strong>74% Natural Sciences</strong> | <strong>65% Health &amp; Medicine</strong>',
-        bars: [
-          { icon: '🔬', name: 'Natural Sciences',     pct: 74, cls: 'bar-teal'   },
-          { icon: '🩺', name: 'Health & Medicine',    pct: 65, cls: 'bar-mint'   },
-          { icon: '⚡', name: 'Engineering & Tech',   pct: 55, cls: 'bar-blue'   },
-          { icon: '🌾', name: 'Agriculture',           pct: 40, cls: 'bar-green'  },
-          { icon: '🌐', name: 'Social Sciences',      pct: 22, cls: 'bar-orange' },
-          { icon: '📚', name: 'Humanities',           pct: 18, cls: 'bar-violet' },
-        ]
+        discKey: 'dna.disc.sci',
+        taglineKey: 'dna.tagline.science',
+        barPcts: [55, 18, 74, 65, 22, 40],
+        barOrder: [2, 3, 0, 5, 4, 1],
       }
     ];
 
     let currentProfile = 0;
 
-    function renderBars(bars) {
+    function renderBars(p) {
       const container = document.getElementById('dnaBars');
-      container.innerHTML = bars.map(b => `
+      container.innerHTML = p.barOrder.map(i => {
+        const b = BAR_KEYS[i];
+        const pct = p.barPcts[i];
+        return `
         <div class="dna-row">
           <span class="dna-icon">${b.icon}</span>
-          <span class="dna-name">${b.name}</span>
+          <span class="dna-name">${t(b.key)}</span>
           <div class="dna-bar-track">
-            <div class="dna-bar-fill ${b.cls}" style="width:0%" data-target="${b.pct}%"></div>
+            <div class="dna-bar-fill ${b.cls}" style="width:0%" data-target="${pct}%"></div>
           </div>
-          <span class="dna-pct">${b.pct}%</span>
-        </div>
-      `).join('');
+          <span class="dna-pct">${pct}%</span>
+        </div>`;
+      }).join('');
       // Animate bars in
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -429,12 +420,10 @@
       currentProfile = idx;
       const p = PROFILES[idx];
       document.getElementById('mainPct').textContent = p.mainPct;
-      document.getElementById('mainDisc').innerHTML = p.mainDisc;
-      var mainSubEl = document.getElementById('mainSub');
-      mainSubEl.textContent = t('dna.main_sub');
-      mainSubEl.setAttribute('data-i18n', 'dna.main_sub');
-      document.getElementById('taglineText').innerHTML = p.tagline;
-      renderBars(p.bars);
+      document.getElementById('mainDisc').textContent = t(p.discKey);
+      document.getElementById('mainSub').textContent = t('dna.main_sub');
+      document.getElementById('taglineText').innerHTML = t(p.taglineKey);
+      renderBars(p);
       // Update button states
       document.querySelectorAll('.ctrl-btn').forEach((btn, i) => {
         btn.classList.toggle('active', i === idx);
@@ -443,9 +432,9 @@
 
     function handleShare(platform) {
       const msg = {
-        instagram: '📸 Opening Instagram Stories...',
-        tiktok: '🎵 Opening TikTok...',
-        copy: '✓ Link copied to clipboard!'
+        instagram: t('dna.toast_instagram'),
+        tiktok:    t('dna.toast_tiktok'),
+        copy:      t('dna.toast_copy'),
       };
       showToast(msg[platform]);
     }

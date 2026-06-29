@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Major Detail — BeyonDegrees.ai</title>
+<script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
 <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,12 +13,14 @@
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="style.css">
+<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
 </head>
 <body>
 
 <!-- Breadcrumb (desktop) -->
 <div class="breadcrumb" id="breadcrumb">
-  <a href="../recommendations-v2/" class="breadcrumb-item">Majors</a>
+  <a href="../recommendations-v2/" class="breadcrumb-item" data-i18n="nav.majors">Majors</a>
   <span class="breadcrumb-separator">/</span>
   <span class="breadcrumb-item active" id="bcTitle">Major Detail</span>
 </div>
@@ -29,7 +32,7 @@
 
       <!-- Status Bar -->
       <div class="status-bar">
-        <span>9:41</span>
+        <span id="statusTime">9:41</span>
         <div class="status-icons">
           <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
             <rect x="0" y="3" width="2" height="7" rx="1"/>
@@ -87,7 +90,7 @@
       <div class="detail-body" id="detailBody">
         <div class="not-found" id="loadingState">
           <div class="not-found-icon">⏳</div>
-          <div class="not-found-title">Loading…</div>
+          <div class="not-found-title" data-i18n="major.detail.loading">Loading…</div>
         </div>
       </div>
 
@@ -159,7 +162,7 @@
                 <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="tab-label"></span>
+            <span class="tab-label" data-i18n="nav.account">Account</span>
           </a>
 
       </nav>
@@ -333,7 +336,7 @@ function getBullets(major, disc){
   const sentences = major.desc.replace(/\n/g,' ').split(/(?<=[.!?])\s+/).filter(s=>s.length>30);
   const picks = sentences.slice(0,3).map(s=>s.replace(/^(This field|This discipline|It )/i,'').trim());
   if(picks.length < 3 && disc){
-    picks.push(`Part of the ${disc.title} discipline — ${disc.short || disc.title} cluster.`);
+    picks.push((window.BDi18n ? window.BDi18n.t('major.detail.bullet_fallback') : 'Part of the {disc} discipline.').replace(/\{disc\}/g, disc.title));
   }
   return picks.slice(0,3);
 }
@@ -390,7 +393,7 @@ function showPicker(){
 
   // Hide hero, simplify header
   document.getElementById('hero').style.display = 'none';
-  document.getElementById('pageTitle').textContent = 'Major Detail';
+  document.getElementById('pageTitle').textContent = _t('major.detail.title') || 'Major Detail';
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -420,13 +423,14 @@ function render(){
   const id = parseInt(rawId);
   const major = MAJORS_DATA.find(m=>m.id===id);
   if(!major){
-    body.innerHTML=`<div class="not-found"><div class="not-found-icon">😕</div><div class="not-found-title">ID ${id} not found</div><div class="not-found-sub">Go back to <a href="./" style="color:var(--violet-400)">major list</a>.</div></div>`;
+    const _tnf = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : k => k;
+    body.innerHTML=`<div class="not-found"><div class="not-found-icon">😕</div><div class="not-found-title">${_tnf('major.detail.not_found').replace('{id}', id)}</div><div class="not-found-sub"><a href="./" style="color:var(--violet-400)">${_tnf('major.detail.go_back')}</a>.</div></div>`;
     return;
   }
 
   const disc    = major.discId ? DISCIPLINES[String(major.discId)] : null;
   const color   = disc ? disc.color : '#7c3aed';
-  const discTitle  = disc ? (disc.short || disc.title) : 'General';
+  const discTitle  = disc ? (disc.short || disc.title) : (window.BDi18n ? window.BDi18n.t('major.detail.general') : 'General');
   const discIcon   = disc ? disc.icon : '📌';
   const discCode   = major.discCode || '';
   const matchPct   = getMatchPct(id);
@@ -468,12 +472,12 @@ function render(){
   const CHEV='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
 
   // ── i18n helper ──
-  const t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : k => k;
+  var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 
   // ── Body ──
   body.innerHTML = `
     <!-- Tagline -->
-    <p class="detail-desc">${major.title}: ${discTitle} pathway</p>
+    <p class="detail-desc">${major.title}: ${discTitle} ${t('major.detail.pathway')}</p>
 
     <!-- Bullets -->
     <div class="detail-bullets">
@@ -526,6 +530,8 @@ function render(){
 
 }
 
+(function(){function uc(){var el=document.getElementById('statusTime');if(!el)return;var n=new Date(),h=n.getHours(),m=n.getMinutes();el.textContent=h+':'+(m<10?'0':'')+m;}uc();setInterval(uc,30000);})();
+
 document.addEventListener('DOMContentLoaded', render);
 
 /* ── Quiz CTA: Finish Quiz (20-29), ẩn khi >= 30 ────────────────────── */
@@ -544,8 +550,5 @@ document.addEventListener('DOMContentLoaded', render);
 })();
 </script>
 <script src="../../../shared/scripts/ui/tab-lock.js"></script>
-<script>/* theme init */(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
-<script src="../../../shared/scripts/ui/i18n.js"></script>
-<script src="../../../shared/scripts/ui/bd-profile.js"></script>
 </body>
 </html>

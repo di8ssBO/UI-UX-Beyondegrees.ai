@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Discipline Match — BeyonDegrees.ai</title>
@@ -106,13 +106,13 @@
 </style>
 </head>
 <body>
-<div class="breadcrumb"><a href="#" class="breadcrumb-item">BeyonDegrees-UI</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-item active">Discipline Match</span></div>
+<div class="breadcrumb"><a href="#" class="breadcrumb-item">BeyonDegrees-UI</a><span class="breadcrumb-separator">/</span><span class="breadcrumb-item active" data-i18n="disc.breadcrumb">Discipline Match</span></div>
 <div class="desktop-container">
   <div class="device-frame"><div class="device-notch"></div>
     <div class="mobile-screen"><div class="ds">
       <div class="ds-aurora"></div>
       <div class="status-bar">
-        <span>9:41</span>
+        <span id="statusTime">9:41</span>
         <div class="status-icons">
           <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
           <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
@@ -171,7 +171,7 @@
         <div id="discCardsWrap">
         <!-- Card 1 -->
         <div class="dc dc-kt"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">💻</div><div><div class="dc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="dc-rank">#1 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">💻</div><div><div class="dc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="dc-rank">#1 <span data-i18n="disc.rank_label">Ranked</span></div></div></div>
           <div style="text-align:right"><div class="dc-pct">94%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:94%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.kt">You possess strong analytical reasoning and a natural inclination toward systematic problem-solving and science innovation.</p>
@@ -179,7 +179,7 @@
         </div>
         <!-- Card 2 -->
         <div class="dc dc-tn"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128300;</div><div><div class="dc-name" data-i18n="disc.name.tn">Natural Sciences</div><div class="dc-rank">#2 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128300;</div><div><div class="dc-name" data-i18n="disc.name.tn">Natural Sciences</div><div class="dc-rank">#2 <span data-i18n="disc.rank_label">Ranked</span></div></div></div>
           <div style="text-align:right"><div class="dc-pct">89%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:89%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.tn">Your curiosity about the physical world and mathematical approach to observation align with life and physical science paths.</p>
@@ -187,7 +187,7 @@
         </div>
         <!-- Card 3 -->
         <div class="dc dc-yt"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">⚕️</div><div><div class="dc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="dc-rank">#3 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">⚕️</div><div><div class="dc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="dc-rank">#3 <span data-i18n="disc.rank_label">Ranked</span></div></div></div>
           <div style="text-align:right"><div class="dc-pct">64%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:64%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.yt">Your empathy and precision-oriented mindset suit healthcare and biomedical paths focused on improving human well-being.</p>
@@ -195,7 +195,7 @@
         </div>
         <!-- Card 4 -->
         <div class="dc dc-nn"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#127806;</div><div><div class="dc-name" data-i18n="disc.name.nn">Agricultural Sciences</div><div class="dc-rank">#4 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#127806;</div><div><div class="dc-name" data-i18n="disc.name.nn">Agricultural Sciences</div><div class="dc-rank">#4 <span data-i18n="disc.rank_label">Ranked</span></div></div></div>
           <div style="text-align:right"><div class="dc-pct">62%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:62%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.nn">A grounded approach to sustainability and life sciences positions you well for agronomy, food science, and environmental stewardship.</p>
@@ -203,7 +203,7 @@
         </div>
         <!-- Card 5 -->
         <div class="dc dc-xh"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">🌍</div><div><div class="dc-name" data-i18n="disc.name.xh">Social Sciences</div><div class="dc-rank">#5 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">🌍</div><div><div class="dc-name" data-i18n="disc.name.xh">Social Sciences</div><div class="dc-rank">#5 <span data-i18n="disc.rank_label">Ranked</span></div></div></div>
           <div style="text-align:right"><div class="dc-pct">34%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:34%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.xh">A deep interest in human behavior, societal structures, and interpersonal dynamics makes this a moderate-fit field for your profile.</p>
@@ -211,7 +211,7 @@
         </div>
         <!-- Card 6 -->
         <div class="dc dc-nv"><div class="dc-bar"></div>
-          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128214;</div><div><div class="dc-name" data-i18n="disc.name.nv">Humanities</div><div class="dc-rank">#6 Ranked</div></div></div>
+          <div class="dc-top"><div class="dc-left"><div class="dc-ico">&#128214;</div><div><div class="dc-name" data-i18n="disc.name.nv">Humanities</div><div class="dc-rank">#6 <span data-i18n="disc.rank_label">Ranked</span></div></div></div>
           <div style="text-align:right"><div class="dc-pct">32%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:32%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.nv">Your appreciation for language, culture, and critical thinking gives you a foundation in literature, philosophy, and history paths.</p>
@@ -259,7 +259,7 @@
                 <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
               </svg>
             </span>
-            <span class="tab-label"></span>
+            <span class="tab-label" data-i18n="nav.account">Account</span>
           </a>
         </nav>
       </div>
@@ -310,12 +310,12 @@
 
   /* Thứ tự xen kẽ cao-thấp → hình radar lồi lõm: 94→34→89→32→64→62 */
   var DISC = [
-    { key:'kt', name:'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:DISC_COLORS.kt, pct:dnaPct('kt'), angle:0   },
-    { key:'xh', name:'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:DISC_COLORS.xh, pct:dnaPct('xh'), angle:60  },
-    { key:'tn', name:'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:DISC_COLORS.tn, pct:dnaPct('tn'), angle:120 },
-    { key:'nv', name:'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:DISC_COLORS.nv, pct:dnaPct('nv'), angle:180 },
-    { key:'yt', name:'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:DISC_COLORS.yt, pct:dnaPct('yt'), angle:240 },
-    { key:'nn', name:'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:DISC_COLORS.nn, pct:dnaPct('nn'), angle:300 },
+    { key:'kt', name:window.BDi18n?window.BDi18n.t('disc.name.kt'):'Engineering & Tech', cst:'ORION',      myth:'Like Orion - precise, powerful & systematic',  color:DISC_COLORS.kt, pct:dnaPct('kt'), angle:0   },
+    { key:'xh', name:window.BDi18n?window.BDi18n.t('disc.name.xh'):'Social Sciences',    cst:'GEMINI',     myth:'Like Gemini - connecting, expressive & dual',   color:DISC_COLORS.xh, pct:dnaPct('xh'), angle:60  },
+    { key:'tn', name:window.BDi18n?window.BDi18n.t('disc.name.tn'):'Natural Sciences',   cst:'CASSIOPEIA', myth:'Like Cassiopeia - curious, observant & exact',  color:DISC_COLORS.tn, pct:dnaPct('tn'), angle:120 },
+    { key:'nv', name:window.BDi18n?window.BDi18n.t('disc.name.nv'):'Humanities',         cst:'VIRGO',      myth:'Like Virgo - graceful, nuanced & cultural',     color:DISC_COLORS.nv, pct:dnaPct('nv'), angle:180 },
+    { key:'yt', name:window.BDi18n?window.BDi18n.t('disc.name.yt'):'Medical & Health',   cst:'OPHIUCHUS',  myth:'Like Ophiuchus - the healer & serpent-holder',  color:DISC_COLORS.yt, pct:dnaPct('yt'), angle:240 },
+    { key:'nn', name:window.BDi18n?window.BDi18n.t('disc.name.nn'):'Agricultural Sci',   cst:'TAURUS',     myth:'Like Taurus - grounded, patient & sustaining',  color:DISC_COLORS.nn, pct:dnaPct('nn'), angle:300 },
   ];
 
   /* Xếp hạng để điều chỉnh độ sáng (rank 0 = cao nhất) */
@@ -530,7 +530,7 @@
     c.style.transition = 'opacity 0.45s ease';
     c.addEventListener('click', (function(disc){
       return function(){
-        tooltip.textContent = disc.myth;
+        tooltip.textContent = window.BDi18n ? window.BDi18n.t('disc.cst.myth.' + disc.key) : disc.myth;
         tooltip.style.color = disc.color;
         tooltip.style.borderColor = disc.color + '60';
         tooltip.style.opacity = '1';
@@ -561,6 +561,7 @@
     t2.setAttribute('text-anchor','middle');
     t2.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
     t2.textContent = d.name;
+    t2.setAttribute('data-i18n', 'disc.name.' + d.key);
     svg.appendChild(t2);
 
     /* t3: % number — ẩn, xuất hiện pha cuối */
@@ -583,18 +584,19 @@
   cLabel.setAttribute('font-size','5'); cLabel.setAttribute('font-weight','600');
   cLabel.setAttribute('text-anchor','middle'); cLabel.setAttribute('letter-spacing','1.5');
   cLabel.setAttribute('font-family','Plus Jakarta Sans, sans-serif');
-  cLabel.textContent = 'ACADEMIC DNA';
+  cLabel.textContent = window.BDi18n ? window.BDi18n.t('disc.cst.center') : 'ACADEMIC DNA';
   svg.appendChild(cLabel);
 
   if (container) container.appendChild(svg);
 
   /* Caption */
   var capKey = milestone >= 30 ? 30 : milestone >= 20 ? 20 : milestone >= 10 ? 10 : 0;
+  var _tc = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k,d){return d;};
   var captions = {
-    0:  'Complete the quiz to reveal your Academic DNA ✨',
-    10: 'Top 2 disciplines revealed — tap a vertex star to explore 🔥',
-    20: '4 disciplines formed — 1 stage to complete your DNA ⚡',
-    30: 'Your complete Academic DNA — tap any vertex to explore 🌌',
+    0:  _tc('disc.caption.0',  'Complete the quiz to reveal your Academic DNA ✨'),
+    10: _tc('disc.caption.10', 'Top 2 disciplines revealed — tap a vertex star to explore 🔥'),
+    20: _tc('disc.caption.20', '4 disciplines formed — 1 stage to complete your DNA ⚡'),
+    30: _tc('disc.caption.30', 'Your complete Academic DNA — tap any vertex to explore 🌌'),
   };
   var cap = document.getElementById('cstCaption');
   if (cap) cap.textContent = captions[capKey];
@@ -681,12 +683,13 @@
     });
   });
 })();
+/* ── Live clock ── */
+(function(){function uc(){var el=document.getElementById('statusTime');if(!el)return;var n=new Date(),h=n.getHours(),m=n.getMinutes();el.textContent=h+':'+(m<10?'0':'')+m;}uc();setInterval(uc,30000);})();
 </script>
 <script src="../../../shared/scripts/ui/discipline-nav.js"></script>
 
 
-<script src="../../../shared/scripts/ui/tab-lock.js"></script>
-<script>/* theme init */(function(){var s="light";try{s=localStorage.getItem("bd-theme")||"light";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script><script>
+<script src="../../../shared/scripts/ui/tab-lock.js"></script><script>
 (function () {
   const DISC_MAP = { 'dc-kt':'kt', 'dc-tn':'tn', 'dc-xh':'xh', 'dc-nv':'nv', 'dc-yt':'yt', 'dc-nn':'nn' };
   document.querySelectorAll('.dc').forEach(function (card) {
@@ -723,8 +726,8 @@
     }
 
     var rem = 10 - progress;
-    var t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
-    if (sub) sub.innerHTML = 'Complete <strong style="color:var(--text-primary)">' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</strong> to unlock your Discipline results.';
+    var _tl = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : function(k){return k;};
+    if (sub) sub.textContent = _tl('disc.detail.unlock_banner').replace('{n}', rem);
     if (cta) {
       var isContinue = progress > 0;
       /* Update data-i18n so i18n.js (loaded after this script) uses the correct key */
