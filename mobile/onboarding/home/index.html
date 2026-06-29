@@ -19,7 +19,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js', { scope: '/mobile/' })
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
           .catch(err => console.warn('SW registration failed:', err));
       });
     }
@@ -50,6 +50,7 @@
   <link rel="stylesheet" href="./style.css">
   <script src="../../../shared/scripts/ui/i18n.js"></script>
 <script src="../../../shared/scripts/ui/bd-profile.js"></script>
+<script src="../../../shared/scripts/ui/pwa-install.js" defer></script>
 
 <style>
 
