@@ -130,6 +130,19 @@
   color: #fff;
 }
 
+/* Understand Matches — cyan */
+.app-menu-item[data-menu-action="understand-matches"] {
+  background: linear-gradient(135deg, rgba(8,145,178,0.52) 0%, rgba(34,211,238,0.38) 100%);
+  border-color: rgba(103,232,249,0.55);
+  color: #CFFAFE;
+  box-shadow: 0 2px 12px rgba(34,211,238,0.28), 0 0 0 1px rgba(103,232,249,0.15) inset;
+}
+.app-menu-item[data-menu-action="understand-matches"]:hover {
+  background: linear-gradient(135deg, rgba(8,145,178,0.70) 0%, rgba(34,211,238,0.56) 100%);
+  border-color: rgba(103,232,249,0.75);
+  color: #fff;
+}
+
 /* Leave Review — green */
 .app-menu-item[data-menu-action="leave-review"] {
   background: linear-gradient(135deg, rgba(5,150,105,0.52) 0%, rgba(16,185,129,0.38) 100%);
@@ -191,6 +204,12 @@
 [data-theme="light"] .app-menu-item[data-menu-action="my-account"]:hover {
   background: rgba(24,99,220,0.18) !important;
 }
+[data-theme="light"] .app-menu-item[data-menu-action="understand-matches"] {
+  background: rgba(8,145,178,0.10) !important; border-color: rgba(8,145,178,0.22) !important; color: #0e7490 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="understand-matches"]:hover {
+  background: rgba(8,145,178,0.18) !important;
+}
 [data-theme="light"] .app-menu-item[data-menu-action="leave-review"] {
   background: rgba(5,150,105,0.10) !important; border-color: rgba(5,150,105,0.22) !important; color: #059669 !important;
 }
@@ -227,12 +246,14 @@
   transition: background 0.15s;
 }
 .app-menu-icon--account  { background: rgba(24,99,220,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(24,99,220,0.40); }
+.app-menu-icon--understand { background: rgba(8,145,178,0.55); color: #fff; box-shadow: 0 2px 8px rgba(34,211,238,0.36); }
 .app-menu-icon--review   { background: rgba(5,150,105,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(16,185,129,0.36); }
 .app-menu-icon--share    { background: rgba(109,40,217,0.55);  color: #fff; box-shadow: 0 2px 8px rgba(139,92,246,0.40); }
 .app-menu-icon--contact  { background: rgba(180,110,0,0.60);   color: #fff; box-shadow: 0 2px 8px rgba(245,158,11,0.36); }
 .app-menu-icon--danger   { background: rgba(185,28,28,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.38); }
 
 [data-theme="light"] .app-menu-icon--account  { background: rgba(24,99,220,0.15) !important;  color: #1863DC !important; }
+[data-theme="light"] .app-menu-icon--understand { background: rgba(8,145,178,0.15) !important; color: #0e7490 !important; }
 [data-theme="light"] .app-menu-icon--review   { background: rgba(5,150,105,0.15) !important;   color: #059669 !important; }
 [data-theme="light"] .app-menu-icon--share    { background: rgba(109,40,217,0.15) !important;  color: #7c3aed !important; }
 [data-theme="light"] .app-menu-icon--contact  { background: rgba(217,119,6,0.15) !important;   color: #d97706 !important; }

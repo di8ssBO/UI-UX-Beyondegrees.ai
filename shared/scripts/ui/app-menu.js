@@ -104,11 +104,14 @@
       });
       try { sessionStorage.setItem('bd_reset_success','1'); } catch(e) {}
 
+      var wrap = document.querySelector('.app-menu-wrap');
+      var home = (wrap && wrap.getAttribute('data-home')) || '../../onboarding/home/';
+
       var btn = document.getElementById('appMenuResetConfirm');
       btn.textContent = _t('menu.resetting','Resetting…');
       btn.style.opacity = '0.7';
       setTimeout(function () {
-        window.location.href = '../../onboarding/home/';
+        window.location.href = home;
       }, 800);
     });
   }

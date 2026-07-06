@@ -120,11 +120,16 @@
       </div>
       <div class="ds-hdr">
         <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
-        <div class="app-menu-wrap">
+        <div class="app-menu-wrap" data-home="../../onboarding/home/">
           <button class="app-menu-btn" aria-label="Menu">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
           <div class="app-dropdown">
+            <div class="app-menu-section" data-i18n="menu.section_explore">Explore</div>
+            <a href="../../understand-matches/" class="app-menu-item" data-menu-action="understand-matches">
+              <span class="app-menu-icon app-menu-icon--understand"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="9" r="6"/><circle cx="12" cy="15" r="6"/></svg></span>
+              <span data-i18n="menu.understand_matches">Understand Matches</span>
+            </a>
             <div class="app-menu-section" data-i18n="menu.section_account">Account</div>
             <a href="../../profile/edit/" class="app-menu-item" data-menu-action="my-account">
               <span class="app-menu-icon app-menu-icon--account"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a4 4 0 014-4h8a4 4 0 014 4v2"/></svg></span>
@@ -732,7 +737,7 @@
       var isContinue = progress > 0;
       /* Update data-i18n so i18n.js (loaded after this script) uses the correct key */
       cta.setAttribute('data-i18n', isContinue ? 'disc.cta.continue' : 'disc.cta.start');
-      cta.textContent = isContinue ? t('disc.cta.continue') : t('disc.cta.start');
+      cta.textContent = isContinue ? _tl('disc.cta.continue') : _tl('disc.cta.start');
       var isLight = document.documentElement.getAttribute('data-theme') === 'light';
       if (isContinue) {
         cta.style.background = isLight ? 'linear-gradient(135deg, #0D9488 0%, #0F766E 100%)' : 'linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%)';

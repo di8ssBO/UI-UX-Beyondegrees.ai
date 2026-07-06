@@ -131,7 +131,7 @@
       }
       return a;
     }
-    var LABELS = { agree:'Agree ✓', strong:'Strong ⚡', neutral:'Neutral –', disagree:'Disagree ✕' };
+    var LABELS = { agree:'Agree ✓', strong:'Strong ⚡', neutral:'Unsure –', disagree:'Disagree ✕' };
 
     var id = BD.param('u', 'fulbright');
     var u = (window.UNI_DATA || []).find(function (x) { return x.id === id; }) || UNI_DATA[0];
@@ -176,7 +176,7 @@
               '<div class="mt-4">' +
                 '<div class="bd-row row-line"><span class="as-chip agree">Agree ✓</span><b>' + counts.agree + '</b></div>' +
                 '<div class="bd-row row-line"><span class="as-chip strong">Strong agree ⚡</span><b>' + counts.strong + '</b></div>' +
-                '<div class="bd-row row-line"><span class="as-chip neutral">Neutral –</span><b>' + counts.neutral + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip neutral">Unsure –</span><b>' + counts.neutral + '</b></div>' +
                 '<div class="bd-row"><span class="as-chip disagree">Disagree ✕</span><b>' + counts.disagree + '</b></div>' +
               '</div>' +
             '</div>' +

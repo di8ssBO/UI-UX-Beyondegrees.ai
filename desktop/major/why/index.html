@@ -137,7 +137,7 @@
           { text:'I care about how food is safely produced for millions of people.', answer:'strong' },
           { text:'Forests, oceans, and ecosystems need protecting — I want to do that.', answer:'agree' } ] }
     };
-    var LABELS = { agree:'Agree ✓', strong:'Strong ⚡', neutral:'Neutral –', disagree:'Disagree ✕' };
+    var LABELS = { agree:'Agree ✓', strong:'Strong ⚡', neutral:'Unsure –', disagree:'Disagree ✕' };
 
     var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
     var wanted = BD.param('major', 'Computer and information sciences');
@@ -193,7 +193,7 @@
               '<div class="mt-4">' +
                 '<div class="bd-row row-line"><span class="as-chip agree">Agree ✓</span><b>' + counts.agree + '</b></div>' +
                 '<div class="bd-row row-line"><span class="as-chip strong">Strong agree ⚡</span><b>' + counts.strong + '</b></div>' +
-                '<div class="bd-row row-line"><span class="as-chip neutral">Neutral –</span><b>' + counts.neutral + '</b></div>' +
+                '<div class="bd-row row-line"><span class="as-chip neutral">Unsure –</span><b>' + counts.neutral + '</b></div>' +
                 '<div class="bd-row"><span class="as-chip disagree">Disagree ✕</span><b>' + counts.disagree + '</b></div>' +
               '</div>' +
             '</div>' +
