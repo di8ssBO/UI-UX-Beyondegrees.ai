@@ -84,7 +84,7 @@
     {
       label: 'Profile',
       items: [
-        { id: 'overview',  icon: '👤', label: 'Overview',  path: '../../profile/overview/' },
+        { id: 'overview',  icon: '👤', label: 'Overview',  path: '../../profile/edit/' },
         { id: 'settings',  icon: '⚙️',  label: 'Settings', path: '../../profile/settings/' }
       ]
     }

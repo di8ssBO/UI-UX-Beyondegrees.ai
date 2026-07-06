@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="_shared.css">
+<link rel="stylesheet" href="_shared.css?v=3">
 <link rel="stylesheet" href="tn.css">
-<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
 <script src="../../../shared/scripts/ui/bd-profile.js"></script>
 </head>
 <body>
@@ -126,6 +126,31 @@
       <!-- Scrollable detail body -->
       <div class="detail-body" id="detailBody">
 
+        <!-- Discipline Overview Card -->
+        <div class="detail-overview-card">
+          <span class="overview-label" data-i18n="disc.detail.overview_label">Discipline overview</span>
+          <div class="overview-row">
+            <div class="overview-title" data-i18n="disc.detail.overview_short">Overview</div>
+            <a class="why-match-btn" href="../../discipline/why/index.html?disc=tn">
+              <span class="wm-ico">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/>
+                </svg>
+              </span>
+              <span class="wm-label" data-i18n="disc.detail.why_btn">Why match</span>
+              <span class="wm-arrow">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12h14M13 6l6 6-6 6"/>
+                </svg>
+              </span>
+            </a>
+          </div>
+          <div class="overview-body">
+
         <!-- Description -->
         <p class="detail-desc" data-i18n="disc.detail.desc.tn">
           Understanding the physical and natural world through observation, experimentation, and analysis.
@@ -159,6 +184,16 @@
               </svg>
             </span>
             <span data-i18n="disc.detail.tn.bullet3">Lays the foundation for medicine and environmental studies.</span>
+          </div>
+        </div>
+          </div>
+        </div>
+
+        <div class="intro-video-card" aria-label="Discipline intro video">
+          <div class="intro-video-slot">
+            <div class="intro-video-play">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+            </div>
           </div>
         </div>
 
@@ -231,7 +266,7 @@
             <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
 
-          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
+          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

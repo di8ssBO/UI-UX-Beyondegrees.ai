@@ -301,6 +301,170 @@ body { background: #06060f; }
 .sheet-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
 .sheet-option[data-selected="true"] .sheet-check { opacity: 1; color: #1863DC; }
 [data-theme="light"] .sheet-option[data-selected="true"] .sheet-check { color: #a84e30 !important; }
+
+.settings-section-title {
+  margin: 4px 4px 8px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+[data-theme="light"] .settings-section-title { color: #a84e30 !important; }
+.row-sub {
+  margin-top: 2px;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+[data-theme="light"] .row-sub { color: #6b5440 !important; }
+.security-action {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--violet-300);
+}
+[data-theme="light"] .security-action { color: #a84e30 !important; }
+.security-sheet {
+  max-height: 86%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.security-sheet::-webkit-scrollbar { display: none; }
+.sheet-form { padding: 6px 20px 22px; }
+.sheet-field { margin-bottom: 13px; }
+.sheet-field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+.sheet-field input {
+  width: 100%;
+  min-height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  padding: 0 14px;
+  font: inherit;
+  outline: none;
+}
+.sheet-field input:focus {
+  border-color: rgba(24,99,220,0.58);
+  box-shadow: 0 0 0 3px rgba(24,99,220,0.16);
+}
+[data-theme="light"] .sheet-field input {
+  background: rgba(255,255,255,0.88) !important;
+  border-color: rgba(140,114,96,0.24) !important;
+  color: #2c1f14 !important;
+}
+.sheet-error {
+  min-height: 18px;
+  margin: 2px 0 12px;
+  color: #ff4757;
+  font-size: 12px;
+  font-weight: 800;
+}
+.sheet-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.sheet-btn {
+  min-height: 46px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.06);
+}
+.sheet-btn-primary {
+  border: 0;
+  color: #fff;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  box-shadow: 0 6px 20px rgba(24,99,220,0.28);
+}
+[data-theme="light"] .sheet-btn {
+  background: rgba(255,255,255,0.84) !important;
+  border-color: rgba(140,114,96,0.22) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .sheet-btn-primary {
+  color: #fff !important;
+  background: linear-gradient(135deg, #e8917a, #c96b55) !important;
+}
+.device-list { padding: 4px 20px 22px; }
+.device-heading {
+  display: block;
+  margin: 14px 0 8px;
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.device-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.09);
+  background: rgba(255,255,255,0.045);
+  margin-bottom: 10px;
+}
+[data-theme="light"] .device-card {
+  background: rgba(255,255,255,0.86) !important;
+  border-color: rgba(140,114,96,0.18) !important;
+}
+.device-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  font-size: 11px;
+  font-weight: 900;
+  background: rgba(24,99,220,0.14);
+  color: var(--violet-300);
+}
+.device-main { flex: 1; min-width: 0; }
+.device-name {
+  font-size: 13px;
+  font-weight: 850;
+  color: var(--text-primary);
+}
+.device-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.device-logout {
+  flex: none;
+  min-height: 34px;
+  padding: 0 10px;
+  border-radius: 11px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  font-weight: 800;
+}
+.device-logout.is-done { opacity: .58; }
+.logout-all-devices {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 8px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,71,87,0.42);
+  background: rgba(255,71,87,0.10);
+  color: #ff4757;
+  font-size: 14px;
+  font-weight: 900;
+}
 </style>
 </head>
 
@@ -308,7 +472,7 @@ body { background: #06060f; }
 <div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
   <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
   <span class="breadcrumb-separator">/</span>
-  <a href="../../profile/overview/" class="breadcrumb-item">Profile</a>
+  <a href="../../profile/edit/" class="breadcrumb-item">Profile</a>
   <span class="breadcrumb-separator">/</span>
   <span class="breadcrumb-item active">Account Settings</span>
 </div>
@@ -328,7 +492,7 @@ body { background: #06060f; }
 
       <!-- Top bar -->
       <div class="top-bar">
-        <a href="../../profile/overview/" class="back-btn" aria-label="Back">
+        <a href="../../profile/edit/" class="back-btn" aria-label="Back">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
         </a>
         <span class="page-title" data-i18n="settings.title">Account Settings</span>
@@ -373,6 +537,32 @@ body { background: #06060f; }
                 <div class="toggle-thumb"></div>
               </label>
             </div>
+          </div>
+        </div>
+
+        <div class="settings-section-title" data-i18n="settings.security">Password & Security</div>
+        <div class="settings-group">
+          <div class="settings-row" onclick="openPasswordSheet()">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <div class="row-body">
+              <span class="row-label" data-i18n="settings.password">Password</span>
+              <span class="row-sub" id="passwordStatus" data-i18n="settings.password_desc">Keep your account sign-in protected.</span>
+            </div>
+            <div class="row-right">
+              <span class="security-action" data-i18n="settings.edit">Edit</span>
+            </div>
+          </div>
+          <div class="settings-row" onclick="openDevicesSheet()">
+            <div class="row-icon">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"/><path d="M8 22h8"/><path d="M12 18v4"/></svg>
+            </div>
+            <div class="row-body">
+              <span class="row-label" data-i18n="settings.devices">Signed-in devices</span>
+              <span class="row-sub" data-i18n="settings.devices_desc">Current device and recent sessions.</span>
+            </div>
+            <div class="row-right"><div class="row-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9,18 15,12 9,6"/></svg></div></div>
           </div>
         </div>
 
@@ -493,6 +683,80 @@ body { background: #06060f; }
       </div>
     </div>
 
+    <!-- PASSWORD BOTTOM SHEET -->
+    <div class="sheet-overlay" id="passwordSheetOverlay"></div>
+    <div class="bottom-sheet security-sheet" id="passwordSheet" role="dialog" aria-modal="true" aria-labelledby="passwordSheetTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title" id="passwordSheetTitle" data-i18n="settings.password_modal_title">Change password</span>
+        <button class="sheet-close" type="button" onclick="closePasswordSheet()" aria-label="Close">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-divider"></div>
+      <form class="sheet-form" id="passwordForm">
+        <div class="sheet-field">
+          <label for="currentPassword" data-i18n="settings.current_password">Current password</label>
+          <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="sheet-field">
+          <label for="newPassword" data-i18n="settings.new_password">New password</label>
+          <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" required minlength="8">
+        </div>
+        <div class="sheet-field">
+          <label for="confirmPassword" data-i18n="settings.confirm_password">Confirm new password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required minlength="8">
+        </div>
+        <div class="sheet-error" id="passwordError" aria-live="polite"></div>
+        <div class="sheet-actions">
+          <button class="sheet-btn" type="button" onclick="closePasswordSheet()" data-i18n="settings.cancel">Cancel</button>
+          <button class="sheet-btn sheet-btn-primary" type="submit" data-i18n="settings.done">Done</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- DEVICES BOTTOM SHEET -->
+    <div class="sheet-overlay" id="devicesSheetOverlay"></div>
+    <div class="bottom-sheet security-sheet" id="devicesSheet" role="dialog" aria-modal="true" aria-labelledby="devicesSheetTitle">
+      <div class="sheet-handle"></div>
+      <div class="sheet-header">
+        <span class="sheet-title" id="devicesSheetTitle" data-i18n="settings.devices_modal_title">Signed-in devices</span>
+        <button class="sheet-close" type="button" onclick="closeDevicesSheet()" aria-label="Close">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="sheet-divider"></div>
+      <div class="device-list">
+        <span class="device-heading" data-i18n="settings.current_device">Current device</span>
+        <div class="device-card">
+          <div class="device-icon">PC</div>
+          <div class="device-main">
+            <div class="device-name" data-i18n="settings.device_current_name">Windows desktop</div>
+            <div class="device-meta" data-i18n="settings.device_current_meta">This browser · Active now</div>
+          </div>
+          <button class="device-logout" type="button" data-i18n="settings.device_logout">Log out</button>
+        </div>
+        <span class="device-heading" data-i18n="settings.other_devices">Other devices</span>
+        <div class="device-card">
+          <div class="device-icon">PH</div>
+          <div class="device-main">
+            <div class="device-name" data-i18n="settings.device_phone_name">iPhone 15</div>
+            <div class="device-meta" data-i18n="settings.device_phone_meta">Ho Chi Minh City · 2 hours ago</div>
+          </div>
+          <button class="device-logout" type="button" data-i18n="settings.device_logout">Log out</button>
+        </div>
+        <div class="device-card">
+          <div class="device-icon">TB</div>
+          <div class="device-main">
+            <div class="device-name" data-i18n="settings.device_tablet_name">iPad</div>
+            <div class="device-meta" data-i18n="settings.device_tablet_meta">Hanoi · Yesterday</div>
+          </div>
+          <button class="device-logout" type="button" data-i18n="settings.device_logout">Log out</button>
+        </div>
+        <button class="logout-all-devices" id="logoutAllDevices" type="button" data-i18n="settings.logout_all_devices">Log out of all devices</button>
+      </div>
+    </div>
+
   </div><!-- /device-frame -->
 </div><!-- /desktop-container -->
 
@@ -569,6 +833,35 @@ function updateLangUI(code){
   updateThemeUI(_currentPref);
 }
 
+function tr(key, fallback){
+  try{ if(window.BDi18n && typeof BDi18n.t === 'function') return BDi18n.t(key); }catch(e){}
+  return fallback || key;
+}
+function setSecuritySheet(sheetId, overlayId, open){
+  var sheet=document.getElementById(sheetId);
+  var overlay=document.getElementById(overlayId);
+  if(sheet) sheet.classList.toggle('open', !!open);
+  if(overlay) overlay.classList.toggle('open', !!open);
+}
+function openPasswordSheet(){
+  setSecuritySheet('passwordSheet','passwordSheetOverlay',true);
+  setTimeout(function(){var el=document.getElementById('currentPassword'); if(el) el.focus();},80);
+}
+function closePasswordSheet(){
+  setSecuritySheet('passwordSheet','passwordSheetOverlay',false);
+  var form=document.getElementById('passwordForm');
+  var error=document.getElementById('passwordError');
+  if(form) form.reset();
+  if(error) error.textContent='';
+}
+function openDevicesSheet(){ setSecuritySheet('devicesSheet','devicesSheetOverlay',true); }
+function closeDevicesSheet(){ setSecuritySheet('devicesSheet','devicesSheetOverlay',false); }
+function markDeviceLoggedOut(btn){
+  btn.classList.add('is-done');
+  btn.disabled=true;
+  btn.textContent=tr('settings.device_logged_out','Signed out');
+}
+
 /* ── Init UI labels once DOM is ready ── */
 document.addEventListener('DOMContentLoaded',function(){
   var savedTheme='dark';try{savedTheme=localStorage.getItem('bd-theme')||'dark';}catch(e){}
@@ -577,6 +870,34 @@ document.addEventListener('DOMContentLoaded',function(){
 
   var savedLang='en';try{savedLang=localStorage.getItem('bd-lang')||'en';}catch(e){}
   updateLangUI(savedLang);
+
+  var passwordForm=document.getElementById('passwordForm');
+  if(passwordForm){
+    passwordForm.addEventListener('submit',function(e){
+      e.preventDefault();
+      var next=passwordForm.elements.newPassword.value;
+      var confirm=passwordForm.elements.confirmPassword.value;
+      var error=document.getElementById('passwordError');
+      if(next!==confirm){
+        if(error) error.textContent=tr('settings.password_mismatch','New passwords do not match.');
+        return;
+      }
+      var status=document.getElementById('passwordStatus');
+      if(status) status.textContent=tr('settings.password_updated','Password updated just now.');
+      closePasswordSheet();
+    });
+  }
+  document.querySelectorAll('.device-logout').forEach(function(btn){
+    btn.addEventListener('click',function(){ markDeviceLoggedOut(btn); });
+  });
+  var logoutAll=document.getElementById('logoutAllDevices');
+  if(logoutAll){
+    logoutAll.addEventListener('click',function(){
+      document.querySelectorAll('.device-logout').forEach(markDeviceLoggedOut);
+      logoutAll.disabled=true;
+      logoutAll.textContent=tr('settings.all_devices_logged_out','All devices signed out');
+    });
+  }
 });
 
 window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',function(){
@@ -596,6 +917,6 @@ window.matchMedia('(prefers-color-scheme:light)').addEventListener('change',func
   setInterval(updateClock,30000);
 })();
 </script>
-<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/i18n.js?v=5"></script>
 </body>
 </html>

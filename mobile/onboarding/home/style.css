@@ -24,6 +24,14 @@
 }
 .mobile-viewport::-webkit-scrollbar { display: none; }
 
+.mobile-viewport > .float-tab-bar {
+  position: sticky;
+  bottom: 10px;
+  margin-top: auto;
+  flex-shrink: 0;
+  z-index: 30;
+}
+
 /* ═══════════════════════════════════════════════════
    AURORA — blob size overrides (300/260/220/180px)
    ═══════════════════════════════════════════════════ */

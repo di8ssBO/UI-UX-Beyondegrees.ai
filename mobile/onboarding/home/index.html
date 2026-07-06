@@ -47,10 +47,12 @@
   <link rel="stylesheet" href="../../../design-system/components/navigation.css">
   <link rel="stylesheet" href="../../../design-system/animations.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
-  <link rel="stylesheet" href="./style.css">
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
+  <link rel="stylesheet" href="./style.css?v=2">
+  <script src="../../../shared/scripts/data/majors-data.js"></script>
+  <script src="../../../shared/scripts/data/uni-data.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=5"></script>
 <script src="../../../shared/scripts/ui/bd-profile.js"></script>
-<script src="../../../shared/scripts/ui/pwa-install.js" defer></script>
+<script src="../../../shared/scripts/ui/pwa-install.js?v=4" defer></script>
 
 <style>
 
@@ -134,6 +136,200 @@ svg *, canvas, video, img { transition: none !important; }
   z-index: 1;
   display: block;
 }
+
+.match-board-section {
+  padding: 0 16px 10px;
+  margin-top: 4px;
+}
+.match-board {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 20px 16px 18px;
+  background:
+    radial-gradient(ellipse 80% 72% at 0% 0%, color-mix(in srgb, var(--board-accent, var(--violet-500)) 18%, transparent), transparent 70%),
+    linear-gradient(145deg, rgba(23,23,45,0.94), rgba(8,15,25,0.96));
+  border: 1px solid color-mix(in srgb, var(--board-accent, var(--violet-500)) 26%, rgba(255,255,255,0.10));
+  box-shadow: 0 18px 42px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+[data-theme="light"] .match-board {
+  background:
+    radial-gradient(ellipse 74% 68% at 0% 0%, rgba(201,107,85,0.12), transparent 70%),
+    linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,244,236,0.96));
+  border-color: rgba(74,135,168,0.22);
+  box-shadow: 0 18px 38px rgba(140,114,96,0.12), inset 0 1px 0 rgba(255,255,255,0.88);
+}
+.match-board-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.match-board-kicker {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--violet-300);
+  margin-bottom: 6px;
+}
+[data-theme="light"] .match-board-kicker { color: #a84e30; }
+.match-board-title {
+  font-size: 21px;
+  line-height: 1.12;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0;
+}
+[data-theme="light"] .match-board-title { color: #2c1f14; }
+.match-board-controls {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.match-board-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+  display: grid;
+  place-items: center;
+}
+.match-board-arrow[hidden] {
+  display: grid !important;
+  opacity: .32;
+  pointer-events: none;
+}
+.match-board-arrow svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+[data-theme="light"] .match-board-arrow {
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(140,114,96,0.20);
+  color: #2c1f14;
+}
+.rank-list {
+  display: grid;
+  gap: 10px;
+}
+.rank-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px minmax(0,1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 82px;
+  padding: 13px 12px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid color-mix(in srgb, var(--item-accent, var(--violet-500)) 42%, rgba(255,255,255,0.10));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.rank-row:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--item-accent, var(--violet-500)) 62%, #fff);
+  outline-offset: 3px;
+}
+.rank-row.rank-winner {
+  min-height: 96px;
+  background: color-mix(in srgb, var(--item-accent, var(--violet-500)) 13%, rgba(255,255,255,0.06));
+}
+[data-theme="light"] .rank-row {
+  background: rgba(255,255,255,0.82);
+  border-color: color-mix(in srgb, var(--item-accent, #c96b55) 36%, rgba(140,114,96,0.16));
+}
+.rank-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: color-mix(in srgb, var(--item-accent, var(--violet-500)) 16%, rgba(255,255,255,0.05));
+}
+.rank-info { min-width: 0; }
+.rank-no {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--item-accent, var(--violet-500));
+  margin-bottom: 6px;
+}
+.rank-name {
+  font-size: 14px;
+  line-height: 1.22;
+  font-weight: 850;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rank-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rank-score {
+  min-width: 58px;
+  text-align: right;
+}
+.rank-pct {
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--item-accent, var(--violet-400));
+}
+.rank-label {
+  display: block;
+  margin-top: 4px;
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 900;
+}
+.match-board-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.match-board-dot {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.26);
+}
+.match-board-dot.active {
+  width: 22px;
+  background: var(--board-accent, var(--violet-500));
+}
+[data-theme="light"] .match-board-dot { background: rgba(140,114,96,0.22); }
 
 </style>
 </head>
@@ -232,6 +428,27 @@ svg *, canvas, video, img { transition: none !important; }
           </div>
         </section>
 
+        <section class="match-board-section" id="matchBoardSection" hidden>
+          <div class="match-board" id="matchBoard">
+            <div class="match-board-head">
+              <div>
+                <div class="match-board-kicker" id="matchBoardKicker" data-i18n="home.match_board.kicker_fallback">Ranking</div>
+                <h2 class="match-board-title" id="matchBoardTitle" data-i18n="home.match_board.title_fallback">Top matches</h2>
+              </div>
+              <div class="match-board-controls">
+                <button class="match-board-arrow" id="matchBoardPrev" type="button" aria-label="Previous ranking" data-i18n-aria="home.match_board.prev" onclick="changeMatchBoardPage(-1)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="match-board-arrow" id="matchBoardNext" type="button" aria-label="Next ranking" data-i18n-aria="home.match_board.next" onclick="changeMatchBoardPage(1)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="rank-list" id="matchRankList"></div>
+          </div>
+          <div class="match-board-dots" id="matchBoardDots" aria-label="Match ranking pages" data-i18n-aria="home.match_board.pages"></div>
+        </section>
+
         <!-- CTA Buttons -->
         <section class="cta-section">
           <button class="btn btn-primary" id="ctaPrimary" style="width:100%;" data-i18n="home.cta.start">Start Quiz →</button>
@@ -273,7 +490,7 @@ svg *, canvas, video, img { transition: none !important; }
             </span>
             <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
-          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
+          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/><path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
@@ -683,13 +900,199 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+  var tf = function(k, vars) { return window.BDi18n && BDi18n.tf ? BDi18n.tf(k, vars) : t(k); };
+  var MATCH_BOARD_PAGES = [];
+  var MATCH_BOARD_ACTIVE = 0;
+
+  function discByCode(code) {
+    if (typeof DISCIPLINES === 'undefined') return null;
+    return Object.values(DISCIPLINES).find(function (d) { return d.code === code; }) || null;
+  }
+
+  function readDiscScores() {
+    var fallback = { kt:94, tn:89, yt:64, nn:62, xh:34, nv:32 };
+    try {
+      var saved = JSON.parse(localStorage.getItem('discScores') || 'null');
+      if (saved && Object.keys(saved).some(function (k) { return saved[k] > 0; })) return saved;
+    } catch (e) {}
+    try {
+      var raw = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+      if (raw && Object.keys(raw).some(function (k) { return raw[k] > 0; })) {
+        var total = Object.keys(raw).reduce(function (sum, k) { return sum + (raw[k] || 0); }, 0) || 1;
+        var scores = {};
+        ['kt', 'nv', 'yt', 'xh', 'nn', 'tn'].forEach(function (k) {
+          scores[k] = Math.round(((raw[k] || 0) / total) * 100);
+        });
+        return scores;
+      }
+    } catch (e) {}
+    return fallback;
+  }
+
+  var MAJOR_MATCH_PCT = {
+    'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
+    'Electrical engineering, Electronic engineering, Information engineering':94,
+    'Engineering':91,'Environmental biotechnology':79,'Environmental engineering':81,
+    'Industrial biotechnology':76,'Materials engineering':84,'Mechanical engineering':88,
+    'Medical engineering':82,'Nano-technology':87,'Other engineering and technologies':75,
+    'Biological sciences':86,'Chemical sciences':84,'Computer and information sciences':89,
+    'Earth and related Environmental sciences':79,'Mathematics':92,'Mathematics and Statistics':90,
+    'Physical sciences':87,'Basic medicine':50,'Clinical medicine':56,'Health sciences':62,
+    'Medical biotechnology':64,'Nursing':47,'Other medical sciences':45,
+    'Agricultural biotechnology':62,'Agriculture, forestry and fishery':50,'Animal and dairy science':46,
+    'Behavioral Sciences':30,'Business':28,'Economics and business':34,'Education':20,
+    'Educational sciences':18,'Helms School of Government':24,'Law':16,'Political science':22,
+    'Psychology':32,'Sciences':19,'Social and economic geography':14,'Sociology':26,
+    'Arts and Sciences':26,'Communication and the Arts':22,'English':30,'History':20,
+    'History and archaeology':16,'Languages and literature':24,'Music':18,
+    'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
+  };
+
+  function topDiscItems() {
+    var scores = readDiscScores();
+    return ['kt', 'tn', 'yt', 'nn', 'xh', 'nv'].map(function (code) {
+      var d = discByCode(code) || { short: code.toUpperCase(), title: code.toUpperCase(), icon: '🎯', color: '#7c3aed' };
+      return {
+        name: t('disc.short.' + code) || d.short || d.title,
+        meta: d.title || d.short || '',
+        icon: d.icon || '🎯',
+        pct: scores[code] || 0,
+        color: d.color || '#7c3aed',
+        href: '../../discipline/detail/' + encodeURIComponent(code) + '.html'
+      };
+    }).sort(function (a, b) { return b.pct - a.pct; }).slice(0, 3);
+  }
+
+  function topMajorItems() {
+    if (typeof MAJORS_DATA === 'undefined') return [];
+    return MAJORS_DATA.map(function (m) {
+      var d = discByCode(m.discCode) || { short: m.discCode || '', color: '#7c3aed' };
+      return {
+        name: m.title,
+        meta: t('disc.short.' + m.discCode) || d.short || '',
+        icon: m.icon || '📚',
+        pct: MAJOR_MATCH_PCT[m.title] != null ? MAJOR_MATCH_PCT[m.title] : 50,
+        color: d.color || '#7c3aed',
+        href: '../../major/detail/index.html?id=' + encodeURIComponent(m.id)
+      };
+    }).sort(function (a, b) { return b.pct - a.pct; }).slice(0, 3);
+  }
+
+  function topUniItems() {
+    if (typeof UNI_DATA === 'undefined') return [];
+    return UNI_DATA.slice().sort(function (a, b) { return b.match - a.match; }).slice(0, 3).map(function (u) {
+      return {
+        name: u.name,
+        meta: u.loc,
+        icon: u.icon || '🏛️',
+        pct: u.match,
+        color: u.match >= 85 ? '#06d6a0' : u.match >= 70 ? '#f97316' : '#ef4444',
+        href: '../../university/detail/index.html?id=' + encodeURIComponent(u.id)
+      };
+    });
+  }
+
+  function escapeAttr(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (ch) {
+      return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+    });
+  }
+
+  function renderRankRows(items) {
+    var podium = [
+      { item: items[1], rank: 2, cls: 'rank-second' },
+      { item: items[0], rank: 1, cls: 'rank-winner' },
+      { item: items[2], rank: 3, cls: 'rank-third' }
+    ].filter(function (entry) { return entry.item; });
+    return podium.map(function (entry) {
+      var item = entry.item;
+      var badge = tf('home.match_board.rank_badge', { n: entry.rank });
+      var label = entry.rank === 1 ? t('home.match_board.total_match') : t('home.match_board.match');
+      return '<a class="rank-row ' + entry.cls + '" href="' + escapeAttr(item.href || '#') + '" style="--item-accent:' + escapeAttr(item.color) + '">' +
+        '<div class="rank-icon">' + item.icon + '</div>' +
+        '<div class="rank-info">' +
+          '<div class="rank-no">' + badge + '</div>' +
+          '<div class="rank-name">' + item.name + '</div>' +
+          '<div class="rank-meta">' + item.meta + '</div>' +
+        '</div>' +
+        '<div class="rank-score"><span class="rank-pct">' + item.pct + '%</span><span class="rank-label">' + label + '</span></div>' +
+      '</a>';
+    }).join('');
+  }
+
+  function renderMatchBoardPage(index) {
+    var page = MATCH_BOARD_PAGES[index];
+    if (!page) return;
+    MATCH_BOARD_ACTIVE = index;
+    document.getElementById('matchBoard').style.setProperty('--board-accent', page.color);
+    document.getElementById('matchBoardKicker').textContent = page.kicker;
+    document.getElementById('matchBoardTitle').textContent = page.title;
+    document.getElementById('matchRankList').innerHTML = renderRankRows(page.items);
+    var canSlide = MATCH_BOARD_PAGES.length > 1;
+    document.getElementById('matchBoardPrev').hidden = !canSlide;
+    document.getElementById('matchBoardNext').hidden = !canSlide;
+    document.getElementById('matchBoardDots').innerHTML = MATCH_BOARD_PAGES.map(function (p, i) {
+      return '<button type="button" class="match-board-dot' + (i === index ? ' active' : '') + '" aria-label="' + tf('home.match_board.page_aria', { title: p.kicker }) + '" onclick="renderMatchBoardPage(' + i + ')"></button>';
+    }).join('');
+  }
+
+  function changeMatchBoardPage(delta) {
+    if (!MATCH_BOARD_PAGES.length) return;
+    var nextIndex = (MATCH_BOARD_ACTIVE + delta + MATCH_BOARD_PAGES.length) % MATCH_BOARD_PAGES.length;
+    renderMatchBoardPage(nextIndex);
+  }
+  window.renderMatchBoardPage = renderMatchBoardPage;
+  window.changeMatchBoardPage = changeMatchBoardPage;
+
+  function setupMatchBoard(key) {
+    var discSection = document.querySelector('.disciplines-section');
+    var section = document.getElementById('matchBoardSection');
+    if (!section || !discSection) return;
+    if (key < 10) {
+      section.hidden = true;
+      discSection.style.display = '';
+      return;
+    }
+    discSection.style.display = 'none';
+    section.hidden = false;
+    MATCH_BOARD_PAGES = [{
+      key: 'discipline',
+      kicker: t('home.match_board.disc_kicker'),
+      title: t('home.match_board.disc_title'),
+      sub: t('home.match_board.disc_sub'),
+      color: '#7c3aed',
+      items: topDiscItems()
+    }];
+    if (key >= 20) {
+      MATCH_BOARD_PAGES.push({
+        key: 'major',
+        kicker: t('home.match_board.major_kicker'),
+        title: t('home.match_board.major_title'),
+        sub: t('home.match_board.major_sub'),
+        color: '#06d6a0',
+        items: topMajorItems()
+      });
+    }
+    if (key >= 30) {
+      MATCH_BOARD_PAGES.push({
+        key: 'university',
+        kicker: t('home.match_board.uni_kicker'),
+        title: t('home.match_board.uni_title'),
+        sub: t('home.match_board.uni_sub'),
+        color: '#f97316',
+        items: topUniItems()
+      });
+    }
+    renderMatchBoardPage(key >= 20 && MATCH_BOARD_PAGES.length > 1 ? 1 : 0);
+  }
+
   // ── Progress-based state init ──────────────────────────────────────
   (function initProgress() {
     const p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
     const m = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
-    // milestone (10/20/30) chỉ thay đổi khi hoàn thành hẳn 1 batch qua loading screen
-    // progress (1...) thay đổi sau mỗi câu trả lời, chỉ dùng để detect "đã bắt đầu quiz"
-    const key = m >= 30 ? 30 : m >= 20 ? 20 : m >= 10 ? 10 : p > 0 ? 1 : 0;
+    const answered = Math.max(p, m);
+    const key = answered >= 30 ? 30 : answered >= 20 ? 20 : answered >= 10 ? 10 : answered > 0 ? 1 : 0;
     const $   = id => document.getElementById(id);
 
     // Ring fill
@@ -702,15 +1105,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (key === 30) ring.style.stroke = '#f59e0b'; // gold = complete
     }
 
-    // Hero text
-    var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
     const STATES = {
       0:  { emoji: '🚀', tagline: t('home.state0.tagline'),
             title: t('home.state0.title'),
             sub:   t('home.state0.sub') },
-      1:  { emoji: '💪', tagline: t('home.state1_start.tagline'),
-            title: t('home.state1_start.title'),
-            sub:   t('home.state1_start.sub').replace('{n}', p) },
+      1:  { emoji: '💪', tagline: t('home.state_started_tagline'),
+            title: t('home.state_started_title'),
+            sub:   tf('home.state_started_sub', { n: answered }) },
       10: { emoji: '🔥', tagline: t('home.state1.tagline'),
             title: t('home.state1.title'),
             sub:   t('home.state1.sub') },
@@ -724,7 +1125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const s = STATES[key];
     if ($('heroEmoji'))   $('heroEmoji').textContent   = s.emoji;
     if ($('heroTagline')) $('heroTagline').textContent = s.tagline;
-    if ($('heroTitle'))   $('heroTitle').textContent   = s.title;
+    if ($('heroTitle'))   $('heroTitle').textContent   = key === 30 ? s.title.replace(/\s*\u2728\s*$/, '') : s.title;
     if ($('heroSub'))     $('heroSub').textContent     = s.sub;
 
     // Buttons
@@ -749,8 +1150,10 @@ document.addEventListener('DOMContentLoaded', () => {
         btn2.onclick       = () => location.href = b.b2.u;
       } else {
         btn2.style.display = 'none';
+        btn2.onclick = null;
       }
     }
+    setupMatchBoard(key);
   })();
 
   // ── Orange Pill Tab Bar interaction ──

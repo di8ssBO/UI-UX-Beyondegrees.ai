@@ -5,7 +5,7 @@
  *   - Other same-origin assets: stale-while-revalidate.
  * Bump CACHE_VERSION whenever you ship new assets to force an update.
  */
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v15';
 const CACHE_NAME = `beyondegrees-${CACHE_VERSION}`;
 // The device router at '/' decides desktop vs mobile, so it's the offline entry.
 const OFFLINE_FALLBACK = '/';
@@ -14,6 +14,15 @@ const OFFLINE_FALLBACK = '/';
 // abort installation, so we add them with allSettled below.
 const PRECACHE_URLS = [
   OFFLINE_FALLBACK,
+  '/mobile/auth/index.html',
+  '/desktop/auth/index.html',
+  '/shared/auth/auth.css',
+  '/shared/auth/auth.js',
+  '/mobile/auth/complete-profile/index.html',
+  '/desktop/auth/complete-profile/index.html',
+  '/shared/auth/complete-profile.css',
+  '/shared/auth/complete-profile.js',
+  '/shared/beyondegrees-logo-mark.png',
   '/mobile/onboarding/home/index.html',
   '/desktop/onboarding/home/index.html',
   '/mobile/manifest.json',

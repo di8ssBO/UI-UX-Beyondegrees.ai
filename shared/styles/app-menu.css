@@ -43,48 +43,76 @@
   color: #1863DC !important;
 }
 
-/* ── Dropdown panel ── */
-.app-dropdown {
+/* ── Dim backdrop behind the drawer ── */
+.app-menu-backdrop {
   position: fixed;
-  z-index: 9999;
-  width: 230px;
-
-  background: rgba(10, 12, 30, 0.97);
-  backdrop-filter: blur(28px) saturate(200%);
-  -webkit-backdrop-filter: blur(28px) saturate(200%);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 20px;
-  padding: 8px;
-
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.05) inset,
-    0 8px 24px rgba(0,0,0,0.55),
-    0 24px 64px rgba(0,0,0,0.65);
-
-  /* Hidden state */
+  inset: 0;
+  z-index: 9998;
+  background: rgba(6, 6, 15, 0.55);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-8px) scale(0.95);
-  transform-origin: top right;
-  transition: opacity 0.22s ease, transform 0.22s cubic-bezier(0.34,1.2,0.64,1);
+  transition: opacity 0.3s ease;
 }
-.app-dropdown.open {
-  opacity: 1;
-  pointer-events: all;
-  transform: translateY(0) scale(1);
+.app-menu-backdrop.open { opacity: 1; pointer-events: auto; }
+[data-theme="light"] .app-menu-backdrop { background: rgba(40, 30, 20, 0.35); }
+
+/* ── Slide-in drawer (right side) ── */
+.app-dropdown {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+  height: 100vh;
+  height: 100dvh;
+  width: min(86vw, 322px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  background: var(--bg-elevated, #14142a);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  padding: calc(env(safe-area-inset-top) + 56px) 14px calc(env(safe-area-inset-bottom) + 16px);
+  box-shadow: -16px 0 48px rgba(0,0,0,0.5);
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  transform: translateX(100%);
+  transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
 }
+.app-dropdown::-webkit-scrollbar { display: none; }
+.app-dropdown::before { display: none; }
+.app-dropdown.open { transform: translateX(0); }
 
 [data-theme="light"] .app-dropdown {
-  background: rgba(248,249,255,0.98) !important;
-  border-color: rgba(0,0,0,0.08) !important;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.90) inset,
-    0 8px 24px rgba(0,0,0,0.12),
-    0 24px 48px rgba(0,0,0,0.10) !important;
+  background: var(--bg-elevated, #fffcf5) !important;
+  border-left-color: rgba(0,0,0,0.08) !important;
+  box-shadow: -16px 0 48px rgba(92,74,61,0.18) !important;
 }
-[data-theme="light"] .app-dropdown::before {
-  background: rgba(248,249,255,0.98) !important;
+
+/* ── Close (✕) button — injected by app-menu.js ── */
+.app-menu-close {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 12px);
+  right: 14px;
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.app-menu-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+[data-theme="light"] .app-menu-close {
+  background: rgba(0,0,0,0.04) !important;
   border-color: rgba(0,0,0,0.08) !important;
+  color: #5C4A3D !important;
 }
 
 /* ── Section label ── */
@@ -245,3 +273,76 @@
   margin: 4px 8px 7px;
 }
 [data-theme="light"] .app-menu-divider { background: rgba(0,0,0,0.07) !important; }
+
+/* ── Install app — teal/cyan (added) ── */
+.app-menu-item[data-menu-action="install"] {
+  background: linear-gradient(135deg, rgba(8,145,178,0.52) 0%, rgba(6,182,212,0.38) 100%);
+  border-color: rgba(34,211,238,0.55);
+  color: #CFFAFE;
+  box-shadow: 0 2px 12px rgba(6,182,212,0.28), 0 0 0 1px rgba(34,211,238,0.15) inset;
+}
+.app-menu-item[data-menu-action="install"]:hover {
+  background: linear-gradient(135deg, rgba(8,145,178,0.70) 0%, rgba(6,182,212,0.56) 100%);
+  border-color: rgba(34,211,238,0.75);
+  color: #fff;
+}
+.app-menu-icon--install { background: rgba(8,145,178,0.60); color: #fff; box-shadow: 0 2px 8px rgba(6,182,212,0.38); }
+.app-menu-icon--settings { background: rgba(148,163,184,0.30); color: #e2e8f0; box-shadow: 0 2px 8px rgba(148,163,184,0.20); }
+[data-theme="light"] .app-menu-icon--settings { background: rgba(100,116,139,0.14) !important; color: #475569 !important; }
+
+[data-theme="light"] .app-menu-item[data-menu-action="install"] {
+  background: rgba(8,145,178,0.10) !important; border-color: rgba(8,145,178,0.22) !important; color: #0e7490 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="install"]:hover {
+  background: rgba(8,145,178,0.18) !important;
+}
+[data-theme="light"] .app-menu-icon--install { background: rgba(8,145,178,0.15) !important; color: #0e7490 !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   DRAWER ROWS — simplified, professional look.
+   Inside the slide-in drawer, rows are clean/neutral (no flashy
+   gradient fills); the colored icon chips stay as small accents.
+═══════════════════════════════════════════════════════════════ */
+.app-dropdown .app-menu-section {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 12px 12px 6px;
+  color: var(--text-muted, rgba(255,255,255,0.34));
+}
+.app-dropdown .app-menu-item {
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  box-shadow: none !important;
+  color: var(--text-primary, #f8fafc) !important;
+  font-weight: 600 !important;
+  padding: 12px 11px !important;
+  margin-bottom: 1px !important;
+}
+.app-dropdown .app-menu-item:hover {
+  background: rgba(255,255,255,0.06) !important;
+  border-color: transparent !important;
+}
+.app-dropdown .app-menu-item--danger,
+.app-dropdown .app-menu-item[data-menu-action="reset"] {
+  color: #ff6b6b !important;
+}
+.app-dropdown .app-menu-item--danger:hover,
+.app-dropdown .app-menu-item[data-menu-action="reset"]:hover {
+  background: rgba(239,68,68,0.10) !important;
+}
+.app-dropdown .app-menu-divider { margin: 8px 8px; }
+
+[data-theme="light"] .app-dropdown .app-menu-item {
+  color: var(--text-primary, #1a1a1a) !important;
+}
+[data-theme="light"] .app-dropdown .app-menu-item:hover {
+  background: rgba(0,0,0,0.05) !important;
+}
+[data-theme="light"] .app-dropdown .app-menu-item--danger,
+[data-theme="light"] .app-dropdown .app-menu-item[data-menu-action="reset"] {
+  color: #dc2626 !important;
+}
+[data-theme="light"] .app-dropdown .app-menu-item--danger:hover,
+[data-theme="light"] .app-dropdown .app-menu-item[data-menu-action="reset"]:hover {
+  background: rgba(220,38,38,0.09) !important;
+}

@@ -12,8 +12,8 @@
   <link rel="stylesheet" href="../../../design-system/tokens.css">
   <link rel="stylesheet" href="../../../design-system/base.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
-  <link rel="stylesheet" href="style.css">
-<script src="../../../shared/scripts/ui/i18n.js"></script>
+  <link rel="stylesheet" href="style.css?v=3">
+<script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
 <script src="../../../shared/scripts/ui/bd-profile.js"></script>
 </head>
 <body>
@@ -152,7 +152,7 @@
             <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
 
-          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
+          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -474,40 +474,39 @@ function render(){
   // ── i18n helper ──
   var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 
+  // ── Why-match button icons ──
+  const MAG_SVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>';
+  const ARR_SVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  const overviewTitle = t('major.detail.overview_short') === 'major.detail.overview_short'
+    ? 'Overview'
+    : t('major.detail.overview_short');
+
   // ── Body ──
   body.innerHTML = `
-    <!-- Tagline -->
-    <p class="detail-desc">${major.title}: ${discTitle} ${t('major.detail.pathway')}</p>
-
-    <!-- Bullets -->
-    <div class="detail-bullets">
-      ${bullets.map(b=>`
-        <div class="detail-bullet">
-          <span class="bullet-check">
-            <svg viewBox="0 0 12 12" fill="none" stroke="${color}" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="2,6 5,9 10,3"/>
-            </svg>
-          </span>
-          <span>${b}</span>
-        </div>
-      `).join('')}
+    <!-- Major Overview Card -->
+    <div class="detail-overview-card">
+      <span class="overview-label">${discTitle}</span>
+      <div class="overview-row">
+        <div class="overview-title">${overviewTitle}</div>
+        <a class="why-match-btn" href="../../discipline/why/index.html${discCode ? '?disc='+discCode : ''}">
+          <span class="wm-ico">${MAG_SVG}</span>
+          <span class="wm-label">${t('disc.detail.why_btn')}</span>
+          <span class="wm-arrow">${ARR_SVG}</span>
+        </a>
+      </div>
+      <div class="overview-body">
+        <p class="lead">${major.title}: ${discTitle} ${t('major.detail.pathway')}</p>
+        ${bullets.map(b=>`<p>${b}</p>`).join('')}
+      </div>
     </div>
 
-    <!-- Why I Match -->
-    <a class="why-banner" href="../../discipline/why/index.html${discCode ? '?disc='+discCode : ''}">
-      <div class="why-icon-box">🔍</div>
-      <div class="why-text">
-        <div class="why-title">${t('major.detail.why_title')}</div>
-        <div class="why-sub">${t('major.detail.why_sub')}</div>
+    <div class="intro-video-card" aria-label="Major intro video">
+      <div class="intro-video-slot">
+        <div class="intro-video-play">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </div>
       </div>
-      <div class="why-arrow">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M5 12h14M13 6l6 6-6 6"/>
-        </svg>
-      </div>
-    </a>
+    </div>
 
     <!-- Specializations -->
     <div class="section-header">${t('major.detail.specializations')}</div>

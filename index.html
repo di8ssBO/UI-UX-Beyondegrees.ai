@@ -13,8 +13,8 @@
        Override with ?v=mobile or ?v=desktop (remembered in localStorage). -->
   <script>
   (function () {
-    var MOBILE = '/mobile/onboarding/home/index.html';
-    var DESKTOP = '/desktop/onboarding/home/index.html';
+    var MOBILE = '/mobile/auth/index.html';
+    var DESKTOP = '/desktop/auth/index.html';
 
     function detect() {
       // 1) Explicit override via query string wins, and is remembered.
@@ -45,7 +45,7 @@
 
     var target = detect() === 'mobile' ? MOBILE : DESKTOP;
     // replace() so the router doesn't sit in the back-button history.
-    location.replace(target);
+    location.replace(target + location.search);
   })();
   </script>
 
@@ -71,9 +71,9 @@
     <div class="spinner" aria-hidden="true"></div>
     <div class="muted">Đang mở BeyonDegrees…</div>
     <div class="switch">
-      <a href="/mobile/onboarding/home/index.html?v=mobile">Phiên bản Mobile</a>
+      <a href="/mobile/auth/index.html?v=mobile">Phiên bản Mobile</a>
       &nbsp;·&nbsp;
-      <a href="/desktop/onboarding/home/index.html?v=desktop">Phiên bản Desktop</a>
+      <a href="/desktop/auth/index.html?v=desktop">Phiên bản Desktop</a>
     </div>
   </div>
 </body>
