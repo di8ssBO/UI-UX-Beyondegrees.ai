@@ -275,6 +275,32 @@ body {
 }
 .ud-mb-factor.weak { background: rgba(248,113,113,.08); border-color: rgba(248,113,113,.20); color: #F87171; }
 .ud-mb-factor.mid  { background: rgba(251,191,36,.08);  border-color: rgba(251,191,36,.20);  color: #FBBF24; }
+.udm-match-program {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+.udm-match-major {
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--text-primary);
+  letter-spacing: 0;
+}
+.udm-match-disc {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--disc-light);
+  background: var(--disc-bg);
+  border: 1px solid var(--disc-border);
+}
 
 /* ═══════════════════════════════════════════════════════
    CONTENT SECTIONS
@@ -2220,6 +2246,58 @@ body {
   font-size: 11px; font-weight: 700;
   border: 1px solid currentColor;
 }
+.sius-study-box {
+  position: relative;
+  margin: 12px 16px 12px;
+  padding: 18px 18px 18px 22px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 80% 130% at 0% 0%, color-mix(in srgb, var(--disc-primary) 18%, transparent) 0%, transparent 62%),
+    color-mix(in srgb, var(--disc-primary) 8%, var(--bg-surface));
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 28%, transparent);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--disc-primary) 10%, transparent), inset 0 1px 0 rgba(255,255,255,0.10);
+}
+.sius-study-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--disc-primary) 85%, #fff), var(--disc-primary) 55%, color-mix(in srgb, var(--disc-primary) 75%, #000));
+}
+.sius-study-crumb {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--disc-lighter, var(--disc-light));
+  margin-bottom: 9px;
+  line-height: 1.35;
+}
+.sius-study-title {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.12;
+  color: var(--text-primary);
+  letter-spacing: 0;
+}
+.sius-study-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 13px;
+}
+.sius-study-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 11px;
+  font-weight: 800;
+}
 
 /* ════════════════════════════════════════════════════════
    LOCATION SECTION (mirrors ud-section location)
@@ -2996,6 +3074,28 @@ body {
   background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
   border: 1px solid rgba(201,107,85,0.50) !important;
   color: #a84e30 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .udm-match-major,
+[data-theme="light"] .sius-study-title {
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .udm-match-disc {
+  background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
+  border: 1px solid rgba(201,107,85,0.50) !important;
+  color: #a84e30 !important;
+}
+[data-theme="light"] .sius-study-box {
+  background:
+    radial-gradient(ellipse 80% 130% at 0% 0%, color-mix(in srgb, var(--disc-primary) 16%, transparent) 0%, transparent 62%),
+    color-mix(in srgb, var(--disc-primary) 7%, #ffffff) !important;
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 28%, transparent) !important;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--disc-primary) 14%, transparent), inset 0 1px 0 rgba(255,255,255,0.65) !important;
+}
+[data-theme="light"] .sius-study-crumb {
+  color: color-mix(in srgb, var(--disc-primary) 72%, #2c1f14) !important;
+}
+[data-theme="light"] .sius-study-tag {
   font-weight: 800 !important;
 }
 
@@ -3805,7 +3905,7 @@ body {
             <span class="tab-label" data-i18n="nav.universities">Universities</span>
           </a>
 
-          <a href="../../profile/overview/" class="tab-item" data-tab="t5">
+          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
             <span class="tab-icon">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4363,6 +4463,43 @@ var _currentMajor = null;
 var _currentSpecs = [];
 var _savedBodyHTML = '';
 
+function udEscapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildUdHeroHtml(u, matchPct, hideMatchPill) {
+  var imgs = UNI_IMG_MAP[u.id] || { icon: null, image: null };
+  var pct = (typeof matchPct === 'number') ? matchPct : u.match;
+  var matchCls = getMatchClass(pct);
+  var pillHtml = hideMatchPill ? '' : '<div class="ud-match-pill ' + matchCls + '">' + pct + '%</div>';
+  var heroImgHtml = imgs.image
+    ? '<img class="ud-hero-img" alt="' + udEscapeHtml(u.name) + ' campus" src="' + udEscapeHtml(imgs.image) + '" onerror="this.style.display=\'none\'">'
+    : '';
+  var logoHtml = imgs.icon
+    ? '<img class="ud-logo-img" alt="' + udEscapeHtml(u.name) + ' logo" src="' + udEscapeHtml(imgs.icon) + '" onerror="this.style.display=\'none\';var fallback=this.parentNode.querySelector(\'.ud-logo-emoji\');if(fallback)fallback.style.display=\'block\';">' +
+      '<span class="ud-logo-emoji" style="display:none">' + udEscapeHtml(u.icon) + '</span>'
+    : '<span class="ud-logo-emoji">' + udEscapeHtml(u.icon) + '</span>';
+
+  return '<div class="ud-hero">' +
+      heroImgHtml +
+      '<div class="ud-hero-aurora"></div>' +
+      '<div class="ud-hero-overlay"></div>' +
+      pillHtml +
+      '<div class="ud-hero-content">' +
+        '<div class="ud-logo-wrap">' + logoHtml + '</div>' +
+        '<div class="ud-hero-info">' +
+          '<div class="ud-hero-name">' + udEscapeHtml(u.name) + '</div>' +
+          '<div class="ud-hero-loc">' + udEscapeHtml(u.loc) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
 function render(u) {
   _currentUni = u;
   var det  = getDetail(u.id);
@@ -4673,30 +4810,30 @@ function renderMajorInUni(u, major) {
     ? major.desc.slice(0, major.desc.lastIndexOf(' ', 200)) + '…'
     : major.desc;
 
-  /* University logo — fills hero */
-  var muImgs = UNI_IMG_MAP[u.id] || { icon: null };
-  var muHeroFillHtml = muImgs.icon
-    ? '<div class="udm-hero-logo-fill" style="background-image:url(\'' + muImgs.icon + '\')"></div>'
-    : '<div class="udm-hero-emoji-fill">' + u.icon + '</div>';
-
   /* Match % — same formula as the program list on parent screen */
   var udmPct = ((major.id * 17 + 31) % 30) + 62;
-  var udmPctCls = udmPct >= 70 ? 'pct-high' : udmPct >= 50 ? 'pct-mid' : 'pct-low';
+  var udmMatchCls = getMatchClass(udmPct);
+  var udmBarCls = getBarClass(udmPct);
 
   /* Render into udBody */
   document.getElementById('udBody').innerHTML =
-    '<div class="udm-hero">' +
-      muHeroFillHtml +
-    '</div>' +
-    '<div class="udm-label">' +
-      '<div class="udm-label-info">' +
-        '<div class="udm-major-name">' + major.title + '</div>' +
-        '<div class="udm-disc-tag">' + disc.icon + ' ' + disc.title + '</div>' +
+    buildUdHeroHtml(u, udmPct, true) +
+    '<div class="ud-match-banner udm-match-banner">' +
+      '<div class="udm-match-program">' +
+        '<span class="udm-match-disc">' + udEscapeHtml(disc.icon || '') + ' ' + udEscapeHtml(disc.title) + '</span>' +
+        '<div class="udm-match-major">' + udEscapeHtml(major.title) + '</div>' +
       '</div>' +
-      '<span class="udm-match-pct ml-pct ' + udmPctCls + '">' +
-        '<span class="udm-match-pct-num">' + udmPct + '<small>%</small></span>' +
-        '<span class="udm-match-pct-lbl">' + t('uni.detail.match') + '</span>' +
-      '</span>' +
+      '<div class="ud-mb-score-row">' +
+        '<span class="ud-mb-pct ' + udmMatchCls + '">' + udmPct + '%</span>' +
+        '<span class="ud-mb-sub">' + t('uni.detail.match_sub') + '</span>' +
+      '</div>' +
+      '<div class="ud-mb-bar-track">' +
+        '<div class="ud-mb-bar-fill ' + udmBarCls + '" style="width:' + udmPct + '%"></div>' +
+      '</div>' +
+      '<div class="ud-mb-factors">' +
+        '<span class="ud-mb-factor">' + udEscapeHtml(disc.title) + '</span>' +
+        '<span class="ud-mb-factor mid">' + udEscapeHtml(major.title) + '</span>' +
+      '</div>' +
     '</div>' +
     '<div class="udm-body">' +
       '<div class="udm-desc-card">' +
@@ -4992,16 +5129,6 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
       '</div>';
   }
 
-  /* Hero logo fill */
-  var siusHeroFillHtml = imgs.icon
-    ? '<div class="sius-hero-logo-fill" style="background-image:url(\'' + imgs.icon + '\')">' +
-        '<img src="' + imgs.icon + '" style="display:none" onerror="' +
-          'this.parentNode.className=\'sius-hero-emoji-fill\';' +
-          'this.parentNode.style.backgroundImage=\'none\';' +
-          'this.parentNode.innerHTML=\'' + u.icon + '\'">' +
-      '</div>'
-    : '<div class="sius-hero-emoji-fill">' + u.icon + '</div>';
-
   /* ─── NEW PILLS BUILDER ─── show 8 by default + "+N more" toggle ─── */
   function siusBuildPills(items, mutedClass) {
     if (!items || !items.length) return '';
@@ -5027,18 +5154,14 @@ function renderSpecInUni(u, major, spec, specIdx, skipPush) {
 
   document.getElementById('udBody').innerHTML =
     /* ── Hero — logo full + bottom dark fade (no text overlay) ── */
-    '<div class="sius-hero">' +
-      siusHeroFillHtml +
-      '<div class="sius-hero-overlay"></div>' +
-    '</div>' +
+    buildUdHeroHtml(u, null, true) +
 
     /* ── Spec label below hero (mirrors udm-label-info pattern) ── */
-    '<div class="sius-label">' +
-      '<div class="sius-label-info">' +
-        '<div class="sius-spec-name">' + spec.name + '</div>' +
-        '<div class="sius-label-tags">' +
-          '<span class="sius-parent-tag">🎓 ' + major.title + '</span>' +
-        '</div>' +
+    '<div class="sius-study-box">' +
+      '<div class="sius-study-crumb">' + udEscapeHtml(disc.title) + ' &middot; ' + udEscapeHtml(major.title) + '</div>' +
+      '<div class="sius-study-title">' + udEscapeHtml(spec.name) + '</div>' +
+      '<div class="sius-study-meta">' +
+        '<span class="sius-study-tag" style="' + ts + '">' + udEscapeHtml(spec.tag) + '</span>' +
       '</div>' +
     '</div>' +
 

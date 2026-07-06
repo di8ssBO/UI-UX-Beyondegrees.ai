@@ -228,7 +228,7 @@
       { id: 'majors',       href: '../../major/recommendations/',             label: tr('nav.majors', 'Majors'),          icon: 'M12 14l9-5-9-5-9 5 9 5zm0 0v7m-6.5-3.5V11.5' },
       { id: 'universities', href: '../../university/matches/',       label: tr('nav.universities', 'Universities'),    icon: 'M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6' },
       { sec: tr('sidebar.account', 'Account') },
-      { id: 'profile',      href: '../../profile/overview/',            label: 'Hoang Phuc',      icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0' },
+      { id: 'profile',      href: '../../profile/edit/',                label: 'My Account',      icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM4 21a8 8 0 0116 0' },
       { id: 'settings',     href: '../../profile/settings/',           label: tr('nav.settings', 'Settings'),        icon: 'M12 15a3 3 0 100-6 3 3 0 000 6zm7.4-3a7.4 7.4 0 00-.1-1.2l2-1.6-2-3.4-2.4 1a7.4 7.4 0 00-2-1.2L14.5 3h-5l-.4 2.6a7.4 7.4 0 00-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 000 2.4l-2 1.6 2 3.4 2.4-1a7.4 7.4 0 002 1.2l.4 2.6h5l.4-2.6a7.4 7.4 0 002-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2z' }
     ];
   }
@@ -252,13 +252,6 @@
       '<aside class="sidebar">' +
         '<a class="sidebar-logo" href="../../onboarding/home/"><span class="logo-mark">BD</span><span class="logo-text">BeyonDegrees.ai</span></a>' +
         nav +
-        '<div class="sidebar-footer">' +
-          '<div class="side-stats">' +
-            '<div class="side-stat"><b>20/30</b><span>' + tr('sidebar.questions', 'Questions') + '</span></div>' +
-            '<div class="side-stat"><b>92%</b><span>' + tr('sidebar.top_match', 'Top match') + '</span></div>' +
-          '</div>' +
-          '<div class="muted" style="font-size:11px;padding:6px 12px 0;">Desktop UI · Prototype 2026</div>' +
-        '</div>' +
       '</aside>';
 
     /* Aurora blobs + noise overlay (mobile parity, dark mode only via CSS) */
@@ -274,7 +267,6 @@
         '<div class="crumbs">BeyonDegrees.ai &nbsp;/&nbsp; <b>' + crumb + '</b></div>' +
         '<div class="topbar-spacer"></div>' +
         '<button class="theme-toggle" type="button">' + themeLabel() + '</button>' +
-        '<div class="avatar">HP</div>' +
       '</header>';
 
     var main = document.querySelector('.main');

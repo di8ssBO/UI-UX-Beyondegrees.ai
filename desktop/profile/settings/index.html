@@ -8,7 +8,7 @@
 <title>Account Settings — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   .set-row { display: flex; align-items: center; gap: 16px; padding: 17px 4px; }
   .set-row .ic { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center; font-size: 17px; flex: none;
@@ -42,6 +42,84 @@
   .switch.on::after { left: 22px; background: #fff; }
   .btn-danger { color: var(--red-400); border: 1px solid rgba(255,71,87,0.40); background: rgba(255,71,87,0.07); }
   .btn-danger:hover { background: rgba(255,71,87,0.15); }
+  .set-copy { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .set-copy .muted { font-size: 12.5px; line-height: 1.45; }
+  .btn-sm { padding: 9px 14px; border-radius: 12px; font-size: 12.5px; }
+  .security-link {
+    width: 100%; border: 0; background: transparent; color: inherit; font: inherit; text-align: left;
+    cursor: pointer;
+  }
+  .security-link:hover .ic,
+  .security-link:focus-visible .ic {
+    border-color: rgba(124,58,237,0.45);
+    background: rgba(124,58,237,0.12);
+  }
+  :root[data-theme="light"] .security-link:hover .ic,
+  :root[data-theme="light"] .security-link:focus-visible .ic {
+    border-color: rgba(201,107,85,0.45);
+    background: rgba(201,107,85,0.10);
+  }
+  .security-chevron { color: var(--text-muted); font-size: 22px; line-height: 1; }
+  .settings-modal {
+    position: fixed; inset: 0; z-index: 500; display: none; align-items: center; justify-content: center;
+    padding: 24px; background: rgba(6,6,15,0.62); backdrop-filter: blur(12px);
+  }
+  .settings-modal.show { display: flex; }
+  :root[data-theme="light"] .settings-modal { background: rgba(44,31,20,0.24); }
+  .settings-dialog { width: min(460px, calc(100vw - 48px)); padding: 24px; }
+  .settings-dialog-wide { width: min(560px, calc(100vw - 48px)); }
+  .modal-head { display: flex; align-items: flex-start; gap: 12px; justify-content: space-between; margin-bottom: 18px; }
+  .modal-head h2 { font-size: 20px; line-height: 1.25; margin: 0; }
+  .modal-close {
+    width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.12);
+    position: relative; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 34px;
+    padding: 0; line-height: 1; background: rgba(255,255,255,0.06); color: var(--text-secondary); font-size: 0;
+  }
+  .modal-close::before,
+  .modal-close::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 13px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transform-origin: center;
+  }
+  .modal-close::before { transform: translate(-50%, -50%) rotate(45deg); }
+  .modal-close::after { transform: translate(-50%, -50%) rotate(-45deg); }
+  :root[data-theme="light"] .modal-close { background: #fdf8f2; border-color: #e8e0d5; color: #5c4535; }
+  .field-stack { display: grid; gap: 14px; }
+  .field label { display: block; margin-bottom: 7px; font-size: 12.5px; font-weight: 800; color: var(--text-secondary); }
+  .field input {
+    width: 100%; height: 46px; border-radius: 13px; border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06); color: var(--text-primary); padding: 0 14px; font: inherit;
+    outline: none;
+  }
+  .field input:focus { border-color: rgba(124,58,237,0.58); box-shadow: 0 0 0 3px rgba(124,58,237,0.16); }
+  :root[data-theme="light"] .field input { background: rgba(255,255,255,0.86); border-color: #e8e0d5; }
+  :root[data-theme="light"] .field input:focus { border-color: rgba(201,107,85,0.55); box-shadow: 0 0 0 3px rgba(201,107,85,0.14); }
+  .form-error { min-height: 18px; margin-top: 10px; color: var(--red-400); font-size: 12.5px; font-weight: 700; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+  .device-group { display: grid; gap: 10px; margin-top: 12px; }
+  .device-group + .device-group { margin-top: 20px; }
+  .device-heading { font-size: 11px; font-weight: 900; letter-spacing: 1.7px; text-transform: uppercase; color: var(--text-muted); }
+  .device-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.045);
+  }
+  :root[data-theme="light"] .device-item { background: rgba(255,255,255,0.76); border-color: #e8e0d5; }
+  .device-icon {
+    width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none;
+    background: rgba(124,58,237,0.14); color: var(--violet-300); font-weight: 900;
+  }
+  :root[data-theme="light"] .device-icon { background: rgba(201,107,85,0.12); color: #a84e30; }
+  .device-main { min-width: 0; flex: 1; }
+  .device-name { font-size: 14px; font-weight: 850; color: var(--text-primary); }
+  .device-meta { margin-top: 3px; font-size: 12px; color: var(--text-muted); }
+  .device-logout.is-done { opacity: 0.62; cursor: default; }
+  .logout-all { width: 100%; margin-top: 18px; }
 </style>
 </head>
 <body class="app" data-page="settings" data-crumb="Profile · Account Settings">
@@ -75,6 +153,26 @@
       </div>
 
       <div class="card mt-6">
+        <span class="section-label" data-i18n="settings.security">Password & Security</span>
+        <div class="set-row row-line mt-4">
+          <div class="ic">&#128274;</div>
+          <div class="set-copy">
+            <b data-i18n="settings.password">Password</b>
+            <span class="muted" id="passwordStatus" data-i18n="settings.password_desc">Keep your account sign-in protected.</span>
+          </div>
+          <button class="btn btn-ghost btn-sm ctrl" id="editPasswordBtn" type="button" data-i18n="settings.edit">Edit</button>
+        </div>
+        <button class="set-row security-link" id="openDevicesBtn" type="button">
+          <div class="ic">&#128187;</div>
+          <div class="set-copy">
+            <b data-i18n="settings.devices">Signed-in devices</b>
+            <span class="muted" data-i18n="settings.devices_desc">Current device and recent sessions.</span>
+          </div>
+          <span class="ctrl security-chevron" aria-hidden="true">&#8250;</span>
+        </button>
+      </div>
+
+      <div class="card mt-6">
         <span class="section-label" data-i18n="settings.account">Account</span>
         <div class="flex mt-4" style="gap:12px;flex-wrap:wrap;">
           <button class="btn btn-ghost" data-i18n="settings.log_out">Log Out</button>
@@ -84,8 +182,76 @@
     </div>
   </div>
 
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <div class="settings-modal" id="passwordModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="passwordModalTitle">
+    <form class="card settings-dialog" id="passwordForm">
+      <div class="modal-head">
+        <h2 id="passwordModalTitle" data-i18n="settings.password_modal_title">Change password</h2>
+        <button class="modal-close" type="button" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <div class="field-stack">
+        <div class="field">
+          <label for="currentPassword" data-i18n="settings.current_password">Current password</label>
+          <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="field">
+          <label for="newPassword" data-i18n="settings.new_password">New password</label>
+          <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" required minlength="8">
+        </div>
+        <div class="field">
+          <label for="confirmPassword" data-i18n="settings.confirm_password">Confirm new password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required minlength="8">
+        </div>
+      </div>
+      <div class="form-error" id="passwordError" aria-live="polite"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" type="button" data-close-modal data-i18n="settings.cancel">Cancel</button>
+        <button class="btn btn-primary" type="submit" data-i18n="settings.done">Done</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="settings-modal" id="devicesModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="devicesModalTitle">
+    <div class="card settings-dialog settings-dialog-wide">
+      <div class="modal-head">
+        <h2 id="devicesModalTitle" data-i18n="settings.devices_modal_title">Signed-in devices</h2>
+        <button class="modal-close" type="button" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <div class="device-group">
+        <span class="device-heading" data-i18n="settings.current_device">Current device</span>
+        <div class="device-item">
+          <div class="device-icon">PC</div>
+          <div class="device-main">
+            <div class="device-name" data-i18n="settings.device_current_name">Windows desktop</div>
+            <div class="device-meta" data-i18n="settings.device_current_meta">This browser · Active now</div>
+          </div>
+          <button class="btn btn-ghost btn-sm device-logout" type="button" data-i18n="settings.device_logout">Log out</button>
+        </div>
+      </div>
+      <div class="device-group">
+        <span class="device-heading" data-i18n="settings.other_devices">Other devices</span>
+        <div class="device-item">
+          <div class="device-icon">PH</div>
+          <div class="device-main">
+            <div class="device-name" data-i18n="settings.device_phone_name">iPhone 15</div>
+            <div class="device-meta" data-i18n="settings.device_phone_meta">Ho Chi Minh City · 2 hours ago</div>
+          </div>
+          <button class="btn btn-ghost btn-sm device-logout" type="button" data-i18n="settings.device_logout">Log out</button>
+        </div>
+        <div class="device-item">
+          <div class="device-icon">TB</div>
+          <div class="device-main">
+            <div class="device-name" data-i18n="settings.device_tablet_name">iPad</div>
+            <div class="device-meta" data-i18n="settings.device_tablet_meta">Hanoi · Yesterday</div>
+          </div>
+          <button class="btn btn-ghost btn-sm device-logout" type="button" data-i18n="settings.device_logout">Log out</button>
+        </div>
+      </div>
+      <button class="btn btn-danger logout-all" id="logoutAllDevices" type="button" data-i18n="settings.logout_all_devices">Log out of all devices</button>
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/ui/i18n.js?v=4"></script>
+  <script src="../../_shell/desktop.js?v=13"></script>
   <script>
     /* Theme segmented — đồng bộ bd-theme với toàn app */
     var segTheme = document.getElementById('segTheme');
@@ -141,6 +307,77 @@
     });
     syncSegLang();
     document.getElementById('swNoti').onclick = function () { this.classList.toggle('on'); };
+
+    function tr(key, fallback) {
+      try {
+        if (window.BDi18n && typeof window.BDi18n.t === 'function') return window.BDi18n.t(key);
+      } catch (err) {}
+      return fallback || key;
+    }
+
+    var passwordModal = document.getElementById('passwordModal');
+    var devicesModal = document.getElementById('devicesModal');
+    var passwordForm = document.getElementById('passwordForm');
+    var passwordError = document.getElementById('passwordError');
+    var passwordStatus = document.getElementById('passwordStatus');
+
+    function openModal(modal) {
+      if (!modal) return;
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      var firstField = modal.querySelector('input') || modal.querySelector('button');
+      if (firstField) setTimeout(function () { firstField.focus(); }, 40);
+    }
+
+    function closeModal(modal) {
+      if (!modal) return;
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      if (!document.querySelector('.settings-modal.show')) document.body.style.overflow = '';
+      if (modal === passwordModal && passwordForm) {
+        passwordForm.reset();
+        passwordError.textContent = '';
+      }
+    }
+
+    document.getElementById('editPasswordBtn').addEventListener('click', function () { openModal(passwordModal); });
+    document.getElementById('openDevicesBtn').addEventListener('click', function () { openModal(devicesModal); });
+
+    document.querySelectorAll('[data-close-modal]').forEach(function (btn) {
+      btn.addEventListener('click', function () { closeModal(btn.closest('.settings-modal')); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('.settings-modal.show').forEach(closeModal);
+    });
+
+    passwordForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var next = passwordForm.elements.newPassword.value;
+      var confirm = passwordForm.elements.confirmPassword.value;
+      if (next !== confirm) {
+        passwordError.textContent = tr('settings.password_mismatch', 'New passwords do not match.');
+        return;
+      }
+      passwordStatus.textContent = tr('settings.password_updated', 'Password updated just now.');
+      closeModal(passwordModal);
+    });
+
+    function markDeviceLoggedOut(btn) {
+      btn.classList.add('is-done');
+      btn.disabled = true;
+      btn.textContent = tr('settings.device_logged_out', 'Signed out');
+    }
+
+    document.querySelectorAll('.device-logout').forEach(function (btn) {
+      btn.addEventListener('click', function () { markDeviceLoggedOut(btn); });
+    });
+    document.getElementById('logoutAllDevices').addEventListener('click', function () {
+      document.querySelectorAll('.device-logout').forEach(markDeviceLoggedOut);
+      this.disabled = true;
+      this.textContent = tr('settings.all_devices_logged_out', 'All devices signed out');
+    });
   </script>
 </body>
 </html>

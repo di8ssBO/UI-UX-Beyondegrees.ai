@@ -8,7 +8,7 @@
 <title>Specialization — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   .sp-hero { display: flex; align-items: center; gap: 24px; padding: 36px 40px; position: relative; overflow: hidden; }
   .sp-hero::after { content: ''; position: absolute; top: -50%; right: -10%; width: 55%; height: 160%; border-radius: 50%;
@@ -132,12 +132,16 @@
   <script src="../../../shared/scripts/data/spec-mock.js"></script>
   <script src="../../../shared/scripts/data/uni-data.js"></script>
   <script src="../../../shared/scripts/data/uni-img-map.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
   <script>
+    /* i18n helpers — named tr()/trf() (render() uses local `t` for tag styles) */
+    function tr(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function trf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : tr(k); }
+
     var DISC_LABEL = {
-      kt:'⚙️ Engineering', tn:'🔬 Natural Sci', yt:'🩺 Medical',
-      nn:'🌱 Agricultural', xh:'🧠 Social Sci', nv:'📜 Humanities'
+      kt:'⚙️ ' + tr('disc.short.kt'), tn:'🔬 ' + tr('disc.short.tn'), yt:'🩺 ' + tr('disc.short.yt'),
+      nn:'🌱 ' + tr('disc.short.nn'), xh:'🧠 ' + tr('disc.short.xh'), nv:'📜 ' + tr('disc.short.nv')
     };
     /* getDefaultMockData — fallback nguyên văn mobile spec-detail */
     function getDefaultMockData() {
@@ -201,13 +205,13 @@
             '</div>' +
             '<div class="uc-match-badge ' + matchCls + '">' +
               '<div class="uc-match-val">' + uni.match + '%</div>' +
-              '<div class="uc-match-lbl">MATCH</div>' +
+              '<div class="uc-match-lbl">' + tr('uni.match') + '</div>' +
             '</div>' +
           '</div>' +
           '<div class="uc-body">' +
             '<div class="uc-stats">' +
-              '<div class="uc-stat"><div class="uc-stat-val">' + uni.ranking + '</div><div class="uc-stat-lbl">Ranking</div></div>' +
-              '<div class="uc-stat"><div class="uc-stat-val">' + (uni.tuition || 'N/A') + '</div><div class="uc-stat-lbl">Annual Tuition</div></div>' +
+              '<div class="uc-stat"><div class="uc-stat-val">' + uni.ranking + '</div><div class="uc-stat-lbl">' + tr('uni.ranking') + '</div></div>' +
+              '<div class="uc-stat"><div class="uc-stat-val">' + (uni.tuition || 'N/A') + '</div><div class="uc-stat-lbl">' + tr('uni.tuition') + '</div></div>' +
             '</div>' +
           '</div>' +
         '</a>';
@@ -233,7 +237,7 @@
       document.getElementById('root').innerHTML =
         '<div class="acc-' + dc + '">' +
 
-          '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">← Back</button>' +
+          '<button class="btn btn-ghost" onclick="goBack()" style="margin-bottom:18px;">' + tr('common.back') + '</button>' +
 
           /* Hero */
           '<div class="card glass-hero sp-hero">' +
@@ -248,7 +252,7 @@
 
           /* Salary & Outcomes */
           '<div class="card mt-6">' +
-            '<div class="sp-h"><span class="em">💰</span>Salary &amp; Outcomes</div>' +
+            '<div class="sp-h"><span class="em">💰</span>' + tr('uni.detail.sec_salary') + '</div>' +
             '<div class="sp-stat-grid">' +
               '<div class="sp-stat primary"><div class="sp-stat-label">Average Salary</div><div class="sp-stat-value">' + md.avgSalary + '</div><div class="sp-stat-meta">per year · with experience</div></div>' +
               '<div class="sp-stat"><div class="sp-stat-label">Entry Level</div><div class="sp-stat-value">' + md.entrySalary + '</div><div class="sp-stat-meta">per year · starting</div></div>' +
@@ -259,19 +263,19 @@
           /* Overview */
           (spec.desc ?
           '<div class="card mt-6">' +
-            '<div class="sp-h"><span class="em">📋</span>Overview</div>' +
+            '<div class="sp-h"><span class="em">📋</span>' + tr('uni.detail.sec_overview') + '</div>' +
             '<p class="sp-overview">' + spec.desc + '</p>' +
           '</div>' : '') +
 
           /* Career Outcomes | Required Skills */
           '<div class="grid grid-2 mt-6">' +
             '<div class="card">' +
-              '<div class="sp-h"><span class="em">💼</span>Career Outcomes</div>' +
+              '<div class="sp-h"><span class="em">💼</span>' + tr('uni.detail.sec_career') + '</div>' +
               '<div class="sp-sub">' + md.careers.length + ' job paths</div>' +
               '<div class="skill-chips career-chips">' + chips(md.careers) + '</div>' +
             '</div>' +
             '<div class="card">' +
-              '<div class="sp-h"><span class="em">⚡</span>Required Skills</div>' +
+              '<div class="sp-h"><span class="em">⚡</span>' + tr('uni.detail.sec_skills') + '</div>' +
               '<div class="sp-sub">Core competencies &amp; tools</div>' +
               '<div class="sp-skill-group" style="margin-top:14px;"><span class="sp-glabel">Core Competencies</span><div class="skill-chips">' + chips(md.coreSkills) + '</div></div>' +
               '<div class="sp-skill-group"><span class="sp-glabel">Tools &amp; Software</span><div class="skill-chips">' + chips(md.tools) + '</div></div>' +
@@ -280,8 +284,8 @@
 
           /* Learning Path */
           '<div class="card mt-6">' +
-            '<div class="sp-h"><span class="em">🧭</span>Learning Path</div>' +
-            '<div class="sp-sub">Admission requirements, exams, and language needs</div>' +
+            '<div class="sp-h"><span class="em">🧭</span>' + tr('uni.detail.sec_learning') + '</div>' +
+            '<div class="sp-sub">' + tr('uni.detail.sec_learning_sub') + '</div>' +
             '<div class="req-block row-line" style="margin-top:8px;"><b>🎓 Admission</b><p>' + md.admission + '</p></div>' +
             '<div class="req-block row-line"><b>📝 Exams &amp; certificates</b><p>' + md.exams + '</p></div>' +
             '<div class="req-block"><b>🌐 Language</b><p>' + md.language + '</p></div>' +
@@ -290,7 +294,7 @@
           /* Apply at {uni} — chỉ hiện ở trang kết hợp major × university */
           (uctx ?
           '<div class="card mt-6">' +
-            '<div class="sp-h"><span class="em">🚀</span>Apply at ' + uctx.name + '</div>' +
+            '<div class="sp-h"><span class="em">🚀</span>' + trf('uni.detail.sec_apply_at', { name: uctx.name }) + '</div>' +
             '<div class="sp-sub">Study ' + spec.name + ' at ' + uctx.name + ' · ' + uctx.loc + '</div>' +
             '<div class="flex mt-4" style="gap:10px;">' +
               '<a class="btn btn-primary" href="../../university/detail/?u=' + uctx.id + '">View ' + uctx.name + ' →</a>' +

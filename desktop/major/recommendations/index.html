@@ -8,7 +8,7 @@
 <title>Major Recommendations — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   /* ════════════════════════════════════════════════════════════
      Major Recommendations — desktop port of mobile recommendations.
@@ -17,28 +17,60 @@
      locked state + teaser). Chỉ đổi bố trí & kích thước cho desktop.
      ════════════════════════════════════════════════════════════ */
 
-  /* ── Filter chips (mobile .fc) ── */
-  .filter-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
-  .fc {
-    display: inline-flex; align-items: center; gap: 7px;
-    padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700;
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12);
-    color: var(--text-secondary); cursor: pointer; backdrop-filter: blur(8px);
-    transition: all var(--tr-fast); white-space: nowrap;
+  /* ── Two-column layout: filter sidebar (trái) + kết quả (phải) ── */
+  .rec-layout { display: flex; align-items: flex-start; gap: 24px; margin-top: 22px; }
+  .rec-sidebar { flex: none; width: 248px; position: sticky; top: 80px; }
+  .rec-main { flex: 1; min-width: 0; }
+  @media (max-width: 880px) {
+    .rec-layout { flex-direction: column; gap: 16px; }
+    .rec-sidebar { width: 100%; position: static; }
   }
-  .fc:hover { color: var(--text-primary); border-color: rgba(124,58,237,0.45); }
-  .fc.active { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.28); color: var(--text-primary); }
-  .fc .fc-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--c,#888); flex: none; }
-  .fc .fc-pct { font-size: 12px; font-weight: 800; opacity: .95; }
-  :root[data-theme="light"] .fc { background: rgba(253,248,242,0.88); border-color: #e8e0d5; color: #5c4535; }
-  :root[data-theme="light"] .fc:hover { border-color: rgba(201,107,85,0.45); color: #a84e30; }
-  :root[data-theme="light"] .fc[data-disc]:not([data-disc="all"]).active {
-    background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,0.55));
-    border-color: color-mix(in srgb, var(--c) 45%, transparent);
-    color: color-mix(in srgb, var(--c) 35%, #2c1f14);
+
+  /* ── Sidebar card wrapper ── */
+  .sidebar-card {
+    padding: 20px; border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    background: rgba(255,255,255,0.04);
+  }
+  .sidebar-label {
+    font-size: 11px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 12px;
+  }
+  :root[data-theme="light"] .sidebar-card {
+    background: rgba(253,248,242,0.96);
+    border-color: rgba(232,224,213,0.70);
+    box-shadow: 0 2px 12px rgba(92,69,53,0.06), inset 0 1px 0 rgba(255,255,255,0.70);
+  }
+  :root[data-theme="light"] .sidebar-label { color: #8c7260; }
+
+  /* ── Filter chips — hàng dọc, dạng row card ── */
+  .filter-chips { display: flex; flex-direction: column; gap: 6px; }
+  .fc {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 11px; font-size: 13.5px; font-weight: 700;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.10);
+    color: var(--text-secondary); cursor: pointer;
+    transition: all var(--tr-fast); white-space: nowrap; width: 100%;
+    box-sizing: border-box;
+  }
+  .fc:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); color: var(--text-primary); }
+  .fc.active { background: rgba(124,58,237,0.14); border-color: rgba(124,58,237,0.34); color: var(--text-primary); }
+  .fc[data-disc="all"].active { background: rgba(124,58,237,0.14); border-color: rgba(124,58,237,0.34); color: #c4b5fd; font-weight: 800; }
+  .fc .fc-label { flex: 1; }
+  .fc .fc-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c,#888); flex: none; }
+  .fc .fc-pct { font-size: 12.5px; font-weight: 800; margin-left: auto; }
+
+  /* ── Light mode overrides ── */
+  :root[data-theme="light"] .fc {
+    background: rgba(253,248,242,0.55); border-color: rgba(232,224,213,0.60); color: #5c4535;
+  }
+  :root[data-theme="light"] .fc:hover { background: rgba(245,237,224,0.80); border-color: rgba(201,107,85,0.30); color: #3c2a1e; }
+  :root[data-theme="light"] .fc.active {
+    background: rgba(201,107,85,0.14); border-color: rgba(201,107,85,0.34); color: #a84e30; font-weight: 800;
   }
   :root[data-theme="light"] .fc[data-disc="all"].active {
-    background: rgba(201,107,85,.18); border-color: rgba(201,107,85,.40); color: #a84e30;
+    background: rgba(201,107,85,0.14); border-color: rgba(201,107,85,0.34); color: #a84e30;
   }
 
   /* ── Hero Major Card (mobile .hero-maj) ── */
@@ -46,7 +78,7 @@
     position: relative; overflow: hidden; cursor: pointer;
     background: linear-gradient(135deg, rgba(var(--disc-rgb),.08) 0%, rgba(var(--disc-rgb),.16) 100%);
     border: 1px solid rgba(var(--disc-rgb),.30); border-radius: 22px;
-    padding: 30px 32px; margin: 24px 0 26px; --disc-rgb: 6,214,160;
+    padding: 30px 32px; margin: 0 0 26px; --disc-rgb: 6,214,160;
     transition: transform var(--tr-base), box-shadow var(--tr-base), border-color var(--tr-base);
   }
   .hero-maj:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(var(--disc-rgb),.22); }
@@ -226,7 +258,7 @@
   :root[data-theme="light"] .teaser-card .tc-pct { color: #2f6f53; }
 </style>
 </head>
-<body class="app" data-page="majors" data-crumb="Major Recommendations">
+<body class="app" data-page="majors" data-crumb="Major Matches">
   <div class="main">
     <div class="content fade-in">
 
@@ -234,11 +266,11 @@
       <div class="locked-state" id="lockedState">
         <div class="lock-banner">
           <div class="lock-emoji">🔒</div>
-          <div class="lock-title">Major Match Locked</div>
+          <div class="lock-title" data-i18n="major.lock_title">Major Match Locked</div>
           <div class="lock-sub" id="lockSubText">Complete more questions to unlock your best-fit majors.</div>
           <button class="lock-cta-btn" id="lockCta">Start Quiz →</button>
         </div>
-        <div class="teaser-label">🔮 Preview</div>
+        <div class="teaser-label" data-i18n="disc.preview">🔮 Preview</div>
         <div class="teaser-wrap">
           <div class="teaser-list">
             <div class="teaser-card">
@@ -263,42 +295,50 @@
 
       <!-- ── Main content: hiện khi đã trả lời ≥ 20 câu ── -->
       <div id="mainContent" style="display:none">
-        <span class="ai-chip">🔥 High Demand</span>
-        <h1 class="page-title mt-4">Majors Made <span class="ac">For You</span></h1>
-        <p class="page-sub">Discover majors tailored to your interests and strengths.</p>
+        <span class="ai-chip" data-i18n="major.demand_high">🔥 High Demand</span>
+        <h1 class="page-title mt-4" data-i18n="major.headline">Majors Made For You</h1>
+        <p class="page-sub" data-i18n="major.subtext">Discover majors tailored to your interests and strengths.</p>
 
-        <!-- Filter chips: fc-pct = điểm discipline (DISC_SCORES), màu theo mức match -->
-        <div class="filter-chips" id="filterChips">
-          <button class="fc active" data-disc="all">All</button>
-          <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span>Engineering</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span>Natural Sci</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span>Medical</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span>Agricultural</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span>Social Sci</span><span class="fc-pct"></span></button>
-          <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span>Humanities</span><span class="fc-pct"></span></button>
-        </div>
+        <!-- Two-column: filter chips (trái) + kết quả (phải) -->
+        <div class="rec-layout">
+        <aside class="rec-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-label" data-i18n="major.filter_by">Filter by discipline</div>
+            <!-- Filter chips: fc-pct = điểm discipline (DISC_SCORES), màu theo mức match -->
+            <div class="filter-chips" id="filterChips">
+              <button class="fc active" data-disc="all"><span class="fc-label" data-i18n="major.all_majors">All majors</span></button>
+              <button class="fc" data-disc="kt" style="--c:#7c3aed"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.eng">Engineering</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="tn" style="--c:#f43f5e"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.natural">Natural Sci</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="yt" style="--c:#06d6a0"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.medical">Medical</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="nn" style="--c:#f59e0b"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.agri">Agricultural</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="xh" style="--c:#a855f7"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.social">Social Sci</span><span class="fc-pct"></span></button>
+              <button class="fc" data-disc="nv" style="--c:#3b82f6"><span class="fc-dot"></span><span class="fc-label" data-i18n="major.filter.humanities">Humanities</span><span class="fc-pct"></span></button>
+            </div>
+          </div>
+        </aside>
+        <div class="rec-main">
 
         <!-- Hero card -->
         <div class="hero-maj" id="heroCard" onclick="goToDetail()">
           <div class="hm-disc-badge"><span class="hm-disc-dot" id="heroDiscDot"></span><span id="heroDiscName"></span></div>
           <div class="hm-top">
             <div class="hm-name" id="heroName"></div>
-            <div class="hm-pctwrap"><div class="hm-pct" id="heroPct"></div><div class="hm-lbl">Compatibility</div></div>
+            <div class="hm-pctwrap"><div class="hm-pct" id="heroPct"></div><div class="hm-lbl" data-i18n="major.compat">Compatibility</div></div>
           </div>
           <div class="hm-tags" id="heroTags"></div>
-          <button class="hm-cta" type="button" onclick="event.stopPropagation();goToDetail()">View Career Paths →</button>
+          <button class="hm-cta" type="button" onclick="event.stopPropagation();goToDetail()" data-i18n="major.view_career">View Career Paths →</button>
         </div>
 
         <!-- No results -->
         <div id="no-results">
           <div class="nr-icon">🔍</div>
-          <div class="nr-text">No majors found for this filter</div>
+          <div class="nr-text" data-i18n="major.no_results">No majors found for this filter</div>
         </div>
 
         <!-- Accordion: Top Picks -->
         <div class="acc-section" id="secTop">
           <div class="acc-hdr open" onclick="toggleAcc('top')">
-            <div class="acc-title-wrap"><span class="acc-icon">🎯</span><span class="acc-title">Top Picks</span><span class="acc-count" id="cntTop">0</span></div>
+            <div class="acc-title-wrap"><span class="acc-icon">🎯</span><span class="acc-title" data-i18n="major.top_picks">Top Picks</span><span class="acc-count" id="cntTop">0</span></div>
             <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </div>
           <div class="acc-body open" id="bodyTop"><div class="acc-inner" id="listTop"></div></div>
@@ -307,7 +347,7 @@
         <!-- Accordion: Also Fits -->
         <div class="acc-section" id="secMid">
           <div class="acc-hdr" onclick="toggleAcc('mid')">
-            <div class="acc-title-wrap"><span class="acc-icon">💡</span><span class="acc-title">Also Fits</span><span class="acc-count" id="cntMid">0</span></div>
+            <div class="acc-title-wrap"><span class="acc-icon">💡</span><span class="acc-title" data-i18n="major.also_fits">Also Fits</span><span class="acc-count" id="cntMid">0</span></div>
             <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </div>
           <div class="acc-body" id="bodyMid"><div class="acc-inner" id="listMid"></div></div>
@@ -316,12 +356,12 @@
         <!-- Accordion: Explore More -->
         <div class="acc-section" id="secLow">
           <div class="acc-hdr" onclick="toggleAcc('low')">
-            <div class="acc-title-wrap"><span class="acc-icon">🌐</span><span class="acc-title">Explore More</span><span class="acc-count" id="cntLow">0</span></div>
+            <div class="acc-title-wrap"><span class="acc-icon">🌐</span><span class="acc-title" data-i18n="major.explore_more">Explore More</span><span class="acc-count" id="cntLow">0</span></div>
             <span class="acc-chevron"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></span>
           </div>
           <div class="acc-body" id="bodyLow">
             <div class="acc-inner" id="listLow"></div>
-            <div class="acc-hint">💬 Those majors are not your primary strengths, but you can still study them if you're passionate.</div>
+            <div class="acc-hint">💬 <span data-i18n="major.explore_hint">Those majors are not your primary strengths, but you can still study them if you're passionate.</span></div>
           </div>
         </div>
 
@@ -329,6 +369,9 @@
         <div class="continue-wrap" id="continueWrap">
           <button class="continue-btn" id="continueBtn">Continue Quiz →</button>
         </div>
+
+        </div><!-- /rec-main -->
+        </div><!-- /rec-layout -->
       </div><!-- /mainContent -->
 
     </div>
@@ -336,9 +379,13 @@
 
   <!-- Data thật từ app gốc — 50 majors + disciplines từ CSV (bản copy nội bộ desktop) -->
   <script src="../../../shared/scripts/data/majors-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
   <script>
+    /* i18n helpers */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     /* ── DISC_CODE → display info (từ DISCIPLINES) ── */
     var DISC = {};
     Object.values(DISCIPLINES).forEach(function (d) {
@@ -403,7 +450,7 @@
         '<div class="ml-left">' +
           '<div class="ml-ico" style="background:color-mix(in srgb,' + d.color + ' 16%,transparent)">' + m.icon + '</div>' +
           '<div class="ml-info">' +
-            '<div class="disc-badge" style="--bc:' + d.color + '"><span class="d-dot"></span><span class="d-name">' + d.name + '</span></div>' +
+            '<div class="disc-badge" style="--bc:' + d.color + '"><span class="d-dot"></span><span class="d-name">' + t('disc.short.' + m.disc) + '</span></div>' +
             '<div class="ml-name">' + m.name + '</div>' +
             '<div class="ml-sub">' + m.sub + '</div>' +
           '</div>' +
@@ -444,7 +491,7 @@
         heroCard.style.setProperty('--disc-rgb', pc.rgb);
         heroCard.style.setProperty('--disc-color', pc.color);
         $('heroDiscDot').style.background = hd.color;
-        $('heroDiscName').textContent = hd.fullName;
+        $('heroDiscName').textContent = t('disc.name.' + hero.disc);
         $('heroName').textContent = hero.name;
         $('heroPct').textContent = hero.pct + '%';
         $('heroTags').innerHTML = (hero.tags || [])
@@ -453,7 +500,7 @@
 
       [['top', top], ['mid', mid], ['low', low]].forEach(function (pair) {
         var tier = pair[0], list = pair[1], Key = tier.charAt(0).toUpperCase() + tier.slice(1);
-        $('list' + Key).innerHTML = list.length ? list.map(renderCard).join('') : '<div class="acc-empty">No majors here</div>';
+        $('list' + Key).innerHTML = list.length ? list.map(renderCard).join('') : '<div class="acc-empty">' + t('major.no_here') + '</div>';
         $('cnt' + Key).textContent = list.length;
         $('sec' + Key).style.display = list.length === 0 ? 'none' : '';
       });
@@ -489,12 +536,12 @@
       var lockSub = $('lockSubText'), lockCta = $('lockCta');
       if (answered < 10) {
         var rem1 = 10 - answered;
-        lockSub.innerHTML = 'Complete <strong>' + rem1 + ' more question' + (rem1 !== 1 ? 's' : '') + '</strong> to unlock Discipline results first.';
-        lockCta.textContent = answered > 0 ? 'Continue Quiz →' : 'Start Quiz →';
+        lockSub.textContent = tf('major.lock_disc_first', { n: rem1 });
+        lockCta.textContent = answered > 0 ? t('major.cta.continue') : t('disc.cta.start');
       } else {
         var rem2 = 20 - answered;
-        lockSub.innerHTML = 'Complete <strong>' + rem2 + ' more question' + (rem2 !== 1 ? 's' : '') + '</strong> to unlock your best-fit majors.';
-        lockCta.textContent = 'Continue Quiz →';
+        lockSub.textContent = tf('major.lock_sub_n', { n: rem2 });
+        lockCta.textContent = t('major.cta.continue');
       }
       lockCta.addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
     } else {
@@ -523,7 +570,7 @@
       if (answered >= 30) {
         continueWrap.style.display = 'none';
       } else {
-        continueBtn.textContent = 'Finish Quiz →';
+        continueBtn.textContent = t('major.cta.finish');
         continueBtn.addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
       }
     }

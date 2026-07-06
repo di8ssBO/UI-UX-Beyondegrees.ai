@@ -8,7 +8,7 @@
 <title>University Matches — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   .uni-layout { display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: start; }
   @media (max-width: 900px) { .uni-layout { grid-template-columns: 1fr; } }
@@ -229,33 +229,33 @@
 <body class="app" data-page="universities" data-crumb="University Matches">
   <div class="main">
     <div class="content fade-in">
-      <h1 class="page-title">Best Universities <span class="ac">For You</span></h1>
-      <p class="page-sub">Top institutions matching your academic profile, curated by our advanced matching engine.</p>
+      <h1 class="page-title" data-i18n="uni.headline">Best Universities For You</h1>
+      <p class="page-sub" data-i18n="uni.subtext">Top institutions matching your academic profile, curated by our advanced matching engine.</p>
 
       <div class="uni-layout mt-8">
         <!-- FILTERS -->
         <div class="card" style="position:sticky;top:90px;">
           <div class="flex between">
-            <span class="section-label">Filters</span>
-            <span class="clear-link" id="clearAll">Clear all</span>
+            <span class="section-label" data-i18n="uni.filter.title">Filters</span>
+            <span class="clear-link" id="clearAll" data-i18n="uni.filter.clear_all">Clear all</span>
           </div>
           <div class="fil-group mt-4" id="filRegion">
-            <span class="lb">Region</span>
-            <label class="fil-opt"><input type="checkbox" value="asia" checked> Asia</label>
-            <label class="fil-opt"><input type="checkbox" value="america" checked> America</label>
-            <label class="fil-opt"><input type="checkbox" value="europe" checked> Europe</label>
-            <label class="fil-opt"><input type="checkbox" value="africa" checked> Africa</label>
-            <label class="fil-opt"><input type="checkbox" value="oceania" checked> Oceania</label>
+            <span class="lb" data-i18n="uni.filter.region">Region</span>
+            <label class="fil-opt"><input type="checkbox" value="asia" checked> <span data-i18n="uni.region_asia">Asia</span></label>
+            <label class="fil-opt"><input type="checkbox" value="america" checked> <span data-i18n="uni.region_america">America</span></label>
+            <label class="fil-opt"><input type="checkbox" value="europe" checked> <span data-i18n="uni.region_europe">Europe</span></label>
+            <label class="fil-opt"><input type="checkbox" value="africa" checked> <span data-i18n="uni.region_africa">Africa</span></label>
+            <label class="fil-opt"><input type="checkbox" value="oceania" checked> <span data-i18n="uni.region_oceania">Oceania</span></label>
           </div>
           <div class="fil-group" id="filCountryGroup">
-            <span class="lb">Country</span>
+            <span class="lb" data-i18n="uni.filter.country">Country</span>
             <div class="fil-scroll" id="filCountry"></div>
           </div>
           <div class="fil-group" id="filAid">
-            <span class="lb">Financial Aid</span>
-            <label class="fil-opt"><input type="checkbox" value="full" checked> Full Scholarship</label>
-            <label class="fil-opt"><input type="checkbox" value="need" checked> Need-Based Aid</label>
-            <label class="fil-opt"><input type="checkbox" value="merit" checked> Merit Scholarship</label>
+            <span class="lb" data-i18n="uni.filter.aid">Financial Aid</span>
+            <label class="fil-opt"><input type="checkbox" value="full" checked> <span data-i18n="uni.aid_full">Full Scholarship</span></label>
+            <label class="fil-opt"><input type="checkbox" value="need" checked> <span data-i18n="uni.aid_need">Need-Based Aid</span></label>
+            <label class="fil-opt"><input type="checkbox" value="merit" checked> <span data-i18n="uni.aid_merit">Merit Scholarship</span></label>
           </div>
         </div>
 
@@ -263,14 +263,14 @@
         <div>
           <div class="flex" style="flex-wrap:wrap;gap:10px;">
             <div class="sort-row" id="sortRow">
-              <button class="sort-pill on" data-sort="match">↓ Best Match</button>
-              <button class="sort-pill" data-sort="mix">⚡ Diverse Mix</button>
-              <button class="sort-pill" data-sort="employment">↓ Employment</button>
-              <button class="sort-pill" data-sort="az">↓ A → Z</button>
+              <button class="sort-pill on" data-sort="match" data-i18n="uni.sort.best_match">↓ Best Match</button>
+              <button class="sort-pill" data-sort="mix" data-i18n="uni.sort.diverse">⚡ Diverse Mix</button>
+              <button class="sort-pill" data-sort="employment" data-i18n="uni.sort.employment">↓ Employment</button>
+              <button class="sort-pill" data-sort="az" data-i18n="uni.sort.alpha">↓ A → Z</button>
             </div>
-            <span class="chip saved-chip" id="savedChip">🤍 Saved <b id="savedCount">0</b></span>
+            <span class="chip saved-chip" id="savedChip"><span id="savedIc">🤍</span> <span data-i18n="profile.saved">Saved</span> <b id="savedCount">0</b></span>
           </div>
-          <div class="res-count mt-4"><b id="resCount">—</b> universities</div>
+          <div class="res-count mt-4"><b id="resCount">—</b> <span data-i18n="uni.universities">universities</span></div>
           <div id="lockWrap"></div>
           <div class="grid grid-2 mt-4" id="uniGrid"></div>
         </div>
@@ -280,18 +280,18 @@
 
   <!-- Compare tray -->
   <div class="cmp-tray" id="cmpTray">
-    <span class="ct-lbl">Compare <b id="cmpCount">0</b>/3</span>
+    <span class="ct-lbl"><span data-i18n="uni.compare">Compare</span> <b id="cmpCount">0</b>/3</span>
     <div class="ct-pills" id="cmpPills"></div>
-    <button class="btn btn-ghost" id="cmpClear" style="padding:8px 16px;">Clear</button>
-    <button class="btn btn-primary" id="cmpGo" style="padding:8px 18px;">Compare →</button>
+    <button class="btn btn-ghost" id="cmpClear" style="padding:8px 16px;" data-i18n="uni.cmp_clear">Clear</button>
+    <button class="btn btn-primary" id="cmpGo" style="padding:8px 18px;" data-i18n="uni.compare_btn">Compare →</button>
   </div>
 
   <!-- Compare overlay -->
   <div class="cmp-overlay" id="cmpOverlay">
     <div class="card cmp-modal">
       <div class="flex between" style="margin-bottom:18px;">
-        <h2 style="font-size:20px;font-weight:900;color:var(--text-primary);">Compare Universities <span id="cmpTitleN" style="color:var(--text-muted);font-weight:700;font-size:14px;"></span></h2>
-        <button class="btn btn-ghost" id="cmpClose" style="padding:8px 16px;">✕ Close</button>
+        <h2 style="font-size:20px;font-weight:900;color:var(--text-primary);"><span data-i18n="uni.compare_title">Compare Universities</span> <span id="cmpTitleN" style="color:var(--text-muted);font-weight:700;font-size:14px;"></span></h2>
+        <button class="btn btn-ghost" id="cmpClose" style="padding:8px 16px;" data-i18n="uni.cmp_close">✕ Close</button>
       </div>
       <div id="cmpTableWrap"></div>
     </div>
@@ -299,9 +299,13 @@
 
   <script src="../../../shared/scripts/data/uni-data.js"></script>
   <script src="../../../shared/scripts/data/uni-img-map.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
   <script>
+    /* i18n helpers */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     function getRegion(country) {
       var asia = ['Vietnam','Singapore','Japan','South Korea','China','Hong Kong','Malaysia','Thailand','India','Taiwan'];
       var america = ['USA','United States','Canada','Brazil','Mexico'];
@@ -325,7 +329,7 @@
         : '<span class="em">' + u.icon + '</span>';
     }
 
-    var saved = {};
+    var saved = JSON.parse(localStorage.getItem('bd-saved-unis') || '{}');
     var compare = [];
     var showSaved = false;
     var sortMode = 'match';
@@ -395,16 +399,16 @@
             '<div class="uc-metarow"><span class="uc-loc">📍 ' + u.loc + '</span>' +
               '<span class="uc-type-chip ' + (u.type === 'pub' ? 'pub' : u.type === 'priv' ? 'priv' : 'intl') + '">' + u.typeLabel + '</span></div>' +
           '</div>' +
-          '<div class="uc-match ' + matchCls(u.match) + '"><div class="uc-match-val">' + matchTxt + '</div><div class="uc-match-lbl">MATCH</div></div>' +
+          '<div class="uc-match ' + matchCls(u.match) + '"><div class="uc-match-val">' + matchTxt + '</div><div class="uc-match-lbl">' + t('uni.match') + '</div></div>' +
         '</div>' +
         '<div class="uc-stats">' +
-          '<div class="uc-stat"><div class="v">' + u.ranking + '</div><div class="l">Ranking</div></div>' +
-          '<div class="uc-stat"><div class="v">' + u.tuition + '</div><div class="l">Annual Tuition</div></div>' +
+          '<div class="uc-stat"><div class="v">' + u.ranking + '</div><div class="l">' + t('uni.ranking') + '</div></div>' +
+          '<div class="uc-stat"><div class="v">' + u.tuition + '</div><div class="l">' + t('uni.tuition') + '</div></div>' +
         '</div>' +
         '<div class="uc-actions">' +
-          '<button class="uc-save' + (saved[u.id] ? ' on' : '') + '" data-id="' + u.id + '" title="Save">' + (saved[u.id] ? '♥' : '♡') + '</button>' +
-          '<a class="uc-view" href="' + detailHref + '">View Programs →</a>' +
-          '<button class="uc-cmp' + (compareHas ? ' on' : '') + '" data-id="' + u.id + '" title="' + (cmpDisabled ? 'Compare list full (max 3)' : 'Add to compare') + '"' + (cmpDisabled ? ' disabled' : '') + '>' + (compareHas ? '✓ Added' : '⇄ Compare') + '</button>' +
+          '<button class="uc-save' + (saved[u.id] ? ' on' : '') + '" data-id="' + u.id + '" title="' + t('uni.save') + '">' + (saved[u.id] ? '♥' : '♡') + '</button>' +
+          '<a class="uc-view" href="' + detailHref + '">' + t('uni.view_programs') + '</a>' +
+          '<button class="uc-cmp' + (compareHas ? ' on' : '') + '" data-id="' + u.id + '" title="' + (cmpDisabled ? t('uni.cmp_full') : t('uni.add_compare')) + '"' + (cmpDisabled ? ' disabled' : '') + '>' + (compareHas ? t('uni.added') : t('uni.compare_chip')) + '</button>' +
         '</div>' +
       '</div>';
     }
@@ -419,9 +423,9 @@
         lw.innerHTML =
           '<div class="lock-banner">' +
             '<span class="lk-ic">🔒</span>' +
-            '<div><div class="lk-title">University Matches Locked</div>' +
-            '<div class="lk-sub">Complete <strong>' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</strong> to unlock your best-fit universities.</div></div>' +
-            '<button class="lk-cta" id="lkCta">' + (answered > 0 ? 'Continue Quiz →' : 'Start Quiz →') + '</button>' +
+            '<div><div class="lk-title">' + t('uni.lock_title') + '</div>' +
+            '<div class="lk-sub">' + tf('uni.lock_body', { n: rem }) + '</div></div>' +
+            '<button class="lk-cta" id="lkCta">' + (answered > 0 ? t('disc.cta.continue') : t('disc.cta.start')) + '</button>' +
           '</div>';
         document.getElementById('lkCta').onclick = function () { location.href = '../../quiz/quiz-card/'; };
       } else { lw.innerHTML = ''; }
@@ -433,6 +437,8 @@
         g.querySelectorAll('.uc-save').forEach(function (h) {
           h.onclick = function () {
             saved[h.dataset.id] = !saved[h.dataset.id];
+            if (!saved[h.dataset.id]) delete saved[h.dataset.id];
+            localStorage.setItem('bd-saved-unis', JSON.stringify(saved));
             document.getElementById('savedCount').textContent =
               Object.keys(saved).filter(function (k) { return saved[k]; }).length;
             render();
@@ -465,10 +471,10 @@
       var go = document.getElementById('cmpGo');
       if (compare.length < 2) {
         go.disabled = true; go.style.opacity = '.5';
-        go.textContent = compare.length === 1 ? 'Select 1 more' : 'Compare →';
+        go.textContent = compare.length === 1 ? t('uni.cmp_select1') : t('uni.compare_btn');
       } else {
         go.disabled = false; go.style.opacity = '1';
-        go.textContent = 'Compare ' + compare.length + ' →';
+        go.textContent = tf('uni.cmp_compare_n', { n: compare.length });
       }
     }
     function openCompare() {
@@ -488,10 +494,10 @@
 
       var strip = '<div class="dcmp-strip">' + us.map(function (u, i) {
         return '<div class="dcmp-school dcmp-' + SK[i % SK.length] + '">' +
-          '<button class="ds-remove" data-id="' + u.id + '" title="Remove from compare">✕</button>' +
+          '<button class="ds-remove" data-id="' + u.id + '" title="' + t('uni.cmp_remove') + '">✕</button>' +
           '<div class="ds-logo">' + uniLogo(u) + '</div>' +
           '<div class="ds-name">' + u.name + '</div>' +
-          '<div class="ds-match">' + u.match + '%<small>Match</small></div>' +
+          '<div class="ds-match">' + u.match + '%<small>' + t('uni.match') + '</small></div>' +
         '</div>';
       }).join('') + '</div>';
 
@@ -500,7 +506,7 @@
           var info = o.fn(u);
           return '<div class="dcmp-row' + (o.match ? ' match' : '') + (info.best ? ' best' : '') + '">' +
             '<div class="rn"><span class="em">' + (u.icon || '🎓') + '</span><b>' + shortName(u) + '</b></div>' +
-            '<div class="rv">' + info.val + (info.best ? '<span class="dcmp-best">Best</span>' : '') + '</div>' +
+            '<div class="rv">' + info.val + (info.best ? '<span class="dcmp-best">' + t('uni.cmp_best') + '</span>' : '') + '</div>' +
           '</div>';
         }).join('');
         return '<div class="dcmp-sec dcmp-' + o.kind + (o.full ? ' full' : '') + '">' +
@@ -511,23 +517,23 @@
       }
 
       var secs = '<div class="dcmp-sections">' +
-        section({ kind:'terra', full:true, match:true, icon:'🎯', label:'Match Score', sub:'AI compatibility with your profile',
+        section({ kind:'terra', full:true, match:true, icon:'🎯', label:t('uni.compare.match_score'), sub:t('uni.compare.match_score.sub'),
           fn:function (u) { return { val:u.match + '%', best:u.match === bestMatch }; } }) +
-        section({ kind:'blue', icon:'🏅', label:'Ranking', sub:'Global university rank',
+        section({ kind:'blue', icon:'🏅', label:t('uni.compare.ranking'), sub:t('uni.compare.ranking.sub'),
           fn:function (u) { return { val:u.ranking, best:false }; } }) +
-        section({ kind:'sage', icon:'💼', label:'Employment', sub:'Graduate employment rate',
+        section({ kind:'sage', icon:'💼', label:t('uni.compare.employment'), sub:t('uni.compare.employment.sub'),
           fn:function (u) { return { val:u.employment, best:(parseInt(u.employment) || 0) === bestEmp }; } }) +
-        section({ kind:'sand', icon:'💰', label:'Tuition', sub:'Annual cost',
+        section({ kind:'sand', icon:'💰', label:t('uni.compare.tuition'), sub:t('uni.compare.tuition.sub'),
           fn:function (u) { return { val:u.tuition, best:false }; } }) +
-        section({ kind:'terra', icon:'🎁', label:'Financial Aid', sub:'Scholarship & support',
+        section({ kind:'terra', icon:'🎁', label:t('uni.compare.financial_aid'), sub:t('uni.compare.financial_aid.sub'),
           fn:function (u) { return { val:u.aid, best:false }; } }) +
-        section({ kind:'blue', full:true, icon:'👥', label:'Students', sub:'Total enrollment',
+        section({ kind:'blue', full:true, icon:'👥', label:t('uni.compare.students'), sub:t('uni.compare.students.sub'),
           fn:function (u) { return { val:u.students || '—', best:false }; } }) +
       '</div>';
 
       document.getElementById('cmpTableWrap').innerHTML = '<div class="dcmp">' + strip + secs + '</div>';
       var titleN = document.getElementById('cmpTitleN');
-      if (titleN) titleN.textContent = '· ' + us.length + ' selected';
+      if (titleN) titleN.textContent = tf('uni.cmp_selected', { n: us.length });
 
       /* Gỡ trường ngay trong bảng so sánh → cập nhật cả lưới thẻ + thanh compare */
       document.querySelectorAll('#cmpTableWrap .ds-remove').forEach(function (b) {
@@ -555,7 +561,8 @@
     document.getElementById('savedChip').onclick = function () {
       showSaved = !showSaved;
       this.classList.toggle('on', showSaved);
-      this.firstChild.textContent = showSaved ? '♥ Saved ' : '🤍 Saved ';
+      var ic = document.getElementById('savedIc');
+      if (ic) ic.textContent = showSaved ? '♥' : '🤍';
       render();
     };
     document.getElementById('cmpClear').onclick = function () { compare = []; render(); };

@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="../../../design-system/components/navigation.css">
   <link rel="stylesheet" href="../../../design-system/animations.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
 <style>
 :root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
 /* Light-mode token overrides live in design-system/tokens.css */
@@ -24,11 +25,12 @@ svg *,canvas,video,img{transition:none!important}
 body { background: #06060f; }
 
 .mobile-viewport {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
+  flex: 1; overflow: hidden;
   display: flex; flex-direction: column;
   position: relative; background: var(--bg-base);
   scrollbar-width: none;
 }
+.mobile-viewport > .float-tab-bar { flex-shrink: 0; }
 .mobile-viewport::-webkit-scrollbar { display: none; }
 [data-theme="light"] .mobile-viewport {
   background:
@@ -62,8 +64,20 @@ body { background: #06060f; }
 [data-theme="light"] .back-btn { background: rgba(24,99,220,0.08)!important; border-color: rgba(24,99,220,0.15)!important; }
 .page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); flex: 1; }
 
-/* Page content */
-.page-content { padding: 20px 16px 32px; }
+/* Header (ds-hdr) — consistent with the other screens */
+.ds-hdr { display:flex; align-items:center; justify-content:space-between; padding:10px 18px 8px; position:relative; z-index:5; flex-shrink:0; }
+.ds-logo { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--text-primary); line-height:1; }
+.ds-logo .logo-text { display:inline-flex; align-items:baseline; gap:0; white-space:nowrap; }
+.ds-logo .logo-beyon { color:var(--text-primary); }
+.ds-logo .logo-accent { color:var(--violet-400); }
+.ds-logo .logo-img { height:20px; width:auto; display:block; flex-shrink:0; }
+[data-theme="dark"] .ds-logo .logo-img { filter:brightness(0) invert(1) drop-shadow(0 1px 4px rgba(107,163,255,0.30)); }
+[data-theme="dark"] .ds-logo .logo-text { background:linear-gradient(135deg,#a78bfa 0%,#06d6a0 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="light"] .ds-logo .logo-text { background:linear-gradient(135deg,#c96b55 0%,#0274BE 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* Page content — scroll body that fills between header and tab bar */
+.page-content { padding: 16px 16px 20px; flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; scrollbar-width: none; }
+.page-content::-webkit-scrollbar { display: none; }
 
 /* Avatar section */
 .avatar-section {
@@ -78,6 +92,7 @@ body { background: #06060f; }
   font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -1px;
   border: 3px solid rgba(24,99,220,0.35);
   box-shadow: 0 0 0 4px rgba(24,99,220,0.12);
+  overflow: hidden;
 }
 .avatar-edit-btn {
   position: absolute; bottom: 0; right: 0;
@@ -85,6 +100,38 @@ body { background: #06060f; }
   background: #1863DC; border: 2px solid var(--bg-base);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; color: white;
+}
+.avatar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.avatar-action {
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.avatar-action--danger {
+  color: #ff4757;
+  border-color: rgba(255,71,87,0.34);
+  background: rgba(255,71,87,0.08);
+}
+[data-theme="light"] .avatar-action {
+  background: rgba(255,255,255,0.84) !important;
+  border-color: rgba(140,114,96,0.22) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .avatar-action--danger {
+  color: #c45540 !important;
+  border-color: rgba(196,85,64,0.34) !important;
+  background: rgba(196,85,64,0.08) !important;
 }
 .archetype-chip {
   display: inline-flex; align-items: center; gap: 6px;
@@ -351,7 +398,7 @@ body { background: #06060f; }
 <div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
   <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
   <span class="breadcrumb-separator">/</span>
-  <a href="../../profile/overview/" class="breadcrumb-item">Profile</a>
+  <a href="../../onboarding/home/" class="breadcrumb-item">Profile</a>
   <span class="breadcrumb-separator">/</span>
   <span class="breadcrumb-item active">Edit Profile</span>
 </div>
@@ -369,12 +416,46 @@ body { background: #06060f; }
         </div>
       </div>
 
-      <!-- Top bar -->
-      <div class="top-bar">
-        <a href="../../profile/overview/" class="back-btn" aria-label="Back">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
-        </a>
-        <span class="page-title" data-i18n="edit.title">Edit Profile</span>
+      <!-- Header (ds-hdr) — logo + account menu, consistent with other screens -->
+      <div class="ds-hdr">
+        <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
+        <div class="app-menu-wrap">
+          <button class="app-menu-btn" aria-label="Menu">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="app-dropdown">
+            <div class="app-menu-section" data-i18n="menu.section_account">Account</div>
+            <a href="../../profile/edit/" class="app-menu-item" data-menu-action="my-account">
+              <span class="app-menu-icon app-menu-icon--account"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a4 4 0 014-4h8a4 4 0 014 4v2"/></svg></span>
+              <span data-i18n="menu.my_account">My Account</span>
+            </a>
+            <a href="../../profile/settings/" class="app-menu-item" data-menu-action="account-settings">
+              <span class="app-menu-icon app-menu-icon--settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+              <span data-i18n="menu.account_settings">Account Settings</span>
+            </a>
+            <button class="app-menu-item" data-menu-action="install">
+              <span class="app-menu-icon app-menu-icon--install"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></span>
+              <span data-i18n="menu.install">Install app</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="leave-review">
+              <span class="app-menu-icon app-menu-icon--review"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+              <span data-i18n="menu.leave_review">Leave Review</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="share">
+              <span class="app-menu-icon app-menu-icon--share"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+              <span data-i18n="menu.share_archetype">Share Archetype</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="contact">
+              <span class="app-menu-icon app-menu-icon--contact"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+              <span data-i18n="menu.contact_us">Contact Us</span>
+            </button>
+            <div class="app-menu-divider"></div>
+            <button class="app-menu-item app-menu-item--danger" data-menu-action="reset">
+              <span class="app-menu-icon app-menu-icon--danger"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></span>
+              <span data-i18n="menu.reset_account">Reset Account</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <div class="page-content">
@@ -383,6 +464,14 @@ body { background: #06060f; }
         <div class="avatar-section">
           <div class="avatar-wrap">
             <div class="avatar"></div>
+            <label class="avatar-edit-btn" for="avatarUpload" aria-label="Upload profile photo">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+            </label>
+          </div>
+          <input id="avatarUpload" type="file" accept="image/*" hidden>
+          <div class="avatar-actions">
+            <label class="avatar-action" for="avatarUpload" data-i18n="profile.avatar.library">Choose from Library</label>
+            <button class="avatar-action avatar-action--danger" id="removeAvatarBtn" type="button" data-i18n="profile.avatar.remove">Remove Current Photo</button>
           </div>
           <div class="archetype-chip">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
@@ -481,6 +570,11 @@ body { background: #06060f; }
           <span data-i18n="edit.reset">Reset Account</span>
         </button>
 
+        <button class="btn-secondary" id="logoutBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          <span data-i18n="edit.logout">Logout</span>
+        </button>
+
 
       <!-- Reset Confirm Modal -->
       <div class="modal-backdrop" id="resetModal">
@@ -507,6 +601,40 @@ body { background: #06060f; }
         </div>
       </div>
       </div><!-- /page-content -->
+
+      <!-- Bottom tab bar — consistent with other screens (Account active) -->
+      <nav class="float-tab-bar" id="floatTabBar">
+        <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.about_me">About me</span>
+        </a>
+        <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+        </a>
+        <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.majors">Majors</span>
+        </a>
+        <a href="../../university/matches/" class="tab-item" data-tab="t4">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.universities">Universities</span>
+        </a>
+        <a href="../../profile/edit/" class="tab-item active" data-tab="t5">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.account">Account</span>
+        </a>
+      </nav>
 
     </div><!-- /mobile-viewport -->
 
@@ -546,12 +674,41 @@ var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
   } else { prefill(); }
 })();
 
+var avatarInput = document.getElementById('avatarUpload');
+var removeAvatarBtn = document.getElementById('removeAvatarBtn');
+if (avatarInput) {
+  avatarInput.addEventListener('change', function () {
+    var file = avatarInput.files && avatarInput.files[0];
+    if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      if (window.BDProfile) {
+        BDProfile.saveAvatar(String(reader.result || ''));
+        BDProfile.applyAvatar();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+if (removeAvatarBtn) {
+  removeAvatarBtn.addEventListener('click', function () {
+    if (window.BDProfile) {
+      BDProfile.removeAvatar();
+      BDProfile.applyAvatar();
+    }
+    if (avatarInput) avatarInput.value = '';
+  });
+}
+
 function saveChanges() {
   /* Save name to localStorage */
   var fnEl = document.getElementById('editFirstName');
   var lnEl = document.getElementById('editLastName');
   if (window.BDProfile && fnEl && lnEl) {
     BDProfile.save(fnEl.value, lnEl.value);
+    BDProfile.applyTabLabel();
+    BDProfile.applyNameDisplay();
+    BDProfile.applyAvatar();
   }
 
   var btn = document.querySelector('.btn-save');
@@ -614,7 +771,16 @@ document.getElementById('resetConfirmBtn').addEventListener('click', function ()
   }, 800);
 });
 
+var logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function () {
+    window.location.href = '../../onboarding/home/';
+  });
+}
+
 </script>
-<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/i18n.js?v=5"></script>
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
+<script src="../../../shared/scripts/ui/pwa-install.js?v=4" defer></script>
 </body>
 </html>

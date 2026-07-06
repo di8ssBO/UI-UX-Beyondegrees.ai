@@ -6,17 +6,16 @@
 (function () {
   'use strict';
 
-  function positionDropdown(btn, dropdown) {
-    var rect    = btn.getBoundingClientRect();
-    var dropW   = dropdown.offsetWidth || 230;
-    /* Align dropdown's right edge to button's right edge, clamp to viewport */
-    var left    = rect.right - dropW;
-    var maxLeft = (window.innerWidth || document.documentElement.clientWidth) - dropW - 4;
-    left = Math.min(left, maxLeft);
-    left = Math.max(left, 4);
-    dropdown.style.top   = (rect.bottom + 8) + 'px';
-    dropdown.style.left  = left + 'px';
-    dropdown.style.right = 'auto';
+  /* One shared dim backdrop behind the slide-in drawer. */
+  function getBackdrop() {
+    var bd = document.getElementById('app-menu-backdrop');
+    if (!bd) {
+      bd = document.createElement('div');
+      bd.id = 'app-menu-backdrop';
+      bd.className = 'app-menu-backdrop';
+      document.body.appendChild(bd);
+    }
+    return bd;
   }
 
   function initMenu(wrap) {
@@ -24,39 +23,28 @@
     var dropdown = wrap.querySelector('.app-dropdown');
     if (!btn || !dropdown) return;
 
-    /* Move dropdown to body so it escapes ALL stacking contexts */
+    /* Move the drawer to <body> so it escapes any overflow:hidden / transforms. */
     document.body.appendChild(dropdown);
+    var backdrop = getBackdrop();
 
-    function open() {
-      positionDropdown(btn, dropdown);
-      dropdown.classList.add('open');
-      btn.classList.add('open');
-    }
-    function close() {
-      dropdown.classList.remove('open');
-      btn.classList.remove('open');
-    }
+    function open()  { dropdown.classList.add('open');    backdrop.classList.add('open');    btn.classList.add('open'); }
+    function close() { dropdown.classList.remove('open'); backdrop.classList.remove('open'); btn.classList.remove('open'); }
     function toggle() { dropdown.classList.contains('open') ? close() : open(); }
 
+    /* Inject a close (✕) button once, at the top of the drawer. */
+    if (!dropdown.querySelector('.app-menu-close')) {
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'app-menu-close';
+      x.setAttribute('aria-label', 'Close');
+      x.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
+      x.addEventListener('click', close);
+      dropdown.insertBefore(x, dropdown.firstChild);
+    }
+
     btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
-
-    /* Close on outside click */
-    document.addEventListener('click', function (e) {
-      if (!btn.contains(e.target) && !dropdown.contains(e.target)) close();
-    });
-
-    /* Reposition on resize/scroll */
-    window.addEventListener('resize', function () {
-      if (dropdown.classList.contains('open')) positionDropdown(btn, dropdown);
-    });
-    window.addEventListener('scroll', function () {
-      if (dropdown.classList.contains('open')) positionDropdown(btn, dropdown);
-    }, true);
-
-    /* Close on Escape */
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') close();
-    });
+    backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
   }
 
   /* ── Reset confirm modal ── */
@@ -129,6 +117,9 @@
         if (action === 'my-account') {
           window.location.href = el.getAttribute('href') || el.getAttribute('data-href') || '../../profile/edit/';
 
+        } else if (action === 'account-settings') {
+          window.location.href = el.getAttribute('href') || el.getAttribute('data-href') || '../../profile/settings/';
+
         } else if (action === 'leave-review') {
           window.open('https://www.trustpilot.com', '_blank');
 
@@ -142,6 +133,9 @@
 
         } else if (action === 'contact') {
           window.location.href = 'mailto:support@beyondegrees.ai';
+
+        } else if (action === 'install') {
+          if (window.BDInstall && window.BDInstall.prompt) window.BDInstall.prompt();
 
         } else if (action === 'reset') {
           showResetConfirm();

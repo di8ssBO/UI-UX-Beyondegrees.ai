@@ -8,18 +8,29 @@
 <title>Major Detail — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   /* Back button (mobile parity → history.back()) */
   .md-back { margin-bottom: 18px; }
+  .match-high { --match-color: #06d6a0; --match-soft: rgba(6,214,160,0.16); --match-border: rgba(6,214,160,0.38); }
+  .match-mid { --match-color: #fb923c; --match-soft: rgba(251,146,60,0.15); --match-border: rgba(251,146,60,0.35); }
+  .match-low { --match-color: #ff6b81; --match-soft: rgba(255,107,129,0.14); --match-border: rgba(255,107,129,0.34); }
+  :root[data-theme="light"] .match-high { --match-color: #047857; --match-soft: rgba(4,120,87,0.10); --match-border: rgba(4,120,87,0.30); }
+  :root[data-theme="light"] .match-mid { --match-color: #b87916; --match-soft: rgba(184,121,22,0.11); --match-border: rgba(184,121,22,0.30); }
+  :root[data-theme="light"] .match-low { --match-color: #c45540; --match-soft: rgba(196,85,64,0.10); --match-border: rgba(196,85,64,0.30); }
 
   /* ── Hero ── */
-  .md-hero { display: flex; align-items: center; gap: 28px; padding: 38px 44px; position: relative; overflow: hidden; }
+  .md-hero { display: flex; align-items: center; gap: 28px; min-height: 170px; padding: 38px 44px; position: relative; overflow: hidden; }
+  .md-hero::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 70%; height: 1px;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--acc) 55%, transparent), transparent);
+  }
   .md-hero::after {
     content: ''; position: absolute; top: -50%; right: -12%;
-    width: 58%; height: 160%; border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 18%, transparent) 0%, transparent 70%);
-    filter: blur(32px); pointer-events: none;
+    width: 60%; height: 160%; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--acc) 20%, transparent) 0%, transparent 70%);
+    filter: blur(34px); pointer-events: none;
   }
   .md-hero > * { position: relative; z-index: 1; }
   .md-hero .ic { width: 88px; height: 88px; border-radius: 24px; flex: none; display: grid; place-items: center; font-size: 42px;
@@ -33,32 +44,66 @@
   .md-ring { position: relative; width: 104px; height: 104px; }
   .md-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); display: block; }
   .md-ring-track { fill: none; stroke: color-mix(in srgb, var(--text-muted) 28%, transparent); stroke-width: 7; }
-  .md-ring-fill { fill: none; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 1s var(--ease-out); }
+  .md-ring-fill { fill: none; stroke: var(--match-color); stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 1s var(--ease-out); filter: drop-shadow(0 0 8px var(--match-soft)); }
   .md-ring-num { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    font-size: 26px; font-weight: 900; line-height: 1; }
+    color: var(--match-color); font-size: 26px; font-weight: 900; line-height: 1; }
   .md-ring-cap { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
 
   /* ── Body: specializations (left) + Why-match CTA rail (right) ── */
-  .md-layout { display: grid; grid-template-columns: 1fr 300px; gap: 22px; align-items: start; margin-top: 22px; }
+  .md-layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 22px; align-items: start; margin-top: 22px; }
   .md-main { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
-  .md-rail { position: sticky; top: 78px; display: flex; flex-direction: column; gap: 18px; }
+  .md-rail { position: sticky; top: 78px; height: calc(100vh - 110px); display: flex; flex-direction: column; gap: 18px; min-width: 0; }
   @media (max-width: 980px) {
     .md-layout { grid-template-columns: 1fr; }
-    .md-rail { position: static; }
+    .md-rail { position: static; height: auto; }
+    .md-spec-panel { flex: none; }
+    .md-specs { overflow: visible; padding-right: 0; }
   }
 
   /* About */
   .md-about { padding: 28px 32px; }
   .md-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.8; }
+  .intro-video-card { padding: 0; overflow: hidden; }
+  .intro-video-slot {
+    min-height: 260px;
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-items: center;
+    border-radius: inherit;
+    background:
+      radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--acc) 22%, transparent), transparent 48%),
+      linear-gradient(135deg, color-mix(in srgb, var(--acc) 12%, rgba(255,255,255,0.04)), rgba(255,255,255,0.03));
+    border: 1px solid color-mix(in srgb, var(--acc) 24%, transparent);
+  }
+  :root[data-theme="light"] .intro-video-slot {
+    background:
+      radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--acc) 16%, transparent), transparent 52%),
+      linear-gradient(135deg, color-mix(in srgb, var(--acc) 9%, rgba(253,248,242,0.94)), rgba(255,255,255,0.72));
+    border-color: color-mix(in srgb, var(--acc) 20%, rgba(232,224,213,0.9));
+  }
+  .intro-video-play {
+    width: 64px; height: 64px; border-radius: 999px;
+    display: grid; place-items: center;
+    color: #fff;
+    background: linear-gradient(135deg, var(--acc), color-mix(in srgb, var(--acc) 68%, #000));
+    box-shadow: 0 12px 30px color-mix(in srgb, var(--acc) 34%, transparent);
+  }
+  .intro-video-play svg { width: 24px; height: 24px; margin-left: 3px; }
 
   /* Specializations — vertical list down the left */
-  .md-specs { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
-  .spec-card { display: flex; align-items: flex-start; gap: 16px; padding: 18px 22px; }
-  .spec-card .em { font-size: 30px; line-height: 1; flex: none; margin-top: 2px; }
+  .md-spec-panel { min-height: 0; flex: 1; display: flex; flex-direction: column; }
+  .md-spec-panel .section-title { flex: none; margin-bottom: 14px; }
+  .md-spec-panel .section-title .hint { display: block; margin-top: 4px; line-height: 1.35; }
+  .md-specs { min-height: 0; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-right: 6px; scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--acc) 48%, transparent) transparent; }
+  .md-specs::-webkit-scrollbar { width: 6px; }
+  .md-specs::-webkit-scrollbar-track { background: transparent; }
+  .md-specs::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--acc) 42%, transparent); border-radius: 999px; }
+  .spec-card { display: flex; align-items: flex-start; gap: 12px; padding: 14px 14px; }
+  .spec-card .em { font-size: 24px; line-height: 1; flex: none; margin-top: 2px; }
   .spec-card .spec-body { flex: 1; min-width: 0; }
-  .spec-card b { display: block; font-size: 15px; color: var(--text-primary); }
-  .spec-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-top: 4px; }
-  .spec-tag { display: inline-flex; margin-top: 10px; padding: 4px 11px; border-radius: 999px; font-size: 11px; font-weight: 800; }
+  .spec-card b { display: block; font-size: 13.5px; color: var(--text-primary); }
+  .spec-card p { display: none; }
+  .spec-tag { display: inline-flex; margin-top: 8px; padding: 4px 10px; border-radius: 999px; font-size: 10.5px; font-weight: 800; }
 
   /* Why I match — button tinted with the discipline accent color */
   .why-btn {
@@ -103,9 +148,13 @@
 
   <script src="../../../shared/scripts/data/majors-data.js"></script>
   <script src="../../../shared/scripts/data/spec-data.js"></script>
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
   <script>
+    /* i18n helpers */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     var MOCK_PCT = {
       'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
       'Electrical engineering, Electronic engineering, Information engineering':94,
@@ -126,8 +175,8 @@
       'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
     };
     var DISC_LABEL = {
-      kt:'⚙️ Engineering', tn:'🔬 Natural Sci', yt:'🩺 Medical',
-      nn:'🌱 Agricultural', xh:'🧠 Social Sci', nv:'📜 Humanities'
+      kt:'⚙️ ' + t('disc.short.kt'), tn:'🔬 ' + t('disc.short.tn'), yt:'🩺 ' + t('disc.short.yt'),
+      nn:'🌱 ' + t('disc.short.nn'), xh:'🧠 ' + t('disc.short.xh'), nv:'📜 ' + t('disc.short.nv')
     };
     /* Placeholder average salary per discipline (no real data in dataset) */
     var MOCK_SALARY = { kt:'$75K', tn:'$68K', yt:'$82K', nn:'$58K', xh:'$60K', nv:'$52K' };
@@ -141,13 +190,13 @@
     /* Back về trang trước đó (giống mobile history.back()), fallback majors.html */
     function goBack() { if (history.length > 1) history.back(); else location.href = '../../major/recommendations/'; }
     window.goBack = goBack;
-    var backBtn = '<button class="btn btn-ghost md-back" onclick="goBack()">← Back</button>';
+    var backBtn = '<button class="btn btn-ghost md-back" onclick="goBack()">' + t('common.back') + '</button>';
 
     if (!major) {
       root.innerHTML = backBtn + '<div class="card lock-note"><div class="em">⏳</div>' +
-        '<h2 class="mt-4" style="font-weight:900;">Loading…</h2>' +
-        '<p class="muted mt-2">Complete the quiz to unlock major details.</p>' +
-        '<a class="btn btn-primary mt-6" href="../../quiz/quiz-card/">Finish Quiz →</a></div>';
+        '<h2 class="mt-4" style="font-weight:900;">' + t('major.detail.loading') + '</h2>' +
+        '<p class="muted mt-2">' + t('major.detail.unlock_note') + '</p>' +
+        '<a class="btn btn-primary mt-6" href="../../quiz/quiz-card/">' + t('major.cta.finish') + '</a></div>';
     } else {
       document.title = major.title + ' — BeyonDegrees.ai';
       var pct = MOCK_PCT[major.title] != null ? MOCK_PCT[major.title] : 50;
@@ -167,22 +216,26 @@
       }).join('');
 
       /* Match ring geometry (r=46 → circumference) + magnitude color */
+      function matchTone(value) {
+        return value >= 85 ? 'match-high' : value >= 70 ? 'match-mid' : 'match-low';
+      }
       var ringC = 2 * Math.PI * 46;
       var ringOff = ringC * (1 - pct / 100);
+      var pctTone = matchTone(pct);
       var pctColor = pct >= 75 ? '#06d6a0'   /* high  → green  */
                    : pct >= 50 ? '#f59e0b'   /* mid   → amber  */
                    : pct >= 25 ? '#f97316'   /* low   → orange */
                    :             '#ef4444';  /* v.low → red    */
       var ring =
-        '<div class="md-ringwrap">' +
+        '<div class="md-ringwrap ' + pctTone + '">' +
           '<div class="md-ring">' +
             '<svg viewBox="0 0 104 104">' +
               '<circle class="md-ring-track" cx="52" cy="52" r="46"/>' +
-              '<circle class="md-ring-fill" cx="52" cy="52" r="46" stroke="' + pctColor + '" stroke-dasharray="' + ringC.toFixed(1) + '" stroke-dashoffset="' + ringOff.toFixed(1) + '"/>' +
+              '<circle class="md-ring-fill" cx="52" cy="52" r="46" stroke-dasharray="' + ringC.toFixed(1) + '" stroke-dashoffset="' + ringOff.toFixed(1) + '"/>' +
             '</svg>' +
-            '<b class="md-ring-num" style="color:' + pctColor + '">' + pct + '%</b>' +
+            '<b class="md-ring-num">' + pct + '%</b>' +
           '</div>' +
-          '<span class="md-ring-cap">Match</span>' +
+          '<span class="md-ring-cap">' + t('disc.match') + '</span>' +
         '</div>';
 
       var hero =
@@ -197,21 +250,27 @@
 
       var about =
         '<div class="card md-about">' +
-          '<span class="section-label">About this major</span>' +
+          '<span class="section-label">' + t('major.detail.about') + '</span>' +
           '<p class="md-desc mt-4">' + sentences.slice(0, 5).join(' ') + '</p>' +
+        '</div>';
+      var introVideo =
+        '<div class="card intro-video-card" aria-label="Major intro video">' +
+          '<div class="intro-video-slot">' +
+            '<div class="intro-video-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></div>' +
+          '</div>' +
         '</div>';
 
       var specsBlock = specs.length
-        ? '<div>' +
-            '<div class="section-title">Specializations <span class="hint">— choose a specialization track</span></div>' +
+        ? '<div class="md-spec-panel">' +
+            '<div class="section-title">' + t('major.detail.specializations') + ' <span class="hint">' + t('major.detail.spec_hint') + '</span></div>' +
             '<div class="md-specs fade-in-stagger">' + specCards + '</div>' +
           '</div>'
         : '';
 
       var why =
-        '<a class="why-btn" href="../../major/why/?major=' + encodeURIComponent(major.title) + '" title="See how your quiz answers align with this major">' +
+        '<a class="why-btn" href="../../major/why/?major=' + encodeURIComponent(major.title) + '" title="' + t('major.detail.why_sub') + '">' +
           '<span class="why-emoji">🔍</span>' +
-          '<span>Why I match this major?</span>' +
+          '<span>' + t('major.detail.why_title') + '</span>' +
           '<span class="why-arrow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>' +
         '</a>';
 
@@ -220,7 +279,7 @@
       var salaryCard =
         '<div class="card md-stat">' +
           '<div class="stat-ic">💰</div>' +
-          '<div><div class="stat-val">' + salary + '</div><div class="stat-lbl">Average Salary</div></div>' +
+          '<div><div class="stat-val">' + salary + '</div><div class="stat-lbl">' + t('major.detail.avg_salary') + '</div></div>' +
         '</div>';
 
       /* Related majors in the same discipline (real data) — fills the rail */
@@ -230,7 +289,7 @@
       var relTitle = (DISC_LABEL[major.discCode] || 'this field').replace(/^\S+\s/, '');
       var relatedCard = related.length
         ? '<div class="card md-related">' +
-            '<div class="rel-title">More in ' + relTitle + '</div>' +
+            '<div class="rel-title">' + tf('major.detail.more_in', { name: relTitle }) + '</div>' +
             related.map(function (m) {
               return '<a href="../../major/detail/?major=' + encodeURIComponent(m.title) + '">' +
                 '<span class="rel-ic">' + (m.icon || '🎓') + '</span>' +
@@ -244,8 +303,8 @@
         '<div class="acc-' + major.discCode + '">' +
           hero +
           '<div class="md-layout">' +
-            '<div class="md-main">' + about + specsBlock + '</div>' +
-            '<div class="md-rail">' + why + salaryCard + relatedCard + '</div>' +
+            '<div class="md-main">' + about + introVideo + '</div>' +
+            '<div class="md-rail">' + why + salaryCard + specsBlock + '</div>' +
           '</div>' +
         '</div>';
     }

@@ -8,13 +8,14 @@
      desktop → use phase.label    / phase.title    directly
    ───────────────────────────────────────────────────────────────── */
 
+/* start times scaled for a 10s loading screen */
 window.BD_DNA_SCHEDULE = [
-  { disc: 'kt', ico: '💻', name: 'Engineering & Tech',  target: 78, start:  2.0 },
-  { disc: 'yt', ico: '🩺', name: 'Health & Medicine',   target: 45, start:  4.5 },
-  { disc: 'nv', ico: '📖', name: 'Humanities',          target: 62, start:  6.0 },
-  { disc: 'nn', ico: '🌾', name: 'Agriculture',         target: 31, start:  8.5 },
-  { disc: 'xh', ico: '🌐', name: 'Social Sciences',     target: 55, start: 10.0 },
-  { disc: 'tn', ico: '🧬', name: 'Natural Sciences',    target: 68, start: 12.5 },
+  { disc: 'kt', ico: '💻', name: 'Engineering & Tech',  target: 78, start: 0.8 },
+  { disc: 'yt', ico: '🩺', name: 'Health & Medicine',   target: 45, start: 1.8 },
+  { disc: 'nv', ico: '📖', name: 'Humanities',          target: 62, start: 2.4 },
+  { disc: 'nn', ico: '🌾', name: 'Agriculture',         target: 31, start: 3.4 },
+  { disc: 'xh', ico: '🌐', name: 'Social Sciences',     target: 55, start: 4.0 },
+  { disc: 'tn', ico: '🧬', name: 'Natural Sciences',    target: 68, start: 5.0 },
 ];
 
 window.BD_PHASES = [

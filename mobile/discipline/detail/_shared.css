@@ -301,13 +301,10 @@ body{
 .major-name {
   font-size: 14px; font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 3px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .major-tag {
-  font-size: 9px; font-weight: 700;
-  color: var(--text-muted);
-  letter-spacing: .10em; text-transform: uppercase;
+  display: none;
 }
 .major-arrow {
   color: var(--text-muted);
@@ -699,3 +696,214 @@ body{
 
 /* Locked card */
 [data-theme="light"] .major-card.locked { opacity: 0.50; }
+
+/* ════════════════════════════════════════════════════════════
+   APP MODE — flatten the simulated phone frame for the real app.
+   Hides the dev breadcrumb, device bezel / notch and the fake
+   status bar so each screen fills the real device viewport.
+   (Added for the installable PWA / Capacitor build.)
+   ════════════════════════════════════════════════════════════ */
+.breadcrumb { display: none !important; }
+
+.desktop-container {
+  display: block !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.device-frame {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-top: env(safe-area-inset-top) !important;
+}
+
+.device-notch { display: none !important; }
+.status-bar   { display: none !important; }
+
+.bottom-nav {
+  padding-bottom: calc(var(--space-2, 8px) + env(safe-area-inset-bottom)) !important;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   HERO MATCH % — parity with major/detail hero
+   ════════════════════════════════════════════════════════════════ */
+.hero-label-top {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 10px; margin-bottom: 6px;
+}
+.hero-label-top .hero-label-name { flex: 1; min-width: 0; }
+.hero-match { text-align: right; flex-shrink: 0; }
+.hero-match-pct {
+  font-size: 28px; font-weight: 900; line-height: 1;
+  color: var(--disc-light, #a78bfa);
+  text-shadow: 0 2px 16px rgba(0,0,0,.55);
+}
+.hero-match-label {
+  font-size: 9px; font-weight: 700;
+  color: rgba(255,255,255,.55);
+  letter-spacing: .1em; text-transform: uppercase; text-align: right;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   DISCIPLINE OVERVIEW CARD — mirrors desktop dd-discipline-card
+   ════════════════════════════════════════════════════════════════ */
+.detail-overview-card {
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  margin-bottom: 22px;
+}
+.overview-label {
+  display: block;
+  font-size: 10px; font-weight: 800;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--disc-light, #a78bfa);
+  margin-bottom: 6px;
+}
+.overview-title {
+  font-size: 19px; font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -.02em;
+  margin-bottom: 14px;
+}
+.overview-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.overview-row .overview-title {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+.overview-body {
+  padding-left: 14px;
+  border-left: 3px solid var(--disc-primary);
+}
+.overview-body p {
+  font-size: 13.5px; line-height: 1.6;
+  color: var(--text-secondary);
+}
+.overview-body p + p { margin-top: 11px; }
+.overview-body .lead {
+  font-size: 14.5px; font-weight: 700; color: var(--text-primary);
+  letter-spacing: -.01em;
+}
+.detail-overview-card .detail-desc { margin-bottom: 14px; }
+.detail-overview-card .detail-bullets { margin-bottom: 0; }
+.intro-video-card {
+  margin-bottom: 22px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--bg-surface);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.intro-video-slot {
+  height: clamp(160px, calc((100vw - 36px) * 0.5625), 220px);
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--disc-primary) 24%, transparent), transparent 52%),
+    linear-gradient(135deg, color-mix(in srgb, var(--disc-primary) 12%, rgba(255,255,255,.05)), rgba(255,255,255,.03));
+  border: 1px solid color-mix(in srgb, var(--disc-primary) 24%, transparent);
+}
+.intro-video-play {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, var(--disc-primary), var(--disc-light));
+  box-shadow: 0 10px 24px var(--disc-glow-sm);
+}
+.intro-video-play svg { width: 20px; height: 20px; margin-left: 2px; }
+
+/* ════════════════════════════════════════════════════════════════
+   WHY-MATCH BUTTON — unified disc-colored gradient (magnifier + arrow)
+   Shared with major/detail (.why-match-btn duplicated in that file's css)
+   ════════════════════════════════════════════════════════════════ */
+.why-match-btn {
+  position: relative;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 13px 42px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--disc-primary), var(--disc-light));
+  color: #fff;
+  font-size: 14px; font-weight: 800; letter-spacing: .01em;
+  text-decoration: none;
+  border: none; cursor: pointer;
+  box-shadow: 0 6px 20px var(--disc-glow-sm), 0 1px 0 rgba(255,255,255,.20) inset;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), filter var(--t-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+.why-match-btn:hover { filter: brightness(1.06); }
+.why-match-btn:active { transform: scale(.98); box-shadow: 0 3px 12px var(--disc-glow-sm); }
+.why-match-btn .wm-ico,
+.why-match-btn .wm-arrow { flex-shrink: 0; display: flex; align-items: center; }
+.why-match-btn .wm-arrow {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  opacity: .9;
+}
+.overview-row .why-match-btn {
+  width: auto;
+  flex: none;
+  margin-top: 0;
+  min-height: 38px;
+  padding: 10px 34px 10px 14px;
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.overview-row .why-match-btn .wm-label {
+  max-width: 88px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.overview-row .why-match-btn .wm-arrow { right: 12px; }
+
+/* ── LIGHT MODE overrides ──────────────────────────────────────── */
+[data-theme="light"] .hero-match-pct {
+  color: color-mix(in srgb, var(--disc-primary) 60%, #2c1f14) !important;
+  text-shadow: 0 1px 2px rgba(255,255,255,.5);
+}
+[data-theme="light"] .hero-match-label { color: #5c4535 !important; }
+
+[data-theme="light"] .detail-overview-card {
+  background: rgba(253,248,242,0.92) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  border: 1px solid rgba(232,224,213,0.70) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.65),
+    0 2px 8px rgba(92,69,53,0.05),
+    0 8px 20px rgba(140,114,96,0.07) !important;
+}
+[data-theme="light"] .overview-label {
+  color: color-mix(in srgb, var(--disc-primary) 55%, #2c1f14) !important;
+}
+[data-theme="light"] .overview-title { color: #2c1f14 !important; }
+[data-theme="light"] .overview-body { border-left-color: var(--disc-primary) !important; }
+[data-theme="light"] .overview-body .lead { color: #2c1f14 !important; }
+[data-theme="light"] .overview-body p { color: #5c4535 !important; }
+[data-theme="light"] .intro-video-card {
+  background: rgba(253,248,242,0.92) !important;
+  border: 1px solid rgba(232,224,213,0.70) !important;
+}
+[data-theme="light"] .intro-video-slot {
+  background:
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--disc-primary) 18%, transparent), transparent 54%),
+    linear-gradient(135deg, color-mix(in srgb, var(--disc-primary) 10%, rgba(253,248,242,0.94)), rgba(255,255,255,0.72)) !important;
+  border-color: color-mix(in srgb, var(--disc-primary) 20%, rgba(232,224,213,0.9)) !important;
+}

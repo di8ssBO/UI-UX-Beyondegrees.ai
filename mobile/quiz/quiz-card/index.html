@@ -2999,6 +2999,56 @@ svg *, canvas, video, img { transition: none !important; }
 .stt-dismiss-btn:active { transform: scale(0.96); box-shadow: 0 3px 10px rgba(24,99,220,0.3); }
 
 </style>
+<style>
+/* ════════════════════════════════════════════════════════════
+   APP MODE — flatten the simulated phone frame for the real app.
+   Hides the dev breadcrumb, device bezel / notch and the fake
+   status bar so each screen fills the real device viewport.
+   (Added for the installable PWA / Capacitor build.)
+   ════════════════════════════════════════════════════════════ */
+.breadcrumb { display: none !important; }
+
+/* quiz-card uses its own wrapper classes instead of .desktop-container */
+.breadcrumb-bar { display: none !important; }
+.page-layout,
+.page-layout--centered {
+  display: block !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+.device-wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  flex-shrink: 1 !important;
+}
+
+.desktop-container {
+  display: block !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.device-frame {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-top: env(safe-area-inset-top) !important;
+}
+
+.device-notch { display: none !important; }
+.status-bar   { display: none !important; }
+
+.bottom-nav {
+  padding-bottom: calc(var(--space-2, 8px) + env(safe-area-inset-bottom)) !important;
+}
+</style>
 </head>
 <body>
   <nav class="breadcrumb-bar">
@@ -3173,7 +3223,7 @@ svg *, canvas, video, img { transition: none !important; }
             </a>
 
             <!-- 5. Hoang Phuc -->
-            <a href="../../profile/overview/" class="tab-item" data-tab="account">
+            <a href="../../profile/edit/" class="tab-item" data-tab="account">
               <span class="tab-icon">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="7.5" r="3.5"/>
@@ -5320,8 +5370,22 @@ function showBatchDone(stage) {
         'border-radius:9px;padding:5px 12px;font-size:11.5px;font-weight:700;color:#fff;cursor:pointer}';
     document.head.appendChild(css);
 
+    /* quiz-card doesn't load shared i18n.js — local resume strings (5 langs). */
+    var RESUME_I18N = {
+      en: { 'quiz.resume.title':'Resume where you left off ❖', 'quiz.resume.sub':'Q{n} / {total} · {count} answers saved', 'quiz.resume.start_over':'Start over', 'quiz.resume.continue':'Continue →' },
+      vi: { 'quiz.resume.title':'Tiếp tục từ nơi bạn dừng ❖', 'quiz.resume.sub':'Câu {n} / {total} · {count} câu đã lưu', 'quiz.resume.start_over':'Bắt đầu lại', 'quiz.resume.continue':'Tiếp tục →' },
+      hi: { 'quiz.resume.title':'जहाँ छोड़ा था वहाँ से जारी रखें ❖', 'quiz.resume.sub':'प्रश्न {n} / {total} · {count} उत्तर सहेजे', 'quiz.resume.start_over':'फिर से शुरू करें', 'quiz.resume.continue':'जारी रखें →' },
+      fr: { 'quiz.resume.title':'Reprendre où vous vous êtes arrêté ❖', 'quiz.resume.sub':'Q{n} / {total} · {count} réponses sauvegardées', 'quiz.resume.start_over':'Recommencer', 'quiz.resume.continue':'Continuer →' },
+      ar: { 'quiz.resume.title':'استئناف من حيث توقفت ❖', 'quiz.resume.sub':'س{n} / {total} · {count} إجابات محفوظة', 'quiz.resume.start_over':'البدء من جديد', 'quiz.resume.continue':'متابعة →' }
+    };
     var _rt = function(k, vars) {
-      var s = (window.BDi18n ? BDi18n.t(k) : k) || k;
+      var lang = 'en';
+      try { lang = localStorage.getItem('bd-lang') || 'en'; } catch (e) {}
+      var s = window.BDi18n ? BDi18n.t(k) : null;
+      if (s == null || s === k) {
+        var tbl = RESUME_I18N[lang] || RESUME_I18N.en;
+        s = tbl[k] || RESUME_I18N.en[k] || k;
+      }
       if (vars) Object.keys(vars).forEach(function(v) { s = s.replace('{'+v+'}', vars[v]); });
       return s;
     };

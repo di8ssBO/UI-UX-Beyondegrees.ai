@@ -8,7 +8,7 @@
 <title>Discipline Match — BeyonDegrees.ai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../_shell/desktop.css">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   .match-layout { display: grid; grid-template-columns: 1fr 400px; gap: 24px; align-items: start; }
   /* ── dc card (mobile .dc) ── */
@@ -45,10 +45,14 @@
 
   /* ══ Constellation Sky — nguyên văn mobile (cấu trúc + hiệu ứng) ══ */
   .cst-section { padding: 0; }
-  .cst-sky-wrap { border-radius: 24px; overflow: hidden; position: relative; }
+  .cst-sky-wrap {
+    border-radius: 24px; overflow: hidden; position: relative;
+    border: 1px solid rgba(255,255,255,0.09);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.30), 0 8px 28px rgba(0,0,0,0.20);
+  }
   .cst-caption {
-    text-align: center; font-size: 12px; color: rgba(255,255,255,0.4);
-    padding: 8px 12px 10px; font-style: italic; font-family: 'Plus Jakarta Sans', sans-serif;
+    text-align: center; font-size: 12px; color: rgba(255,255,255,0.45);
+    padding: 10px 16px 14px; font-style: italic; font-family: 'Plus Jakarta Sans', sans-serif;
     letter-spacing: 0.03em; background: linear-gradient(to bottom, #020510, #0a0a1a);
   }
   #cstContainer { display: block; line-height: 0; }
@@ -124,26 +128,26 @@
       <div class="locked-state" id="lockedState">
         <div class="lock-banner">
           <div class="lock-emoji">🔒</div>
-          <div class="lock-title">Discipline Match Locked</div>
+          <div class="lock-title" data-i18n="disc.lock_title">Discipline Match Locked</div>
           <div class="lock-sub" id="lockSubText">Complete more questions to unlock your Discipline results.</div>
           <button class="lock-cta-btn" id="lockCta">Start Quiz →</button>
         </div>
-        <div class="teaser-label">🔮 Preview</div>
+        <div class="teaser-label" data-i18n="disc.preview">🔮 Preview</div>
         <div class="teaser-wrap">
           <div class="teaser-list">
-            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">⚙️</div><div><div class="tc-name">Engineering &amp; Technology</div><div class="tc-sub">#1 Ranked</div></div></div><span class="tc-pct">??%</span></div>
-            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">🔬</div><div><div class="tc-name">Natural Sciences</div><div class="tc-sub">#2 Ranked</div></div></div><span class="tc-pct">??%</span></div>
-            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">🩺</div><div><div class="tc-name">Medical &amp; Health Sciences</div><div class="tc-sub">#3 Ranked</div></div></div><span class="tc-pct">??%</span></div>
-            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">🌾</div><div><div class="tc-name">Agricultural Sciences</div><div class="tc-sub">#4 Ranked</div></div></div><span class="tc-pct">??%</span></div>
+            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">⚙️</div><div><div class="tc-name" data-i18n="disc.name.kt">Engineering &amp; Technology</div><div class="tc-sub">#1 Ranked</div></div></div><span class="tc-pct">??%</span></div>
+            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">🔬</div><div><div class="tc-name" data-i18n="disc.name.tn">Natural Sciences</div><div class="tc-sub">#2 Ranked</div></div></div><span class="tc-pct">??%</span></div>
+            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">🩺</div><div><div class="tc-name" data-i18n="disc.name.yt">Medical &amp; Health Sciences</div><div class="tc-sub">#3 Ranked</div></div></div><span class="tc-pct">??%</span></div>
+            <div class="teaser-card"><div class="tc-left"><div class="tc-ico">🌾</div><div><div class="tc-name" data-i18n="disc.name.nn">Agricultural Sciences</div><div class="tc-sub">#4 Ranked</div></div></div><span class="tc-pct">??%</span></div>
           </div>
         </div>
       </div>
 
       <!-- ── Main content: hiện khi đã trả lời ≥ 10 câu ── -->
       <div id="mainContent" style="display:none">
-        <span class="ai-chip">✦ AI-Powered Curation</span>
-        <h1 class="page-title mt-4">Your Perfect <span class="ac">Disciplines</span></h1>
-        <p class="page-sub">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
+        <span class="ai-chip" data-i18n="disc.ai_chip">✦ AI-Powered Curation</span>
+        <h1 class="page-title mt-4"><span data-i18n="disc.headline">Your Perfect</span> <span class="ac" data-i18n="disc.headline_em">Disciplines</span></h1>
+        <p class="page-sub" data-i18n="disc.subtext">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
 
         <div class="match-layout mt-8">
           <div class="fade-in-stagger" id="rankList"></div>
@@ -152,8 +156,8 @@
             <div class="cst-section">
               <div class="cst-sky-wrap">
                 <div id="cstContainer"></div>
+                <p class="cst-caption" id="cstCaption" data-i18n="disc.caption">Complete the quiz to reveal your Academic DNA ✨</p>
               </div>
-              <p class="cst-caption" id="cstCaption">Complete the quiz to reveal your Academic DNA ✨</p>
             </div>
           </div>
         </div>
@@ -162,9 +166,13 @@
     </div>
   </div>
 
-  <script src="../../../shared/scripts/ui/i18n.js"></script>
-  <script src="../../_shell/desktop.js?v=3"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
   <script>
+    /* i18n helpers — BDi18n._lang is already set (i18n.js inits on load) */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+    function tf(k,v){ return (window.BDi18n && BDi18n.tf) ? BDi18n.tf(k,v) : t(k); }
+
     /* ── Dữ liệu nguyên văn mobile (rank, %, mô tả) ── */
     var DISCS = [
       { k:'kt', ico:'⚙️', name:'Engineering & Technology',     rank:1, pct:94,
@@ -198,16 +206,16 @@
           '<div class="dc-top">' +
             '<div class="dc-left">' +
               '<div class="dc-ico">' + d.ico + '</div>' +
-              '<div><div class="dc-name">' + d.name + '</div>' +
-              '<div class="dc-rank">#' + d.rank + ' Ranked</div></div>' +
+              '<div><div class="dc-name">' + t('disc.name.' + d.k) + '</div>' +
+              '<div class="dc-rank">' + tf('disc.ranked', { n: d.rank }) + '</div></div>' +
             '</div>' +
-            '<div><div class="dc-pct dc-pct-num">' + d.pct + '%</div><div class="dc-plbl">Match</div></div>' +
+            '<div><div class="dc-pct dc-pct-num">' + d.pct + '%</div><div class="dc-plbl">' + t('disc.match') + '</div></div>' +
           '</div>' +
           '<div class="dc-prog"><div class="dc-pfill dc-pfill-el" style="width:0%"></div></div>' +
-          '<div class="dc-desc">' + d.desc + '</div>' +
+          '<div class="dc-desc">' + t('disc.desc.' + d.k) + '</div>' +
           '<div class="dc-foot">' +
-            '<a class="btn-ex" href="../../discipline/why/?d=' + d.k + '">Why I match? 🔍</a>' +
-            '<a class="btn-pw" href="../../discipline/detail/?d=' + d.k + '">Career Paths</a>' +
+            '<a class="btn-ex" href="../../discipline/why/?d=' + d.k + '">' + t('disc.why_match') + '</a>' +
+            '<a class="btn-pw" href="../../discipline/detail/?d=' + d.k + '">' + t('disc.career_paths') + '</a>' +
           '</div>';
         list.appendChild(el);
         setTimeout(function () { el.querySelector('.dc-pfill-el').style.width = d.pct + '%'; }, 250 + i * 90);
@@ -217,8 +225,8 @@
     if (answered < 10) {
       $('lockedState').classList.add('show');
       var rem = 10 - answered;
-      $('lockSubText').innerHTML = 'Complete <strong>' + rem + ' more question' + (rem !== 1 ? 's' : '') + '</strong> to unlock your Discipline results.';
-      $('lockCta').textContent = answered > 0 ? 'Continue Quiz →' : 'Start Quiz →';
+      $('lockSubText').textContent = tf('disc.lock_sub_n', { n: rem });
+      $('lockCta').textContent = answered > 0 ? t('disc.cta.continue') : t('disc.cta.start');
       $('lockCta').addEventListener('click', function () { location.href = '../../quiz/quiz-card/'; });
     } else {
       $('mainContent').style.display = '';
@@ -260,12 +268,12 @@
 
       /* Thứ tự xen kẽ cao-thấp → hình radar lồi lõm: 94→34→89→32→64→62 */
       var DISC = [
-        { key:'kt', name:'Engineering & Tech', myth:'Like Orion - precise, powerful & systematic',  color:DISC_COLORS.kt, pct:dnaPct('kt'), angle:0   },
-        { key:'xh', name:'Social Sciences',    myth:'Like Gemini - connecting, expressive & dual',   color:DISC_COLORS.xh, pct:dnaPct('xh'), angle:60  },
-        { key:'tn', name:'Natural Sciences',   myth:'Like Cassiopeia - curious, observant & exact',  color:DISC_COLORS.tn, pct:dnaPct('tn'), angle:120 },
-        { key:'nv', name:'Humanities',         myth:'Like Virgo - graceful, nuanced & cultural',     color:DISC_COLORS.nv, pct:dnaPct('nv'), angle:180 },
-        { key:'yt', name:'Medical & Health',   myth:'Like Ophiuchus - the healer & serpent-holder',  color:DISC_COLORS.yt, pct:dnaPct('yt'), angle:240 },
-        { key:'nn', name:'Agricultural Sci',   myth:'Like Taurus - grounded, patient & sustaining',  color:DISC_COLORS.nn, pct:dnaPct('nn'), angle:300 }
+        { key:'kt', name:t('disc.short.kt'), myth:'Like Orion - precise, powerful & systematic',  color:DISC_COLORS.kt, pct:dnaPct('kt'), angle:0   },
+        { key:'xh', name:t('disc.short.xh'), myth:'Like Gemini - connecting, expressive & dual',   color:DISC_COLORS.xh, pct:dnaPct('xh'), angle:60  },
+        { key:'tn', name:t('disc.short.tn'), myth:'Like Cassiopeia - curious, observant & exact',  color:DISC_COLORS.tn, pct:dnaPct('tn'), angle:120 },
+        { key:'nv', name:t('disc.short.nv'), myth:'Like Virgo - graceful, nuanced & cultural',     color:DISC_COLORS.nv, pct:dnaPct('nv'), angle:180 },
+        { key:'yt', name:t('disc.short.yt'), myth:'Like Ophiuchus - the healer & serpent-holder',  color:DISC_COLORS.yt, pct:dnaPct('yt'), angle:240 },
+        { key:'nn', name:t('disc.short.nn'), myth:'Like Taurus - grounded, patient & sustaining',  color:DISC_COLORS.nn, pct:dnaPct('nn'), angle:300 }
       ];
 
       /* Xếp hạng để điều chỉnh độ sáng (rank 0 = cao nhất) */
@@ -495,17 +503,17 @@
       cLabel.setAttribute('font-size', '5'); cLabel.setAttribute('font-weight', '600');
       cLabel.setAttribute('text-anchor', 'middle'); cLabel.setAttribute('letter-spacing', '1.5');
       cLabel.setAttribute('font-family', 'Plus Jakarta Sans, sans-serif');
-      cLabel.textContent = 'ACADEMIC DNA';
+      cLabel.textContent = t('dna.center');
       svg.appendChild(cLabel);
 
       container.appendChild(svg);
 
       var capKey = rawMilestone >= 30 ? 30 : rawMilestone >= 20 ? 20 : rawMilestone >= 10 ? 10 : 0;
       var captions = {
-        0: 'Complete the quiz to reveal your Academic DNA ✨',
-        10: 'Top 2 disciplines revealed — tap a vertex star to explore 🔥',
-        20: '4 disciplines formed — 1 stage to complete your DNA ⚡',
-        30: 'Your complete Academic DNA — tap any vertex to explore 🌌'
+        0: t('disc.caption'),
+        10: t('disc.cap_10'),
+        20: t('disc.cap_20'),
+        30: t('disc.cap_30')
       };
       var cap = document.getElementById('cstCaption');
       if (cap) cap.textContent = captions[capKey];

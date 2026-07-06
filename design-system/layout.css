@@ -808,3 +808,36 @@ html[data-theme="light"] body {
   border-color: rgba(2,116,190,0.28) !important;
   color: #0274BE !important;
 }
+
+/* ════════════════════════════════════════════════════════════
+   APP MODE — flatten the simulated phone frame for the real app.
+   Hides the dev breadcrumb, device bezel / notch and the fake
+   status bar so each screen fills the real device viewport.
+   (Added for the installable PWA / Capacitor build.)
+   ════════════════════════════════════════════════════════════ */
+.breadcrumb { display: none !important; }
+
+.desktop-container {
+  display: block !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.device-frame {
+  width: 100% !important;
+  max-width: none !important;
+  height: 100vh !important;
+  height: 100dvh !important;
+  aspect-ratio: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-top: env(safe-area-inset-top) !important;
+}
+
+.device-notch { display: none !important; }
+.status-bar   { display: none !important; }
+
+.bottom-nav {
+  padding-bottom: calc(var(--space-2, 8px) + env(safe-area-inset-bottom)) !important;
+}

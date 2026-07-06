@@ -28,7 +28,7 @@
         }
       } catch (e) {}
       /* Default seed — replaced when user saves from Profile Edit */
-      return { firstName: 'Hoang', lastName: 'Phuc' };
+      return { firstName: 'Your', lastName: 'Name' };
     },
 
     getDisplayName: function () {
