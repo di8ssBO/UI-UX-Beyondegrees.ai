@@ -104,25 +104,55 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
 [data-theme="light"] .venn-btn{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.16);color:#e8e8f5}
 [data-theme="light"] .venn-btn:hover{background:rgba(255,255,255,.18)}
 
+/* Exit-fullscreen is its own action (leave the view) vs. zoom (adjust
+   it) — same split as desktop: ✕ pinned top-right on its own, zoom
+   cluster moves to bottom-right so a fat thumb can't hit the wrong one. */
+.venn-close-btn{display:none;position:absolute;top:10px;right:10px;z-index:7;width:30px;height:30px;border-radius:50%;font-size:14px;line-height:1;align-items:center;justify-content:center;cursor:pointer;background:rgba(42,27,12,.10);border:1px solid rgba(42,27,12,.20);color:#2A1B0C}
+.venn-close-btn:active{transform:scale(.92)}
+[data-theme="light"] .venn-close-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.20);color:#e8e8f5}
+.venn-card.vc-fullscreen .venn-close-btn{display:flex}
+.venn-card.vc-fullscreen .venn-controls{top:auto;bottom:14px;right:14px}
+.venn-card.vc-fullscreen [data-act="fullscreen"]{display:none}
+
 .venn-stage-wrap{width:100%;overflow:hidden;border-radius:12px}
 .venn-stage{width:100%;transform-origin:center center;transition:transform .18s ease}
 .venn-stage svg{display:block;width:100%;height:auto}
-
-.venn-tooltip{position:absolute;left:50%;bottom:14px;transform:translateX(-50%) translateY(6px);max-width:88%;background:rgba(8,10,32,.96);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:10px 14px;font-size:11.5px;line-height:1.5;color:#e8e8f5;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:8;box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.venn-tooltip.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
-.venn-tooltip .vt-q{font-weight:600;margin-bottom:4px}
-.venn-tooltip .vt-a{font-size:10.5px;color:rgba(232,232,245,.65)}
-.venn-tooltip .vt-a b{font-weight:800}
-
-/* ── Fullscreen mode (contained within phone frame) ──────── */
-.venn-card.vc-fullscreen{position:absolute;inset:10px;z-index:30;display:flex;flex-direction:column}
 .venn-card.vc-fullscreen .venn-stage-wrap{flex:1;display:flex;align-items:center;justify-content:center}
 
-/* ── Legend ───────────────────────────────────────────────── */
-.venn-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;padding:14px 2px 4px}
-.venn-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--text-secondary)}
+/* Circles glow when the dot/story currently shown belongs to them —
+   same "explainable AI" cue as desktop: press a dot → see exactly which
+   part of the diagram it's talking about. */
+.venn-circle{transition:fill-opacity .22s ease,stroke-opacity .22s ease,stroke-width .22s ease}
+.venn-circle.circle-glow{fill-opacity:.62;stroke-opacity:.95;stroke-width:2.2px}
+
+/* ── Tooltip — floats next to whichever dot/circle was PRESSED (never
+   on hover — there is no hover on a touchscreen) instead of pinning to
+   a fixed spot on the card, which used to land on top of the 3rd
+   circle's name/% label. Flips above/below the press target depending
+   on which side has room, with a caret pointing right at it. ── */
+.venn-tooltip{position:absolute;z-index:8;transform:translateX(-50%) translateY(6px) scale(.94);width:min(90%,300px);background:rgba(8,10,32,.97);border:1px solid rgba(255,255,255,.14);border-top:2px solid var(--vt-accent,rgba(255,255,255,.3));border-radius:14px;padding:11px 14px;font-size:11.5px;line-height:1.5;color:#e8e8f5;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .3s cubic-bezier(.34,1.56,.64,1),left .18s ease,top .18s ease,bottom .18s ease;z-index:8;box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 22px -8px var(--vt-accent,transparent)}
+.venn-tooltip.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1);pointer-events:auto}
+.venn-tooltip::after{content:'';position:absolute;width:12px;height:12px;left:var(--vt-arrow-x,50%);background:rgba(8,10,32,.97);transform:translateX(-50%) rotate(45deg);border-radius:3px}
+.venn-tooltip.place-above::after{bottom:-6px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14)}
+.venn-tooltip.place-below::after{top:-6px;border-left:1px solid rgba(255,255,255,.14);border-top:1px solid rgba(255,255,255,.14)}
+.venn-tooltip .vt-verdict{display:flex;align-items:center;gap:5px;font-weight:800;font-size:11px;color:#fff;margin-bottom:4px}
+.venn-tooltip .vt-story{font-size:11px;line-height:1.5;color:rgba(232,232,245,.92);min-height:1.4em}
+.venn-tooltip .vt-story.typing::after{content:'▍';margin-left:1px;opacity:.7;animation:vtCaret .7s steps(1) infinite;color:rgba(232,232,245,.6)}
+@keyframes vtCaret{50%{opacity:0}}
+.venn-tooltip .vt-a{font-size:10.5px;color:rgba(232,232,245,.65);margin-top:7px;padding-top:6px;border-top:1px solid rgba(255,255,255,.10)}
+.venn-tooltip .vt-a b{font-weight:800}
+@media (prefers-reduced-motion:reduce){.venn-tooltip .vt-story.typing::after{display:none}.venn-tooltip{transition:opacity .15s ease}}
+
+/* ── Legend — moved INSIDE the card, directly above the stage (was a
+   separate row below the whole card), so it's read as part of the same
+   block as the diagram instead of a stray row the eye jumps to. Items
+   are tappable → that discipline's own story. ── */
+.venn-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px;padding:0 2px 10px}
+.venn-legend-item{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;color:var(--text-secondary);cursor:pointer;border-radius:999px;padding:2px 7px;transition:background .15s}
+.venn-legend-item:active{background:rgba(255,255,255,.10)}
+[data-theme="light"] .venn-legend-item:active{background:rgba(30,21,51,.08)}
 .venn-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.venn-caption{font-size:11px;color:var(--text-muted);line-height:1.5;padding:0 2px;margin-top:2px;text-align:center}
+.venn-caption{font-size:11px;color:var(--text-muted);line-height:1.5;padding:0 2px;margin-top:8px;text-align:center}
 
 /* ── Locked state card ────────────────────────────────────── */
 .um-lock-wrap{display:flex;align-items:center;justify-content:center;min-height:340px;padding:20px 4px}
@@ -193,8 +223,8 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
       </div>
 
       <div class="um-body">
-        <h1 class="um-title" data-i18n="understand.title">Understand Your Matches</h1>
-        <p class="um-subtitle" data-i18n="understand.subtitle">See how your answers shaped your top matches. Each dot is an Assertion you answered — tap to read it and see your answer.</p>
+        <h1 class="um-title" data-i18n="understand.title">Why These Are Your Matches</h1>
+        <p class="um-subtitle" data-i18n="understand.subtitle">Each dot is an answer that shaped this result — tap one to see why.</p>
 
         <div class="um-tabs" role="tablist">
           <button class="um-tab active" data-tab="disciplines" data-i18n="understand.tab.disciplines">DISCIPLINES</button>
@@ -763,6 +793,37 @@ function colorForMask(mask, top3){
 }
 
 /* ══════════════════════════════════════════════════════════
+   NARRATIVE — same template-bank storytelling as desktop: a short,
+   warm, second-person explanation of WHY a dot/answer matters, built
+   from its mask (which circles it belongs to) + how strongly it was
+   answered. Ported 1:1 so a future real-AI text source only has to
+   swap this function, not the tooltip/press UI around it.
+═══════════════════════════════════════════════════════════ */
+function namesFromMask(mask, top3){
+  var out = [];
+  if (mask & 1) out.push(top3[0].name);
+  if (mask & 2) out.push(top3[1].name);
+  if (mask & 4) out.push(top3[2].name);
+  return out;
+}
+function strengthOf(answer){
+  if (answer === t('understand.answer.absolutely')) return 'strong';
+  if (answer === t('understand.answer.unsure'))     return 'weak';
+  if (answer === t('understand.answer.disagree'))   return 'against';
+  return 'agree';
+}
+function buildNarrative(mask, answer, top3){
+  var names = namesFromMask(mask, top3);
+  var verdict = t('understand.narr.verdict.' + strengthOf(answer));
+  var story;
+  if (mask === 0) story = t('understand.narr.other');
+  else if (names.length === 1) story = t('understand.narr.single').replace('{a}', names[0]);
+  else if (names.length === 2) story = t('understand.narr.pair').replace('{a}', names[0]).replace('{b}', names[1]);
+  else story = t('understand.narr.triple').replace('{a}', names[0]).replace('{b}', names[1]).replace('{c}', names[2]);
+  return { verdict: verdict, story: story };
+}
+
+/* ══════════════════════════════════════════════════════════
    RENDER — builds one Venn tab (Disciplines / Majors)
 ═══════════════════════════════════════════════════════════ */
 var ZOOM = {};
@@ -794,7 +855,8 @@ function renderVennTab(tabKey, top3, assertions){
     var mask = discMaskFor(a.discs, top3Ids);
     var p    = (mask === 0) ? placeOtherDot(i + 1, otherPlaced) : placeDot(mask, i + 1);
     if (mask === 0) otherPlaced.push(p);
-    return { p:p, color: colorForMask(mask, top3), text:a.text, answer:a.answer };
+    var narr = buildNarrative(mask, a.answer, top3);
+    return { p:p, color: colorForMask(mask, top3), text:a.text, answer:a.answer, mask:mask, verdict:narr.verdict, story:narr.story };
   });
   var uniqueColors = [];
   dotData.forEach(function(d){ if (uniqueColors.indexOf(d.color) === -1) uniqueColors.push(d.color); });
@@ -839,7 +901,7 @@ function renderVennTab(tabKey, top3, assertions){
      is unaffected by whatever fixed ring/number colors are in play. */
   var dotsSvg = dotData.map(function(d, i){
     var p = d.p, color = d.color;
-    var payload = encodeURIComponent(JSON.stringify({ text:d.text, answer:d.answer, color:color }));
+    var payload = encodeURIComponent(JSON.stringify({ text:d.text, answer:d.answer, color:color, mask:d.mask, verdict:d.verdict, story:d.story }));
     var fleck = cardIsLight
       ? '<ellipse cx="' + (p.x - 4.2).toFixed(1) + '" cy="' + (p.y - 5.2).toFixed(1) + '" rx="3.8" ry="2.3" fill="rgba(255,255,255,.70)"></ellipse>'
       : '';
@@ -891,9 +953,9 @@ function renderVennTab(tabKey, top3, assertions){
   var svg = ''
     + '<svg viewBox="0 0 320 ' + viewH + '" xmlns="http://www.w3.org/2000/svg">'
     + defsSvg
-    + '<circle cx="' + c1.cx + '" cy="' + c1.cy + '" r="' + c1.r + '" fill="' + top3[0].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[0].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
-    + '<circle cx="' + c2.cx + '" cy="' + c2.cy + '" r="' + c2.r + '" fill="' + top3[1].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[1].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
-    + '<circle cx="' + c3.cx + '" cy="' + c3.cy + '" r="' + c3.r + '" fill="' + top3[2].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[2].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
+    + '<circle class="venn-circle" id="vennCircle-' + uid + '-1" data-disc="0" cx="' + c1.cx + '" cy="' + c1.cy + '" r="' + c1.r + '" fill="' + top3[0].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[0].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
+    + '<circle class="venn-circle" id="vennCircle-' + uid + '-2" data-disc="1" cx="' + c2.cx + '" cy="' + c2.cy + '" r="' + c2.r + '" fill="' + top3[1].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[1].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
+    + '<circle class="venn-circle" id="vennCircle-' + uid + '-3" data-disc="2" cx="' + c3.cx + '" cy="' + c3.cy + '" r="' + c3.r + '" fill="' + top3[2].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[2].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
     + label1.svg
     + label2.svg
     + label3.svg
@@ -901,11 +963,11 @@ function renderVennTab(tabKey, top3, assertions){
     + dotsSvg
     + '</svg>';
 
-  var legend = top3.map(function(d){
-    return '<div class="venn-legend-item"><span class="venn-legend-dot" style="background:' + d.color + '"></span>' + d.name + '</div>';
+  var legend = top3.map(function(d, i){
+    return '<div class="venn-legend-item" data-disc="' + i + '"><span class="venn-legend-dot" style="background:' + d.color + '"></span>' + d.name + '</div>';
   }).join('');
   if (hasOther){
-    legend += '<div class="venn-legend-item"><span class="venn-legend-dot" style="background:' + OTHER_COLOR + '"></span>' + t('understand.other_label') + '</div>';
+    legend += '<div class="venn-legend-item" style="cursor:default"><span class="venn-legend-dot" style="background:' + OTHER_COLOR + '"></span>' + t('understand.other_label') + '</div>';
   }
 
   var html = ''
@@ -915,61 +977,170 @@ function renderVennTab(tabKey, top3, assertions){
     + '    <button class="venn-btn" data-act="zoom-out" data-tab="' + uid + '" aria-label="Zoom out">&minus;</button>'
     + '    <button class="venn-btn" data-act="fullscreen" data-tab="' + uid + '" aria-label="Fullscreen">&#9974;</button>'
     + '  </div>'
+    + '  <button class="venn-close-btn" data-act="close-fullscreen" data-tab="' + uid + '" aria-label="Exit fullscreen">&#10005;</button>'
+    + '  <div class="venn-legend">' + legend + '</div>'
     + '  <div class="venn-stage-wrap">'
     + '    <div class="venn-stage" id="vennStage-' + uid + '">' + svg + '</div>'
     + '  </div>'
     + '  <div class="venn-tooltip" id="vennTooltip-' + uid + '"></div>'
     + '</div>'
-    + '<div class="venn-legend">' + legend + '</div>'
     + '<p class="venn-caption" data-i18n="understand.legend_caption">' + t('understand.legend_caption') + '</p>';
 
   var panel = document.getElementById('panel' + uid.charAt(0).toUpperCase() + uid.slice(1));
   panel.innerHTML = html;
-  wireVennTab(uid);
+  wireVennTab(uid, top3);
 }
 
-function wireVennTab(uid){
+function wireVennTab(uid, top3){
   var card    = document.getElementById('vennCard-' + uid);
   var stage   = document.getElementById('vennStage-' + uid);
   var tooltip = document.getElementById('vennTooltip-' + uid);
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   ZOOM[uid] = ZOOM[uid] || 1;
   function applyZoom(){ stage.style.transform = 'scale(' + ZOOM[uid] + ')'; }
   applyZoom();
 
   card.querySelectorAll('[data-act="zoom-in"]').forEach(function(btn){
-    btn.addEventListener('click', function(){ ZOOM[uid] = Math.min(2.5, +(ZOOM[uid] + 0.15).toFixed(2)); applyZoom(); });
+    btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.min(2.5, +(ZOOM[uid] + 0.15).toFixed(2)); applyZoom(); });
   });
   card.querySelectorAll('[data-act="zoom-out"]').forEach(function(btn){
-    btn.addEventListener('click', function(){ ZOOM[uid] = Math.max(0.7, +(ZOOM[uid] - 0.15).toFixed(2)); applyZoom(); });
-  });
-  card.querySelectorAll('[data-act="fullscreen"]').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var isFs = card.classList.toggle('vc-fullscreen');
-      btn.innerHTML = isFs ? '&#10005;' : '&#9974;';
-      if (isFs){
-        var host = document.querySelector('.um');
-        var r = host.getBoundingClientRect();
-        card.style.width  = (r.width - 20) + 'px';
-        card.style.height = (r.height - 20) + 'px';
-      } else {
-        card.style.width  = '';
-        card.style.height = '';
-      }
-    });
+    btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.max(0.7, +(ZOOM[uid] - 0.15).toFixed(2)); applyZoom(); });
   });
 
+  /* Enter/exit fullscreen are two separate buttons (⛶ to open, ✕ pinned
+     top-right to close) — same split as desktop, so a thumb reaching for
+     zoom never lands on "leave the view" by mistake. */
+  function openFullscreen(){
+    card.classList.add('vc-fullscreen');
+    var host = document.querySelector('.um');
+    var r = host.getBoundingClientRect();
+    card.style.width  = (r.width - 20) + 'px';
+    card.style.height = (r.height - 20) + 'px';
+  }
+  function closeFullscreen(){
+    card.classList.remove('vc-fullscreen');
+    card.style.width  = '';
+    card.style.height = '';
+  }
+  card.querySelectorAll('[data-act="fullscreen"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){ e.stopPropagation(); openFullscreen(); });
+  });
+  card.querySelectorAll('[data-act="close-fullscreen"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){ e.stopPropagation(); closeFullscreen(); });
+  });
+
+  /* Types the explanation in so it reads as the AI "speaking" it, not
+     dumping a wall of text — same treatment as desktop. */
+  var typeTimer = null;
+  function typeInto(el, text){
+    if (typeTimer){ clearInterval(typeTimer); typeTimer = null; }
+    el.classList.remove('typing');
+    if (reduceMotion){ el.textContent = text; return; }
+    el.textContent = '';
+    el.classList.add('typing');
+    var i = 0, n = text.length, per = Math.max(7, Math.min(22, Math.round(420 / Math.max(1, n))));
+    typeTimer = setInterval(function(){
+      i++; el.textContent = text.slice(0, i);
+      if (i >= n){ clearInterval(typeTimer); typeTimer = null; el.classList.remove('typing'); }
+    }, per);
+  }
+
+  /* Floats the tooltip next to whatever was PRESSED instead of pinning
+     it to a fixed spot on the card (which used to land on top of the
+     3rd circle's name/% label). Flips above/below based on available
+     room and reports the press target's centre (--vt-arrow-x) so the
+     CSS speech-bubble caret points right at it. */
+  function positionTooltipNear(anchorEl){
+    if (!anchorEl) return;
+    var wrap = tooltip.parentNode;
+    var wrapRect = wrap.getBoundingClientRect();
+    var aRect = anchorEl.getBoundingClientRect();
+    var cx = aRect.left + aRect.width / 2 - wrapRect.left;
+    var topY = aRect.top - wrapRect.top;
+    var bottomY = aRect.bottom - wrapRect.top;
+    var GAP = 12, TH_ESTIMATE = 100;
+    var spaceBelow = wrapRect.height - bottomY;
+    var spaceAbove = topY;
+    var placeAbove = spaceAbove >= (TH_ESTIMATE + GAP) && spaceAbove >= spaceBelow;
+
+    var tw = tooltip.offsetWidth || 240;
+    var minLeft = tw / 2 + 6, maxLeft = Math.max(minLeft, wrapRect.width - tw / 2 - 6);
+    var left = Math.max(minLeft, Math.min(maxLeft, cx));
+
+    tooltip.style.left = left + 'px';
+    if (placeAbove){
+      tooltip.style.top = 'auto';
+      tooltip.style.bottom = (wrapRect.height - topY + GAP) + 'px';
+      tooltip.classList.add('place-above'); tooltip.classList.remove('place-below');
+    } else {
+      tooltip.style.bottom = 'auto';
+      tooltip.style.top = (bottomY + GAP) + 'px';
+      tooltip.classList.add('place-below'); tooltip.classList.remove('place-above');
+    }
+    tooltip.style.setProperty('--vt-arrow-x', (cx - left + tw / 2) + 'px');
+  }
+
+  function setCircleGlow(mask, on){
+    [1, 2, 3].forEach(function(k){
+      var bit = k === 1 ? 1 : (k === 2 ? 2 : 4);
+      var el = document.getElementById('vennCircle-' + uid + '-' + k);
+      if (el) el.classList.toggle('circle-glow', on && !!(mask & bit));
+    });
+  }
+
+  /* Dot story — verdict headline + typed narrative + the answer given. */
+  function showTip(data, anchorEl){
+    tooltip.style.setProperty('--vt-accent', data.color);
+    tooltip.innerHTML = '<div class="vt-verdict"><span>&#9889;</span>' + data.verdict + '</div>'
+      + '<div class="vt-story"></div>'
+      + '<div class="vt-a">' + t('understand.tooltip.answered') + ' <b style="color:' + data.color + '">' + data.answer + '</b></div>';
+    positionTooltipNear(anchorEl);
+    tooltip.classList.add('show');
+    typeInto(tooltip.querySelector('.vt-story'), data.story);
+    setCircleGlow(data.mask, true);
+  }
+  /* Discipline-level story — triggered by pressing a legend chip or circle. */
+  function showDiscTip(i, anchorEl){
+    if (!top3 || !top3[i]) return;
+    var bit = i === 0 ? 1 : (i === 1 ? 2 : 4);
+    var dots = card.querySelectorAll('.venn-dot');
+    var tied = 0;
+    dots.forEach(function(dot){
+      var d = JSON.parse(decodeURIComponent(dot.getAttribute('data-payload')));
+      if (d.mask & bit) tied++;
+    });
+    var story = t('understand.narr.disc')
+      .replace(/\{n\}/g, tied).replace('{total}', dots.length)
+      .replace(/\{a\}/g, top3[i].name).replace('{rank}', i + 1);
+    tooltip.style.setProperty('--vt-accent', top3[i].color);
+    tooltip.innerHTML = '<div class="vt-verdict" style="color:' + top3[i].color + '"><span>&#9889;</span>' + top3[i].name + ' &middot; #' + (i + 1) + '</div><div class="vt-story"></div>';
+    positionTooltipNear(anchorEl || document.getElementById('vennCircle-' + uid + '-' + (i + 1)));
+    tooltip.classList.add('show');
+    typeInto(tooltip.querySelector('.vt-story'), story);
+    setCircleGlow(bit, true);
+  }
+  function hideTip(){ tooltip.classList.remove('show'); setCircleGlow(0, false); }
+
+  /* PRESS is the only trigger — a touchscreen has no hover-equivalent,
+     so every one of these is a `click` (which fires on tap), never a
+     pointerover/mouseenter. */
   card.querySelectorAll('.venn-dot').forEach(function(dot){
     dot.addEventListener('click', function(e){
       e.stopPropagation();
       var data = JSON.parse(decodeURIComponent(dot.getAttribute('data-payload')));
-      tooltip.innerHTML =
-          '<div class="vt-q">' + data.text + '</div>'
-        + '<div class="vt-a">' + t('understand.tooltip.answered') + ' <b style="color:' + data.color + '">' + data.answer + '</b></div>';
-      tooltip.classList.add('show');
+      showTip(data, dot);
     });
   });
-  document.addEventListener('click', function(){ tooltip.classList.remove('show'); });
+  card.querySelectorAll('.venn-legend-item[data-disc]').forEach(function(chip){
+    var i = +chip.getAttribute('data-disc');
+    chip.addEventListener('click', function(e){ e.stopPropagation(); showDiscTip(i, chip); });
+  });
+  [1, 2, 3].forEach(function(k){
+    var el = document.getElementById('vennCircle-' + uid + '-' + k);
+    if (el) el.addEventListener('click', function(e){ e.stopPropagation(); showDiscTip(k - 1, el); });
+  });
+  document.addEventListener('click', hideTip);
 }
 
 /* ══════════════════════════════════════════════════════════
