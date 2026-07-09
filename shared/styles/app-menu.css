@@ -7,6 +7,7 @@
 /* ── Wrapper (position anchor) ── */
 .app-menu-wrap {
   position: relative;
+  display: none;
 }
 
 /* ── Trigger button ── */
@@ -43,6 +44,60 @@
   color: #1863DC !important;
 }
 
+/* Account tab in the mobile bottom nav is now the drawer trigger. */
+.app-menu-btn {
+  display: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255,255,255,0.30), transparent 26%),
+    linear-gradient(135deg, rgba(24,99,220,0.95), rgba(109,40,217,0.88));
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow:
+    0 3px 10px rgba(24,99,220,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+}
+
+.float-tab-bar .tab-item[data-tab="t5"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="t5"]:hover .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"]:hover .tab-icon {
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255,255,255,0.36), transparent 26%),
+    linear-gradient(135deg, #1863DC, #06D6A0);
+  box-shadow:
+    0 4px 14px rgba(6,214,160,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.34);
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon svg,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255,255,255,0.45), transparent 26%),
+    linear-gradient(135deg, #1863DC, #0E7490);
+  border-color: rgba(24,99,220,0.20);
+  box-shadow:
+    0 3px 10px rgba(24,99,220,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
 /* ── Dim backdrop behind the drawer ── */
 .app-menu-backdrop {
   position: fixed;
@@ -61,43 +116,46 @@
 /* ── Slide-in drawer (right side) ── */
 .app-dropdown {
   position: fixed;
-  top: 0;
-  right: 0;
+  left: 50%;
+  right: auto;
+  bottom: 0;
   z-index: 9999;
-  height: 100vh;
-  height: 100dvh;
-  width: min(86vw, 322px);
+  width: min(100vw, 430px);
+  max-height: min(82vh, calc(100dvh - 18px));
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 2px;
 
   background: var(--bg-elevated, #14142a);
-  border-left: 1px solid rgba(255,255,255,0.08);
-  padding: calc(env(safe-area-inset-top) + 56px) 14px calc(env(safe-area-inset-bottom) + 16px);
-  box-shadow: -16px 0 48px rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 0;
+  border-radius: 22px 22px 0 0;
+  padding: 58px 14px calc(env(safe-area-inset-bottom) + 16px);
+  box-shadow: 0 -18px 48px rgba(0,0,0,0.50);
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 
-  transform: translateX(100%);
+  transform: translate(-50%, 100%);
   transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .app-dropdown::-webkit-scrollbar { display: none; }
 .app-dropdown::before { display: none; }
-.app-dropdown.open { transform: translateX(0); }
+.app-dropdown.open { transform: translate(-50%, 0) !important; }
 
 [data-theme="light"] .app-dropdown {
   background: var(--bg-elevated, #fffcf5) !important;
-  border-left-color: rgba(0,0,0,0.08) !important;
-  box-shadow: -16px 0 48px rgba(92,74,61,0.18) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 -18px 48px rgba(92,74,61,0.18) !important;
 }
 
 /* ── Close (✕) button — injected by app-menu.js ── */
 .app-menu-close {
   position: absolute;
-  top: calc(env(safe-area-inset-top) + 12px);
+  top: 12px;
   right: 14px;
   width: 34px; height: 34px;
   border-radius: 10px;
@@ -345,4 +403,164 @@
 [data-theme="light"] .app-dropdown .app-menu-item--danger:hover,
 [data-theme="light"] .app-dropdown .app-menu-item[data-menu-action="reset"]:hover {
   background: rgba(220,38,38,0.09) !important;
+}
+
+/* Compact mobile account popover: anchored from the bottom-right, no full-screen sheet. */
+.float-tab-bar .tab-item[data-tab="t5"] .tab-label,
+.float-tab-bar .tab-item[data-tab="account"] .tab-label {
+  display: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  color: rgba(238,242,244,0.78) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="t5"]:hover .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"]:hover .tab-icon {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon svg,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon svg {
+  display: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon::before,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.7px solid currentColor;
+  background:
+    radial-gradient(circle at 32% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 50% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 68% 50%, currentColor 0 1.35px, transparent 1.5px);
+  box-sizing: border-box;
+  opacity: 0.92;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .app-menu-tab-mark,
+.float-tab-bar .tab-item[data-tab="account"] .app-menu-tab-mark {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50%;
+  border: 1.7px solid currentColor;
+  background:
+    radial-gradient(circle at 32% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 50% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 68% 50%, currentColor 0 1.35px, transparent 1.5px);
+  box-sizing: border-box;
+  color: currentColor;
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  opacity: 0.92;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon:has(.app-menu-tab-mark)::before,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon:has(.app-menu-tab-mark)::before,
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon.has-app-menu-tab-mark::before,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon.has-app-menu-tab-mark::before {
+  content: none;
+}
+
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  color: #6f7777 !important;
+}
+
+.app-menu-backdrop,
+.app-menu-backdrop.open,
+[data-theme="light"] .app-menu-backdrop,
+[data-theme="light"] .app-menu-backdrop.open {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.app-dropdown {
+  left: auto !important;
+  right: max(12px, calc((100vw - 430px) / 2 + 12px)) !important;
+  bottom: calc(env(safe-area-inset-bottom) + 84px) !important;
+  width: min(292px, calc(100vw - 24px)) !important;
+  max-height: min(58vh, 420px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 18px !important;
+  padding: 44px 10px 10px !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.42) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate3d(10px, 18px, 0) scale(0.96) !important;
+  transform-origin: 100% 100% !important;
+  transition:
+    opacity 0.18s ease,
+    transform 0.24s cubic-bezier(0.34, 1.18, 0.64, 1) !important;
+}
+
+.app-dropdown.open {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+[data-theme="light"] .app-dropdown {
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  box-shadow: 0 18px 42px rgba(92,74,61,0.16) !important;
+}
+
+.app-menu-close {
+  top: 10px !important;
+  right: 10px !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 8px !important;
+  background: transparent !important;
+  border: 0 !important;
+}
+
+[data-theme="light"] .app-menu-close {
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+.app-dropdown .app-menu-section {
+  padding: 8px 10px 6px !important;
+}
+
+.app-dropdown .app-menu-item {
+  padding: 10px !important;
+}
+
+.app-dropdown .app-menu-icon {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: currentColor !important;
+  opacity: 0.78;
+}
+
+.app-dropdown .app-menu-icon svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+.app-dropdown .app-menu-item:hover .app-menu-icon {
+  opacity: 1;
 }

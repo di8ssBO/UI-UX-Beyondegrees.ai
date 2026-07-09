@@ -11,7 +11,13 @@
 <link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
   .uni-layout { display: grid; grid-template-columns: 250px 1fr; gap: 24px; align-items: start; }
-  @media (max-width: 900px) { .uni-layout { grid-template-columns: 1fr; } }
+  .filter-col, .results-col { min-width: 0; }
+  .filter-card { position: sticky; top: 90px; min-height: 640px; }
+  #uniGrid { gap: 14px; align-items: start; }
+  @media (max-width: 900px) {
+    .uni-layout { grid-template-columns: 1fr; }
+    .filter-card { position: relative; top: auto; }
+  }
   /* Sort pills */
   .sort-row { display: flex; gap: 8px; flex-wrap: wrap; }
   .sort-pill {
@@ -34,24 +40,30 @@
   .fil-scroll { max-height: 196px; overflow-y: auto; padding-right: 4px; }
   .fil-scroll::-webkit-scrollbar { width: 5px; }
   .fil-scroll::-webkit-scrollbar-thumb { background: rgba(124,58,237,0.3); border-radius: 4px; }
-  .clear-link { font-size: 12px; font-weight: 700; color: var(--violet-400); cursor: pointer; }
-  :root[data-theme="light"] .clear-link { color: #a84e30; }
+  .filter-actions { display: flex; align-items: center; gap: 10px; }
+  .filter-action {
+    padding: 0; border: 0; background: transparent; font-size: 12px; font-weight: 800;
+    color: var(--violet-400); cursor: pointer;
+  }
+  .filter-action:hover { color: var(--violet-300); text-decoration: underline; text-underline-offset: 3px; }
+  :root[data-theme="light"] .filter-action { color: #a84e30; }
+  :root[data-theme="light"] .filter-action:hover { color: #6b5440; }
 
   /* ── University card — màu sắc theo mobile ── */
-  .uni-card { padding: 18px; }
-  .uc-hero { display: flex; align-items: center; gap: 14px; }
+  .uni-card { padding: 14px 15px; }
+  .uc-hero { display: flex; align-items: center; gap: 12px; }
   /* white logo substrate (mobile .uc-hero-logo-wrap) */
-  .uc-logo { width: 54px; height: 54px; border-radius: 14px; flex: none; display: grid; place-items: center; font-size: 27px; overflow: hidden;
+  .uc-logo { width: 46px; height: 46px; border-radius: 12px; flex: none; display: grid; place-items: center; font-size: 24px; overflow: hidden;
     background: #ffffff; border: 1px solid rgba(255,255,255,0.18);
     box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 6px rgba(0,0,0,0.35), 0 6px 14px rgba(0,0,0,0.20); }
-  .uc-logo img { width: 40px; height: 40px; object-fit: contain; }
-  .uc-logo .em { font-size: 27px; line-height: 1; }
+  .uc-logo img { width: 34px; height: 34px; object-fit: contain; }
+  .uc-logo .em { font-size: 24px; line-height: 1; }
   .uc-hinfo { flex: 1; min-width: 0; }
-  .uc-name { font-size: 16px; font-weight: 800; color: var(--text-primary); line-height: 1.3;
+  .uc-name { font-size: 15px; font-weight: 800; color: var(--text-primary); line-height: 1.24;
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .uc-metarow { display: flex; align-items: center; gap: 7px; margin-top: 6px; flex-wrap: wrap; }
-  .uc-loc { font-size: 12px; color: var(--text-muted); }
-  .uc-type-chip { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid; }
+  .uc-metarow { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+  .uc-loc { font-size: 11.5px; color: var(--text-muted); }
+  .uc-type-chip { font-size: 9.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 1px 7px; border-radius: 999px; border: 1px solid; }
   .uc-type-chip.pub  { color: var(--mint-400);   background: rgba(6,214,160,.10);  border-color: rgba(6,214,160,.25); }
   .uc-type-chip.priv { color: #fb923c;           background: rgba(251,146,60,.10); border-color: rgba(251,146,60,.25); }
   .uc-type-chip.intl { color: var(--violet-300); background: rgba(24,99,220,.12);  border-color: rgba(24,99,220,.25); }
@@ -59,9 +71,9 @@
   :root[data-theme="light"] .uc-type-chip.priv { color: #a84e30; background: rgba(201,107,85,.10); border-color: rgba(201,107,85,.30); }
   :root[data-theme="light"] .uc-type-chip.intl { color: #075c9f; background: rgba(2,116,190,.08); border-color: rgba(2,116,190,.25); }
   /* match badge — transparent, colored number (mobile) */
-  .uc-match { flex: none; text-align: center; min-width: 46px; }
-  .uc-match-val { font-size: 19px; font-weight: 900; line-height: 1; }
-  .uc-match-lbl { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .uc-match { flex: none; text-align: center; min-width: 42px; }
+  .uc-match-val { font-size: 17px; font-weight: 900; line-height: 1; }
+  .uc-match-lbl { font-size: 8.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-top: 3px; }
   .uc-match.mh .uc-match-val { color: var(--mint-400); }
   .uc-match.mm .uc-match-val { color: var(--orange-400); }
   .uc-match.ml .uc-match-val { color: var(--red-400); }
@@ -69,25 +81,25 @@
   :root[data-theme="light"] .uc-match.mm .uc-match-val { color: #d9a040; }
   :root[data-theme="light"] .uc-match.ml .uc-match-val { color: #c45540; }
   /* stats strip — dusty blue + sage (mobile .uc-stats) */
-  .uc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 16px; padding: 14px 12px; border-radius: 12px;
+  .uc-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 10px; padding: 9px 10px; border-radius: 11px;
     background: linear-gradient(135deg, rgba(74,135,168,0.20) 0%, rgba(106,150,144,0.12) 100%);
     border: 1px solid rgba(74,135,168,0.32); box-shadow: inset 0 1px 0 rgba(255,255,255,0.08); }
-  .uc-stat { text-align: center; padding: 0 12px; }
+  .uc-stat { text-align: center; padding: 0 10px; }
   .uc-stat:not(:last-child) { border-right: 1px solid rgba(74,135,168,0.32); }
-  .uc-stat .v { font-size: 14px; font-weight: 800; color: var(--text-primary); line-height: 1.3; }
-  .uc-stat .l { font-size: 10px; font-weight: 700; color: #8fb5cc; margin-top: 4px; text-transform: uppercase; letter-spacing: .05em; }
+  .uc-stat .v { font-size: 13px; font-weight: 800; color: var(--text-primary); line-height: 1.25; }
+  .uc-stat .l { font-size: 9px; font-weight: 700; color: #8fb5cc; margin-top: 2px; text-transform: uppercase; letter-spacing: .05em; }
   :root[data-theme="light"] .uc-stats { background: #c4d9e5; border-color: #a3c2d3; box-shadow: inset 0 1px 0 rgba(255,255,255,0.45); }
   :root[data-theme="light"] .uc-stat:not(:last-child) { border-right-color: #a3c2d3; }
   :root[data-theme="light"] .uc-stat .v { color: #2c1f14; }
   :root[data-theme="light"] .uc-stat .l { color: #2f6a8c; }
   /* actions: Save · View Programs (→ detail) · Compare */
-  .uc-actions { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
-  .uc-save { width: 40px; height: 40px; border-radius: 11px; flex: none; display: grid; place-items: center; font-size: 16px;
+  .uc-actions { display: flex; align-items: center; gap: 7px; margin-top: 10px; }
+  .uc-save { width: 36px; height: 36px; border-radius: 10px; flex: none; display: grid; place-items: center; font-size: 15px;
     background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted); cursor: pointer; transition: all .15s; }
   .uc-save.on { color: #fb7185; border-color: rgba(251,113,133,0.5); background: rgba(251,113,133,0.10); }
   /* Compare — toggle có nhãn rõ ràng (select-to-compare, hiện sẵn, không cần bung thẻ) */
-  .uc-cmp { height: 40px; padding: 0 14px; border-radius: 11px; flex: none;
-    display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; white-space: nowrap;
+  .uc-cmp { height: 36px; padding: 0 12px; border-radius: 10px; flex: none;
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; white-space: nowrap;
     background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary); cursor: pointer; transition: all .15s; }
   .uc-cmp:hover:not(:disabled) { color: var(--text-primary); border-color: rgba(124,58,237,0.40); }
   .uc-cmp.on  { color: var(--violet-300); border-color: rgba(124,58,237,0.5); background: rgba(124,58,237,0.14); }
@@ -96,7 +108,7 @@
   :root[data-theme="light"] .uc-cmp { background: #fdf8f2; border-color: #e8e0d5; color: #5c4535; }
   :root[data-theme="light"] .uc-cmp:hover:not(:disabled) { border-color: rgba(201,107,85,0.45); color: #a84e30; }
   :root[data-theme="light"] .uc-cmp.on { color: #2f6a8c; border-color: rgba(74,135,168,0.5); background: rgba(127,168,190,0.18); }
-  .uc-view { flex: 1; height: 40px; border-radius: 11px; text-decoration: none; font-size: 13px; font-weight: 800;
+  .uc-view { flex: 1; height: 36px; border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 800;
     display: inline-flex; align-items: center; justify-content: center; gap: 6px;
     background: linear-gradient(90deg, rgba(24,99,220,0.28), rgba(6,214,160,0.20)); border: 1px solid rgba(24,99,220,0.38); color: var(--violet-300);
     transition: all .15s; }
@@ -121,6 +133,88 @@
   .res-count { font-size: 13px; color: var(--text-muted); font-weight: 600; }
   .saved-chip { margin-left: auto; cursor: pointer; }
   .saved-chip.on { background: rgba(251,113,133,0.12); border-color: rgba(251,113,133,0.3); color: #fb7185; }
+  .uni-pager { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 4px; }
+  .uni-page-btn {
+    width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.05); color: var(--text-secondary); font-size: 13px; font-weight: 900;
+    cursor: pointer; transition: transform .15s, border-color .15s, background .15s, color .15s;
+  }
+  .uni-page-btn:hover { transform: translateY(-1px); border-color: rgba(124,58,237,.44); color: var(--text-primary); }
+  .uni-page-btn.on { background: linear-gradient(135deg, var(--violet-600), var(--violet-500)); border-color: transparent; color: #fff; box-shadow: 0 8px 18px rgba(124,58,237,.25); }
+  :root[data-theme="light"] .uni-page-btn { background: #fdf8f2; border-color: #e8e0d5; color: #5c4535; box-shadow: 0 2px 8px rgba(92,69,53,.05); }
+  :root[data-theme="light"] .uni-page-btn:hover { border-color: rgba(201,107,85,.44); color: #a84e30; }
+  :root[data-theme="light"] .uni-page-btn.on { background: linear-gradient(135deg, #e8917a, #c96b55); color: #fff; box-shadow: 0 8px 18px rgba(201,107,85,.22); }
+
+  .partner-section {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 18px 0 0;
+  }
+  .partner-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+  .partner-title { font-size: 18px; font-weight: 900; color: var(--text-primary); letter-spacing: -.01em; }
+  .partner-sub { margin-top: 4px; font-size: 12.5px; font-weight: 650; color: var(--text-muted); }
+  .partner-navs { display: flex; gap: 8px; flex: none; }
+  .partner-nav {
+    width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+    border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.08); color: var(--text-secondary);
+    font-size: 20px; font-weight: 900; transition: transform .15s, background .15s, color .15s;
+  }
+  .partner-nav:hover { transform: translateY(-1px); background: rgba(124,58,237,.16); color: var(--text-primary); }
+  :root[data-theme="light"] .partner-nav { background: #fff; border-color: #e8e0d5; color: #6b5440; box-shadow: 0 4px 14px rgba(92,69,53,.11); }
+  :root[data-theme="light"] .partner-nav:hover { background: #fdf8f2; color: #a84e30; }
+  .partner-track {
+    display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 4px;
+    padding: 4px 4px 14px; -webkit-overflow-scrolling: touch;
+  }
+  .partner-track::-webkit-scrollbar { height: 6px; }
+  .partner-track::-webkit-scrollbar-thumb { background: rgba(124,58,237,.30); border-radius: 999px; }
+  :root[data-theme="light"] .partner-track::-webkit-scrollbar-thumb { background: rgba(201,107,85,.34); }
+  .partner-card {
+    flex: 0 0 calc((100% - 18px) / 2); min-width: 245px; max-width: 340px; overflow: hidden; scroll-snap-align: start;
+    border-radius: 18px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.13);
+    box-shadow: 0 16px 34px rgba(0,0,0,.18);
+  }
+  .partner-hero { position: relative; height: 128px; overflow: hidden; background: linear-gradient(135deg, #7fa8be, #efe4d7); }
+  .partner-hero::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.22), transparent 38%),
+      radial-gradient(circle at 70% 15%, rgba(255,255,255,.45), transparent 18%),
+      linear-gradient(to top, rgba(0,0,0,.18), transparent 55%);
+  }
+  .partner-hero::after {
+    content: ""; position: absolute; left: 18px; right: 18px; bottom: 0; height: 54px; opacity: .62;
+    background:
+      linear-gradient(to top, rgba(255,255,255,.72), rgba(255,255,255,.42)),
+      repeating-linear-gradient(90deg, transparent 0 18px, rgba(95,116,126,.25) 18px 21px);
+    clip-path: polygon(0 100%,0 44%,10% 44%,10% 27%,19% 27%,19% 44%,31% 44%,31% 18%,42% 18%,42% 44%,55% 44%,55% 30%,66% 30%,66% 44%,100% 44%,100% 100%);
+  }
+  .partner-hero.liberty { background: linear-gradient(135deg, #7fa8be, #d9cbbd); }
+  .partner-hero.miami { background: linear-gradient(135deg, #8eb5bc, #efe1d4); }
+  .partner-hero.millennia { background: linear-gradient(135deg, #b88a78, #f2d8ce); }
+  .partner-hero.fisher { background: linear-gradient(135deg, #6f91b6, #e3d5c4); }
+  .partner-hero.imt { background: linear-gradient(135deg, #5d8bb8, #cfe5df); }
+  .partner-logo {
+    position: relative; z-index: 1; width: 70px; height: 70px; margin: -34px 0 0 18px; border-radius: 50%;
+    display: grid; place-items: center; background: #fff; color: #2c1f14; border: 1px solid rgba(0,0,0,.08);
+    box-shadow: 0 8px 18px rgba(0,0,0,.18); font-size: 16px; font-weight: 900; letter-spacing: -.03em;
+  }
+  .partner-body { padding: 13px 18px 18px; }
+  .partner-label { font-size: 12px; font-weight: 750; color: var(--mint-400); }
+  .partner-name { margin-top: 3px; font-size: 16px; line-height: 1.25; font-weight: 800; color: var(--text-primary); }
+  .partner-match { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .partner-desc { margin-top: 16px; font-size: 13px; line-height: 1.45; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  :root[data-theme="light"] .partner-card { background: #fdf8f2; border-color: #e8e0d5; box-shadow: 0 12px 24px rgba(92,69,53,.10); }
+  :root[data-theme="light"] .partner-label { color: #2f6f53; }
+  :root[data-theme="light"] .partner-desc { color: #5c4535; }
+  @media (max-width: 760px) {
+    .partner-head { align-items: flex-start; }
+    .partner-card { flex-basis: 82%; }
+  }
+  @media (max-width: 900px) {
+    .filter-card { min-height: auto; }
+    .partner-section { grid-column: auto; width: 100%; }
+  }
 
   /* Locked state (quizProgress < 30) */
   .lock-banner {
@@ -234,33 +328,38 @@
 
       <div class="uni-layout mt-8">
         <!-- FILTERS -->
-        <div class="card" style="position:sticky;top:90px;">
-          <div class="flex between">
-            <span class="section-label" data-i18n="uni.filter.title">Filters</span>
-            <span class="clear-link" id="clearAll" data-i18n="uni.filter.clear_all">Clear all</span>
-          </div>
-          <div class="fil-group mt-4" id="filRegion">
-            <span class="lb" data-i18n="uni.filter.region">Region</span>
-            <label class="fil-opt"><input type="checkbox" value="asia" checked> <span data-i18n="uni.region_asia">Asia</span></label>
-            <label class="fil-opt"><input type="checkbox" value="america" checked> <span data-i18n="uni.region_america">America</span></label>
-            <label class="fil-opt"><input type="checkbox" value="europe" checked> <span data-i18n="uni.region_europe">Europe</span></label>
-            <label class="fil-opt"><input type="checkbox" value="africa" checked> <span data-i18n="uni.region_africa">Africa</span></label>
-            <label class="fil-opt"><input type="checkbox" value="oceania" checked> <span data-i18n="uni.region_oceania">Oceania</span></label>
-          </div>
-          <div class="fil-group" id="filCountryGroup">
-            <span class="lb" data-i18n="uni.filter.country">Country</span>
-            <div class="fil-scroll" id="filCountry"></div>
-          </div>
-          <div class="fil-group" id="filAid">
-            <span class="lb" data-i18n="uni.filter.aid">Financial Aid</span>
-            <label class="fil-opt"><input type="checkbox" value="full" checked> <span data-i18n="uni.aid_full">Full Scholarship</span></label>
-            <label class="fil-opt"><input type="checkbox" value="need" checked> <span data-i18n="uni.aid_need">Need-Based Aid</span></label>
-            <label class="fil-opt"><input type="checkbox" value="merit" checked> <span data-i18n="uni.aid_merit">Merit Scholarship</span></label>
+        <div class="filter-col">
+          <div class="card filter-card">
+            <div class="flex between">
+              <span class="section-label" data-i18n="uni.filter.title">Filters</span>
+              <div class="filter-actions">
+                <button class="filter-action" id="selectAll" type="button">Select all</button>
+                <button class="filter-action" id="clearAll" type="button" data-i18n="uni.filter.clear_all">Clear all</button>
+              </div>
+            </div>
+            <div class="fil-group mt-4" id="filRegion">
+              <span class="lb" data-i18n="uni.filter.region">Region</span>
+              <label class="fil-opt"><input type="checkbox" value="asia" checked> <span data-i18n="uni.region_asia">Asia</span></label>
+              <label class="fil-opt"><input type="checkbox" value="america" checked> <span data-i18n="uni.region_america">America</span></label>
+              <label class="fil-opt"><input type="checkbox" value="europe" checked> <span data-i18n="uni.region_europe">Europe</span></label>
+              <label class="fil-opt"><input type="checkbox" value="africa" checked> <span data-i18n="uni.region_africa">Africa</span></label>
+              <label class="fil-opt"><input type="checkbox" value="oceania" checked> <span data-i18n="uni.region_oceania">Oceania</span></label>
+            </div>
+            <div class="fil-group" id="filCountryGroup">
+              <span class="lb" data-i18n="uni.filter.country">Country</span>
+              <div class="fil-scroll" id="filCountry"></div>
+            </div>
+            <div class="fil-group" id="filAid">
+              <span class="lb" data-i18n="uni.filter.aid">Financial Aid</span>
+              <label class="fil-opt"><input type="checkbox" value="full" checked> <span data-i18n="uni.aid_full">Full Scholarship</span></label>
+              <label class="fil-opt"><input type="checkbox" value="need" checked> <span data-i18n="uni.aid_need">Need-Based Aid</span></label>
+              <label class="fil-opt"><input type="checkbox" value="merit" checked> <span data-i18n="uni.aid_merit">Merit Scholarship</span></label>
+            </div>
           </div>
         </div>
 
         <!-- RESULTS -->
-        <div>
+        <div class="results-col">
           <div class="flex" style="flex-wrap:wrap;gap:10px;">
             <div class="sort-row" id="sortRow">
               <button class="sort-pill on" data-sort="match" data-i18n="uni.sort.best_match">↓ Best Match</button>
@@ -273,7 +372,22 @@
           <div class="res-count mt-4"><b id="resCount">—</b> <span data-i18n="uni.universities">universities</span></div>
           <div id="lockWrap"></div>
           <div class="grid grid-2 mt-4" id="uniGrid"></div>
+          <div class="uni-pager" id="uniPager" aria-label="University result pages"></div>
         </div>
+
+        <section class="partner-section" aria-labelledby="partnerTitle">
+          <div class="partner-head">
+            <div>
+              <div class="partner-title" id="partnerTitle">University Partners</div>
+              <div class="partner-sub">Official partner schools you can explore next.</div>
+            </div>
+            <div class="partner-navs" aria-label="Partner university carousel controls">
+              <button class="partner-nav" id="partnerPrev" type="button" aria-label="Previous partner">&lsaquo;</button>
+              <button class="partner-nav" id="partnerNext" type="button" aria-label="Next partner">&rsaquo;</button>
+            </div>
+          </div>
+          <div class="partner-track" id="partnerTrack"></div>
+        </section>
       </div>
     </div>
   </div>
@@ -333,6 +447,40 @@
     var compare = [];
     var showSaved = false;
     var sortMode = 'match';
+    var uniPage = 0;
+    var PAGE_SIZE = 6;
+    var PARTNER_UNIS = [
+      {
+        name: 'Liberty University',
+        mark: 'LU',
+        hero: 'liberty',
+        desc: 'Liberty University in Lynchburg, Virginia (USA) is one of the largest private universities with career-focused programs.'
+      },
+      {
+        name: 'Miami Regional University',
+        mark: 'MRU',
+        hero: 'miami',
+        desc: 'Miami Regional University (MRU) is a dynamic institution dedicated to professional healthcare and business education.'
+      },
+      {
+        name: 'Millennia Atlantic University',
+        mark: 'MAU',
+        hero: 'millennia',
+        desc: 'Millennia Atlantic University offers business-centered programs in the Miami region for global learners.'
+      },
+      {
+        name: 'Fisher College',
+        mark: 'FC',
+        hero: 'fisher',
+        desc: 'Fisher College connects students with practical business, technology, and health sciences pathways in Boston.'
+      },
+      {
+        name: 'IMT Atlantique',
+        mark: 'IMT',
+        hero: 'imt',
+        desc: 'IMT Atlantique is a leading French graduate engineering school focused on digital technology, energy, and innovation.'
+      }
+    ];
 
     var rawProgress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
     var rawMilestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
@@ -413,9 +561,55 @@
       '</div>';
     }
 
+    function resetUniPage() {
+      uniPage = 0;
+    }
+
+    function renderPager(totalPages) {
+      var pager = document.getElementById('uniPager');
+      if (!pager) return;
+      if (totalPages <= 1) {
+        pager.innerHTML = '';
+        return;
+      }
+      var html = [];
+      for (var i = 0; i < totalPages; i++) {
+        html.push('<button class="uni-page-btn' + (i === uniPage ? ' on' : '') + '" type="button" data-page="' + i + '" aria-label="Go to university page ' + (i + 1) + '">' + (i + 1) + '</button>');
+      }
+      pager.innerHTML = html.join('');
+      pager.querySelectorAll('.uni-page-btn').forEach(function (btn) {
+        btn.onclick = function () {
+          uniPage = parseInt(btn.dataset.page || '0', 10);
+          render();
+        };
+      });
+    }
+
+    function partnerHTML(p) {
+      return '<article class="partner-card">' +
+        '<div class="partner-hero ' + p.hero + '"></div>' +
+        '<div class="partner-logo">' + p.mark + '</div>' +
+        '<div class="partner-body">' +
+          '<div class="partner-label">Official Partner</div>' +
+          '<div class="partner-name">' + p.name + '</div>' +
+          '<div class="partner-match">No Match</div>' +
+          '<div class="partner-desc">' + p.desc + '</div>' +
+        '</div>' +
+      '</article>';
+    }
+
+    function renderPartners() {
+      var track = document.getElementById('partnerTrack');
+      if (track) track.innerHTML = PARTNER_UNIS.map(partnerHTML).join('');
+    }
+
     function render() {
       var list = filtered();
       document.getElementById('resCount').textContent = list.length;
+      var totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+      if (uniPage > totalPages - 1) uniPage = totalPages - 1;
+      if (uniPage < 0) uniPage = 0;
+      var pageItems = list.slice(uniPage * PAGE_SIZE, (uniPage + 1) * PAGE_SIZE);
 
       var lw = document.getElementById('lockWrap');
       if (locked) {
@@ -431,7 +625,8 @@
       } else { lw.innerHTML = ''; }
 
       var g = document.getElementById('uniGrid');
-      g.innerHTML = list.map(cardHTML).join('');
+      g.innerHTML = pageItems.map(cardHTML).join('');
+      renderPager(totalPages);
 
       if (!locked) {
         g.querySelectorAll('.uc-save').forEach(function (h) {
@@ -549,29 +744,41 @@
     document.getElementById('sortRow').addEventListener('click', function (e) {
       var p = e.target.closest('.sort-pill'); if (!p) return;
       document.querySelectorAll('.sort-pill').forEach(function (x) { x.classList.remove('on'); });
-      p.classList.add('on'); sortMode = p.dataset.sort; render();
+      p.classList.add('on'); sortMode = p.dataset.sort; resetUniPage(); render();
     });
-    document.getElementById('filRegion').addEventListener('change', function () { syncCountryByRegion(); render(); });
-    document.getElementById('filCountry').addEventListener('change', render);
-    document.getElementById('filAid').addEventListener('change', render);
-    document.getElementById('clearAll').onclick = function () {
+    document.getElementById('filRegion').addEventListener('change', function () { syncCountryByRegion(); resetUniPage(); render(); });
+    document.getElementById('filCountry').addEventListener('change', function () { resetUniPage(); render(); });
+    document.getElementById('filAid').addEventListener('change', function () { resetUniPage(); render(); });
+    document.getElementById('selectAll').onclick = function () {
       document.querySelectorAll('.fil-opt input').forEach(function (i) { i.checked = true; });
-      syncCountryByRegion(); render();
+      syncCountryByRegion(); resetUniPage(); render();
+    };
+    document.getElementById('clearAll').onclick = function () {
+      document.querySelectorAll('.fil-opt input').forEach(function (i) { i.checked = false; });
+      syncCountryByRegion(); resetUniPage(); render();
     };
     document.getElementById('savedChip').onclick = function () {
       showSaved = !showSaved;
       this.classList.toggle('on', showSaved);
       var ic = document.getElementById('savedIc');
       if (ic) ic.textContent = showSaved ? '♥' : '🤍';
+      resetUniPage();
       render();
     };
     document.getElementById('cmpClear').onclick = function () { compare = []; render(); };
     document.getElementById('cmpGo').onclick = openCompare;
     document.getElementById('cmpClose').onclick = function () { document.getElementById('cmpOverlay').classList.remove('show'); };
     document.getElementById('cmpOverlay').onclick = function (e) { if (e.target === this) this.classList.remove('show'); };
+    document.getElementById('partnerPrev').onclick = function () {
+      document.getElementById('partnerTrack').scrollBy({ left: -300, behavior: 'smooth' });
+    };
+    document.getElementById('partnerNext').onclick = function () {
+      document.getElementById('partnerTrack').scrollBy({ left: 300, behavior: 'smooth' });
+    };
 
     new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     syncCountryByRegion();
+    renderPartners();
     render();
   </script>
 </body>

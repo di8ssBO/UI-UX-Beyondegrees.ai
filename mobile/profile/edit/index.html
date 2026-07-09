@@ -391,6 +391,206 @@ body { background: #06060f; }
   border-color: rgba(24,99,220,0.15) !important;
   color: #1A1A2E !important;
 }
+
+/* Desktop edit profile parity */
+.profile-edit-screen {
+  padding: 14px 14px 20px;
+  display: grid;
+  gap: 14px;
+}
+.profile-edit-title {
+  margin: 2px 2px 0;
+  font-size: 24px;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+.profile-edit-screen .form-card {
+  margin: 0;
+  border-radius: 22px;
+  padding: 18px;
+  overflow: visible;
+}
+.profile-card-mobile {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+}
+.avatar-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.profile-card-mobile .avatar-wrap {
+  width: 96px;
+  height: 96px;
+}
+.profile-card-mobile .avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.34), transparent 30%),
+    linear-gradient(135deg, var(--violet-600), var(--violet-400));
+  box-shadow: 0 14px 34px rgba(24,99,220,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+  background-position: center;
+  background-size: cover;
+}
+.profile-card-mobile .avatar img {
+  border-radius: inherit !important;
+}
+[data-theme="light"] .profile-card-mobile .avatar {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.44), transparent 30%),
+    linear-gradient(135deg, #e8917a, #c96b55) !important;
+  border-color: rgba(232,224,213,0.78) !important;
+  box-shadow: 0 14px 32px rgba(201,107,85,0.22), inset 0 1px 0 rgba(255,255,255,0.60) !important;
+}
+.profile-card-mobile .avatar-edit-btn {
+  bottom: -4px;
+  right: -4px;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+}
+.profile-card-mobile .avatar-actions {
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+.profile-card-mobile .avatar-action {
+  width: 100%;
+  min-height: 32px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  text-align: center;
+}
+.profile-card-body {
+  flex: 1;
+  min-width: 0;
+}
+.section-label {
+  display: inline-flex;
+  margin-bottom: 12px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+[data-theme="light"] .section-label,
+[data-theme="light"] .profile-edit-screen .field-label {
+  color: #a84e30 !important;
+}
+.name-grid,
+.profile-field-stack {
+  display: grid;
+  gap: 14px;
+}
+.profile-edit-screen .field-row {
+  padding: 0;
+  border: 0;
+}
+.profile-edit-screen .field-label {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+.profile-edit-screen .field-input-wrap,
+.profile-edit-screen .field-select-wrap {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.profile-edit-screen .field-input,
+.profile-edit-screen .field-select {
+  min-height: 42px;
+  font-size: 14px;
+  font-weight: 700;
+}
+[data-theme="light"] .profile-edit-screen .field-input-wrap,
+[data-theme="light"] .profile-edit-screen .field-select-wrap {
+  background: rgba(255,255,255,0.86) !important;
+  border-color: #e8e0d5 !important;
+}
+[data-theme="light"] .profile-edit-screen input.field-input,
+[data-theme="light"] .profile-edit-screen .field-select {
+  background: transparent !important;
+  color: #5c4535 !important;
+}
+.arch-card {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+}
+.arch-card .archetype-chip {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.mobile-seg {
+  display: flex;
+  gap: 8px;
+}
+.mobile-seg button {
+  flex: 1;
+  min-height: 42px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+.mobile-seg button.on {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+  box-shadow: 0 4px 14px rgba(24,99,220,0.28);
+}
+[data-theme="light"] .mobile-seg button {
+  background: rgba(255,255,255,0.86) !important;
+  border-color: #e8e0d5 !important;
+  color: #5c4535 !important;
+}
+[data-theme="light"] .mobile-seg button.on {
+  color: #fff !important;
+  border-color: transparent !important;
+  background: linear-gradient(135deg, #e8917a, #c96b55) !important;
+  box-shadow: 0 4px 14px rgba(201,107,85,0.28) !important;
+}
+.profile-edit-screen .checkbox-row {
+  margin: 0;
+}
+.profile-action-row,
+.danger-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.profile-action-row .btn-save,
+.profile-action-row .btn-secondary,
+.danger-row .btn-reset,
+.danger-row .btn-secondary {
+  flex: 1 1 150px;
+  margin: 0;
+}
+.danger-card .section-label {
+  margin-bottom: 12px;
+}
+@media (max-width: 380px) {
+  .profile-card-mobile { flex-direction: column; }
+  .avatar-editor { align-items: flex-start; }
+  .profile-card-mobile .avatar-actions { max-width: 180px; }
+}
 </style>
 </head>
 
@@ -420,9 +620,6 @@ body { background: #06060f; }
       <div class="ds-hdr">
         <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
         <div class="app-menu-wrap">
-          <button class="app-menu-btn" aria-label="Menu">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </button>
           <div class="app-dropdown">
             <div class="app-menu-section" data-i18n="menu.section_account">Account</div>
             <a href="../../profile/edit/" class="app-menu-item" data-menu-action="my-account">
@@ -458,122 +655,122 @@ body { background: #06060f; }
         </div>
       </div>
 
-      <div class="page-content">
+      <div class="page-content profile-edit-screen">
+        <h1 class="profile-edit-title" data-i18n="edit.title">Edit Profile</h1>
 
-        <!-- Avatar -->
-        <div class="avatar-section">
-          <div class="avatar-wrap">
-            <div class="avatar"></div>
-            <label class="avatar-edit-btn" for="avatarUpload" aria-label="Upload profile photo">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
-            </label>
+        <section class="form-card profile-card-mobile">
+          <div class="avatar-editor">
+            <div class="avatar-wrap">
+              <div class="avatar profile-avatar-preview"></div>
+              <label class="avatar-edit-btn" for="avatarUpload" aria-label="Upload profile photo">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              </label>
+            </div>
+            <input id="avatarUpload" type="file" accept="image/*" hidden>
+            <div class="avatar-actions">
+              <label class="avatar-action" for="avatarUpload" data-i18n="profile.avatar.library">Choose from Library</label>
+              <button class="avatar-action avatar-action--danger" id="removeAvatarBtn" type="button" data-i18n="profile.avatar.remove">Remove Current Photo</button>
+            </div>
           </div>
-          <input id="avatarUpload" type="file" accept="image/*" hidden>
-          <div class="avatar-actions">
-            <label class="avatar-action" for="avatarUpload" data-i18n="profile.avatar.library">Choose from Library</label>
-            <button class="avatar-action avatar-action--danger" id="removeAvatarBtn" type="button" data-i18n="profile.avatar.remove">Remove Current Photo</button>
+          <div class="profile-card-body">
+            <span class="section-label">Profile</span>
+            <div class="name-grid">
+              <div class="field-row">
+                <div class="field-label">Họ tên</div>
+                <div class="field-input-wrap">
+                  <input class="field-input" id="editFullName" type="text" value="" placeholder="Your Name">
+                </div>
+              </div>
+              <input id="editFirstName" type="hidden" value="">
+              <input id="editLastName" type="hidden" value="">
+            </div>
           </div>
+        </section>
+
+        <section class="form-card arch-card">
           <div class="archetype-chip">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
-            <span><span data-i18n="edit.archetype_label">Academic Archetype:</span> <a href="#" data-i18n="edit.archetype_find">Find Out</a></span>
+            <span><span data-i18n="edit.archetype">Academic Archetype:</span> <a href="../../quiz/quiz-card/" data-i18n="edit.find_out">Find Out</a></span>
           </div>
-        </div>
+        </section>
 
-        <!-- Name fields -->
-        <div class="form-card">
-          <div class="field-row">
-            <div class="field-label" data-i18n="edit.first_name">First Name</div>
-            <div class="field-input-wrap">
-              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <input class="field-input" id="editFirstName" type="text" value="" data-i18n-placeholder="edit.ph_first_name" placeholder="First name">
+        <section class="form-card profile-fields-card">
+          <div class="profile-field-stack">
+            <div class="field-row field-readonly">
+              <div class="field-label" data-i18n="edit.email">Email</div>
+              <div class="field-input-wrap">
+                <input class="field-input" id="editEmail" type="email" value="hoangphuc@beyondegrees.ai" readonly>
+              </div>
+              <div class="field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
             </div>
-          </div>
-          <div class="field-row">
-            <div class="field-label" data-i18n="edit.last_name">Last Name</div>
-            <div class="field-input-wrap">
-              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-              <input class="field-input" id="editLastName" type="text" value="" data-i18n-placeholder="edit.ph_last_name" placeholder="Last name">
-            </div>
-          </div>
-        </div>
 
-        <!-- Email -->
-        <div class="form-card">
-          <div class="field-row field-readonly">
-            <div class="field-label" data-i18n="edit.email">Email</div>
-            <div class="field-input-wrap">
-              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <input class="field-input" id="editEmail" type="email" value="" readonly>
+            <div class="field-row">
+              <div class="field-label" data-i18n="edit.location">Location</div>
+              <div class="field-input-wrap">
+                <input class="field-input" id="editLocation" type="text" value="Ho Chi Minh City, Vietnam" data-i18n-placeholder="edit.ph_location" placeholder="Your location">
+              </div>
             </div>
-            <div class="field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
-          </div>
-        </div>
 
-        <!-- Location -->
-        <div class="form-card">
-          <div class="field-row">
-            <div class="field-label" data-i18n="edit.location">Location</div>
-            <div class="field-input-wrap">
-              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <input class="field-input" id="editLocation" type="text" value="" data-i18n-placeholder="edit.ph_location" placeholder="Your location">
-            </div>
-          </div>
-        </div>
-
-        <!-- Study preferences -->
-        <div class="form-card">
-          <div class="field-row">
-            <div class="field-label" data-i18n="edit.study">I want to study</div>
-            <div class="field-select-wrap">
-              <select class="field-select">
-                <option value="abroad" data-i18n="edit.study.abroad">Abroad</option>
-                <option value="in-country" selected data-i18n="edit.study.in_country">In my country</option>
+            <div class="field-row">
+              <div class="field-label" data-i18n="edit.study">I want to study</div>
+              <select class="field-select profile-seg-select" id="studySelect" hidden>
+                <option value="abroad" selected data-i18n="edit.study.abroad">Abroad</option>
+                <option value="in-country" data-i18n="edit.study.in_country">In my country</option>
                 <option value="either" data-i18n="edit.study.either">Either</option>
               </select>
-              <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+              <div class="mobile-seg" data-seg-target="studySelect">
+                <button type="button" class="on" data-value="abroad" data-i18n="edit.study.abroad">Abroad</button>
+                <button type="button" data-value="in-country" data-i18n="edit.study.in_country">In my country</button>
+                <button type="button" data-value="either" data-i18n="edit.study.either">Either</button>
+              </div>
             </div>
-          </div>
-          <div class="field-row">
-            <div class="field-label" data-i18n="edit.degree">I'm working toward a...</div>
-            <div class="field-select-wrap">
-              <select class="field-select">
+
+            <div class="field-row">
+              <div class="field-label" data-i18n="edit.degree">I'm working toward a...</div>
+              <select class="field-select profile-seg-select" id="degreeSelect" hidden>
                 <option value="bachelor" selected data-i18n="edit.degree.bachelor">Bachelor's Degree</option>
                 <option value="master" data-i18n="edit.degree.master">Master's Degree</option>
                 <option value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</option>
                 <option value="associate" data-i18n="edit.degree.associate">Associate's Degree</option>
               </select>
-              <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+              <div class="mobile-seg" data-seg-target="degreeSelect">
+                <button type="button" class="on" data-value="bachelor" data-i18n="edit.degree.bachelor">Bachelor's Degree</button>
+                <button type="button" data-value="master" data-i18n="edit.degree.master">Master's Degree</button>
+                <button type="button" data-value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</button>
+                <button type="button" data-value="associate" data-i18n="edit.degree.associate">Associate's Degree</button>
+              </div>
             </div>
+
+            <label class="checkbox-row">
+              <input type="checkbox" id="know-study">
+              <div class="custom-checkbox">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+              </div>
+              <span class="checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
+            </label>
           </div>
-        </div>
 
-        <!-- Checkbox -->
-        <label class="checkbox-row">
-          <input type="checkbox" id="know-study">
-          <div class="custom-checkbox">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+          <div class="profile-action-row" style="margin-top:18px">
+            <button class="btn-save" onclick="saveChanges()" data-i18n="edit.save">Save Changes</button>
+            <button class="btn-secondary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span data-i18n="edit.leave_review">Leave Review</span>
+            </button>
           </div>
-          <span class="checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
-        </label>
+        </section>
 
-        <!-- Save -->
-        <button class="btn-save" onclick="saveChanges()" data-i18n="edit.save">Save Changes</button>
-
-        <!-- Secondary actions -->
-        <button class="btn-secondary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          <span data-i18n="edit.leave_review">Leave Review</span>
-        </button>
-
-        <button class="btn-reset" id="resetAccountBtn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
-          <span data-i18n="edit.reset">Reset Account</span>
-        </button>
-
-        <button class="btn-secondary" id="logoutBtn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          <span data-i18n="edit.logout">Logout</span>
-        </button>
+        <section class="form-card danger-card">
+          <span class="section-label" data-i18n="edit.danger_zone">Danger zone</span>
+          <div class="danger-row">
+            <button class="btn-reset" id="resetAccountBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+              <span data-i18n="edit.reset">Reset Account</span>
+            </button>
+            <button class="btn-secondary" id="logoutBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span data-i18n="edit.logout">Logout</span>
+            </button>
+          </div>
+        </section>
 
 
       <!-- Reset Confirm Modal -->
@@ -657,6 +854,16 @@ document.querySelectorAll('.checkbox-row').forEach(function(row) {
   update();
 });
 
+document.querySelectorAll('.mobile-seg').forEach(function(seg) {
+  var select = document.getElementById(seg.getAttribute('data-seg-target') || '');
+  seg.addEventListener('click', function(e) {
+    if (!e.target || e.target.tagName !== 'BUTTON') return;
+    seg.querySelectorAll('button').forEach(function(btn) { btn.classList.remove('on'); });
+    e.target.classList.add('on');
+    if (select) select.value = e.target.getAttribute('data-value') || select.value;
+  });
+});
+
 var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 
 /* Pre-fill name fields from localStorage on load */
@@ -664,10 +871,12 @@ var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
   function prefill() {
     if (!window.BDProfile) return;
     var p = BDProfile.get();
+    var fullEl = document.getElementById('editFullName');
     var fnEl = document.getElementById('editFirstName');
     var lnEl = document.getElementById('editLastName');
     if (fnEl && p.firstName) fnEl.value = p.firstName;
     if (lnEl && p.lastName)  lnEl.value = p.lastName;
+    if (fullEl) fullEl.value = ((p.firstName || '') + ' ' + (p.lastName || '')).trim();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', prefill);
@@ -702,8 +911,15 @@ if (removeAvatarBtn) {
 
 function saveChanges() {
   /* Save name to localStorage */
+  var fullEl = document.getElementById('editFullName');
   var fnEl = document.getElementById('editFirstName');
   var lnEl = document.getElementById('editLastName');
+  if (fullEl && fnEl && lnEl) {
+    var fullName = (fullEl.value || '').trim().replace(/\s+/g, ' ');
+    var parts = fullName ? fullName.split(' ') : [];
+    fnEl.value = parts.length > 1 ? parts.slice(0, -1).join(' ') : (parts[0] || '');
+    lnEl.value = parts.length > 1 ? parts[parts.length - 1] : '';
+  }
   if (window.BDProfile && fnEl && lnEl) {
     BDProfile.save(fnEl.value, lnEl.value);
     BDProfile.applyTabLabel();
