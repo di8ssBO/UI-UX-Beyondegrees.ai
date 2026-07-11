@@ -170,9 +170,10 @@
   .partner-track::-webkit-scrollbar-thumb { background: rgba(124,58,237,.30); border-radius: 999px; }
   :root[data-theme="light"] .partner-track::-webkit-scrollbar-thumb { background: rgba(201,107,85,.34); }
   .partner-card {
-    flex: 0 0 calc((100% - 18px) / 2); min-width: 245px; max-width: 340px; overflow: hidden; scroll-snap-align: start;
+    display: block; flex: 0 0 calc((100% - 18px) / 2); min-width: 245px; max-width: 340px; overflow: hidden; scroll-snap-align: start;
     border-radius: 18px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.13);
     box-shadow: 0 16px 34px rgba(0,0,0,.18);
+    color: inherit; text-decoration: none;
   }
   .partner-hero { position: relative; height: 128px; overflow: hidden; background: linear-gradient(135deg, #7fa8be, #efe4d7); }
   .partner-hero::before {
@@ -194,15 +195,28 @@
   .partner-hero.millennia { background: linear-gradient(135deg, #b88a78, #f2d8ce); }
   .partner-hero.fisher { background: linear-gradient(135deg, #6f91b6, #e3d5c4); }
   .partner-hero.imt { background: linear-gradient(135deg, #5d8bb8, #cfe5df); }
+  .partner-hero.has-img {
+    background-size: cover;
+    background-position: center;
+  }
+  .partner-hero.has-img::before {
+    background: linear-gradient(to top, rgba(0,0,0,.34), rgba(0,0,0,.06));
+  }
+  .partner-hero.has-img::after { display: none; }
   .partner-logo {
     position: relative; z-index: 1; width: 70px; height: 70px; margin: -34px 0 0 18px; border-radius: 50%;
     display: grid; place-items: center; background: #fff; color: #2c1f14; border: 1px solid rgba(0,0,0,.08);
     box-shadow: 0 8px 18px rgba(0,0,0,.18); font-size: 16px; font-weight: 900; letter-spacing: -.03em;
   }
+  .partner-logo img { width: 78%; height: 78%; object-fit: contain; display: block; }
   .partner-body { padding: 13px 18px 18px; }
   .partner-label { font-size: 12px; font-weight: 750; color: var(--mint-400); }
   .partner-name { margin-top: 3px; font-size: 16px; line-height: 1.25; font-weight: 800; color: var(--text-primary); }
   .partner-match { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--text-muted); }
+  .partner-match span { font-weight: 950; }
+  .partner-match.mh span { color: var(--mint-400, #34d399); }
+  .partner-match.mm span { color: var(--orange-400, #fb923c); }
+  .partner-match.ml span { color: var(--red-400, #ff6b81); }
   .partner-desc { margin-top: 16px; font-size: 13px; line-height: 1.45; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   :root[data-theme="light"] .partner-card { background: #fdf8f2; border-color: #e8e0d5; box-shadow: 0 12px 24px rgba(92,69,53,.10); }
   :root[data-theme="light"] .partner-label { color: #2f6f53; }
@@ -449,38 +463,7 @@
     var sortMode = 'match';
     var uniPage = 0;
     var PAGE_SIZE = 6;
-    var PARTNER_UNIS = [
-      {
-        name: 'Liberty University',
-        mark: 'LU',
-        hero: 'liberty',
-        desc: 'Liberty University in Lynchburg, Virginia (USA) is one of the largest private universities with career-focused programs.'
-      },
-      {
-        name: 'Miami Regional University',
-        mark: 'MRU',
-        hero: 'miami',
-        desc: 'Miami Regional University (MRU) is a dynamic institution dedicated to professional healthcare and business education.'
-      },
-      {
-        name: 'Millennia Atlantic University',
-        mark: 'MAU',
-        hero: 'millennia',
-        desc: 'Millennia Atlantic University offers business-centered programs in the Miami region for global learners.'
-      },
-      {
-        name: 'Fisher College',
-        mark: 'FC',
-        hero: 'fisher',
-        desc: 'Fisher College connects students with practical business, technology, and health sciences pathways in Boston.'
-      },
-      {
-        name: 'IMT Atlantique',
-        mark: 'IMT',
-        hero: 'imt',
-        desc: 'IMT Atlantique is a leading French graduate engineering school focused on digital technology, energy, and innovation.'
-      }
-    ];
+    var PARTNER_IDS = ['liberty','mru','mau','fisher','imt'];
 
     var rawProgress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
     var rawMilestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
@@ -505,7 +488,8 @@
       var ctrys = checkedVals('#filCountry input');
       var aids = checkedVals('#filAid input');
       var list = UNI_DATA.filter(function (u) {
-        return regs.indexOf(getRegion(u.country)) > -1 &&
+        return !u.partner &&
+               regs.indexOf(getRegion(u.country)) > -1 &&
                ctrys.indexOf(u.country) > -1 &&
                aids.indexOf(u.aidType || 'merit') > -1;
       });
@@ -585,22 +569,44 @@
       });
     }
 
-    function partnerHTML(p) {
-      return '<article class="partner-card">' +
-        '<div class="partner-hero ' + p.hero + '"></div>' +
-        '<div class="partner-logo">' + p.mark + '</div>' +
+    function uniImage(u) {
+      var map = (typeof UNI_IMG_MAP !== 'undefined') ? UNI_IMG_MAP : (window.UNI_IMG_MAP || {});
+      var im = map[u.id] || { image: null };
+      return im.image || '';
+    }
+
+    function partnerLogoHTML(u) {
+      var map = (typeof UNI_IMG_MAP !== 'undefined') ? UNI_IMG_MAP : (window.UNI_IMG_MAP || {});
+      var im = map[u.id] || { icon: null };
+      if (!im.icon) return u.icon || 'BD';
+      return '<img src="' + im.icon + '" alt="' + u.name + ' logo" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'"><span style="display:none">' + (u.icon || 'BD') + '</span>';
+    }
+
+    function partnerDesc(u) {
+      var progs = (u.programs || []).slice(0, 2).join(' and ');
+      return u.loc + (progs ? ' - programs in ' + progs + '.' : '.');
+    }
+
+    function partnerHTML(u) {
+      var bg = uniImage(u);
+      var heroStyle = bg ? ' style="background-image:linear-gradient(to top, rgba(0,0,0,.34), rgba(0,0,0,.06)), url(' + bg + ')"' : '';
+      return '<a class="partner-card" href="../../university/detail/?u=' + u.id + '">' +
+        '<div class="partner-hero ' + (bg ? 'has-img' : '') + '"' + heroStyle + '></div>' +
+        '<div class="partner-logo">' + partnerLogoHTML(u) + '</div>' +
         '<div class="partner-body">' +
           '<div class="partner-label">Official Partner</div>' +
-          '<div class="partner-name">' + p.name + '</div>' +
-          '<div class="partner-match">No Match</div>' +
-          '<div class="partner-desc">' + p.desc + '</div>' +
+          '<div class="partner-name">' + u.name + '</div>' +
+          '<div class="partner-match ' + matchCls(u.match) + '"><span>' + u.match + '%</span> ' + t('uni.match') + '</div>' +
+          '<div class="partner-desc">' + partnerDesc(u) + '</div>' +
         '</div>' +
-      '</article>';
+      '</a>';
     }
 
     function renderPartners() {
       var track = document.getElementById('partnerTrack');
-      if (track) track.innerHTML = PARTNER_UNIS.map(partnerHTML).join('');
+      if (!track) return;
+      var partners = PARTNER_IDS.map(uniById).filter(Boolean);
+      track.innerHTML = partners.map(partnerHTML).join('');
     }
 
     function render() {

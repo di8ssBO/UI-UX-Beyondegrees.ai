@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="../../../design-system/layout.css">
   <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
 <style>
-:root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
+/* Theme colors come from design-system/tokens.css; page-specific CSS stays scoped below. */
 /* Light-mode token overrides live in design-system/tokens.css */
 [data-theme="light"] body{background:#06060f!important}
 *,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
@@ -65,7 +65,10 @@ body { background: #06060f; }
 .page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); flex: 1; }
 
 /* Header (ds-hdr) — consistent with the other screens */
-.ds-hdr { display:flex; align-items:center; justify-content:space-between; padding:10px 18px 8px; position:relative; z-index:5; flex-shrink:0; }
+.ds-hdr {
+  display:flex; align-items:center; justify-content:space-between; padding:10px 18px 8px;
+  position:relative; z-index:30; flex-shrink:0; background: var(--bg-base);
+}
 .ds-logo { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--text-primary); line-height:1; }
 .ds-logo .logo-text { display:inline-flex; align-items:baseline; gap:0; white-space:nowrap; }
 .ds-logo .logo-beyon { color:var(--text-primary); }
@@ -73,6 +76,7 @@ body { background: #06060f; }
 .ds-logo .logo-img { height:20px; width:auto; display:block; flex-shrink:0; }
 [data-theme="dark"] .ds-logo .logo-img { filter:brightness(0) invert(1) drop-shadow(0 1px 4px rgba(107,163,255,0.30)); }
 [data-theme="dark"] .ds-logo .logo-text { background:linear-gradient(135deg,#a78bfa 0%,#06d6a0 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="light"] .ds-hdr { background: transparent; }
 [data-theme="light"] .ds-logo .logo-text { background:linear-gradient(135deg,#c96b55 0%,#0274BE 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
 /* Page content — scroll body that fills between header and tab bar */
@@ -269,7 +273,14 @@ body { background: #06060f; }
   background: #1863DC; border-color: #1863DC;
   transform: scale(1.08);
 }
+.checkbox-row.is-checked .custom-checkbox {
+  background: #1863DC; border-color: #1863DC;
+  transform: scale(1.08);
+}
 .checkbox-row input:checked ~ .custom-checkbox svg {
+  opacity: 1; transform: scale(1) rotate(0deg);
+}
+.checkbox-row.is-checked .custom-checkbox svg {
   opacity: 1; transform: scale(1) rotate(0deg);
 }
 [data-theme="light"] .custom-checkbox { border-color: rgba(0,0,0,0.20)!important; }
@@ -416,6 +427,7 @@ body { background: #06060f; }
   display: flex;
   align-items: flex-start;
   gap: 18px;
+  min-height: 232px;
 }
 .avatar-editor {
   display: flex;
@@ -556,6 +568,16 @@ body { background: #06060f; }
   background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
   box-shadow: 0 4px 14px rgba(24,99,220,0.28);
 }
+.mobile-seg[data-seg-target="degreeSelect"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.mobile-seg[data-seg-target="degreeSelect"] button {
+  min-width: 0;
+  min-height: 46px;
+  white-space: normal;
+  line-height: 1.22;
+}
 [data-theme="light"] .mobile-seg button {
   background: rgba(255,255,255,0.86) !important;
   border-color: #e8e0d5 !important;
@@ -566,6 +588,89 @@ body { background: #06060f; }
   border-color: transparent !important;
   background: linear-gradient(135deg, #e8917a, #c96b55) !important;
   box-shadow: 0 4px 14px rgba(201,107,85,0.28) !important;
+}
+.mobile-major-field[hidden],
+.mobile-major-menu[hidden] {
+  display: none !important;
+}
+.mobile-major-picker {
+  position: relative;
+}
+.mobile-major-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 13px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+}
+.mobile-major-button.open {
+  border-color: rgba(124,58,237,0.72);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.16);
+}
+.mobile-major-placeholder {
+  color: var(--text-muted);
+}
+.mobile-major-caret {
+  color: var(--text-muted);
+  transition: transform .16s ease;
+}
+.mobile-major-button.open .mobile-major-caret {
+  transform: rotate(180deg);
+}
+.mobile-major-menu {
+  margin-top: 8px;
+  max-height: 190px;
+  overflow: auto;
+  padding: 7px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-md);
+}
+.mobile-major-option {
+  width: 100%;
+  padding: 10px 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+}
+.mobile-major-option.on,
+.mobile-major-option:active {
+  background: rgba(124,58,237,0.18);
+  color: var(--text-primary);
+}
+.mobile-major-option.on::after {
+  content: "✓";
+  color: var(--violet-400);
+  font-weight: 900;
+}
+[data-theme="light"] .mobile-major-button.open {
+  border-color: rgba(201,107,85,0.68);
+  box-shadow: 0 0 0 3px rgba(201,107,85,0.14);
+}
+[data-theme="light"] .mobile-major-option.on,
+[data-theme="light"] .mobile-major-option:active {
+  background: rgba(201,107,85,0.13);
+  color: #2c1f14;
+}
+[data-theme="light"] .mobile-major-option.on::after {
+  color: var(--coral-600);
 }
 .profile-edit-screen .checkbox-row {
   margin: 0;
@@ -585,6 +690,119 @@ body { background: #06060f; }
 }
 .danger-card .section-label {
   margin-bottom: 12px;
+}
+
+/* Design-system token alignment + remove the right-side white wash on this screen. */
+.mobile-viewport {
+  background: var(--bg-base) !important;
+  isolation: isolate;
+  overflow: hidden;
+}
+[data-theme="light"] .mobile-viewport {
+  background:
+    radial-gradient(ellipse 48% 30% at 10% 12%, rgba(168,194,217,0.22) 0%, transparent 62%),
+    radial-gradient(ellipse 44% 34% at 18% 88%, rgba(232,147,112,0.14) 0%, transparent 64%),
+    linear-gradient(180deg, var(--cream-50) 0%, var(--cream-100) 42%, var(--cream-200) 100%) !important;
+}
+.mobile-viewport::before,
+.mobile-viewport::after {
+  content: none !important;
+  display: none !important;
+}
+.profile-edit-screen {
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+.profile-edit-screen .form-card {
+  background: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+  overflow: hidden;
+}
+.profile-edit-screen .profile-card-mobile {
+  min-height: 232px;
+  overflow: visible !important;
+}
+.profile-edit-screen .profile-fields-card {
+  overflow: visible !important;
+}
+.profile-edit-screen .profile-fields-card .profile-field-stack {
+  min-width: 0;
+}
+[data-theme="light"] .profile-edit-screen .form-card {
+  background: rgba(255,252,245,0.90) !important;
+  border-color: var(--border-color) !important;
+}
+.profile-edit-screen .field-input-wrap,
+.profile-edit-screen .field-select-wrap,
+.mobile-seg button {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-color) !important;
+}
+.profile-edit-screen .field-input,
+.profile-edit-screen .field-select,
+.checkbox-label,
+.profile-edit-title {
+  color: var(--text-primary) !important;
+}
+.section-label,
+.profile-edit-screen .field-label {
+  color: var(--text-muted) !important;
+}
+[data-theme="light"] .section-label,
+[data-theme="light"] .profile-edit-screen .field-label {
+  color: var(--coral-700) !important;
+}
+.profile-card-mobile .avatar {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.18), transparent 30%),
+    linear-gradient(135deg, var(--violet-600), var(--violet-500)) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-violet-sm), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+[data-theme="light"] .profile-card-mobile .avatar {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.26), transparent 30%),
+    linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-orange-sm), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+}
+.profile-card-mobile .avatar-edit-btn,
+.btn-save,
+.mobile-seg button.on,
+.checkbox-row input:checked ~ .custom-checkbox {
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: var(--shadow-violet-sm) !important;
+}
+[data-theme="light"] .mobile-seg button.on {
+  background: linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  box-shadow: var(--shadow-orange-sm) !important;
+}
+[data-theme="light"] .checkbox-row input:checked ~ .custom-checkbox,
+[data-theme="light"] .checkbox-row.is-checked .custom-checkbox {
+  background: linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  box-shadow: var(--shadow-orange-sm) !important;
+}
+.archetype-chip a {
+  color: var(--violet-400) !important;
+}
+[data-theme="light"] .archetype-chip a {
+  color: var(--coral-700) !important;
+}
+.avatar-action,
+.btn-secondary,
+.btn-modal-cancel {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+.avatar-action--danger,
+.btn-reset {
+  color: var(--red-400) !important;
+  border-color: color-mix(in srgb, var(--red-500) 38%, transparent) !important;
+  background: color-mix(in srgb, var(--red-500) 10%, transparent) !important;
 }
 @media (max-width: 380px) {
   .profile-card-mobile { flex-direction: column; }
@@ -714,12 +932,12 @@ body { background: #06060f; }
               <div class="field-label" data-i18n="edit.study">I want to study</div>
               <select class="field-select profile-seg-select" id="studySelect" hidden>
                 <option value="abroad" selected data-i18n="edit.study.abroad">Abroad</option>
-                <option value="in-country" data-i18n="edit.study.in_country">In my country</option>
+                <option value="home" data-i18n="edit.study.in_country">In my country</option>
                 <option value="either" data-i18n="edit.study.either">Either</option>
               </select>
               <div class="mobile-seg" data-seg-target="studySelect">
                 <button type="button" class="on" data-value="abroad" data-i18n="edit.study.abroad">Abroad</button>
-                <button type="button" data-value="in-country" data-i18n="edit.study.in_country">In my country</button>
+                <button type="button" data-value="home" data-i18n="edit.study.in_country">In my country</button>
                 <button type="button" data-value="either" data-i18n="edit.study.either">Either</button>
               </div>
             </div>
@@ -747,6 +965,17 @@ body { background: #06060f; }
               </div>
               <span class="checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
             </label>
+
+            <div class="field-row mobile-major-field" id="mobileMajorField" hidden>
+              <div class="field-label">Preferred Major</div>
+              <div class="mobile-major-picker" id="mobileMajorPicker">
+                <button class="mobile-major-button" id="mobileMajorButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span id="mobileMajorText" class="mobile-major-placeholder">Select a major</span>
+                  <span class="mobile-major-caret" aria-hidden="true">v</span>
+                </button>
+                <div class="mobile-major-menu" id="mobileMajorMenu" role="listbox" hidden></div>
+              </div>
+            </div>
           </div>
 
           <div class="profile-action-row" style="margin-top:18px">
@@ -841,14 +1070,108 @@ body { background: #06060f; }
 <script>
 (function(){function a(r){document.documentElement.setAttribute('data-theme',r)}function b(p){var r=p==='system'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;a(r);document.documentElement.setAttribute('data-theme-pref',p);try{localStorage.setItem('bd-theme',p)}catch(e){}}window.bdSetTheme=b;var s='dark';try{s=localStorage.getItem('bd-theme')||'dark'}catch(e){}b(s);window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){var p=document.documentElement.getAttribute('data-theme-pref')||'dark';if(p==='system')b('system')})})();
 
+var PROFILE_MAJORS = [
+  { v: 'cs', label: 'Computer Science' },
+  { v: 'ds', label: 'Data Science & AI' },
+  { v: 'design', label: 'Design & UX' },
+  { v: 'eng', label: 'Engineering' },
+  { v: 'med', label: 'Medicine' },
+  { v: 'biz', label: 'Business' },
+  { v: 'psy', label: 'Psychology' },
+  { v: 'econ', label: 'Economics' },
+  { v: 'law', label: 'Law' },
+  { v: 'arch', label: 'Architecture' },
+  { v: 'bio', label: 'Biology' },
+  { v: 'comm', label: 'Communications' }
+];
+var mobileMajorValue = '';
+
+function readJson(key) {
+  try {
+    var raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function writeJson(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
+
+function normalizeStudy(value) {
+  if (value === 'in-country' || value === 'my-country') return 'home';
+  return value || 'abroad';
+}
+
+function findProfileMajor(value) {
+  return PROFILE_MAJORS.filter(function (major) { return major.v === value; })[0] || null;
+}
+
+function setMobileSegment(selectId, value) {
+  var select = document.getElementById(selectId);
+  if (!select) return;
+  var selected = value || select.value || '';
+  select.value = selected;
+  document.querySelectorAll('[data-seg-target="' + selectId + '"] button').forEach(function (btn) {
+    btn.classList.toggle('on', btn.getAttribute('data-value') === selected);
+  });
+}
+
+function getMobileSegment(selectId, fallback) {
+  var select = document.getElementById(selectId);
+  return (select && select.value) || fallback;
+}
+
+function renderMobileMajorPicker() {
+  var menu = document.getElementById('mobileMajorMenu');
+  if (!menu) return;
+  menu.innerHTML = PROFILE_MAJORS.map(function (major) {
+    var active = major.v === mobileMajorValue ? ' on' : '';
+    return '<button class="mobile-major-option' + active + '" type="button" role="option" data-value="' + major.v + '">' + major.label + '</button>';
+  }).join('');
+}
+
+function setMobileMajor(value) {
+  mobileMajorValue = findProfileMajor(value) ? value : '';
+  var selected = findProfileMajor(mobileMajorValue);
+  var text = document.getElementById('mobileMajorText');
+  if (text) {
+    text.textContent = selected ? selected.label : 'Select a major';
+    text.classList.toggle('mobile-major-placeholder', !selected);
+  }
+  renderMobileMajorPicker();
+}
+
+function closeMobileMajorPicker() {
+  var menu = document.getElementById('mobileMajorMenu');
+  var btn = document.getElementById('mobileMajorButton');
+  if (menu) menu.hidden = true;
+  if (btn) {
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function syncMobileMajorField() {
+  var input = document.getElementById('know-study');
+  var field = document.getElementById('mobileMajorField');
+  var show = !!(input && input.checked);
+  if (field) field.hidden = !show;
+  if (!show) {
+    setMobileMajor('');
+    closeMobileMajorPicker();
+  }
+}
+
 // Checkbox visual update
 document.querySelectorAll('.checkbox-row').forEach(function(row) {
   var input = row.querySelector('input[type="checkbox"]');
   var box = row.querySelector('.custom-checkbox');
   if (!input || !box) return;
   function update() {
-    box.style.background = input.checked ? '#1863DC' : 'transparent';
-    box.style.borderColor = input.checked ? '#1863DC' : '';
+    row.classList.toggle('is-checked', input.checked);
+    if (input.id === 'know-study') syncMobileMajorField();
   }
   input.addEventListener('change', update);
   update();
@@ -860,8 +1183,32 @@ document.querySelectorAll('.mobile-seg').forEach(function(seg) {
     if (!e.target || e.target.tagName !== 'BUTTON') return;
     seg.querySelectorAll('button').forEach(function(btn) { btn.classList.remove('on'); });
     e.target.classList.add('on');
-    if (select) select.value = e.target.getAttribute('data-value') || select.value;
+    if (select) select.value = normalizeStudy(e.target.getAttribute('data-value') || select.value);
   });
+});
+
+var mobileMajorButton = document.getElementById('mobileMajorButton');
+var mobileMajorMenu = document.getElementById('mobileMajorMenu');
+var mobileMajorPicker = document.getElementById('mobileMajorPicker');
+if (mobileMajorButton) {
+  mobileMajorButton.addEventListener('click', function () {
+    if (!mobileMajorMenu) return;
+    var opening = mobileMajorMenu.hidden;
+    mobileMajorMenu.hidden = !opening;
+    mobileMajorButton.classList.toggle('open', opening);
+    mobileMajorButton.setAttribute('aria-expanded', opening ? 'true' : 'false');
+  });
+}
+if (mobileMajorMenu) {
+  mobileMajorMenu.addEventListener('click', function (e) {
+    var option = e.target && e.target.closest ? e.target.closest('[data-value]') : null;
+    if (!option) return;
+    setMobileMajor(option.getAttribute('data-value') || '');
+    closeMobileMajorPicker();
+  });
+}
+document.addEventListener('click', function (e) {
+  if (mobileMajorPicker && !mobileMajorPicker.contains(e.target)) closeMobileMajorPicker();
 });
 
 var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
@@ -869,14 +1216,28 @@ var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 /* Pre-fill name fields from localStorage on load */
 (function() {
   function prefill() {
-    if (!window.BDProfile) return;
-    var p = BDProfile.get();
+    var p = window.BDProfile ? BDProfile.get() : (readJson('bd-profile') || {});
+    var onboarding = readJson('bd-onboarding') || {};
     var fullEl = document.getElementById('editFullName');
     var fnEl = document.getElementById('editFirstName');
     var lnEl = document.getElementById('editLastName');
+    var emailEl = document.getElementById('editEmail');
+    var locationEl = document.getElementById('editLocation');
+    var knowEl = document.getElementById('know-study');
     if (fnEl && p.firstName) fnEl.value = p.firstName;
     if (lnEl && p.lastName)  lnEl.value = p.lastName;
-    if (fullEl) fullEl.value = ((p.firstName || '') + ' ' + (p.lastName || '')).trim();
+    if (fullEl) fullEl.value = ((p.firstName || p.givenName || '') + ' ' + (p.lastName || p.familyName || '')).trim() || fullEl.value || 'Your Name';
+    if (emailEl) emailEl.value = p.email || emailEl.value || '';
+    if (locationEl) locationEl.value = onboarding.location || locationEl.value || '';
+    setMobileSegment('studySelect', normalizeStudy(onboarding.studyWhere));
+    setMobileSegment('degreeSelect', onboarding.degree || 'bachelor');
+    if (knowEl) knowEl.checked = !!onboarding.knowMajor;
+    setMobileMajor(onboarding.major || '');
+    document.querySelectorAll('.checkbox-row').forEach(function (row) {
+      var input = row.querySelector('input[type="checkbox"]');
+      row.classList.toggle('is-checked', !!(input && input.checked));
+    });
+    syncMobileMajorField();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', prefill);
@@ -926,11 +1287,37 @@ function saveChanges() {
     BDProfile.applyNameDisplay();
     BDProfile.applyAvatar();
   }
+  try {
+    var emailEl = document.getElementById('editEmail');
+    var locationEl = document.getElementById('editLocation');
+    var knowEl = document.getElementById('know-study');
+    var existingProfile = readJson('bd-profile') || {};
+    if (fnEl && lnEl) {
+      existingProfile.firstName = fnEl.value || '';
+      existingProfile.lastName = lnEl.value || '';
+      existingProfile.givenName = fnEl.value || '';
+      existingProfile.familyName = lnEl.value || '';
+    }
+    if (emailEl && emailEl.value) existingProfile.email = emailEl.value;
+    writeJson('bd-profile', existingProfile);
+    if (fullEl) {
+      localStorage.setItem('bd-full-name', fullEl.value || '');
+      localStorage.setItem('bd-username', fullEl.value || '');
+    }
+    var knowsMajor = !!(knowEl && knowEl.checked);
+    writeJson('bd-onboarding', {
+      location: locationEl ? locationEl.value.trim() : '',
+      studyWhere: normalizeStudy(getMobileSegment('studySelect', 'abroad')),
+      degree: getMobileSegment('degreeSelect', 'bachelor'),
+      knowMajor: knowsMajor,
+      major: knowsMajor ? (mobileMajorValue || null) : null
+    });
+  } catch (e) {}
 
   var btn = document.querySelector('.btn-save');
   var orig = btn.textContent;
   btn.textContent = _t('edit.save_success');
-  btn.style.background = 'linear-gradient(135deg, #059669, #10B981)';
+  btn.style.background = 'linear-gradient(135deg, var(--mint-700), var(--mint-500))';
   setTimeout(function() {
     btn.textContent = orig;
     btn.style.background = '';

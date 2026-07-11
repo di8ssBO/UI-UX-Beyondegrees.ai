@@ -373,6 +373,19 @@
 /* Status bar text */
 [data-theme="light"] .status-bar { color: #0d0a06 !important; }
 
+.us {
+  height: 100%;
+  min-height: 0;
+}
+.us-hdr {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+}
+.us-body {
+  min-height: 0;
+}
+
 /* ── Page Hero (us-hero) — redesigned for prominence ──
    Stronger terracotta-dominated gradient (was washed-out cream).
    Bigger title with deep terracotta accent, defined left strip.
@@ -1474,6 +1487,84 @@ svg *, canvas, video, img { transition: none !important; }
 }
 .saved-toggle.active .saved-badge { background: rgba(239,68,68,.4); }
 
+/* Partner universities */
+.partner-mobile-section { margin: 16px 0 8px; }
+.partner-mobile-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.partner-mobile-title { font-size: 16px; line-height: 1.2; font-weight: 900; color: var(--text-primary); letter-spacing: -0.01em; }
+.partner-mobile-sub { margin-top: 3px; font-size: 10.5px; line-height: 1.35; color: var(--text-muted); font-weight: 650; }
+.partner-mobile-count {
+  flex: none; padding: 4px 9px; border-radius: 999px;
+  background: rgba(24,99,220,.12); border: 1px solid rgba(24,99,220,.25);
+  color: var(--violet-300); font-size: 10px; font-weight: 900;
+}
+.partner-mobile-track {
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 2px 2px 13px; margin: 0 -2px; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.partner-mobile-track::-webkit-scrollbar { display: none; }
+.partner-mobile-card {
+  display: block; flex: 0 0 78%; min-width: 226px; max-width: 272px; overflow: hidden; scroll-snap-align: start;
+  border-radius: 18px; background: var(--bg-surface); border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 10px 24px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06);
+  color: inherit; text-decoration: none;
+}
+.partner-mobile-hero { position: relative; height: 92px; overflow: hidden; background: linear-gradient(135deg, #1863DC, #06d6a0); }
+.partner-mobile-hero::before {
+  content: ""; position: absolute; inset: 0;
+  background: radial-gradient(circle at 72% 18%, rgba(255,255,255,.38), transparent 20%), linear-gradient(to top, rgba(0,0,0,.28), transparent 58%);
+}
+.partner-mobile-hero::after {
+  content: ""; position: absolute; left: 14px; right: 14px; bottom: 0; height: 40px; opacity: .66;
+  background: linear-gradient(to top, rgba(255,255,255,.70), rgba(255,255,255,.34)), repeating-linear-gradient(90deg, transparent 0 14px, rgba(65,78,94,.24) 14px 17px);
+  clip-path: polygon(0 100%,0 45%,13% 45%,13% 28%,22% 28%,22% 45%,37% 45%,37% 18%,48% 18%,48% 45%,63% 45%,63% 31%,74% 31%,74% 45%,100% 45%,100% 100%);
+}
+.partner-mobile-hero.liberty { background: linear-gradient(135deg, #7fa8be, #d9cbbd); }
+.partner-mobile-hero.miami { background: linear-gradient(135deg, #8eb5bc, #efe1d4); }
+.partner-mobile-hero.millennia { background: linear-gradient(135deg, #b88a78, #f2d8ce); }
+.partner-mobile-hero.fisher { background: linear-gradient(135deg, #6f91b6, #e3d5c4); }
+.partner-mobile-hero.imt { background: linear-gradient(135deg, #5d8bb8, #cfe5df); }
+.partner-mobile-hero.has-img {
+  background-size: cover;
+  background-position: center;
+}
+.partner-mobile-hero.has-img::before {
+  background: linear-gradient(to top, rgba(0,0,0,.34), rgba(0,0,0,.06));
+}
+.partner-mobile-hero.has-img::after { display: none; }
+.partner-mobile-logo {
+  position: relative; z-index: 1; width: 54px; height: 54px; margin: -27px 0 0 14px;
+  border-radius: 50%; display: grid; place-items: center; background: #fff; color: #2c1f14;
+  border: 1px solid rgba(0,0,0,.08); box-shadow: 0 7px 16px rgba(0,0,0,.20);
+  font-size: 12px; font-weight: 900; letter-spacing: -0.03em;
+}
+.partner-mobile-logo img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+  display: block;
+}
+.partner-mobile-body { padding: 10px 14px 14px; }
+.partner-mobile-label { font-size: 10.5px; font-weight: 850; color: var(--mint-400); }
+.partner-mobile-name { margin-top: 3px; font-size: 14px; line-height: 1.25; font-weight: 850; color: var(--text-primary); }
+.partner-mobile-match { margin-top: 3px; font-size: 10.5px; font-weight: 750; color: var(--text-muted); }
+.partner-mobile-match span { font-weight: 950; }
+.partner-mobile-match.mh span { color: var(--mint-400, #34d399); }
+.partner-mobile-match.mm span { color: var(--orange-400, #fb923c); }
+.partner-mobile-match.ml span { color: var(--red-400, #ff6b81); }
+.partner-mobile-desc {
+  margin-top: 10px; font-size: 11.5px; line-height: 1.45; color: var(--text-secondary);
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+[data-theme="light"] .partner-mobile-count {
+  background: rgba(201,107,85,.12) !important; border-color: rgba(201,107,85,.30) !important; color: #a84e30 !important;
+}
+[data-theme="light"] .partner-mobile-card {
+  background: #FFFCF5 !important; border-color: #E8DCC2 !important;
+  box-shadow: 0 8px 20px rgba(92,74,61,.10), inset 0 1px 0 rgba(255,255,255,.78) !important;
+}
+[data-theme="light"] .partner-mobile-label { color: #2f6f53 !important; }
+[data-theme="light"] .partner-mobile-desc { color: #5c4535 !important; }
+
 /* ═══════════════════════════════════════════════════════════════════════════
    ENHANCED UNIVERSITY CARD
    ═══════════════════════════════════════════════════════════════════════════ */
@@ -1854,6 +1945,9 @@ svg *, canvas, video, img { transition: none !important; }
 .uc-match-badge.mh .uc-match-val { color: var(--mint-400, #34d399); }
 .uc-match-badge.mm .uc-match-val { color: var(--orange-400, #fb923c); }
 .uc-match-badge.ml .uc-match-val { color: var(--red-400, #ff6b81); }
+.uc-match-badge.match-green .uc-match-val { color: var(--mint-400, #34d399); }
+.uc-match-badge.match-yellow .uc-match-val { color: var(--orange-400, #fb923c); }
+.uc-match-badge.match-red .uc-match-val { color: var(--red-400, #ff6b81); }
 .uc-match-lbl {
   font-size: 9px;
   font-weight: 700;
@@ -2565,6 +2659,51 @@ svg *, canvas, video, img { transition: none !important; }
   -webkit-tap-highlight-color: transparent;
   transition: all .15s;
 }
+.mobile-page-wrap {
+  --pager-violet-600: #7c3aed;
+  --pager-violet-500: #8b5cf6;
+  --pager-violet-400: #a78bfa;
+  --pager-violet-300: #c4b5fd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  padding: 8px 0 2px;
+  margin-bottom: 4px;
+}
+.mobile-page-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  border: 1px solid rgba(124,58,237,.30);
+  background: rgba(124,58,237,.12);
+  color: var(--pager-violet-300);
+  font-size: 12px;
+  font-weight: 900;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform .15s, background .15s, border-color .15s, color .15s;
+}
+.mobile-page-btn:active { transform: scale(.96); }
+.mobile-page-btn.on {
+  background: linear-gradient(135deg, var(--pager-violet-600), var(--pager-violet-500));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 5px 14px rgba(124,58,237,.28);
+}
+[data-theme="light"] .mobile-page-btn {
+  background: rgba(124,58,237,.10) !important;
+  border-color: rgba(124,58,237,.30) !important;
+  color: #6d28d9 !important;
+  box-shadow: 0 2px 8px rgba(124,58,237,.10) !important;
+}
+[data-theme="light"] .mobile-page-btn.on {
+  background: linear-gradient(135deg, #7c3aed, #8b5cf6) !important;
+  color: #fff !important;
+  box-shadow: 0 5px 14px rgba(124,58,237,.28) !important;
+}
 
 /* ═══════════════════════════════════════════════════════════════════════════
    FILTER SHEET (bottom slide-up)
@@ -2893,6 +3032,18 @@ svg *, canvas, video, img { transition: none !important; }
 
             <!-- University list -->
             <div id="uniList"></div>
+
+            <!-- Partner universities -->
+            <section class="partner-mobile-section" aria-labelledby="partnerMobileTitle">
+              <div class="partner-mobile-head">
+                <div>
+                  <div class="partner-mobile-title" id="partnerMobileTitle">University Partners</div>
+                  <div class="partner-mobile-sub">Official partner schools you can explore next.</div>
+                </div>
+                <div class="partner-mobile-count">5</div>
+              </div>
+              <div class="partner-mobile-track" id="partnerMobileTrack"></div>
+            </section>
           </div>
         </div><!-- end us-body -->
 
@@ -3170,7 +3321,36 @@ var UNI_DATA = [
     loc:'Boston, MA, USA', country:'USA', type:'priv', typeLabel:'Private',
     match:71, ranking:'#43 Regional (US News)', students:'1,500+', employment:'90%',
     tuition:'$35,524 / yr', aid:'Merit-Based Aid', aidType:'merit',
-    salary:'$3,800 / mo avg', programs:['Business','Healthcare Management','Criminal Justice','Sport Management'] },
+    salary:'$3,800 / mo avg', programs:['Business','Healthcare Management','Criminal Justice','Sport Management'],
+    partner:true },
+
+  { id:'liberty',  icon:'LU', name:'Liberty University',
+    loc:'Lynchburg, VA, USA', country:'USA', type:'priv', typeLabel:'Private',
+    match:86, ranking:'National University (US)', students:'135,000+', employment:'91%',
+    tuition:'$24,000 / yr', aid:'Merit + Need Aid', aidType:'merit',
+    salary:'$4,100 / mo avg', programs:['Business','Computer Science','Aviation','Education','Health Sciences'],
+    partner:true },
+
+  { id:'mru',      icon:'MRU', name:'Miami Regional University',
+    loc:'Miami Springs, FL, USA', country:'USA', type:'priv', typeLabel:'Private',
+    match:78, ranking:'Healthcare-focused University', students:'1,200+', employment:'92%',
+    tuition:'$18,000 / yr', aid:'Merit-Based Aid', aidType:'merit',
+    salary:'$3,700 / mo avg', programs:['Nursing','Healthcare Management','Business','Education'],
+    partner:true },
+
+  { id:'mau',      icon:'MAU', name:'Millennia Atlantic University',
+    loc:'Doral, FL, USA', country:'USA', type:'priv', typeLabel:'Private',
+    match:74, ranking:'Business-focused University', students:'600+', employment:'91%',
+    tuition:'$12,000 / yr', aid:'Merit-Based Aid', aidType:'merit',
+    salary:'$3,600 / mo avg', programs:['Business Administration','International Business','Marketing','Management'],
+    partner:true },
+
+  { id:'imt',      icon:'IMT', name:'IMT Atlantique',
+    loc:'Brest / Nantes / Rennes, France', country:'France', type:'pub', typeLabel:'Graduate Engineering',
+    match:83, ranking:'Top French Engineering School', students:'2,300+', employment:'98%',
+    tuition:'EUR 4k / yr (~$4.4k)', aid:'Merit Scholarship', aidType:'merit',
+    salary:'$4,900 / mo avg', programs:['Engineering','Computer Science','Telecommunications','Energy','Data Science'],
+    partner:true },
 
   { id:'ubc',      icon:'🍁', name:'Univ. of British Columbia',
     loc:'Vancouver, BC, Canada', country:'Canada', type:'pub', typeLabel:'Public',
@@ -3256,6 +3436,7 @@ var _locked  = false;
    Source: https://commons.wikimedia.org/wiki/Special:FilePath/{filename}
    ══════════════════════════════════════════════════════════ */
 var W = 'https://commons.wikimedia.org/wiki/Special:FilePath/';
+var P = '../../../shared/assets/partners/';
 var UNI_IMG_MAP = {
   /* Vietnam — logos served from GCS if available, else null */
   'fulbright' : { icon: null,  image: null },
@@ -3288,7 +3469,11 @@ var UNI_IMG_MAP = {
   'uci'       : { icon: W+'UC_Irvine_Anteaters_logo.svg',                               image: null },
   'ucf'       : { icon: W+'UCF_Knights_logo.svg',                                       image: null },
   'erau'      : { icon: W+'ERAU.svg',                                                   image: null },
-  'fisher'    : { icon: null,                                                            image: null },
+  'fisher'    : { icon: P+'fisher-logo.png',                                            image: P+'fisher-campus.png' },
+  'liberty'   : { icon: P+'liberty-logo.png',                                           image: P+'liberty-campus.png' },
+  'mru'       : { icon: P+'mru-logo.png',                                               image: P+'mru-campus.png' },
+  'mau'       : { icon: P+'mau-logo.png',                                               image: P+'mau-campus.png' },
+  'imt'       : { icon: P+'imt-logo.png',                                               image: P+'imt-campus.png' },
   /* Americas */
   'ubc'       : { icon: W+'British_columbia_ca_univ_logo.svg',                          image: null },
   'usp'       : { icon: W+'Universidade_de_S%C3%A3o_Paulo_Logo.svg',                    image: null },
@@ -3317,7 +3502,8 @@ function getUniBg(id) {
 /* View + pagination */
 var _view    = 'card';   /* always card */
 var _page    = 1;
-var PAGE_SIZE = 10;
+var PAGE_SIZE = 5;
+var PARTNER_IDS = ['liberty','mru','mau','fisher','imt'];
 
 /* Filter sheet draft (staged state before Apply) */
 var _fsDraft = { regions:[], countries:[], aid:'all' };
@@ -3406,9 +3592,9 @@ function findUni(id) {
 }
 
 function getMatchClass(pct) {
-  if (pct >= 70) return 'match-green';
-  if (pct >= 40) return 'match-yellow';
-  return 'match-red';
+  if (pct >= 85) return 'mh';
+  if (pct >= 70) return 'mm';
+  return 'ml';
 }
 function getMatchRingClass(pct) {
   if (pct >= 70) return 'match-ring-green';
@@ -3422,7 +3608,7 @@ function inArray(arr, val) { return arr.indexOf(val) >= 0; }
    FILTER + SORT
 ══════════════════════════════════════════════════════════ */
 function filteredUnis() {
-  var list = UNI_DATA.slice();
+  var list = UNI_DATA.filter(function(u){ return !u.partner; });
 
   /* search */
   if (_state.search) {
@@ -3661,27 +3847,76 @@ function render() {
     return;
   }
 
-  var visible = list.slice(0, _page * PAGE_SIZE);
+  var totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  if (_page > totalPages) _page = totalPages;
+  if (_page < 1) _page = 1;
+
+  var start = (_page - 1) * PAGE_SIZE;
+  var visible = list.slice(start, start + PAGE_SIZE);
   var html = '';
   for (var i = 0; i < visible.length; i++) {
     html += renderCard(visible[i]);
   }
 
-  var remaining = total - visible.length;
-  if (remaining > 0) {
-    var showN = Math.min(remaining, PAGE_SIZE);
-    html += '<div class="load-more-wrap">'
-      + '<button class="load-more-btn" onclick="loadMore()">'
-      + t('uni.load_more').replace('{n}', showN) + ' <span style="opacity:.55;font-weight:500">(' + t('uni.load_more_left').replace('{n}', remaining) + ')</span>'
-      + '</button></div>';
+  if (totalPages > 1) {
+    html += '<div class="mobile-page-wrap" aria-label="University pages">';
+    for (var p = 1; p <= totalPages; p++) {
+      html += '<button class="mobile-page-btn' + (p === _page ? ' on' : '') + '" type="button" onclick="goToPage(' + p + ')" aria-label="Go to university page ' + p + '">' + p + '</button>';
+    }
+    html += '</div>';
   }
 
   listEl.innerHTML = html;
 }
 
 function loadMore() {
-  _page++;
+  goToPage(_page + 1);
+}
+
+function goToPage(page) {
+  _page = page;
   render();
+  var body = document.querySelector('.us-body');
+  if (body && body.scrollTo) body.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function partnerLogoHTML(u) {
+  var logo = getUniIcon(u.id);
+  if (!logo) return u.icon || 'BD';
+  return '<img src="' + logo + '" alt="' + u.name + ' logo" onerror="this.style.display=\'none\';this.nextSibling.style.display=\'block\'"><span style="display:none">' + (u.icon || 'BD') + '</span>';
+}
+
+function partnerDesc(u) {
+  var progs = (u.programs || []).slice(0, 2).join(' and ');
+  return u.loc + (progs ? ' - programs in ' + progs + '.' : '.');
+}
+
+function partnerMobileHTML(u) {
+  var bg = getUniBg(u.id);
+  var heroStyle = bg ? ' style="background-image:linear-gradient(to top, rgba(0,0,0,.34), rgba(0,0,0,.06)), url(' + bg + ')"' : '';
+  return '<a class="partner-mobile-card" href="../detail/index.html?id=' + u.id + '">' +
+    '<div class="partner-mobile-hero ' + (bg ? 'has-img' : '') + '"' + heroStyle + '></div>' +
+    '<div class="partner-mobile-logo">' + partnerLogoHTML(u) + '</div>' +
+    '<div class="partner-mobile-body">' +
+      '<div class="partner-mobile-label">Official Partner</div>' +
+      '<div class="partner-mobile-name">' + u.name + '</div>' +
+      '<div class="partner-mobile-match ' + getMatchClass(u.match) + '"><span>' + u.match + '%</span> match</div>' +
+      '<div class="partner-mobile-desc">' + partnerDesc(u) + '</div>' +
+    '</div>' +
+  '</a>';
+}
+
+function renderMobilePartners() {
+  var track = document.getElementById('partnerMobileTrack');
+  if (!track) return;
+  var partners = [];
+  for (var i = 0; i < PARTNER_IDS.length; i++) {
+    var u = findUni(PARTNER_IDS[i]);
+    if (u) partners.push(u);
+  }
+  track.innerHTML = partners.map(partnerMobileHTML).join('');
+  var count = document.querySelector('.partner-mobile-count');
+  if (count) count.textContent = partners.length;
 }
 
 /* view toggle removed — card-only mode */
@@ -4182,6 +4417,7 @@ if (window.BDi18n) BDi18n.init();
 (function init() {
   try { _saved = JSON.parse(localStorage.getItem('bd-saved-unis') || '[]'); } catch(e) { _saved = []; }
   checkLock();
+  renderMobilePartners();
   render();
   updateSavedToggle();
   updateCompareBar();

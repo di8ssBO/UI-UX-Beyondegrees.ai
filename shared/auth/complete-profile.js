@@ -52,11 +52,14 @@
   var detectT1, detectT2;
 
   applyTheme();
+  hydrateState();
   renderShell();
   cacheEls();
+  syncStateToControls();
   bindEvents();
   update();
-  startLocationDetection();
+  if (state.location.trim()) syncLocationUI();
+  else startLocationDetection();
 
   /* ── Helpers ─────────────────────────────────────────────── */
   function normalizeTheme(v) {
@@ -69,6 +72,49 @@
 
   function writeStorage(key, value) {
     try { window.localStorage.setItem(key, value); } catch (e) {}
+  }
+
+  function readJson(key) {
+    try {
+      var raw = readStorage(key);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function hydrateState() {
+    var saved = readJson("bd-onboarding") || {};
+    state.location = saved.location || state.location;
+    state.studyWhere = normalizeStudyWhere(saved.studyWhere) || state.studyWhere;
+    state.degree = saved.degree || state.degree;
+    state.knowMajor = !!saved.knowMajor;
+    state.major = saved.knowMajor ? (saved.major || null) : null;
+    var avatar = readStorage("bd-avatar") || readStorage("bd-profile-avatar");
+    if (avatar) state.avatarUrl = avatar;
+    if (state.location.trim()) state.locStatus = "done";
+  }
+
+  function normalizeStudyWhere(value) {
+    if (value === "in-country" || value === "my-country") return "home";
+    return value || null;
+  }
+
+  function syncStateToControls() {
+    if (state.avatarUrl && els.avatarInner) {
+      els.avatarInner.style.backgroundImage = "url(" + JSON.stringify(state.avatarUrl) + ")";
+      els.avatar.classList.add("has-image");
+    }
+    if (els.location) els.location.value = state.location || "";
+    if (state.major) {
+      var m = findMajor(state.major);
+      if (m) {
+        state.majorQuery = m.label;
+        if (els.majorQ) els.majorQ.value = m.label;
+      }
+    }
+    syncLocationUI();
+    renderMajorTag();
   }
 
   function esc(s) {

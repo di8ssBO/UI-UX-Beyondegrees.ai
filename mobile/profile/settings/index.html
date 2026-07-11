@@ -14,8 +14,8 @@
   <link rel="stylesheet" href="../../../design-system/components/navigation.css">
   <link rel="stylesheet" href="../../../design-system/animations.css">
   <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
 <style>
-:root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
 /* Light-mode token overrides live in design-system/tokens.css */
 [data-theme="light"] body{background:#06060f!important}
 *,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
@@ -24,11 +24,12 @@ svg *,canvas,video,img{transition:none!important}
 body { background: #06060f; }
 
 .mobile-viewport {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
+  flex: 1; overflow: hidden;
   display: flex; flex-direction: column;
   position: relative; background: var(--bg-base);
   scrollbar-width: none;
 }
+.mobile-viewport > .float-tab-bar { flex-shrink: 0; }
 .mobile-viewport::-webkit-scrollbar { display: none; }
 [data-theme="light"] .mobile-viewport {
   background:
@@ -41,46 +42,47 @@ body { background: #06060f; }
 [data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
 [data-theme="light"] .status-bar { color: #2c1f14 !important; }
 
-/* Top bar */
-.top-bar {
-  position: sticky; top: 0; z-index: 50;
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 18px 14px;
-  background: rgba(6,6,15,0.88);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+/* Header */
+.ds-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px 8px;
+  position: relative;
+  z-index: 30;
+  flex-shrink: 0;
+  background: var(--bg-base);
 }
-[data-theme="light"] .top-bar {
-  background: rgba(253,248,242,0.78) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(140%);
-  backdrop-filter: blur(20px) saturate(140%);
-  border-bottom: 1px solid rgba(232,224,213,0.65) !important;
-}
-[data-theme="light"] .page-title { color: #2c1f14 !important; font-weight: 800 !important; }
-
-.back-btn {
-  width: 34px; height: 34px; border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-primary); cursor: pointer; text-decoration: none;
-  transition: background 0.18s; flex-shrink: 0;
-}
-.back-btn:hover { background: rgba(255,255,255,0.10); }
-[data-theme="light"] .back-btn {
-  background: rgba(255,255,255,0.85) !important;
-  border: 1px solid rgba(201,107,85,0.35) !important;
-  color: #a84e30 !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 2px 6px rgba(201,107,85,0.10) !important;
-}
-[data-theme="light"] .back-btn:hover {
-  background: linear-gradient(135deg, rgba(232,145,122,0.18) 0%, rgba(201,107,85,0.22) 100%) !important;
-  border-color: rgba(201,107,85,0.55) !important;
-}
-.page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.ds-logo { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--text-primary); line-height:1; }
+.ds-logo .logo-text { display:inline-flex; align-items:baseline; gap:0; white-space:nowrap; }
+.ds-logo .logo-beyon { color:var(--text-primary); }
+.ds-logo .logo-accent { color:var(--violet-400); }
+.ds-logo .logo-img { height:20px; width:auto; display:block; flex-shrink:0; }
+[data-theme="dark"] .ds-logo .logo-img { filter:brightness(0) invert(1) drop-shadow(0 1px 4px color-mix(in srgb, var(--violet-400) 30%, transparent)); }
+[data-theme="dark"] .ds-logo .logo-text { background:linear-gradient(135deg,var(--violet-400) 0%,var(--mint-500) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="light"] .ds-hdr { background: transparent; }
+[data-theme="light"] .ds-logo .logo-text { background:linear-gradient(135deg,var(--coral-600) 0%,var(--violet-600) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
 /* Page content */
-.page-content { position: relative; z-index: 1; padding: 20px 16px 24px; }
+.page-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 14px 16px 24px;
+}
+.page-content::-webkit-scrollbar { display: none; }
+.settings-title {
+  margin: 2px 2px 16px;
+  font-size: 24px;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
 
 /* Settings group */
 .settings-group {
@@ -114,7 +116,7 @@ body { background: #06060f; }
 
 .row-icon {
   width: 34px; height: 34px; border-radius: 9px;
-  background: rgba(24,99,220,0.12);
+  background: color-mix(in srgb, var(--violet-500) 14%, transparent);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0; color: var(--violet-400);
 }
@@ -153,7 +155,7 @@ body { background: #06060f; }
 .toggle { position: relative; width: 46px; height: 26px; cursor: pointer; }
 .toggle input { opacity: 0; width: 0; height: 0; }
 .toggle-track { position: absolute; inset: 0; border-radius: 100px; background: var(--neutral-600); transition: background 0.25s ease; }
-.toggle input:checked ~ .toggle-track { background: #1863DC; }
+.toggle input:checked ~ .toggle-track { background: var(--violet-600); }
 [data-theme="light"] .toggle-track { background: rgba(140,114,96,0.30) !important; }
 [data-theme="light"] .toggle input:checked ~ .toggle-track {
   background: linear-gradient(135deg, #e8917a 0%, #c96b55 50%, #a84e30 100%) !important;
@@ -268,8 +270,8 @@ body { background: #06060f; }
 [data-theme="light"] .sheet-option:hover { background: rgba(201,107,85,0.06) !important; }
 
 .sheet-option-left { display: flex; align-items: center; gap: 12px; }
-.sheet-opt-icon { width: 30px; height: 30px; border-radius: 8px; background: rgba(24,99,220,0.10); display: flex; align-items: center; justify-content: center; color: var(--violet-400); flex-shrink: 0; }
-.sheet-option[data-selected="true"] .sheet-opt-icon { background: rgba(24,99,220,0.18); }
+.sheet-opt-icon { width: 30px; height: 30px; border-radius: 8px; background: color-mix(in srgb, var(--violet-500) 12%, transparent); display: flex; align-items: center; justify-content: center; color: var(--violet-400); flex-shrink: 0; }
+.sheet-option[data-selected="true"] .sheet-opt-icon { background: color-mix(in srgb, var(--violet-500) 20%, transparent); }
 /* Light mode — palette rotation for sheet option icons */
 [data-theme="light"] .sheet-option:nth-child(4n+1) .sheet-opt-icon {
   background: linear-gradient(135deg, rgba(232,145,122,0.22) 0%, rgba(201,107,85,0.28) 100%) !important;
@@ -299,7 +301,7 @@ body { background: #06060f; }
 }
 
 .sheet-check { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
-.sheet-option[data-selected="true"] .sheet-check { opacity: 1; color: #1863DC; }
+.sheet-option[data-selected="true"] .sheet-check { opacity: 1; color: var(--violet-400); }
 [data-theme="light"] .sheet-option[data-selected="true"] .sheet-check { color: #a84e30 !important; }
 
 .settings-section-title {
@@ -351,8 +353,8 @@ body { background: #06060f; }
   outline: none;
 }
 .sheet-field input:focus {
-  border-color: rgba(24,99,220,0.58);
-  box-shadow: 0 0 0 3px rgba(24,99,220,0.16);
+  border-color: color-mix(in srgb, var(--violet-500) 58%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--violet-500) 16%, transparent);
 }
 [data-theme="light"] .sheet-field input {
   background: rgba(255,255,255,0.88) !important;
@@ -383,8 +385,8 @@ body { background: #06060f; }
 .sheet-btn-primary {
   border: 0;
   color: #fff;
-  background: linear-gradient(135deg, #1863DC, #0274BE);
-  box-shadow: 0 6px 20px rgba(24,99,220,0.28);
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+  box-shadow: var(--shadow-violet-sm);
 }
 [data-theme="light"] .sheet-btn {
   background: rgba(255,255,255,0.84) !important;
@@ -428,7 +430,7 @@ body { background: #06060f; }
   flex: none;
   font-size: 11px;
   font-weight: 900;
-  background: rgba(24,99,220,0.14);
+  background: color-mix(in srgb, var(--violet-500) 16%, transparent);
   color: var(--violet-300);
 }
 .device-main { flex: 1; min-width: 0; }
@@ -465,6 +467,125 @@ body { background: #06060f; }
   font-size: 14px;
   font-weight: 900;
 }
+
+/* Design-system token alignment */
+.mobile-viewport {
+  background: var(--bg-base) !important;
+  isolation: isolate;
+}
+[data-theme="light"] .mobile-viewport {
+  background:
+    radial-gradient(ellipse 48% 30% at 10% 12%, rgba(168,194,217,0.22) 0%, transparent 62%),
+    radial-gradient(ellipse 44% 34% at 18% 88%, rgba(232,147,112,0.14) 0%, transparent 64%),
+    linear-gradient(180deg, var(--cream-50) 0%, var(--cream-100) 42%, var(--cream-200) 100%) !important;
+}
+.mobile-viewport::before,
+.mobile-viewport::after {
+  content: none !important;
+  display: none !important;
+}
+.settings-title,
+.row-label,
+.sheet-title,
+.sheet-option,
+.device-name {
+  color: var(--text-primary) !important;
+}
+.row-value,
+.row-chevron,
+.row-sub,
+.device-meta,
+.device-heading,
+.settings-section-title {
+  color: var(--text-muted) !important;
+}
+.settings-group,
+.bottom-sheet,
+.device-card {
+  background: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+.settings-row {
+  border-bottom-color: var(--border-color) !important;
+}
+.settings-row:hover,
+.sheet-option:hover {
+  background: color-mix(in srgb, var(--violet-500) 10%, transparent) !important;
+}
+.row-icon,
+.sheet-opt-icon,
+.device-icon {
+  background: color-mix(in srgb, var(--violet-500) 15%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--violet-500) 24%, transparent) !important;
+  color: var(--violet-400) !important;
+}
+.toggle input:checked ~ .toggle-track,
+.sheet-btn-primary {
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500)) !important;
+  box-shadow: var(--shadow-violet-sm) !important;
+}
+.sheet-check,
+.security-action {
+  color: var(--violet-400) !important;
+}
+.sheet-close,
+.sheet-btn,
+.device-logout {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+.sheet-field input {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+.sheet-field input:focus {
+  border-color: color-mix(in srgb, var(--violet-500) 58%, transparent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--violet-500) 16%, transparent) !important;
+}
+.row-destructive .row-icon,
+.settings-row.row-destructive .row-icon {
+  background: color-mix(in srgb, var(--red-500) 12%, transparent) !important;
+  border-color: color-mix(in srgb, var(--red-500) 34%, transparent) !important;
+  color: var(--red-400) !important;
+}
+.row-destructive .row-label,
+.row-destructive .row-chevron,
+.sheet-error,
+.logout-all-devices {
+  color: var(--red-400) !important;
+}
+.logout-all-devices {
+  background: color-mix(in srgb, var(--red-500) 10%, transparent) !important;
+  border-color: color-mix(in srgb, var(--red-500) 38%, transparent) !important;
+}
+[data-theme="light"] .settings-section-title {
+  color: var(--coral-700) !important;
+}
+[data-theme="light"] .settings-group,
+[data-theme="light"] .bottom-sheet,
+[data-theme="light"] .device-card {
+  background: rgba(255,252,245,0.90) !important;
+  border-color: var(--border-color) !important;
+}
+[data-theme="light"] .row-icon,
+[data-theme="light"] .sheet-opt-icon,
+[data-theme="light"] .device-icon {
+  background: color-mix(in srgb, var(--coral-500) 16%, var(--bg-elevated)) !important;
+  border-color: color-mix(in srgb, var(--coral-500) 28%, var(--border-color)) !important;
+  color: var(--coral-700) !important;
+}
+[data-theme="light"] .toggle input:checked ~ .toggle-track,
+[data-theme="light"] .sheet-btn-primary {
+  background: linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  box-shadow: var(--shadow-orange-sm) !important;
+}
+[data-theme="light"] .sheet-check,
+[data-theme="light"] .security-action {
+  color: var(--coral-700) !important;
+}
 </style>
 </head>
 
@@ -490,16 +611,14 @@ body { background: #06060f; }
         </div>
       </div>
 
-      <!-- Top bar -->
-      <div class="top-bar">
-        <a href="../../profile/edit/" class="back-btn" aria-label="Back">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15,18 9,12 15,6"/></svg>
-        </a>
-        <span class="page-title" data-i18n="settings.title">Account Settings</span>
+      <!-- Header -->
+      <div class="ds-hdr">
+        <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
       </div>
 
       <!-- Content -->
       <div class="page-content">
+        <h1 class="settings-title" data-i18n="settings.title">Account Settings</h1>
 
         <!-- Preferences -->
         <div class="settings-group">
@@ -588,6 +707,40 @@ body { background: #06060f; }
         </div>
 
       </div><!-- /page-content -->
+
+      <!-- Bottom tab bar -->
+      <nav class="float-tab-bar" id="floatTabBar">
+        <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.about_me">About me</span>
+        </a>
+        <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+        </a>
+        <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.majors">Majors</span>
+        </a>
+        <a href="../../university/matches/" class="tab-item" data-tab="t4">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.universities">Universities</span>
+        </a>
+        <a href="../../profile/edit/" class="tab-item active" data-tab="t5">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.account">Account</span>
+        </a>
+      </nav>
 
     </div><!-- /mobile-viewport -->
 
