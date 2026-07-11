@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Major Detail — BeyonDegrees.ai</title>
+<script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+<script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="style.css?v=3">
+<script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
+</head>
+<body>
+
+<!-- Breadcrumb (desktop) -->
+<div class="breadcrumb" id="breadcrumb">
+  <a href="../recommendations-v2/" class="breadcrumb-item" data-i18n="nav.majors">Majors</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-item active" id="bcTitle">Major Detail</span>
+</div>
+
+<div class="desktop-container">
+  <div class="device-frame">
+    <div class="device-notch"></div>
+    <div class="mobile-screen" id="mobileScreen">
+
+      <!-- Status Bar -->
+      <div class="status-bar">
+        <span id="statusTime">9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor">
+            <rect x="0" y="3" width="2" height="7" rx="1"/>
+            <rect x="3" y="2" width="2" height="8" rx="1"/>
+            <rect x="6" y="0" width="2" height="10" rx="1"/>
+            <rect x="9" y="1" width="2" height="9" rx="1"/>
+          </svg>
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor">
+            <rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <rect x="2.5" y="2.5" width="7" height="5" rx="1"/>
+            <rect x="13" y="3" width="2" height="4" rx="1"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <button class="btn-icon" onclick="history.back()" aria-label="Back">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5M12 5l-7 7 7 7"/>
+          </svg>
+        </button>
+        <span class="page-title" id="pageTitle">Major Detail</span>
+        <button class="btn-icon" aria-label="Share">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.5"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/>
+            <circle cx="18" cy="19" r="3"/>
+            <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Hero (populated by JS) -->
+      <div class="hero" id="hero">
+        <div class="hero-aurora hero-glow-pulse" id="heroAurora"></div>
+        <div class="hero-waves" id="heroWaves"></div>
+        <div class="hero-overlay"></div>
+        <div class="hero-label">
+          <div class="hero-label-top">
+            <div class="hero-label-name" id="heroName">—</div>
+            <div class="hero-match">
+              <div class="hero-match-pct" id="heroMatchPct">—</div>
+              <div class="hero-match-label" data-i18n="results.match_label">Match</div>
+            </div>
+          </div>
+          <div class="hero-label-tag" id="heroTag">—</div>
+        </div>
+      </div>
+
+      <!-- Detail body -->
+      <div class="detail-body" id="detailBody">
+        <div class="not-found" id="loadingState">
+          <div class="not-found-icon">⏳</div>
+          <div class="not-found-title" data-i18n="major.detail.loading">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Quiz CTA (Finish Quiz — shown when 20 ≤ progress < 30) -->
+      <div class="cta-wrap" id="quizCtaWrap" style="display:none">
+        <button class="cta-btn" id="quizCtaBtn" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);box-shadow:0 4px 20px rgba(124,58,237,.35)" data-i18n="major.cta.finish">
+          Finish Quiz →
+        </button>
+      </div>
+
+
+      <!-- Floating Tab Bar -->
+      <nav class="float-tab-bar">
+
+          <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="8" r="3.5"/>
+                <path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
+                <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z"
+                      fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
+          </a>
+
+          <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88"
+                         stroke="none" fill="currentColor" opacity="0.6"/>
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+          </a>
+
+          <a href="../recommendations-v2/" class="tab-item active" data-tab="t3">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
+          </a>
+
+          <a href="../../university/matches/" class="tab-item" data-tab="t4">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
+          </a>
+
+          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="7.5" r="3.5"/>
+                <path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/>
+                <circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
+                <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.account">Account</span>
+          </a>
+
+      </nav>
+
+    </div><!-- /mobile-screen -->
+  </div><!-- /device-frame -->
+</div><!-- /desktop-container -->
+
+<!-- ── Data ──────────────────────────────────────────────── -->
+<script src="../../../shared/scripts/data/majors-data.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   Specializations data
+═══════════════════════════════════════════════════════════ */
+const SPECIALIZATIONS = {
+  109:[{icon:"🧬",name:"Molecular Biology & Genetics",desc:"DNA, gene expression, and hereditary mechanisms at the molecular level.",tag:"Research"},{icon:"🦠",name:"Microbiology & Immunology",desc:"Bacteria, viruses, and the body's defense systems against pathogens.",tag:"Lab-based"},{icon:"🌿",name:"Ecology & Conservation",desc:"Ecosystems, biodiversity, and strategies for environmental preservation.",tag:"Fieldwork"},{icon:"🐾",name:"Zoology & Animal Biology",desc:"Animal physiology, behavior, and evolutionary biology.",tag:"Fieldwork"}],
+  107:[{icon:"⚗️",name:"Organic Chemistry",desc:"Carbon-based compounds and reactions; foundation for pharmaceuticals.",tag:"Lab-based"},{icon:"🔋",name:"Physical & Computational Chemistry",desc:"Apply physics and math to understand molecular dynamics.",tag:"Research"},{icon:"🧪",name:"Analytical Chemistry",desc:"Techniques to identify and quantify substances in complex mixtures.",tag:"Lab-based"},{icon:"🌿",name:"Green & Environmental Chemistry",desc:"Sustainable chemical processes that minimize environmental impact.",tag:"Applied"}],
+  105:[{icon:"💻",name:"Software Engineering",desc:"Design, build, and maintain large-scale software systems and applications.",tag:"High Demand"},{icon:"🤖",name:"Artificial Intelligence & ML",desc:"Intelligent systems that learn from data and make autonomous decisions.",tag:"High Demand"},{icon:"🔐",name:"Cybersecurity",desc:"Protect systems and data from digital attacks and unauthorized access.",tag:"High Demand"},{icon:"📊",name:"Data Science & Analytics",desc:"Extract insights from large datasets using statistical and computational methods.",tag:"High Demand"}],
+  108:[{icon:"🌍",name:"Geology & Geophysics",desc:"Earth's structure, composition, and physical properties.",tag:"Fieldwork"},{icon:"🌦️",name:"Atmospheric & Climate Science",desc:"Weather systems, climate dynamics, and climate change drivers.",tag:"Research"},{icon:"🌊",name:"Oceanography",desc:"Ocean systems, marine chemistry, and deep-sea ecosystems.",tag:"Fieldwork"},{icon:"🌱",name:"Environmental Science",desc:"Human impact on ecosystems and strategies for mitigation.",tag:"Applied"}],
+  104:[{icon:"📐",name:"Pure Mathematics",desc:"Abstract structures, theorems, and proofs from number theory to topology.",tag:"Research"},{icon:"📊",name:"Statistics & Probability",desc:"Model uncertainty and extract meaning from data using rigorous methods.",tag:"Applied"},{icon:"🤖",name:"Computational Mathematics",desc:"Solve complex problems using algorithms, simulation, and numerical methods.",tag:"Applied"},{icon:"💹",name:"Mathematical Finance",desc:"Stochastic calculus and optimization applied to financial markets.",tag:"Industry"}],
+  106:[{icon:"⚛️",name:"Quantum Physics",desc:"Behavior of matter and energy at the atomic and subatomic scale.",tag:"Research"},{icon:"🔭",name:"Astrophysics & Cosmology",desc:"Stellar evolution, galaxies, and the large-scale structure of the universe.",tag:"Research"},{icon:"⚡",name:"Condensed Matter Physics",desc:"Properties of solid and liquid matter at a fundamental level.",tag:"Research"},{icon:"🔬",name:"Optics & Photonics",desc:"Harnessing light and electromagnetic radiation for technology.",tag:"Applied"}],
+  143:[{icon:"📐",name:"Applied Mathematics",desc:"Mathematical modeling for science, engineering, and social systems.",tag:"Applied"},{icon:"📊",name:"Biostatistics",desc:"Statistical methods for biological and medical research.",tag:"Research"},{icon:"🤖",name:"Data Science Track",desc:"Machine learning, big data processing, and statistical computing.",tag:"High Demand"},{icon:"💹",name:"Actuarial Science",desc:"Risk modeling and financial mathematics for insurance and investment.",tag:"Industry"}],
+  110:[{icon:"🏗️",name:"Structural Engineering",desc:"Design safe and efficient load-bearing structures and buildings.",tag:"Core"},{icon:"🌊",name:"Hydraulic & Water Resources",desc:"Water systems, flood control, and irrigation networks.",tag:"Applied"},{icon:"🛣️",name:"Transportation Engineering",desc:"Plan and design roads, rails, and urban transport networks.",tag:"Applied"},{icon:"🌍",name:"Geotechnical Engineering",desc:"Soil and rock mechanics for foundations and earthworks.",tag:"Fieldwork"}],
+  111:[{icon:"⚡",name:"Power Systems & Energy",desc:"Electricity generation, transmission, distribution, and smart grids.",tag:"Core"},{icon:"📡",name:"Telecommunications",desc:"Wireless networks, signal processing, and communication protocols.",tag:"Industry"},{icon:"🤖",name:"Embedded Systems & IoT",desc:"Microcontrollers and connected hardware for smart devices.",tag:"High Demand"},{icon:"🔌",name:"Electronics & VLSI Design",desc:"Integrated circuits and microchip architecture design.",tag:"Research"}],
+  112:[{icon:"🔧",name:"Thermodynamics & Energy",desc:"Heat engines, refrigeration, and energy conversion systems.",tag:"Core"},{icon:"✈️",name:"Fluid Mechanics & Aerodynamics",desc:"Fluid flow for aerospace, automotive, and industrial applications.",tag:"Applied"},{icon:"🤖",name:"Robotics & Automation",desc:"Robotic systems and automated manufacturing processes.",tag:"High Demand"},{icon:"🏎️",name:"Automotive & Vehicle Engineering",desc:"Propulsion, chassis, and control systems for vehicles.",tag:"Industry"}],
+  113:[{icon:"⚗️",name:"Process Engineering",desc:"Industrial chemical processes for pharmaceuticals and materials.",tag:"Industry"},{icon:"⚡",name:"Petroleum & Energy",desc:"Refining, extraction, and processing of fossil and renewable fuels.",tag:"Industry"},{icon:"🌿",name:"Biochemical Engineering",desc:"Biological systems in industrial production of drugs and foods.",tag:"Applied"},{icon:"🌍",name:"Environmental Engineering",desc:"Waste treatment, pollution management, and sustainable processes.",tag:"Applied"}],
+  114:[{icon:"🔬",name:"Nanomaterials",desc:"Engineering materials at the atomic scale for electronics and medicine.",tag:"Research"},{icon:"🛡️",name:"Biomaterials",desc:"Materials compatible with human tissue for medical implants.",tag:"Research"},{icon:"🏭",name:"Polymers & Composites",desc:"Advanced plastics, rubbers, and fiber-reinforced materials.",tag:"Industry"},{icon:"⚙️",name:"Metallurgy",desc:"Study and improvement of metals and alloys for structural use.",tag:"Core"}],
+  115:[{icon:"🩻",name:"Medical Imaging",desc:"MRI, CT, and ultrasound technologies for non-invasive diagnosis.",tag:"Research"},{icon:"🦾",name:"Prosthetics & Rehabilitation",desc:"Assistive devices and exoskeletons to restore mobility.",tag:"Applied"},{icon:"💊",name:"Drug Delivery Systems",desc:"Nano-carriers and implants for controlled drug release.",tag:"Research"},{icon:"🧬",name:"Bioinformatics",desc:"Computational tools for analyzing biological and genomic data.",tag:"High Demand"}],
+  116:[{icon:"💧",name:"Water & Wastewater Treatment",desc:"Systems to purify water and treat sewage efficiently.",tag:"Applied"},{icon:"🌬️",name:"Air Quality Control",desc:"Monitor and mitigate air pollutants from industrial sources.",tag:"Applied"},{icon:"♻️",name:"Solid Waste Management",desc:"Recycling, composting, and landfill engineering solutions.",tag:"Applied"},{icon:"☀️",name:"Renewable Energy Systems",desc:"Solar, wind, and bioenergy infrastructure design.",tag:"High Demand"}],
+  119:[{icon:"⚛️",name:"Nanoelectronics",desc:"Transistors and circuits at the nanoscale for next-gen chips.",tag:"Research"},{icon:"💊",name:"Nanomedicine",desc:"Targeted drug delivery and diagnostics at the cellular level.",tag:"Research"},{icon:"🌿",name:"Green Nanotechnology",desc:"Sustainable nanomaterials for energy and environmental remediation.",tag:"Applied"},{icon:"🔬",name:"Nano-characterization",desc:"Electron microscopy and spectroscopy to visualize nanoscale structures.",tag:"Lab-based"}],
+  120:[{icon:"🚀",name:"Aerospace Engineering",desc:"Design aircraft, spacecraft, and advanced propulsion systems.",tag:"Specialized"},{icon:"🏭",name:"Industrial Engineering",desc:"Optimize production systems, supply chains, and operations.",tag:"Industry"},{icon:"⚙️",name:"Mechatronics",desc:"Integration of mechanics, electronics, and software in smart systems.",tag:"Applied"},{icon:"💡",name:"Photonics Engineering",desc:"Laser, fiber optic, and display technology design.",tag:"Research"}],
+  121:[{icon:"🫀",name:"Anatomy & Physiology",desc:"Human body structure and organ system function.",tag:"Foundation"},{icon:"🦠",name:"Pathology & Microbiology",desc:"Disease mechanisms, infection, and the immune response.",tag:"Foundation"},{icon:"🧬",name:"Biochemistry & Pharmacology",desc:"Molecular basis of drugs and metabolic disease processes.",tag:"Research"},{icon:"🔬",name:"Medical Research",desc:"Clinical and translational studies to advance medicine.",tag:"Research"}],
+  122:[{icon:"🩺",name:"Internal Medicine",desc:"Diagnose and treat adult diseases across organ systems.",tag:"Clinical"},{icon:"🔪",name:"Surgery",desc:"Operative treatment of injuries, diseases, and deformities.",tag:"Clinical"},{icon:"🍼",name:"Pediatrics",desc:"Medical care for infants, children, and adolescents.",tag:"Clinical"},{icon:"🧠",name:"Neurology & Psychiatry",desc:"Brain, spinal cord, and mental health disorder treatment.",tag:"Clinical"}],
+  123:[{icon:"🏃",name:"Public Health & Epidemiology",desc:"Prevent disease and promote population-level health outcomes.",tag:"Applied"},{icon:"🏥",name:"Healthcare Management",desc:"Administration of health systems, hospitals, and organizations.",tag:"Industry"},{icon:"🥗",name:"Nutrition & Dietetics",desc:"Evidence-based dietary guidance from food science principles.",tag:"Applied"},{icon:"🧘",name:"Physiotherapy",desc:"Restore movement and function after injury or illness.",tag:"Clinical"}],
+  124:[{icon:"💉",name:"Vaccine Development",desc:"Design and test vaccines against infectious and chronic diseases.",tag:"Research"},{icon:"🧬",name:"Gene Therapy",desc:"Correct genetic disorders using viral vectors and CRISPR.",tag:"Research"},{icon:"🔬",name:"Diagnostics & Biosensors",desc:"Rapid tests and smart sensors for disease detection.",tag:"Applied"},{icon:"🦾",name:"Regenerative Medicine",desc:"Stem cell and tissue engineering to repair or replace organs.",tag:"Research"}],
+  125:[{icon:"🦷",name:"Dentistry & Oral Health",desc:"Diagnose and treat diseases of teeth, gums, and oral tissue.",tag:"Clinical"},{icon:"👁️",name:"Optometry & Vision Science",desc:"Assess and correct visual disorders and eye health.",tag:"Clinical"},{icon:"💊",name:"Pharmacy & Pharmacology",desc:"Drug design, action, and safe clinical use.",tag:"Applied"},{icon:"🧬",name:"Medical Laboratory Science",desc:"Diagnostic tests and biological specimen analysis.",tag:"Lab-based"}],
+  157:[{icon:"🏥",name:"Acute Care & ICU Nursing",desc:"Manage critically ill patients in intensive care settings.",tag:"Clinical"},{icon:"🤱",name:"Midwifery & Women's Health",desc:"Support pregnancy, childbirth, and postnatal care.",tag:"Clinical"},{icon:"🧠",name:"Mental Health Nursing",desc:"Therapeutic care for psychiatric and psychological disorders.",tag:"Clinical"},{icon:"🏘️",name:"Community & Primary Care",desc:"Preventive health services outside hospital settings.",tag:"Applied"}],
+  126:[{icon:"🌾",name:"Agronomy & Crop Science",desc:"Improve crop yields, soil health, and farming systems.",tag:"Core"},{icon:"🐄",name:"Animal & Livestock Science",desc:"Nutrition, breeding, and welfare of farm animals.",tag:"Applied"},{icon:"🌿",name:"Sustainable Agriculture",desc:"Eco-friendly farming practices and food security solutions.",tag:"Applied"},{icon:"🤖",name:"Precision Agriculture",desc:"Drones, sensors, and AI to optimize farm management.",tag:"High Demand"}],
+  127:[{icon:"🐄",name:"Dairy Technology",desc:"Processing and quality control of milk and dairy products.",tag:"Industry"},{icon:"🐑",name:"Animal Nutrition",desc:"Formulate diets for optimal animal health and productivity.",tag:"Applied"},{icon:"🧬",name:"Animal Genetics & Breeding",desc:"Improve livestock traits through selective breeding and genomics.",tag:"Research"},{icon:"🐾",name:"Veterinary Sciences",desc:"Diagnose and treat diseases in domestic and farm animals.",tag:"Clinical"}],
+  128:[{icon:"🌱",name:"Plant Genomics & GMO",desc:"Engineer crops for pest resistance, yield, and climate resilience.",tag:"Research"},{icon:"🧪",name:"Biopesticides",desc:"Bio-based alternatives to chemical agricultural inputs.",tag:"Applied"},{icon:"🍎",name:"Post-harvest Technology",desc:"Extend shelf life and preserve nutritional quality of produce.",tag:"Applied"},{icon:"🌊",name:"Aquaculture Biotechnology",desc:"Enhance fish and shellfish production through genetic tools.",tag:"Applied"}],
+  129:[{icon:"🧠",name:"Clinical Psychology",desc:"Evidence-based therapy for mental health disorders.",tag:"Clinical"},{icon:"🏢",name:"Organizational Psychology",desc:"Behavioral science applied to workplace performance.",tag:"Industry"},{icon:"🧒",name:"Developmental Psychology",desc:"Cognitive and emotional growth across the human lifespan.",tag:"Research"},{icon:"🔬",name:"Cognitive Neuroscience",desc:"Brain-behavior relationships and mental processes.",tag:"Research"}],
+  130:[{icon:"📈",name:"Macroeconomics & Policy",desc:"National economies, fiscal policy, and global trade dynamics.",tag:"Research"},{icon:"💹",name:"Finance & Investment",desc:"Asset management, financial markets, and corporate finance.",tag:"Industry"},{icon:"🏢",name:"Business Administration",desc:"Management, strategy, and operations of organizations.",tag:"Industry"},{icon:"📊",name:"Econometrics & Data",desc:"Statistical and computational methods for economic modeling.",tag:"Applied"}],
+  131:[{icon:"🏫",name:"Curriculum & Pedagogy",desc:"Design effective learning programs and teaching strategies.",tag:"Applied"},{icon:"🧒",name:"Early Childhood Education",desc:"Development-focused approaches for young learners.",tag:"Applied"},{icon:"💻",name:"Educational Technology",desc:"Leverage digital tools and online learning platforms.",tag:"High Demand"},{icon:"🌍",name:"International Education",desc:"Cross-cultural perspectives on education systems and reform.",tag:"Research"}],
+  132:[{icon:"🏙️",name:"Urban & Community Sociology",desc:"Social dynamics, inequality, and urban development.",tag:"Research"},{icon:"🌍",name:"Global & Development Studies",desc:"Inequality, migration, and international development.",tag:"Research"},{icon:"📣",name:"Media & Culture Studies",desc:"How media shapes social norms and cultural identity.",tag:"Applied"},{icon:"⚖️",name:"Gender & Diversity Studies",desc:"Intersectional analysis of identity, power, and social justice.",tag:"Research"}],
+  133:[{icon:"⚖️",name:"Corporate & Commercial Law",desc:"Legal frameworks governing business transactions and contracts.",tag:"Industry"},{icon:"🌍",name:"International & Human Rights Law",desc:"Public international law, treaties, and human rights protection.",tag:"Research"},{icon:"🏛️",name:"Constitutional Law",desc:"Government powers, civil liberties, and public administration.",tag:"Applied"},{icon:"💻",name:"Technology & Cyber Law",desc:"Legal issues in data privacy, AI, and digital commerce.",tag:"High Demand"}],
+  134:[{icon:"🏛️",name:"Comparative Politics",desc:"Political systems, institutions, and governance structures.",tag:"Research"},{icon:"🌍",name:"International Relations",desc:"State behavior, diplomacy, and global security dynamics.",tag:"Research"},{icon:"📋",name:"Public Policy",desc:"Design and evaluate government policies and programs.",tag:"Applied"},{icon:"🗳️",name:"Political Theory",desc:"Philosophical foundations of justice, democracy, and governance.",tag:"Research"}],
+  135:[{icon:"🗺️",name:"Urban Geography & Planning",desc:"Spatial analysis of cities, land use, and regional development.",tag:"Applied"},{icon:"🌍",name:"Development Geography",desc:"Economic and social inequalities in the Global South.",tag:"Research"},{icon:"📡",name:"GIS & Remote Sensing",desc:"Geospatial technology for mapping and environmental monitoring.",tag:"High Demand"},{icon:"🌊",name:"Environmental Geography",desc:"Interaction between human activity and natural landscapes.",tag:"Applied"}],
+  136:[{icon:"🏺",name:"Classical & Ancient History",desc:"Civilizations of Greece, Rome, Egypt, and the ancient world.",tag:"Research"},{icon:"⚔️",name:"Medieval & Early Modern History",desc:"Political and cultural change from 500–1800 CE.",tag:"Research"},{icon:"🔍",name:"Archaeology",desc:"Excavation and analysis of human artifacts and settlements.",tag:"Fieldwork"},{icon:"🌏",name:"Asian & Southeast Asian History",desc:"Colonial histories and modern transformation of Asia.",tag:"Research"}],
+  137:[{icon:"📝",name:"Creative Writing & Rhetoric",desc:"Craft literary fiction, poetry, and persuasive discourse.",tag:"Applied"},{icon:"🌍",name:"Linguistics & Language Theory",desc:"Structure, acquisition, and evolution of human language.",tag:"Research"},{icon:"📚",name:"Comparative Literature",desc:"Cross-cultural reading of texts across languages and traditions.",tag:"Research"},{icon:"🌐",name:"Translation & Interpreting",desc:"Bridge languages in literary, legal, and diplomatic contexts.",tag:"Industry"}],
+  138:[{icon:"🤔",name:"Ethics & Moral Philosophy",desc:"Reason about right action, justice, and the good life.",tag:"Research"},{icon:"🧠",name:"Philosophy of Mind & AI",desc:"Questions of consciousness, cognition, and intelligence.",tag:"Research"},{icon:"🔬",name:"Philosophy of Science",desc:"Foundations, methods, and epistemology of scientific knowledge.",tag:"Research"},{icon:"🏛️",name:"Political Philosophy",desc:"Legitimacy, justice, and the ethics of governance.",tag:"Applied"}],
+  146:[{icon:"📈",name:"Marketing & Brand Management",desc:"Brand identity, consumer strategy, and digital campaigns.",tag:"Industry"},{icon:"💹",name:"Finance & Accounting",desc:"Financial reporting, investment analysis, and risk management.",tag:"Industry"},{icon:"🏢",name:"Management & Leadership",desc:"Organizational behavior, strategy, and entrepreneurship.",tag:"Industry"},{icon:"🌐",name:"International Business",desc:"Cross-border trade, global supply chains, and market entry.",tag:"Industry"}],
+  144:[{icon:"✍️",name:"Literature & Critical Theory",desc:"Texts through feminist, postcolonial, and psychoanalytic lenses.",tag:"Research"},{icon:"🎭",name:"Drama & Performance Studies",desc:"Theatrical traditions, playwriting, and performance analysis.",tag:"Applied"},{icon:"📰",name:"Journalism & Media Writing",desc:"News writing, investigative reporting, and digital media.",tag:"Industry"},{icon:"🏫",name:"TESOL & Applied Linguistics",desc:"Teaching English and studying language acquisition.",tag:"Applied"}],
+  152:[{icon:"🎨",name:"Graphic Design & Visual Art",desc:"Visual communication, branding, and digital illustration.",tag:"Creative"},{icon:"🎬",name:"Film & Media Production",desc:"Storytelling through video, documentary, and new media.",tag:"Creative"},{icon:"📡",name:"Public Relations",desc:"Strategic messaging, PR campaigns, and media relations.",tag:"Industry"},{icon:"🎭",name:"Theatre & Performing Arts",desc:"Acting, directing, dramaturgy, and live performance.",tag:"Creative"}],
+  153:[{icon:"🏫",name:"Secondary Education",desc:"Subject specialization and pedagogy for high school teaching.",tag:"Applied"},{icon:"🌍",name:"TESOL & Language Education",desc:"Teaching English as a second or foreign language.",tag:"High Demand"},{icon:"💻",name:"Instructional Design & EdTech",desc:"Digital learning experiences and e-learning platforms.",tag:"High Demand"},{icon:"🧠",name:"Special & Inclusive Education",desc:"Support students with learning disabilities and diverse needs.",tag:"Applied"}],
+  154:[{icon:"⚙️",name:"Mechanical Engineering",desc:"Design and build machines, engines, and mechanical systems.",tag:"Core"},{icon:"🏗️",name:"Civil Engineering",desc:"Design infrastructure: bridges, roads, and buildings.",tag:"Core"},{icon:"⚡",name:"Electrical Engineering",desc:"Power systems, electronics, and signal processing.",tag:"Core"},{icon:"💻",name:"Software Engineering",desc:"Large-scale software development and system architecture.",tag:"High Demand"}],
+  156:[{icon:"🎹",name:"Performance & Instruments",desc:"Master classical or contemporary instruments for concert performance.",tag:"Creative"},{icon:"🎼",name:"Composition & Songwriting",desc:"Write music for orchestral, chamber, or popular contexts.",tag:"Creative"},{icon:"🎧",name:"Music Technology & Production",desc:"Digital audio workstations, sound design, and production.",tag:"Industry"},{icon:"📚",name:"Music Theory & Musicology",desc:"Musical structure, history, and cultural analysis.",tag:"Research"}],
+  158:[{icon:"🏛️",name:"Government & Public Policy",desc:"Political institutions, policy analysis, and public administration.",tag:"Applied"},{icon:"🌍",name:"International Affairs",desc:"Diplomacy, geopolitics, and international organizations.",tag:"Research"},{icon:"⚖️",name:"Constitutional Law",desc:"Government power, rights, and constitutional frameworks.",tag:"Applied"},{icon:"🏘️",name:"Community Development",desc:"Grassroots leadership, civic engagement, and social policy.",tag:"Applied"}],
+  148:[{icon:"🌍",name:"World & Global History",desc:"Interconnected histories across continents and civilizations.",tag:"Research"},{icon:"🏭",name:"Economic & Social History",desc:"History of labor, trade, class, and everyday life.",tag:"Research"},{icon:"🎨",name:"Cultural & Intellectual History",desc:"Ideas, arts, and cultural movements across time.",tag:"Research"},{icon:"🌏",name:"Vietnamese & Southeast Asian History",desc:"Local histories in regional and global context.",tag:"Applied"}],
+  145:[{icon:"🧠",name:"Cognitive & Decision Science",desc:"How people think, reason, and make choices under uncertainty.",tag:"Research"},{icon:"🏢",name:"Behavioral Economics",desc:"Psychological influences on economic decisions and markets.",tag:"Research"},{icon:"🏘️",name:"Social Work & Human Services",desc:"Support vulnerable populations and design social interventions.",tag:"Applied"},{icon:"📊",name:"Research Methods",desc:"Quantitative and qualitative methods for behavioral research.",tag:"Foundation"}],
+  142:[{icon:"🤟",name:"Sign Language Linguistics",desc:"Phonology, morphology, and syntax of signed languages.",tag:"Research"},{icon:"🏥",name:"Medical & Legal Interpreting",desc:"Specialized interpretation in healthcare and judicial settings.",tag:"Industry"},{icon:"🏫",name:"Deaf Education",desc:"Teaching methodologies for Deaf and hard-of-hearing students.",tag:"Applied"},{icon:"🌍",name:"Deaf Culture Studies",desc:"History, identity, and social dynamics of Deaf communities.",tag:"Research"}],
+  117:[{icon:"🌿",name:"Bioremediation",desc:"Microorganisms to break down environmental pollutants.",tag:"Research"},{icon:"⚡",name:"Biofuels & Biogas",desc:"Sustainable energy from biological feedstocks.",tag:"Applied"},{icon:"💧",name:"Biowater Treatment",desc:"Biological processes for clean water production.",tag:"Applied"},{icon:"🧬",name:"Microbial Ecology",desc:"Microbial communities in natural and engineered environments.",tag:"Research"}],
+  118:[{icon:"🧪",name:"Fermentation Technology",desc:"Large-scale production of enzymes, antibiotics, and biofuels.",tag:"Industry"},{icon:"🧬",name:"Metabolic Engineering",desc:"Redesign cellular metabolism for industrial chemical production.",tag:"Research"},{icon:"🌿",name:"Plant Biotechnology",desc:"Improve crops using genetic tools for yield and resilience.",tag:"Applied"},{icon:"💊",name:"Pharmaceutical Biotechnology",desc:"Biological drugs — proteins, antibodies, and vaccines.",tag:"Industry"}],
+  139:[{icon:"🔬",name:"Life Sciences Track",desc:"Biology, chemistry, and health sciences concentration.",tag:"Foundation"},{icon:"💡",name:"Social Sciences Track",desc:"Psychology, sociology, and policy studies concentration.",tag:"Foundation"},{icon:"🎨",name:"Humanities & Arts Track",desc:"Literature, philosophy, and fine arts concentration.",tag:"Foundation"},{icon:"💻",name:"Computing & Data Track",desc:"Computer science and data analytics foundation pathway.",tag:"Foundation"}],
+  150:[{icon:"🔬",name:"Biological Sciences",desc:"Cell biology, genetics, and organismal science.",tag:"Core"},{icon:"⚗️",name:"Physical & Chemical Sciences",desc:"Physics, chemistry, and materials science.",tag:"Core"},{icon:"🌍",name:"Earth & Environmental Sciences",desc:"Geology, climate, and ecosystem science.",tag:"Core"},{icon:"💻",name:"Applied & Computational Sciences",desc:"Data science, bioinformatics, and scientific computing.",tag:"Applied"}],
+  151:[{icon:"✈️",name:"Aerodynamics & Flight Mechanics",desc:"Principles of lift, drag, and aircraft stability.",tag:"Core"},{icon:"🚀",name:"Propulsion & Jet Engines",desc:"Gas turbine, rocket, and hybrid propulsion systems.",tag:"Core"},{icon:"🛰️",name:"Avionics & Flight Systems",desc:"Navigation, communication, and control electronics in aircraft.",tag:"Applied"},{icon:"🛡️",name:"Aerospace Structures & Materials",desc:"Lightweight composites and structural integrity for flight.",tag:"Research"}],
+};
+
+function getFallbackSpecs(major) {
+  return [
+    {icon:"📚",name:"Core Foundations",desc:`Fundamental theories and principles of ${major.title}.`,tag:"Foundation"},
+    {icon:"🔬",name:"Research Methods",desc:"Quantitative and qualitative approaches for advanced inquiry.",tag:"Research"},
+    {icon:"🏢",name:"Applied Practice",desc:"Real-world projects, internships, and industry placements.",tag:"Applied"},
+    {icon:"🌐",name:"Interdisciplinary Studies",desc:"Connections with adjacent fields and emerging specialties.",tag:"Elective"},
+  ];
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Tag color helpers
+═══════════════════════════════════════════════════════════ */
+const TAG_STYLES = {
+  'High Demand':{bg:'rgba(6,214,160,.12)',border:'rgba(6,214,160,.30)',text:'#06d6a0'},
+  'Research'   :{bg:'var(--disc-bg)',border:'var(--disc-border)',text:'var(--disc-light)'},
+  'Applied'    :{bg:'rgba(251,146,60,.12)',border:'rgba(251,146,60,.30)',text:'#fb923c'},
+  'Clinical'   :{bg:'rgba(239,68,68,.12)',border:'rgba(239,68,68,.30)',text:'#f87171'},
+  'Industry'   :{bg:'rgba(255,212,59,.12)',border:'rgba(255,212,59,.25)',text:'#ffd43b'},
+  'Core'       :{bg:'rgba(200,200,224,.08)',border:'rgba(200,200,224,.20)',text:'#c8c8e0'},
+  'Foundation' :{bg:'rgba(200,200,224,.08)',border:'rgba(200,200,224,.20)',text:'#c8c8e0'},
+  'Creative'   :{bg:'var(--disc-bg)',border:'var(--disc-border)',text:'var(--disc-light)'},
+  'Fieldwork'  :{bg:'rgba(6,214,160,.10)',border:'rgba(6,214,160,.22)',text:'#34d399'},
+  'Lab-based'  :{bg:'var(--disc-bg)',border:'var(--disc-border)',text:'var(--disc-light)'},
+  'Elective'   :{bg:'rgba(200,200,224,.06)',border:'rgba(200,200,224,.14)',text:'#9d9dbf'},
+  'Specialized':{bg:'var(--disc-bg)',border:'var(--disc-border)',text:'var(--disc-light)'},
+};
+function tagStyle(t){const s=TAG_STYLES[t]||TAG_STYLES['Core'];return `background:${s.bg};border-color:${s.border};color:${s.text}`}
+
+/* ═══════════════════════════════════════════════════════════
+   Match % (from localStorage or deterministic seed)
+═══════════════════════════════════════════════════════════ */
+function getMatchPct(id){
+  try{const r=JSON.parse(localStorage.getItem('quizResults')||'{}');if(r[id])return r[id];}catch(e){}
+  return ((id*17+31)%30)+62;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Build hero waves SVG with disc color
+═══════════════════════════════════════════════════════════ */
+function buildWavesSVG(hex){
+  const c1=hex, c2=hex+'cc', c3=hex+'80';
+  return `<svg viewBox="0 0 390 190" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="wg1" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="${c1}" stop-opacity=".0"/>
+        <stop offset="35%"  stop-color="${c1}" stop-opacity=".70"/>
+        <stop offset="70%"  stop-color="${c2}" stop-opacity=".50"/>
+        <stop offset="100%" stop-color="${c1}" stop-opacity=".0"/>
+      </linearGradient>
+      <linearGradient id="wg2" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="${c1}" stop-opacity=".0"/>
+        <stop offset="40%"  stop-color="${c1}" stop-opacity=".45"/>
+        <stop offset="75%"  stop-color="${c3}" stop-opacity=".30"/>
+        <stop offset="100%" stop-color="${c1}" stop-opacity=".0"/>
+      </linearGradient>
+      <linearGradient id="wg3" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="${c1}" stop-opacity=".0"/>
+        <stop offset="50%"  stop-color="${c1}" stop-opacity=".35"/>
+        <stop offset="100%" stop-color="${c1}" stop-opacity=".0"/>
+      </linearGradient>
+    </defs>
+    <g class="hero-wave-1">
+      <path d="M-40,140 C60,100 150,160 260,120 S370,80 430,100"  fill="none" stroke="url(#wg1)" stroke-width="2.5"/>
+      <path d="M-40,120 C80,80  170,140 280,100 S390,60 440,80"   fill="none" stroke="url(#wg1)" stroke-width="1.8"/>
+      <path d="M-40,160 C50,130 140,170 250,140 S360,110 430,125" fill="none" stroke="url(#wg2)" stroke-width="2"/>
+    </g>
+    <g class="hero-wave-2">
+      <path d="M-20,95  C70,65  180,110 290,80  S400,50  450,70"  fill="none" stroke="url(#wg2)" stroke-width="1.5"/>
+      <path d="M-20,170 C60,145 160,180 270,155 S380,130 440,148" fill="none" stroke="url(#wg3)" stroke-width="1.8"/>
+      <path d="M-20,55  C90,35  190,70  300,45  S410,20  450,38"  fill="none" stroke="url(#wg1)" stroke-width="1.2"/>
+    </g>
+  </svg>`;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Apply disc color CSS vars
+═══════════════════════════════════════════════════════════ */
+function applyColor(hex){
+  const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  const rgb=`${r},${g},${b}`;
+  const root=document.documentElement;
+  root.style.setProperty('--disc-primary',hex);
+  root.style.setProperty('--disc-light',lighten(hex,.2));
+  root.style.setProperty('--disc-lighter',lighten(hex,.4));
+  root.style.setProperty('--disc-glow',`rgba(${rgb},.50)`);
+  root.style.setProperty('--disc-glow-sm',`rgba(${rgb},.25)`);
+  root.style.setProperty('--disc-bg',`rgba(${rgb},.12)`);
+  root.style.setProperty('--disc-border',`rgba(${rgb},.30)`);
+}
+function lighten(hex,amt){
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,Math.round(r+(255-r)*amt));
+  g=Math.min(255,Math.round(g+(255-g)*amt));
+  b=Math.min(255,Math.round(b+(255-b)*amt));
+  return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Build bullet summary from description
+═══════════════════════════════════════════════════════════ */
+function getBullets(major, disc){
+  // 3 characteristic bullets extracted from description sentences
+  const sentences = major.desc.replace(/\n/g,' ').split(/(?<=[.!?])\s+/).filter(s=>s.length>30);
+  const picks = sentences.slice(0,3).map(s=>s.replace(/^(This field|This discipline|It )/i,'').trim());
+  if(picks.length < 3 && disc){
+    picks.push((window.BDi18n ? window.BDi18n.t('major.detail.bullet_fallback') : 'Part of the {disc} discipline.').replace(/\{disc\}/g, disc.title));
+  }
+  return picks.slice(0,3);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Designer Picker — hiện khi không có ?id=
+═══════════════════════════════════════════════════════════ */
+function showPicker(){
+  const body = document.getElementById('detailBody');
+
+  const groups = {};
+  MAJORS_DATA.forEach(m => {
+    const disc = DISCIPLINES[String(m.discId)] || {title:'Other', color:'#6b6b9a', icon:'📌'};
+    if(!groups[m.discId]) groups[m.discId] = { disc, majors:[] };
+    groups[m.discId].majors.push(m);
+  });
+
+  const rows = Object.values(groups).map(g => `
+    <div style="margin-bottom:20px">
+      <div style="font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+        color:${g.disc.color};margin-bottom:8px;padding:0 2px">
+        ${g.disc.icon} ${g.disc.title}
+      </div>
+      ${g.majors.map(m=>`
+        <div onclick="location.search='?id=${m.id}'"
+          style="display:flex;align-items:center;gap:12px;padding:11px 14px;
+            background:#12121f;border:1px solid rgba(255,255,255,.07);border-radius:12px;
+            margin-bottom:7px;cursor:pointer;transition:background .15s"
+          onmouseover="this.style.background='#1a1a2e'"
+          onmouseout="this.style.background='#12121f'">
+          <span style="font-size:18px">${m.icon||g.disc.icon}</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:13px;font-weight:700;color:#f8fafc;
+              white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.title}</div>
+          </div>
+          <span style="font-size:12px;color:${g.disc.color};font-weight:800">→</span>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  const _t = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : k => k;
+  body.innerHTML = `
+    <div style="padding-bottom:8px">
+      <div style="font-size:15px;font-weight:800;color:#f8fafc;margin-bottom:4px">
+        ${_t('major.detail.picker_title')}
+      </div>
+      <div style="font-size:12px;color:#6b6b9a;margin-bottom:20px">
+        ${MAJORS_DATA.length} ${_t('major.detail.picker_sub')}
+      </div>
+      ${rows}
+    </div>
+  `;
+
+  // Hide hero, simplify header
+  document.getElementById('hero').style.display = 'none';
+  document.getElementById('pageTitle').textContent = _t('major.detail.title') || 'Major Detail';
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Main Render
+═══════════════════════════════════════════════════════════ */
+function render(){
+  const params = new URLSearchParams(window.location.search);
+  const rawId  = params.get('id');
+  const body   = document.getElementById('detailBody');
+
+  // No data file loaded at all
+  if(typeof MAJORS_DATA === 'undefined'){
+    body.innerHTML=`<div class="not-found">
+      <div class="not-found-icon">⚠️</div>
+      <div class="not-found-title">majors-data.js not loaded</div>
+      <div class="not-found-sub">Make sure <code style="color:#a78bfa">majors-data.js</code> is in the same directory as this HTML file.<br><br>If opening directly in a browser (file://), try using Live Server in VS Code.</div>
+    </div>`;
+    return;
+  }
+
+  // No ?id= → show picker
+  if(!rawId){
+    showPicker();
+    return;
+  }
+
+  const id = parseInt(rawId);
+  const major = MAJORS_DATA.find(m=>m.id===id);
+  if(!major){
+    const _tnf = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : k => k;
+    body.innerHTML=`<div class="not-found"><div class="not-found-icon">😕</div><div class="not-found-title">${_tnf('major.detail.not_found').replace('{id}', id)}</div><div class="not-found-sub"><a href="./" style="color:var(--violet-400)">${_tnf('major.detail.go_back')}</a>.</div></div>`;
+    return;
+  }
+
+  const disc    = major.discId ? DISCIPLINES[String(major.discId)] : null;
+  const color   = disc ? disc.color : '#7c3aed';
+  const discTitle  = disc ? (disc.short || disc.title) : (window.BDi18n ? window.BDi18n.t('major.detail.general') : 'General');
+  const discIcon   = disc ? disc.icon : '📌';
+  const discCode   = major.discCode || '';
+  const matchPct   = getMatchPct(id);
+  const specs      = SPECIALIZATIONS[id] || getFallbackSpecs(major);
+  const bullets    = getBullets(major, disc);
+
+  // ── Colors ──
+  applyColor(color);
+
+  // ── Breadcrumb ──
+  document.getElementById('bcTitle').textContent = major.title;
+
+  // ── Page title ──
+  document.getElementById('pageTitle').textContent = major.title.length > 22
+    ? major.title.slice(0,20)+'…' : major.title;
+  document.title = `${major.title} — BeyonDegrees.ai`;
+
+  // ── Hero aurora ──
+  const hex=color.slice(1);
+  const r2=parseInt(hex.slice(0,2),16),g2=parseInt(hex.slice(2,4),16),b2=parseInt(hex.slice(4,6),16);
+  const ra=`rgba(${r2},${g2},${b2}`;
+  document.getElementById('heroAurora').style.background=
+    `radial-gradient(ellipse 110% 80% at 30% 40%,${ra},.55) 0%,${ra},.28) 45%,transparent 75%),`
+    +`radial-gradient(ellipse 70% 60% at 80% 70%,${ra},.22) 0%,transparent 60%),`
+    +`radial-gradient(ellipse 90% 100% at 50% 100%,rgba(6,4,14,.80) 0%,transparent 70%),`
+    +`linear-gradient(160deg,rgba(${r2},${g2},${b2},.25) 0%,#0a080e 40%,#060408 100%)`;
+
+  // ── Hero waves ──
+  document.getElementById('heroWaves').innerHTML = buildWavesSVG(color);
+
+  // ── Hero label ──
+  document.getElementById('heroName').textContent = major.title;
+  document.getElementById('heroMatchPct').textContent = matchPct + '%';
+  document.getElementById('heroTag').innerHTML =
+    `<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/></svg>
+     ${discIcon} ${discTitle}`;
+
+  // ── CHEV SVG ──
+  const CHEV='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+
+  // ── i18n helper ──
+  var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
+  // ── Why-match button icons ──
+  const MAG_SVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>';
+  const ARR_SVG='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  const overviewTitle = t('major.detail.overview_short') === 'major.detail.overview_short'
+    ? 'Overview'
+    : t('major.detail.overview_short');
+
+  // ── Body ──
+  body.innerHTML = `
+    <!-- Major Overview Card -->
+    <div class="detail-overview-card">
+      <span class="overview-label">${discTitle}</span>
+      <div class="overview-row">
+        <div class="overview-title">${overviewTitle}</div>
+        <a class="why-match-btn" href="../../discipline/why/index.html${discCode ? '?disc='+discCode : ''}">
+          <span class="wm-ico">${MAG_SVG}</span>
+          <span class="wm-label">${t('disc.detail.why_btn')}</span>
+          <span class="wm-arrow">${ARR_SVG}</span>
+        </a>
+      </div>
+      <div class="overview-body">
+        <p class="lead">${major.title}: ${discTitle} ${t('major.detail.pathway')}</p>
+        ${bullets.map(b=>`<p>${b}</p>`).join('')}
+      </div>
+    </div>
+
+    <div class="intro-video-card" aria-label="Major intro video">
+      <div class="intro-video-slot">
+        <div class="intro-video-play">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specializations -->
+    <div class="section-header">${t('major.detail.specializations')}</div>
+    <div class="spec-list">
+      ${specs.map((s,i)=>`
+        <div class="spec-card" onclick="location.href='../spec-detail/?majorId=${id}&specIdx=${i}'" style="cursor:pointer">
+          <div class="spec-icon">${s.icon}</div>
+          <div class="spec-info">
+            <div class="spec-name">${s.name}</div>
+            <div class="spec-sub">${s.desc}</div>
+            <div class="spec-tag" style="${tagStyle(s.tag)}">${s.tag}</div>
+          </div>
+          <div class="spec-right">${CHEV}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  // ── CTA ──
+
+}
+
+(function(){function uc(){var el=document.getElementById('statusTime');if(!el)return;var n=new Date(),h=n.getHours(),m=n.getMinutes();el.textContent=h+':'+(m<10?'0':'')+m;}uc();setInterval(uc,30000);})();
+
+document.addEventListener('DOMContentLoaded', render);
+
+/* ── Quiz CTA: Finish Quiz (20-29), ẩn khi >= 30 ────────────────────── */
+(function () {
+  const progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+  const wrap = document.getElementById('quizCtaWrap');
+  const btn  = document.getElementById('quizCtaBtn');
+  if (!wrap || !btn) return;
+  if (progress >= 20 && progress < 30) {
+    wrap.style.display = '';
+    btn.addEventListener('click', function () {
+      var _p=parseInt(localStorage.getItem('quizProgress')||'0',10); window.location.href='../../quiz/quiz-card/?start='+(_p>0?_p+1:1);
+    });
+  }
+  /* progress < 20 hoặc >= 30: ẩn (display:none mặc định) */
+})();
+</script>
+<script src="../../../shared/scripts/ui/tab-lock.js"></script>
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
+</body>
+</html>

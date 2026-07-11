@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <script src="../../../shared/scripts/ui/bd-profile.js"></script>
+  <title>Edit Profile — BeyonDegrees.ai</title>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
+<style>
+/* Theme colors come from design-system/tokens.css; page-specific CSS stays scoped below. */
+/* Light-mode token overrides live in design-system/tokens.css */
+[data-theme="light"] body{background:#06060f!important}
+*,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
+svg *,canvas,video,img{transition:none!important}
+
+body { background: #06060f; }
+
+.mobile-viewport {
+  flex: 1; overflow: hidden;
+  display: flex; flex-direction: column;
+  position: relative; background: var(--bg-base);
+  scrollbar-width: none;
+}
+.mobile-viewport > .float-tab-bar { flex-shrink: 0; }
+.mobile-viewport::-webkit-scrollbar { display: none; }
+[data-theme="light"] .mobile-viewport {
+  background:
+    url("../../../shared/bg-light.svg") center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+[data-theme="light"] .device-frame { border-color: #1a1a2e !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
+
+/* Top bar */
+.top-bar {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 18px 14px;
+  background: rgba(6,6,15,0.88);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+[data-theme="light"] .top-bar { background: rgba(255,255,255,0.94)!important; border-bottom-color: rgba(24,99,220,0.10)!important; }
+.back-btn {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-primary); cursor: pointer; text-decoration: none;
+  transition: background 0.18s; flex-shrink: 0;
+}
+.back-btn:hover { background: rgba(255,255,255,0.10); }
+[data-theme="light"] .back-btn { background: rgba(24,99,220,0.08)!important; border-color: rgba(24,99,220,0.15)!important; }
+.page-title { font-size: 16px; font-weight: 700; color: var(--text-primary); flex: 1; }
+
+/* Header (ds-hdr) — consistent with the other screens */
+.ds-hdr {
+  display:flex; align-items:center; justify-content:space-between; padding:10px 18px 8px;
+  position:relative; z-index:30; flex-shrink:0; background: var(--bg-base);
+}
+.ds-logo { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--text-primary); line-height:1; }
+.ds-logo .logo-text { display:inline-flex; align-items:baseline; gap:0; white-space:nowrap; }
+.ds-logo .logo-beyon { color:var(--text-primary); }
+.ds-logo .logo-accent { color:var(--violet-400); }
+.ds-logo .logo-img { height:20px; width:auto; display:block; flex-shrink:0; }
+[data-theme="dark"] .ds-logo .logo-img { filter:brightness(0) invert(1) drop-shadow(0 1px 4px rgba(107,163,255,0.30)); }
+[data-theme="dark"] .ds-logo .logo-text { background:linear-gradient(135deg,#a78bfa 0%,#06d6a0 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="light"] .ds-hdr { background: transparent; }
+[data-theme="light"] .ds-logo .logo-text { background:linear-gradient(135deg,#c96b55 0%,#0274BE 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* Page content — scroll body that fills between header and tab bar */
+.page-content { padding: 16px 16px 20px; flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; scrollbar-width: none; }
+.page-content::-webkit-scrollbar { display: none; }
+
+/* Avatar section */
+.avatar-section {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 0 24px; gap: 10px;
+}
+.avatar-wrap { position: relative; width: 80px; height: 80px; }
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -1px;
+  border: 3px solid rgba(24,99,220,0.35);
+  box-shadow: 0 0 0 4px rgba(24,99,220,0.12);
+  overflow: hidden;
+}
+.avatar-edit-btn {
+  position: absolute; bottom: 0; right: 0;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #1863DC; border: 2px solid var(--bg-base);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white;
+}
+.avatar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.avatar-action {
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.avatar-action--danger {
+  color: #ff4757;
+  border-color: rgba(255,71,87,0.34);
+  background: rgba(255,71,87,0.08);
+}
+[data-theme="light"] .avatar-action {
+  background: rgba(255,255,255,0.84) !important;
+  border-color: rgba(140,114,96,0.22) !important;
+  color: #2c1f14 !important;
+}
+[data-theme="light"] .avatar-action--danger {
+  color: #c45540 !important;
+  border-color: rgba(196,85,64,0.34) !important;
+  background: rgba(196,85,64,0.08) !important;
+}
+.archetype-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.archetype-chip a {
+  color: #1863DC; font-weight: 600; text-decoration: none;
+}
+.archetype-chip a:hover { text-decoration: underline; }
+/* Neutralise layout.css global [class*="chip"] blue box — 9-not chain
+   to beat (0,9,0) specificity. archetype-chip is a label row, not pill. */
+.archetype-chip:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i),
+[data-theme="light"] .archetype-chip:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: #6b5440 !important;
+}
+[data-theme="light"] .archetype-chip a {
+  color: #a84e30 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .archetype-chip a:hover { color: #7d3720 !important; }
+
+/* Form card */
+.form-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px; overflow: hidden; margin-bottom: 12px;
+}
+[data-theme="light"] .form-card {
+  background: rgba(255,255,255,0.92)!important;
+  border-color: rgba(24,99,220,0.12)!important;
+  box-shadow: 0 2px 16px rgba(24,99,220,0.07);
+}
+
+/* Field row */
+.field-row {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.field-row:last-child { border-bottom: none; }
+[data-theme="light"] .field-row { border-bottom-color: rgba(24,99,220,0.07)!important; }
+
+.field-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.field-input {
+  width: 100%;
+  background: transparent;
+  border: none; outline: none;
+  font-size: 14px; font-weight: 500;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  padding: 0;
+}
+.field-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+/* Neutralise layout.css global input box paint —
+   field-input sits inside .form-card (which provides bg + border),
+   so the input itself must be transparent. 9-not chain to beat
+   global [data-theme="light"] input { ... } cream box. */
+[data-theme="light"] input.field-input,
+[data-theme="light"] textarea.field-input,
+[data-theme="light"] .field-input:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #2c1f14 !important;
+  padding: 0 !important;
+}
+[data-theme="light"] .field-input::placeholder { color: #8c7260 !important; opacity: 0.85 !important; }
+[data-theme="light"] .field-input:focus { box-shadow: none !important; outline: none !important; }
+
+.field-input-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.field-prefix-icon { color: var(--text-muted); flex-shrink: 0; }
+
+/* Read-only field */
+.field-readonly .field-input { color: var(--text-muted); cursor: default; }
+.field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; opacity: 0.7; }
+
+/* Select field */
+.field-select {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 14px; font-weight: 500; color: var(--text-primary);
+  font-family: var(--font-body); cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  padding: 0;
+}
+.field-select option { background: #0d0d1a; color: #fff; }
+[data-theme="light"] .field-select { color: #1A1A2E; }
+[data-theme="light"] .field-select option { background: #fff; color: #1A1A2E; }
+
+.field-select-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.select-chevron { color: var(--text-muted); flex-shrink: 0; }
+
+/* Checkbox */
+.checkbox-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px; margin-bottom: 12px;
+  cursor: pointer;
+}
+[data-theme="light"] .checkbox-row { background: rgba(24,99,220,0.04)!important; border-color: rgba(24,99,220,0.10)!important; }
+.custom-checkbox {
+  width: 20px; height: 20px; border-radius: 11px;
+  border: 2px solid rgba(255,255,255,0.20);
+  background: transparent; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+}
+.custom-checkbox svg {
+  opacity: 0; transform: scale(0.3) rotate(-10deg);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
+}
+.checkbox-row input { display: none; }
+.checkbox-row input:checked ~ .custom-checkbox {
+  background: #1863DC; border-color: #1863DC;
+  transform: scale(1.08);
+}
+.checkbox-row.is-checked .custom-checkbox {
+  background: #1863DC; border-color: #1863DC;
+  transform: scale(1.08);
+}
+.checkbox-row input:checked ~ .custom-checkbox svg {
+  opacity: 1; transform: scale(1) rotate(0deg);
+}
+.checkbox-row.is-checked .custom-checkbox svg {
+  opacity: 1; transform: scale(1) rotate(0deg);
+}
+[data-theme="light"] .custom-checkbox { border-color: rgba(0,0,0,0.20)!important; }
+.checkbox-label { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+[data-theme="light"] .checkbox-label { color: #1A1A2E!important; }
+
+/* Save button */
+.btn-save {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: white;
+  cursor: pointer; letter-spacing: 0.01em;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 20px rgba(24,99,220,0.35);
+  margin-bottom: 10px;
+}
+.btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-save:active { transform: scale(0.98); }
+
+/* Secondary buttons */
+.btn-secondary {
+  width: 100%; padding: 13px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s, border-color 0.18s; margin-bottom: 10px;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.26); }
+[data-theme="light"] .btn-secondary { background: rgba(24,99,220,0.07)!important; border-color: rgba(24,99,220,0.22)!important; color: #1A1A2E!important; }
+[data-theme="light"] .btn-secondary:hover { background: rgba(24,99,220,0.12)!important; }
+
+.btn-reset {
+  width: 100%; padding: 12px 8px; margin-top: 4px;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.38); border-radius: 14px;
+  font-size: 13px; font-weight: 600; color: #ef4444;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background 0.18s, border-color 0.18s;
+}
+.btn-reset:hover { background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.55); }
+[data-theme="light"] .btn-reset { background: rgba(239,68,68,0.08)!important; border-color: rgba(239,68,68,0.30)!important; color: #dc2626!important; }
+[data-theme="light"] .btn-reset:hover { background: rgba(239,68,68,0.14)!important; border-color: rgba(239,68,68,0.45)!important; }
+
+
+/* ── Reset Confirm Modal ─────────────────────────────────────── */
+.modal-backdrop {
+  position: absolute; inset: 0; z-index: 200;
+  background: rgba(6,6,15,0.72);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.modal-backdrop.open {
+  opacity: 1; pointer-events: all;
+}
+.modal-sheet {
+  width: 100%;
+  background: var(--bg-surface, #0d0d1a);
+  border-radius: 24px 24px 0 0;
+  padding: 0 16px 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
+}
+[data-theme="light"] .modal-sheet {
+  background: #fff !important;
+  border-top-color: rgba(24,99,220,0.10) !important;
+}
+.modal-backdrop.open .modal-sheet {
+  transform: translateY(0);
+}
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  margin: 12px auto 20px;
+}
+[data-theme="light"] .modal-handle { background: rgba(0,0,0,0.12) !important; }
+.modal-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(249,115,22,0.12);
+  border: 1.5px solid rgba(249,115,22,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+}
+.modal-title {
+  font-size: 17px; font-weight: 800; color: var(--text-primary);
+  text-align: center; margin-bottom: 8px;
+}
+.modal-body {
+  font-size: 13px; color: var(--text-muted); text-align: center;
+  line-height: 1.55; margin-bottom: 22px; padding: 0 4px;
+}
+.modal-body strong { color: var(--text-secondary); }
+.modal-actions { display: flex; flex-direction: column; gap: 10px; }
+.btn-modal-danger {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg,#ea580c,#f97316);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: #fff;
+  cursor: pointer; letter-spacing: 0.01em;
+  box-shadow: 0 4px 18px rgba(249,115,22,0.35);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.btn-modal-danger:active { opacity: 0.88; transform: scale(0.98); }
+.btn-modal-cancel {
+  width: 100%; padding: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.btn-modal-cancel:hover { background: rgba(255,255,255,0.09); }
+[data-theme="light"] .btn-modal-cancel {
+  background: rgba(24,99,220,0.06) !important;
+  border-color: rgba(24,99,220,0.15) !important;
+  color: #1A1A2E !important;
+}
+
+/* Desktop edit profile parity */
+.profile-edit-screen {
+  padding: 14px 14px 20px;
+  display: grid;
+  gap: 14px;
+}
+.profile-edit-title {
+  margin: 2px 2px 0;
+  font-size: 24px;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+.profile-edit-screen .form-card {
+  margin: 0;
+  border-radius: 22px;
+  padding: 18px;
+  overflow: visible;
+}
+.profile-card-mobile {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  min-height: 232px;
+}
+.avatar-editor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+.profile-card-mobile .avatar-wrap {
+  width: 96px;
+  height: 96px;
+}
+.profile-card-mobile .avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.34), transparent 30%),
+    linear-gradient(135deg, var(--violet-600), var(--violet-400));
+  box-shadow: 0 14px 34px rgba(24,99,220,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+  background-position: center;
+  background-size: cover;
+}
+.profile-card-mobile .avatar img {
+  border-radius: inherit !important;
+}
+[data-theme="light"] .profile-card-mobile .avatar {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.44), transparent 30%),
+    linear-gradient(135deg, #e8917a, #c96b55) !important;
+  border-color: rgba(232,224,213,0.78) !important;
+  box-shadow: 0 14px 32px rgba(201,107,85,0.22), inset 0 1px 0 rgba(255,255,255,0.60) !important;
+}
+.profile-card-mobile .avatar-edit-btn {
+  bottom: -4px;
+  right: -4px;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+}
+.profile-card-mobile .avatar-actions {
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+.profile-card-mobile .avatar-action {
+  width: 100%;
+  min-height: 32px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  text-align: center;
+}
+.profile-card-body {
+  flex: 1;
+  min-width: 0;
+}
+.section-label {
+  display: inline-flex;
+  margin-bottom: 12px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+[data-theme="light"] .section-label,
+[data-theme="light"] .profile-edit-screen .field-label {
+  color: #a84e30 !important;
+}
+.name-grid,
+.profile-field-stack {
+  display: grid;
+  gap: 14px;
+}
+.profile-edit-screen .field-row {
+  padding: 0;
+  border: 0;
+}
+.profile-edit-screen .field-label {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 7px;
+}
+.profile-edit-screen .field-input-wrap,
+.profile-edit-screen .field-select-wrap {
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.profile-edit-screen .field-input,
+.profile-edit-screen .field-select {
+  min-height: 42px;
+  font-size: 14px;
+  font-weight: 700;
+}
+[data-theme="light"] .profile-edit-screen .field-input-wrap,
+[data-theme="light"] .profile-edit-screen .field-select-wrap {
+  background: rgba(255,255,255,0.86) !important;
+  border-color: #e8e0d5 !important;
+}
+[data-theme="light"] .profile-edit-screen input.field-input,
+[data-theme="light"] .profile-edit-screen .field-select {
+  background: transparent !important;
+  color: #5c4535 !important;
+}
+.arch-card {
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+}
+.arch-card .archetype-chip {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.mobile-seg {
+  display: flex;
+  gap: 8px;
+}
+.mobile-seg button {
+  flex: 1;
+  min-height: 42px;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+.mobile-seg button.on {
+  color: #fff;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+  box-shadow: 0 4px 14px rgba(24,99,220,0.28);
+}
+.mobile-seg[data-seg-target="degreeSelect"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.mobile-seg[data-seg-target="degreeSelect"] button {
+  min-width: 0;
+  min-height: 46px;
+  white-space: normal;
+  line-height: 1.22;
+}
+[data-theme="light"] .mobile-seg button {
+  background: rgba(255,255,255,0.86) !important;
+  border-color: #e8e0d5 !important;
+  color: #5c4535 !important;
+}
+[data-theme="light"] .mobile-seg button.on {
+  color: #fff !important;
+  border-color: transparent !important;
+  background: linear-gradient(135deg, #e8917a, #c96b55) !important;
+  box-shadow: 0 4px 14px rgba(201,107,85,0.28) !important;
+}
+.mobile-major-field[hidden],
+.mobile-major-menu[hidden] {
+  display: none !important;
+}
+.mobile-major-picker {
+  position: relative;
+}
+.mobile-major-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 13px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: left;
+}
+.mobile-major-button.open {
+  border-color: rgba(124,58,237,0.72);
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.16);
+}
+.mobile-major-placeholder {
+  color: var(--text-muted);
+}
+.mobile-major-caret {
+  color: var(--text-muted);
+  transition: transform .16s ease;
+}
+.mobile-major-button.open .mobile-major-caret {
+  transform: rotate(180deg);
+}
+.mobile-major-menu {
+  margin-top: 8px;
+  max-height: 190px;
+  overflow: auto;
+  padding: 7px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-md);
+}
+.mobile-major-option {
+  width: 100%;
+  padding: 10px 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+}
+.mobile-major-option.on,
+.mobile-major-option:active {
+  background: rgba(124,58,237,0.18);
+  color: var(--text-primary);
+}
+.mobile-major-option.on::after {
+  content: "✓";
+  color: var(--violet-400);
+  font-weight: 900;
+}
+[data-theme="light"] .mobile-major-button.open {
+  border-color: rgba(201,107,85,0.68);
+  box-shadow: 0 0 0 3px rgba(201,107,85,0.14);
+}
+[data-theme="light"] .mobile-major-option.on,
+[data-theme="light"] .mobile-major-option:active {
+  background: rgba(201,107,85,0.13);
+  color: #2c1f14;
+}
+[data-theme="light"] .mobile-major-option.on::after {
+  color: var(--coral-600);
+}
+.profile-edit-screen .checkbox-row {
+  margin: 0;
+}
+.profile-action-row,
+.danger-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.profile-action-row .btn-save,
+.profile-action-row .btn-secondary,
+.danger-row .btn-reset,
+.danger-row .btn-secondary {
+  flex: 1 1 150px;
+  margin: 0;
+}
+.danger-card .section-label {
+  margin-bottom: 12px;
+}
+
+/* Design-system token alignment + remove the right-side white wash on this screen. */
+.mobile-viewport {
+  background: var(--bg-base) !important;
+  isolation: isolate;
+  overflow: hidden;
+}
+[data-theme="light"] .mobile-viewport {
+  background:
+    radial-gradient(ellipse 48% 30% at 10% 12%, rgba(168,194,217,0.22) 0%, transparent 62%),
+    radial-gradient(ellipse 44% 34% at 18% 88%, rgba(232,147,112,0.14) 0%, transparent 64%),
+    linear-gradient(180deg, var(--cream-50) 0%, var(--cream-100) 42%, var(--cream-200) 100%) !important;
+}
+.mobile-viewport::before,
+.mobile-viewport::after {
+  content: none !important;
+  display: none !important;
+}
+.profile-edit-screen {
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+.profile-edit-screen .form-card {
+  background: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-md) !important;
+  overflow: hidden;
+}
+.profile-edit-screen .profile-card-mobile {
+  min-height: 232px;
+  overflow: visible !important;
+}
+.profile-edit-screen .profile-fields-card {
+  overflow: visible !important;
+}
+.profile-edit-screen .profile-fields-card .profile-field-stack {
+  min-width: 0;
+}
+[data-theme="light"] .profile-edit-screen .form-card {
+  background: rgba(255,252,245,0.90) !important;
+  border-color: var(--border-color) !important;
+}
+.profile-edit-screen .field-input-wrap,
+.profile-edit-screen .field-select-wrap,
+.mobile-seg button {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-color) !important;
+}
+.profile-edit-screen .field-input,
+.profile-edit-screen .field-select,
+.checkbox-label,
+.profile-edit-title {
+  color: var(--text-primary) !important;
+}
+.section-label,
+.profile-edit-screen .field-label {
+  color: var(--text-muted) !important;
+}
+[data-theme="light"] .section-label,
+[data-theme="light"] .profile-edit-screen .field-label {
+  color: var(--coral-700) !important;
+}
+.profile-card-mobile .avatar {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.18), transparent 30%),
+    linear-gradient(135deg, var(--violet-600), var(--violet-500)) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-violet-sm), inset 0 1px 0 rgba(255,255,255,0.16) !important;
+}
+[data-theme="light"] .profile-card-mobile .avatar {
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255,255,255,0.26), transparent 30%),
+    linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--shadow-orange-sm), inset 0 1px 0 rgba(255,255,255,0.45) !important;
+}
+.profile-card-mobile .avatar-edit-btn,
+.btn-save,
+.mobile-seg button.on,
+.checkbox-row input:checked ~ .custom-checkbox {
+  background: linear-gradient(135deg, var(--violet-600), var(--violet-500)) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: var(--shadow-violet-sm) !important;
+}
+[data-theme="light"] .mobile-seg button.on {
+  background: linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  box-shadow: var(--shadow-orange-sm) !important;
+}
+[data-theme="light"] .checkbox-row input:checked ~ .custom-checkbox,
+[data-theme="light"] .checkbox-row.is-checked .custom-checkbox {
+  background: linear-gradient(135deg, var(--coral-500), var(--coral-600)) !important;
+  box-shadow: var(--shadow-orange-sm) !important;
+}
+.archetype-chip a {
+  color: var(--violet-400) !important;
+}
+[data-theme="light"] .archetype-chip a {
+  color: var(--coral-700) !important;
+}
+.avatar-action,
+.btn-secondary,
+.btn-modal-cancel {
+  background: var(--bg-elevated) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+.avatar-action--danger,
+.btn-reset {
+  color: var(--red-400) !important;
+  border-color: color-mix(in srgb, var(--red-500) 38%, transparent) !important;
+  background: color-mix(in srgb, var(--red-500) 10%, transparent) !important;
+}
+@media (max-width: 380px) {
+  .profile-card-mobile { flex-direction: column; }
+  .avatar-editor { align-items: flex-start; }
+  .profile-card-mobile .avatar-actions { max-width: 180px; }
+}
+</style>
+</head>
+
+<body>
+<div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
+  <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <span class="breadcrumb-separator">/</span>
+  <a href="../../onboarding/home/" class="breadcrumb-item">Profile</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-item active">Edit Profile</span>
+</div>
+
+<div class="desktop-container">
+  <div class="device-frame">
+    <div class="device-notch"></div>
+
+    <div class="mobile-viewport">
+      <div class="status-bar">
+        <span id="statusTime">9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+        </div>
+      </div>
+
+      <!-- Header (ds-hdr) — logo + account menu, consistent with other screens -->
+      <div class="ds-hdr">
+        <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
+        <div class="app-menu-wrap">
+          <div class="app-dropdown">
+            <div class="app-menu-section" data-i18n="menu.section_account">Account</div>
+            <a href="../../profile/edit/" class="app-menu-item" data-menu-action="my-account">
+              <span class="app-menu-icon app-menu-icon--account"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a4 4 0 014-4h8a4 4 0 014 4v2"/></svg></span>
+              <span data-i18n="menu.my_account">My Account</span>
+            </a>
+            <a href="../../profile/settings/" class="app-menu-item" data-menu-action="account-settings">
+              <span class="app-menu-icon app-menu-icon--settings"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+              <span data-i18n="menu.account_settings">Account Settings</span>
+            </a>
+            <button class="app-menu-item" data-menu-action="install">
+              <span class="app-menu-icon app-menu-icon--install"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></span>
+              <span data-i18n="menu.install">Install app</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="leave-review">
+              <span class="app-menu-icon app-menu-icon--review"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+              <span data-i18n="menu.leave_review">Leave Review</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="share">
+              <span class="app-menu-icon app-menu-icon--share"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+              <span data-i18n="menu.share_archetype">Share Archetype</span>
+            </button>
+            <button class="app-menu-item" data-menu-action="contact">
+              <span class="app-menu-icon app-menu-icon--contact"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+              <span data-i18n="menu.contact_us">Contact Us</span>
+            </button>
+            <div class="app-menu-divider"></div>
+            <button class="app-menu-item app-menu-item--danger" data-menu-action="reset">
+              <span class="app-menu-icon app-menu-icon--danger"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></span>
+              <span data-i18n="menu.reset_account">Reset Account</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="page-content profile-edit-screen">
+        <h1 class="profile-edit-title" data-i18n="edit.title">Edit Profile</h1>
+
+        <section class="form-card profile-card-mobile">
+          <div class="avatar-editor">
+            <div class="avatar-wrap">
+              <div class="avatar profile-avatar-preview"></div>
+              <label class="avatar-edit-btn" for="avatarUpload" aria-label="Upload profile photo">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+              </label>
+            </div>
+            <input id="avatarUpload" type="file" accept="image/*" hidden>
+            <div class="avatar-actions">
+              <label class="avatar-action" for="avatarUpload" data-i18n="profile.avatar.library">Choose from Library</label>
+              <button class="avatar-action avatar-action--danger" id="removeAvatarBtn" type="button" data-i18n="profile.avatar.remove">Remove Current Photo</button>
+            </div>
+          </div>
+          <div class="profile-card-body">
+            <span class="section-label">Profile</span>
+            <div class="name-grid">
+              <div class="field-row">
+                <div class="field-label">Họ tên</div>
+                <div class="field-input-wrap">
+                  <input class="field-input" id="editFullName" type="text" value="" placeholder="Your Name">
+                </div>
+              </div>
+              <input id="editFirstName" type="hidden" value="">
+              <input id="editLastName" type="hidden" value="">
+            </div>
+          </div>
+        </section>
+
+        <section class="form-card arch-card">
+          <div class="archetype-chip">
+            <span><span data-i18n="edit.archetype">Academic Archetype:</span> <a href="../../quiz/quiz-card/" data-i18n="edit.find_out">Find Out</a></span>
+          </div>
+        </section>
+
+        <section class="form-card profile-fields-card">
+          <div class="profile-field-stack">
+            <div class="field-row field-readonly">
+              <div class="field-label" data-i18n="edit.email">Email</div>
+              <div class="field-input-wrap">
+                <input class="field-input" id="editEmail" type="email" value="hoangphuc@beyondegrees.ai" readonly>
+              </div>
+              <div class="field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-label" data-i18n="edit.location">Location</div>
+              <div class="field-input-wrap">
+                <input class="field-input" id="editLocation" type="text" value="Ho Chi Minh City, Vietnam" data-i18n-placeholder="edit.ph_location" placeholder="Your location">
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-label" data-i18n="edit.study">I want to study</div>
+              <select class="field-select profile-seg-select" id="studySelect" hidden>
+                <option value="abroad" selected data-i18n="edit.study.abroad">Abroad</option>
+                <option value="home" data-i18n="edit.study.in_country">In my country</option>
+                <option value="either" data-i18n="edit.study.either">Either</option>
+              </select>
+              <div class="mobile-seg" data-seg-target="studySelect">
+                <button type="button" class="on" data-value="abroad" data-i18n="edit.study.abroad">Abroad</button>
+                <button type="button" data-value="home" data-i18n="edit.study.in_country">In my country</button>
+                <button type="button" data-value="either" data-i18n="edit.study.either">Either</button>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field-label" data-i18n="edit.degree">I'm working toward a...</div>
+              <select class="field-select profile-seg-select" id="degreeSelect" hidden>
+                <option value="bachelor" selected data-i18n="edit.degree.bachelor">Bachelor's Degree</option>
+                <option value="master" data-i18n="edit.degree.master">Master's Degree</option>
+                <option value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</option>
+                <option value="associate" data-i18n="edit.degree.associate">Associate's Degree</option>
+              </select>
+              <div class="mobile-seg" data-seg-target="degreeSelect">
+                <button type="button" class="on" data-value="bachelor" data-i18n="edit.degree.bachelor">Bachelor's Degree</button>
+                <button type="button" data-value="master" data-i18n="edit.degree.master">Master's Degree</button>
+                <button type="button" data-value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</button>
+                <button type="button" data-value="associate" data-i18n="edit.degree.associate">Associate's Degree</button>
+              </div>
+            </div>
+
+            <label class="checkbox-row">
+              <input type="checkbox" id="know-study">
+              <div class="custom-checkbox">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+              </div>
+              <span class="checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
+            </label>
+
+            <div class="field-row mobile-major-field" id="mobileMajorField" hidden>
+              <div class="field-label">Preferred Major</div>
+              <div class="mobile-major-picker" id="mobileMajorPicker">
+                <button class="mobile-major-button" id="mobileMajorButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span id="mobileMajorText" class="mobile-major-placeholder">Select a major</span>
+                  <span class="mobile-major-caret" aria-hidden="true">v</span>
+                </button>
+                <div class="mobile-major-menu" id="mobileMajorMenu" role="listbox" hidden></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-action-row" style="margin-top:18px">
+            <button class="btn-save" onclick="saveChanges()" data-i18n="edit.save">Save Changes</button>
+            <button class="btn-secondary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span data-i18n="edit.leave_review">Leave Review</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="form-card danger-card">
+          <span class="section-label" data-i18n="edit.danger_zone">Danger zone</span>
+          <div class="danger-row">
+            <button class="btn-reset" id="resetAccountBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+              <span data-i18n="edit.reset">Reset Account</span>
+            </button>
+            <button class="btn-secondary" id="logoutBtn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              <span data-i18n="edit.logout">Logout</span>
+            </button>
+          </div>
+        </section>
+
+
+      <!-- Reset Confirm Modal -->
+      <div class="modal-backdrop" id="resetModal">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1,4 1,10 7,10"/>
+              <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+            </svg>
+          </div>
+          <div class="modal-title" data-i18n="edit.reset_title">Reset Account?</div>
+          <div class="modal-body" data-i18n="edit.reset_body">
+            This will clear all quiz progress and all your answers. You'll start fresh from Question 1.
+          </div>
+          <div class="modal-actions">
+            <button class="btn-modal-danger" id="resetConfirmBtn" data-i18n="edit.reset_confirm">
+              Reset &amp; Start Over
+            </button>
+            <button class="btn-modal-cancel" id="resetCancelBtn" data-i18n="edit.cancel">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+      </div><!-- /page-content -->
+
+      <!-- Bottom tab bar — consistent with other screens (Account active) -->
+      <nav class="float-tab-bar" id="floatTabBar">
+        <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.about_me">About me</span>
+        </a>
+        <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+        </a>
+        <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.majors">Majors</span>
+        </a>
+        <a href="../../university/matches/" class="tab-item" data-tab="t4">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.universities">Universities</span>
+        </a>
+        <a href="../../profile/edit/" class="tab-item active" data-tab="t5">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.account">Account</span>
+        </a>
+      </nav>
+
+    </div><!-- /mobile-viewport -->
+
+  </div><!-- /device-frame -->
+</div><!-- /desktop-container -->
+
+<script>
+(function(){function a(r){document.documentElement.setAttribute('data-theme',r)}function b(p){var r=p==='system'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;a(r);document.documentElement.setAttribute('data-theme-pref',p);try{localStorage.setItem('bd-theme',p)}catch(e){}}window.bdSetTheme=b;var s='dark';try{s=localStorage.getItem('bd-theme')||'dark'}catch(e){}b(s);window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){var p=document.documentElement.getAttribute('data-theme-pref')||'dark';if(p==='system')b('system')})})();
+
+var PROFILE_MAJORS = [
+  { v: 'cs', label: 'Computer Science' },
+  { v: 'ds', label: 'Data Science & AI' },
+  { v: 'design', label: 'Design & UX' },
+  { v: 'eng', label: 'Engineering' },
+  { v: 'med', label: 'Medicine' },
+  { v: 'biz', label: 'Business' },
+  { v: 'psy', label: 'Psychology' },
+  { v: 'econ', label: 'Economics' },
+  { v: 'law', label: 'Law' },
+  { v: 'arch', label: 'Architecture' },
+  { v: 'bio', label: 'Biology' },
+  { v: 'comm', label: 'Communications' }
+];
+var mobileMajorValue = '';
+
+function readJson(key) {
+  try {
+    var raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function writeJson(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+}
+
+function normalizeStudy(value) {
+  if (value === 'in-country' || value === 'my-country') return 'home';
+  return value || 'abroad';
+}
+
+function findProfileMajor(value) {
+  return PROFILE_MAJORS.filter(function (major) { return major.v === value; })[0] || null;
+}
+
+function setMobileSegment(selectId, value) {
+  var select = document.getElementById(selectId);
+  if (!select) return;
+  var selected = value || select.value || '';
+  select.value = selected;
+  document.querySelectorAll('[data-seg-target="' + selectId + '"] button').forEach(function (btn) {
+    btn.classList.toggle('on', btn.getAttribute('data-value') === selected);
+  });
+}
+
+function getMobileSegment(selectId, fallback) {
+  var select = document.getElementById(selectId);
+  return (select && select.value) || fallback;
+}
+
+function renderMobileMajorPicker() {
+  var menu = document.getElementById('mobileMajorMenu');
+  if (!menu) return;
+  menu.innerHTML = PROFILE_MAJORS.map(function (major) {
+    var active = major.v === mobileMajorValue ? ' on' : '';
+    return '<button class="mobile-major-option' + active + '" type="button" role="option" data-value="' + major.v + '">' + major.label + '</button>';
+  }).join('');
+}
+
+function setMobileMajor(value) {
+  mobileMajorValue = findProfileMajor(value) ? value : '';
+  var selected = findProfileMajor(mobileMajorValue);
+  var text = document.getElementById('mobileMajorText');
+  if (text) {
+    text.textContent = selected ? selected.label : 'Select a major';
+    text.classList.toggle('mobile-major-placeholder', !selected);
+  }
+  renderMobileMajorPicker();
+}
+
+function closeMobileMajorPicker() {
+  var menu = document.getElementById('mobileMajorMenu');
+  var btn = document.getElementById('mobileMajorButton');
+  if (menu) menu.hidden = true;
+  if (btn) {
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function syncMobileMajorField() {
+  var input = document.getElementById('know-study');
+  var field = document.getElementById('mobileMajorField');
+  var show = !!(input && input.checked);
+  if (field) field.hidden = !show;
+  if (!show) {
+    setMobileMajor('');
+    closeMobileMajorPicker();
+  }
+}
+
+// Checkbox visual update
+document.querySelectorAll('.checkbox-row').forEach(function(row) {
+  var input = row.querySelector('input[type="checkbox"]');
+  var box = row.querySelector('.custom-checkbox');
+  if (!input || !box) return;
+  function update() {
+    row.classList.toggle('is-checked', input.checked);
+    if (input.id === 'know-study') syncMobileMajorField();
+  }
+  input.addEventListener('change', update);
+  update();
+});
+
+document.querySelectorAll('.mobile-seg').forEach(function(seg) {
+  var select = document.getElementById(seg.getAttribute('data-seg-target') || '');
+  seg.addEventListener('click', function(e) {
+    if (!e.target || e.target.tagName !== 'BUTTON') return;
+    seg.querySelectorAll('button').forEach(function(btn) { btn.classList.remove('on'); });
+    e.target.classList.add('on');
+    if (select) select.value = normalizeStudy(e.target.getAttribute('data-value') || select.value);
+  });
+});
+
+var mobileMajorButton = document.getElementById('mobileMajorButton');
+var mobileMajorMenu = document.getElementById('mobileMajorMenu');
+var mobileMajorPicker = document.getElementById('mobileMajorPicker');
+if (mobileMajorButton) {
+  mobileMajorButton.addEventListener('click', function () {
+    if (!mobileMajorMenu) return;
+    var opening = mobileMajorMenu.hidden;
+    mobileMajorMenu.hidden = !opening;
+    mobileMajorButton.classList.toggle('open', opening);
+    mobileMajorButton.setAttribute('aria-expanded', opening ? 'true' : 'false');
+  });
+}
+if (mobileMajorMenu) {
+  mobileMajorMenu.addEventListener('click', function (e) {
+    var option = e.target && e.target.closest ? e.target.closest('[data-value]') : null;
+    if (!option) return;
+    setMobileMajor(option.getAttribute('data-value') || '');
+    closeMobileMajorPicker();
+  });
+}
+document.addEventListener('click', function (e) {
+  if (mobileMajorPicker && !mobileMajorPicker.contains(e.target)) closeMobileMajorPicker();
+});
+
+var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
+/* Pre-fill name fields from localStorage on load */
+(function() {
+  function prefill() {
+    var p = window.BDProfile ? BDProfile.get() : (readJson('bd-profile') || {});
+    var onboarding = readJson('bd-onboarding') || {};
+    var fullEl = document.getElementById('editFullName');
+    var fnEl = document.getElementById('editFirstName');
+    var lnEl = document.getElementById('editLastName');
+    var emailEl = document.getElementById('editEmail');
+    var locationEl = document.getElementById('editLocation');
+    var knowEl = document.getElementById('know-study');
+    if (fnEl && p.firstName) fnEl.value = p.firstName;
+    if (lnEl && p.lastName)  lnEl.value = p.lastName;
+    if (fullEl) fullEl.value = ((p.firstName || p.givenName || '') + ' ' + (p.lastName || p.familyName || '')).trim() || fullEl.value || 'Your Name';
+    if (emailEl) emailEl.value = p.email || emailEl.value || '';
+    if (locationEl) locationEl.value = onboarding.location || locationEl.value || '';
+    setMobileSegment('studySelect', normalizeStudy(onboarding.studyWhere));
+    setMobileSegment('degreeSelect', onboarding.degree || 'bachelor');
+    if (knowEl) knowEl.checked = !!onboarding.knowMajor;
+    setMobileMajor(onboarding.major || '');
+    document.querySelectorAll('.checkbox-row').forEach(function (row) {
+      var input = row.querySelector('input[type="checkbox"]');
+      row.classList.toggle('is-checked', !!(input && input.checked));
+    });
+    syncMobileMajorField();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', prefill);
+  } else { prefill(); }
+})();
+
+var avatarInput = document.getElementById('avatarUpload');
+var removeAvatarBtn = document.getElementById('removeAvatarBtn');
+if (avatarInput) {
+  avatarInput.addEventListener('change', function () {
+    var file = avatarInput.files && avatarInput.files[0];
+    if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      if (window.BDProfile) {
+        BDProfile.saveAvatar(String(reader.result || ''));
+        BDProfile.applyAvatar();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+if (removeAvatarBtn) {
+  removeAvatarBtn.addEventListener('click', function () {
+    if (window.BDProfile) {
+      BDProfile.removeAvatar();
+      BDProfile.applyAvatar();
+    }
+    if (avatarInput) avatarInput.value = '';
+  });
+}
+
+function saveChanges() {
+  /* Save name to localStorage */
+  var fullEl = document.getElementById('editFullName');
+  var fnEl = document.getElementById('editFirstName');
+  var lnEl = document.getElementById('editLastName');
+  if (fullEl && fnEl && lnEl) {
+    var fullName = (fullEl.value || '').trim().replace(/\s+/g, ' ');
+    var parts = fullName ? fullName.split(' ') : [];
+    fnEl.value = parts.length > 1 ? parts.slice(0, -1).join(' ') : (parts[0] || '');
+    lnEl.value = parts.length > 1 ? parts[parts.length - 1] : '';
+  }
+  if (window.BDProfile && fnEl && lnEl) {
+    BDProfile.save(fnEl.value, lnEl.value);
+    BDProfile.applyTabLabel();
+    BDProfile.applyNameDisplay();
+    BDProfile.applyAvatar();
+  }
+  try {
+    var emailEl = document.getElementById('editEmail');
+    var locationEl = document.getElementById('editLocation');
+    var knowEl = document.getElementById('know-study');
+    var existingProfile = readJson('bd-profile') || {};
+    if (fnEl && lnEl) {
+      existingProfile.firstName = fnEl.value || '';
+      existingProfile.lastName = lnEl.value || '';
+      existingProfile.givenName = fnEl.value || '';
+      existingProfile.familyName = lnEl.value || '';
+    }
+    if (emailEl && emailEl.value) existingProfile.email = emailEl.value;
+    writeJson('bd-profile', existingProfile);
+    if (fullEl) {
+      localStorage.setItem('bd-full-name', fullEl.value || '');
+      localStorage.setItem('bd-username', fullEl.value || '');
+    }
+    var knowsMajor = !!(knowEl && knowEl.checked);
+    writeJson('bd-onboarding', {
+      location: locationEl ? locationEl.value.trim() : '',
+      studyWhere: normalizeStudy(getMobileSegment('studySelect', 'abroad')),
+      degree: getMobileSegment('degreeSelect', 'bachelor'),
+      knowMajor: knowsMajor,
+      major: knowsMajor ? (mobileMajorValue || null) : null
+    });
+  } catch (e) {}
+
+  var btn = document.querySelector('.btn-save');
+  var orig = btn.textContent;
+  btn.textContent = _t('edit.save_success');
+  btn.style.background = 'linear-gradient(135deg, var(--mint-700), var(--mint-500))';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 1800);
+}
+
+// Reset Account modal
+var resetModal = document.getElementById('resetModal');
+document.getElementById('resetAccountBtn').addEventListener('click', function () {
+  resetModal.classList.add('open');
+});
+document.getElementById('resetCancelBtn').addEventListener('click', function () {
+  resetModal.classList.remove('open');
+});
+resetModal.addEventListener('click', function (e) {
+  if (e.target === resetModal) resetModal.classList.remove('open');
+});
+/* ── Helper: clear ALL quiz progress from storage ── */
+function clearQuizProgress() {
+  try {
+    localStorage.removeItem('quizProgress');
+    localStorage.removeItem('quizMilestone');
+    localStorage.removeItem('bd-quiz-progress'); // Fix #3 resume key
+  } catch(e) {}
+  try {
+    sessionStorage.removeItem('bd_dna');
+    sessionStorage.removeItem('bd_answers');
+    sessionStorage.removeItem('bd_scores');
+    sessionStorage.removeItem('bd_nextStart');
+  } catch(e) {}
+}
+
+/* ── Dynamic status bar clock ── */
+(function () {
+  function updateClock() {
+    var el = document.getElementById('statusTime');
+    if (!el) return;
+    var now = new Date();
+    var h = now.getHours(), m = now.getMinutes();
+    el.textContent = h + ':' + (m < 10 ? '0' : '') + m;
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+})();
+
+document.getElementById('resetConfirmBtn').addEventListener('click', function () {
+  clearQuizProgress();
+  try { sessionStorage.setItem('bd_reset_success', '1'); } catch(e) {}
+  var btn = document.getElementById('resetConfirmBtn');
+  btn.textContent = _t('edit.resetting');
+  btn.style.opacity = '0.7';
+  setTimeout(function () {
+    window.location.href = '../../onboarding/home/';
+  }, 800);
+});
+
+var logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', function () {
+    window.location.href = '../../onboarding/home/';
+  });
+}
+
+</script>
+<script src="../../../shared/scripts/ui/i18n.js?v=5"></script>
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
+<script src="../../../shared/scripts/ui/pwa-install.js?v=4" defer></script>
+</body>
+</html>

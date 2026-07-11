@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Results — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
+<style>
+  .reveal-layout { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: stretch; }
+  /* ── Hero (mobile reveal hero) ── */
+  .rv-hero { text-align: center; padding: 44px 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .rv-ico { font-size: 64px; animation: pop .7s cubic-bezier(.2,1.6,.4,1) both .3s;
+    filter: drop-shadow(0 6px 18px rgba(124,58,237,0.45)); }
+  :root[data-theme="light"] .rv-ico { filter: drop-shadow(0 6px 18px rgba(201,107,85,0.35)); }
+  @keyframes pop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .rv-disc { font-size: 20px; font-weight: 800; margin-top: 8px; color: var(--text-primary); }
+  .rv-pct {
+    font-size: 76px; font-weight: 900; letter-spacing: -3px; line-height: 1;
+    margin-top: 6px;
+    background: linear-gradient(135deg, var(--violet-400), var(--mint-400));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  :root[data-theme="light"] .rv-pct { background: linear-gradient(135deg, #0274BE, #E08B6E); -webkit-background-clip: text; background-clip: text; }
+  .rv-mr { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }
+  .rv-top12 { margin-top: 12px; }
+  .rv-born { font-size: 24px; font-weight: 800; margin-top: 18px; color: var(--text-primary); }
+  .rv-born em { font-style: normal; color: var(--violet-400); }
+  :root[data-theme="light"] .rv-born em { color: #a84e30; }
+  .rv-sub { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-top: 10px; max-width: 420px; }
+  .rv-ctas { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; justify-content: center; }
+
+  /* ── DNA Share card (mobile .dna-share-card) ── */
+  .dna-card { display: flex; flex-direction: column; }
+  .dsc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .dsc-title { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: rgba(167,139,250,0.75); }
+  :root[data-theme="light"] .dsc-title { color: #a84e30; }
+  .dsc-name-big { font-size: 17px; font-weight: 800; margin-top: 3px; color: var(--text-primary); }
+  .dsc-share-btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 999px;
+    font-size: 12px; font-weight: 800;
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35); color: var(--violet-300);
+    transition: all .15s;
+  }
+  .dsc-share-btn:hover { background: rgba(124,58,237,0.25); }
+  :root[data-theme="light"] .dsc-share-btn { background: rgba(201,107,85,0.10); border-color: rgba(201,107,85,0.32); color: #a84e30; }
+  .dsc-row { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
+  .dsc-row .em { width: 30px; font-size: 16px; text-align: center; }
+  .dsc-row .nm { width: 120px; font-size: 12.5px; font-weight: 700; color: var(--text-secondary); }
+  .dsc-row .bar { flex: 1; height: 7px; }
+  .dsc-row .pc { width: 42px; text-align: right; font-size: 13px; font-weight: 900; color: var(--acc-pct); }
+  .dsc-foot { display: flex; justify-content: space-between; margin-top: auto; padding-top: 14px; font-size: 11px; color: var(--text-muted); }
+  .dsc-foot b { color: var(--violet-400); }
+  :root[data-theme="light"] .dsc-foot b { color: #075c9f; }
+
+  /* ── Top Majors (mobile cards) ── */
+  .mj-rank { display: flex; align-items: flex-start; gap: 14px; }
+  .mj-rank .no {
+    width: 30px; height: 30px; border-radius: 9px; flex: none;
+    display: grid; place-items: center; font-size: 13px; font-weight: 900;
+    background: rgba(255,255,255,0.08); color: var(--text-muted);
+  }
+  :root[data-theme="light"] .mj-rank .no { background: #f0e9df; color: #8c7260; }
+  .mj-rank .em { font-size: 26px; }
+  .mj-rank b { font-size: 16px; display: block; color: var(--text-primary); }
+  .mj-rank small { font-size: 12px; color: var(--text-muted); }
+  .mj-rank .pc { margin-left: auto; font-size: 20px; font-weight: 900; color: var(--acc-pct); }
+  .mj-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin: 12px 0; min-height: 42px; }
+  .mj-tags { display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+  .mj-foot { display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+  .mj-view {
+    flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 13px; font-weight: 800;
+    background: rgba(124,58,237,0.18); border: 1px solid rgba(124,58,237,0.35); color: var(--violet-300);
+  }
+  .mj-view:hover { background: rgba(124,58,237,0.28); }
+  :root[data-theme="light"] .mj-view { background: rgba(201,107,85,0.10); border-color: rgba(201,107,85,0.32); color: #a84e30; }
+  .mj-heart {
+    width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-muted);
+    font-size: 16px; transition: all .15s;
+  }
+  .mj-heart.on { color: #fb7185; border-color: rgba(251,113,133,0.5); background: rgba(251,113,133,0.10); }
+  :root[data-theme="light"] .mj-heart { background: #fdf8f2; border-color: #e8e0d5; }
+  .bottom-ctas { display: flex; gap: 12px; justify-content: center; margin-top: 32px; flex-wrap: wrap; }
+  .powered { text-align: center; margin-top: 22px; font-size: 11px; color: var(--text-muted); }
+  #confettiCv { position: fixed; inset: 0; pointer-events: none; z-index: 150; }
+</style>
+</head>
+<body class="app" data-page="disciplines" data-crumb="Your Results">
+  <canvas id="confettiCv"></canvas>
+  <div class="main">
+    <div class="content fade-in">
+
+      <div class="reveal-layout">
+        <!-- HERO -->
+        <div class="card glass-hero rv-hero">
+          <div class="rv-ico">💻</div>
+          <div class="rv-disc" data-i18n="disc.name.kt">Engineering &amp; Technology</div>
+          <div class="rv-pct"><span id="pct">0</span>%</div>
+          <div class="rv-mr" data-i18n="results.match_label">Match Rate</div>
+          <div class="rv-top12"><span class="chip orange" data-i18n="results.top12">⭐ Top 12% best match</span></div>
+          <div class="rv-born"><span data-i18n="results.born_a">You were born for</span> <em data-i18n="results.born_em">technology</em></div>
+          <p class="rv-sub" data-i18n="results.ai_analyzed">✨ AI analyzed your 30 answers and identified your academic DNA with high accuracy.</p>
+          <div class="rv-ctas">
+            <a class="btn btn-primary" href="../../discipline/match/" data-i18n="results.view_full">View full analysis →</a>
+            <a class="btn btn-ghost" href="../../discipline/why/" data-i18n="results.why_match">Why do I match?</a>
+          </div>
+        </div>
+
+        <!-- DNA SHARE CARD -->
+        <div class="card dna-card">
+          <div class="dsc-head">
+            <div>
+              <div class="dsc-title" data-i18n="results.dna.label">Academic DNA</div>
+              <div class="dsc-name-big">Hoang Phuc</div>
+            </div>
+            <button class="dsc-share-btn" id="shareBtn">⤴ <span data-i18n="results.dna.share">Share</span></button>
+          </div>
+          <div id="dnaRows"></div>
+          <div class="dsc-foot"><b>✦ BeyonDegrees.ai</b><span>24/04/2026</span></div>
+        </div>
+      </div>
+
+      <!-- TOP MAJORS -->
+      <div class="section-title" data-i18n="results.section.top_majors">Your Top Majors</div>
+      <div class="grid grid-3 fade-in-stagger" id="majorCards"></div>
+
+      <div style="text-align:center;margin-top:26px;">
+        <a class="btn btn-primary" href="../../major/recommendations/" data-i18n="results.cta.explore">Explore all matching majors →</a>
+      </div>
+      <div class="bottom-ctas">
+        <a class="btn btn-ghost" href="../../quiz/quiz-card/" data-i18n="results.cta.retake">↺ Retake Quiz</a>
+        <button class="btn btn-ghost" id="saveBtn" data-i18n="results.cta.save">🔖 Save Results</button>
+      </div>
+      <div class="powered" data-i18n="results.powered">✦ Powered by BeyonDegrees.ai</div>
+
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
+  <script>
+    /* i18n helper */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+
+    /* ── Data — adapted from mobile script.js ── */
+    var MATCH_PCT = 87;
+    var DNA_DATA = [
+      { disc:'kt', em:'💻', name:'Eng & Tech',   target:78 },
+      { disc:'tn', em:'🧬', name:'Natural Sci',  target:68 },
+      { disc:'nv', em:'📖', name:'Humanities',   target:62 },
+      { disc:'xh', em:'🌐', name:'Social Sci',   target:55 },
+      { disc:'yt', em:'🩺', name:'Med & Health', target:45 },
+      { disc:'nn', em:'🌾', name:'Agriculture',  target:31 }
+    ];
+    var MAJORS = [
+      { no:1, em:'💻', acc:'kt', name:'Computer Science', unis:'FPT, Bach Khoa, VinUni...', pct:87,
+        desc:'Design algorithms, build software, and solve complex problems with technology.',
+        tags:['💰 Avg. salary $1,200+/mo','📈 Hiring demand +40%/yr'] },
+      { no:2, em:'🤖', acc:'kt', name:'Artificial Intelligence', unis:'RMIT, VNU Science, Duy Tan...', pct:82,
+        desc:'Build AI and machine learning models to solve real-world problems.',
+        tags:['💰 Salary $1,000–1,800/mo','🔥 Hottest field of 2025'] },
+      { no:3, em:'📊', acc:'tn', name:'Data Science', unis:'VinUni, HUST, Open University...', pct:76,
+        desc:'Analyze and mine big data to power smarter business decisions.',
+        tags:['💰 Salary $900–1,500/mo','📊 High international opportunity'] }
+    ];
+
+    /* DNA bars */
+    var rows = document.getElementById('dnaRows');
+    DNA_DATA.forEach(function (d, i) {
+      var el = document.createElement('div');
+      el.className = 'dsc-row acc-' + d.disc;
+      el.innerHTML =
+        '<span class="em">' + d.em + '</span><span class="nm">' + t('results.dna.' + d.disc) + '</span>' +
+        '<div class="bar"><span class="dc-pfill" id="dscb-' + d.disc + '" style="width:0%"></span></div>' +
+        '<span class="pc" id="dscp-' + d.disc + '">0%</span>';
+      rows.appendChild(el);
+      setTimeout(function () {
+        document.getElementById('dscb-' + d.disc).style.width = d.target + '%';
+        var n = 0, t = setInterval(function () {
+          n = Math.min(n + 3, d.target);
+          document.getElementById('dscp-' + d.disc).textContent = n + '%';
+          if (n >= d.target) clearInterval(t);
+        }, 30);
+      }, 700 + i * 180);
+    });
+
+    /* Major cards */
+    var mc = document.getElementById('majorCards');
+    MAJORS.forEach(function (m) {
+      var el = document.createElement('div');
+      el.className = 'card disc-strip acc-' + m.acc;
+      el.innerHTML =
+        '<div class="mj-rank"><span class="no">' + m.no + '</span><span class="em">' + m.em + '</span>' +
+        '<div><b>' + m.name + '</b><small>' + m.unis + '</small></div>' +
+        '<span class="pc">' + m.pct + '%</span></div>' +
+        '<div class="mj-desc">' + m.desc + '</div>' +
+        '<div class="mj-tags">' + m.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
+        '<div class="mj-foot"><a class="mj-view" href="../../major/detail/?major=' + encodeURIComponent(m.name) + '">' + t('results.major.view_path') + '</a>' +
+        '<button class="mj-heart">♡</button></div>';
+      el.querySelector('.mj-heart').onclick = function () {
+        this.classList.toggle('on');
+        this.textContent = this.classList.contains('on') ? '♥' : '♡';
+      };
+      mc.appendChild(el);
+    });
+
+    /* Count-up 87% */
+    setTimeout(function () {
+      var cur = 0, iv = setInterval(function () {
+        cur = Math.min(cur + 2, MATCH_PCT);
+        document.getElementById('pct').textContent = cur;
+        if (cur >= MATCH_PCT) clearInterval(iv);
+      }, 24);
+    }, 600);
+
+    /* Confetti — canvas ~4s (mobile parity) */
+    (function confetti() {
+      var cv = document.getElementById('confettiCv'), ctx = cv.getContext('2d');
+      cv.width = innerWidth; cv.height = innerHeight;
+      var C = ['#7c3aed','#06d6a0','#f59e0b','#3b82f6','#f43f5e','#a855f7'];
+      var ps = [];
+      for (var i = 0; i < 130; i++) ps.push({
+        x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * .5,
+        w: 6 + Math.random() * 6, h: 8 + Math.random() * 8,
+        vy: 2 + Math.random() * 3.2, vx: -1 + Math.random() * 2,
+        rot: Math.random() * 6.28, vr: -.1 + Math.random() * .2,
+        c: C[i % C.length]
+      });
+      var t0 = Date.now();
+      (function tick() {
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        ps.forEach(function (p) {
+          p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+          ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        });
+        if (Date.now() - t0 < 4200) requestAnimationFrame(tick);
+        else ctx.clearRect(0, 0, cv.width, cv.height);
+      })();
+    })();
+
+    document.getElementById('saveBtn').onclick = function () { this.textContent = t('results.cta.saved'); };
+    document.getElementById('shareBtn').onclick = function () { this.textContent = '✓ Copied'; };
+  </script>
+</body>
+</html>

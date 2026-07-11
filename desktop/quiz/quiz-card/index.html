@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz &mdash; BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
+<style>
+  /* ── Quiz wrap ── */
+  .quiz-wrap { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; }
+
+  /* ── Header ── */
+  .quiz-header {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
+    margin-bottom: 12px;
+  }
+  .quiz-header .undo-btn { justify-self: start; }
+  .quiz-header .counter-wrap { justify-self: center; text-align: center; }
+  .undo-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05);
+    color: var(--text-muted); display: grid; place-items: center;
+    backdrop-filter: blur(4px); transition: all .2s; font-size: 15px;
+  }
+  .undo-btn:hover { border-color: var(--violet-500); color: var(--violet-400); }
+  :root[data-theme="light"] .undo-btn { background: #fdf8f2; border-color: #e8e0d5; }
+  :root[data-theme="light"] .undo-btn:hover { border-color: #c96b55; color: #a84e30; }
+  .counter-wrap { font-size: 14px; font-weight: 700; color: var(--text-secondary); }
+  .counter-current { color: var(--violet-400); font-size: 18px; }
+  :root[data-theme="light"] .counter-current { color: #a84e30; }
+
+  /* ── Score chips ── */
+  .score-row { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+  .score-chip {
+    display: flex; align-items: center; gap: 5px; padding: 4px 12px;
+    border-radius: 999px; font-size: 12px; font-weight: 700; backdrop-filter: blur(8px);
+  }
+  .score-chip.agree   { background: rgba(6,214,160,0.12);   color: var(--mint-500);  border: 1px solid rgba(6,214,160,0.25); }
+  .score-chip.strong  { background: rgba(124,58,237,0.12);  color: var(--violet-400); border: 1px solid rgba(124,58,237,0.25); }
+  .score-chip.neutral { background: rgba(107,107,154,0.12); color: #9d9dbf;          border: 1px solid rgba(107,107,154,0.2); }
+  .score-chip.disagree{ background: rgba(255,71,87,0.12);   color: var(--red-400);   border: 1px solid rgba(255,71,87,0.25); }
+  :root[data-theme="light"] .score-chip.agree   { color:#047857; background:rgba(5,150,105,0.10); border-color:rgba(5,150,105,0.25); }
+  :root[data-theme="light"] .score-chip.strong  { color:#075c9f; background:rgba(2,116,190,0.08); border-color:rgba(2,116,190,0.25); }
+  :root[data-theme="light"] .score-chip.neutral { color:#8c7260; background:#fdf8f2; border-color:#e8e0d5; }
+  :root[data-theme="light"] .score-chip.disagree{ color:#be123c; background:rgba(225,29,72,0.08); border-color:rgba(225,29,72,0.22); }
+
+  /* ── Card arena ── */
+  html,
+  body[data-page="quiz"] {
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+  }
+  .card-arena {
+    position: relative; height: 540px; margin-top: 18px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  /* Direction hints — big gradient pills with a colored glow + pop-in */
+  .dir-hint {
+    position: absolute; z-index: 50; font-size: 19px; font-weight: 900;
+    padding: 16px 34px; border-radius: 18px; letter-spacing: 1.5px;
+    opacity: 0; pointer-events: none; text-transform: uppercase;
+    color: #fff; border: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.22);
+    transition: opacity .14s;
+  }
+  .hint-right {
+    right: 0; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, #0ad99f, #06b083);
+    box-shadow: 0 14px 38px rgba(6,214,160,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .hint-left {
+    left: 0; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, #ff8a94, #e23748);
+    box-shadow: 0 14px 38px rgba(255,71,87,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .hint-up {
+    top: 12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #a47bff, #7c3aed);
+    box-shadow: 0 14px 38px rgba(124,58,237,0.5), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .hint-down {
+    bottom: 12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, #aeaecb, #6b6b9a);
+    box-shadow: 0 14px 38px rgba(107,107,154,0.45), inset 0 0 0 1px rgba(255,255,255,0.18);
+  }
+  .dir-hint.visible { opacity: 1; }
+  .hint-right.visible, .hint-left.visible { animation: hintPopY .3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  .hint-up.visible, .hint-down.visible    { animation: hintPopX .3s cubic-bezier(0.34,1.56,0.64,1) both; }
+  @keyframes hintPopY {
+    0%   { opacity: 0; transform: translateY(-50%) scale(.55); }
+    60%  { opacity: 1; transform: translateY(-50%) scale(1.18); }
+    100% { opacity: 1; transform: translateY(-50%) scale(1); }
+  }
+  @keyframes hintPopX {
+    0%   { opacity: 0; transform: translateX(-50%) scale(.55); }
+    60%  { opacity: 1; transform: translateX(-50%) scale(1.18); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  }
+
+  /* ── Card stack ── */
+  .card-stack { position: relative; width: 640px; height: 440px; }
+  .q-card {
+    position: absolute; inset: 0; border-radius: 24px;
+    background: #2d1267;
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.07), 0 30px 80px rgba(24,99,220,0.5);
+    transition: transform .35s cubic-bezier(0.34,1.2,0.64,1), opacity .35s, background .6s, box-shadow .6s;
+    user-select: none;
+  }
+  .q-card.back-1 { transform: scale(.95) translateY(16px); opacity: .55; z-index: 1; }
+  .q-card.back-2 { transform: scale(.90) translateY(32px); opacity: .30; z-index: 0; }
+  .q-card.active-card { z-index: 2; cursor: grab; }
+  body[data-page="quiz"] .q-card.active-card { touch-action: none; }
+  .q-card.active-card:active { cursor: grabbing; }
+  .q-card.fling { transition: transform .45s ease-in, opacity .45s ease-in; }
+  .card-inner { position: relative; height: 100%; padding: 44px 48px; display: flex; flex-direction: column; }
+  .card-placeholder { display: grid; place-items: center; height: 100%; color: rgba(255,255,255,0.2); font-size: 13px; letter-spacing: 4px; }
+  .q-text {
+    flex: 1; display: flex; align-items: center;
+    font-size: 31px; font-weight: 800; letter-spacing: -0.3px; line-height: 1.45;
+    color: rgba(255,255,255,0.96);
+  }
+
+  /* Swipe hint: visible Q1 only, fades out after */
+  .swipe-hint {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    font-size: 12px; color: rgba(255,255,255,0.40); font-weight: 600;
+    transition: opacity 0.5s ease;
+  }
+  .swipe-hint.hidden { opacity: 0; pointer-events: none; }
+  .swipe-hint .hint-arrows { font-weight: 900; letter-spacing: 2px; }
+
+  /* Swipe-guide arrow: flies out in the demoed direction */
+  .guide-arrow {
+    position: absolute; top: 50%; left: 50%;
+    pointer-events: none; z-index: 60; opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+  .guide-arrow-svg { width: 184px; height: auto; display: block; }
+  /* Moderate-speed glide: pops in at center, then slides smoothly away (comet trail) */
+  .guide-arrow.fly { animation: guideArrowFly 0.9s cubic-bezier(0.22,0.61,0.36,1) both; }
+  @keyframes guideArrowFly {
+    0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.45); }
+    22%  { opacity: 1; transform: translate(-50%, -50%) scale(1.18); }
+    100% { opacity: 0; transform: translate(calc(-50% + var(--ax, 0px)), calc(-50% + var(--ay, 0px))) scale(1.06); }
+  }
+
+  /* Light mode card */
+  :root[data-theme="light"] .q-card .q-text { color: #2c1f14; }
+  :root[data-theme="light"] .q-card .swipe-hint { color: rgba(44,31,20,0.45); }
+  :root[data-theme="light"] .q-card .card-placeholder { color: rgba(44,31,20,0.25); }
+
+  /* ── Discipline Color Field ── */
+  /* Sits inside .content as position:absolute so it stays within the main area */
+  .content { position: relative; }
+  #colorField {
+    position: absolute; inset: -40px -80px;
+    z-index: 0; pointer-events: none;
+    opacity: 0;
+    transition: opacity 1.8s ease, background 1.5s ease;
+    border-radius: 0;
+  }
+  #colorField.disc-active { opacity: 1; }
+
+  /* ═══════════════════════════════════════════════════
+     MILESTONE — Planet Burst (ported from mobile)
+     Full-screen takeover shown every 10 questions.
+     ═══════════════════════════════════════════════════ */
+  .milestone-overlay {
+    position: fixed; inset: 0; z-index: 300;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    /* Lift the centered content clear of the moon/astronaut scene at the bottom */
+    padding-bottom: 210px;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  :root[data-theme="light"] .milestone-overlay { padding-bottom: 0; }
+  .milestone-overlay.visible { pointer-events: auto; opacity: 1; }
+  .milestone-overlay .ms-legacy { display: none; }
+
+  /* Space background */
+  .ms-po-bg { position: absolute; inset: 0; background: #08031b; opacity: 0; transition: opacity 0.35s ease; pointer-events: none; }
+  .milestone-overlay.visible .ms-po-bg { opacity: 0.97; }
+
+  /* Aurora glow */
+  .ms-po-aurora {
+    position: absolute; top: 44%; left: 50%; transform: translate(-50%,-50%);
+    width: 460px; height: 460px; border-radius: 50%;
+    background: radial-gradient(ellipse at center,rgba(124,58,237,.28) 0%,rgba(6,214,160,.12) 45%,transparent 70%);
+    pointer-events: none; opacity: 0; transition: opacity 0.6s ease 0.15s;
+  }
+  .milestone-overlay.visible .ms-po-aurora { opacity: 1; animation: msPlanetAurora 3.5s ease-in-out infinite; }
+  @keyframes msPlanetAurora {
+    0%,100%{ transform: translate(-50%,-50%) scale(1); opacity:.85; }
+    50%    { transform: translate(-50%,-50%) scale(1.18); opacity:1; }
+  }
+
+  /* Stars */
+  .ms-po-stars { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  @keyframes msStarTwinkle { 0%,100%{opacity:.15} 50%{opacity:1} }
+
+  /* Planet system */
+  .ms-po-system {
+    position: relative; width: 240px; height: 240px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    opacity: 0; transform: scale(0.2) rotate(-15deg);
+  }
+  @keyframes msSysIn {
+    0%  { opacity:0; transform: scale(0.15) rotate(-20deg); }
+    55% { opacity:1; transform: scale(1.1) rotate(5deg); }
+    75% { transform: scale(0.95) rotate(-1.5deg); }
+    90% { transform: scale(1.02) rotate(0.5deg); }
+    100%{ opacity:1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* Shockwaves */
+  .ms-shockwave { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); border-radius: 50%; border: 2.5px solid; opacity: 0; pointer-events: none; }
+  .ms-sw1 { width: 90px; height: 90px; border-color: rgba(167,139,250,.95); }
+  .ms-sw2 { width: 90px; height: 90px; border-color: rgba(6,214,160,.8); }
+  .ms-sw3 { width: 60px; height: 60px; border-color: rgba(248,250,252,.5); }
+  @keyframes msShockOut {
+    0%  { transform: translate(-50%,-50%) scale(0); opacity:.95; }
+    65% { opacity:.5; }
+    100%{ transform: translate(-50%,-50%) scale(4); opacity:0; }
+  }
+
+  /* Orb rings */
+  .ms-po-ring { position: absolute; border-radius: 50%; }
+  .ms-ring-outer {
+    width: 160px; height: 160px; border: 1.5px solid transparent;
+    border-top-color: rgba(124,58,237,.65); border-right-color: rgba(124,58,237,.2);
+    border-bottom-color: rgba(124,58,237,.4); border-left-color: rgba(124,58,237,.1);
+    animation: msRspinCW 5.5s linear infinite; filter: drop-shadow(0 0 8px rgba(124,58,237,.45));
+  }
+  .ms-ring-mid {
+    width: 128px; height: 128px; border: 1px solid transparent;
+    border-top-color: rgba(6,214,160,.6); border-right-color: rgba(6,214,160,.15);
+    border-bottom-color: rgba(6,214,160,.35); border-left-color: rgba(6,214,160,.08);
+    animation: msRspinCCW 3.8s linear infinite; filter: drop-shadow(0 0 6px rgba(6,214,160,.35));
+  }
+  @keyframes msRspinCW  { to{ transform: rotate(360deg);  } }
+  @keyframes msRspinCCW { to{ transform: rotate(-360deg); } }
+
+  /* Core orb */
+  .ms-po-orb {
+    width: 92px; height: 92px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 35%,rgba(220,210,255,.98) 0%,rgba(124,58,237,.92) 38%,rgba(20,5,50,.8) 100%);
+    box-shadow: 0 0 0 1.5px rgba(167,139,250,.3),0 0 32px rgba(124,58,237,.9),0 0 80px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.4);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; z-index: 3; animation: msOrbGlow 2.2s ease-in-out infinite;
+  }
+  @keyframes msOrbGlow {
+    0%,100%{ box-shadow:0 0 0 1.5px rgba(167,139,250,.3),0 0 32px rgba(124,58,237,.9),0 0 80px rgba(124,58,237,.5),inset 0 1px 0 rgba(255,255,255,.4); transform: scale(1); }
+    50%    { box-shadow:0 0 0 1.5px rgba(167,139,250,.5),0 0 52px rgba(124,58,237,1),0 0 120px rgba(124,58,237,.65),inset 0 1px 0 rgba(255,255,255,.45); transform: scale(1.07); }
+  }
+  .ms-po-orb-emoji { font-size: 38px; line-height: 1; }
+
+  /* Burst particles */
+  .ms-bp-anchor { position: absolute; top: 50%; left: 50%; width: 0; height: 0; }
+  .ms-bp { position: absolute; width: 13px; height: 13px; border-radius: 50%; transform: translate(-50%,-50%); opacity: 0; pointer-events: none; }
+  @keyframes msBpFly0 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translateY(-100px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translateY(-88px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translateY(-96px) scale(.7)} }
+  @keyframes msBpFly1 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(86px,-50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(76px,-44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(82px,-48px) scale(.7)} }
+  @keyframes msBpFly2 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(86px,50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(76px,44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(82px,48px) scale(.7)} }
+  @keyframes msBpFly3 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translateY(100px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translateY(88px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translateY(96px) scale(.7)} }
+  @keyframes msBpFly4 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(-86px,50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(-76px,44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(-82px,48px) scale(.7)} }
+  @keyframes msBpFly5 { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 25%{opacity:1;transform:translate(-50%,-50%) translate(-86px,-50px) scale(1.5)} 70%{opacity:.7;transform:translate(-50%,-50%) translate(-76px,-44px) scale(1)} 100%{opacity:0;transform:translate(-50%,-50%) translate(-82px,-48px) scale(.7)} }
+
+  /* Orbit particles */
+  .ms-po-orbit { position: absolute; border-radius: 50%; display: flex; align-items: flex-start; justify-content: center; top: 50%; left: 50%; opacity: 0; transition: opacity 0.4s ease; }
+  .ms-o1{width:128px;height:128px;margin:-64px 0 0 -64px;animation:msRspinCW 5.8s linear infinite;}
+  .ms-o2{width:150px;height:150px;margin:-75px 0 0 -75px;animation:msRspinCCW 8.2s linear infinite;}
+  .ms-o3{width:114px;height:114px;margin:-57px 0 0 -57px;animation:msRspinCW 4.9s linear infinite;}
+  .ms-o4{width:140px;height:140px;margin:-70px 0 0 -70px;animation:msRspinCCW 9.4s linear infinite;}
+  .ms-o5{width:108px;height:108px;margin:-54px 0 0 -54px;animation:msRspinCW 7.1s linear infinite;}
+  .ms-o6{width:156px;height:156px;margin:-78px 0 0 -78px;animation:msRspinCCW 11.5s linear infinite;}
+  .ms-po-particle{width:11px;height:11px;border-radius:50%;margin-top:-5.5px;}
+  .ms-pp-kt{background:rgba(139,92,246,.95);box-shadow:0 0 12px rgba(139,92,246,.95),0 0 28px rgba(139,92,246,.55);}
+  .ms-pp-yt{background:rgba(6,214,160,.95); box-shadow:0 0 12px rgba(6,214,160,.95), 0 0 28px rgba(6,214,160,.55);}
+  .ms-pp-nv{background:rgba(59,130,246,.95);box-shadow:0 0 12px rgba(59,130,246,.95),0 0 28px rgba(59,130,246,.55);}
+  .ms-pp-nn{background:rgba(245,158,11,.95);box-shadow:0 0 12px rgba(245,158,11,.95),0 0 28px rgba(245,158,11,.55);}
+  .ms-pp-xh{background:rgba(168,85,247,.95); box-shadow:0 0 12px rgba(168,85,247,.95),0 0 28px rgba(168,85,247,.55);}
+  .ms-pp-tn{background:rgba(244,63,94,.95);  box-shadow:0 0 12px rgba(244,63,94,.95), 0 0 28px rgba(244,63,94,.55);}
+
+  /* Orbit discipline labels — counter-rotate to stay upright */
+  .ms-orb-label {
+    position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; font-weight: 700; white-space: nowrap; color: rgba(255,255,255,.75);
+    background: rgba(15,5,40,.55); backdrop-filter: blur(6px); border: 1px solid rgba(255,255,255,.12);
+    padding: 2px 5px; border-radius: 999px; pointer-events: none; letter-spacing: .3px;
+    opacity: 0; transition: opacity .4s ease .8s;
+  }
+  .milestone-overlay.visible .ms-orb-label { opacity: 1; }
+  @keyframes msLabelCCW { from{ transform: translateX(-50%) rotate(0deg); } to{ transform: translateX(-50%) rotate(-360deg); } }
+  @keyframes msLabelCW  { from{ transform: translateX(-50%) rotate(0deg); } to{ transform: translateX(-50%) rotate(360deg);  } }
+  .ms-o1 .ms-orb-label { animation: msLabelCCW  5.8s linear infinite; }
+  .ms-o2 .ms-orb-label { animation: msLabelCW   8.2s linear infinite; }
+  .ms-o3 .ms-orb-label { animation: msLabelCCW  4.9s linear infinite; }
+  .ms-o4 .ms-orb-label { animation: msLabelCW   9.4s linear infinite; }
+  .ms-o5 .ms-orb-label { animation: msLabelCCW  7.1s linear infinite; }
+  .ms-o6 .ms-orb-label { animation: msLabelCW  11.5s linear infinite; }
+
+  /* Milestone text */
+  .ms-po-text { position: relative; z-index: 10; text-align: center; margin-top: 30px; display: flex; flex-direction: column; align-items: center; padding: 0 24px; }
+  .ms-po-badge { font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 800; color: rgba(6,214,160,.9); margin-bottom: 16px; opacity: 0; transform: translateY(8px); }
+  .ms-po-big-emoji { font-size: 64px; line-height: 1; margin-bottom: 16px; opacity: 0; transform: scale(.3) rotate(-20deg); filter: drop-shadow(0 0 28px rgba(255,200,60,.6)); }
+  .ms-po-title {
+    font-size: 32px; font-weight: 800; line-height: 1.15;
+    background: linear-gradient(135deg,#e9d5ff 0%,#06d6a0 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 12px; opacity: 0; transform: scale(.8) translateY(14px);
+  }
+  .ms-po-sub { font-size: 17px; font-weight: 500; color: rgba(255,255,255,.8); line-height: 1.5; opacity: 0; transform: translateY(10px); margin-bottom: 4px; }
+  .ms-po-xp { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; max-width: 300px; margin-top: 28px; opacity: 0; transform: translateY(18px) scale(.88); }
+  .ms-po-progress-wrap { display: flex; align-items: center; width: 100%; padding: 0 4px; }
+  .ms-po-progress-track { flex: 1; height: 7px; border-radius: 999px; background: rgba(167,139,250,.2); overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,.3); }
+  .ms-po-progress-fill { height: 100%; border-radius: 999px; width: 0; background: linear-gradient(90deg,#7C3AED,#06d6a0); transition: width .8s cubic-bezier(.34,1.2,.64,1); box-shadow: 0 0 10px rgba(124,58,237,.5); }
+  .ms-po-hint { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 22px; opacity: 0; transition: opacity .4s ease; }
+  .milestone-overlay.visible .ms-po-hint { opacity: 1; transition-delay: 2s; }
+
+  /* Text entry animations */
+  @keyframes msBadgeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes msEmojiIn { 0%{opacity:0;transform:scale(.3) rotate(-20deg)} 60%{opacity:1;transform:scale(1.25) rotate(8deg)} 80%{transform:scale(.93) rotate(-3deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
+  @keyframes msTitleIn { 0%{opacity:0;transform:scale(.8) translateY(14px)} 65%{opacity:1;transform:scale(1.04) translateY(-3px)} 100%{opacity:1;transform:scale(1) translateY(0)} }
+  @keyframes msSubIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes msXpIn { 0%{opacity:0;transform:translateY(18px) scale(.88)} 65%{opacity:1;transform:translateY(-4px) scale(1.05)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+
+  /* Confetti */
+  .ms-confetti { position: absolute; pointer-events: none; z-index: 120; border-radius: 2px; }
+  @keyframes msCFall {
+    0%  { opacity:1; transform: translate(var(--cx),var(--cy)) rotate(0deg) scale(1); }
+    85% { opacity:.8; }
+    100%{ opacity:0; transform: translate(calc(var(--cx) + var(--dx)),calc(var(--cy) + var(--fall,640px))) rotate(var(--spin)) scale(.4); }
+  }
+
+  /* Moon + Astronaut scene (dark mode only) */
+  .ms-moon-scene { position: absolute; bottom: 0; left: 0; right: 0; height: 240px; pointer-events: none; z-index: 5; overflow: hidden; }
+  :root[data-theme="light"] .ms-moon-scene { display: none; }
+  .ms-moon-wrap { position: absolute; bottom: -300px; left: 50%; width: 460px; height: 460px; margin-left: -230px; }
+  .ms-moon-svg { width: 100%; height: 100%; display: block; }
+  .ms-astronaut { position: absolute; left: calc(50% - 34px); bottom: 92px; width: 68px; height: 90px; animation: astroFloat 3s ease-in-out infinite; }
+  @keyframes astroFloat { 0%,100% { transform: rotate(-7deg) translateY(0px); } 50% { transform: rotate(-7deg) translateY(-8px); } }
+  .ms-astro-leg-l { animation: legDrift 3s ease-in-out infinite; transform-origin: 50% 0%; }
+  .ms-astro-leg-r { animation: legDrift 3s ease-in-out infinite 0.2s; transform-origin: 50% 0%; }
+  @keyframes legDrift { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }
+
+  /* Light-mode "Trên Đỉnh Mây" world scene */
+  .ms-light-scene { display: none; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.35s ease; }
+  :root[data-theme="light"] .ms-light-scene { display: block; }
+  .milestone-overlay.visible .ms-light-scene { opacity: 1; }
+
+  /* Light-mode overrides */
+  :root[data-theme="light"] .ms-po-bg {
+    background: linear-gradient(to bottom, rgba(237,233,254,.82) 0%, rgba(221,214,254,.5) 25%, rgba(254,243,199,.2) 60%, transparent 100%) !important;
+    opacity: 1 !important;
+  }
+  :root[data-theme="light"] .ms-po-aurora { opacity: 0 !important; animation: none !important; }
+  :root[data-theme="light"] .ms-po-stars { display: none !important; }
+  :root[data-theme="light"] .ms-shockwave { border-color: rgba(251,191,36,.72) !important; box-shadow: 0 0 16px rgba(251,191,36,.35) !important; }
+  :root[data-theme="light"] .ms-ring-outer { border-top-color: rgba(251,191,36,.70) !important; border-right-color: rgba(251,191,36,.20) !important; border-bottom-color: rgba(251,191,36,.45) !important; border-left-color: rgba(251,191,36,.10) !important; filter: drop-shadow(0 0 8px rgba(251,191,36,.48)) !important; }
+  :root[data-theme="light"] .ms-ring-mid { border-top-color: rgba(167,139,250,.65) !important; border-right-color: rgba(167,139,250,.18) !important; border-bottom-color: rgba(167,139,250,.40) !important; border-left-color: rgba(167,139,250,.08) !important; filter: drop-shadow(0 0 6px rgba(167,139,250,.38)) !important; }
+  :root[data-theme="light"] .ms-po-orb {
+    background: radial-gradient(circle at 38% 35%, rgba(255,250,205,.98) 0%, rgba(251,191,36,.92) 28%, rgba(124,58,237,.80) 65%, rgba(12,4,28,.75) 100%) !important;
+    box-shadow: 0 0 0 1.5px rgba(251,191,36,.45), 0 0 32px rgba(251,191,36,.85), 0 0 80px rgba(251,191,36,.38), 0 0 120px rgba(124,58,237,.28), inset 0 1px 0 rgba(255,255,255,.50) !important;
+    animation: msOrbGlowLight 2.2s ease-in-out infinite !important;
+  }
+  @keyframes msOrbGlowLight {
+    0%,100% { box-shadow: 0 0 0 1.5px rgba(251,191,36,.45), 0 0 32px rgba(251,191,36,.85), 0 0 80px rgba(251,191,36,.38), 0 0 120px rgba(124,58,237,.28), inset 0 1px 0 rgba(255,255,255,.50); transform: scale(1); }
+    50% { box-shadow: 0 0 0 1.5px rgba(251,191,36,.65), 0 0 52px rgba(251,191,36,1), 0 0 120px rgba(251,191,36,.52), 0 0 160px rgba(124,58,237,.38), inset 0 1px 0 rgba(255,255,255,.55); transform: scale(1.07); }
+  }
+  :root[data-theme="light"] .ms-po-badge { color: rgba(91,33,182,.78) !important; }
+  :root[data-theme="light"] .ms-po-big-emoji { filter: drop-shadow(0 0 28px rgba(251,191,36,.65)) !important; }
+  :root[data-theme="light"] .ms-po-title { background: linear-gradient(135deg, #fbbf24 0%, #c4b5fd 55%, #06d6a0 100%) !important; -webkit-background-clip: text !important; background-clip: text !important; -webkit-text-fill-color: transparent !important; }
+  :root[data-theme="light"] .ms-po-sub { color: rgba(30,27,75,.62) !important; }
+  :root[data-theme="light"] .ms-po-hint { color: rgba(30,27,75,.5) !important; }
+  :root[data-theme="light"] .ms-po-progress-track { background: rgba(30,27,75,.12) !important; }
+  :root[data-theme="light"] .ms-pp-kt { background: rgba(251,191,36,.95) !important; box-shadow: 0 0 12px rgba(251,191,36,.95), 0 0 28px rgba(251,191,36,.55) !important; }
+</style>
+</head>
+<body class="app" data-page="quiz" data-crumb="Quiz">
+  <div class="main">
+    <div class="content fade-in">
+
+      <!-- Discipline color field: ambient background wash per discipline -->
+      <div id="colorField"></div>
+
+      <div class="quiz-wrap">
+
+        <!-- Header: undo + counter -->
+        <header class="quiz-header">
+          <button class="undo-btn" id="undoBtn" title="Undo">&#8617;</button>
+          <div class="counter-wrap">
+            <span class="counter-current" id="qCur">1</span><span class="muted"> / </span><span class="muted" id="qTotal">30</span>
+          </div>
+        </header>
+
+        <!-- Story bar: 1 segment per question -->
+        <div class="story-bar" id="storyBar"></div>
+
+        <!-- Score chips -->
+        <div class="score-row">
+          <div class="score-chip agree"><span>&#10003;</span><span id="agreeCount">0</span></div>
+          <div class="score-chip strong"><span>&#9889;</span><span id="strongCount">0</span></div>
+          <div class="score-chip neutral"><span>&ndash;</span><span id="neutralCount">0</span></div>
+          <div class="score-chip disagree"><span>&#10005;</span><span id="disagreeCount">0</span></div>
+        </div>
+
+        <!-- Card arena -->
+        <div class="card-arena" id="cardArena">
+          <div class="dir-hint hint-right" id="hintRight" data-i18n="quiz.swipe.agree">AGREE &#10003;</div>
+          <div class="dir-hint hint-left"  id="hintLeft" data-i18n="quiz.swipe.disagree">DISAGREE &#10005;</div>
+          <div class="dir-hint hint-up"    id="hintUp" data-i18n="quiz.swipe.strong">STRONGLY AGREE &#9889;</div>
+          <div class="dir-hint hint-down"  id="hintDown" data-i18n="quiz.swipe.neutral">NEUTRAL &ndash;</div>
+          <div class="guide-arrow" id="guideArrow">
+            <svg class="guide-arrow-svg" id="guideArrowSvg" viewBox="0 0 120 48" aria-hidden="true">
+              <defs>
+                <linearGradient id="guideArrowGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0"    stop-color="currentColor" stop-opacity="0"/>
+                  <stop offset="0.45" stop-color="currentColor" stop-opacity="0.45"/>
+                  <stop offset="1"    stop-color="currentColor" stop-opacity="1"/>
+                </linearGradient>
+              </defs>
+              <path d="M6,18 L74,18 L74,5 L114,24 L74,43 L74,30 L6,30 Z" fill="url(#guideArrowGrad)" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="card-stack">
+            <div class="q-card back-2" id="backCard2"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
+            <div class="q-card back-1" id="backCard1"><div class="card-inner"><div class="card-placeholder">&#9679;&#9679;&#9679;</div></div></div>
+            <div class="q-card active-card" id="activeCard">
+              <div class="card-inner">
+                <p class="q-text" id="qText"></p>
+                <!-- Drag hint: only visible on Q1 -->
+                <div class="swipe-hint" id="swipeHint">
+                  <span data-i18n="quiz.hint.drag">Drag to answer</span>
+                  <span class="hint-arrows">&#8592; &#8594;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.quiz-wrap -->
+    </div><!-- /.content -->
+  </div><!-- /.main -->
+
+  <!-- ░░ MILESTONE OVERLAY — Planet Burst (ported from mobile) ░░ -->
+  <div class="milestone-overlay" id="milestoneOverlay">
+    <!-- Hidden legacy refs (kept so any old code stays valid) -->
+    <div class="ms-legacy">
+      <div id="milestoneEmoji"></div>
+      <div id="milestoneText"></div>
+      <div id="milestoneSub"></div>
+    </div>
+
+    <!-- Space bg + aurora + stars -->
+    <div class="ms-po-bg"></div>
+    <div class="ms-po-aurora" id="msPlanetAurora"></div>
+    <div class="ms-po-stars" id="msPlanetStars"></div>
+
+    <!-- Light mode: "Trên Đỉnh Mây" world scene -->
+    <div class="ms-light-scene" id="msPlanetLightScene">
+      <svg width="100%" height="100%" viewBox="0 0 120 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="msLsGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#4C1D95"/>
+            <stop offset="22%"  stop-color="#7C3AED"/>
+            <stop offset="45%"  stop-color="#C026D3"/>
+            <stop offset="65%"  stop-color="#EA580C"/>
+            <stop offset="82%"  stop-color="#F59E0B"/>
+            <stop offset="100%" stop-color="#FEF3C7"/>
+          </linearGradient>
+          <radialGradient id="msLsAtmos" cx="50%" cy="42%">
+            <stop offset="0%"   stop-color="#FFFBEB" stop-opacity=".9"/>
+            <stop offset="20%"  stop-color="#FDE68A" stop-opacity=".5"/>
+            <stop offset="55%"  stop-color="#F59E0B" stop-opacity=".15"/>
+            <stop offset="100%" stop-color="#F97316" stop-opacity="0"/>
+          </radialGradient>
+          <linearGradient id="msOceanGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#FDE68A" stop-opacity=".55"/>
+            <stop offset="22%"  stop-color="#F59E0B" stop-opacity=".45"/>
+            <stop offset="45%"  stop-color="#EA580C" stop-opacity=".35"/>
+            <stop offset="68%"  stop-color="#C026D3" stop-opacity=".25"/>
+            <stop offset="100%" stop-color="#6D28D9" stop-opacity=".18"/>
+          </linearGradient>
+        </defs>
+        <rect width="120" height="220" fill="url(#msLsGrad)"/>
+        <ellipse cx="60" cy="92" rx="60" ry="60" fill="url(#msLsAtmos)"/>
+        <circle cx="60" cy="92" r="28" fill="none" stroke="rgba(255,251,235,.11)" stroke-width="3"/>
+        <circle cx="7"   cy="16" r="1.1" fill="white" opacity=".85"/>
+        <circle cx="24"  cy="14" r=".7"  fill="white" opacity=".6"/>
+        <circle cx="42"  cy="17" r=".5"  fill="white" opacity=".45"/>
+        <circle cx="58"  cy="15" r=".9"  fill="white" opacity=".72"/>
+        <circle cx="72"  cy="18" r=".6"  fill="white" opacity=".5"/>
+        <circle cx="89"  cy="14" r="1.0" fill="white" opacity=".78"/>
+        <circle cx="103" cy="17" r=".5"  fill="white" opacity=".4"/>
+        <circle cx="115" cy="15" r=".8"  fill="white" opacity=".65"/>
+        <circle cx="16"  cy="25" r=".9"  fill="white" opacity=".68"/>
+        <circle cx="47"  cy="26" r=".7"  fill="white" opacity=".55"/>
+        <circle cx="63"  cy="29" r="1.1" fill="white" opacity=".8"/>
+        <circle cx="94"  cy="28" r=".8"  fill="white" opacity=".62"/>
+        <circle cx="118" cy="30" r=".9"  fill="white" opacity=".58"/>
+        <circle cx="38"  cy="37" r=".8"  fill="white" opacity=".48"/>
+        <circle cx="83"  cy="44" r=".9"  fill="white" opacity=".45"/>
+        <rect x="0" y="162" width="120" height="58" fill="url(#msOceanGrad)"/>
+        <ellipse cx="60" cy="156" rx="52" ry="14" fill="rgba(253,224,71,.14)"/>
+        <ellipse cx="60" cy="159" rx="36" ry="8"  fill="rgba(251,191,36,.2)"/>
+        <ellipse cx="60" cy="161" rx="22" ry="4"  fill="rgba(252,211,77,.28)"/>
+        <circle cx="60" cy="167" r="26" fill="rgba(254,240,138,.1)"/>
+        <circle cx="60" cy="167" r="18" fill="rgba(253,224,71,.18)"/>
+        <circle cx="60" cy="167" r="13" fill="rgba(251,191,36,.26)"/>
+        <path d="M 49,162 A 12,12 0 0 1 71,162 Z" fill="rgba(254,240,138,.92)"/>
+        <path d="M 51,162 A 10,10 0 0 1 69,162 Z" fill="rgba(253,224,71,.88)"/>
+        <path d="M 54,162 A 7,7 0 0 1 66,162 Z"  fill="#FDE047"/>
+        <line x1="60"   y1="154" x2="60"   y2="146" stroke="rgba(251,191,36,.5)"  stroke-width="1.4" stroke-linecap="round"/>
+        <line x1="0"  y1="162" x2="46"  y2="162" stroke="rgba(255,251,235,.45)" stroke-width=".9"/>
+        <line x1="74" y1="162" x2="120" y2="162" stroke="rgba(255,251,235,.45)" stroke-width=".9"/>
+        <line x1="46" y1="162" x2="74"  y2="162" stroke="rgba(254,240,138,.9)"  stroke-width="1.3"/>
+        <ellipse cx="60" cy="164.5" rx="18" ry=".9"  fill="rgba(253,224,71,.42)"/>
+        <ellipse cx="60" cy="167"   rx="11" ry=".65" fill="rgba(251,191,36,.28)"/>
+        <path d="M 0,165 C 18,164.2 36,165.8 54,165 C 72,164.2 90,165.8 108,165 C 114,164.7 118,165.2 120,165" fill="none" stroke="rgba(255,248,220,.22)" stroke-width=".7"/>
+        <path d="M 0,169 C 15,168.3 32,170 50,169 C 68,168.2 86,170 104,169 C 112,168.6 117,169.3 120,169" fill="none" stroke="rgba(255,244,210,.16)" stroke-width=".6"/>
+        <path d="M 0,176 C 20,175.3 42,176.8 62,176 C 82,175.2 102,176.8 120,176" fill="none" stroke="rgba(200,134,10,.12)" stroke-width=".5"/>
+      </svg>
+    </div>
+
+    <!-- Planet system -->
+    <div class="ms-po-system" id="msPlanetSystem">
+      <div class="ms-shockwave ms-sw1" id="msSw1"></div>
+      <div class="ms-shockwave ms-sw2" id="msSw2"></div>
+      <div class="ms-shockwave ms-sw3" id="msSw3"></div>
+      <div class="ms-po-ring ms-ring-outer"></div>
+      <div class="ms-po-ring ms-ring-mid"></div>
+      <div class="ms-po-orb">
+        <span class="ms-po-orb-emoji" id="msPlanetOrbEmoji">✨</span>
+      </div>
+      <div class="ms-bp-anchor">
+        <div class="ms-bp" id="msBp0" style="background:#8b5cf6;box-shadow:0 0 18px rgba(139,92,246,.95),0 0 40px rgba(139,92,246,.5)"></div>
+        <div class="ms-bp" id="msBp1" style="background:#06d6a0;box-shadow:0 0 18px rgba(6,214,160,.95),0 0 40px rgba(6,214,160,.5)"></div>
+        <div class="ms-bp" id="msBp2" style="background:#3b82f6;box-shadow:0 0 18px rgba(59,130,246,.95),0 0 40px rgba(59,130,246,.5)"></div>
+        <div class="ms-bp" id="msBp3" style="background:#f59e0b;box-shadow:0 0 18px rgba(245,158,11,.95),0 0 40px rgba(245,158,11,.5)"></div>
+        <div class="ms-bp" id="msBp4" style="background:#a855f7;box-shadow:0 0 18px rgba(168,85,247,.95),0 0 40px rgba(168,85,247,.5)"></div>
+        <div class="ms-bp" id="msBp5" style="background:#f43f5e;box-shadow:0 0 18px rgba(244,63,94,.95),0 0 40px rgba(244,63,94,.5)"></div>
+      </div>
+      <div class="ms-po-orbit ms-o1"><div class="ms-po-particle ms-pp-kt"></div><span class="ms-orb-label" data-i18n="quiz.orbit_eng">Eng</span></div>
+      <div class="ms-po-orbit ms-o2"><div class="ms-po-particle ms-pp-yt"></div><span class="ms-orb-label" data-i18n="quiz.orbit_health">Health</span></div>
+      <div class="ms-po-orbit ms-o3"><div class="ms-po-particle ms-pp-nv"></div><span class="ms-orb-label" data-i18n="quiz.orbit_hum">Hum</span></div>
+      <div class="ms-po-orbit ms-o4"><div class="ms-po-particle ms-pp-nn"></div><span class="ms-orb-label" data-i18n="quiz.orbit_agri">Agri</span></div>
+      <div class="ms-po-orbit ms-o5"><div class="ms-po-particle ms-pp-xh"></div><span class="ms-orb-label" data-i18n="quiz.orbit_social">Social</span></div>
+      <div class="ms-po-orbit ms-o6"><div class="ms-po-particle ms-pp-tn"></div><span class="ms-orb-label" data-i18n="quiz.orbit_sci">Sci</span></div>
+    </div>
+
+    <!-- Milestone text -->
+    <div class="ms-po-text">
+      <span class="ms-po-badge"     id="msPlanetBadge" data-i18n="quiz.ms_label">MILESTONE</span>
+      <div class="ms-po-big-emoji"  id="msPlanetBigEmoji">✨</div>
+      <h2  class="ms-po-title"      id="msPlanetTitle">1/3 Done!</h2>
+      <p   class="ms-po-sub"        id="msPlanetSub">Keep going! 💪</p>
+      <div class="ms-po-xp" id="msPlanetXp">
+        <div class="ms-po-progress-wrap">
+          <div class="ms-po-progress-track">
+            <div class="ms-po-progress-fill" id="msPlanetProgressFill"></div>
+          </div>
+        </div>
+      </div>
+      <div class="ms-po-hint" data-i18n="quiz.ms_click">Click to continue →</div>
+    </div>
+
+    <!-- Moon + Astronaut (dark mode only) -->
+    <div class="ms-moon-scene" aria-hidden="true">
+      <div class="ms-moon-wrap">
+        <svg class="ms-moon-svg" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="moonGrad" cx="32%" cy="28%" r="72%">
+              <stop offset="0%"   stop-color="#eceef5"/>
+              <stop offset="28%"  stop-color="#c8ccda"/>
+              <stop offset="58%"  stop-color="#92979f"/>
+              <stop offset="85%"  stop-color="#62666e"/>
+              <stop offset="100%" stop-color="#45484f"/>
+            </radialGradient>
+            <radialGradient id="cFloor" cx="50%" cy="50%">
+              <stop offset="0%"   stop-color="#52565e"/>
+              <stop offset="75%"  stop-color="#6a6e78"/>
+              <stop offset="100%" stop-color="#80848e"/>
+            </radialGradient>
+            <radialGradient id="moonShadow" cx="78%" cy="52%" r="55%">
+              <stop offset="0%"   stop-color="rgba(10,10,28,0.42)"/>
+              <stop offset="100%" stop-color="rgba(10,10,28,0)"/>
+            </radialGradient>
+            <radialGradient id="rimLight" cx="50%" cy="8%" r="60%">
+              <stop offset="0%"   stop-color="rgba(139,92,246,0.55)"/>
+              <stop offset="100%" stop-color="rgba(139,92,246,0)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="90" cy="90" r="87" fill="url(#moonGrad)"/>
+          <circle cx="90" cy="90" r="87" fill="url(#moonShadow)"/>
+          <circle cx="50"  cy="62"  r="18" fill="none" stroke="rgba(200,205,215,0.22)" stroke-width="2.5"/>
+          <circle cx="50"  cy="62"  r="16" fill="url(#cFloor)"/>
+          <ellipse cx="46" cy="58"  rx="8"  ry="4"  fill="rgba(255,255,255,0.06)"/>
+          <circle cx="112" cy="44"  r="13" fill="none" stroke="rgba(185,190,200,0.2)" stroke-width="2"/>
+          <circle cx="112" cy="44"  r="11" fill="url(#cFloor)"/>
+          <circle cx="36"  cy="116" r="14" fill="none" stroke="rgba(185,190,200,0.18)" stroke-width="2"/>
+          <circle cx="36"  cy="116" r="12" fill="url(#cFloor)"/>
+          <circle cx="138" cy="100" r="7"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.15)" stroke-width="1.2"/>
+          <circle cx="74"  cy="130" r="6"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.12)" stroke-width="1"/>
+          <circle cx="152" cy="62"  r="5"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.12)" stroke-width="0.8"/>
+          <circle cx="25"  cy="82"  r="5"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.10)" stroke-width="0.8"/>
+          <circle cx="96"  cy="145" r="6"  fill="url(#cFloor)" stroke="rgba(180,185,195,0.10)" stroke-width="0.8"/>
+          <ellipse cx="44" cy="55" rx="22" ry="32" fill="rgba(255,255,255,0.055)" transform="rotate(-18,44,55)"/>
+          <circle cx="90" cy="90" r="87" fill="url(#rimLight)"/>
+          <path d="M 16,90 A 74,74 0 0,1 164,90" fill="none" stroke="rgba(139,92,246,0.45)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 30,90 A 60,60 0 0,1 150,90" fill="none" stroke="rgba(167,139,250,0.25)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="90" cy="90" r="87" fill="none" stroke="rgba(139,92,246,0.12)" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="ms-astronaut" id="msAstronaut">
+        <svg class="ms-astro-svg" viewBox="0 0 48 64" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="asG1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#3B82F6"/>
+            </linearGradient>
+            <linearGradient id="asG2" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#6D28D9"/><stop offset="100%" stop-color="#1D4ED8"/>
+            </linearGradient>
+            <linearGradient id="asG3" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#5B21B6"/><stop offset="100%" stop-color="#312E81"/>
+            </linearGradient>
+            <linearGradient id="asGS" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.30)"/><stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+          </defs>
+          <rect x="5" y="32" width="7" height="12" rx="3.5" fill="url(#asG2)" opacity="0.65"/>
+          <ellipse cx="8.5" cy="45.5" rx="4.5" ry="3.8" fill="#4C1D95" opacity="0.65"/>
+          <rect x="13" y="30" width="22" height="19" rx="7.5" fill="url(#asG1)"/>
+          <rect x="13" y="30" width="22" height="10" rx="7.5" fill="url(#asGS)"/>
+          <rect x="13" y="41" width="22" height="2" fill="rgba(255,255,255,0.2)"/>
+          <rect x="35" y="31" width="7" height="12" rx="3.5" fill="url(#asG1)"/>
+          <rect x="35" y="31" width="7" height="6" rx="3.5" fill="url(#asGS)"/>
+          <ellipse cx="38.5" cy="44.5" rx="4.8" ry="4" fill="url(#asG2)"/>
+          <ellipse cx="36.5" cy="42.5" rx="1.5" ry="0.9" fill="rgba(255,255,255,0.25)"/>
+          <rect x="18" y="28" width="13" height="3" rx="1.5" fill="#7C3AED"/>
+          <rect x="18" y="28" width="13" height="1.5" rx="0.75" fill="rgba(255,255,255,0.2)"/>
+          <circle cx="24" cy="15" r="14.5" fill="white"/>
+          <circle cx="24" cy="15" r="13.8" fill="none" stroke="rgba(196,181,253,0.35)" stroke-width="0.6"/>
+          <ellipse cx="18.5" cy="6" rx="7.5" ry="4" fill="rgba(255,255,255,0.35)"/>
+          <ellipse cx="25" cy="16.5" rx="10" ry="9.5" fill="#0c0b2e"/>
+          <ellipse cx="25" cy="16.5" rx="10" ry="9.5" fill="rgba(99,60,220,0.18)"/>
+          <ellipse cx="25" cy="16.5" rx="10" ry="9.5" fill="none" stroke="rgba(139,92,246,0.5)" stroke-width="0.8"/>
+          <ellipse cx="19.5" cy="10.5" rx="4" ry="2.2" fill="rgba(255,255,255,0.22)" transform="rotate(-20,19.5,10.5)"/>
+          <ellipse cx="20.5" cy="17" rx="3.8" ry="4.2" fill="white"/>
+          <ellipse cx="29.5" cy="17" rx="3.8" ry="4.2" fill="white"/>
+          <circle cx="22.0" cy="15.6" r="2.5" fill="#1E1B4B"/>
+          <circle cx="31.0" cy="15.6" r="2.5" fill="#1E1B4B"/>
+          <circle cx="23.0" cy="14.4" r="1.1" fill="white"/>
+          <circle cx="32.0" cy="14.4" r="1.1" fill="white"/>
+          <path d="M 17.5,11.5 Q 20.5,9.8 23.5,11.5" fill="none" stroke="#4338CA" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 26.5,11.5 Q 29.5,9.8 32.5,11.5" fill="none" stroke="#4338CA" stroke-width="1.2" stroke-linecap="round"/>
+          <path d="M 18.5,22.5 Q 25,27.5 31.5,22.5" fill="none" stroke="#3730A3" stroke-width="1.3" stroke-linecap="round"/>
+          <ellipse cx="16.5" cy="21.5" rx="3.2" ry="1.8" fill="rgba(251,113,133,0.38)"/>
+          <ellipse cx="33.5" cy="21.5" rx="3.2" ry="1.8" fill="rgba(251,113,133,0.38)"/>
+          <path d="M 33,8 L 33.8,9.8 L 35.6,10.6 L 33.8,11.4 L 33,13.2 L 32.2,11.4 L 30.4,10.6 L 32.2,9.8 Z" fill="rgba(253,224,71,0.85)" />
+          <line x1="32" y1="2.5" x2="30" y2="5.5" stroke="#A78BFA" stroke-width="1.2" stroke-linecap="round"/>
+          <circle cx="32.5" cy="1.8" r="2" fill="#C4B5FD"/>
+          <circle cx="32.5" cy="1.8" r="0.85" fill="white" opacity="0.9"/>
+          <rect x="15" y="49" width="8" height="11" rx="3.5" fill="url(#asG2)" opacity="0.75" class="ms-astro-leg-r"/>
+          <rect x="24.5" y="49" width="9" height="12" rx="4" fill="url(#asG1)" class="ms-astro-leg-l"/>
+          <rect x="12" y="58" width="14" height="5.5" rx="2.75" fill="url(#asG3)" opacity="0.8"/>
+          <rect x="21.5" y="59.5" width="16" height="6" rx="3" fill="url(#asG3)"/>
+          <rect x="22.5" y="60" width="9" height="2" rx="1" fill="rgba(255,255,255,0.22)"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
+  <script src="../../../shared/scripts/data/disc-config.js"></script>
+  <script src="../../../shared/scripts/data/questions-static.js"></script>
+  <script>
+    /* i18n helper */
+    function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
+
+    /* aliases — keep existing code working without changes */
+    var DISC_COLORS = window.BD_DISC_COLORS;
+    var DISC_NAMES  = window.BD_DISC_NAMES;
+    var QUESTIONS   = window.BD_QUESTIONS_STATIC;
+
+
+    /* Resume từ tiến độ đã lưu (chuyển tab sidebar rồi quay lại không bị reset) */
+    var idx = (function () {
+      var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+      return (isNaN(p) || p < 0 || p >= QUESTIONS.length) ? 0 : p;
+    })();
+    var answerLog = (function () {
+      try { var a = JSON.parse(localStorage.getItem('quizAnswerLog') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+    })();
+    var counts = (function () {
+      try {
+        var c = JSON.parse(localStorage.getItem('quizCounts') || 'null');
+        if (c && typeof c === 'object') return { right:c.right||0, up:c.up||0, down:c.down||0, left:c.left||0 };
+      } catch (e) {}
+      return { right:0, up:0, down:0, left:0 };
+    })();
+    /* Fresh start (idx 0 ⇒ no answers yet): keep score chips + answer log in
+       sync even if a reset cleared progress but left stale counts behind. */
+    if (idx === 0) { counts = { right:0, up:0, down:0, left:0 }; answerLog = []; }
+    /* Where this session started — used to avoid re-firing a milestone the user
+       has already passed when resuming after an AI-loading checkpoint. */
+    var START_IDX = idx;
+    var $ = function (id) { return document.getElementById(id); };
+
+    function isLight() { return document.documentElement.getAttribute('data-theme') === 'light'; }
+
+    function styleCard(el, disc) {
+      var c = DISC_COLORS[disc];
+      if (isLight()) {
+        el.style.background = c.lightBase;
+        el.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.6), 0 30px 80px ' + c.lightGlow;
+        el.style.borderColor = 'rgba(255,255,255,0.75)';
+      } else {
+        el.style.background =
+          'radial-gradient(ellipse 90% 80% at 30% 35%, ' + c.glow + ' 0%, transparent 70%), ' + c.dark;
+        el.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.07), 0 30px 80px ' + c.glow;
+        el.style.borderColor = 'rgba(255,255,255,0.10)';
+      }
+    }
+
+    function setAurora(disc) {
+      var c = DISC_COLORS[disc], r = document.documentElement.style;
+      r.setProperty('--blob-p1', c.glow);
+      r.setProperty('--blob-p2', 'rgba(59,130,246,0.3)');
+      r.setProperty('--blob-p4', c.glow);
+    }
+
+    function buildStoryBar() {
+      var bar = $('storyBar');
+      var html = '';
+      for (var i = 0; i < QUESTIONS.length; i++) html += '<div class="story-seg"></div>';
+      bar.innerHTML = html;
+    }
+
+    function render() {
+      var q = QUESTIONS[idx];
+      if (!q) return finish();
+      $('qCur').textContent = idx + 1;
+      var qKey = 'quiz.q.' + q.id;
+      var qTr = t(qKey);
+      $('qText').textContent = (qTr && qTr !== qKey) ? qTr : q.text;
+      styleCard($('activeCard'), q.disc);
+      if (QUESTIONS[idx + 1]) styleCard($('backCard1'), QUESTIONS[idx + 1].disc);
+      if (QUESTIONS[idx + 2]) styleCard($('backCard2'), QUESTIONS[idx + 2].disc);
+      setAurora(q.disc);
+      /* story bar: 1 segment per question */
+      var segs = $('storyBar').children;
+      for (var i = 0; i < segs.length; i++) segs[i].className = 'story-seg' + (i < idx ? ' done' : (i === idx ? ' active' : ''));
+      /* counts */
+      $('agreeCount').textContent = counts.right;
+      $('strongCount').textContent = counts.up;
+      $('neutralCount').textContent = counts.down;
+      $('disagreeCount').textContent = counts.left;
+      /* Static swipe hint only on the very first question */
+      var sh = $('swipeHint'); if (sh) sh.classList.toggle('hidden', idx > 0);
+      localStorage.setItem('quizProgress', idx);
+      localStorage.setItem('quizCounts', JSON.stringify(counts));
+      localStorage.setItem('quizAnswerLog', JSON.stringify(answerLog));
+    }
+
+    var swipeScrollLock = { on: false, x: 0, y: 0 };
+    function restoreSwipeScroll() {
+      if (!swipeScrollLock.on) return;
+      var x = window.pageXOffset || document.documentElement.scrollLeft || 0;
+      var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      if (x !== swipeScrollLock.x || y !== swipeScrollLock.y) {
+        window.scrollTo(swipeScrollLock.x, swipeScrollLock.y);
+      }
+    }
+    function lockSwipeScroll() {
+      if (swipeScrollLock.on) return;
+      swipeScrollLock.on = true;
+      swipeScrollLock.x = window.pageXOffset || document.documentElement.scrollLeft || 0;
+      swipeScrollLock.y = window.pageYOffset || document.documentElement.scrollTop || 0;
+      window.addEventListener('scroll', restoreSwipeScroll, { passive: true });
+    }
+    function unlockSwipeScroll() {
+      if (!swipeScrollLock.on) return;
+      window.removeEventListener('scroll', restoreSwipeScroll);
+      restoreSwipeScroll();
+      swipeScrollLock.on = false;
+    }
+
+    /* Fling target: viewport-relative so the card always clears the whole
+       screen regardless of window width (fixed px left it stuck mid-screen
+       on wide desktops). Mirrors mobile's full fly-off. */
+    function flingTransform(dir) {
+      var w = window.innerWidth, h = window.innerHeight;
+      switch (dir) {
+        case 'right': return 'translate(' + (w + 240) + 'px,-60px) rotate(20deg)';
+        case 'left':  return 'translate(' + (-(w + 240)) + 'px,-60px) rotate(-20deg)';
+        case 'up':    return 'translate(20px,' + (-(h + 240)) + 'px) rotate(5deg)';
+        case 'down':  return 'translate(0,' + (h + 240) + 'px) rotate(0deg)';
+      }
+      return '';
+    }
+
+    function answer(dir) {
+      var card = $('activeCard');
+      if (card.dataset.busy) return;
+      stopGuide();
+      lockSwipeScroll();
+      card.dataset.busy = '1';
+      counts[dir]++; answerLog.push(dir);
+      showHint(dir, true); setTimeout(function () { showHint(dir, false); }, 280);
+      card.classList.add('fling');
+      card.style.transform = flingTransform(dir);
+      card.style.opacity = '0';
+      setTimeout(function () {
+        idx++;
+        /* Snap the card straight to center with NO transition, then load the
+           next question — so the new card appears in the middle instead of
+           sliding back in from the throw direction (mobile parity). */
+        card.classList.remove('fling');
+        card.style.transition = 'none';
+        card.style.transform = '';
+        card.style.opacity = '';
+        void card.offsetWidth; /* force reflow so the snap is instant */
+        card.style.transition = ''; /* restore base transition for next drag/fling */
+        unlockSwipeScroll();
+        delete card.dataset.busy;
+        /* Persist before any checkpoint navigation so progress survives. */
+        localStorage.setItem('quizProgress', idx);
+        localStorage.setItem('quizCounts', JSON.stringify(counts));
+        localStorage.setItem('quizAnswerLog', JSON.stringify(answerLog));
+        /* Every 10 answers: Planet-Burst milestone → AI loading screen.
+           START_IDX guard prevents re-firing when resuming past a checkpoint. */
+        if ((idx === 10 || idx === 20 || idx === 30) && START_IDX < idx) {
+          localStorage.setItem('quizMilestone', idx);
+          showPlanetMilestone(idx / 10, function () { goLoading(idx / 10); });
+          return;
+        }
+        if (idx >= 30) { localStorage.setItem('quizMilestone', 30); return finish(); }
+        render();
+      }, 430);
+    }
+
+    /* Navigate to the AI loading screen for the given stage (1, 2 or 3). */
+    function goLoading(stage) {
+      document.body.style.transition = 'opacity .3s ease';
+      document.body.style.opacity = '0';
+      setTimeout(function () { location.href = '../../onboarding/loading/?stage=' + stage; }, 300);
+    }
+
+    function finish() { goLoading(3); }
+
+    /* ── Planet Burst Milestone Engine (ported from mobile) ───────── */
+    var MS_COPY = {
+      1: { emoji: '🔥', badge: t('quiz.ms_badge1'), title: t('quiz.ms_title1'), sub: t('quiz.ms_sub1') },
+      2: { emoji: '🚀', badge: t('quiz.ms_badge2'), title: t('quiz.ms_title2'), sub: t('quiz.ms_sub2') },
+      3: { emoji: '🏆', badge: t('quiz.ms_badge3'), title: t('quiz.ms_title3'), sub: t('quiz.ms_sub3') }
+    };
+    var _msTimer = null;
+
+    /* One-time twinkling starfield */
+    (function initStars() {
+      var starsEl = $('msPlanetStars');
+      if (!starsEl) return;
+      for (var i = 0; i < 70; i++) {
+        var s = document.createElement('div');
+        var sz = Math.random() > 0.8 ? 2 : 1;
+        s.style.cssText = 'position:absolute;border-radius:50%;'
+          + 'width:' + sz + 'px;height:' + sz + 'px;'
+          + 'left:' + (Math.random()*100).toFixed(1) + '%;'
+          + 'top:'  + (Math.random()*100).toFixed(1) + '%;'
+          + 'background:rgba(255,255,255,' + (0.3+Math.random()*0.7).toFixed(2) + ');'
+          + 'animation:msStarTwinkle ' + (2+Math.random()*3).toFixed(1) + 's ease-in-out '
+          + (Math.random()*3).toFixed(1) + 's infinite;';
+        starsEl.appendChild(s);
+      }
+    })();
+
+    function _msSet(id, v) { var el = $(id); if (el) el.textContent = v; }
+    function _msAnim(id, a) { var el = $(id); if (el) el.style.animation = a; }
+
+    function showPlanetMilestone(stage, cb) {
+      var ov = $('milestoneOverlay'), sys = $('msPlanetSystem');
+      if (!ov || !sys) { cb && cb(); return; }
+      var c = MS_COPY[stage] || MS_COPY[1];
+
+      _msReset();
+
+      _msSet('msPlanetOrbEmoji', c.emoji);
+      _msSet('msPlanetBigEmoji', c.emoji);
+      _msSet('msPlanetBadge',    c.badge);
+      _msSet('msPlanetTitle',    c.title);
+      _msSet('msPlanetSub',      c.sub);
+
+      var total = QUESTIONS.length || 30;
+      var pct   = Math.round(idx / total * 100);
+      var fill  = $('msPlanetProgressFill');
+      if (fill) { fill.style.transition = 'none'; fill.style.width = '0'; void fill.offsetWidth; fill.style.transition = ''; setTimeout(function () { fill.style.width = pct + '%'; }, 120); }
+
+      ov.classList.add('visible');
+
+      setTimeout(function () { sys.style.animation = 'msSysIn .6s cubic-bezier(.34,1.25,.64,1) forwards'; }, 80);
+      setTimeout(function () {
+        ['msSw1','msSw2','msSw3'].forEach(function (id, i) {
+          var el = $(id); if (el) el.style.animation = 'msShockOut ' + (.65+i*.1) + 's ease-out ' + (i*100) + 'ms forwards';
+        });
+        for (var b = 0; b < 6; b++) (function (k) {
+          var bp = $('msBp' + k); if (bp) bp.style.animation = 'msBpFly' + k + ' .8s cubic-bezier(.34,1.1,.64,1) ' + (k*28) + 'ms forwards';
+        })(b);
+      }, 320);
+      setTimeout(function () { _msConfetti(ov); }, 360);
+      setTimeout(function () {
+        ov.querySelectorAll('.ms-po-orbit').forEach(function (el, i) { setTimeout(function () { el.style.opacity = '1'; }, i * 45); });
+      }, 580);
+      setTimeout(function () { _msAnim('msPlanetBadge',    'msBadgeIn .4s ease forwards'); }, 640);
+      setTimeout(function () { _msAnim('msPlanetBigEmoji', 'msEmojiIn .6s cubic-bezier(.34,1.3,.64,1) forwards'); }, 780);
+      setTimeout(function () { _msAnim('msPlanetTitle',    'msTitleIn .55s cubic-bezier(.34,1.15,.64,1) forwards'); }, 960);
+      setTimeout(function () { _msAnim('msPlanetSub',      'msSubIn .4s ease forwards'); }, 1160);
+      setTimeout(function () { _msAnim('msPlanetXp',       'msXpIn .55s cubic-bezier(.34,1.2,.64,1) forwards'); }, 1340);
+
+      _msTimer = setTimeout(function () { _msDismiss(ov, cb); }, 4300);
+      ov.addEventListener('click', function _tap() {
+        ov.removeEventListener('click', _tap);
+        clearTimeout(_msTimer);
+        _msDismiss(ov, cb);
+      }, { once: true });
+    }
+
+    function _msDismiss(ov, cb) {
+      cb && cb();   /* fire navigation first; overlay stays up through the fade-out */
+    }
+
+    function _msReset() {
+      var sys = $('msPlanetSystem');
+      if (sys) { sys.style.animation = 'none'; sys.style.opacity = '0'; sys.style.transform = 'scale(0.2) rotate(-15deg)'; void sys.offsetWidth; }
+      ['msSw1','msSw2','msSw3'].forEach(function (id) { var el = $(id); if (el) { el.style.animation = 'none'; void el.offsetWidth; } });
+      for (var b = 0; b < 6; b++) { var bp = $('msBp' + b); if (bp) { bp.style.animation = 'none'; void bp.offsetWidth; } }
+      var ov = $('milestoneOverlay');
+      if (ov) {
+        ov.querySelectorAll('.ms-po-orbit').forEach(function (el) { el.style.opacity = '0'; el.style.transition = 'none'; void el.offsetWidth; el.style.transition = ''; });
+        ov.querySelectorAll('.ms-confetti').forEach(function (el) { el.remove(); });
+      }
+      ['msPlanetBadge','msPlanetBigEmoji','msPlanetTitle','msPlanetSub','msPlanetXp'].forEach(function (id) { var el = $(id); if (el) { el.style.animation = 'none'; void el.offsetWidth; } });
+      var pf = $('msPlanetProgressFill');
+      if (pf) { pf.style.transition = 'none'; pf.style.width = '0'; void pf.offsetWidth; pf.style.transition = ''; }
+    }
+
+    var _MS_CONFETTI = ['#a78bfa','#06d6a0','#fbbf24','#f472b6','#60a5fa','#fb7185','#34d399'];
+    function _msConfetti(container) {
+      var fw = container.offsetWidth, fh = container.offsetHeight;
+      var waves = [
+        { count: 50, cyMin: 0,       cyMax: fh*.20, baseDelay: 0.00 },
+        { count: 44, cyMin: fh*.15,  cyMax: fh*.40, baseDelay: 0.08 },
+        { count: 40, cyMin: fh*.35,  cyMax: fh*.60, baseDelay: 0.16 },
+        { count: 32, cyMin: fh*.55,  cyMax: fh*.78, baseDelay: 0.24 },
+        { count: 24, cyMin: 0,       cyMax: fh*.70, baseDelay: 0.40 }
+      ];
+      waves.forEach(function (w) {
+        for (var i = 0; i < w.count; i++) (function () {
+          var el = document.createElement('div');
+          el.className = 'ms-confetti';
+          var cx = (Math.random()*fw*1.15 - fw*.08).toFixed(0)+'px';
+          var cy = (w.cyMin + Math.random()*(w.cyMax - w.cyMin)).toFixed(0)+'px';
+          var dx = (Math.random()*320-160).toFixed(0)+'px';
+          var fall = (480 + Math.random()*380).toFixed(0)+'px';
+          var spin = (Math.random()*1080-540).toFixed(0)+'deg';
+          var dur = (.55+Math.random()*1.5).toFixed(2)+'s';
+          var delay = (w.baseDelay + Math.random()*.55).toFixed(2)+'s';
+          var color = _MS_CONFETTI[Math.floor(Math.random()*_MS_CONFETTI.length)];
+          var size = (4+Math.random()*9).toFixed(0)+'px';
+          el.style.cssText = 'left:0;top:0;width:'+size+';height:'+size
+            +';border-radius:'+(Math.random()>.4?'50%':'2px')
+            +';background:'+color
+            +';--cx:'+cx+';--cy:'+cy+';--dx:'+dx+';--spin:'+spin+';--fall:'+fall
+            +';animation:msCFall '+dur+' ease-out '+delay+' forwards;opacity:0;';
+          container.appendChild(el);
+          setTimeout(function () { el.remove(); }, (parseFloat(dur)+parseFloat(delay)+.6)*1000);
+        })();
+      });
+    }
+
+    function showHint(dir, on) {
+      var map = { right:'hintRight', left:'hintLeft', up:'hintUp', down:'hintDown' };
+      $(map[dir]).classList.toggle('visible', on);
+    }
+
+    /* Undo (mobile parity) */
+    function undo() {
+      if (!answerLog.length || idx === 0) return;
+      var last = answerLog.pop();
+      counts[last]--; idx--;
+      render();
+    }
+    $('undoBtn').onclick = undo;
+
+    /* Action buttons */
+    document.querySelectorAll('.action-btn').forEach(function (b) {
+      b.onclick = function () { answer(b.dataset.dir); };
+      b.onmouseenter = function () { showHint(b.dataset.dir, true); };
+      b.onmouseleave = function () { showHint(b.dataset.dir, false); };
+    });
+
+    /* Keyboard */
+    document.addEventListener('keydown', function (e) {
+      var k = { ArrowRight:'right', ArrowLeft:'left', ArrowUp:'up', ArrowDown:'down' }[e.key];
+      if (k) { e.preventDefault(); answer(k); }
+      if (e.key === 'z' || e.key === 'Z') undo();
+    });
+
+    /* Mouse drag (swipe parity) */
+    (function drag() {
+      var card = $('activeCard'), sx = 0, sy = 0, dx = 0, dy = 0, on = false;
+      card.addEventListener('mousedown', function (e) { stopGuide(); lockSwipeScroll(); on = true; sx = e.clientX; sy = e.clientY; e.preventDefault(); });
+      document.addEventListener('mousemove', function (e) {
+        if (!on) return;
+        e.preventDefault();
+        dx = e.clientX - sx; dy = e.clientY - sy;
+        card.style.transition = 'none';
+        card.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + dx / 24 + 'deg)';
+        restoreSwipeScroll();
+        showHint('right', dx > 70); showHint('left', dx < -70);
+        showHint('up', dy < -70 && Math.abs(dx) < 70); showHint('down', dy > 70 && Math.abs(dx) < 70);
+      });
+      document.addEventListener('mouseup', function () {
+        var didAnswer = false;
+        if (!on) return; on = false;
+        card.style.transition = '';
+        ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+        if (dx > 110) { didAnswer = true; answer('right'); }
+        else if (dx < -110) { didAnswer = true; answer('left'); }
+        else if (dy < -110) { didAnswer = true; answer('up'); }
+        else if (dy > 110) { didAnswer = true; answer('down'); }
+        else card.style.transform = '';
+        dx = dy = 0;
+        if (!didAnswer) unlockSwipeScroll();
+      });
+    })();
+
+    /* Re-style cards khi đổi theme */
+    new MutationObserver(function () { render(); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+    /* ── Swipe guide: one-time demo nudge on the very first card ──
+       The card gently leans right (flash AGREE) then left (flash DISAGREE)
+       to show it can be swiped. Cancels instantly on any interaction. */
+    var guideActive = false, guideTimer = null, guideDone = false;
+    var ARROW_ROT    = { right:'rotate(0deg)', left:'rotate(180deg)', up:'rotate(-90deg)', down:'rotate(90deg)' };
+    var ARROW_COLOR  = { right:'var(--mint-500)', left:'var(--red-500)', up:'var(--violet-400)', down:'#9d9dbf' };
+    var ARROW_OFFSET = { right:['250px','0px'], left:['-250px','0px'], up:['0px','-185px'], down:['0px','185px'] };
+    function playArrow(dir) {
+      var a = $('guideArrow'); if (!a) return;
+      var svg = $('guideArrowSvg');
+      if (svg) {
+        svg.style.color = ARROW_COLOR[dir];                       /* gradient uses currentColor */
+        svg.style.transform = ARROW_ROT[dir];                     /* point the right-facing arrow */
+        svg.style.filter = 'drop-shadow(0 0 22px ' + ARROW_COLOR[dir] + ')'; /* colored glow */
+      }
+      a.style.setProperty('--ax', ARROW_OFFSET[dir][0]);
+      a.style.setProperty('--ay', ARROW_OFFSET[dir][1]);
+      a.classList.remove('fly'); void a.offsetWidth; a.classList.add('fly');
+    }
+    function stopGuide() {
+      guideDone = true;
+      if (!guideActive) return;
+      guideActive = false;
+      if (guideTimer) { clearTimeout(guideTimer); guideTimer = null; }
+      ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+      var a = $('guideArrow'); if (a) a.classList.remove('fly');
+      var card = $('activeCard');
+      if (card && !card.dataset.busy) { card.style.transition = ''; card.style.transform = ''; }
+    }
+    function swipeGuide() {
+      if (guideDone || idx !== 0) return;
+      var card = $('activeCard');
+      if (!card) return;
+      guideDone = true; guideActive = true;
+      /* Demo all 4 directions: AGREE → / DISAGREE ← / STRONGLY AGREE ↑ / NEUTRAL ↓ */
+      var seq = [
+        { t: 'translate(78px,0) rotate(6deg)',   hint: 'right' },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(-78px,0) rotate(-6deg)', hint: 'left'  },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(0,-58px) rotate(0deg)',  hint: 'up'    },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   },
+        { t: 'translate(0,54px) rotate(0deg)',   hint: 'down'  },
+        { t: 'translate(0,0) rotate(0deg)',      hint: null   }
+      ];
+      var i = 0;
+      card.style.transition = 'transform 0.5s cubic-bezier(0.34,1.2,0.64,1)';
+      (function step() {
+        if (!guideActive) return;
+        var s = seq[i++];
+        card.style.transform = s.t;
+        ['right','left','up','down'].forEach(function (d) { showHint(d, false); });
+        if (s.hint) { showHint(s.hint, true); playArrow(s.hint); }
+        guideTimer = setTimeout(i < seq.length ? step : stopGuide, s.hint ? 640 : 340);
+      })();
+    }
+
+    buildStoryBar();
+    render();
+    /* kick off the guide shortly after first paint (skipped if resuming) */
+    setTimeout(swipeGuide, 750);
+  </script>
+</body>
+</html>
