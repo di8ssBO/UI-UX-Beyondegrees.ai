@@ -1,6 +1,6 @@
 
 .claude/
-backend/node_modules/
+backend/
 *.pdf
 *.docx
 .env
