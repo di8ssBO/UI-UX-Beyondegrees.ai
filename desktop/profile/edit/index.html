@@ -55,6 +55,52 @@
   :root[data-theme="light"] .field label { color: #a84e30; }
   .field .note { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
   .field.full { grid-column: 1 / -1; }
+  .major-field[hidden],
+  .major-picker-menu[hidden] { display: none !important; }
+  .major-picker { position: relative; }
+  .major-picker-btn {
+    width: 100%; min-height: 50px; padding: 0 14px; border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
+    color: var(--text-primary); display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; font-size: 15px; font-weight: 800; text-align: left; cursor: pointer;
+    transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  .major-picker-btn:hover,
+  .major-picker.open .major-picker-btn {
+    border-color: rgba(124,58,237,0.72);
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.16);
+  }
+  .major-picker-placeholder { color: var(--text-muted); }
+  .major-picker-caret { color: var(--text-muted); font-size: 13px; transition: transform .16s; }
+  .major-picker.open .major-picker-caret { transform: rotate(180deg); }
+  .major-picker-menu {
+    position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); z-index: 40;
+    max-height: 258px; overflow: auto; padding: 8px; border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.14); background: rgba(20,20,33,0.98);
+    box-shadow: 0 18px 38px rgba(0,0,0,0.32), 0 0 0 1px rgba(124,58,237,0.12);
+  }
+  .major-picker-option {
+    width: 100%; padding: 11px 12px; border: 0; border-radius: 10px;
+    background: transparent; color: var(--text-secondary); display: flex; align-items: center;
+    justify-content: space-between; font-size: 14px; font-weight: 750; cursor: pointer; text-align: left;
+  }
+  .major-picker-option:hover,
+  .major-picker-option.on { background: rgba(124,58,237,0.18); color: var(--text-primary); }
+  .major-picker-option.on::after { content: "✓"; color: var(--violet-400); font-weight: 900; }
+  :root[data-theme="light"] .major-picker-btn {
+    background: rgba(255,255,255,0.86); border-color: #e8e0d5; color: #2c1f14;
+  }
+  :root[data-theme="light"] .major-picker-btn:hover,
+  :root[data-theme="light"] .major-picker.open .major-picker-btn {
+    border-color: rgba(201,107,85,0.68); box-shadow: 0 0 0 3px rgba(201,107,85,0.14);
+  }
+  :root[data-theme="light"] .major-picker-menu {
+    background: rgba(255,252,245,0.98); border-color: #e8e0d5; box-shadow: 0 18px 38px rgba(77,51,32,0.14);
+  }
+  :root[data-theme="light"] .major-picker-option { color: #5c4535; }
+  :root[data-theme="light"] .major-picker-option:hover,
+  :root[data-theme="light"] .major-picker-option.on { background: rgba(201,107,85,0.13); color: #2c1f14; }
+  :root[data-theme="light"] .major-picker-option.on::after { color: #c96b55; }
   /* Segmented (mobile "I want to study") */
   .seg { display: flex; gap: 8px; }
   .seg button {
@@ -68,9 +114,27 @@
   }
   :root[data-theme="light"] .seg button { background: rgba(255,255,255,0.85); border-color: #e8e0d5; color: #5c4535; }
   :root[data-theme="light"] .seg button.on { background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 4px 14px rgba(201,107,85,0.35); }
-  .check-row { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: var(--text-secondary); }
-  .check-row input { width: 17px; height: 17px; accent-color: #7c3aed; }
-  :root[data-theme="light"] .check-row input { accent-color: #c96b55; }
+  .check-row {
+    display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700;
+    color: var(--text-secondary); cursor: pointer; text-transform: none !important; letter-spacing: 0 !important;
+    position: relative;
+  }
+  .check-row input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+  .desktop-checkmark {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.22);
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    background: rgba(255,255,255,0.04); transition: background .16s, border-color .16s, transform .16s;
+  }
+  .desktop-checkmark svg { opacity: 0; transform: scale(.45); transition: opacity .16s, transform .2s cubic-bezier(.34,1.56,.64,1); }
+  .check-row input:checked + .desktop-checkmark {
+    background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+    border-color: transparent; transform: scale(1.06); box-shadow: 0 4px 14px rgba(124,58,237,0.30);
+  }
+  .check-row input:checked + .desktop-checkmark svg { opacity: 1; transform: scale(1); }
+  :root[data-theme="light"] .desktop-checkmark { border-color: rgba(92,69,53,0.26); background: rgba(255,255,255,0.72); }
+  :root[data-theme="light"] .check-row input:checked + .desktop-checkmark {
+    background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 4px 14px rgba(201,107,85,0.30);
+  }
   .danger-row { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn-danger { color: var(--red-400); border: 1px solid rgba(255,71,87,0.40); background: rgba(255,71,87,0.07); }
   .btn-danger:hover { background: rgba(255,71,87,0.15); }
@@ -122,25 +186,39 @@
       <div class="card mt-6">
         <div class="form-grid">
           <div class="field full"><label data-i18n="edit.email">Email</label>
-            <input class="input" type="email" value="hoangphuc@beyondegrees.ai" disabled>
+            <input class="input" id="emailInput" type="email" value="hoangphuc@beyondegrees.ai" disabled>
             <div class="note" data-i18n="edit.email_hint">Contact support to change the email.</div>
           </div>
-          <div class="field full"><label data-i18n="edit.location">Location</label><input class="input" value="Ho Chi Minh City, Vietnam"></div>
+          <div class="field full"><label data-i18n="edit.location">Location</label><input class="input" id="locationInput" value="Ho Chi Minh City, Vietnam"></div>
           <div class="field full"><label data-i18n="edit.study">I want to study</label>
             <div class="seg" id="segStudy">
-              <button class="on" data-i18n="edit.study.abroad">Abroad</button><button data-i18n="edit.study.in_country">In my country</button><button data-i18n="edit.study.either">Either</button>
+              <button class="on" data-value="abroad" data-i18n="edit.study.abroad">Abroad</button><button data-value="home" data-i18n="edit.study.in_country">In my country</button><button data-value="either" data-i18n="edit.study.either">Either</button>
             </div>
           </div>
           <div class="field full"><label data-i18n="edit.degree">I'm working toward a...</label>
             <div class="seg" id="segDegree">
-              <button class="on" data-i18n="edit.degree.bachelor">Bachelor's Degree</button><button data-i18n="edit.degree.master">Master's Degree</button>
-              <button data-i18n="edit.degree.phd">PhD / Doctorate</button><button data-i18n="edit.degree.associate">Associate's Degree</button>
+              <button class="on" data-value="bachelor" data-i18n="edit.degree.bachelor">Bachelor's Degree</button><button data-value="master" data-i18n="edit.degree.master">Master's Degree</button>
+              <button data-value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</button><button data-value="associate" data-i18n="edit.degree.associate">Associate's Degree</button>
             </div>
           </div>
           <div class="field full">
-            <label class="check-row" style="display:flex;text-transform:none;letter-spacing:0;font-size:14px;">
-              <input type="checkbox"> <span data-i18n="edit.already_know">I already know what I want to study</span>
+            <label class="check-row">
+              <input type="checkbox" id="knowMajorInput">
+              <span class="desktop-checkmark" aria-hidden="true">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+              </span>
+              <span data-i18n="edit.already_know">I already know what I want to study</span>
             </label>
+          </div>
+          <div class="field full major-field" id="majorField" hidden>
+            <label for="majorPickerBtn">Preferred Major</label>
+            <div class="major-picker" id="majorPicker">
+              <button class="major-picker-btn" id="majorPickerBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="majorPickerText" class="major-picker-placeholder">Select a major</span>
+                <span class="major-picker-caret" aria-hidden="true">v</span>
+              </button>
+              <div class="major-picker-menu" id="majorPickerMenu" role="listbox" hidden></div>
+            </div>
           </div>
         </div>
         <div class="flex mt-8" style="gap:12px;flex-wrap:wrap;">
@@ -175,17 +253,77 @@
   <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
   <script src="../../_shell/desktop.js?v=12"></script>
   <script>
-    ['segStudy', 'segDegree'].forEach(function (id) {
-      var seg = document.getElementById(id);
-      seg.addEventListener('click', function (e) {
-        if (e.target.tagName !== 'BUTTON') return;
-        seg.querySelectorAll('button').forEach(function (b) { b.classList.remove('on'); });
-        e.target.classList.add('on');
-      });
-    });
     var avatarInput = document.getElementById('avatarUpload');
     var avatarPreview = document.getElementById('avatarPreview');
     var fullNameInput = document.getElementById('fullNameInput');
+    var emailInput = document.getElementById('emailInput');
+    var locationInput = document.getElementById('locationInput');
+    var knowMajorInput = document.getElementById('knowMajorInput');
+    var majorField = document.getElementById('majorField');
+    var majorPicker = document.getElementById('majorPicker');
+    var majorPickerBtn = document.getElementById('majorPickerBtn');
+    var majorPickerText = document.getElementById('majorPickerText');
+    var majorPickerMenu = document.getElementById('majorPickerMenu');
+    var majorValue = '';
+    var MAJORS = [
+      { v: 'cs', label: 'Computer Science' },
+      { v: 'ds', label: 'Data Science & AI' },
+      { v: 'design', label: 'Design & UX' },
+      { v: 'eng', label: 'Engineering' },
+      { v: 'med', label: 'Medicine' },
+      { v: 'biz', label: 'Business' },
+      { v: 'psy', label: 'Psychology' },
+      { v: 'econ', label: 'Economics' },
+      { v: 'law', label: 'Law' },
+      { v: 'arch', label: 'Architecture' },
+      { v: 'bio', label: 'Biology' },
+      { v: 'comm', label: 'Communications' }
+    ];
+
+    function readJson(key) {
+      try {
+        var raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeJson(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
+    }
+
+    function splitName(fullName) {
+      var clean = String(fullName || '').trim().replace(/\s+/g, ' ');
+      if (!clean) return { firstName: '', lastName: '' };
+      var parts = clean.split(' ');
+      if (parts.length === 1) return { firstName: parts[0], lastName: '' };
+      return {
+        firstName: parts.slice(0, -1).join(' '),
+        lastName: parts[parts.length - 1]
+      };
+    }
+
+    function readProfile() {
+      var profile = readJson('bd-profile') || {};
+      var firstName = profile.firstName || profile.givenName || '';
+      var lastName = profile.lastName || profile.familyName || '';
+      if (!firstName && !lastName) {
+        var legacyName = '';
+        try { legacyName = localStorage.getItem('bd-full-name') || localStorage.getItem('bd-username') || ''; } catch (e) {}
+        var split = splitName(legacyName);
+        firstName = split.firstName;
+        lastName = split.lastName;
+      }
+      profile.firstName = firstName;
+      profile.lastName = lastName;
+      return profile;
+    }
+
+    function displayName(profile) {
+      return ((profile.firstName || profile.givenName || '') + ' ' + (profile.lastName || profile.familyName || '')).trim();
+    }
+
     function setAvatar(src) {
       if (!avatarPreview) return;
       if (src) {
@@ -196,12 +334,116 @@
         avatarPreview.classList.remove('has-image');
       }
     }
-    try {
-      var savedAvatar = localStorage.getItem('bd-profile-avatar') || '';
-      var savedName = localStorage.getItem('bd-full-name') || localStorage.getItem('bd-username') || '';
-      if (savedAvatar) setAvatar(savedAvatar);
-      if (savedName && fullNameInput) fullNameInput.value = savedName;
-    } catch (e) {}
+
+    function normalizeStudy(value) {
+      if (value === 'in-country' || value === 'my-country') return 'home';
+      return value || 'abroad';
+    }
+
+    function findMajor(value) {
+      return MAJORS.filter(function (major) { return major.v === value; })[0] || null;
+    }
+
+    function closeMajorPicker() {
+      if (majorPickerMenu) majorPickerMenu.hidden = true;
+      if (majorPicker) majorPicker.classList.remove('open');
+      if (majorPickerBtn) majorPickerBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    function renderMajorPicker() {
+      if (!majorPickerMenu) return;
+      majorPickerMenu.innerHTML = MAJORS.map(function (major) {
+        var active = major.v === majorValue ? ' on' : '';
+        return '<button class="major-picker-option' + active + '" type="button" role="option" data-value="' + major.v + '">' + major.label + '</button>';
+      }).join('');
+    }
+
+    function setMajor(value) {
+      majorValue = findMajor(value) ? value : '';
+      var selected = findMajor(majorValue);
+      if (majorPickerText) {
+        majorPickerText.textContent = selected ? selected.label : 'Select a major';
+        majorPickerText.classList.toggle('major-picker-placeholder', !selected);
+      }
+      renderMajorPicker();
+    }
+
+    function setSegment(id, value) {
+      var seg = document.getElementById(id);
+      if (!seg) return;
+      var selected = value || '';
+      seg.querySelectorAll('button').forEach(function (btn) {
+        btn.classList.toggle('on', btn.getAttribute('data-value') === selected);
+      });
+    }
+
+    function getSegment(id, fallback) {
+      var on = document.querySelector('#' + id + ' button.on');
+      return (on && on.getAttribute('data-value')) || fallback;
+    }
+
+    function syncMajorField() {
+      var show = !!(knowMajorInput && knowMajorInput.checked);
+      if (majorField) majorField.hidden = !show;
+      if (!show) {
+        setMajor('');
+        closeMajorPicker();
+      }
+    }
+
+    ['segStudy', 'segDegree'].forEach(function (id) {
+      var seg = document.getElementById(id);
+      if (!seg) return;
+      seg.addEventListener('click', function (e) {
+        if (!e.target || e.target.tagName !== 'BUTTON') return;
+        setSegment(id, e.target.getAttribute('data-value'));
+      });
+    });
+
+    if (knowMajorInput) {
+      knowMajorInput.addEventListener('change', syncMajorField);
+    }
+
+    if (majorPickerBtn) {
+      majorPickerBtn.addEventListener('click', function () {
+        if (!majorPickerMenu) return;
+        var opening = majorPickerMenu.hidden;
+        majorPickerMenu.hidden = !opening;
+        if (majorPicker) majorPicker.classList.toggle('open', opening);
+        majorPickerBtn.setAttribute('aria-expanded', opening ? 'true' : 'false');
+      });
+    }
+
+    if (majorPickerMenu) {
+      majorPickerMenu.addEventListener('click', function (e) {
+        var option = e.target && e.target.closest ? e.target.closest('[data-value]') : null;
+        if (!option) return;
+        setMajor(option.getAttribute('data-value') || '');
+        closeMajorPicker();
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      if (majorPicker && !majorPicker.contains(e.target)) closeMajorPicker();
+    });
+
+    (function prefillProfile() {
+      var profile = readProfile();
+      var onboarding = readJson('bd-onboarding') || {};
+      try {
+        var savedAvatar = localStorage.getItem('bd-avatar') || localStorage.getItem('bd-profile-avatar') || '';
+        if (savedAvatar) setAvatar(savedAvatar);
+      } catch (e) {}
+      if (fullNameInput) fullNameInput.value = displayName(profile) || 'Your Name';
+      if (emailInput) emailInput.value = profile.email || emailInput.value || '';
+      if (locationInput) locationInput.value = onboarding.location || locationInput.value || '';
+      setSegment('segStudy', normalizeStudy(onboarding.studyWhere));
+      setSegment('segDegree', onboarding.degree || 'bachelor');
+      if (knowMajorInput) knowMajorInput.checked = !!onboarding.knowMajor;
+      setMajor(onboarding.major || '');
+      syncMajorField();
+    })();
+
     if (avatarInput) {
       avatarInput.addEventListener('change', function () {
         var file = avatarInput.files && avatarInput.files[0];
@@ -210,7 +452,10 @@
         reader.onload = function () {
           var src = String(reader.result || '');
           setAvatar(src);
-          try { localStorage.setItem('bd-profile-avatar', src); } catch (e) {}
+          try {
+            localStorage.setItem('bd-avatar', src);
+            localStorage.setItem('bd-profile-avatar', src);
+          } catch (e) {}
         };
         reader.readAsDataURL(file);
       });
@@ -218,10 +463,26 @@
     document.getElementById('saveBtn').onclick = function () {
       try {
         var fullName = fullNameInput ? fullNameInput.value.trim() : '';
+        var nameParts = splitName(fullName);
+        var existingProfile = readJson('bd-profile') || {};
         if (fullName) {
+          existingProfile.firstName = nameParts.firstName;
+          existingProfile.lastName = nameParts.lastName;
+          existingProfile.givenName = nameParts.firstName;
+          existingProfile.familyName = nameParts.lastName;
+          if (emailInput && emailInput.value) existingProfile.email = emailInput.value;
+          writeJson('bd-profile', existingProfile);
           localStorage.setItem('bd-full-name', fullName);
           localStorage.setItem('bd-username', fullName);
         }
+        var knowsMajor = !!(knowMajorInput && knowMajorInput.checked);
+        writeJson('bd-onboarding', {
+          location: locationInput ? locationInput.value.trim() : '',
+          studyWhere: getSegment('segStudy', 'abroad'),
+          degree: getSegment('segDegree', 'bachelor'),
+          knowMajor: knowsMajor,
+          major: knowsMajor ? (majorValue || null) : null
+        });
       } catch (e) {}
       var t = document.getElementById('toast');
       t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2200);

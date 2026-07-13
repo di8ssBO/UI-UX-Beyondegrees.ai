@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="kt.css">
 <script src="../../../shared/scripts/ui/i18n.js?v=2"></script>
 <script src="../../../shared/scripts/ui/bd-profile.js"></script>
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
 </head>
 <body>
 
@@ -329,7 +330,7 @@ function getMatchPct(id){
 
   /* ── CTA button theo mốc quiz ─────────────────────────────────────────
      < 10  : Start Quiz  → stage=1
-     10-19 : Continue Quiz → stage=2
+     10-19 : Continue → stage=2
      20-29 : Finish Quiz → stage=3
      >= 30 : ẩn nút (quiz hoàn thành)
      ─────────────────────────────────────────────────────────────────── */
@@ -368,5 +369,6 @@ function quizResumeUrl(){var p=parseInt(localStorage.getItem('quizProgress')||'0
 
 
 <script src="../../../shared/scripts/ui/tab-lock.js"></script>
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
 </body>
 </html>

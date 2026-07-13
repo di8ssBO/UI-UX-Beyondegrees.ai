@@ -712,6 +712,7 @@
 
       /* Edit profile */
       'edit.title':           'Edit Profile',
+      'edit.full_name':       'Full Name',
       'edit.first_name':      'First Name',
       'edit.last_name':       'Last Name',
       'edit.email':           'Email',
@@ -726,6 +727,8 @@
       'edit.degree.master':   "Master's Degree",
       'edit.degree.phd':      'PhD / Doctorate',
       'edit.degree.associate':"Associate's Degree",
+      'edit.preferred_major':  'Preferred Major',
+      'edit.select_major':     'Select a major',
       'edit.already_know':    'I already know what I want to study',
       'edit.save':            'Save Changes',
       'edit.leave_review':    'Leave Review',
@@ -737,6 +740,7 @@
       'edit.cancel':          'Cancel',
       'edit.archetype_label': 'Academic Archetype:',
       'edit.archetype_find':  'Find Out',
+      'edit.ph_full_name':    'Your Name',
       'edit.ph_first_name':   'First name',
       'edit.ph_last_name':    'Last name',
       'edit.ph_location':     'Your location',
@@ -909,6 +913,7 @@
       'results.powered':        '✦ Powered by BeyonDegrees.ai',
       'edit.archetype':         'Academic Archetype:',
       'edit.find_out':          'Find Out',
+      'edit.feedback_prompt':   'Enjoying BeyonDegrees?',
       'edit.danger_zone':       'Danger zone',
       'edit.toast_saved':       '✅ Profile saved!',
 
@@ -1601,6 +1606,7 @@
 
       /* Edit profile */
       'edit.title':           'Chỉnh sửa hồ sơ',
+      'edit.full_name':       'Họ tên',
       'edit.first_name':      'Tên',
       'edit.last_name':       'Họ',
       'edit.email':           'Email',
@@ -1615,6 +1621,8 @@
       'edit.degree.master':   'Thạc sĩ',
       'edit.degree.phd':      'Tiến sĩ',
       'edit.degree.associate':'Cao đẳng',
+      'edit.preferred_major':  'Ngành học ưa thích',
+      'edit.select_major':     'Chọn một ngành',
       'edit.already_know':    'Tôi đã biết mình muốn học gì',
       'edit.save':            'Lưu thay đổi',
       'edit.leave_review':    'Đánh giá',
@@ -1626,6 +1634,7 @@
       'edit.cancel':          'Hủy',
       'edit.archetype_label': 'Phong cách học tập:',
       'edit.archetype_find':  'Khám phá',
+      'edit.ph_full_name':    'Họ tên của bạn',
       'edit.ph_first_name':   'Tên',
       'edit.ph_last_name':    'Họ',
       'edit.ph_location':     'Địa điểm của bạn',
@@ -1798,6 +1807,7 @@
       'results.powered':        '✦ Được hỗ trợ bởi BeyonDegrees.ai',
       'edit.archetype':         'Archetype học thuật:',
       'edit.find_out':          'Tìm hiểu',
+      'edit.feedback_prompt':   'Bạn có hài lòng với BeyonDegrees?',
       'edit.danger_zone':       'Vùng nguy hiểm',
       'edit.toast_saved':       '✅ Đã lưu hồ sơ!',
 
@@ -2013,6 +2023,7 @@
       'results.powered':        '✦ BeyonDegrees.ai द्वारा संचालित',
       'edit.archetype':         'शैक्षणिक Archetype:',
       'edit.find_out':          'जानें',
+      'edit.feedback_prompt':   'क्या आप BeyonDegrees का आनंद ले रहे हैं?',
       'edit.danger_zone':       'खतरा क्षेत्र',
       'edit.toast_saved':       '✅ प्रोफ़ाइल सहेजी गई!',
 
@@ -2556,6 +2567,7 @@
 
       /* Edit profile */
       'edit.title':           'प्रोफ़ाइल संपादित करें',
+      'edit.full_name':       'पूरा नाम',
       'edit.first_name':      'पहला नाम',
       'edit.last_name':       'अंतिम नाम',
       'edit.email':           'ईमेल',
@@ -2570,6 +2582,8 @@
       'edit.degree.master':   'परास्नातक डिग्री',
       'edit.degree.phd':      'पीएचडी / डॉक्टरेट',
       'edit.degree.associate':'सहयोगी डिग्री',
+      'edit.preferred_major':  'पसंदीदा विषय',
+      'edit.select_major':     'एक विषय चुनें',
       'edit.already_know':    'मुझे पहले से पता है कि मैं क्या पढ़ना चाहता हूं',
       'edit.leave_review':    'समीक्षा करें',
       'edit.reset':           'खाता रीसेट करें',
@@ -2638,6 +2652,7 @@
       'edit.cancel':          'रद्द करें',
       'edit.archetype_label': 'शैक्षणिक Archetype:',
       'edit.archetype_find':  'पता लगाएं',
+      'edit.ph_full_name':    'आपका नाम',
       'edit.ph_first_name':   'पहला नाम',
       'edit.ph_last_name':    'अंतिम नाम',
       'edit.ph_location':     'आपका स्थान',
@@ -2770,6 +2785,7 @@
 
       /* Edit profile */
       'edit.title':           'Modifier le profil',
+      'edit.full_name':       'Nom complet',
       'edit.first_name':      'Prénom',
       'edit.last_name':       'Nom',
       'edit.email':           'E-mail',
@@ -2784,6 +2800,8 @@
       'edit.degree.master':   'Master',
       'edit.degree.phd':      'Doctorat',
       'edit.degree.associate':'BTS / DUT',
+      'edit.preferred_major':  'Filière préférée',
+      'edit.select_major':     'Sélectionner une filière',
       'edit.already_know':    'Je sais déjà ce que je veux étudier',
       'edit.save':            'Enregistrer',
       'edit.leave_review':    'Laisser un avis',
@@ -2794,6 +2812,7 @@
       'edit.cancel':          'Annuler',
       'edit.archetype_label': 'Archétype académique :',
       'edit.archetype_find':  'Découvrir',
+      'edit.ph_full_name':    'Votre nom',
       'edit.ph_first_name':   'Prénom',
       'edit.ph_last_name':    'Nom',
       'edit.ph_location':     'Votre localisation',
@@ -2939,6 +2958,7 @@
       'results.powered':        '✦ Propulsé par BeyonDegrees.ai',
       'edit.archetype':         'Archétype académique :',
       'edit.find_out':          'Découvrir',
+      'edit.feedback_prompt':   'Vous appréciez BeyonDegrees ?',
       'edit.danger_zone':       'Zone de danger',
       'edit.toast_saved':       '✅ Profil enregistré !',
 
@@ -3599,6 +3619,7 @@
 
       /* Edit profile */
       'edit.title':           'تعديل الملف الشخصي',
+      'edit.full_name':       'الاسم الكامل',
       'edit.first_name':      'الاسم الأول',
       'edit.last_name':       'اسم العائلة',
       'edit.email':           'البريد الإلكتروني',
@@ -3613,6 +3634,8 @@
       'edit.degree.master':   'ماجستير',
       'edit.degree.phd':      'دكتوراه',
       'edit.degree.associate':'دبلوم',
+      'edit.preferred_major':  'التخصص المفضل',
+      'edit.select_major':     'اختر تخصصاً',
       'edit.already_know':    'أعرف بالفعل ما أريد دراسته',
       'edit.save':            'حفظ التغييرات',
       'edit.leave_review':    'اترك تقييماً',
@@ -3623,6 +3646,7 @@
       'edit.cancel':          'إلغاء',
       'edit.archetype_label': 'النمط الأكاديمي:',
       'edit.archetype_find':  'اكتشف',
+      'edit.ph_full_name':    'اسمك',
       'edit.ph_first_name':   'الاسم الأول',
       'edit.ph_last_name':    'اسم العائلة',
       'edit.ph_location':     'موقعك',
@@ -3768,6 +3792,7 @@
       'results.powered':        '✦ مدعوم من BeyonDegrees.ai',
       'edit.archetype':         'النمط الأكاديمي:',
       'edit.find_out':          'اكتشف',
+      'edit.feedback_prompt':   'هل تستمتع باستخدام BeyonDegrees؟',
       'edit.danger_zone':       'منطقة الخطر',
       'edit.toast_saved':       '✅ تم حفظ الملف الشخصي!',
 

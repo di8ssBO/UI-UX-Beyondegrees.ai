@@ -1,6 +1,7 @@
 /* uni-img-map.js — trích nguyên văn W + UNI_IMG_MAP từ mobile mobile/university/detail.
    icon = logo trường (SVG/JPG từ Wikimedia Commons), image = ảnh khuôn viên. null = không có. */
 var W = 'https://commons.wikimedia.org/wiki/Special:FilePath/';
+var P = '../../../shared/assets/partners/';
 var UNI_IMG_MAP = {
   /* Vietnam */
   'fulbright' : { icon: null,  image: null },
@@ -33,7 +34,11 @@ var UNI_IMG_MAP = {
   'uci'       : { icon: W+'UC_Irvine_Anteaters_logo.svg',                              image: null },
   'ucf'       : { icon: W+'UCF_Knights_logo.svg',                                      image: null },
   'erau'      : { icon: W+'ERAU.svg',                                                  image: null },
-  'fisher'    : { icon: null,                                                           image: null },
+  'fisher'    : { icon: P+'fisher-logo.png',                                           image: P+'fisher-campus.png' },
+  'liberty'   : { icon: P+'liberty-logo.png',                                          image: P+'liberty-campus.png' },
+  'mru'       : { icon: P+'mru-logo.png',                                              image: P+'mru-campus.png' },
+  'mau'       : { icon: P+'mau-logo.png',                                              image: P+'mau-campus.png' },
+  'imt'       : { icon: P+'imt-logo.png',                                              image: P+'imt-campus.png' },
   /* Americas */
   'ubc'       : { icon: W+'British_columbia_ca_univ_logo.svg',                         image: null },
   'usp'       : { icon: W+'Universidade_de_S%C3%A3o_Paulo_Logo.svg',                   image: null },

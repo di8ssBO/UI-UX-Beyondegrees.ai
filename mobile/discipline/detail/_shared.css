@@ -348,7 +348,7 @@ body{
   box-shadow: 0 3px 12px rgba(124,58,237,0.25);
 }
 
-/* Continue Quiz — btn-success: mint-500 */
+/* Continue — btn-success: mint-500 */
 .cta-btn.cta-continue {
   background: var(--mint-500);
   color: #06060f;
@@ -655,7 +655,7 @@ body{
     color-mix(in srgb, var(--disc-primary) 85%, #ffffff) 0%,
     var(--disc-primary) 100%) !important;
 }
-/* Continue Quiz CTA → sage success */
+/* Continue CTA → sage success */
 [data-theme="light"] .cta-btn.cta-continue {
   background: linear-gradient(135deg, #4a9e7a 0%, #2f6f53 100%) !important;
   color: #fff !important;

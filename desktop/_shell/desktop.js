@@ -428,7 +428,6 @@
       main: [
         { sec: tr('sidebar.explore', 'Explore') },
         { id: 'home',         href: '../../onboarding/home/',        label: tr('nav.about_me', 'About me'),       icon: 'M3 12l9-9 9 9M5 10v10h5v-6h4v6h5V10' },
-        { id: 'quiz',         href: '../../quiz/quiz-card/',         label: tr('nav.quiz', 'Quiz'),               icon: 'M9 9a3 3 0 115.8 1c-.7.8-1.8 1.2-1.8 2.5M12 17h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0' },
         { sec: tr('sidebar.results', 'Results') },
         { id: 'understand',   href: '../../results/understand-matches/', label: tr('nav.understand', 'Understand Matches'), icon: 'M9 15a6 6 0 100-12 6 6 0 000 12zM15 15a6 6 0 100-12 6 6 0 000 12' },
         { id: 'disciplines',  href: '../../discipline/match/',       label: tr('nav.disciplines', 'Disciplines'), icon: 'M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3M12 12l8-4.5M12 12v9M12 12L4 7.5' },
@@ -449,7 +448,8 @@
 
   /* ── Render shell ───────────────────────────────────────── */
   function renderShell() {
-    var page  = document.body.getAttribute('data-page')  || '';
+    var rawPage = document.body.getAttribute('data-page') || '';
+    var page  = (rawPage === 'quiz' || rawPage === 'quiz-card') ? 'home' : rawPage;
     var crumb = document.body.getAttribute('data-crumb') || '';
     var stats = getLiveStats();
     ensureDesktopInstallAssets();

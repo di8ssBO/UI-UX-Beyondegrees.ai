@@ -167,11 +167,11 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 .sec-lbl{font-size:10px;font-weight:700;color:var(--text-muted);
   letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;margin-top:4px}
 
-/* ── Continue Quiz button ─────────────────────────────────────── */
+/* ── Continue button ──────────────────────────────────────────── */
 .continue-wrap{padding:10px 0 6px}
 .continue-btn{display:flex;align-items:center;justify-content:center;gap:8px;
   width:100%;padding:14px 20px;
-  /* btn-success: mint-500 — Continue Quiz */
+  /* btn-success: mint-500 — Continue */
   background:var(--mint-500);
   color:#06060f;border-radius:var(--radius-full);font-size:15px;font-weight:700;
   text-decoration:none;letter-spacing:.01em;
@@ -487,7 +487,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:var(--font-
 }
 [data-theme="light"] .teaser-unlock-msg { color:#2c1f14 !important; }
 
-/* ── Continue Quiz button — sage success ── */
+/* ── Continue button — sage success ── */
 [data-theme="light"] .continue-btn {
   background: linear-gradient(135deg, #4a9e7a 0%, #2f6f53 100%) !important;
   color: #fff !important;

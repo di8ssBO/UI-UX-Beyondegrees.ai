@@ -48,9 +48,6 @@
       <div class="ms-hdr">
         <div class="ms-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
         <div class="app-menu-wrap" data-home="../../onboarding/home/">
-          <button class="app-menu-btn" aria-label="Menu">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-          </button>
           <div class="app-dropdown">
             <div class="app-menu-section" data-i18n="menu.section_explore">Explore</div>
             <a href="../../understand-matches/" class="app-menu-item" data-menu-action="understand-matches">
@@ -243,9 +240,9 @@
           </div>
         </div>
 
-        <!-- Continue Quiz -->
+        <!-- Continue -->
         <div class="continue-wrap" id="continueWrap">
-          <button class="continue-btn" id="continueBtn" data-i18n="major.cta.continue">Continue Quiz →</button>
+          <button class="continue-btn" id="continueBtn" data-i18n="major.cta.continue">Continue →</button>
         </div>
         </div><!-- /mainContent -->
 
@@ -448,7 +445,7 @@ if (progress < 20) {
     }
     if (lockCta) {
       const t2 = window.BDi18n ? window.BDi18n.t.bind(window.BDi18n) : k => k;
-      /* Progress 10-19: always "Continue Quiz" — update data-i18n for i18n.js */
+      /* Progress 10-19: always "Continue" — update data-i18n for i18n.js */
       lockCta.setAttribute('data-i18n', 'disc.cta.continue');
       lockCta.textContent      = t2('disc.cta.continue');
       const isLight2 = document.documentElement.getAttribute('data-theme') === 'light';
@@ -649,6 +646,4 @@ document.getElementById('filterChips').addEventListener('click', e => {
 </script>
 <script src="../../../shared/scripts/ui/tab-lock.js"></script>
 <script src="../../../shared/scripts/ui/app-menu.js"></script>
-<script src="../../../shared/scripts/ui/pwa-install.js?v=4" defer></script>
-</body>
-</html>
+<script src="../../../shared/scripts/ui/pwa-install.js?

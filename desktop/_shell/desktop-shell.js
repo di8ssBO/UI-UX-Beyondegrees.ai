@@ -68,7 +68,6 @@
       label: 'Journey',
       items: [
         { id: 'home',      icon: '🏠', label: 'About me',    path: '../../onboarding/home/' },
-        { id: 'quiz-card', icon: '🃏', label: 'Quiz',        path: '../../quiz/quiz-card/' },
         { id: 'loading',   icon: '🤖', label: 'AI Analysis', path: '../../onboarding/loading/', minMilestone: 0 }
       ]
     },
@@ -98,7 +97,8 @@
     var stats = getLiveStats();
     var theme = getThemePref();
     var resolved = resolveTheme(theme);
-    var currentPage = document.body.getAttribute('data-page') || '';
+    var rawPage = document.body.getAttribute('data-page') || '';
+    var currentPage = (rawPage === 'quiz' || rawPage === 'quiz-card') ? 'home' : rawPage;
 
     var h = '';
 

@@ -3049,6 +3049,7 @@ svg *, canvas, video, img { transition: none !important; }
   padding-bottom: calc(var(--space-2, 8px) + env(safe-area-inset-bottom)) !important;
 }
 </style>
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
 </head>
 <body>
   <nav class="breadcrumb-bar">
@@ -4364,7 +4365,7 @@ if (START_IDX === 0) {
   } catch(e) {}
 }
 // Fresh start (no ?start param and no bd_nextStart) → reset stale quizProgress so
-// "Continue Quiz" on other pages doesn't resume from an old session's position.
+// "Continue" on other pages doesn't resume from an old session's position.
 if (START_IDX === 0) {
   try { localStorage.removeItem('quizProgress'); } catch(e) {}
   try {
@@ -4880,11 +4881,11 @@ function recordAnswer(direction, answer) {
   const weight = DNA_WEIGHTS[answer] ?? 0;
   state.dna[q.disc] = Math.max(0, (state.dna[q.disc] || 0) + 1 + weight);
 
-  // Lưu state sau mỗi câu để score-row hiển thị tích lũy khi Continue Quiz
+  // Lưu state sau mỗi câu để score-row hiển thị tích lũy khi Continue
   saveQuizState();
 
   // Cập nhật quizProgress sau mỗi câu trả lời để các tab khác
-  // có thể hiển thị "Continue Quiz" ngay từ câu đầu tiên.
+  // có thể hiển thị "Continue" ngay từ câu đầu tiên.
   // Dùng state.currentIndex + 1 (absolute, 1-based) thay vì
   // START_IDX + state.answers.length để tránh double-count khi
   // loadQuizState() đã load các câu cũ vào state.answers.
@@ -5461,5 +5462,6 @@ function showBatchDone(stage) {
 })();
 
 </script>
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
 </body>
 </html>
