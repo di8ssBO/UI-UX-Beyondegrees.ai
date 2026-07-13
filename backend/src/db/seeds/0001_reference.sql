@@ -1,0 +1,3 @@
+-- Dữ liệu tham chiếu thật (disciplines, majors, specializations, universities,
+-- junction, assertions) được nạp bằng script: node scripts/import_csv.js
+-- File seed này để trống có chủ đích, tránh chèn dữ liệu mẫu trùng/bịa.
