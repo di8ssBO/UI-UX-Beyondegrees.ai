@@ -1,0 +1,8 @@
+
+.claude/
+backend/
+*.pdf
+*.docx
+.env
+firebase-cert.json
+client-secret.json

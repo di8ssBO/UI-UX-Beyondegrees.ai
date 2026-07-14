@@ -1,0 +1,22 @@
+/* ── Agricultural Sciences (nn) — Amber ─────────────────── */
+:root {
+  --disc-primary: #f59e0b;
+  --disc-light:   #fbbf24;
+  --disc-lighter: #fcd34d;
+  --disc-dark:    #451a03;
+  --disc-glow:    rgba(245,158,11,0.50);
+  --disc-glow-sm: rgba(245,158,11,0.25);
+  --disc-bg:      rgba(245,158,11,0.12);
+  --disc-border:  rgba(245,158,11,0.30);
+}
+.hero-aurora {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 110% 80% at 30% 40%,
+      rgba(245,158,11,.55) 0%, rgba(217,119,6,.30) 45%, transparent 75%),
+    radial-gradient(ellipse 70% 60% at 80% 70%,
+      rgba(251,191,36,.25) 0%, transparent 60%),
+    radial-gradient(ellipse 90% 100% at 50% 100%,
+      rgba(69,26,3,.80) 0%, transparent 70%),
+    linear-gradient(160deg, rgb(26 16 3) 0%, #0a080e 40%, #060408 100%);
+}

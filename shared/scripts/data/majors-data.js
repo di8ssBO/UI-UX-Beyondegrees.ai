@@ -1,0 +1,481 @@
+/**
+ * majors-data.js — BeyonDegrees.ai
+ * Generated từ "Disciplines export.csv" và "Majors export.csv"
+ * Không sửa tay — chạy lại gen script khi CSV thay đổi
+ */
+
+/* ── Disciplines ──────────────────────────────────────────── */
+const DISCIPLINES = {
+  "76": {
+    "id": 76,
+    "title": "Humanities",
+    "desc": "This discipline focuses on the study of human culture, thought, and expression. It emphasizes abstract and theoretical thinking, ethical inquiry, historical and cultural understanding, and interpretive analysis. Fields like philosophy, history, literature, religious studies, art history, and cultural studies fall within this category. Humanities often prioritize qualitative approaches over quantitative data and explore broad, open-ended questions about meaning, identity, and morality. It values creativity, critical reflection, and the ethical implications of scientific and technological change. While it may contrast with disciplines like Engineering, Natural Sciences, or Health Sciences in its focus on ambiguity and theory, it often aligns with Social Sciences in exploring human impact, behavior, and societal values.",
+    "code": "nv",
+    "color": "#3b82f6",
+    "icon": "📜",
+    "short": "Humanities"
+  },
+  "75": {
+    "id": 75,
+    "title": "Social sciences",
+    "desc": "This discipline centers on the study of human behavior, social structures, and societal systems. It includes fields like psychology, sociology, political science, economics, and anthropology. This discipline emphasizes understanding how individuals and groups interact, how societies function, and how policies, institutions, and cultural norms shape outcomes. Social Sciences blend qualitative and quantitative methods, often focusing on real-world applications, human impact, and ethical considerations. It values critical thinking, collaboration, and systemic analysis. While it overlaps with Humanities in exploring human meaning and ethics, it is more empirical and policy-oriented. It may contrast with disciplines like Engineering or Natural Sciences, which focus more on technical systems and measurable data than on human and social dynamics.",
+    "code": "xh",
+    "color": "#a855f7",
+    "icon": "🧠",
+    "short": "Social Sci"
+  },
+  "74": {
+    "id": 74,
+    "title": "Agricultural sciences",
+    "desc": "This discipline focuses on the study and improvement of food production, farming systems, and the sustainable use of natural resources. It includes areas like agronomy, crop and soil science, animal husbandry, agricultural technology, and food science. This field emphasizes both scientific research and practical application, often integrating biology, ecology, and engineering to solve challenges related to food security, sustainability, and rural development. Agricultural Sciences value innovation (e.g., biotechnology, precision farming) while also recognizing the importance of traditional knowledge and ecological balance. It may align with Natural Sciences and Engineering in its technical aspects, but can also intersect with Social Sciences and Humanities when addressing ethical, environmental, and cultural dimensions of agriculture.",
+    "code": "nn",
+    "color": "#f59e0b",
+    "icon": "🌱",
+    "short": "Agricultural"
+  },
+  "73": {
+    "id": 73,
+    "title": "Medical and Health sciences",
+    "desc": "This discipline focuses on understanding, diagnosing, treating, and preventing disease, as well as promoting overall health and well-being. It includes fields such as medicine, nursing, public health, pharmacy, dentistry, and medical technology. This discipline emphasizes evidence-based practices, clinical guidelines, and scientific research, often involving both laboratory and patient-centered work. It values precision, safety, and ethical responsibility, with a strong focus on improving individual and public health outcomes. While it often overlaps with Engineering (in medical technology) and Natural Sciences (in biomedical research), it may contrast with Humanities and Social Sciences when cultural or ethical perspectives challenge standardized medical approaches.",
+    "code": "yt",
+    "color": "#06d6a0",
+    "icon": "🩺",
+    "short": "Medical"
+  },
+  "72": {
+    "id": 72,
+    "title": "Engineering and technology",
+    "desc": "This discipline focuses on the design, development, and application of systems, tools, and processes to solve practical problems. It includes fields such as mechanical, civil, electrical, software, and industrial engineering, as well as data science and robotics. This discipline emphasizes innovation, efficiency, technical precision, and hands-on problem-solving, often using mathematical and scientific principles to create real-world solutions. It prioritizes functionality and measurable outcomes, sometimes placing less emphasis on ethical or social implications. While it aligns closely with Natural Sciences and often supports advances in Health and Agriculture, it may contrast with Humanities and Social Sciences, which focus more on human behavior, culture, and ethical considerations.",
+    "code": "kt",
+    "color": "#7c3aed",
+    "icon": "⚙️",
+    "short": "Engineering"
+  },
+  "71": {
+    "id": 71,
+    "title": "Natural sciences",
+    "desc": "This discipline focuses on understanding the physical and natural world through observation, experimentation, and theoretical analysis. It includes fields such as physics, chemistry, biology, earth sciences, and mathematics. This discipline emphasizes empirical evidence, measurable data, and the development of scientific theories to explain natural phenomena. Natural Sciences value precision, critical thinking, and curiosity-driven inquiry, often laying the foundation for advances in technology, medicine, and environmental studies. While it aligns with Engineering and Health Sciences in its scientific rigor, it may contrast with Humanities and Social Sciences, which emphasize interpretation, ethics, and human-centered perspectives.",
+    "code": "tn",
+    "color": "#f43f5e",
+    "icon": "🔬",
+    "short": "Natural Sci"
+  }
+};
+
+/* ── Disc code → id map ───────────────────────────────────── */
+const DISC_CODE_TO_ID = {"nv": 76, "xh": 75, "nn": 74, "yt": 73, "kt": 72, "tn": 71};
+
+/* ── Majors ───────────────────────────────────────────────── */
+/* pct (match %) không có ở đây — được tính từ quiz results  */
+const MAJORS_DATA = [
+  {
+    "id": 109,
+    "title": "Biological sciences",
+    "desc": "Biological sciences is the study of living organisms and their interactions with the environment. It includes many fields such as biology, zoology, botany, microbiology, and genetics. Scientists in this area explore how plants, animals, and microorganisms function, grow, and evolve. This field helps us understand the basic processes of life, from cells to whole ecosystems. Research in biological sciences can lead to new medicines, environmental solutions, and advances in agriculture. Biological scientists use experiments, observations, and technology to answer important questions about life. The knowledge gained can help solve health, food, and environmental challenges. Students in this major learn laboratory skills, data analysis, and critical thinking. Careers in biological sciences include research, healthcare, teaching, and biotechnology. It is a dynamic field that continues to grow with new discoveries and innovations.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "🧬"
+  },
+  {
+    "id": 107,
+    "title": "Chemical sciences",
+    "desc": "Chemical sciences is the study of the substances that make up the world around us. It explores the properties, structure, and changes of matter. Scientists in this field learn how atoms and molecules interact with each other. They use this knowledge to create new materials, medicines, and technologies. Chemical sciences are important in many industries like food, energy, and health care. The field includes areas such as organic, inorganic, physical, and analytical chemistry. Students learn to do experiments safely and to analyze the results. They also study the impact of chemicals on the environment. The knowledge from chemical sciences helps solve real-world problems. It is a key science for understanding and improving our daily lives.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "⚗️"
+  },
+  {
+    "id": 105,
+    "title": "Computer and information sciences",
+    "desc": "Computer and information sciences is a field that studies how computers work and how we can use them to solve problems. It covers topics such as programming, software development, databases, and networks. Students learn to write code in different programming languages and build applications. They also study how data is stored, managed, and protected. This field explores both the theory and practical aspects of computing. Computer scientists help develop new technologies that improve our daily lives. Their work is important in many industries, including healthcare, business, and entertainment. The field is always changing, with new discoveries and tools appearing regularly. Careers in computer and information sciences are in high demand around the world. It is a good choice for people who enjoy solving problems and working with technology.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "💻"
+  },
+  {
+    "id": 108,
+    "title": "Earth and related Environmental sciences",
+    "desc": "Earth and related Environmental sciences study our planet and its natural systems. This field explores the atmosphere, oceans, land, and living things. Scientists try to understand how these parts interact with each other. They also look at how humans affect the environment. Topics include climate change, natural disasters, and pollution. The goal is to find ways to protect Earth's resources for the future. Research in this area helps us predict weather and prepare for hazards. It also teaches us about the history of the planet. Environmental sciences use tools like data analysis and fieldwork. This major prepares students for careers in research, conservation, and policy.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "🌍"
+  },
+  {
+    "id": 104,
+    "title": "Mathematics",
+    "desc": "Mathematics is the study of numbers, shapes, and patterns. It helps us solve problems in everyday life and in many different careers. People use mathematics to count, measure, and compare things. It is important in science, engineering, business, and even art. Mathematics includes topics like algebra, geometry, and statistics. Learning math can improve your logical thinking and problem-solving skills. Many inventions and technologies are based on mathematical ideas. It is a subject that builds as you learn more, with each new topic connecting to others. Mathematics is a universal language that people all over the world can understand. Studying math can open many doors for your future.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "📊"
+  },
+  {
+    "id": 143,
+    "title": "Mathematics and Statistics",
+    "desc": "Mathematics and Statistics is the study of numbers, structures, patterns, and data. Students gain skills in problem-solving, logical reasoning, and quantitative analysis, applying mathematical theories and statistical methods to fields such as science, technology, business, economics, and data science.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "📐"
+  },
+  {
+    "id": 106,
+    "title": "Physical sciences",
+    "desc": "Physical sciences are a group of sciences that study non-living systems. They include subjects like physics, chemistry, astronomy, and earth science. These sciences help us understand how the world and universe work. In physics, we learn about forces, energy, and matter. Chemistry focuses on the properties and reactions of different substances. Astronomy explores stars, planets, and the universe beyond Earth. Earth science looks at our planet’s structure, weather, and natural processes. Physical sciences use experiments and observations to find answers. They are important for technology, medicine, and solving environmental problems. Studying physical sciences can lead to many exciting careers in research, engineering, and industry.",
+    "discId": 71,
+    "discCode": "tn",
+    "icon": "🔭"
+  },
+  {
+    "id": 151,
+    "title": "Aeronautics",
+    "desc": "Aeronautics is a discipline within engineering and technology that focuses on the study, design, development, and operation of aircraft and related systems. It combines principles of physics, mathematics, and materials science with advanced engineering practices to ensure safe and efficient air transportation. Aeronautics not only contributes to innovation in aviation technology but also plays a vital role in global connectivity, defense, and space exploration.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "✈️"
+  },
+  {
+    "id": 113,
+    "title": "Chemical engineering",
+    "desc": "Chemical engineering is a branch of engineering that focuses on designing and managing processes to convert raw materials into useful products. It combines knowledge from chemistry, physics, mathematics, and biology to solve problems related to the production of chemicals, fuels, food, and many other products. Chemical engineers work in industries such as pharmaceuticals, energy, food processing, and environmental protection. They develop and improve processes for large-scale manufacturing while considering safety, cost, and environmental impact. Their work often involves designing equipment, optimizing production methods, and ensuring quality control. Chemical engineers also work on developing new materials and energy sources. They use computer simulations and laboratory experiments to test their ideas. Problem-solving and teamwork are important skills in this field. Chemical engineering plays a vital role in making everyday products more efficiently and sustainably. It offers diverse career opportunities around the world.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "⚗️"
+  },
+  {
+    "id": 110,
+    "title": "Civil engineering",
+    "desc": "Civil engineering is a branch of engineering that deals with designing, building, and maintaining the physical environment. Civil engineers work on projects like roads, bridges, buildings, airports, and water supply systems. They make sure structures are safe, strong, and useful for people. Civil engineering includes different areas, such as structural, transportation, environmental, and geotechnical engineering. These engineers often work with architects and other specialists to complete projects. They use math, science, and technology to solve problems and create new solutions. Civil engineers also consider the impact of projects on the environment and society. Their work helps improve daily life and supports the growth of cities and communities. Civil engineering is an important and respected profession around the world. It offers many job opportunities and a chance to make a positive difference.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🏗️"
+  },
+  {
+    "id": 111,
+    "title": "Electrical engineering, Electronic engineering, Information engineering",
+    "desc": "Major user provides are professionals or organizations that make significant use of electrical, electronic, or information engineering technologies. In electrical engineering, these users include power companies, manufacturers, and construction firms that rely on electrical systems for energy distribution and machinery operation. For electronic engineering, major users are often companies in the telecommunications, consumer electronics, and automotive sectors, where electronic devices and circuits are essential. Information engineering's major users include IT companies, banks, and government agencies that depend on data management and information systems. These users require reliable, efficient, and innovative engineering solutions to support their operations. They often collaborate with engineers to develop, implement, and maintain advanced systems. Major users also drive demand for new technologies and improvements. Their feedback helps guide research and development in these engineering fields. As a result, they play a crucial role in the growth and direction of the industry.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "⚡"
+  },
+  {
+    "id": 154,
+    "title": "Engineering",
+    "desc": "Engineering is a discipline that applies scientific and mathematical principles to design, build, and optimize systems, machines, structures, and processes. It includes diverse branches such as civil, mechanical, electrical, computer, aerospace, and chemical engineering. The field emphasizes problem-solving, innovation, and practical applications of science and technology to address real-world challenges. Engineering prepares students to become professionals who create sustainable solutions and drive technological progress across industries.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "⚙️"
+  },
+  {
+    "id": 117,
+    "title": "Environmental biotechnology",
+    "desc": "Environmental biotechnology is a branch of science that uses living organisms to solve environmental problems. It focuses on finding sustainable ways to clean up pollution, treat waste, and protect natural resources. Scientists use bacteria, plants, and fungi to break down harmful substances in soil, water, and air. This process is known as bioremediation. Environmental biotechnology also helps reduce the use of harmful chemicals in agriculture and industry. It can create eco-friendly products and renewable energy sources, like biofuels. The field plays a key role in addressing climate change and reducing greenhouse gas emissions. It supports the development of green technologies that are safer for the environment. Environmental biotechnology offers solutions for managing waste and conserving biodiversity. Overall, it aims to create a healthier and more sustainable planet.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🌿"
+  },
+  {
+    "id": 116,
+    "title": "Environmental engineering",
+    "desc": "Environmental engineering is a field of engineering focused on protecting the environment and improving public health. Environmental engineers use science and engineering principles to solve problems related to air, water, and soil pollution. They design systems for waste management, water treatment, and air quality control. These professionals also work on projects to clean up contaminated sites and prevent future pollution. Environmental engineers often collaborate with governments, companies, and communities to create sustainable solutions. Their work helps ensure safe drinking water, clean air, and healthy ecosystems. They may also be involved in developing new technologies for renewable energy or resource conservation. Environmental engineering combines knowledge from biology, chemistry, and engineering. This major prepares students for careers in both the public and private sectors. It is an important field for creating a more sustainable and healthy world.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "♻️"
+  },
+  {
+    "id": 118,
+    "title": "Industrial biotechnology",
+    "desc": "Industrial biotechnology is a branch of biotechnology that uses living cells and enzymes to create products for industries. It is sometimes called \"white biotechnology\" because it focuses on cleaner and more sustainable processes. Scientists use microbes, plants, or animal cells to make chemicals, materials, and fuels. Common products include biofuels, biodegradable plastics, and enzymes for detergents. Industrial biotechnology helps reduce pollution and energy use by replacing traditional chemical processes. It also supports the recycling of waste materials into valuable products. This field is important for making industry more environmentally friendly. Companies use industrial biotechnology to develop new medicines and food ingredients. It can also help in the production of textiles and paper. Overall, industrial biotechnology is key to a greener and more sustainable future.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🏭"
+  },
+  {
+    "id": 114,
+    "title": "Materials engineering",
+    "desc": "Materials engineering is the study and development of materials used in all kinds of products and structures. It focuses on understanding the properties and behaviors of different materials, such as metals, ceramics, polymers, and composites. Materials engineers work to create new materials with specific qualities, like strength, flexibility, or resistance to heat and corrosion. They often solve problems related to manufacturing and the performance of materials in various conditions. Their work is important for industries like aerospace, automotive, electronics, and construction. Materials engineers use advanced tools and technology to analyze materials at the atomic and molecular level. They also study how materials can be recycled or made more environmentally friendly. This field combines knowledge from chemistry, physics, and engineering. Materials engineers help improve existing products and invent new ones. Their work plays a key role in innovation and technological advancement.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🧱"
+  },
+  {
+    "id": 112,
+    "title": "Mechanical engineering",
+    "desc": "Mechanical engineering is a branch of engineering that focuses on designing, building, and maintaining machines and mechanical systems. Mechanical engineers work with everything from engines and vehicles to heating systems and manufacturing equipment. They use principles of physics and mathematics to solve problems and create new technology. This field is important in industries like automotive, aerospace, energy, and manufacturing. Mechanical engineers often use computer-aided design (CAD) software to develop and test their ideas. They also work on improving the efficiency and safety of machines. Communication and teamwork skills are important, as engineers often work in groups. Mechanical engineering requires a good understanding of materials, forces, and motion. It is a broad field with many career opportunities. This profession helps shape the modern world by making life easier and more comfortable.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🔩"
+  },
+  {
+    "id": 115,
+    "title": "Medical engineering",
+    "desc": "Medical engineering is a field that combines engineering principles with medical and biological sciences to improve healthcare. It involves designing and developing medical devices, equipment, and technology used in hospitals and clinics. Medical engineers work on products like artificial organs, prosthetics, diagnostic machines, and imaging devices such as MRI and X-ray systems. They also help in creating software for managing medical data and improving patient care. These professionals often collaborate with doctors, nurses, and researchers to find solutions to medical problems. Safety, quality, and efficiency are very important in their work. Medical engineering helps to make treatments safer and more effective. It also plays a key role in advancing modern medicine. People in this field need strong skills in both engineering and biology. Medical engineering offers many exciting career opportunities for those interested in science and helping others.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🫀"
+  },
+  {
+    "id": 119,
+    "title": "Nano-technology",
+    "desc": "Nanotechnology is the science and engineering of materials at the scale of atoms and molecules, usually less than 100 nanometers. At this tiny scale, materials can have unique and useful properties not seen at larger sizes. Scientists use nanotechnology to create new materials, devices, and systems with special functions. It is used in many industries, including medicine, electronics, energy, and cosmetics. For example, in medicine, nanotechnology can help deliver drugs directly to diseased cells. In electronics, it helps make smaller and faster computer chips. Nanotechnology can also be used to create stronger and lighter materials. There are concerns about the safety and environmental impact of nanotechnology, so careful research is important. As the technology develops, it may solve many problems in health, environment, and technology. Nanotechnology is a rapidly growing field with great potential for the future.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "⚛️"
+  },
+  {
+    "id": 120,
+    "title": "Other engineering and technologies",
+    "desc": "Other engineering and technologies focus on fields that do not fit directly into traditional branches like civil, mechanical, or electrical engineering. This area includes emerging and interdisciplinary technologies such as environmental engineering, nanotechnology, and renewable energy systems. Professionals in this sector often work on innovative projects that solve modern problems. They use advanced tools and methods to improve processes, products, and services. Work might involve designing new materials, developing smart devices, or researching sustainable solutions. Collaboration with scientists and experts from other fields is common. These engineers need strong technical skills and creativity. Career opportunities are available in industries, research institutions, and government agencies. Continuous learning is important due to rapid technological advancements. This field is ideal for those who enjoy exploring new ideas and applying technology in unique ways.",
+    "discId": 72,
+    "discCode": "kt",
+    "icon": "🔧"
+  },
+  {
+    "id": 121,
+    "title": "Basic medicine",
+    "desc": "Basic medicine is the study of the fundamental concepts in healthcare and medical science. It covers important topics like human anatomy, physiology, and biochemistry. Students learn about how the body works, what causes diseases, and how to prevent them. Basic medicine also teaches about the structure and functions of organs and systems in the human body. It forms the foundation for more advanced medical studies and clinical practice. Understanding basic medicine helps future doctors, nurses, and other healthcare professionals provide better care for patients. The subject includes both theoretical knowledge and practical skills. Learning basic medicine is essential for diagnosing and treating illnesses. It also emphasizes the importance of hygiene and healthy lifestyle choices. Overall, basic medicine is the starting point for anyone pursuing a career in the medical field.",
+    "discId": 73,
+    "discCode": "yt",
+    "icon": "🩻"
+  },
+  {
+    "id": 122,
+    "title": "Clinical medicine",
+    "desc": "Clinical medicine is a branch of medicine that focuses on the direct care of patients. Doctors in this field diagnose, treat, and prevent diseases by working closely with individuals. Clinical medicine combines scientific knowledge with practical skills to manage a variety of health conditions. It usually involves taking patient histories, performing physical examinations, and ordering diagnostic tests. Treatments can include medications, surgeries, or lifestyle changes. Clinical medicine covers many specialties, such as cardiology, pediatrics, and internal medicine. It plays an essential role in improving public health and patient outcomes. Practitioners must stay updated with the latest medical research and techniques. Good communication skills are important for building trust with patients. Clinical medicine is vital for the effective delivery of healthcare services.",
+    "discId": 73,
+    "discCode": "yt",
+    "icon": "🏥"
+  },
+  {
+    "id": 123,
+    "title": "Health sciences",
+    "desc": "Health sciences is a field that focuses on the study of health, wellness, and disease. It combines knowledge from biology, chemistry, medicine, and social sciences. People in this field learn how the human body works and how to prevent and treat illnesses. Health sciences also look at ways to improve healthcare systems and promote healthy lifestyles. Students study subjects like anatomy, physiology, nutrition, and public health. Professionals work in hospitals, clinics, laboratories, and research centers. Their goal is to help people live healthier lives. They may also educate communities about health risks and safe practices. Careers in health sciences include doctors, nurses, pharmacists, and public health specialists. This major is ideal for those interested in science and helping others.",
+    "discId": 73,
+    "discCode": "yt",
+    "icon": "💊"
+  },
+  {
+    "id": 124,
+    "title": "Medical biotechnology",
+    "desc": "Medical biotechnology is a field that uses living cells and biological processes to improve human health. It involves developing new treatments, medicines, and technologies for diagnosing and curing diseases. Scientists in this field work with DNA, proteins, and cells to create vaccines, antibiotics, and other medical products. Medical biotechnology has led to important advances like insulin for diabetes and gene therapy for genetic disorders. It also helps in detecting diseases faster and more accurately. Researchers use techniques such as genetic engineering and cell culture. This field plays a key role in fighting pandemics and developing personalized medicine. Medical biotechnology combines biology, chemistry, and technology. It offers many career opportunities in research, healthcare, and pharmaceuticals. The goal is to make healthcare safer, more effective, and more accessible for everyone.",
+    "discId": 73,
+    "discCode": "yt",
+    "icon": "🧫"
+  },
+  {
+    "id": 157,
+    "title": "Nursing",
+    "desc": "Nursing is a discipline within the Medical and Health Sciences that focuses on patient care, health promotion, and disease prevention. It combines clinical expertise with compassion to support individuals, families, and communities across the lifespan. Students in this field gain knowledge of medical science, healthcare systems, and practical skills in patient assessment, treatment, and recovery, preparing them to work as essential professionals in the healthcare sector.",
+    "discId": 73,
+    "discCode": "yt",
+    "icon": "🩺"
+  },
+  {
+    "id": 125,
+    "title": "Other medical sciences",
+    "desc": "Other medical sciences include various fields that support and expand our understanding of health and disease. These sciences often work together with medicine to improve patient care. Examples are pharmacy, which focuses on creating and using medicines, and medical laboratory science, which helps diagnose diseases through tests. Public health studies how to prevent illness in communities. Biochemistry and genetics look at the body at a molecular level, helping to explain how diseases happen. Nutrition science explores how food affects health. Epidemiology tracks how diseases spread in populations. Biomedical engineering creates new tools and devices for doctors. Each branch has its own methods and goals, but all aim to improve health and well-being. Together, they play a key role in modern healthcare.",
+    "discId": 73,
+    "discCode": "yt",
+    "icon": "🔬"
+  },
+  {
+    "id": 128,
+    "title": "Agricultural biotechnology",
+    "desc": "Agricultural biotechnology is a field of science that uses technology to improve plants, animals, and microorganisms for farming. It involves techniques like genetic engineering, molecular markers, and tissue culture. These methods help create crops that are more resistant to pests, diseases, and harsh weather. Biotechnology also helps in developing plants with higher yields and better nutritional value. Farmers can use fewer chemicals, which is better for the environment. This technology can also make food last longer and taste better. It plays a big role in ensuring food security for the growing world population. However, there are concerns about safety, ethics, and the environment. Scientists and governments work together to make sure these technologies are safe. Overall, agricultural biotechnology aims to make farming more efficient and sustainable.",
+    "discId": 74,
+    "discCode": "nn",
+    "icon": "🌱"
+  },
+  {
+    "id": 126,
+    "title": "Agriculture, forestry and fishery",
+    "desc": "Agriculture, forestry, and fishery are important sectors that provide food, materials, and resources for society. Agriculture involves growing crops and raising animals for food and other products. Forestry is about managing forests to produce wood, paper, and other forest products, while also protecting the environment. Fishery includes catching and farming fish and other seafood for people to eat. These activities support millions of jobs around the world. They also help maintain rural communities and local economies. Sustainable practices in these sectors are important to protect natural resources and biodiversity. New technologies and methods are helping farmers, foresters, and fishers work more efficiently and responsibly. Climate change and global demand present both challenges and opportunities for these industries. Overall, agriculture, forestry, and fishery are vital for human survival and economic development.",
+    "discId": 74,
+    "discCode": "nn",
+    "icon": "🌾"
+  },
+  {
+    "id": 127,
+    "title": "Animal and dairy science",
+    "desc": "Animal and dairy science is a field of study that focuses on the biology and management of farm animals. It covers animals such as cows, sheep, goats, pigs, and poultry. Students learn about animal nutrition, breeding, genetics, and health. The major also explores how to manage animal housing, welfare, and production systems. Dairy science specifically looks at milk production and processing. Students study how to improve milk yield and quality. The program often includes practical experience on farms or in laboratories. Graduates can work in agriculture, research, food production, or veterinary services. This major prepares students for careers that support sustainable and efficient animal agriculture. It is a good choice for those interested in both science and working with animals.",
+    "discId": 74,
+    "discCode": "nn",
+    "icon": "🐄"
+  },
+  {
+    "id": 145,
+    "title": "Behavioral Sciences",
+    "desc": "Behavioral Sciences is an interdisciplinary field that studies human and animal behavior through systematic observation, analysis, and experimentation. It encompasses disciplines such as psychology, sociology, anthropology, and cognitive science, aiming to understand how individuals think, feel, and act within different social, cultural, and biological contexts. Insights from behavioral sciences are applied in areas such as education, healthcare, business, and public policy to improve individual well-being and societal outcomes.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🧠"
+  },
+  {
+    "id": 146,
+    "title": "Business",
+    "desc": "Business is the study of how organizations and individuals create, manage, and sustain economic activities in a competitive environment. It covers areas such as management, finance, marketing, entrepreneurship, and operations, with a focus on decision-making, resource allocation, and innovation. Business programs prepare students to analyze markets, understand organizational behavior, and develop strategies that drive growth and sustainability in both local and global contexts.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "💼"
+  },
+  {
+    "id": 130,
+    "title": "Economics and business",
+    "desc": "Economics and business are closely related fields that study how people, companies, and governments use resources. Economics focuses on understanding how individuals and societies make choices when resources are limited. It looks at the production, distribution, and consumption of goods and services. Business, on the other hand, is about organizing and managing activities to achieve specific goals, usually making a profit. Businesses create products or provide services to satisfy customer needs. Both economics and business help explain how markets work and how prices are set. They also show how competition and innovation can benefit society. Understanding these fields can help people make better decisions in their personal and professional lives. Economics and business are important for solving real-world problems like unemployment and inflation. They also play a key role in the growth and development of countries.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "📈"
+  },
+  {
+    "id": 153,
+    "title": "Education",
+    "desc": "Education is a discipline that explores the theories, methods, and practices of teaching and learning. It covers areas such as curriculum development, educational psychology, instructional design, classroom management, and educational leadership. This field aims to prepare students to become effective educators, researchers, or administrators who contribute to improving learning outcomes and advancing educational systems in society.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "📚"
+  },
+  {
+    "id": 131,
+    "title": "Educational sciences",
+    "desc": "Educational sciences is a field that studies how people learn and how teaching works. It combines knowledge from psychology, sociology, philosophy, and education. Students learn about different teaching methods, classroom management, and curriculum design. The major also explores how culture and society influence education. Educational sciences prepare students to become teachers, counselors, or education administrators. They learn how to assess student progress and create effective learning environments. Research is an important part of this field, as it helps improve educational practices. Students may also study educational policy and leadership. This major helps people understand and solve problems in schools and other learning settings. Graduates can work in schools, government agencies, or educational organizations.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🎓"
+  },
+  {
+    "id": 158,
+    "title": "Helms School of Government",
+    "desc": "The field of Government and Public Policy focuses on the study of political systems, governance, public administration, and international relations. It equips students and researchers with a deep understanding of political theory, constitutional principles, ethical leadership, and policy-making processes. This discipline prepares individuals to engage in public service, diplomacy, law, and advocacy with a strong foundation in both practical governance and moral responsibility.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🏛️"
+  },
+  {
+    "id": 133,
+    "title": "Law",
+    "desc": "Law is a system of rules created and enforced by governments and institutions to maintain order and protect people's rights. It helps resolve conflicts between individuals, groups, or organizations. Laws can be written in constitutions, statutes, regulations, or established by court decisions. They cover many areas, such as criminal law, civil law, business law, and family law. Everyone in society is expected to follow the law, and breaking it can lead to penalties or punishment. Lawyers and judges play important roles in the legal system, helping to interpret and apply the law. Laws change over time to reflect new values and ideas in society. Understanding the law is important for making informed decisions and protecting yourself. Laws also promote fairness and justice. Learning about law can help you understand your rights and responsibilities.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "⚖️"
+  },
+  {
+    "id": 134,
+    "title": "Political science",
+    "desc": "Political science is the study of politics, government systems, and political behavior. It helps us understand how societies are governed and how laws are made. Political scientists analyze the roles of institutions like parliaments, presidents, and courts. They also study political parties, elections, and public opinion. This field looks at both national and international politics. Political science helps explain why certain policies are created and how they affect people’s lives. It teaches critical thinking and research skills. Students learn about history, economics, and philosophy as part of their studies. Graduates can work in government, journalism, or education. Political science is important for anyone interested in leadership or social change.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🗳️"
+  },
+  {
+    "id": 129,
+    "title": "Psychology",
+    "desc": "Psychology is the scientific study of the mind and behavior. It explores how people think, feel, and act in different situations. Psychologists try to understand what motivates us, how we learn, and how we develop over time. This field looks at both normal and abnormal behaviors. It also examines how the brain and environment influence our actions. Psychology includes many areas, such as clinical, social, developmental, and cognitive psychology. Psychologists often help people with mental health problems. They use different methods to study people, such as experiments, interviews, and surveys. Psychology helps us improve our relationships, work, and well-being. Studying psychology can lead to various careers, including counseling, research, and human resources.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🧠"
+  },
+  {
+    "id": 150,
+    "title": "Sciences",
+    "desc": "Sciences is an academic field that explores the natural world, physical phenomena, and the laws that govern them. It encompasses a wide range of disciplines such as Mathematics, Physics, Chemistry, Biology, Earth Sciences, and Computer Science. Through methods of observation, experimentation, and analysis, Sciences enable humans to better understand nature, advance technology, address global challenges, and contribute to social progress.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🔬"
+  },
+  {
+    "id": 135,
+    "title": "Social and economic geography",
+    "desc": "Social and economic geography is a branch of geography that studies how people live and work in different places. It looks at how societies are organized and how resources are distributed. Social geography examines issues like population, culture, housing, and migration. Economic geography focuses on industries, jobs, trade, and how wealth is spread around the world. This field helps us understand why some areas are richer or more developed than others. It also explores how people use land and natural resources. Social and economic geography connects human activities with the environment. It uses maps, data, and statistics to analyze patterns and trends. By studying this subject, we can learn about global problems such as poverty and inequality. It also helps governments and businesses make better decisions about planning and development.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "🗺️"
+  },
+  {
+    "id": 132,
+    "title": "Sociology",
+    "desc": "Sociology is the study of society, social relationships, and human behavior. It explores how people interact with each other in groups, organizations, and communities. Sociologists examine topics like culture, family, education, and social change. They look at how social structures shape our lives and influence our choices. Sociology also studies issues such as inequality, crime, and race. It uses different research methods to collect data and analyze social patterns. The subject helps us understand why people act the way they do in different situations. Sociologists work in many fields, including education, government, and social services. By studying sociology, we learn more about ourselves and the world around us. It encourages us to think critically about social problems and find solutions.",
+    "discId": 75,
+    "discCode": "xh",
+    "icon": "👥"
+  },
+  {
+    "id": 139,
+    "title": "Arts and Sciences",
+    "desc": "Arts and Sciences is a broad academic field that explores the intersection of human creativity and the principles that govern our world. This domain includes not only the study of natural phenomena and complex social systems but also delves into the humanistic aspects of our existence.\n\nA strong foundation in Arts and Sciences helps you develop critical thinking, problem-solving skills, and a deep understanding of the world around you. Instead of focusing on a narrow specialty, you will be equipped with a diverse set of intellectual tools, allowing you to adapt and thrive in various professional environments. Whether you aim to pursue in-depth research or a role in business and leadership, an Arts and Sciences background will provide you with the knowledge and skills you need to succeed.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "🎭"
+  },
+  {
+    "id": 152,
+    "title": "Communication and the Arts",
+    "desc": "Communication and the Arts is a multidisciplinary field that combines creative expression with media and communication studies. It covers a wide range of programs such as acting, theatre, musical theatre, graphic design, studio and digital arts, film production, journalism, strategic communication, and media studies. This field equips students with both artistic and professional communication skills, fostering creativity, cultural awareness, and the ability to engage audiences effectively across various platforms. Graduates are prepared for careers in the arts, media, entertainment, public relations, and other creative industries.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "🎨"
+  },
+  {
+    "id": 144,
+    "title": "English",
+    "desc": "Chương trình Cử nhân Văn học Anh cung cấp nền tảng vững chắc về ngôn ngữ, văn học và kỹ năng phân tích. Sinh viên sẽ phát triển khả năng đọc, viết và giao tiếp hiệu quả, đồng thời được trang bị kiến thức để theo đuổi nhiều cơ hội nghề nghiệp, bao gồm: biên tập và báo chí, nghiên cứu pháp lý, tiếp thị, viết chuyên nghiệp, xuất bản, và giáo dục trung học hoặc đại học.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "📝"
+  },
+  {
+    "id": 148,
+    "title": "History",
+    "desc": "History is a discipline within the Humanities that explores past events, societies, cultures, and ideas to understand how they have shaped the present and influence the future. As a field of study, History develops critical thinking, analytical, and interpretive skills by examining evidence, narratives, and diverse perspectives. It also connects with the Social Sciences in areas such as sociology, economics, and political science, making it an interdisciplinary subject that bridges human experience across time.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "🏺"
+  },
+  {
+    "id": 136,
+    "title": "History and archaeology",
+    "desc": "History and archaeology are fields that study the past of human societies. History looks at written records, documents, and stories to understand how people lived and what important events happened. Archaeology focuses on discovering and studying physical remains, such as buildings, tools, and pottery left by ancient peoples. Both fields help us learn about different cultures and how they changed over time. Historians often analyze texts, while archaeologists dig at sites to find artifacts. Together, they provide a more complete picture of our past. These studies teach us about our ancestors’ daily lives, beliefs, and achievements. They also show how societies grew, traded, and sometimes disappeared. Understanding history and archaeology helps us appreciate our shared heritage. It also gives us lessons that can guide us today.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "🏛️"
+  },
+  {
+    "id": 137,
+    "title": "Languages and literature",
+    "desc": "Languages and literature is the study of different languages and the written works created in those languages. This field includes learning how to speak, read, and write in one or more languages. It also involves analyzing novels, poems, plays, and other texts to understand their meaning and cultural significance. Students explore the history and development of languages and how they influence each other. Literature classes often discuss themes, characters, and writing styles. Studying languages and literature helps improve communication skills and critical thinking. It also opens up opportunities to appreciate other cultures and perspectives. People with this background can work in teaching, translation, writing, or publishing. This major is ideal for those who love reading and are curious about languages. Overall, it connects people through stories and ideas from around the world.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "✍️"
+  },
+  {
+    "id": 156,
+    "title": "Music",
+    "desc": "Music is a multidimensional field that combines both art and science, focusing on the study, creation, performance, and analysis of organized sound. It is not only a discipline of melody and harmony but also a pathway to exploring the intersection of culture, history, and human emotion. Students pursuing this field are equipped with in-depth knowledge of music theory and world music history, along with practical skills such as composition, instrumental performance, or vocal training.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "🎵"
+  },
+  {
+    "id": 138,
+    "title": "Philosophy, ethics and religion",
+    "desc": "Philosophy, ethics, and religion are fields that explore the big questions about life, existence, and human behavior. Philosophy asks questions about reality, knowledge, and the meaning of life. Ethics is a part of philosophy that studies what is right and wrong, and how we should act towards others. Religion involves beliefs and practices related to the divine, the sacred, or the purpose of life. Different religions offer various moral codes and ways to understand the world. Many people find guidance, comfort, and community through religious beliefs. Philosophy and religion sometimes agree, but they can also have different views about truth and morality. Studying ethics helps people make better decisions and understand the reasons behind their actions. These subjects are important for understanding cultures, history, and personal values. Together, philosophy, ethics, and religion help people think deeply about themselves and the world around them.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "📜"
+  },
+  {
+    "id": 142,
+    "title": "Sign Language and Interpreting",
+    "desc": "Sign Language and Interpreting is a specialized field that trains students to communicate fluently in sign language and to serve as professional interpreters between the Deaf and hearing communities. The program emphasizes linguistic competence, cultural awareness of the Deaf community, and practical interpreting skills across educational, medical, legal, and social service settings. Graduates are prepared for careers as certified interpreters, educators, or advocates supporting accessibility and inclusion.",
+    "discId": 76,
+    "discCode": "nv",
+    "icon": "🤟"
+  }
+];
+
+/* ── Helper: lấy majors theo discipline code ──────────────── */
+function getMajorsByDisc(discCode) {
+  return MAJORS_DATA.filter(m => m.discCode === discCode);
+}
+
+/* ── Helper: lấy discipline object theo code ─────────────── */
+function getDisc(discCode) {
+  return Object.values(DISCIPLINES).find(d => d.code === discCode);
+}
