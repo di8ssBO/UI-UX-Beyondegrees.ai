@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <script src="../../../shared/scripts/ui/bd-profile.js"></script>
+  <title>Edit Profile — BeyonDegrees.ai</title>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
+<style>
+:root,:root[data-theme="dark"]{--violet-950:#06091A;--violet-900:#0A0F28;--violet-800:#0F2060;--violet-700:#1358C4;--violet-600:#1863DC;--violet-500:#0274BE;--violet-400:#6BA3FF;--violet-300:#93BBFF;--violet-200:#B8D4FF;--violet-100:#DCE9FF;--shadow-violet:0 8px 24px rgba(24,99,220,0.35);--shadow-violet-sm:0 4px 12px rgba(24,99,220,0.20);--glow-violet:0 20px 50px rgba(24,99,220,0.40);--glow-violet-sm:0 12px 30px rgba(24,99,220,0.28)}
+/* Light-mode token overrides live in design-system/tokens.css */
+[data-theme="light"] body{background:#06060f!important;color:#f8fafc!important}
+*,*::before,*::after{transition:background-color .3s ease,border-color .3s ease,color .2s ease,box-shadow .3s ease}
+svg *,canvas,video,img{transition:none!important}
+
+body { background: #06060f; }
+
+.mobile-viewport {
+  flex: 1; overflow: hidden;
+  display: flex; flex-direction: column;
+  position: relative; background: var(--bg-base);
+  scrollbar-width: none;
+}
+.mobile-viewport > .float-tab-bar { flex-shrink: 0; }
+.mobile-viewport::-webkit-scrollbar { display: none; }
+[data-theme="light"] .mobile-viewport {
+  background:
+    url("../../../shared/bg-light.svg") center top / cover no-repeat,
+    linear-gradient(180deg, #fdf8f2 0%, #f5ede0 50%, #ede1cf 100%) !important;
+}
+[data-theme="light"] .device-frame { border-color: #1a1a2e !important; }
+[data-theme="light"] .breadcrumb-item,
+[data-theme="light"] .breadcrumb-separator { color: rgba(255,255,255,0.45) !important; }
+[data-theme="light"] .breadcrumb-item.active { color: rgba(255,255,255,0.85) !important; }
+[data-theme="light"] .status-bar { color: #2c1f14 !important; }
+
+/* Header — logo only, navigation now lives in the bottom tab bar
+   like every other mobile screen (no back button / breadcrumb link). */
+.ds-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px 8px;
+  position: relative;
+  z-index: 30;
+  flex-shrink: 0;
+  background: var(--bg-base);
+}
+.ds-logo { display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:700; color:var(--text-primary); line-height:1; }
+.ds-logo .logo-text { display:inline-flex; align-items:baseline; gap:0; white-space:nowrap; }
+.ds-logo .logo-beyon { color:var(--text-primary); }
+.ds-logo .logo-accent { color:var(--violet-400); }
+.ds-logo .logo-img { height:20px; width:auto; display:block; flex-shrink:0; }
+[data-theme="dark"] .ds-logo .logo-img { filter:brightness(0) invert(1) drop-shadow(0 1px 4px color-mix(in srgb, var(--violet-400) 30%, transparent)); }
+[data-theme="dark"] .ds-logo .logo-text { background:linear-gradient(135deg,var(--violet-400) 0%,var(--mint-500) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+[data-theme="light"] .ds-hdr { background: transparent; }
+[data-theme="light"] .ds-logo .logo-text { background:linear-gradient(135deg,var(--coral-600) 0%,var(--violet-600) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+
+/* Page content — scrolls on its own between the header and the
+   bottom tab bar, which stays pinned outside this scroll region. */
+.page-content {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  padding: 20px 16px 32px;
+}
+.page-content::-webkit-scrollbar { display: none; }
+.profile-edit-title {
+  margin: 2px 2px 16px;
+  font-size: 24px;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+/* Avatar section */
+.avatar-section {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 20px 0 24px; gap: 10px;
+}
+.avatar-wrap { position: relative; width: 80px; height: 80px; }
+.avatar {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff;
+  border: 3px solid rgba(139,92,246,0.38);
+  box-shadow: 0 0 0 4px rgba(139,92,246,0.16), 0 6px 18px rgba(109,40,217,0.30);
+}
+.avatar-edit-btn {
+  position: absolute; bottom: 0; right: 0;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #F97316; border: 2px solid var(--bg-base);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: white;
+}
+.avatar-edit-btn:hover { background: #EA580C; }
+/* Light theme: a warm coral/peach gradient (single hue family, no
+   coral+blue clash) ties into the cream palette the rest of light mode
+   uses. The edit button switches to this page's brand blue instead of
+   dark mode's orange — a clearly different hue, not just a shade shift. */
+[data-theme="light"] .avatar {
+  background: linear-gradient(135deg, #E89370, #C46B4A);
+  border-color: rgba(230,138,96,0.40);
+  box-shadow: 0 0 0 4px rgba(230,138,96,0.18), 0 6px 18px rgba(196,107,74,0.28);
+}
+[data-theme="light"] .avatar-edit-btn { background: #0274BE; }
+[data-theme="light"] .avatar-edit-btn:hover { background: #065A94; }
+/* Only surfaced once a photo is actually set — nothing to remove otherwise. */
+.avatar-remove-btn {
+  position: absolute; top: 0; right: 0;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: #ef4444; border: 2px solid var(--bg-base);
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; color: white; padding: 0;
+}
+.avatar-remove-btn.show { display: flex; }
+.avatar-remove-btn:hover { background: #dc2626; }
+.archetype-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-muted);
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.archetype-chip a {
+  color: #1863DC; font-weight: 600; text-decoration: none;
+}
+.archetype-chip a:hover { text-decoration: underline; }
+/* Neutralise layout.css global [class*="chip"] blue box — 9-not chain
+   to beat (0,9,0) specificity. archetype-chip is a label row, not pill. */
+.archetype-chip:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i),
+[data-theme="light"] .archetype-chip:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  color: #6b5440 !important;
+}
+[data-theme="light"] .archetype-chip a {
+  color: #a84e30 !important;
+  font-weight: 800 !important;
+}
+[data-theme="light"] .archetype-chip a:hover { color: #7d3720 !important; }
+
+/* Form card */
+.form-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 18px; overflow: hidden; margin-bottom: 12px;
+}
+[data-theme="light"] .form-card {
+  background: rgba(255,255,255,0.92)!important;
+  border-color: rgba(24,99,220,0.12)!important;
+  box-shadow: 0 2px 16px rgba(24,99,220,0.07);
+}
+
+/* Field row */
+.field-row {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.field-row:last-child { border-bottom: none; }
+[data-theme="light"] .field-row { border-bottom-color: rgba(24,99,220,0.07)!important; }
+
+.field-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+.field-input {
+  width: 100%;
+  background: transparent;
+  border: none; outline: none;
+  font-size: 14px; font-weight: 500;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  padding: 0;
+}
+.field-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+/* Neutralise layout.css global input box paint —
+   field-input sits inside .form-card (which provides bg + border),
+   so the input itself must be transparent. 9-not chain to beat
+   global [data-theme="light"] input { ... } cream box. */
+[data-theme="light"] input.field-input,
+[data-theme="light"] textarea.field-input,
+[data-theme="light"] .field-input:not(.a):not(.b):not(.c):not(.d):not(.e):not(.f):not(.g):not(.h):not(.i) {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #2c1f14 !important;
+  padding: 0 !important;
+}
+[data-theme="light"] .field-input::placeholder { color: #8c7260 !important; opacity: 0.85 !important; }
+[data-theme="light"] .field-input:focus { box-shadow: none !important; outline: none !important; }
+
+.field-input-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.field-prefix-icon { color: var(--text-muted); flex-shrink: 0; }
+
+/* Read-only field */
+.field-readonly .field-input { color: var(--text-muted); cursor: default; }
+.field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; opacity: 0.7; }
+
+/* Select field */
+.field-select {
+  width: 100%; background: transparent; border: none; outline: none;
+  font-size: 14px; font-weight: 500; color: var(--text-primary);
+  font-family: var(--font-body); cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  padding: 0;
+}
+.field-select option { background: #0d0d1a; color: #fff; }
+[data-theme="light"] .field-select { color: #1A1A2E; }
+[data-theme="light"] .field-select option { background: #fff; color: #1A1A2E; }
+
+.field-select-wrap {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.select-chevron { color: var(--text-muted); flex-shrink: 0; }
+
+/* Checkbox */
+.checkbox-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px; margin-bottom: 12px;
+  cursor: pointer;
+}
+[data-theme="light"] .checkbox-row { background: rgba(24,99,220,0.04)!important; border-color: rgba(24,99,220,0.10)!important; }
+.custom-checkbox {
+  width: 20px; height: 20px; border-radius: 11px;
+  border: 2px solid rgba(255,255,255,0.20);
+  background: transparent; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+}
+.custom-checkbox svg {
+  opacity: 0; transform: scale(0.3) rotate(-10deg);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events: none;
+}
+.checkbox-row input { display: none; }
+.checkbox-row input:checked ~ .custom-checkbox {
+  background: #1863DC; border-color: #1863DC;
+  transform: scale(1.08);
+}
+.checkbox-row input:checked ~ .custom-checkbox svg {
+  opacity: 1; transform: scale(1) rotate(0deg);
+}
+[data-theme="light"] .custom-checkbox { border-color: rgba(0,0,0,0.20)!important; }
+.checkbox-label { font-size: 13px; font-weight: 500; color: var(--text-primary); line-height: 1.4; }
+[data-theme="light"] .checkbox-label { color: #1A1A2E!important; }
+
+/* Preferred Major — revealed only when "I already know what I want to
+   study" is checked. Ported as-is from mobile/profile/edit. */
+.mobile-major-field[hidden],
+.mobile-major-menu[hidden] {
+  display: none !important;
+}
+.mobile-major-picker {
+  position: relative;
+}
+.mobile-major-button {
+  width: 100%;
+  min-height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  text-align: left;
+  cursor: pointer;
+}
+.mobile-major-placeholder {
+  color: var(--text-muted);
+}
+.mobile-major-caret {
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform .16s ease;
+}
+.mobile-major-button.open .mobile-major-caret {
+  transform: rotate(180deg);
+}
+.mobile-major-menu {
+  margin-top: 8px;
+  max-height: 190px;
+  overflow: auto;
+  padding: 7px;
+  border-radius: 14px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-md);
+}
+.mobile-major-option {
+  width: 100%;
+  padding: 10px 11px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+}
+.mobile-major-option.on,
+.mobile-major-option:active {
+  background: rgba(124,58,237,0.18);
+  color: var(--text-primary);
+}
+.mobile-major-option.on::after {
+  content: "✓";
+  color: var(--violet-400);
+  font-weight: 900;
+}
+[data-theme="light"] .mobile-major-option.on,
+[data-theme="light"] .mobile-major-option:active {
+  background: rgba(201,107,85,0.13);
+  color: #2c1f14;
+}
+[data-theme="light"] .mobile-major-option.on::after {
+  color: var(--coral-600);
+}
+
+/* Save button */
+.btn-save {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: white;
+  cursor: pointer; letter-spacing: 0.01em;
+  transition: opacity 0.2s, transform 0.15s;
+  box-shadow: 0 4px 20px rgba(24,99,220,0.35);
+  margin-bottom: 10px;
+}
+.btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+.btn-save:active { transform: scale(0.98); }
+
+/* Secondary buttons */
+.btn-secondary {
+  width: 100%; padding: 13px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: background 0.18s, border-color 0.18s; margin-bottom: 10px;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.26); }
+[data-theme="light"] .btn-secondary { background: rgba(24,99,220,0.07)!important; border-color: rgba(24,99,220,0.22)!important; color: #1A1A2E!important; }
+[data-theme="light"] .btn-secondary:hover { background: rgba(24,99,220,0.12)!important; }
+
+.btn-reset {
+  width: 100%; padding: 12px 8px; margin-top: 4px;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.38); border-radius: 14px;
+  font-size: 13px; font-weight: 600; color: #ef4444;
+  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: background 0.18s, border-color 0.18s;
+}
+.btn-reset:hover { background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.55); }
+[data-theme="light"] .btn-reset { background: rgba(239,68,68,0.08)!important; border-color: rgba(239,68,68,0.30)!important; color: #dc2626!important; }
+[data-theme="light"] .btn-reset:hover { background: rgba(239,68,68,0.14)!important; border-color: rgba(239,68,68,0.45)!important; }
+
+
+/* ── Reset Confirm Modal ─────────────────────────────────────── */
+.modal-backdrop {
+  position: absolute; inset: 0; z-index: 200;
+  background: rgba(6,6,15,0.72);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+.modal-backdrop.open {
+  opacity: 1; pointer-events: all;
+}
+.modal-sheet {
+  width: 100%;
+  background: var(--bg-surface, #0d0d1a);
+  border-radius: 24px 24px 0 0;
+  padding: 0 16px 32px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transform: translateY(100%);
+  transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
+}
+[data-theme="light"] .modal-sheet {
+  background: #fff !important;
+  border-top-color: rgba(24,99,220,0.10) !important;
+}
+.modal-backdrop.open .modal-sheet {
+  transform: translateY(0);
+}
+.modal-handle {
+  width: 36px; height: 4px; border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  margin: 12px auto 20px;
+}
+[data-theme="light"] .modal-handle { background: rgba(0,0,0,0.12) !important; }
+.modal-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(249,115,22,0.12);
+  border: 1.5px solid rgba(249,115,22,0.25);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+  font-size: 24px; line-height: 1;
+}
+.modal-icon--archetype {
+  background: rgba(139,92,246,0.14);
+  border-color: rgba(139,92,246,0.30);
+}
+.btn-modal-primary {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: #fff;
+  cursor: pointer; letter-spacing: 0.01em;
+  box-shadow: 0 4px 18px rgba(139,92,246,0.35);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.btn-modal-primary:active { opacity: 0.88; transform: scale(0.98); }
+.modal-title {
+  font-size: 17px; font-weight: 800; color: var(--text-primary);
+  text-align: center; margin-bottom: 8px;
+}
+.modal-body {
+  font-size: 13px; color: var(--text-muted); text-align: center;
+  line-height: 1.55; margin-bottom: 22px; padding: 0 4px;
+}
+.modal-body strong { color: var(--text-secondary); }
+.modal-actions { display: flex; flex-direction: column; gap: 10px; }
+.btn-modal-danger {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg,#ea580c,#f97316);
+  border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 700; color: #fff;
+  cursor: pointer; letter-spacing: 0.01em;
+  box-shadow: 0 4px 18px rgba(249,115,22,0.35);
+  transition: opacity 0.18s, transform 0.18s;
+}
+.btn-modal-danger:active { opacity: 0.88; transform: scale(0.98); }
+.btn-modal-cancel {
+  width: 100%; padding: 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+  font-size: 14px; font-weight: 600; color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.18s;
+}
+.btn-modal-cancel:hover { background: rgba(255,255,255,0.09); }
+[data-theme="light"] .btn-modal-cancel {
+  background: rgba(24,99,220,0.06) !important;
+  border-color: rgba(24,99,220,0.15) !important;
+  color: #1A1A2E !important;
+}
+</style>
+</head>
+
+<body>
+<div class="breadcrumb" style="margin:var(--space-4) var(--space-6) 0">
+  <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
+  <span class="breadcrumb-separator">/</span>
+  <span class="breadcrumb-item active">Edit Profile</span>
+</div>
+
+<div class="desktop-container">
+  <div class="device-frame">
+    <div class="device-notch"></div>
+
+    <div class="mobile-viewport">
+      <div class="status-bar">
+        <span>9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <div class="ds-hdr">
+        <div class="ds-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
+      </div>
+
+      <div class="page-content">
+        <h1 class="profile-edit-title">Edit Profile</h1>
+
+        <!-- Avatar -->
+        <div class="avatar-section">
+          <div class="avatar-wrap">
+            <div class="avatar"></div>
+            <label class="avatar-edit-btn" for="avatarUpload" aria-label="Change profile photo">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </label>
+            <button type="button" class="avatar-remove-btn" id="removeAvatarBtn" aria-label="Remove profile photo">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <input id="avatarUpload" type="file" accept="image/*" hidden>
+          </div>
+          <div class="archetype-chip">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <span>Academic Archetype: <a href="#" id="archetypeFindOut">Find Out</a></span>
+          </div>
+        </div>
+
+        <!-- Name fields -->
+        <div class="form-card">
+          <div class="field-row">
+            <div class="field-label" data-i18n="edit.first_name">First Name</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input class="field-input" id="editFirstName" type="text" value="Hoang" placeholder="First name">
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-label" data-i18n="edit.last_name">Last Name</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              <input class="field-input" id="editLastName" type="text" value="Phuc" placeholder="Last name">
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-card">
+          <div class="field-row field-readonly">
+            <div class="field-label" data-i18n="edit.email">Email</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input class="field-input" type="email" value="hoangphuc140904@gmail.com" readonly>
+            </div>
+            <div class="field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="form-card">
+          <div class="field-row">
+            <div class="field-label" data-i18n="edit.location">Location</div>
+            <div class="field-input-wrap">
+              <svg class="field-prefix-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input class="field-input" type="text" value="Ho Chi Minh City, Vietnam" placeholder="Your location">
+            </div>
+          </div>
+        </div>
+
+        <!-- Study preferences -->
+        <div class="form-card">
+          <div class="field-row">
+            <div class="field-label" data-i18n="edit.study">I want to study</div>
+            <div class="field-select-wrap">
+              <select class="field-select">
+                <option value="abroad" data-i18n="edit.study.abroad">Abroad</option>
+                <option value="in-country" selected data-i18n="edit.study.in_country">In my country</option>
+                <option value="either" data-i18n="edit.study.either">Either</option>
+              </select>
+              <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field-label" data-i18n="edit.degree">I'm working toward a...</div>
+            <div class="field-select-wrap">
+              <select class="field-select">
+                <option value="bachelor" selected data-i18n="edit.degree.bachelor">Bachelor's Degree</option>
+                <option value="master" data-i18n="edit.degree.master">Master's Degree</option>
+                <option value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</option>
+                <option value="associate" data-i18n="edit.degree.associate">Associate's Degree</option>
+              </select>
+              <svg class="select-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkbox -->
+        <label class="checkbox-row">
+          <input type="checkbox" id="know-study">
+          <div class="custom-checkbox">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>
+          <span class="checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
+        </label>
+
+        <!-- Preferred Major — shown only when the checkbox above is checked -->
+        <div class="form-card mobile-major-field" id="mobileMajorField" hidden>
+          <div class="field-row">
+            <div class="field-label">Preferred Major</div>
+            <div class="mobile-major-picker" id="mobileMajorPicker">
+              <button class="mobile-major-button" id="mobileMajorButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="mobileMajorText" class="mobile-major-placeholder">Select a major</span>
+                <svg class="select-chevron mobile-major-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6,9 12,15 18,9"/></svg>
+              </button>
+              <div class="mobile-major-menu" id="mobileMajorMenu" role="listbox" hidden></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save -->
+        <button class="btn-save" onclick="saveChanges()" data-i18n="edit.save">Save Changes</button>
+
+        <!-- Secondary actions -->
+        <button class="btn-secondary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span data-i18n="edit.leave_review">Leave Review</span>
+        </button>
+
+        <button class="btn-reset" id="resetAccountBtn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          <span data-i18n="edit.reset">Reset Account</span>
+        </button>
+
+
+      <!-- Reset Confirm Modal -->
+      <div class="modal-backdrop" id="resetModal">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1,4 1,10 7,10"/>
+              <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+            </svg>
+          </div>
+          <div class="modal-title" data-i18n="edit.reset_title">Reset Account?</div>
+          <div class="modal-body" data-i18n="edit.reset_body">
+            This will clear all quiz progress and all your answers. You'll start fresh from Question 1.
+          </div>
+          <div class="modal-actions">
+            <button class="btn-modal-danger" id="resetConfirmBtn" data-i18n="edit.reset_confirm">
+              Reset &amp; Start Over
+            </button>
+            <button class="btn-modal-cancel" id="resetCancelBtn" data-i18n="edit.cancel">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Academic Archetype Modal -->
+      <div class="modal-backdrop" id="archetypeModal">
+        <div class="modal-sheet">
+          <div class="modal-handle"></div>
+          <div class="modal-icon modal-icon--archetype" id="archetypeIcon">⭐</div>
+          <div class="modal-title" id="archetypeTitle">Academic Archetype</div>
+          <div class="modal-body" id="archetypeBody"></div>
+          <div class="modal-actions">
+            <button class="btn-modal-primary" id="archetypeCta" hidden>Start Swiping</button>
+            <button class="btn-modal-cancel" id="archetypeCloseBtn">Close</button>
+          </div>
+        </div>
+      </div>
+      </div><!-- /page-content -->
+
+      <!-- Bottom tab bar — consistent with other screens (Account active) -->
+      <nav class="float-tab-bar" id="floatTabBar">
+        <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.about_me">About me</span>
+        </a>
+        <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+        </a>
+        <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.majors">Majors</span>
+        </a>
+        <a href="../../university/matches/" class="tab-item" data-tab="t4">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+          </span>
+          <span class="tab-label" data-i18n="nav.universities">Universities</span>
+        </a>
+        <a href="../../profile/edit/" class="tab-item active" data-tab="t5">
+          <span class="tab-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/></svg>
+          </span>
+          <span class="tab-label">Account</span>
+        </a>
+      </nav>
+
+    </div><!-- /mobile-viewport -->
+
+  </div><!-- /device-frame -->
+</div><!-- /desktop-container -->
+
+<script>
+(function(){function a(r){document.documentElement.setAttribute('data-theme',r)}function b(p){var r=p==='system'?(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'):p;a(r);document.documentElement.setAttribute('data-theme-pref',p);try{localStorage.setItem('bd-theme',p)}catch(e){}}window.bdSetTheme=b;var s='dark';try{s=localStorage.getItem('bd-theme')||'dark'}catch(e){}b(s);window.matchMedia('(prefers-color-scheme: light)').addEventListener('change',function(){var p=document.documentElement.getAttribute('data-theme-pref')||'dark';if(p==='system')b('system')})})();
+
+/* ── "I already know what I want to study" → reveal Preferred Major ──
+   Ported as-is from mobile/profile/edit/index.html: a self-contained
+   picker (not wired into saveChanges — this only adds the show/hide +
+   dropdown behavior, everything else on this page is unchanged).
+   Defined BEFORE the checkbox-row wiring below, since that wiring's
+   initial update() call (on page load, unchecked) already needs
+   syncMobileMajorField() → PROFILE_MAJORS to exist. */
+var PROFILE_MAJORS = [
+  { v: 'cs', label: 'Computer Science' },
+  { v: 'ds', label: 'Data Science & AI' },
+  { v: 'design', label: 'Design & UX' },
+  { v: 'eng', label: 'Engineering' },
+  { v: 'med', label: 'Medicine' },
+  { v: 'biz', label: 'Business' },
+  { v: 'psy', label: 'Psychology' },
+  { v: 'econ', label: 'Economics' },
+  { v: 'law', label: 'Law' },
+  { v: 'arch', label: 'Architecture' },
+  { v: 'bio', label: 'Biology' },
+  { v: 'comm', label: 'Communications' }
+];
+var mobileMajorValue = '';
+
+function findProfileMajor(value) {
+  return PROFILE_MAJORS.filter(function (major) { return major.v === value; })[0] || null;
+}
+
+function renderMobileMajorPicker() {
+  var menu = document.getElementById('mobileMajorMenu');
+  if (!menu) return;
+  menu.innerHTML = PROFILE_MAJORS.map(function (major) {
+    var active = major.v === mobileMajorValue ? ' on' : '';
+    return '<button class="mobile-major-option' + active + '" type="button" role="option" data-value="' + major.v + '">' + major.label + '</button>';
+  }).join('');
+}
+
+function setMobileMajor(value) {
+  mobileMajorValue = findProfileMajor(value) ? value : '';
+  var selected = findProfileMajor(mobileMajorValue);
+  var text = document.getElementById('mobileMajorText');
+  if (text) {
+    text.textContent = selected ? selected.label : 'Select a major';
+    text.classList.toggle('mobile-major-placeholder', !selected);
+  }
+  renderMobileMajorPicker();
+}
+
+function closeMobileMajorPicker() {
+  var menu = document.getElementById('mobileMajorMenu');
+  var btn = document.getElementById('mobileMajorButton');
+  if (menu) menu.hidden = true;
+  if (btn) {
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function syncMobileMajorField() {
+  var input = document.getElementById('know-study');
+  var field = document.getElementById('mobileMajorField');
+  var show = !!(input && input.checked);
+  if (field) field.hidden = !show;
+  if (!show) {
+    setMobileMajor('');
+    closeMobileMajorPicker();
+  }
+}
+
+var mobileMajorButton = document.getElementById('mobileMajorButton');
+var mobileMajorMenu = document.getElementById('mobileMajorMenu');
+var mobileMajorPicker = document.getElementById('mobileMajorPicker');
+if (mobileMajorButton) {
+  mobileMajorButton.addEventListener('click', function () {
+    if (!mobileMajorMenu) return;
+    var opening = mobileMajorMenu.hidden;
+    mobileMajorMenu.hidden = !opening;
+    mobileMajorButton.classList.toggle('open', opening);
+    mobileMajorButton.setAttribute('aria-expanded', opening ? 'true' : 'false');
+  });
+}
+if (mobileMajorMenu) {
+  mobileMajorMenu.addEventListener('click', function (e) {
+    var option = e.target && e.target.closest ? e.target.closest('[data-value]') : null;
+    if (!option) return;
+    setMobileMajor(option.getAttribute('data-value') || '');
+    closeMobileMajorPicker();
+  });
+}
+document.addEventListener('click', function (e) {
+  if (mobileMajorPicker && !mobileMajorPicker.contains(e.target)) closeMobileMajorPicker();
+});
+setMobileMajor('');
+syncMobileMajorField();
+
+// Checkbox visual update
+document.querySelectorAll('.checkbox-row').forEach(function(row) {
+  var input = row.querySelector('input[type="checkbox"]');
+  var box = row.querySelector('.custom-checkbox');
+  if (!input || !box) return;
+  function update() {
+    box.style.background = input.checked ? '#1863DC' : 'transparent';
+    box.style.borderColor = input.checked ? '#1863DC' : '';
+    if (input.id === 'know-study') syncMobileMajorField();
+  }
+  input.addEventListener('change', update);
+  update();
+});
+
+var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
+/* Avatar — camera icon always opens the file picker (works whether a
+   photo is already set or not); the ✕ badge only appears once a photo
+   is actually set, since there's nothing to remove otherwise. */
+var avatarUpload = document.getElementById('avatarUpload');
+var removeAvatarBtn = document.getElementById('removeAvatarBtn');
+function syncAvatarRemoveBtn() {
+  if (!removeAvatarBtn) return;
+  removeAvatarBtn.classList.toggle('show', !!(window.BDProfile && BDProfile.getAvatar()));
+}
+if (avatarUpload) {
+  avatarUpload.addEventListener('change', function () {
+    var file = avatarUpload.files && avatarUpload.files[0];
+    if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      if (window.BDProfile) {
+        BDProfile.saveAvatar(String(reader.result || ''));
+        BDProfile.applyAvatar();
+        syncAvatarRemoveBtn();
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+if (removeAvatarBtn) {
+  removeAvatarBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (window.BDProfile) {
+      BDProfile.removeAvatar();
+      BDProfile.applyAvatar();
+    }
+    if (avatarUpload) avatarUpload.value = '';
+    syncAvatarRemoveBtn();
+  });
+}
+
+/* Page heading (and browser tab title) mirror the saved name fields —
+   "Edit Profile" is only the fallback for a genuinely blank name, not
+   the steady-state title. Only called on load and after Save (not on
+   every keystroke), so the heading doesn't jump around while typing. */
+function updateProfileTitle() {
+  var titleEl = document.querySelector('.profile-edit-title');
+  var fnEl = document.getElementById('editFirstName');
+  var lnEl = document.getElementById('editLastName');
+  if (!titleEl || !fnEl || !lnEl) return;
+  var fullName = ((fnEl.value || '') + ' ' + (lnEl.value || '')).trim().replace(/\s+/g, ' ');
+  var text = fullName || _t('edit.title');
+  titleEl.textContent = text;
+  document.title = text + ' — BeyonDegrees.ai';
+}
+
+/* Pre-fill name + avatar from localStorage on load */
+(function() {
+  function prefill() {
+    if (!window.BDProfile) return;
+    var p = BDProfile.get();
+    var fnEl = document.getElementById('editFirstName');
+    var lnEl = document.getElementById('editLastName');
+    if (fnEl && p.firstName) fnEl.value = p.firstName;
+    if (lnEl && p.lastName)  lnEl.value = p.lastName;
+    BDProfile.applyAvatar();
+    syncAvatarRemoveBtn();
+    updateProfileTitle();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', prefill);
+  } else { prefill(); }
+})();
+
+function saveChanges() {
+  /* Save name to localStorage */
+  var fnEl = document.getElementById('editFirstName');
+  var lnEl = document.getElementById('editLastName');
+  if (window.BDProfile && fnEl && lnEl) {
+    BDProfile.save(fnEl.value, lnEl.value);
+    BDProfile.applyTabLabel();
+    BDProfile.applyNameDisplay();
+  }
+  updateProfileTitle();
+
+  var btn = document.querySelector('.btn-save');
+  var orig = btn.textContent;
+  btn.textContent = _t('edit.save_success');
+  btn.style.background = 'linear-gradient(135deg, #059669, #10B981)';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 1800);
+}
+
+// Reset Account modal
+var resetModal = document.getElementById('resetModal');
+document.getElementById('resetAccountBtn').addEventListener('click', function () {
+  resetModal.classList.add('open');
+});
+document.getElementById('resetCancelBtn').addEventListener('click', function () {
+  resetModal.classList.remove('open');
+});
+resetModal.addEventListener('click', function (e) {
+  if (e.target === resetModal) resetModal.classList.remove('open');
+});
+/* ── Helper: clear ALL quiz progress from storage ── */
+function clearQuizProgress() {
+  try {
+    localStorage.removeItem('quizProgress');
+    localStorage.removeItem('quizMilestone');
+    localStorage.removeItem('bd-quiz-progress'); // Fix #3 resume key
+  } catch(e) {}
+  try {
+    sessionStorage.removeItem('bd_dna');
+    sessionStorage.removeItem('bd_answers');
+    sessionStorage.removeItem('bd_scores');
+    sessionStorage.removeItem('bd_nextStart');
+  } catch(e) {}
+}
+
+document.getElementById('resetConfirmBtn').addEventListener('click', function () {
+  clearQuizProgress();
+  try { sessionStorage.setItem('bd_reset_success', '1'); } catch(e) {}
+  var btn = document.getElementById('resetConfirmBtn');
+  btn.textContent = _t('edit.resetting');
+  btn.style.opacity = '0.7';
+  setTimeout(function () {
+    window.location.href = '../../onboarding/home/';
+  }, 800);
+});
+
+/* ── Academic Archetype reveal ──
+   Reuses the same 'bd_dna' weights the quiz engine writes (read the same
+   way as understand-matches' loadRealTop3) to pick the user's strongest
+   discipline, then maps it to a persona. No real answers yet → a locked
+   state with a CTA into the quiz, mirroring understand-matches' own
+   locked-tab pattern instead of inventing a new one. */
+var ARCHETYPES = {
+  kt: { icon: '⚙️', en: { title: 'The Innovator',  desc: "You're drawn to building and engineering solutions — turning ideas into real, working systems." }, vi: { title: 'Nhà Kiến Tạo', desc: 'Bạn bị thu hút bởi việc xây dựng và thiết kế giải pháp — biến ý tưởng thành hệ thống thực tế.' } },
+  tn: { icon: '🔬', en: { title: 'The Explorer',    desc: 'You question how the natural world works and love uncovering patterns through experimentation.' }, vi: { title: 'Nhà Khám Phá', desc: 'Bạn luôn đặt câu hỏi về cách thế giới tự nhiên vận hành và thích khám phá quy luật qua thực nghiệm.' } },
+  yt: { icon: '🩺', en: { title: 'The Healer',      desc: "You're driven by caring for others and improving health and wellbeing." }, vi: { title: 'Người Chữa Lành', desc: 'Bạn được thúc đẩy bởi mong muốn chăm sóc người khác và cải thiện sức khỏe cộng đồng.' } },
+  nn: { icon: '🌱', en: { title: 'The Cultivator',  desc: 'You care about sustainable growth — from ecosystems to food systems.' }, vi: { title: 'Người Vun Trồng', desc: 'Bạn quan tâm đến sự phát triển bền vững — từ hệ sinh thái đến hệ thống lương thực.' } },
+  xh: { icon: '🤝', en: { title: 'The Connector',   desc: "You're energized by understanding people, communities and how society works." }, vi: { title: 'Người Kết Nối', desc: 'Bạn tràn đầy năng lượng khi tìm hiểu con người, cộng đồng và cách xã hội vận hành.' } },
+  nv: { icon: '📖', en: { title: 'The Storyteller', desc: 'You find meaning in ideas, culture, and the human experience.' }, vi: { title: 'Người Kể Chuyện', desc: 'Bạn tìm thấy ý nghĩa trong ý tưởng, văn hoá và trải nghiệm con người.' } }
+};
+
+function computeTopDiscipline() {
+  try {
+    var dna = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+    if (!dna) return null;
+    var keys = Object.keys(dna).filter(function (k) { return ARCHETYPES[k] && dna[k] > 0; });
+    if (!keys.length) return null;
+    keys.sort(function (a, b) { return dna[b] - dna[a]; });
+    return keys[0];
+  } catch (e) { return null; }
+}
+
+(function () {
+  var archetypeModal = document.getElementById('archetypeModal');
+  var archetypeIcon = document.getElementById('archetypeIcon');
+  var archetypeTitle = document.getElementById('archetypeTitle');
+  var archetypeBody = document.getElementById('archetypeBody');
+  var archetypeCta = document.getElementById('archetypeCta');
+
+  function openArchetypeModal() {
+    var lang = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi' : 'en';
+    var topId = computeTopDiscipline();
+    var archetype = topId && ARCHETYPES[topId];
+    if (archetype) {
+      var copy = archetype[lang] || archetype.en;
+      archetypeIcon.textContent = archetype.icon;
+      archetypeTitle.textContent = copy.title;
+      archetypeBody.textContent = copy.desc;
+      archetypeCta.hidden = true;
+    } else {
+      archetypeIcon.textContent = '🔒';
+      archetypeTitle.textContent = (lang === 'vi') ? 'Chưa đủ dữ liệu' : 'Not Enough Data Yet';
+      archetypeBody.textContent = (lang === 'vi')
+        ? 'Trả lời thêm vài Assertion để khám phá Academic Archetype của bạn.'
+        : 'Answer a few more Assertions to discover your Academic Archetype.';
+      archetypeCta.hidden = false;
+      archetypeCta.textContent = (lang === 'vi') ? 'Bắt đầu trả lời' : 'Start Swiping';
+    }
+    archetypeModal.classList.add('open');
+  }
+
+  document.getElementById('archetypeFindOut').addEventListener('click', function (e) {
+    e.preventDefault();
+    openArchetypeModal();
+  });
+  document.getElementById('archetypeCloseBtn').addEventListener('click', function () {
+    archetypeModal.classList.remove('open');
+  });
+  archetypeModal.addEventListener('click', function (e) {
+    if (e.target === archetypeModal) archetypeModal.classList.remove('open');
+  });
+  archetypeCta.addEventListener('click', function () {
+    window.location.href = '../../quiz/quiz-card/';
+  });
+})();
+
+</script>
+<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
+</body>
+</html>

@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BeyonDegrees.ai</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="/mobile/manifest.json">
+  <meta name="theme-color" content="#1a0533">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BeyonDegrees">
+  <link rel="apple-touch-icon" href="/shared/icons/icon-180.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="/shared/icons/icon-167.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/shared/icons/icon-152.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/shared/icons/icon-192.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js', { scope: '/' })
+          .catch(err => console.warn('SW registration failed:', err));
+      });
+    }
+  </script>
+  <script>
+  /* Theme boot — runs before paint to prevent flash.
+     Priority: ?theme= query → localStorage('bd-theme') → existing html attr → 'dark' */
+  (function(){
+    var p;
+    try { p = new URL(location.href).searchParams.get('theme'); } catch(e) {}
+    if (p !== 'light' && p !== 'dark' && p !== 'system') p = null;
+    if (!p) { try { p = localStorage.getItem('bd-theme'); } catch(e) {} }
+    if (!p) p = document.documentElement.getAttribute('data-theme') || 'dark';
+    var r = p === 'system'
+      ? (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
+      : p;
+    document.documentElement.setAttribute('data-theme', r);
+    document.documentElement.setAttribute('data-theme-pref', p);
+  })();
+  </script>
+  <link rel="stylesheet" href="../../../design-system/tokens.css">
+  <link rel="stylesheet" href="../../../design-system/base.css">
+  <link rel="stylesheet" href="../../../design-system/components/interactive.css">
+  <link rel="stylesheet" href="../../../design-system/components/display.css">
+  <link rel="stylesheet" href="../../../design-system/components/navigation.css">
+  <link rel="stylesheet" href="../../../design-system/animations.css">
+  <link rel="stylesheet" href="../../../design-system/layout.css">
+  <link rel="stylesheet" href="./style.css?v=2">
+  <script src="../../../shared/scripts/data/majors-data.js"></script>
+  <script src="../../../shared/scripts/data/uni-data.js"></script>
+  <script src="../../../shared/scripts/ui/i18n.js?v=5"></script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
+<script src="../../../shared/scripts/ui/pwa-install.js?v=4" defer></script>
+
+<style>
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BEYONDEGREES.AI — THEME SYSTEM v1.0
+   Dark (default) | Light | System
+   Violet → Brand Blue #1863DC migration applied in dark mode
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── DARK MODE: map violet palette → official brand blue ── */
+:root,
+:root[data-theme="dark"] {
+  --violet-950: #06091A;
+  --violet-900: #0A0F28;
+  --violet-800: #0F2060;
+  --violet-700: #1358C4;
+  --violet-600: #1863DC;
+  --violet-500: #0274BE;
+  --violet-400: #6BA3FF;
+  --violet-300: #93BBFF;
+  --violet-200: #B8D4FF;
+  --violet-100: #DCE9FF;
+  --shadow-violet:    0 8px 24px rgba(24, 99, 220, 0.35);
+  --shadow-violet-sm: 0 4px 12px rgba(24, 99, 220, 0.20);
+  --glow-violet:      0 20px 50px rgba(24, 99, 220, 0.40);
+  --glow-violet-sm:   0 12px 30px rgba(24, 99, 220, 0.28);
+}
+
+/* Light-theme tokens & component rules live in:
+     design-system/tokens.css   (palette: cream/coral/sky/blush scales)
+     design-system/layout.css   (all component rules: bg, cards, buttons, etc.)
+   This block keeps only screen-specific overrides. */
+
+/* OUTSIDE — body stays dark even in light mode */
+[data-theme="light"] body {
+  background: #06060f !important;
+}
+
+/* Progress ring uses gradient stroke defined in SVG <defs id="ringGradLight"> */
+[data-theme="light"] .ring-fill {
+  stroke: url(#ringGradLight) !important;
+}
+[data-theme="light"] .hero-ring-svg circle:first-child {
+  stroke: rgba(232,220,194,0.70) !important;
+}
+
+/* ── TRANSITION: smooth theme switch ── */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.2s ease, box-shadow 0.3s ease;
+}
+/* Disable transition for SVG / animations */
+svg *, canvas, video, img { transition: none !important; }
+
+/* ── Progress Ring ──────────────────────────────── */
+.hero-ring-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hero-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-fill {
+  stroke-dasharray: 201.1;
+  stroke-dashoffset: 201.1;
+  transition: stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1), stroke .5s ease;
+}
+#heroEmoji {
+  font-size: 24px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+
+.match-board-section {
+  padding: 0 16px 10px;
+  margin-top: 4px;
+}
+.match-board {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  padding: 20px 16px 18px;
+  background:
+    radial-gradient(ellipse 80% 72% at 0% 0%, color-mix(in srgb, var(--board-accent, var(--violet-500)) 18%, transparent), transparent 70%),
+    linear-gradient(145deg, rgba(23,23,45,0.94), rgba(8,15,25,0.96));
+  border: 1px solid color-mix(in srgb, var(--board-accent, var(--violet-500)) 26%, rgba(255,255,255,0.10));
+  box-shadow: 0 18px 42px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+[data-theme="light"] .match-board {
+  background:
+    radial-gradient(ellipse 74% 68% at 0% 0%, rgba(201,107,85,0.12), transparent 70%),
+    linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,244,236,0.96));
+  border-color: rgba(74,135,168,0.22);
+  box-shadow: 0 18px 38px rgba(140,114,96,0.12), inset 0 1px 0 rgba(255,255,255,0.88);
+}
+.match-board-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.match-board-kicker {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--violet-300);
+  margin-bottom: 6px;
+}
+[data-theme="light"] .match-board-kicker { color: #a84e30; }
+.match-board-title {
+  font-size: 21px;
+  line-height: 1.12;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0;
+}
+[data-theme="light"] .match-board-title { color: #2c1f14; }
+.match-board-controls {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.match-board-arrow {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+  display: grid;
+  place-items: center;
+}
+.match-board-arrow[hidden] {
+  display: grid !important;
+  opacity: .32;
+  pointer-events: none;
+}
+.match-board-arrow svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+[data-theme="light"] .match-board-arrow {
+  background: rgba(255,255,255,0.72);
+  border-color: rgba(140,114,96,0.20);
+  color: #2c1f14;
+}
+.rank-list {
+  display: grid;
+  gap: 10px;
+}
+.rank-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 46px minmax(0,1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 82px;
+  padding: 13px 12px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.055);
+  border: 1px solid color-mix(in srgb, var(--item-accent, var(--violet-500)) 42%, rgba(255,255,255,0.10));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.rank-row:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--item-accent, var(--violet-500)) 62%, #fff);
+  outline-offset: 3px;
+}
+.rank-row.rank-winner {
+  min-height: 96px;
+  background: color-mix(in srgb, var(--item-accent, var(--violet-500)) 13%, rgba(255,255,255,0.06));
+}
+[data-theme="light"] .rank-row {
+  background: rgba(255,255,255,0.82);
+  border-color: color-mix(in srgb, var(--item-accent, #c96b55) 36%, rgba(140,114,96,0.16));
+}
+.rank-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  background: color-mix(in srgb, var(--item-accent, var(--violet-500)) 16%, rgba(255,255,255,0.05));
+}
+.rank-info { min-width: 0; }
+.rank-no {
+  display: inline-flex;
+  width: max-content;
+  max-width: 100%;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--item-accent, var(--violet-500));
+  margin-bottom: 6px;
+}
+.rank-name {
+  font-size: 14px;
+  line-height: 1.22;
+  font-weight: 850;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.rank-meta {
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rank-score {
+  min-width: 58px;
+  text-align: right;
+}
+.rank-pct {
+  display: block;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 900;
+  color: var(--item-accent, var(--violet-400));
+}
+.rank-label {
+  display: block;
+  margin-top: 4px;
+  font-size: 8px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 900;
+}
+.match-board-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+.match-board-dot {
+  width: 7px;
+  height: 7px;
+  border: 0;
+  padding: 0;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.26);
+}
+.match-board-dot.active {
+  width: 22px;
+  background: var(--board-accent, var(--violet-500));
+}
+[data-theme="light"] .match-board-dot { background: rgba(140,114,96,0.22); }
+
+</style>
+  <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
+</head>
+<body>
+<div class="breadcrumb" style="margin: var(--space-4) var(--space-6) 0;">
+    <a href="../../../" class="breadcrumb-item">BeyonDegrees-UI</a>
+    <span class="breadcrumb-separator">/</span>
+    <span class="breadcrumb-item active">Home Screen</span>
+  </div>
+
+  <div class="desktop-container">
+
+
+    <div class="device-frame">
+      <div class="device-notch"></div>
+      
+      <div class="mobile-viewport">
+
+        <!-- ░░ AURORA MESH GRADIENT BACKGROUND ░░ -->
+        <div class="aurora-bg">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+          <div class="blob blob-3"></div>
+          <div class="blob blob-4"></div>
+          <div class="noise-overlay"></div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+          <span id="statusTime">9:41</span>
+          <div class="status-icons">
+            <svg width="14" height="10" viewBox="0 0 14 10" fill="currentColor"><rect x="0" y="3" width="2" height="7" rx="1"/><rect x="3" y="2" width="2" height="8" rx="1"/><rect x="6" y="0" width="2" height="10" rx="1"/><rect x="9" y="1" width="2" height="9" rx="1"/></svg>
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect x="1" y="1" width="11" height="8" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="2.5" width="7" height="5" rx="1"/><rect x="13" y="3" width="2" height="4" rx="1"/></svg>
+          </div>
+        </div>
+
+        <!-- Header -->
+        <header class="mobile-header">
+          <h1 class="mobile-logo"><img src="../../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img">BeyonDegrees.ai</h1>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+          <div class="hero-gradient"></div>
+          <div class="hero-content">
+            <!-- Progress Ring -->
+            <div class="hero-ring-wrap">
+              <svg class="hero-ring-svg" viewBox="0 0 76 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="ringGradLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#E89370"/>
+                    <stop offset="50%" stop-color="#0274BE"/>
+                    <stop offset="100%" stop-color="#075C9F"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+                <circle id="heroRingFill" cx="38" cy="38" r="32" class="ring-fill"
+                  stroke="#1863DC" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+              <span id="heroEmoji">🚀</span>
+            </div>
+            <p class="mobile-tagline" id="heroTagline" data-i18n="home.state0.tagline">Discover your academic identity</p>
+            <h2 id="heroTitle" data-i18n="home.state0.title">What major are you interested in?</h2>
+            <p id="heroSub" data-i18n="home.state0.sub">Answer 30 questions and let AI find your perfect match.</p>
+          </div>
+        </section>
+
+        <!-- Disciplines Grid — 6 official disciplines from majors-data.js -->
+        <section class="disciplines-section">
+          <h3 class="section-label-mobile" data-i18n="home.choose_disc">Choose 1 or more disciplines</h3>
+          <div class="disciplines-grid">
+            <div class="discipline-card" data-disc="kt" data-disc-id="72" style="--disc:#7c3aed">
+              <div class="discipline-icon">💻</div>
+              <span data-i18n="disc.short.kt">Engineering</span>
+            </div>
+            <div class="discipline-card" data-disc="yt" data-disc-id="73" style="--disc:#06d6a0">
+              <div class="discipline-icon">⚕️</div>
+              <span data-i18n="disc.short.yt">Medical</span>
+            </div>
+            <div class="discipline-card" data-disc="tn" data-disc-id="71" style="--disc:#f43f5e">
+              <div class="discipline-icon">🔬</div>
+              <span data-i18n="disc.short.tn">Natural Sci</span>
+            </div>
+            <div class="discipline-card" data-disc="nn" data-disc-id="74" style="--disc:#f59e0b">
+              <div class="discipline-icon">🌱</div>
+              <span data-i18n="disc.short.nn">Agricultural</span>
+            </div>
+            <div class="discipline-card" data-disc="xh" data-disc-id="75" style="--disc:#a855f7">
+              <div class="discipline-icon">🌍</div>
+              <span data-i18n="disc.short.xh">Social Sci</span>
+            </div>
+            <div class="discipline-card" data-disc="nv" data-disc-id="76" style="--disc:#3b82f6">
+              <div class="discipline-icon">📖</div>
+              <span data-i18n="disc.short.nv">Humanities</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="match-board-section" id="matchBoardSection" hidden>
+          <div class="match-board" id="matchBoard">
+            <div class="match-board-head">
+              <div>
+                <div class="match-board-kicker" id="matchBoardKicker" data-i18n="home.match_board.kicker_fallback">Ranking</div>
+                <h2 class="match-board-title" id="matchBoardTitle" data-i18n="home.match_board.title_fallback">Top matches</h2>
+              </div>
+              <div class="match-board-controls">
+                <button class="match-board-arrow" id="matchBoardPrev" type="button" aria-label="Previous ranking" data-i18n-aria="home.match_board.prev" onclick="changeMatchBoardPage(-1)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button class="match-board-arrow" id="matchBoardNext" type="button" aria-label="Next ranking" data-i18n-aria="home.match_board.next" onclick="changeMatchBoardPage(1)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="rank-list" id="matchRankList"></div>
+          </div>
+          <div class="match-board-dots" id="matchBoardDots" aria-label="Match ranking pages" data-i18n-aria="home.match_board.pages"></div>
+        </section>
+
+        <!-- CTA Buttons -->
+        <section class="cta-section">
+          <button class="btn btn-primary" id="ctaPrimary" style="width:100%;" data-i18n="home.cta.start">Start Quiz →</button>
+          <button class="btn btn-secondary" id="ctaSecondary" style="width:100%;display:none;"></button>
+        </section>
+
+        <!-- ░░ PRESS-GLOW FLOATING TAB BAR ░░ -->
+        <nav class="float-tab-bar" id="floatTabBar">
+
+          <a href="../../onboarding/home/" class="tab-item active" data-tab="t1">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.about_me">About me</span>
+          </a>
+          <a href="../../discipline/match/" class="tab-item" data-tab="t2">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
+          </a>
+          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.majors">Majors</span>
+          </a>
+          <a href="../../university/matches/" class="tab-item" data-tab="t4">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
+              </svg>
+            </span>
+            <span class="tab-label" data-i18n="nav.universities">Universities</span>
+          </a>
+          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
+            <span class="tab-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/><path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="tab-label"></span>
+          </a>
+        </nav>
+
+      </div>
+    </div>
+
+  </div>
+
+  
+  
+  
+<script>
+/* utils */
+/* BeyonDegrees.ai — Shared Utilities */
+
+// Toast Notification System
+const Toast = {
+  show(message, duration = 2000, type = 'info') {
+    let toast = document.getElementById('app-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'app-toast';
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+    }
+    
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, duration);
+  },
+  
+  success(message, duration = 2000) {
+    this.show(message, duration, 'success');
+  },
+  
+  error(message, duration = 3000) {
+    this.show(message, duration, 'error');
+  },
+  
+  warning(message, duration = 2500) {
+    this.show(message, duration, 'warning');
+  }
+};
+
+// Clipboard Utilities
+const Clipboard = {
+  async copy(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      var _ct = window.BDi18n ? BDi18n.t('err.copy_success') : 'Copied';
+      Toast.success(_ct + ': ' + text);
+      return true;
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      Toast.error(window.BDi18n ? BDi18n.t('err.copy_failed') : 'Failed to copy');
+      return false;
+    }
+  },
+  
+  async paste() {
+    try {
+      const text = await navigator.clipboard.readText();
+      return text;
+    } catch (err) {
+      console.error('Failed to paste:', err);
+      Toast.error(window.BDi18n ? BDi18n.t('err.paste_failed') : 'Failed to paste');
+      return null;
+    }
+  }
+};
+
+// Format Utilities
+const Format = {
+  percent(value) {
+    const num = parseFloat(value);
+    return isNaN(num) ? '0%' : `${Math.round(num)}%`;
+  },
+  
+  capitalize(str) {
+    if (typeof str !== 'string') return '';
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  },
+  
+  pluralize(count, singular, plural) {
+    return count === 1 ? singular : plural;
+  },
+  
+  formatNumber(num) {
+    return new Intl.NumberFormat('en-US').format(num);
+  },
+  
+  formatDate(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }).format(new Date(date));
+  },
+  
+  formatTime(date) {
+    return new Intl.DateTimeFormat('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    }).format(new Date(date));
+  },
+  
+  truncate(str, length = 50) {
+    if (typeof str !== 'string') return '';
+    return str.length > length ? str.substring(0, length) + '...' : str;
+  }
+};
+
+// DOM Utilities
+const DOM = {
+  query(selector) {
+    return document.querySelector(selector);
+  },
+  
+  queryAll(selector) {
+    return document.querySelectorAll(selector);
+  },
+  
+  create(tag, attributes = {}, content = '') {
+    const el = document.createElement(tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (key === 'className') {
+        el.className = value;
+      } else if (key === 'innerHTML') {
+        el.innerHTML = value;
+      } else if (key.startsWith('on')) {
+        el.addEventListener(key.slice(2).toLowerCase(), value);
+      } else {
+        el.setAttribute(key, value);
+      }
+    });
+    if (content) el.textContent = content;
+    return el;
+  },
+  
+  addClass(el, className) {
+    if (el) el.classList.add(className);
+    return el;
+  },
+  
+  removeClass(el, className) {
+    if (el) el.classList.remove(className);
+    return el;
+  },
+  
+  toggleClass(el, className) {
+    if (el) el.classList.toggle(className);
+    return el;
+  },
+  
+  hasClass(el, className) {
+    return el && el.classList.contains(className);
+  },
+  
+  setStyle(el, styles) {
+    if (el) Object.assign(el.style, styles);
+    return el;
+  }
+};
+
+// Event Utilities
+const Events = {
+  debounce(func, delay = 300) {
+    let timeoutId;
+    return function(...args) {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+  },
+  
+  throttle(func, delay = 300) {
+    let lastCall = 0;
+    return function(...args) {
+      const now = Date.now();
+      if (now - lastCall >= delay) {
+        lastCall = now;
+        return func.apply(this, args);
+      }
+    };
+  },
+  
+  on(element, event, handler) {
+    element && element.addEventListener(event, handler);
+  },
+  
+  off(element, event, handler) {
+    element && element.removeEventListener(event, handler);
+  },
+  
+  once(element, event, handler) {
+    const wrapper = (...args) => {
+      handler.apply(this, args);
+      element && element.removeEventListener(event, wrapper);
+    };
+    element && element.addEventListener(event, wrapper);
+  }
+};
+
+// Storage Utilities
+const Storage = {
+  setItem(key, value) {
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  getItem(key, defaultValue = null) {
+    try {
+      const item = localStorage.getItem(key);
+      return item ? JSON.parse(item) : defaultValue;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return defaultValue;
+    }
+  },
+  
+  removeItem(key) {
+    try {
+      localStorage.removeItem(key);
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  },
+  
+  clear() {
+    try {
+      localStorage.clear();
+      return true;
+    } catch (err) {
+      console.error('Storage error:', err);
+      return false;
+    }
+  }
+};
+
+// Export as global namespace
+window.BD = {
+  Toast,
+  Clipboard,
+  Format,
+  DOM,
+  Events,
+  Storage
+};
+
+/* navigation */
+/* BeyonDegrees.ai — Navigation & Page Management */
+
+// Navigation Manager
+const Navigation = {
+  init() {
+    this.initBottomNav();
+    this.initSidebarNav();
+    this.initActiveState();
+    this.initScrollSpy();
+  },
+  
+  initBottomNav() {
+    const items = document.querySelectorAll('.bottom-nav-item');
+    items.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const href = item.getAttribute('href') || item.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initSidebarNav() {
+    const links = document.querySelectorAll('.sidebar-link');
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href') || link.getAttribute('data-href');
+        if (href && !href.startsWith('javascript')) {
+          e.preventDefault();
+          window.location.href = href;
+        }
+      });
+    });
+  },
+  
+  initActiveState() {
+    const currentPath = window.location.pathname;
+    
+    // Bottom nav items
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+      const href = item.getAttribute('href') || item.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+    
+    // Sidebar items
+    document.querySelectorAll('.sidebar-link').forEach(link => {
+      const href = link.getAttribute('href') || link.getAttribute('data-href') || '';
+      if (href && ((h => { const s = h.replace(/\/$/, '').split('/').filter(Boolean).pop(); return !!s && currentPath.includes(s); })(href))) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  },
+  
+  initScrollSpy() {
+    const sections = document.querySelectorAll('[data-section]');
+    if (sections.length === 0) return;
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.getAttribute('data-section');
+          const navItem = document.querySelector(`[data-nav="${sectionId}"]`);
+          if (navItem) {
+            document.querySelectorAll('[data-nav]').forEach(item => {
+              item.classList.remove('active');
+            });
+            navItem.classList.add('active');
+          }
+        }
+      });
+    }, observerOptions);
+    
+    sections.forEach(section => observer.observe(section));
+  },
+  
+  setActive(selector) {
+    document.querySelectorAll(selector).forEach(el => el.classList.remove('active'));
+  },
+  
+  goTo(path) {
+    window.location.href = path;
+  }
+};
+
+// Page transition utilities
+const PageTransition = {
+  fadeOut(duration = 300) {
+    document.body.style.opacity = '0';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  },
+  
+  fadeIn(duration = 300) {
+    document.body.style.opacity = '1';
+    document.body.style.transition = `opacity ${duration}ms ease`;
+  }
+};
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  Navigation.init();
+  document.body.style.opacity = '1';
+});
+
+// Global navigation export
+window.Nav = Navigation;
+window.PageTransition = PageTransition;
+
+/* screen */
+// Home Screen Interactions
+
+document.addEventListener('DOMContentLoaded', () => {
+  const disciplineCards = document.querySelectorAll('.discipline-card');
+
+  // Toggle discipline selection with ripple
+  disciplineCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      // Ripple from click point
+      const r = document.createElement('span');
+      r.className = 'dc-ripple';
+      const rect = card.getBoundingClientRect();
+      r.style.left = (e.clientX - rect.left) + 'px';
+      r.style.top  = (e.clientY - rect.top)  + 'px';
+      card.appendChild(r);
+      r.addEventListener('animationend', () => r.remove());
+
+      card.classList.toggle('selected');
+    });
+  });
+
+  var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+  var tf = function(k, vars) { return window.BDi18n && BDi18n.tf ? BDi18n.tf(k, vars) : t(k); };
+  var MATCH_BOARD_PAGES = [];
+  var MATCH_BOARD_ACTIVE = 0;
+
+  function discByCode(code) {
+    if (typeof DISCIPLINES === 'undefined') return null;
+    return Object.values(DISCIPLINES).find(function (d) { return d.code === code; }) || null;
+  }
+
+  function readDiscScores() {
+    var fallback = { kt:94, tn:89, yt:64, nn:62, xh:34, nv:32 };
+    try {
+      var saved = JSON.parse(localStorage.getItem('discScores') || 'null');
+      if (saved && Object.keys(saved).some(function (k) { return saved[k] > 0; })) return saved;
+    } catch (e) {}
+    try {
+      var raw = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+      if (raw && Object.keys(raw).some(function (k) { return raw[k] > 0; })) {
+        var total = Object.keys(raw).reduce(function (sum, k) { return sum + (raw[k] || 0); }, 0) || 1;
+        var scores = {};
+        ['kt', 'nv', 'yt', 'xh', 'nn', 'tn'].forEach(function (k) {
+          scores[k] = Math.round(((raw[k] || 0) / total) * 100);
+        });
+        return scores;
+      }
+    } catch (e) {}
+    return fallback;
+  }
+
+  var MAJOR_MATCH_PCT = {
+    'Aeronautics':86,'Chemical engineering':83,'Civil engineering':77,
+    'Electrical engineering, Electronic engineering, Information engineering':94,
+    'Engineering':91,'Environmental biotechnology':79,'Environmental engineering':81,
+    'Industrial biotechnology':76,'Materials engineering':84,'Mechanical engineering':88,
+    'Medical engineering':82,'Nano-technology':87,'Other engineering and technologies':75,
+    'Biological sciences':86,'Chemical sciences':84,'Computer and information sciences':89,
+    'Earth and related Environmental sciences':79,'Mathematics':92,'Mathematics and Statistics':90,
+    'Physical sciences':87,'Basic medicine':50,'Clinical medicine':56,'Health sciences':62,
+    'Medical biotechnology':64,'Nursing':47,'Other medical sciences':45,
+    'Agricultural biotechnology':62,'Agriculture, forestry and fishery':50,'Animal and dairy science':46,
+    'Behavioral Sciences':30,'Business':28,'Economics and business':34,'Education':20,
+    'Educational sciences':18,'Helms School of Government':24,'Law':16,'Political science':22,
+    'Psychology':32,'Sciences':19,'Social and economic geography':14,'Sociology':26,
+    'Arts and Sciences':26,'Communication and the Arts':22,'English':30,'History':20,
+    'History and archaeology':16,'Languages and literature':24,'Music':18,
+    'Philosophy, ethics and religion':32,'Sign Language and Interpreting':12
+  };
+
+  function topDiscItems() {
+    var scores = readDiscScores();
+    return ['kt', 'tn', 'yt', 'nn', 'xh', 'nv'].map(function (code) {
+      var d = discByCode(code) || { short: code.toUpperCase(), title: code.toUpperCase(), icon: '🎯', color: '#7c3aed' };
+      return {
+        name: t('disc.short.' + code) || d.short || d.title,
+        meta: d.title || d.short || '',
+        icon: d.icon || '🎯',
+        pct: scores[code] || 0,
+        color: d.color || '#7c3aed',
+        href: '../../discipline/detail/' + encodeURIComponent(code) + '.html'
+      };
+    }).sort(function (a, b) { return b.pct - a.pct; }).slice(0, 3);
+  }
+
+  function topMajorItems() {
+    if (typeof MAJORS_DATA === 'undefined') return [];
+    return MAJORS_DATA.map(function (m) {
+      var d = discByCode(m.discCode) || { short: m.discCode || '', color: '#7c3aed' };
+      return {
+        name: m.title,
+        meta: t('disc.short.' + m.discCode) || d.short || '',
+        icon: m.icon || '📚',
+        pct: MAJOR_MATCH_PCT[m.title] != null ? MAJOR_MATCH_PCT[m.title] : 50,
+        color: d.color || '#7c3aed',
+        href: '../../major/detail/index.html?id=' + encodeURIComponent(m.id)
+      };
+    }).sort(function (a, b) { return b.pct - a.pct; }).slice(0, 3);
+  }
+
+  function topUniItems() {
+    if (typeof UNI_DATA === 'undefined') return [];
+    return UNI_DATA.slice().sort(function (a, b) { return b.match - a.match; }).slice(0, 3).map(function (u) {
+      return {
+        name: u.name,
+        meta: u.loc,
+        icon: u.icon || '🏛️',
+        pct: u.match,
+        color: u.match >= 85 ? '#06d6a0' : u.match >= 70 ? '#f97316' : '#ef4444',
+        href: '../../university/detail/index.html?id=' + encodeURIComponent(u.id)
+      };
+    });
+  }
+
+  function escapeAttr(value) {
+    return String(value == null ? '' : value).replace(/[&<>"']/g, function (ch) {
+      return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+    });
+  }
+
+  function renderRankRows(items) {
+    var podium = [
+      { item: items[1], rank: 2, cls: 'rank-second' },
+      { item: items[0], rank: 1, cls: 'rank-winner' },
+      { item: items[2], rank: 3, cls: 'rank-third' }
+    ].filter(function (entry) { return entry.item; });
+    return podium.map(function (entry) {
+      var item = entry.item;
+      var badge = tf('home.match_board.rank_badge', { n: entry.rank });
+      var label = entry.rank === 1 ? t('home.match_board.total_match') : t('home.match_board.match');
+      return '<a class="rank-row ' + entry.cls + '" href="' + escapeAttr(item.href || '#') + '" style="--item-accent:' + escapeAttr(item.color) + '">' +
+        '<div class="rank-icon">' + item.icon + '</div>' +
+        '<div class="rank-info">' +
+          '<div class="rank-no">' + badge + '</div>' +
+          '<div class="rank-name">' + item.name + '</div>' +
+          '<div class="rank-meta">' + item.meta + '</div>' +
+        '</div>' +
+        '<div class="rank-score"><span class="rank-pct">' + item.pct + '%</span><span class="rank-label">' + label + '</span></div>' +
+      '</a>';
+    }).join('');
+  }
+
+  function renderMatchBoardPage(index) {
+    var page = MATCH_BOARD_PAGES[index];
+    if (!page) return;
+    MATCH_BOARD_ACTIVE = index;
+    document.getElementById('matchBoard').style.setProperty('--board-accent', page.color);
+    document.getElementById('matchBoardKicker').textContent = page.kicker;
+    document.getElementById('matchBoardTitle').textContent = page.title;
+    document.getElementById('matchRankList').innerHTML = renderRankRows(page.items);
+    var canSlide = MATCH_BOARD_PAGES.length > 1;
+    document.getElementById('matchBoardPrev').hidden = !canSlide;
+    document.getElementById('matchBoardNext').hidden = !canSlide;
+    document.getElementById('matchBoardDots').innerHTML = MATCH_BOARD_PAGES.map(function (p, i) {
+      return '<button type="button" class="match-board-dot' + (i === index ? ' active' : '') + '" aria-label="' + tf('home.match_board.page_aria', { title: p.kicker }) + '" onclick="renderMatchBoardPage(' + i + ')"></button>';
+    }).join('');
+  }
+
+  function changeMatchBoardPage(delta) {
+    if (!MATCH_BOARD_PAGES.length) return;
+    var nextIndex = (MATCH_BOARD_ACTIVE + delta + MATCH_BOARD_PAGES.length) % MATCH_BOARD_PAGES.length;
+    renderMatchBoardPage(nextIndex);
+  }
+  window.renderMatchBoardPage = renderMatchBoardPage;
+  window.changeMatchBoardPage = changeMatchBoardPage;
+
+  function setupMatchBoard(key) {
+    var discSection = document.querySelector('.disciplines-section');
+    var section = document.getElementById('matchBoardSection');
+    if (!section || !discSection) return;
+    if (key < 10) {
+      section.hidden = true;
+      discSection.style.display = '';
+      return;
+    }
+    discSection.style.display = 'none';
+    section.hidden = false;
+    MATCH_BOARD_PAGES = [{
+      key: 'discipline',
+      kicker: t('home.match_board.disc_kicker'),
+      title: t('home.match_board.disc_title'),
+      sub: t('home.match_board.disc_sub'),
+      color: '#7c3aed',
+      items: topDiscItems()
+    }];
+    if (key >= 20) {
+      MATCH_BOARD_PAGES.push({
+        key: 'major',
+        kicker: t('home.match_board.major_kicker'),
+        title: t('home.match_board.major_title'),
+        sub: t('home.match_board.major_sub'),
+        color: '#06d6a0',
+        items: topMajorItems()
+      });
+    }
+    if (key >= 30) {
+      MATCH_BOARD_PAGES.push({
+        key: 'university',
+        kicker: t('home.match_board.uni_kicker'),
+        title: t('home.match_board.uni_title'),
+        sub: t('home.match_board.uni_sub'),
+        color: '#f97316',
+        items: topUniItems()
+      });
+    }
+    renderMatchBoardPage(key >= 20 && MATCH_BOARD_PAGES.length > 1 ? 1 : 0);
+  }
+
+  // ── Progress-based state init ──────────────────────────────────────
+  (function initProgress() {
+    const p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    const m = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
+    const answered = Math.max(p, m);
+    const key = answered >= 30 ? 30 : answered >= 20 ? 20 : answered >= 10 ? 10 : answered > 0 ? 1 : 0;
+    const $   = id => document.getElementById(id);
+
+    // Ring fill
+    const C    = 201.1; // 2π × 32
+    const pcts = { 0: 0, 1: 0.05, 10: 0.333, 20: 0.667, 30: 1 };
+    const ring = $('heroRingFill');
+    if (ring) {
+      ring.style.strokeDasharray  = C;
+      ring.style.strokeDashoffset = C * (1 - (pcts[key] ?? 0));
+      if (key === 30) ring.style.stroke = '#f59e0b'; // gold = complete
+    }
+
+    const STATES = {
+      0:  { emoji: '🚀', tagline: t('home.state0.tagline'),
+            title: t('home.state0.title'),
+            sub:   t('home.state0.sub') },
+      1:  { emoji: '💪', tagline: t('home.state_started_tagline'),
+            title: t('home.state_started_title'),
+            sub:   tf('home.state_started_sub', { n: answered }) },
+      10: { emoji: '🔥', tagline: t('home.state1.tagline'),
+            title: t('home.state1.title'),
+            sub:   t('home.state1.sub') },
+      20: { emoji: '⚡', tagline: t('home.state2.tagline'),
+            title: t('home.state2.title'),
+            sub:   t('home.state2.sub') },
+      30: { emoji: '✨', tagline: t('home.state3.tagline'),
+            title: t('home.state3.title'),
+            sub:   t('home.state3.sub') },
+    };
+    const s = STATES[key];
+    if ($('heroEmoji'))   $('heroEmoji').textContent   = s.emoji;
+    if ($('heroTagline')) $('heroTagline').textContent = s.tagline;
+    if ($('heroTitle'))   $('heroTitle').textContent   = key === 30 ? s.title.replace(/\s*\u2728\s*$/, '') : s.title;
+    if ($('heroSub'))     $('heroSub').textContent     = s.sub;
+
+    // Buttons
+    const BTNS = {
+      0:  { b1: t('home.cta.start'),    u1: '../../quiz/quiz-card/', b2: null },
+      1:  { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`, b2: null },
+      10: { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`,
+            b2: { t: t('home.cta.view_disc'), u: '../../discipline/match/' } },
+      20: { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`,
+            b2: { t: t('home.cta.view_major'), u: '../../major/recommendations/' } },
+      30: { b1: t('home.cta.view_match'), u1: '../../university/matches/',
+            b2: { t: t('home.cta.view_uni'), u: '../../university/matches/' } },
+    };
+    const b    = BTNS[key];
+    const btn1 = $('ctaPrimary');
+    const btn2 = $('ctaSecondary');
+    if (btn1) { btn1.textContent = b.b1; btn1.onclick = () => location.href = b.u1; }
+    if (btn2) {
+      if (b.b2) {
+        btn2.style.display = 'block';
+        btn2.textContent   = b.b2.t;
+        btn2.onclick       = () => location.href = b.b2.u;
+      } else {
+        btn2.style.display = 'none';
+        btn2.onclick = null;
+      }
+    }
+    setupMatchBoard(key);
+  })();
+
+  // ── Orange Pill Tab Bar interaction ──
+  const tabBar = document.getElementById('floatTabBar');
+  if (tabBar) {
+    const tabs = tabBar.querySelectorAll('.tab-item:not(.tab-disabled)');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        // If it's a real navigation link, let it navigate
+        if (tab.href && tab.href !== '#' && !tab.href.endsWith('#')) return;
+        e.preventDefault();
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  }
+
+  // ── Show reset-success toast if coming from Reset Account ──────────
+  try {
+    if (sessionStorage.getItem('bd_reset_success') === '1') {
+      sessionStorage.removeItem('bd_reset_success');
+      var _t = window.BDi18n ? BDi18n.t.bind(BDi18n) : function(k){return k;};
+      setTimeout(() => Toast.success(_t('home.reset_success')), 400);
+    }
+  } catch(e) {}
+
+  // ── Dynamic status bar clock ──
+  (function() {
+    function updateClock() {
+      var el = document.getElementById('statusTime');
+      if (!el) return;
+      var now = new Date(), h = now.getHours(), m = now.getMinutes();
+      el.textContent = h + ':' + (m < 10 ? '0' : '') + m;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+  })();
+});
+
+</script>
+
+<script>
+(function() {
+  function bdApplyTheme(resolved) {
+    document.documentElement.setAttribute('data-theme', resolved);
+    // Update toggle bg for light theme
+    var toggle = document.getElementById('bd-theme-toggle');
+    if (toggle) {
+      toggle.style.background = (resolved === 'light')
+        ? 'rgba(255,255,255,0.92)'
+        : 'rgba(10,10,26,0.85)';
+      toggle.style.borderColor = (resolved === 'light')
+        ? 'rgba(24,99,220,0.25)'
+        : 'rgba(24,99,220,0.35)';
+    }
+  }
+
+  function bdSetTheme(pref) {
+    var resolved = pref;
+    if (pref === 'system') {
+      resolved = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    }
+    bdApplyTheme(resolved);
+    document.documentElement.setAttribute('data-theme-pref', pref);
+    try { localStorage.setItem('bd-theme', pref); } catch(e) {}
+    // Update button active states
+    var btns = { system:'bdt-system', light:'bdt-light', dark:'bdt-dark' };
+    Object.keys(btns).forEach(function(name) {
+      var el = document.getElementById(btns[name]);
+      if (!el) return;
+      if (name === pref) {
+        el.style.background = 'linear-gradient(135deg, #1863DC, #0274BE)';
+        el.style.color = '#fff';
+        el.style.boxShadow = '0 4px 12px rgba(24,99,220,0.4)';
+      } else {
+        el.style.background = 'transparent';
+        el.style.color = (resolved === 'light') ? 'rgba(26,26,46,0.55)' : 'rgba(255,255,255,0.5)';
+        el.style.boxShadow = 'none';
+      }
+    });
+  }
+
+  window.bdSetTheme = bdSetTheme;
+
+  // Init on load — respect head boot script's data-theme-pref
+  var saved;
+  try { saved = localStorage.getItem('bd-theme'); } catch(e) {}
+  if (!saved) saved = document.documentElement.getAttribute('data-theme-pref') || 'dark';
+  bdSetTheme(saved);
+
+  // React to OS theme changes (only when user pref === 'system')
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function() {
+    var pref = document.documentElement.getAttribute('data-theme-pref') || 'dark';
+    if (pref === 'system') bdSetTheme('system');
+  });
+})();
+</script>
+
+<script src="../../../shared/scripts/ui/app-menu.js"></script>
+</body>
+</html>

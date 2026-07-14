@@ -1,0 +1,570 @@
+/* ═══════════════════════════════════════════════════════════════
+   BeyonDegrees — App Hamburger Menu
+   Shared across Disciplines, Majors, Universities pages.
+   Usage: wrap the menu btn + dropdown in .app-menu-wrap
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Wrapper (position anchor) ── */
+.app-menu-wrap {
+  position: relative;
+  display: none;
+}
+
+/* ── Trigger button ── */
+.app-menu-btn {
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.75);
+  transition: background 0.18s, border-color 0.18s, color 0.18s;
+  flex-shrink: 0;
+}
+.app-menu-btn:hover {
+  background: rgba(255,255,255,0.13);
+  border-color: rgba(255,255,255,0.20);
+  color: #fff;
+}
+.app-menu-btn.open {
+  background: rgba(24,99,220,0.20);
+  border-color: rgba(24,99,220,0.50);
+  color: #6BA3FF;
+}
+[data-theme="light"] .app-menu-btn {
+  background: rgba(255,255,255,0.90) !important;
+  border-color: rgba(0,0,0,0.10) !important;
+  color: #2c1f14 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .app-menu-btn.open {
+  background: rgba(24,99,220,0.10) !important;
+  border-color: rgba(24,99,220,0.30) !important;
+  color: #1863DC !important;
+}
+
+/* Account tab in the mobile bottom nav is now the drawer trigger. */
+.app-menu-btn {
+  display: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255,255,255,0.30), transparent 26%),
+    linear-gradient(135deg, rgba(24,99,220,0.95), rgba(109,40,217,0.88));
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow:
+    0 3px 10px rgba(24,99,220,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+}
+
+.float-tab-bar .tab-item[data-tab="t5"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="t5"]:hover .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"]:hover .tab-icon {
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255,255,255,0.36), transparent 26%),
+    linear-gradient(135deg, #1863DC, #06D6A0);
+  box-shadow:
+    0 4px 14px rgba(6,214,160,0.28),
+    inset 0 1px 0 rgba(255,255,255,0.34);
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon svg,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  color: #fff !important;
+  background:
+    radial-gradient(circle at 68% 24%, rgba(255,255,255,0.45), transparent 26%),
+    linear-gradient(135deg, #1863DC, #0E7490);
+  border-color: rgba(24,99,220,0.20);
+  box-shadow:
+    0 3px 10px rgba(24,99,220,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.45);
+}
+
+/* ── Dim backdrop behind the drawer ── */
+.app-menu-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: rgba(6, 6, 15, 0.55);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.app-menu-backdrop.open { opacity: 1; pointer-events: auto; }
+[data-theme="light"] .app-menu-backdrop { background: rgba(40, 30, 20, 0.35); }
+
+/* ── Slide-in drawer (right side) ── */
+.app-dropdown {
+  position: fixed;
+  left: 50%;
+  right: auto;
+  bottom: 0;
+  z-index: 9999;
+  width: min(100vw, 430px);
+  max-height: min(82vh, calc(100dvh - 18px));
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  /* Hardcoded, not var(--bg-elevated, ...) — several pages that include
+     this stylesheet define their own theme-independent --bg-elevated
+     (e.g. quiz-card's is a flat #1a1a2e with no light variant), which
+     silently wins over the fallback and pins the drawer dark forever. */
+  background: #14142a;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 0;
+  border-radius: 22px 22px 0 0;
+  padding: 58px 14px calc(env(safe-area-inset-bottom) + 16px);
+  box-shadow: 0 -18px 48px rgba(0,0,0,0.50);
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  transform: translate(-50%, 100%);
+  transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.app-dropdown::-webkit-scrollbar { display: none; }
+.app-dropdown::before { display: none; }
+.app-dropdown.open { transform: translate(-50%, 0) !important; }
+
+[data-theme="light"] .app-dropdown {
+  background: #fffcf5 !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  border-bottom: 0 !important;
+  box-shadow: 0 -18px 48px rgba(92,74,61,0.18) !important;
+}
+
+/* ── Section label ── */
+.app-menu-section {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.10em;
+  color: rgba(255,255,255,0.28);
+  padding: 6px 12px 4px;
+}
+[data-theme="light"] .app-menu-section { color: rgba(0,0,0,0.32) !important; }
+
+/* ── Menu item — base ── */
+.app-menu-item {
+  width: 100%;
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 11px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s;
+  text-align: left;
+  margin-bottom: 3px;
+}
+.app-menu-item:last-child { margin-bottom: 0; }
+.app-menu-item:active { transform: scale(0.97); }
+
+/* ── Per-action colored rows ── */
+
+/* My Account — blue */
+.app-menu-item[data-menu-action="my-account"] {
+  background: linear-gradient(135deg, rgba(24,99,220,0.55) 0%, rgba(37,117,255,0.40) 100%);
+  border-color: rgba(99,163,255,0.55);
+  color: #E0EEFF;
+  box-shadow: 0 2px 12px rgba(24,99,220,0.30), 0 0 0 1px rgba(99,163,255,0.15) inset;
+}
+.app-menu-item[data-menu-action="my-account"]:hover {
+  background: linear-gradient(135deg, rgba(24,99,220,0.72) 0%, rgba(37,117,255,0.58) 100%);
+  border-color: rgba(99,163,255,0.75);
+  color: #fff;
+}
+
+/* Account Settings — slate (matches .app-menu-icon--settings) */
+.app-menu-item[data-menu-action="account-settings"] {
+  background: linear-gradient(135deg, rgba(71,85,105,0.50) 0%, rgba(100,116,139,0.36) 100%);
+  border-color: rgba(148,163,184,0.50);
+  color: #E2E8F0;
+  box-shadow: 0 2px 12px rgba(71,85,105,0.26), 0 0 0 1px rgba(148,163,184,0.14) inset;
+}
+.app-menu-item[data-menu-action="account-settings"]:hover {
+  background: linear-gradient(135deg, rgba(71,85,105,0.68) 0%, rgba(100,116,139,0.54) 100%);
+  border-color: rgba(148,163,184,0.70);
+  color: #fff;
+}
+
+/* Understand Matches — cyan */
+.app-menu-item[data-menu-action="understand-matches"] {
+  background: linear-gradient(135deg, rgba(8,145,178,0.52) 0%, rgba(34,211,238,0.38) 100%);
+  border-color: rgba(103,232,249,0.55);
+  color: #CFFAFE;
+  box-shadow: 0 2px 12px rgba(34,211,238,0.28), 0 0 0 1px rgba(103,232,249,0.15) inset;
+}
+.app-menu-item[data-menu-action="understand-matches"]:hover {
+  background: linear-gradient(135deg, rgba(8,145,178,0.70) 0%, rgba(34,211,238,0.56) 100%);
+  border-color: rgba(103,232,249,0.75);
+  color: #fff;
+}
+
+/* Leave Review — green */
+.app-menu-item[data-menu-action="leave-review"] {
+  background: linear-gradient(135deg, rgba(5,150,105,0.52) 0%, rgba(16,185,129,0.38) 100%);
+  border-color: rgba(52,211,153,0.55);
+  color: #D1FAF0;
+  box-shadow: 0 2px 12px rgba(16,185,129,0.28), 0 0 0 1px rgba(52,211,153,0.15) inset;
+}
+.app-menu-item[data-menu-action="leave-review"]:hover {
+  background: linear-gradient(135deg, rgba(5,150,105,0.70) 0%, rgba(16,185,129,0.56) 100%);
+  border-color: rgba(52,211,153,0.75);
+  color: #fff;
+}
+
+/* Share — purple */
+.app-menu-item[data-menu-action="share"] {
+  background: linear-gradient(135deg, rgba(109,40,217,0.52) 0%, rgba(139,92,246,0.40) 100%);
+  border-color: rgba(167,139,250,0.55);
+  color: #EDE9FE;
+  box-shadow: 0 2px 12px rgba(139,92,246,0.30), 0 0 0 1px rgba(167,139,250,0.15) inset;
+}
+.app-menu-item[data-menu-action="share"]:hover {
+  background: linear-gradient(135deg, rgba(109,40,217,0.70) 0%, rgba(139,92,246,0.58) 100%);
+  border-color: rgba(167,139,250,0.75);
+  color: #fff;
+}
+
+/* Contact — amber */
+.app-menu-item[data-menu-action="contact"] {
+  background: linear-gradient(135deg, rgba(180,110,0,0.52) 0%, rgba(245,158,11,0.38) 100%);
+  border-color: rgba(251,191,36,0.55);
+  color: #FEF3C7;
+  box-shadow: 0 2px 12px rgba(245,158,11,0.28), 0 0 0 1px rgba(251,191,36,0.15) inset;
+}
+.app-menu-item[data-menu-action="contact"]:hover {
+  background: linear-gradient(135deg, rgba(180,110,0,0.70) 0%, rgba(245,158,11,0.56) 100%);
+  border-color: rgba(251,191,36,0.75);
+  color: #fff;
+}
+
+/* Reset Account — red */
+.app-menu-item[data-menu-action="reset"],
+.app-menu-item--danger {
+  background: linear-gradient(135deg, rgba(185,28,28,0.52) 0%, rgba(239,68,68,0.38) 100%) !important;
+  border-color: rgba(252,165,165,0.50) !important;
+  color: #FEE2E2 !important;
+  box-shadow: 0 2px 12px rgba(239,68,68,0.28), 0 0 0 1px rgba(252,165,165,0.12) inset;
+}
+.app-menu-item[data-menu-action="reset"]:hover,
+.app-menu-item--danger:hover {
+  background: linear-gradient(135deg, rgba(185,28,28,0.70) 0%, rgba(239,68,68,0.58) 100%) !important;
+  border-color: rgba(252,165,165,0.70) !important;
+  color: #fff !important;
+}
+
+/* ── Light mode per-action overrides ── */
+[data-theme="light"] .app-menu-item[data-menu-action="my-account"] {
+  background: rgba(24,99,220,0.10) !important; border-color: rgba(24,99,220,0.22) !important; color: #1863DC !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="my-account"]:hover {
+  background: rgba(24,99,220,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="account-settings"] {
+  background: rgba(71,85,105,0.10) !important; border-color: rgba(71,85,105,0.24) !important; color: #334155 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="account-settings"]:hover {
+  background: rgba(71,85,105,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="understand-matches"] {
+  background: rgba(8,145,178,0.10) !important; border-color: rgba(8,145,178,0.22) !important; color: #0e7490 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="understand-matches"]:hover {
+  background: rgba(8,145,178,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="leave-review"] {
+  background: rgba(5,150,105,0.10) !important; border-color: rgba(5,150,105,0.22) !important; color: #059669 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="leave-review"]:hover {
+  background: rgba(5,150,105,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="share"] {
+  background: rgba(109,40,217,0.10) !important; border-color: rgba(109,40,217,0.22) !important; color: #7c3aed !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="share"]:hover {
+  background: rgba(109,40,217,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="contact"] {
+  background: rgba(217,119,6,0.10) !important; border-color: rgba(217,119,6,0.22) !important; color: #d97706 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="contact"]:hover {
+  background: rgba(217,119,6,0.18) !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="reset"],
+[data-theme="light"] .app-menu-item--danger {
+  background: rgba(239,68,68,0.09) !important; border-color: rgba(239,68,68,0.20) !important; color: #dc2626 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="reset"]:hover,
+[data-theme="light"] .app-menu-item--danger:hover {
+  background: rgba(239,68,68,0.16) !important;
+}
+
+/* ── Item icon chip ── */
+.app-menu-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.app-menu-icon--account  { background: rgba(24,99,220,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(24,99,220,0.40); }
+.app-menu-icon--understand { background: rgba(8,145,178,0.55); color: #fff; box-shadow: 0 2px 8px rgba(34,211,238,0.36); }
+.app-menu-icon--review   { background: rgba(5,150,105,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(16,185,129,0.36); }
+.app-menu-icon--share    { background: rgba(109,40,217,0.55);  color: #fff; box-shadow: 0 2px 8px rgba(139,92,246,0.40); }
+.app-menu-icon--contact  { background: rgba(180,110,0,0.60);   color: #fff; box-shadow: 0 2px 8px rgba(245,158,11,0.36); }
+.app-menu-icon--danger   { background: rgba(185,28,28,0.55);   color: #fff; box-shadow: 0 2px 8px rgba(239,68,68,0.38); }
+
+[data-theme="light"] .app-menu-icon--account  { background: rgba(24,99,220,0.15) !important;  color: #1863DC !important; }
+[data-theme="light"] .app-menu-icon--understand { background: rgba(8,145,178,0.15) !important; color: #0e7490 !important; }
+[data-theme="light"] .app-menu-icon--review   { background: rgba(5,150,105,0.15) !important;   color: #059669 !important; }
+[data-theme="light"] .app-menu-icon--share    { background: rgba(109,40,217,0.15) !important;  color: #7c3aed !important; }
+[data-theme="light"] .app-menu-icon--contact  { background: rgba(217,119,6,0.15) !important;   color: #d97706 !important; }
+[data-theme="light"] .app-menu-icon--danger   { background: rgba(239,68,68,0.13) !important;   color: #dc2626 !important; }
+
+/* ── Divider ── */
+.app-menu-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+  margin: 4px 8px 7px;
+}
+[data-theme="light"] .app-menu-divider { background: rgba(0,0,0,0.07) !important; }
+
+/* ── Install app — teal/cyan (added) ── */
+.app-menu-item[data-menu-action="install"] {
+  background: linear-gradient(135deg, rgba(8,145,178,0.52) 0%, rgba(6,182,212,0.38) 100%);
+  border-color: rgba(34,211,238,0.55);
+  color: #CFFAFE;
+  box-shadow: 0 2px 12px rgba(6,182,212,0.28), 0 0 0 1px rgba(34,211,238,0.15) inset;
+}
+.app-menu-item[data-menu-action="install"]:hover {
+  background: linear-gradient(135deg, rgba(8,145,178,0.70) 0%, rgba(6,182,212,0.56) 100%);
+  border-color: rgba(34,211,238,0.75);
+  color: #fff;
+}
+.app-menu-icon--install { background: rgba(8,145,178,0.60); color: #fff; box-shadow: 0 2px 8px rgba(6,182,212,0.38); }
+.app-menu-icon--settings { background: rgba(148,163,184,0.30); color: #e2e8f0; box-shadow: 0 2px 8px rgba(148,163,184,0.20); }
+[data-theme="light"] .app-menu-icon--settings { background: rgba(100,116,139,0.14) !important; color: #475569 !important; }
+
+[data-theme="light"] .app-menu-item[data-menu-action="install"] {
+  background: rgba(8,145,178,0.10) !important; border-color: rgba(8,145,178,0.22) !important; color: #0e7490 !important;
+}
+[data-theme="light"] .app-menu-item[data-menu-action="install"]:hover {
+  background: rgba(8,145,178,0.18) !important;
+}
+[data-theme="light"] .app-menu-icon--install { background: rgba(8,145,178,0.15) !important; color: #0e7490 !important; }
+
+/* ═══════════════════════════════════════════════════════════════
+   DRAWER ROWS — simplified, professional look.
+   Inside the slide-in drawer, rows are clean/neutral (no flashy
+   gradient fills); the colored icon chips stay as small accents.
+═══════════════════════════════════════════════════════════════ */
+.app-dropdown .app-menu-section {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 12px 12px 6px;
+  color: var(--text-muted, rgba(255,255,255,0.34));
+}
+.app-dropdown .app-menu-item {
+  font-weight: 600 !important;
+  padding: 12px 11px !important;
+  margin-bottom: 1px !important;
+}
+.app-dropdown .app-menu-item--danger,
+.app-dropdown .app-menu-item[data-menu-action="reset"] {
+  color: #ff6b6b !important;
+}
+.app-dropdown .app-menu-item--danger:hover,
+.app-dropdown .app-menu-item[data-menu-action="reset"]:hover {
+  background: rgba(239,68,68,0.10) !important;
+}
+.app-dropdown .app-menu-divider { margin: 8px 8px; }
+
+[data-theme="light"] .app-dropdown .app-menu-item--danger,
+[data-theme="light"] .app-dropdown .app-menu-item[data-menu-action="reset"] {
+  color: #dc2626 !important;
+}
+[data-theme="light"] .app-dropdown .app-menu-item--danger:hover,
+[data-theme="light"] .app-dropdown .app-menu-item[data-menu-action="reset"]:hover {
+  background: rgba(220,38,38,0.09) !important;
+}
+
+/* Compact mobile account popover: anchored from the bottom-right, no full-screen sheet. */
+.float-tab-bar .tab-item[data-tab="t5"] .tab-label,
+.float-tab-bar .tab-item[data-tab="account"] .tab-label {
+  display: none !important;
+}
+/* ...except when the account tab is the active one — same "label only
+   shows on the active tab" convention every other tab already follows
+   (see .tab-item.active .tab-label in layout.css). Text itself comes
+   from BDProfile.applyTabLabel(), which already sets it to the user's
+   name on every page that loads bd-profile.js. */
+.float-tab-bar .tab-item[data-tab="t5"].active .tab-label,
+.float-tab-bar .tab-item[data-tab="account"].active .tab-label {
+  display: block !important;
+  animation: tabLabelIn 0.22s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  color: rgba(238,242,244,0.78) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"].active .tab-icon,
+.float-tab-bar .tab-item[data-tab="t5"]:hover .tab-icon,
+.float-tab-bar .tab-item[data-tab="account"]:hover .tab-icon {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon svg,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon svg {
+  display: none !important;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon::before,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.7px solid currentColor;
+  background:
+    radial-gradient(circle at 32% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 50% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 68% 50%, currentColor 0 1.35px, transparent 1.5px);
+  box-sizing: border-box;
+  opacity: 0.92;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .app-menu-tab-mark,
+.float-tab-bar .tab-item[data-tab="account"] .app-menu-tab-mark {
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50%;
+  border: 1.7px solid currentColor;
+  background:
+    radial-gradient(circle at 32% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 50% 50%, currentColor 0 1.35px, transparent 1.5px),
+    radial-gradient(circle at 68% 50%, currentColor 0 1.35px, transparent 1.5px);
+  box-sizing: border-box;
+  color: currentColor;
+  display: block;
+  font-size: 0;
+  line-height: 0;
+  opacity: 0.92;
+}
+
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon:has(.app-menu-tab-mark)::before,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon:has(.app-menu-tab-mark)::before,
+.float-tab-bar .tab-item[data-tab="t5"] .tab-icon.has-app-menu-tab-mark::before,
+.float-tab-bar .tab-item[data-tab="account"] .tab-icon.has-app-menu-tab-mark::before {
+  content: none;
+}
+
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="t5"] .tab-icon,
+[data-theme="light"] .float-tab-bar .tab-item[data-tab="account"] .tab-icon {
+  color: #6f7777 !important;
+}
+
+.app-menu-backdrop,
+.app-menu-backdrop.open,
+[data-theme="light"] .app-menu-backdrop,
+[data-theme="light"] .app-menu-backdrop.open {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.app-dropdown {
+  left: auto !important;
+  right: max(12px, calc((100vw - 430px) / 2 + 12px)) !important;
+  bottom: calc(env(safe-area-inset-bottom) + 84px) !important;
+  width: min(292px, calc(100vw - 24px)) !important;
+  max-height: min(58vh, 420px) !important;
+  border: 1px solid rgba(255,255,255,0.10) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.10) !important;
+  border-radius: 18px !important;
+  padding: 12px 10px 10px !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.42) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate3d(10px, 18px, 0) scale(0.96) !important;
+  transform-origin: 100% 100% !important;
+  transition:
+    opacity 0.18s ease,
+    transform 0.24s cubic-bezier(0.34, 1.18, 0.64, 1) !important;
+}
+
+.app-dropdown.open {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+}
+
+[data-theme="light"] .app-dropdown {
+  border-bottom: 1px solid rgba(0,0,0,0.08) !important;
+  box-shadow: 0 18px 42px rgba(92,74,61,0.16) !important;
+}
+
+.app-dropdown .app-menu-section {
+  padding: 8px 10px 6px !important;
+}
+
+.app-dropdown .app-menu-item {
+  padding: 10px !important;
+}
+
+.app-dropdown .app-menu-icon {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: currentColor !important;
+  opacity: 0.78;
+}
+
+.app-dropdown .app-menu-icon svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+.app-dropdown .app-menu-item:hover .app-menu-icon {
+  opacity: 1;
+}
