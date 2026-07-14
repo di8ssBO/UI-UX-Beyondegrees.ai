@@ -104,20 +104,11 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
 [data-theme="light"] .venn-btn{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.16);color:#e8e8f5}
 [data-theme="light"] .venn-btn:hover{background:rgba(255,255,255,.18)}
 
-/* Exit-fullscreen is its own action (leave the view) vs. zoom (adjust
-   it) — same split as desktop: ✕ pinned top-right on its own, zoom
-   cluster moves to bottom-right so a fat thumb can't hit the wrong one. */
-.venn-close-btn{display:none;position:absolute;top:10px;right:10px;z-index:7;width:30px;height:30px;border-radius:50%;font-size:14px;line-height:1;align-items:center;justify-content:center;cursor:pointer;background:rgba(42,27,12,.10);border:1px solid rgba(42,27,12,.20);color:#2A1B0C}
-.venn-close-btn:active{transform:scale(.92)}
-[data-theme="light"] .venn-close-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.20);color:#e8e8f5}
-.venn-card.vc-fullscreen .venn-close-btn{display:flex}
-.venn-card.vc-fullscreen .venn-controls{top:auto;bottom:14px;right:14px}
-.venn-card.vc-fullscreen [data-act="fullscreen"]{display:none}
-
 .venn-stage-wrap{width:100%;overflow:hidden;border-radius:12px}
+.venn-stage-wrap.pannable{touch-action:none;cursor:grab}
+.venn-stage-wrap.pannable:active{cursor:grabbing}
 .venn-stage{width:100%;transform-origin:center center;transition:transform .18s ease}
 .venn-stage svg{display:block;width:100%;height:auto}
-.venn-card.vc-fullscreen .venn-stage-wrap{flex:1;display:flex;align-items:center;justify-content:center}
 
 /* Circles glow when the dot/story currently shown belongs to them —
    same "explainable AI" cue as desktop: press a dot → see exactly which
@@ -135,6 +126,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
 .venn-tooltip::after{content:'';position:absolute;width:12px;height:12px;left:var(--vt-arrow-x,50%);background:rgba(8,10,32,.97);transform:translateX(-50%) rotate(45deg);border-radius:3px}
 .venn-tooltip.place-above::after{bottom:-6px;border-right:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.14)}
 .venn-tooltip.place-below::after{top:-6px;border-left:1px solid rgba(255,255,255,.14);border-top:1px solid rgba(255,255,255,.14)}
+.venn-tooltip .vt-q{font-size:10.5px;font-style:italic;line-height:1.4;color:rgba(232,232,245,.62);margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid rgba(255,255,255,.10)}
 .venn-tooltip .vt-verdict{display:flex;align-items:center;gap:5px;font-weight:800;font-size:11px;color:#fff;margin-bottom:4px}
 .venn-tooltip .vt-story{font-size:11px;line-height:1.5;color:rgba(232,232,245,.92);min-height:1.4em}
 .venn-tooltip .vt-story.typing::after{content:'▍';margin-left:1px;opacity:.7;animation:vtCaret .7s steps(1) infinite;color:rgba(232,232,245,.6)}
@@ -185,40 +177,6 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
         <div class="um-logo"><img src="../../shared/beyondegrees-logo-mark.png" alt="" class="logo-img"><span class="logo-text"><span class="logo-beyon">Beyon</span><span class="logo-accent">Degrees.ai</span></span></div>
         <div class="um-hdr-right">
           <div class="um-progress"><div class="um-progress-track"><div class="um-progress-fill" id="umProgressFill" style="width:0%"></div></div><span class="um-progress-text" id="umProgressText">0 / 30</span></div>
-          <div class="app-menu-wrap" data-home="../onboarding/home/">
-            <button class="app-menu-btn" aria-label="Menu">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-            <div class="app-dropdown">
-              <div class="app-menu-section" data-i18n="menu.section_explore">Explore</div>
-              <a href="./" class="app-menu-item" data-menu-action="understand-matches">
-                <span class="app-menu-icon app-menu-icon--understand"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="9" r="6"/><circle cx="12" cy="15" r="6"/></svg></span>
-                <span data-i18n="menu.understand_matches">Understand Matches</span>
-              </a>
-              <div class="app-menu-section" data-i18n="menu.section_account">Account</div>
-              <a href="../profile/edit/" class="app-menu-item" data-menu-action="my-account">
-                <span class="app-menu-icon app-menu-icon--account"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="4"/><path d="M4 21v-2a4 4 0 014-4h8a4 4 0 014 4v2"/></svg></span>
-                <span data-i18n="menu.my_account">My Account</span>
-              </a>
-              <button class="app-menu-item" data-menu-action="leave-review">
-                <span class="app-menu-icon app-menu-icon--review"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
-                <span data-i18n="menu.leave_review">Leave Review</span>
-              </button>
-              <button class="app-menu-item" data-menu-action="share">
-                <span class="app-menu-icon app-menu-icon--share"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
-                <span data-i18n="menu.share_archetype">Share Archetype</span>
-              </button>
-              <button class="app-menu-item" data-menu-action="contact">
-                <span class="app-menu-icon app-menu-icon--contact"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-                <span data-i18n="menu.contact_us">Contact Us</span>
-              </button>
-              <div class="app-menu-divider"></div>
-              <button class="app-menu-item app-menu-item--danger" data-menu-action="reset">
-                <span class="app-menu-icon app-menu-icon--danger"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></span>
-                <span data-i18n="menu.reset_account">Reset Account</span>
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -256,7 +214,7 @@ body{background:var(--bg-base);color:var(--text-primary);font-family:'Plus Jakar
         </a>
         <a href="../profile/overview/" class="tab-item" data-tab="t5">
           <span class="tab-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/></svg></span>
-          <span class="tab-label" data-i18n="nav.account">Account</span>
+          <span class="tab-label">Account</span>
         </a>
       </nav>
     </div></div>
@@ -827,6 +785,7 @@ function buildNarrative(mask, answer, top3){
    RENDER — builds one Venn tab (Disciplines / Majors)
 ═══════════════════════════════════════════════════════════ */
 var ZOOM = {};
+var PAN = {};
 function renderVennTab(tabKey, top3, assertions){
   var uid = tabKey;
   var c1 = CIRCLES[1], c2 = CIRCLES[2], c3 = CIRCLES[3];
@@ -975,9 +934,8 @@ function renderVennTab(tabKey, top3, assertions){
     + '  <div class="venn-controls">'
     + '    <button class="venn-btn" data-act="zoom-in" data-tab="' + uid + '" aria-label="Zoom in">+</button>'
     + '    <button class="venn-btn" data-act="zoom-out" data-tab="' + uid + '" aria-label="Zoom out">&minus;</button>'
-    + '    <button class="venn-btn" data-act="fullscreen" data-tab="' + uid + '" aria-label="Fullscreen">&#9974;</button>'
+    + '    <button class="venn-btn" data-act="reset-zoom" data-tab="' + uid + '" aria-label="Reset zoom"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 012-2h3"/><path d="M16 3h3a2 2 0 012 2v3"/><path d="M21 16v3a2 2 0 01-2 2h-3"/><path d="M8 21H5a2 2 0 01-2-2v-3"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg></button>'
     + '  </div>'
-    + '  <button class="venn-close-btn" data-act="close-fullscreen" data-tab="' + uid + '" aria-label="Exit fullscreen">&#10005;</button>'
     + '  <div class="venn-legend">' + legend + '</div>'
     + '  <div class="venn-stage-wrap">'
     + '    <div class="venn-stage" id="vennStage-' + uid + '">' + svg + '</div>'
@@ -994,11 +952,28 @@ function renderVennTab(tabKey, top3, assertions){
 function wireVennTab(uid, top3){
   var card    = document.getElementById('vennCard-' + uid);
   var stage   = document.getElementById('vennStage-' + uid);
+  var stageWrap = card.querySelector('.venn-stage-wrap');
   var tooltip = document.getElementById('vennTooltip-' + uid);
   var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   ZOOM[uid] = ZOOM[uid] || 1;
-  function applyZoom(){ stage.style.transform = 'scale(' + ZOOM[uid] + ')'; }
+  PAN[uid] = PAN[uid] || { x: 0, y: 0 };
+
+  /* Once zoomed in, the stage is bigger than its clipping box — clamp
+     the pan offset so you can only drag up to the overflow amount on
+     each axis (never reveal empty space past the diagram's edge). */
+  function clampPan(){
+    var natW = stage.offsetWidth, natH = stage.offsetHeight;
+    var maxX = Math.max(0, (natW * ZOOM[uid] - stageWrap.clientWidth) / 2);
+    var maxY = Math.max(0, (natH * ZOOM[uid] - stageWrap.clientHeight) / 2);
+    PAN[uid].x = Math.max(-maxX, Math.min(maxX, PAN[uid].x));
+    PAN[uid].y = Math.max(-maxY, Math.min(maxY, PAN[uid].y));
+  }
+  function applyZoom(){
+    clampPan();
+    stage.style.transform = 'translate(' + PAN[uid].x + 'px,' + PAN[uid].y + 'px) scale(' + ZOOM[uid] + ')';
+    stageWrap.classList.toggle('pannable', ZOOM[uid] > 1);
+  }
   applyZoom();
 
   card.querySelectorAll('[data-act="zoom-in"]').forEach(function(btn){
@@ -1008,27 +983,43 @@ function wireVennTab(uid, top3){
     btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.max(0.7, +(ZOOM[uid] - 0.15).toFixed(2)); applyZoom(); });
   });
 
-  /* Enter/exit fullscreen are two separate buttons (⛶ to open, ✕ pinned
-     top-right to close) — same split as desktop, so a thumb reaching for
-     zoom never lands on "leave the view" by mistake. */
-  function openFullscreen(){
-    card.classList.add('vc-fullscreen');
-    var host = document.querySelector('.um');
-    var r = host.getBoundingClientRect();
-    card.style.width  = (r.width - 20) + 'px';
-    card.style.height = (r.height - 20) + 'px';
-  }
-  function closeFullscreen(){
-    card.classList.remove('vc-fullscreen');
-    card.style.width  = '';
-    card.style.height = '';
-  }
-  card.querySelectorAll('[data-act="fullscreen"]').forEach(function(btn){
-    btn.addEventListener('click', function(e){ e.stopPropagation(); openFullscreen(); });
+  /* ⟲ resets the stage back to its original (1x) size/position — the
+     only way to undo +/- zoom and any drag, since there's no fullscreen
+     mode to "exit" from. */
+  card.querySelectorAll('[data-act="reset-zoom"]').forEach(function(btn){
+    btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = 1; PAN[uid] = { x: 0, y: 0 }; applyZoom(); });
   });
-  card.querySelectorAll('[data-act="close-fullscreen"]').forEach(function(btn){
-    btn.addEventListener('click', function(e){ e.stopPropagation(); closeFullscreen(); });
+
+  /* Drag-to-pan once zoomed in — otherwise the parts of the diagram
+     pushed outside the clipping box are just gone, unreachable. Only
+     active above 1x; at 1x the stage exactly fills its box so there's
+     nowhere to pan to (and dragging should still let dot taps through). */
+  var drag = null;
+  stageWrap.addEventListener('pointerdown', function(e){
+    if (ZOOM[uid] <= 1) return;
+    drag = { startX: e.clientX, startY: e.clientY, panX: PAN[uid].x, panY: PAN[uid].y, moved: false, id: e.pointerId };
+    stageWrap.setPointerCapture(e.pointerId);
   });
+  stageWrap.addEventListener('pointermove', function(e){
+    if (!drag || e.pointerId !== drag.id) return;
+    var dx = e.clientX - drag.startX, dy = e.clientY - drag.startY;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) drag.moved = true;
+    PAN[uid].x = drag.panX + dx;
+    PAN[uid].y = drag.panY + dy;
+    stage.style.transition = 'none';
+    clampPan();
+    stage.style.transform = 'translate(' + PAN[uid].x + 'px,' + PAN[uid].y + 'px) scale(' + ZOOM[uid] + ')';
+  });
+  function endDrag(e){
+    if (!drag || (e && e.pointerId !== drag.id)) return;
+    stage.style.transition = '';
+    /* A real drag shouldn't also register as a dot tap underneath it. */
+    if (drag.moved) { dragJustEnded = true; setTimeout(function(){ dragJustEnded = false; }, 0); }
+    drag = null;
+  }
+  var dragJustEnded = false;
+  stageWrap.addEventListener('pointerup', endDrag);
+  stageWrap.addEventListener('pointercancel', endDrag);
 
   /* Types the explanation in so it reads as the AI "speaking" it, not
      dumping a wall of text — same treatment as desktop. */
@@ -1089,10 +1080,14 @@ function wireVennTab(uid, top3){
     });
   }
 
-  /* Dot story — verdict headline + typed narrative + the answer given. */
+  /* Dot story — original assertion (static, so it never reads as
+     AI-generated) + verdict headline + typed narrative + the answer
+     given. The assertion line is what tells users which question this
+     dot actually is; without it the narrative floats with no anchor. */
   function showTip(data, anchorEl){
     tooltip.style.setProperty('--vt-accent', data.color);
-    tooltip.innerHTML = '<div class="vt-verdict"><span>&#9889;</span>' + data.verdict + '</div>'
+    tooltip.innerHTML = '<div class="vt-q">&ldquo;' + data.text + '&rdquo;</div>'
+      + '<div class="vt-verdict"><span>&#9889;</span>' + data.verdict + '</div>'
       + '<div class="vt-story"></div>'
       + '<div class="vt-a">' + t('understand.tooltip.answered') + ' <b style="color:' + data.color + '">' + data.answer + '</b></div>';
     positionTooltipNear(anchorEl);
@@ -1128,6 +1123,7 @@ function wireVennTab(uid, top3){
   card.querySelectorAll('.venn-dot').forEach(function(dot){
     dot.addEventListener('click', function(e){
       e.stopPropagation();
+      if (dragJustEnded) return;
       var data = JSON.parse(decodeURIComponent(dot.getAttribute('data-payload')));
       showTip(data, dot);
     });

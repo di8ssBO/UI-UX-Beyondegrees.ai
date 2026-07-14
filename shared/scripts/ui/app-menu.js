@@ -110,17 +110,6 @@
     function close() { dropdown.style.transform = ''; dropdown.classList.remove('open'); backdrop.classList.remove('open'); if (btn) { btn.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); } setTriggersExpanded('false'); }
     function toggle() { dropdown.classList.contains('open') ? close() : open(); }
 
-    /* Inject a close (✕) button once, at the top of the drawer. */
-    if (!dropdown.querySelector('.app-menu-close')) {
-      var x = document.createElement('button');
-      x.type = 'button';
-      x.className = 'app-menu-close';
-      x.setAttribute('aria-label', 'Close');
-      x.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
-      x.addEventListener('click', close);
-      dropdown.insertBefore(x, dropdown.firstChild);
-    }
-
     if (btn) {
       btn.setAttribute('aria-expanded', 'false');
       btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
@@ -172,8 +161,7 @@
         if (!menuApi) return;
         e.preventDefault();
         e.stopPropagation();
-        el.setAttribute('aria-expanded', 'true');
-        menuApi.open();
+        menuApi.toggle();
       }, true);
     });
   }

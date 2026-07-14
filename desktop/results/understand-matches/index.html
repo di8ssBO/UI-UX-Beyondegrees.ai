@@ -96,8 +96,7 @@
     box-shadow: 0 10px 32px rgba(0,0,0,.35), 0 2px 10px rgba(92,69,53,.12);
   }
   .venn-wrap { position: relative; }
-  /* Viewport controls (zoom + expand-to-fullscreen) — one cluster,
-     top-right, in the compact card view. */
+  /* Viewport controls (zoom + reset) — one cluster, top-right. */
   .venn-controls { position: absolute; top: 12px; right: 12px; z-index: 5; display: flex; flex-direction: column; gap: 8px; }
   .venn-btn {
     width: 34px; height: 34px; border-radius: 10px; font-size: 16px; line-height: 1;
@@ -109,29 +108,9 @@
   :root[data-theme="light"] .venn-btn { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.16); color: #e8e8f5; }
   :root[data-theme="light"] .venn-btn:hover { background: rgba(255,255,255,.18); }
 
-  /* ── Exit-fullscreen is a different kind of action from zoom (leave
-     the view vs. adjust it), so in fullscreen it gets its own spot —
-     top-right corner, on its own — while zoom +/− relocates to the
-     bottom-right as a separate cluster. Hidden entirely outside
-     fullscreen; the compact card keeps using the ⛶ expand button. ── */
-  .venn-close-btn {
-    display: none; position: absolute; top: 16px; right: 16px; z-index: 7;
-    width: 38px; height: 38px; border-radius: 50%; font-size: 16px; line-height: 1;
-    align-items: center; justify-content: center; cursor: pointer; transition: background .15s, transform .1s;
-    background: rgba(42,27,12,.10); border: 1px solid rgba(42,27,12,.20); color: #2A1B0C;
-  }
-  .venn-close-btn:hover { background: rgba(42,27,12,.20); }
-  .venn-close-btn:active { transform: scale(.92); }
-  :root[data-theme="light"] .venn-close-btn { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.20); color: #e8e8f5; }
-  :root[data-theme="light"] .venn-close-btn:hover { background: rgba(255,255,255,.22); }
-  .venn-card.vc-fullscreen .venn-close-btn { display: flex; }
-  /* The ⛶ expand trigger is meaningless once already fullscreen. */
-  .venn-card.vc-fullscreen [data-act="fullscreen"] { display: none; }
-  /* Zoom cluster drops to the opposite corner in fullscreen so it never
-     sits next to the close button. */
-  .venn-card.vc-fullscreen .venn-controls { top: auto; bottom: 20px; right: 20px; }
-
   .venn-stage-wrap { width: 100%; overflow: hidden; border-radius: 16px; }
+  .venn-stage-wrap.pannable { touch-action: none; cursor: grab; }
+  .venn-stage-wrap.pannable:active { cursor: grabbing; }
   /* Cap + centre the diagram so it reads as a deliberate object with
      breathing room, not a poster stretched to the column edges. The
      max-height guard keeps the taller "Other"-bucket layout from towering. */
@@ -198,21 +177,6 @@
   .venn-tooltip .vt-a { font-size: 12px; color: rgba(232,232,245,.65); margin-top: 8px; padding-top: 7px; border-top: 1px solid rgba(255,255,255,.10); }
   .venn-tooltip .vt-a b { font-weight: 800; }
   @media (prefers-reduced-motion: reduce) { .venn-tooltip .vt-story.typing::after { display: none; } .venn-tooltip { transition: opacity .15s ease; transform: translateX(-50%) !important; } }
-
-  /* ── Fullscreen overlay ──
-     The diagram used to stay card-sized inside the fullscreen canvas
-     (bottlenecked by the card view's max-height:660px cap), so most of
-     the screen read as empty space. In fullscreen the stage now scales
-     against the viewport itself (vh-based caps) so the Venn — and every
-     dot in it — genuinely grows to fill the room it's given. ── */
-  .venn-backdrop { position: fixed; inset: 0; z-index: 8999; background: rgba(6,6,15,.62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); display: none; }
-  .venn-backdrop.show { display: block; }
-  .venn-card.vc-fullscreen { position: fixed; inset: 4vh 6vw; z-index: 9000; display: flex; flex-direction: column; padding: 26px; }
-  .venn-card.vc-fullscreen .venn-wrap { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
-  .venn-card.vc-fullscreen .venn-legend-top { padding-bottom: 16px; }
-  .venn-card.vc-fullscreen .venn-legend-top .venn-legend-item { font-size: 14px; }
-  .venn-card.vc-fullscreen .venn-stage { max-width: min(90vh, 1200px); margin: 0 auto; }
-  .venn-card.vc-fullscreen .venn-stage svg { max-height: 76vh; }
 
   /* ── Legend + caption ── */
   .venn-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; padding: 18px 4px 6px; }
@@ -321,8 +285,6 @@
       </div>
     </div>
   </div>
-
-  <div class="venn-backdrop" id="vennBackdrop"></div>
 
   <script src="../../../shared/scripts/ui/i18n.js?v=4"></script>
   <script src="../../../shared/scripts/data/disc-config.js"></script>
@@ -772,6 +734,7 @@
      RENDER — one tab: Venn (left) + assertions list (right)
   ═══════════════════════════════════════════════════════════ */
   var ZOOM = {};
+  var PAN = {};
   function renderVennTab(tabKey, top3, assertions){
     var uid = tabKey;
     var c1 = CIRCLES[1], c2 = CIRCLES[2], c3 = CIRCLES[3];
@@ -893,9 +856,8 @@
       +   '<div class="venn-controls">'
       +     '<button class="venn-btn" data-act="zoom-in" data-tab="' + uid + '" aria-label="Zoom in">+</button>'
       +     '<button class="venn-btn" data-act="zoom-out" data-tab="' + uid + '" aria-label="Zoom out">&minus;</button>'
-      +     '<button class="venn-btn" data-act="fullscreen" data-tab="' + uid + '" aria-label="Fullscreen">&#9974;</button>'
+      +     '<button class="venn-btn" data-act="reset-zoom" data-tab="' + uid + '" aria-label="Reset zoom"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 012-2h3"/><path d="M16 3h3a2 2 0 012 2v3"/><path d="M21 16v3a2 2 0 01-2 2h-3"/><path d="M8 21H5a2 2 0 01-2-2v-3"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg></button>'
       +   '</div>'
-      +   '<button class="venn-close-btn" data-act="close-fullscreen" data-tab="' + uid + '" aria-label="Exit fullscreen">&#10005;</button>'
       +   '<div class="venn-wrap">'
       +     '<div class="venn-legend-top">' + legend + '</div>'
       +     '<div class="venn-stage-wrap"><div class="venn-stage" id="vennStage-' + uid + '">' + svg + '</div></div>'
@@ -916,39 +878,69 @@
   function wireVennTab(uid, dotData, top3){
     var card    = document.getElementById('vennCard-' + uid);
     var stage   = document.getElementById('vennStage-' + uid);
+    var stageWrap = card.querySelector('.venn-stage-wrap');
     var tooltip = document.getElementById('vennTooltip-' + uid);
-    var backdrop = document.getElementById('vennBackdrop');
     var panel   = document.getElementById('panel' + cap(uid));
     var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     ZOOM[uid] = ZOOM[uid] || 1;
-    function applyZoom(){ stage.style.transform = 'scale(' + ZOOM[uid] + ')'; }
+    PAN[uid] = PAN[uid] || { x: 0, y: 0 };
+
+    /* Once zoomed in, the stage is bigger than its clipping box — clamp
+       the pan offset so you can only drag up to the overflow amount on
+       each axis (never reveal empty space past the diagram's edge). */
+    function clampPan(){
+      var natW = stage.offsetWidth, natH = stage.offsetHeight;
+      var maxX = Math.max(0, (natW * ZOOM[uid] - stageWrap.clientWidth) / 2);
+      var maxY = Math.max(0, (natH * ZOOM[uid] - stageWrap.clientHeight) / 2);
+      PAN[uid].x = Math.max(-maxX, Math.min(maxX, PAN[uid].x));
+      PAN[uid].y = Math.max(-maxY, Math.min(maxY, PAN[uid].y));
+    }
+    function applyZoom(){
+      clampPan();
+      stage.style.transform = 'translate(' + PAN[uid].x + 'px,' + PAN[uid].y + 'px) scale(' + ZOOM[uid] + ')';
+      stageWrap.classList.toggle('pannable', ZOOM[uid] > 1);
+    }
     applyZoom();
 
     card.querySelectorAll('[data-act="zoom-in"]').forEach(function(btn){ btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.min(2.5, +(ZOOM[uid] + 0.15).toFixed(2)); applyZoom(); }); });
     card.querySelectorAll('[data-act="zoom-out"]').forEach(function(btn){ btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.max(0.7, +(ZOOM[uid] - 0.15).toFixed(2)); applyZoom(); }); });
-    /* Enter and exit are two distinct actions on two distinct buttons —
-       the ⛶ trigger only ever opens fullscreen; the ✕ (top-right corner,
-       its own cluster) is the only thing that closes it. No more one
-       button silently swapping icon/meaning depending on state. */
-    function openFullscreen(){
-      card.classList.add('vc-fullscreen');
-      backdrop.classList.add('show');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeFullscreen(){
-      var openCard = document.querySelector('.venn-card.vc-fullscreen');
-      if (openCard) openCard.classList.remove('vc-fullscreen');
-      backdrop.classList.remove('show');
-      document.body.style.overflow = '';
-    }
-    card.querySelectorAll('[data-act="fullscreen"]').forEach(function(btn){
-      btn.addEventListener('click', function(e){ e.stopPropagation(); openFullscreen(); });
+    /* ⟲ resets the stage back to its original (1x) size/position — the
+       only way to undo +/- zoom and any drag, since there's no
+       fullscreen mode to "exit" from. */
+    card.querySelectorAll('[data-act="reset-zoom"]').forEach(function(btn){
+      btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = 1; PAN[uid] = { x: 0, y: 0 }; applyZoom(); });
     });
-    card.querySelectorAll('[data-act="close-fullscreen"]').forEach(function(btn){
-      btn.addEventListener('click', function(e){ e.stopPropagation(); closeFullscreen(); });
+
+    /* Drag-to-pan once zoomed in — mouse-only here (desktop), same idea
+       as mobile's touch version. Pointer capture on the wrap keeps the
+       drag tracking even if the cursor passes over dots mid-drag, which
+       also stops their mouseenter/mouseleave hover-tooltips from firing
+       and fighting the pan. */
+    var drag = null, dragJustEnded = false;
+    stageWrap.addEventListener('pointerdown', function(e){
+      if (ZOOM[uid] <= 1) return;
+      drag = { startX: e.clientX, startY: e.clientY, panX: PAN[uid].x, panY: PAN[uid].y, moved: false, id: e.pointerId };
+      stageWrap.setPointerCapture(e.pointerId);
     });
-    backdrop.addEventListener('click', closeFullscreen);
+    stageWrap.addEventListener('pointermove', function(e){
+      if (!drag || e.pointerId !== drag.id) return;
+      var dx = e.clientX - drag.startX, dy = e.clientY - drag.startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) drag.moved = true;
+      PAN[uid].x = drag.panX + dx;
+      PAN[uid].y = drag.panY + dy;
+      stage.style.transition = 'none';
+      clampPan();
+      stage.style.transform = 'translate(' + PAN[uid].x + 'px,' + PAN[uid].y + 'px) scale(' + ZOOM[uid] + ')';
+    });
+    function endDrag(e){
+      if (!drag || (e && e.pointerId !== drag.id)) return;
+      stage.style.transition = '';
+      if (drag.moved) { dragJustEnded = true; setTimeout(function(){ dragJustEnded = false; }, 0); }
+      drag = null;
+    }
+    stageWrap.addEventListener('pointerup', endDrag);
+    stageWrap.addEventListener('pointercancel', endDrag);
 
     /* Types text into a node so the explanation reads as the AI "speaking"
        it, not pasting it. Length-normalised so long strings don't crawl:
@@ -1061,10 +1053,11 @@
        answer matters — the "explainable AI" moment. Click pins the row. */
     card.querySelectorAll('.venn-dot').forEach(function(dot){
       var idx = +dot.getAttribute('data-idx');
-      dot.addEventListener('mouseenter', function(){ setRowHover(idx, true); setCircleGlow(dotData[idx].mask, true); showTip(dotData[idx], dot); });
+      dot.addEventListener('mouseenter', function(){ if (dragJustEnded) return; setRowHover(idx, true); setCircleGlow(dotData[idx].mask, true); showTip(dotData[idx], dot); });
       dot.addEventListener('mouseleave', function(){ setRowHover(idx, false); setCircleGlow(dotData[idx].mask, false); hideTip(); });
       dot.addEventListener('click', function(e){
         e.stopPropagation();
+        if (dragJustEnded) return;
         showTip(dotData[idx], dot); setActiveRow(idx); pulseDot(idx);
       });
     });
@@ -1174,29 +1167,6 @@
 
   if (window.BDi18n && BDi18n.init) BDi18n.init();
   renderAll();
-
-  /* Chromium keeps a `fadeUp` entrance animation "in effect" forever once
-     it fill-mode:both's onto `.content`/`.um-panel.active` (their computed
-     transform reads back as an identity matrix, not `none`), and any
-     element whose transform is animation-targeted — even at identity —
-     establishes a containing block for `position: fixed` descendants.
-     That silently shrank the Venn "fullscreen" overlay down to the width
-     of `.content` instead of the real viewport. Dropping the animation
-     once it's done restores `transform: none` and lets `.vc-fullscreen`
-     size against the actual screen. */
-  document.addEventListener('animationend', function(e){
-    if (e.animationName === 'fadeUp') e.target.style.animation = 'none';
-  });
-
-  /* Escape closes fullscreen — the standard exit affordance alongside the ✕. */
-  document.addEventListener('keydown', function(e){
-    if (e.key !== 'Escape') return;
-    var openCard = document.querySelector('.venn-card.vc-fullscreen');
-    if (!openCard) return;
-    openCard.classList.remove('vc-fullscreen');
-    document.getElementById('vennBackdrop').classList.remove('show');
-    document.body.style.overflow = '';
-  });
 
   /* Re-render when the shell toggles theme, or the language changes —
      the venn card inverts with the theme and all labels re-translate. */

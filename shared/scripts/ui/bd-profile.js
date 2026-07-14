@@ -6,13 +6,12 @@
    Usage:
      BDProfile.get()              → { firstName, lastName }
      BDProfile.getDisplayName()   → "Hoang Phuc"  (fallback: null)
-     BDProfile.getInitials()      → "HP"
      BDProfile.save(fn, ln)       → writes name to localStorage
      BDProfile.saveAvatar(url)    → writes avatar dataURL to localStorage
      BDProfile.getAvatar()        → dataURL or null
      BDProfile.applyTabLabel()    → updates profile tab label on page
-     BDProfile.applyNameDisplay() → updates .profile-name + initials
-     BDProfile.applyAvatar()      → sets avatar image or initials
+     BDProfile.applyNameDisplay() → updates .profile-name
+     BDProfile.applyAvatar()      → sets avatar image or placeholder icon
    ───────────────────────────────────────────────────────────── */
 (function () {
   'use strict';
@@ -41,13 +40,6 @@
       return (this.get().firstName || '').trim();
     },
 
-    getInitials: function () {
-      var p = this.get();
-      var fi = (p.firstName || '').trim().charAt(0).toUpperCase();
-      var li = (p.lastName  || '').trim().charAt(0).toUpperCase();
-      return (fi + li) || '?';
-    },
-
     save: function (firstName, lastName) {
       try {
         localStorage.setItem(KEY, JSON.stringify({
@@ -69,6 +61,10 @@
       try { return localStorage.getItem('bd-avatar') || null; } catch (e) { return null; }
     },
 
+    /* No photo set → a generic placeholder icon, never initials (a blank
+       avatar shouldn't imply a name has been read/parsed). */
+    AVATAR_PLACEHOLDER_SVG: '<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3" ry="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+
     applyAvatar: function () {
       var self = this;
       document.querySelectorAll('.avatar').forEach(function (el) {
@@ -76,16 +72,23 @@
         if (dataURL) {
           el.innerHTML = '<img src="' + dataURL + '" alt="avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">';
         } else {
-          el.textContent = self.getInitials();
+          el.innerHTML = self.AVATAR_PLACEHOLDER_SVG;
         }
       });
     },
 
-    /* Updates <span class="tab-label"> inside the 5th tab-item */
+    /* Updates <span class="tab-label"> inside the 5th tab-item. This is
+       the sole owner of that element's text (it intentionally does NOT
+       carry data-i18n in markup) — i18n.js runs its own DOMContentLoaded
+       pass *after* this one (bd-profile.js loads in <head>, i18n.js at
+       the end of <body>), so if the label were i18n-managed too, every
+       page load would silently stomp the name back to "Account". The
+       untranslated-fallback branch below keeps it correctly localized
+       when no name is set yet. */
     applyTabLabel: function () {
       var name = this.getFirstName() || this.getDisplayName();
-      if (!name) return;
-      /* Select by position (5th .tab-item) or by data-tab="t5" */
+      var fallback = (window.BDi18n && window.BDi18n.t) ? window.BDi18n.t('nav.account') : 'Account';
+      var text = name || fallback;
       var selectors = [
         '.tab-item[data-tab="t5"] .tab-label',
         '.float-tab-bar .tab-item:last-child .tab-label'
@@ -93,25 +96,18 @@
       var updated = false;
       selectors.forEach(function (sel) {
         var els = document.querySelectorAll(sel);
-        els.forEach(function (el) { el.textContent = name; updated = true; });
+        els.forEach(function (el) { el.textContent = text; updated = true; });
       });
       return updated;
     },
 
-    /* Updates .profile-name elements and initials (profile overview screen) */
+    /* Updates .profile-name elements (profile overview screen) */
     applyNameDisplay: function () {
       var name = this.getDisplayName();
       if (!name) return;
       document.querySelectorAll('.profile-name').forEach(function (el) {
         el.textContent = name;
       });
-      /* Refresh initials only if no avatar image is set */
-      if (!this.getAvatar()) {
-        var initials = this.getInitials();
-        document.querySelectorAll('.avatar').forEach(function (el) {
-          if (!el.querySelector('img')) el.textContent = initials;
-        });
-      }
     }
   };
 
@@ -129,4 +125,10 @@
   } else {
     onReady();
   }
+
+  /* Keep the tab label's translated fallback ("Account"/"Tài khoản"/...)
+     correct if the user switches language later at runtime, without
+     needing every consuming page to remember to re-call applyTabLabel(). */
+  new MutationObserver(function () { BDProfile.applyTabLabel(); })
+    .observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
 })();

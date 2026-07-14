@@ -3,6 +3,8 @@
 <head>
 <!-- anti-fouc -->
 <script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+<script src="../../../shared/scripts/ui/bd-profile.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Edit Profile — BeyonDegrees.ai</title>
@@ -10,493 +12,716 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../_shell/desktop.css?v=4">
 <style>
-  .pe-head { display: flex; align-items: center; gap: 20px; padding: 30px 32px; }
-  .profile-card { display: flex; align-items: center; gap: 28px; padding: 28px 32px; }
-  .avatar-editor { display: flex; flex-direction: column; align-items: center; gap: 12px; flex: none; }
-  .profile-avatar-preview {
-    width: 112px; height: 112px; border-radius: 28px;
-    display: grid; place-items: center; overflow: hidden;
-    color: #fff; font-size: 48px;
-    background:
-      radial-gradient(circle at 32% 24%, rgba(255,255,255,0.34), transparent 30%),
-      linear-gradient(135deg, var(--violet-600), var(--violet-400));
-    border: 1px solid rgba(255,255,255,0.18);
-    box-shadow: 0 14px 34px rgba(124,58,237,0.32), inset 0 1px 0 rgba(255,255,255,0.25);
-    background-position: center;
-    background-size: cover;
+  /* This page is a deliberate 1:1 port of mobile/profile/edit — same
+     components, same behavior, same copy. Everything below is prefixed
+     "pe-" (profile-edit) and self-contained so it can't collide with
+     desktop.css globals (it doesn't reuse .card/.btn/etc.). The one
+     exception is the avatar circle itself: it must keep the literal
+     class "avatar" because shared/scripts/ui/bd-profile.js's
+     applyAvatar() looks up document.querySelectorAll('.avatar') by
+     name — so it's scoped as ".pe-avatar-wrap .avatar" to out-specify
+     desktop.css's own unrelated 36px ".avatar" (topbar) rule instead of
+     renaming it. Only sizing/spacing and modal chrome (centered dialog
+     vs mobile's bottom sheet) differ, as desktop-appropriate specs. */
+  .pe-wrap { max-width: 560px; margin: 0 auto; }
+
+  /* ── Avatar (96px vs mobile's 80px — more breathing room on desktop) ── */
+  .pe-avatar-section { display: flex; flex-direction: column; align-items: center; padding: 8px 0 26px; gap: 12px; }
+  .pe-avatar-wrap { position: relative; width: 96px; height: 96px; }
+  .pe-avatar-wrap .avatar {
+    width: 96px; height: 96px; border-radius: 50%;
+    background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    border: 3px solid rgba(139,92,246,0.38);
+    box-shadow: 0 0 0 4px rgba(139,92,246,0.16), 0 8px 22px rgba(109,40,217,0.30);
   }
-  .profile-avatar-preview.has-image .avatar-emoji { opacity: 0; }
-  :root[data-theme="light"] .profile-avatar-preview {
-    background:
-      radial-gradient(circle at 32% 24%, rgba(255,255,255,0.44), transparent 30%),
-      linear-gradient(135deg, #e8917a, #c96b55);
-    border-color: rgba(232,224,213,0.78);
-    box-shadow: 0 14px 32px rgba(201,107,85,0.22), inset 0 1px 0 rgba(255,255,255,0.60);
+  .pe-avatar-wrap .avatar svg { width: 40px; height: 40px; }
+  .pe-avatar-edit-btn {
+    position: absolute; bottom: 2px; right: 2px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #F97316; border: 2px solid var(--bg-elevated, #14142a);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: white;
+    transition: background .15s;
   }
-  .avatar-upload-label {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-height: 36px; padding: 9px 14px; border-radius: 999px;
-    font-size: 12px; font-weight: 800; color: var(--text-primary);
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    cursor: pointer; transition: background .15s, border-color .15s, transform .15s;
+  .pe-avatar-edit-btn:hover { background: #EA580C; }
+  :root[data-theme="light"] .pe-avatar-wrap .avatar {
+    background: linear-gradient(135deg, #E89370, #C46B4A);
+    border-color: rgba(230,138,96,0.40);
+    box-shadow: 0 0 0 4px rgba(230,138,96,0.18), 0 8px 22px rgba(196,107,74,0.28);
   }
-  .avatar-upload-label:hover { background: rgba(124,58,237,0.14); border-color: rgba(124,58,237,0.28); transform: translateY(-1px); }
-  :root[data-theme="light"] .avatar-upload-label { background: rgba(255,255,255,0.86); border-color: #e8e0d5; color: #5c4535; }
-  :root[data-theme="light"] .avatar-upload-label:hover { background: rgba(201,107,85,0.12); border-color: rgba(201,107,85,0.28); }
-  .profile-card-body { flex: 1; min-width: 0; }
-  .profile-card-body .field { max-width: 460px; margin-top: 16px; }
-  .profile-card-body .input { font-size: 16px; font-weight: 700; }
-  .arch { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
-  .arch a { color: var(--violet-400); font-weight: 800; }
-  :root[data-theme="light"] .arch a { color: #a84e30; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .field label { display: block; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
-  :root[data-theme="light"] .field label { color: #a84e30; }
-  .field .note { font-size: 11px; color: var(--text-muted); margin-top: 5px; }
-  .field.full { grid-column: 1 / -1; }
-  .major-field[hidden],
-  .major-picker-menu[hidden] { display: none !important; }
-  .major-picker { position: relative; }
-  .major-picker-btn {
-    width: 100%; min-height: 50px; padding: 0 14px; border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06);
+  :root[data-theme="light"] .pe-avatar-edit-btn { background: #0274BE; }
+  :root[data-theme="light"] .pe-avatar-edit-btn:hover { background: #065A94; }
+  .pe-avatar-remove-btn {
+    position: absolute; top: 0; right: 0;
+    width: 25px; height: 25px; border-radius: 50%;
+    background: #ef4444; border: 2px solid var(--bg-elevated, #14142a);
+    display: none; align-items: center; justify-content: center;
+    cursor: pointer; color: white; padding: 0;
+    transition: background .15s;
+  }
+  .pe-avatar-remove-btn.show { display: flex; }
+  .pe-avatar-remove-btn:hover { background: #dc2626; }
+
+  .pe-archetype-chip { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); }
+  .pe-archetype-chip a { color: #1863DC; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .pe-archetype-chip a:hover { text-decoration: underline; }
+  :root[data-theme="light"] .pe-archetype-chip a { color: #a84e30; }
+
+  /* ── Form card ── */
+  .pe-form-card {
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 18px; overflow: hidden; margin-bottom: 14px;
+  }
+  :root[data-theme="light"] .pe-form-card {
+    background: rgba(255,255,255,0.92);
+    border-color: rgba(24,99,220,0.12);
+    box-shadow: 0 2px 16px rgba(24,99,220,0.07);
+  }
+  .pe-field-row { padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .pe-field-row:last-child { border-bottom: none; }
+  :root[data-theme="light"] .pe-field-row { border-bottom-color: rgba(24,99,220,0.07); }
+  .pe-field-label {
+    font-size: 11.5px; font-weight: 700; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px;
+  }
+  .pe-field-input {
+    width: 100%; background: transparent; border: none; outline: none;
+    font-size: 15px; font-weight: 600; color: var(--text-primary);
+    font-family: inherit; padding: 0;
+  }
+  .pe-field-input::placeholder { color: var(--text-muted); opacity: 0.7; }
+  :root[data-theme="light"] .pe-field-input { color: #2c1f14; }
+  :root[data-theme="light"] .pe-field-input::placeholder { color: #8c7260; opacity: 0.85; }
+  .pe-field-input-wrap { display: flex; align-items: center; gap: 10px; }
+  .pe-field-prefix-icon { color: var(--text-muted); flex-shrink: 0; }
+  .pe-field-readonly .pe-field-input { color: var(--text-muted); cursor: default; }
+  .pe-field-hint { font-size: 11.5px; color: var(--text-muted); margin-top: 5px; opacity: 0.7; }
+  .pe-field-select {
+    width: 100%; background: transparent; border: none; outline: none;
+    font-size: 15px; font-weight: 600; color: var(--text-primary);
+    font-family: inherit; cursor: pointer;
+    appearance: none; -webkit-appearance: none; padding: 0;
+  }
+  .pe-field-select option { background: #14142a; color: #fff; }
+  :root[data-theme="light"] .pe-field-select { color: #1A1A2E; }
+  :root[data-theme="light"] .pe-field-select option { background: #fff; color: #1A1A2E; }
+  .pe-field-select-wrap { display: flex; align-items: center; justify-content: space-between; }
+  .pe-select-chevron { color: var(--text-muted); flex-shrink: 0; }
+
+  /* ── Checkbox ── */
+  .pe-checkbox-row {
+    display: flex; align-items: center; gap: 12px; padding: 16px 20px;
+    background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px; margin-bottom: 14px; cursor: pointer;
+  }
+  :root[data-theme="light"] .pe-checkbox-row { background: rgba(24,99,220,0.04); border-color: rgba(24,99,220,0.10); }
+  .pe-custom-checkbox {
+    width: 21px; height: 21px; border-radius: 11px; border: 2px solid rgba(255,255,255,0.20);
+    background: transparent; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+  }
+  .pe-custom-checkbox svg {
+    opacity: 0; transform: scale(0.3) rotate(-10deg);
+    transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+  }
+  .pe-checkbox-row input { display: none; }
+  .pe-checkbox-row input:checked ~ .pe-custom-checkbox {
+    background: #1863DC; border-color: #1863DC; transform: scale(1.08);
+  }
+  .pe-checkbox-row input:checked ~ .pe-custom-checkbox svg { opacity: 1; transform: scale(1) rotate(0deg); }
+  :root[data-theme="light"] .pe-custom-checkbox { border-color: rgba(0,0,0,0.20); }
+  .pe-checkbox-label { font-size: 14px; font-weight: 600; color: var(--text-primary); line-height: 1.4; }
+  :root[data-theme="light"] .pe-checkbox-label { color: #1A1A2E; }
+
+  /* ── Preferred Major — revealed only when "I already know what I want
+     to study" is checked. Same picker pattern as mobile. ── */
+  .pe-major-field[hidden], .pe-major-menu[hidden] { display: none !important; }
+  .pe-major-picker { position: relative; }
+  .pe-major-button {
+    width: 100%; min-height: 22px; padding: 0; border: none; background: transparent;
     color: var(--text-primary); display: flex; align-items: center; justify-content: space-between;
-    gap: 12px; font-size: 15px; font-weight: 800; text-align: left; cursor: pointer;
-    transition: border-color .15s, box-shadow .15s, background .15s;
+    gap: 10px; font-size: 15px; font-weight: 600; font-family: inherit; text-align: left; cursor: pointer;
   }
-  .major-picker-btn:hover,
-  .major-picker.open .major-picker-btn {
-    border-color: rgba(124,58,237,0.72);
-    box-shadow: 0 0 0 3px rgba(124,58,237,0.16);
+  .pe-major-placeholder { color: var(--text-muted); }
+  .pe-major-caret { color: var(--text-muted); flex-shrink: 0; transition: transform .16s ease; }
+  .pe-major-button.open .pe-major-caret { transform: rotate(180deg); }
+  .pe-major-menu {
+    margin-top: 10px; max-height: 240px; overflow: auto; padding: 8px; border-radius: 14px;
+    border: 1px solid var(--border-color); background: var(--bg-elevated); box-shadow: var(--shadow-md);
   }
-  .major-picker-placeholder { color: var(--text-muted); }
-  .major-picker-caret { color: var(--text-muted); font-size: 13px; transition: transform .16s; }
-  .major-picker.open .major-picker-caret { transform: rotate(180deg); }
-  .major-picker-menu {
-    position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); z-index: 40;
-    max-height: 258px; overflow: auto; padding: 8px; border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.14); background: rgba(20,20,33,0.98);
-    box-shadow: 0 18px 38px rgba(0,0,0,0.32), 0 0 0 1px rgba(124,58,237,0.12);
+  .pe-major-option {
+    width: 100%; padding: 11px 12px; border: 0; border-radius: 10px; background: transparent;
+    color: var(--text-secondary); display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px; font-weight: 700; text-align: left; cursor: pointer;
   }
-  .major-picker-option {
-    width: 100%; padding: 11px 12px; border: 0; border-radius: 10px;
-    background: transparent; color: var(--text-secondary); display: flex; align-items: center;
-    justify-content: space-between; font-size: 14px; font-weight: 750; cursor: pointer; text-align: left;
+  .pe-major-option.on, .pe-major-option:hover { background: rgba(124,58,237,0.18); color: var(--text-primary); }
+  .pe-major-option.on::after { content: "✓"; color: var(--violet-400); font-weight: 900; }
+  :root[data-theme="light"] .pe-major-option.on,
+  :root[data-theme="light"] .pe-major-option:hover { background: rgba(201,107,85,0.13); color: #2c1f14; }
+  :root[data-theme="light"] .pe-major-option.on::after { color: var(--coral-600); }
+
+  /* ── Buttons ── */
+  .pe-btn-save {
+    width: 100%; padding: 16px; background: linear-gradient(135deg, #1863DC, #0274BE);
+    border: none; border-radius: 14px; font-size: 15.5px; font-weight: 700; color: white;
+    cursor: pointer; letter-spacing: 0.01em; transition: opacity 0.2s, transform 0.15s;
+    box-shadow: 0 4px 20px rgba(24,99,220,0.35); margin-bottom: 12px;
   }
-  .major-picker-option:hover,
-  .major-picker-option.on { background: rgba(124,58,237,0.18); color: var(--text-primary); }
-  .major-picker-option.on::after { content: "✓"; color: var(--violet-400); font-weight: 900; }
-  :root[data-theme="light"] .major-picker-btn {
-    background: rgba(255,255,255,0.86); border-color: #e8e0d5; color: #2c1f14;
+  .pe-btn-save:hover { opacity: 0.92; transform: translateY(-1px); }
+  .pe-btn-save:active { transform: scale(0.99); }
+  .pe-btn-secondary {
+    width: 100%; padding: 14px; background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.18); border-radius: 14px;
+    font-size: 14.5px; font-weight: 600; color: var(--text-primary);
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: background 0.18s, border-color 0.18s; margin-bottom: 12px;
   }
-  :root[data-theme="light"] .major-picker-btn:hover,
-  :root[data-theme="light"] .major-picker.open .major-picker-btn {
-    border-color: rgba(201,107,85,0.68); box-shadow: 0 0 0 3px rgba(201,107,85,0.14);
+  .pe-btn-secondary:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.26); }
+  :root[data-theme="light"] .pe-btn-secondary { background: rgba(24,99,220,0.07); border-color: rgba(24,99,220,0.22); color: #1A1A2E; }
+  :root[data-theme="light"] .pe-btn-secondary:hover { background: rgba(24,99,220,0.12); }
+  .pe-btn-reset {
+    width: 100%; padding: 13px 8px; margin-top: 4px; background: rgba(239,68,68,0.12);
+    border: 1px solid rgba(239,68,68,0.38); border-radius: 14px;
+    font-size: 13.5px; font-weight: 600; color: #ef4444;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+    transition: background 0.18s, border-color 0.18s;
   }
-  :root[data-theme="light"] .major-picker-menu {
-    background: rgba(255,252,245,0.98); border-color: #e8e0d5; box-shadow: 0 18px 38px rgba(77,51,32,0.14);
+  .pe-btn-reset:hover { background: rgba(239,68,68,0.20); border-color: rgba(239,68,68,0.55); }
+  :root[data-theme="light"] .pe-btn-reset { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.30); color: #dc2626; }
+  :root[data-theme="light"] .pe-btn-reset:hover { background: rgba(239,68,68,0.14); border-color: rgba(239,68,68,0.45); }
+
+  /* ── Modals — same icon/title/body/actions content as mobile, but a
+     centered dialog (desktop convention) instead of a bottom sheet. ── */
+  .pe-modal-backdrop {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(6,6,15,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; pointer-events: none; transition: opacity 0.22s ease;
   }
-  :root[data-theme="light"] .major-picker-option { color: #5c4535; }
-  :root[data-theme="light"] .major-picker-option:hover,
-  :root[data-theme="light"] .major-picker-option.on { background: rgba(201,107,85,0.13); color: #2c1f14; }
-  :root[data-theme="light"] .major-picker-option.on::after { color: #c96b55; }
-  /* Segmented (mobile "I want to study") */
-  .seg { display: flex; gap: 8px; }
-  .seg button {
-    flex: 1; padding: 11px; border-radius: 12px; font-size: 13px; font-weight: 700;
-    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: var(--text-secondary);
-    transition: all .15s;
+  .pe-modal-backdrop.open { opacity: 1; pointer-events: all; }
+  .pe-modal-sheet {
+    width: 100%; max-width: 400px;
+    background: var(--bg-elevated, #14142a);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 22px; padding: 30px 26px;
+    transform: scale(0.94) translateY(8px);
+    transition: transform 0.28s cubic-bezier(0.34,1.2,0.64,1);
   }
-  .seg button.on {
-    background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
-    border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(124,58,237,0.35);
+  :root[data-theme="light"] .pe-modal-sheet { background: #fffcf5; border-color: rgba(0,0,0,0.08); }
+  .pe-modal-backdrop.open .pe-modal-sheet { transform: scale(1) translateY(0); }
+  .pe-modal-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(249,115,22,0.12); border: 1.5px solid rgba(249,115,22,0.25);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;
+    font-size: 26px; line-height: 1;
   }
-  :root[data-theme="light"] .seg button { background: rgba(255,255,255,0.85); border-color: #e8e0d5; color: #5c4535; }
-  :root[data-theme="light"] .seg button.on { background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 4px 14px rgba(201,107,85,0.35); }
-  .check-row {
-    display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700;
-    color: var(--text-secondary); cursor: pointer; text-transform: none !important; letter-spacing: 0 !important;
-    position: relative;
+  .pe-modal-icon--archetype { background: rgba(139,92,246,0.14); border-color: rgba(139,92,246,0.30); }
+  .pe-modal-title { font-size: 18px; font-weight: 800; color: var(--text-primary); text-align: center; margin-bottom: 9px; }
+  .pe-modal-body { font-size: 13.5px; color: var(--text-muted); text-align: center; line-height: 1.6; margin-bottom: 24px; }
+  .pe-modal-actions { display: flex; flex-direction: column; gap: 10px; }
+  .pe-btn-modal-primary {
+    width: 100%; padding: 14px; background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+    border: none; border-radius: 14px; font-size: 15px; font-weight: 700; color: #fff;
+    cursor: pointer; letter-spacing: 0.01em; box-shadow: 0 4px 18px rgba(139,92,246,0.35);
+    transition: opacity 0.18s, transform 0.18s;
   }
-  .check-row input { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
-  .desktop-checkmark {
-    width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.22);
-    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
-    background: rgba(255,255,255,0.04); transition: background .16s, border-color .16s, transform .16s;
+  .pe-btn-modal-primary:active { opacity: 0.88; transform: scale(0.98); }
+  .pe-btn-modal-danger {
+    width: 100%; padding: 14px; background: linear-gradient(135deg,#ea580c,#f97316);
+    border: none; border-radius: 14px; font-size: 15px; font-weight: 700; color: #fff;
+    cursor: pointer; letter-spacing: 0.01em; box-shadow: 0 4px 18px rgba(249,115,22,0.35);
+    transition: opacity 0.18s, transform 0.18s;
   }
-  .desktop-checkmark svg { opacity: 0; transform: scale(.45); transition: opacity .16s, transform .2s cubic-bezier(.34,1.56,.64,1); }
-  .check-row input:checked + .desktop-checkmark {
-    background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
-    border-color: transparent; transform: scale(1.06); box-shadow: 0 4px 14px rgba(124,58,237,0.30);
+  .pe-btn-modal-danger:active { opacity: 0.88; transform: scale(0.98); }
+  .pe-btn-modal-cancel {
+    width: 100%; padding: 13px; background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10); border-radius: 14px;
+    font-size: 14px; font-weight: 600; color: var(--text-primary);
+    cursor: pointer; transition: background 0.18s;
   }
-  .check-row input:checked + .desktop-checkmark svg { opacity: 1; transform: scale(1); }
-  :root[data-theme="light"] .desktop-checkmark { border-color: rgba(92,69,53,0.26); background: rgba(255,255,255,0.72); }
-  :root[data-theme="light"] .check-row input:checked + .desktop-checkmark {
-    background: linear-gradient(135deg, #e8917a, #c96b55); box-shadow: 0 4px 14px rgba(201,107,85,0.30);
-  }
-  .danger-row { display: flex; gap: 12px; flex-wrap: wrap; }
-  .btn-danger { color: var(--red-400); border: 1px solid rgba(255,71,87,0.40); background: rgba(255,71,87,0.07); }
-  .btn-danger:hover { background: rgba(255,71,87,0.15); }
-  /* Reset modal (mobile parity) */
-  .modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center;
-    background: rgba(6,6,15,0.72); backdrop-filter: blur(10px); }
-  :root[data-theme="light"] .modal { background: rgba(245,237,224,0.82); }
-  .modal.show { display: flex; }
-  .modal .box { max-width: 420px; text-align: center; padding: 36px; animation: fadeUp .4s var(--ease-out) both; }
-  .modal h3 { font-size: 20px; font-weight: 900; color: var(--text-primary); }
-  .modal p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-top: 10px; }
-  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); padding: 12px 22px; border-radius: 999px;
-    background: var(--mint-500); color: #06281e; font-weight: 800; font-size: 14px;
-    box-shadow: 0 8px 24px rgba(6,214,160,0.40); transition: transform .35s cubic-bezier(.2,1.4,.4,1); z-index: 999; }
-  :root[data-theme="light"] .toast { background: #4a9e7a; color: #fff; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  @media (max-width: 760px) {
-    .profile-card { align-items: flex-start; flex-direction: column; }
-    .avatar-editor { align-items: flex-start; }
-  }
+  .pe-btn-modal-cancel:hover { background: rgba(255,255,255,0.09); }
+  :root[data-theme="light"] .pe-btn-modal-cancel { background: rgba(24,99,220,0.06); border-color: rgba(24,99,220,0.15); color: #1A1A2E; }
 </style>
 </head>
 <body class="app" data-page="profile" data-crumb="Profile · Edit Profile">
   <div class="main">
-    <div class="content fade-in" style="max-width: 820px;">
-      <h1 class="page-title" data-i18n="edit.title">Edit Profile</h1>
+    <div class="content fade-in">
+      <div class="pe-wrap">
+        <h1 class="page-title" id="peTitle">Edit Profile</h1>
 
-      <div class="card profile-card mt-6">
-        <div class="avatar-editor">
-          <div class="profile-avatar-preview" id="avatarPreview" role="img" aria-label="Profile avatar">
-            <span class="avatar-emoji">&#128049;</span>
-          </div>
-          <label class="avatar-upload-label" for="avatarUpload">Upload image</label>
-          <input id="avatarUpload" type="file" accept="image/*" hidden>
-        </div>
-        <div class="profile-card-body">
-          <span class="section-label">Profile</span>
-          <div class="field">
-            <label for="fullNameInput">H&#7885; t&#234;n</label>
-            <input class="input" id="fullNameInput" value="Your Name">
-          </div>
-        </div>
-      </div>
-
-      <div class="card glass-hero pe-head mt-6">
-        <div class="arch"><span data-i18n="edit.archetype">Academic Archetype:</span> <a href="../../quiz/quiz-card/" data-i18n="edit.find_out">Find Out</a></div>
-      </div>
-
-      <div class="card mt-6">
-        <div class="form-grid">
-          <div class="field full"><label data-i18n="edit.email">Email</label>
-            <input class="input" id="emailInput" type="email" value="hoangphuc@beyondegrees.ai" disabled>
-            <div class="note" data-i18n="edit.email_hint">Contact support to change the email.</div>
-          </div>
-          <div class="field full"><label data-i18n="edit.location">Location</label><input class="input" id="locationInput" value="Ho Chi Minh City, Vietnam"></div>
-          <div class="field full"><label data-i18n="edit.study">I want to study</label>
-            <div class="seg" id="segStudy">
-              <button class="on" data-value="abroad" data-i18n="edit.study.abroad">Abroad</button><button data-value="home" data-i18n="edit.study.in_country">In my country</button><button data-value="either" data-i18n="edit.study.either">Either</button>
-            </div>
-          </div>
-          <div class="field full"><label data-i18n="edit.degree">I'm working toward a...</label>
-            <div class="seg" id="segDegree">
-              <button class="on" data-value="bachelor" data-i18n="edit.degree.bachelor">Bachelor's Degree</button><button data-value="master" data-i18n="edit.degree.master">Master's Degree</button>
-              <button data-value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</button><button data-value="associate" data-i18n="edit.degree.associate">Associate's Degree</button>
-            </div>
-          </div>
-          <div class="field full">
-            <label class="check-row">
-              <input type="checkbox" id="knowMajorInput">
-              <span class="desktop-checkmark" aria-hidden="true">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
-              </span>
-              <span data-i18n="edit.already_know">I already know what I want to study</span>
+        <!-- Avatar -->
+        <div class="pe-avatar-section">
+          <div class="pe-avatar-wrap">
+            <div class="avatar"></div>
+            <label class="pe-avatar-edit-btn" for="avatarUpload" aria-label="Change profile photo">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
             </label>
+            <button type="button" class="pe-avatar-remove-btn" id="removeAvatarBtn" aria-label="Remove profile photo">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+            <input id="avatarUpload" type="file" accept="image/*" hidden>
           </div>
-          <div class="field full major-field" id="majorField" hidden>
-            <label for="majorPickerBtn">Preferred Major</label>
-            <div class="major-picker" id="majorPicker">
-              <button class="major-picker-btn" id="majorPickerBtn" type="button" aria-haspopup="listbox" aria-expanded="false">
-                <span id="majorPickerText" class="major-picker-placeholder">Select a major</span>
-                <span class="major-picker-caret" aria-hidden="true">v</span>
-              </button>
-              <div class="major-picker-menu" id="majorPickerMenu" role="listbox" hidden></div>
+          <div class="pe-archetype-chip">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+            <span>Academic Archetype: <a href="#" id="archetypeFindOut">Find Out</a></span>
+          </div>
+        </div>
+
+        <!-- Name fields -->
+        <div class="pe-form-card">
+          <div class="pe-field-row">
+            <div class="pe-field-label" data-i18n="edit.first_name">First Name</div>
+            <div class="pe-field-input-wrap">
+              <svg class="pe-field-prefix-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input class="pe-field-input" id="editFirstName" type="text" placeholder="First name">
+            </div>
+          </div>
+          <div class="pe-field-row">
+            <div class="pe-field-label" data-i18n="edit.last_name">Last Name</div>
+            <div class="pe-field-input-wrap">
+              <svg class="pe-field-prefix-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+              <input class="pe-field-input" id="editLastName" type="text" placeholder="Last name">
             </div>
           </div>
         </div>
-        <div class="flex mt-8" style="gap:12px;flex-wrap:wrap;">
-          <button class="btn btn-primary" id="saveBtn" data-i18n="edit.save">Save Changes</button>
-          <button class="btn btn-ghost" data-i18n="edit.leave_review">Leave Review</button>
-        </div>
-      </div>
 
-      <div class="card mt-6">
-        <span class="section-label" data-i18n="edit.danger_zone">Danger zone</span>
-        <div class="danger-row mt-4">
-          <button class="btn btn-danger" id="resetBtn" data-i18n="edit.reset">Reset Account</button>
-          <button class="btn btn-ghost" data-i18n="edit.logout">Logout</button>
+        <!-- Email -->
+        <div class="pe-form-card">
+          <div class="pe-field-row pe-field-readonly">
+            <div class="pe-field-label" data-i18n="edit.email">Email</div>
+            <div class="pe-field-input-wrap">
+              <svg class="pe-field-prefix-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <input class="pe-field-input" type="email" value="hoangphuc140904@gmail.com" readonly>
+            </div>
+            <div class="pe-field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
+          </div>
         </div>
+
+        <!-- Location -->
+        <div class="pe-form-card">
+          <div class="pe-field-row">
+            <div class="pe-field-label" data-i18n="edit.location">Location</div>
+            <div class="pe-field-input-wrap">
+              <svg class="pe-field-prefix-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input class="pe-field-input" type="text" value="Ho Chi Minh City, Vietnam" placeholder="Your location">
+            </div>
+          </div>
+        </div>
+
+        <!-- Study preferences -->
+        <div class="pe-form-card">
+          <div class="pe-field-row">
+            <div class="pe-field-label" data-i18n="edit.study">I want to study</div>
+            <div class="pe-field-select-wrap">
+              <select class="pe-field-select">
+                <option value="abroad" data-i18n="edit.study.abroad">Abroad</option>
+                <option value="in-country" selected data-i18n="edit.study.in_country">In my country</option>
+                <option value="either" data-i18n="edit.study.either">Either</option>
+              </select>
+              <svg class="pe-select-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+            </div>
+          </div>
+          <div class="pe-field-row">
+            <div class="pe-field-label" data-i18n="edit.degree">I'm working toward a...</div>
+            <div class="pe-field-select-wrap">
+              <select class="pe-field-select">
+                <option value="bachelor" selected data-i18n="edit.degree.bachelor">Bachelor's Degree</option>
+                <option value="master" data-i18n="edit.degree.master">Master's Degree</option>
+                <option value="phd" data-i18n="edit.degree.phd">PhD / Doctorate</option>
+                <option value="associate" data-i18n="edit.degree.associate">Associate's Degree</option>
+              </select>
+              <svg class="pe-select-chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkbox -->
+        <label class="pe-checkbox-row">
+          <input type="checkbox" id="know-study">
+          <div class="pe-custom-checkbox">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20,6 9,17 4,12"/></svg>
+          </div>
+          <span class="pe-checkbox-label" data-i18n="edit.already_know">I already know what I want to study</span>
+        </label>
+
+        <!-- Preferred Major — shown only when the checkbox above is checked -->
+        <div class="pe-form-card pe-major-field" id="peMajorField" hidden>
+          <div class="pe-field-row">
+            <div class="pe-field-label">Preferred Major</div>
+            <div class="pe-major-picker" id="peMajorPicker">
+              <button class="pe-major-button" id="peMajorButton" type="button" aria-haspopup="listbox" aria-expanded="false">
+                <span id="peMajorText" class="pe-major-placeholder">Select a major</span>
+                <svg class="pe-select-chevron pe-major-caret" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6,9 12,15 18,9"/></svg>
+              </button>
+              <div class="pe-major-menu" id="peMajorMenu" role="listbox" hidden></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Save -->
+        <button class="pe-btn-save" id="saveBtn" data-i18n="edit.save">Save Changes</button>
+
+        <!-- Secondary actions -->
+        <button class="pe-btn-secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          <span data-i18n="edit.leave_review">Leave Review</span>
+        </button>
+
+        <button class="pe-btn-reset" id="resetAccountBtn">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          <span data-i18n="edit.reset">Reset Account</span>
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Reset modal (mobile parity) -->
-  <div class="modal" id="resetModal">
-    <div class="card box">
-      <h3 data-i18n="edit.reset_title">Reset Account?</h3>
-      <p data-i18n="edit.reset_body">This will clear <b>all quiz progress</b> and all your answers.<br>You'll start fresh from <b>Question 1</b>.</p>
-      <div class="flex mt-6" style="gap:10px;justify-content:center;">
-        <button class="btn btn-danger" id="resetConfirm" data-i18n="edit.reset_confirm">Reset &amp; Start Over</button>
-        <button class="btn btn-ghost" id="resetCancel" data-i18n="edit.cancel">Cancel</button>
+  <!-- Reset Confirm Modal -->
+  <div class="pe-modal-backdrop" id="resetModal">
+    <div class="pe-modal-sheet">
+      <div class="pe-modal-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="1,4 1,10 7,10"/>
+          <path d="M3.51 15a9 9 0 102.13-9.36L1 10"/>
+        </svg>
+      </div>
+      <div class="pe-modal-title" data-i18n="edit.reset_title">Reset Account?</div>
+      <div class="pe-modal-body" data-i18n="edit.reset_body">
+        This will clear all quiz progress and all your answers. You'll start fresh from Question 1.
+      </div>
+      <div class="pe-modal-actions">
+        <button class="pe-btn-modal-danger" id="resetConfirmBtn" data-i18n="edit.reset_confirm">Reset &amp; Start Over</button>
+        <button class="pe-btn-modal-cancel" id="resetCancelBtn" data-i18n="edit.cancel">Cancel</button>
       </div>
     </div>
   </div>
-  <div class="toast" id="toast" data-i18n="edit.toast_saved">✅ Profile saved!</div>
 
-  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
-  <script src="../../_shell/desktop.js?v=12"></script>
-  <script>
-    var avatarInput = document.getElementById('avatarUpload');
-    var avatarPreview = document.getElementById('avatarPreview');
-    var fullNameInput = document.getElementById('fullNameInput');
-    var emailInput = document.getElementById('emailInput');
-    var locationInput = document.getElementById('locationInput');
-    var knowMajorInput = document.getElementById('knowMajorInput');
-    var majorField = document.getElementById('majorField');
-    var majorPicker = document.getElementById('majorPicker');
-    var majorPickerBtn = document.getElementById('majorPickerBtn');
-    var majorPickerText = document.getElementById('majorPickerText');
-    var majorPickerMenu = document.getElementById('majorPickerMenu');
-    var majorValue = '';
-    var MAJORS = [
-      { v: 'cs', label: 'Computer Science' },
-      { v: 'ds', label: 'Data Science & AI' },
-      { v: 'design', label: 'Design & UX' },
-      { v: 'eng', label: 'Engineering' },
-      { v: 'med', label: 'Medicine' },
-      { v: 'biz', label: 'Business' },
-      { v: 'psy', label: 'Psychology' },
-      { v: 'econ', label: 'Economics' },
-      { v: 'law', label: 'Law' },
-      { v: 'arch', label: 'Architecture' },
-      { v: 'bio', label: 'Biology' },
-      { v: 'comm', label: 'Communications' }
-    ];
+  <!-- Academic Archetype Modal -->
+  <div class="pe-modal-backdrop" id="archetypeModal">
+    <div class="pe-modal-sheet">
+      <div class="pe-modal-icon pe-modal-icon--archetype" id="archetypeIcon">⭐</div>
+      <div class="pe-modal-title" id="archetypeTitle">Academic Archetype</div>
+      <div class="pe-modal-body" id="archetypeBody"></div>
+      <div class="pe-modal-actions">
+        <button class="pe-btn-modal-primary" id="archetypeCta" hidden>Start Swiping</button>
+        <button class="pe-btn-modal-cancel" id="archetypeCloseBtn">Close</button>
+      </div>
+    </div>
+  </div>
 
-    function readJson(key) {
-      try {
-        var raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : null;
-      } catch (e) {
-        return null;
+<script>
+/* ── "I already know what I want to study" → reveal Preferred Major ──
+   Same picker as mobile/profile/edit/index.html, just renamed off the
+   "mobile" id/class prefix since this page isn't mobile. Defined BEFORE
+   the checkbox-row wiring below, since that wiring's initial update()
+   call (on page load, unchecked) already needs syncMajorField() →
+   PROFILE_MAJORS to exist. */
+var PROFILE_MAJORS = [
+  { v: 'cs', label: 'Computer Science' },
+  { v: 'ds', label: 'Data Science & AI' },
+  { v: 'design', label: 'Design & UX' },
+  { v: 'eng', label: 'Engineering' },
+  { v: 'med', label: 'Medicine' },
+  { v: 'biz', label: 'Business' },
+  { v: 'psy', label: 'Psychology' },
+  { v: 'econ', label: 'Economics' },
+  { v: 'law', label: 'Law' },
+  { v: 'arch', label: 'Architecture' },
+  { v: 'bio', label: 'Biology' },
+  { v: 'comm', label: 'Communications' }
+];
+var majorValue = '';
+
+function findProfileMajor(value) {
+  return PROFILE_MAJORS.filter(function (major) { return major.v === value; })[0] || null;
+}
+
+function renderMajorPicker() {
+  var menu = document.getElementById('peMajorMenu');
+  if (!menu) return;
+  menu.innerHTML = PROFILE_MAJORS.map(function (major) {
+    var active = major.v === majorValue ? ' on' : '';
+    return '<button class="pe-major-option' + active + '" type="button" role="option" data-value="' + major.v + '">' + major.label + '</button>';
+  }).join('');
+}
+
+function setMajor(value) {
+  majorValue = findProfileMajor(value) ? value : '';
+  var selected = findProfileMajor(majorValue);
+  var text = document.getElementById('peMajorText');
+  if (text) {
+    text.textContent = selected ? selected.label : 'Select a major';
+    text.classList.toggle('pe-major-placeholder', !selected);
+  }
+  renderMajorPicker();
+}
+
+function closeMajorPicker() {
+  var menu = document.getElementById('peMajorMenu');
+  var btn = document.getElementById('peMajorButton');
+  if (menu) menu.hidden = true;
+  if (btn) {
+    btn.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+  }
+}
+
+function syncMajorField() {
+  var input = document.getElementById('know-study');
+  var field = document.getElementById('peMajorField');
+  var show = !!(input && input.checked);
+  if (field) field.hidden = !show;
+  if (!show) {
+    setMajor('');
+    closeMajorPicker();
+  }
+}
+
+var majorButton = document.getElementById('peMajorButton');
+var majorMenu = document.getElementById('peMajorMenu');
+var majorPicker = document.getElementById('peMajorPicker');
+if (majorButton) {
+  majorButton.addEventListener('click', function () {
+    if (!majorMenu) return;
+    var opening = majorMenu.hidden;
+    majorMenu.hidden = !opening;
+    majorButton.classList.toggle('open', opening);
+    majorButton.setAttribute('aria-expanded', opening ? 'true' : 'false');
+  });
+}
+if (majorMenu) {
+  majorMenu.addEventListener('click', function (e) {
+    var option = e.target && e.target.closest ? e.target.closest('[data-value]') : null;
+    if (!option) return;
+    setMajor(option.getAttribute('data-value') || '');
+    closeMajorPicker();
+  });
+}
+document.addEventListener('click', function (e) {
+  if (majorPicker && !majorPicker.contains(e.target)) closeMajorPicker();
+});
+setMajor('');
+syncMajorField();
+
+// Checkbox visual update
+document.querySelectorAll('.pe-checkbox-row').forEach(function(row) {
+  var input = row.querySelector('input[type="checkbox"]');
+  var box = row.querySelector('.pe-custom-checkbox');
+  if (!input || !box) return;
+  function update() {
+    box.style.background = input.checked ? '#1863DC' : 'transparent';
+    box.style.borderColor = input.checked ? '#1863DC' : '';
+    if (input.id === 'know-study') syncMajorField();
+  }
+  input.addEventListener('change', update);
+  update();
+});
+
+var _t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
+
+/* Avatar — pencil icon always opens the file picker (works whether a
+   photo is already set or not); the ✕ badge only appears once a photo
+   is actually set, since there's nothing to remove otherwise. Same
+   BDProfile-backed logic as mobile. */
+var avatarUpload = document.getElementById('avatarUpload');
+var removeAvatarBtn = document.getElementById('removeAvatarBtn');
+function syncAvatarRemoveBtn() {
+  if (!removeAvatarBtn) return;
+  removeAvatarBtn.classList.toggle('show', !!(window.BDProfile && BDProfile.getAvatar()));
+}
+if (avatarUpload) {
+  avatarUpload.addEventListener('change', function () {
+    var file = avatarUpload.files && avatarUpload.files[0];
+    if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      if (window.BDProfile) {
+        BDProfile.saveAvatar(String(reader.result || ''));
+        BDProfile.applyAvatar();
+        syncAvatarRemoveBtn();
       }
-    }
-
-    function writeJson(key, value) {
-      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
-    }
-
-    function splitName(fullName) {
-      var clean = String(fullName || '').trim().replace(/\s+/g, ' ');
-      if (!clean) return { firstName: '', lastName: '' };
-      var parts = clean.split(' ');
-      if (parts.length === 1) return { firstName: parts[0], lastName: '' };
-      return {
-        firstName: parts.slice(0, -1).join(' '),
-        lastName: parts[parts.length - 1]
-      };
-    }
-
-    function readProfile() {
-      var profile = readJson('bd-profile') || {};
-      var firstName = profile.firstName || profile.givenName || '';
-      var lastName = profile.lastName || profile.familyName || '';
-      if (!firstName && !lastName) {
-        var legacyName = '';
-        try { legacyName = localStorage.getItem('bd-full-name') || localStorage.getItem('bd-username') || ''; } catch (e) {}
-        var split = splitName(legacyName);
-        firstName = split.firstName;
-        lastName = split.lastName;
-      }
-      profile.firstName = firstName;
-      profile.lastName = lastName;
-      return profile;
-    }
-
-    function displayName(profile) {
-      return ((profile.firstName || profile.givenName || '') + ' ' + (profile.lastName || profile.familyName || '')).trim();
-    }
-
-    function setAvatar(src) {
-      if (!avatarPreview) return;
-      if (src) {
-        avatarPreview.style.backgroundImage = 'url("' + src + '")';
-        avatarPreview.classList.add('has-image');
-      } else {
-        avatarPreview.style.backgroundImage = '';
-        avatarPreview.classList.remove('has-image');
-      }
-    }
-
-    function normalizeStudy(value) {
-      if (value === 'in-country' || value === 'my-country') return 'home';
-      return value || 'abroad';
-    }
-
-    function findMajor(value) {
-      return MAJORS.filter(function (major) { return major.v === value; })[0] || null;
-    }
-
-    function closeMajorPicker() {
-      if (majorPickerMenu) majorPickerMenu.hidden = true;
-      if (majorPicker) majorPicker.classList.remove('open');
-      if (majorPickerBtn) majorPickerBtn.setAttribute('aria-expanded', 'false');
-    }
-
-    function renderMajorPicker() {
-      if (!majorPickerMenu) return;
-      majorPickerMenu.innerHTML = MAJORS.map(function (major) {
-        var active = major.v === majorValue ? ' on' : '';
-        return '<button class="major-picker-option' + active + '" type="button" role="option" data-value="' + major.v + '">' + major.label + '</button>';
-      }).join('');
-    }
-
-    function setMajor(value) {
-      majorValue = findMajor(value) ? value : '';
-      var selected = findMajor(majorValue);
-      if (majorPickerText) {
-        majorPickerText.textContent = selected ? selected.label : 'Select a major';
-        majorPickerText.classList.toggle('major-picker-placeholder', !selected);
-      }
-      renderMajorPicker();
-    }
-
-    function setSegment(id, value) {
-      var seg = document.getElementById(id);
-      if (!seg) return;
-      var selected = value || '';
-      seg.querySelectorAll('button').forEach(function (btn) {
-        btn.classList.toggle('on', btn.getAttribute('data-value') === selected);
-      });
-    }
-
-    function getSegment(id, fallback) {
-      var on = document.querySelector('#' + id + ' button.on');
-      return (on && on.getAttribute('data-value')) || fallback;
-    }
-
-    function syncMajorField() {
-      var show = !!(knowMajorInput && knowMajorInput.checked);
-      if (majorField) majorField.hidden = !show;
-      if (!show) {
-        setMajor('');
-        closeMajorPicker();
-      }
-    }
-
-    ['segStudy', 'segDegree'].forEach(function (id) {
-      var seg = document.getElementById(id);
-      if (!seg) return;
-      seg.addEventListener('click', function (e) {
-        if (!e.target || e.target.tagName !== 'BUTTON') return;
-        setSegment(id, e.target.getAttribute('data-value'));
-      });
-    });
-
-    if (knowMajorInput) {
-      knowMajorInput.addEventListener('change', syncMajorField);
-    }
-
-    if (majorPickerBtn) {
-      majorPickerBtn.addEventListener('click', function () {
-        if (!majorPickerMenu) return;
-        var opening = majorPickerMenu.hidden;
-        majorPickerMenu.hidden = !opening;
-        if (majorPicker) majorPicker.classList.toggle('open', opening);
-        majorPickerBtn.setAttribute('aria-expanded', opening ? 'true' : 'false');
-      });
-    }
-
-    if (majorPickerMenu) {
-      majorPickerMenu.addEventListener('click', function (e) {
-        var option = e.target && e.target.closest ? e.target.closest('[data-value]') : null;
-        if (!option) return;
-        setMajor(option.getAttribute('data-value') || '');
-        closeMajorPicker();
-      });
-    }
-
-    document.addEventListener('click', function (e) {
-      if (majorPicker && !majorPicker.contains(e.target)) closeMajorPicker();
-    });
-
-    (function prefillProfile() {
-      var profile = readProfile();
-      var onboarding = readJson('bd-onboarding') || {};
-      try {
-        var savedAvatar = localStorage.getItem('bd-avatar') || localStorage.getItem('bd-profile-avatar') || '';
-        if (savedAvatar) setAvatar(savedAvatar);
-      } catch (e) {}
-      if (fullNameInput) fullNameInput.value = displayName(profile) || 'Your Name';
-      if (emailInput) emailInput.value = profile.email || emailInput.value || '';
-      if (locationInput) locationInput.value = onboarding.location || locationInput.value || '';
-      setSegment('segStudy', normalizeStudy(onboarding.studyWhere));
-      setSegment('segDegree', onboarding.degree || 'bachelor');
-      if (knowMajorInput) knowMajorInput.checked = !!onboarding.knowMajor;
-      setMajor(onboarding.major || '');
-      syncMajorField();
-    })();
-
-    if (avatarInput) {
-      avatarInput.addEventListener('change', function () {
-        var file = avatarInput.files && avatarInput.files[0];
-        if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
-        var reader = new FileReader();
-        reader.onload = function () {
-          var src = String(reader.result || '');
-          setAvatar(src);
-          try {
-            localStorage.setItem('bd-avatar', src);
-            localStorage.setItem('bd-profile-avatar', src);
-          } catch (e) {}
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-    document.getElementById('saveBtn').onclick = function () {
-      try {
-        var fullName = fullNameInput ? fullNameInput.value.trim() : '';
-        var nameParts = splitName(fullName);
-        var existingProfile = readJson('bd-profile') || {};
-        if (fullName) {
-          existingProfile.firstName = nameParts.firstName;
-          existingProfile.lastName = nameParts.lastName;
-          existingProfile.givenName = nameParts.firstName;
-          existingProfile.familyName = nameParts.lastName;
-          if (emailInput && emailInput.value) existingProfile.email = emailInput.value;
-          writeJson('bd-profile', existingProfile);
-          localStorage.setItem('bd-full-name', fullName);
-          localStorage.setItem('bd-username', fullName);
-        }
-        var knowsMajor = !!(knowMajorInput && knowMajorInput.checked);
-        writeJson('bd-onboarding', {
-          location: locationInput ? locationInput.value.trim() : '',
-          studyWhere: getSegment('segStudy', 'abroad'),
-          degree: getSegment('segDegree', 'bachelor'),
-          knowMajor: knowsMajor,
-          major: knowsMajor ? (majorValue || null) : null
-        });
-      } catch (e) {}
-      var t = document.getElementById('toast');
-      t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 2200);
     };
-    var modal = document.getElementById('resetModal');
-    document.getElementById('resetBtn').onclick = function () { modal.classList.add('show'); };
-    document.getElementById('resetCancel').onclick = function () { modal.classList.remove('show'); };
-    document.getElementById('resetConfirm').onclick = function () {
-      localStorage.removeItem('quizProgress');
-      localStorage.removeItem('quizMilestone');
-      localStorage.removeItem('quizCounts');
-      localStorage.removeItem('quizAnswerLog');
-      location.href = '../../onboarding/home/';
-    };
-  </script>
+    reader.readAsDataURL(file);
+  });
+}
+if (removeAvatarBtn) {
+  removeAvatarBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (window.BDProfile) {
+      BDProfile.removeAvatar();
+      BDProfile.applyAvatar();
+    }
+    if (avatarUpload) avatarUpload.value = '';
+    syncAvatarRemoveBtn();
+  });
+}
+
+/* Page heading (and browser tab title) mirror the saved name fields —
+   "Edit Profile" is only the fallback for a genuinely blank name, not
+   the steady-state title. Only called on load and after Save (not on
+   every keystroke), so the heading doesn't jump around while typing. */
+function updateProfileTitle() {
+  var titleEl = document.getElementById('peTitle');
+  var fnEl = document.getElementById('editFirstName');
+  var lnEl = document.getElementById('editLastName');
+  if (!titleEl || !fnEl || !lnEl) return;
+  var fullName = ((fnEl.value || '') + ' ' + (lnEl.value || '')).trim().replace(/\s+/g, ' ');
+  var text = fullName || _t('edit.title');
+  titleEl.textContent = text;
+  document.title = text + ' — BeyonDegrees.ai';
+}
+
+/* Pre-fill name + avatar from localStorage on load */
+(function() {
+  function prefill() {
+    if (!window.BDProfile) return;
+    var p = BDProfile.get();
+    var fnEl = document.getElementById('editFirstName');
+    var lnEl = document.getElementById('editLastName');
+    if (fnEl && p.firstName) fnEl.value = p.firstName;
+    if (lnEl && p.lastName)  lnEl.value = p.lastName;
+    BDProfile.applyAvatar();
+    syncAvatarRemoveBtn();
+    updateProfileTitle();
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', prefill);
+  } else { prefill(); }
+})();
+
+function saveChanges() {
+  var fnEl = document.getElementById('editFirstName');
+  var lnEl = document.getElementById('editLastName');
+  if (window.BDProfile && fnEl && lnEl) {
+    BDProfile.save(fnEl.value, lnEl.value);
+    BDProfile.applyTabLabel();
+    BDProfile.applyNameDisplay();
+  }
+  updateProfileTitle();
+
+  var btn = document.getElementById('saveBtn');
+  var orig = btn.textContent;
+  btn.textContent = _t('edit.save_success');
+  btn.style.background = 'linear-gradient(135deg, #059669, #10B981)';
+  setTimeout(function() {
+    btn.textContent = orig;
+    btn.style.background = '';
+  }, 1800);
+}
+document.getElementById('saveBtn').addEventListener('click', saveChanges);
+
+// Reset Account modal
+var resetModal = document.getElementById('resetModal');
+document.getElementById('resetAccountBtn').addEventListener('click', function () {
+  resetModal.classList.add('open');
+});
+document.getElementById('resetCancelBtn').addEventListener('click', function () {
+  resetModal.classList.remove('open');
+});
+resetModal.addEventListener('click', function (e) {
+  if (e.target === resetModal) resetModal.classList.remove('open');
+});
+/* ── Helper: clear ALL quiz progress from storage ── */
+function clearQuizProgress() {
+  try {
+    localStorage.removeItem('quizProgress');
+    localStorage.removeItem('quizMilestone');
+    localStorage.removeItem('bd-quiz-progress');
+  } catch(e) {}
+  try {
+    sessionStorage.removeItem('bd_dna');
+    sessionStorage.removeItem('bd_answers');
+    sessionStorage.removeItem('bd_scores');
+    sessionStorage.removeItem('bd_nextStart');
+  } catch(e) {}
+}
+
+document.getElementById('resetConfirmBtn').addEventListener('click', function () {
+  clearQuizProgress();
+  try { sessionStorage.setItem('bd_reset_success', '1'); } catch(e) {}
+  var btn = document.getElementById('resetConfirmBtn');
+  btn.textContent = _t('edit.resetting');
+  btn.style.opacity = '0.7';
+  setTimeout(function () {
+    window.location.href = '../../onboarding/home/';
+  }, 800);
+});
+
+/* ── Academic Archetype reveal ──
+   Same 'bd_dna' weights the quiz engine writes (read the same way as
+   understand-matches' loadRealTop3) to pick the user's strongest
+   discipline, mapped to a persona. No real answers yet → a locked state
+   with a CTA into the quiz, mirroring understand-matches' own
+   locked-tab pattern instead of inventing a new one. */
+var ARCHETYPES = {
+  kt: { icon: '⚙️', en: { title: 'The Innovator',  desc: "You're drawn to building and engineering solutions — turning ideas into real, working systems." }, vi: { title: 'Nhà Kiến Tạo', desc: 'Bạn bị thu hút bởi việc xây dựng và thiết kế giải pháp — biến ý tưởng thành hệ thống thực tế.' } },
+  tn: { icon: '🔬', en: { title: 'The Explorer',    desc: 'You question how the natural world works and love uncovering patterns through experimentation.' }, vi: { title: 'Nhà Khám Phá', desc: 'Bạn luôn đặt câu hỏi về cách thế giới tự nhiên vận hành và thích khám phá quy luật qua thực nghiệm.' } },
+  yt: { icon: '🩺', en: { title: 'The Healer',      desc: "You're driven by caring for others and improving health and wellbeing." }, vi: { title: 'Người Chữa Lành', desc: 'Bạn được thúc đẩy bởi mong muốn chăm sóc người khác và cải thiện sức khỏe cộng đồng.' } },
+  nn: { icon: '🌱', en: { title: 'The Cultivator',  desc: 'You care about sustainable growth — from ecosystems to food systems.' }, vi: { title: 'Người Vun Trồng', desc: 'Bạn quan tâm đến sự phát triển bền vững — từ hệ sinh thái đến hệ thống lương thực.' } },
+  xh: { icon: '🤝', en: { title: 'The Connector',   desc: "You're energized by understanding people, communities and how society works." }, vi: { title: 'Người Kết Nối', desc: 'Bạn tràn đầy năng lượng khi tìm hiểu con người, cộng đồng và cách xã hội vận hành.' } },
+  nv: { icon: '📖', en: { title: 'The Storyteller', desc: 'You find meaning in ideas, culture, and the human experience.' }, vi: { title: 'Người Kể Chuyện', desc: 'Bạn tìm thấy ý nghĩa trong ý tưởng, văn hoá và trải nghiệm con người.' } }
+};
+
+function computeTopDiscipline() {
+  try {
+    var dna = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+    if (!dna) return null;
+    var keys = Object.keys(dna).filter(function (k) { return ARCHETYPES[k] && dna[k] > 0; });
+    if (!keys.length) return null;
+    keys.sort(function (a, b) { return dna[b] - dna[a]; });
+    return keys[0];
+  } catch (e) { return null; }
+}
+
+(function () {
+  var archetypeModal = document.getElementById('archetypeModal');
+  var archetypeIcon = document.getElementById('archetypeIcon');
+  var archetypeTitle = document.getElementById('archetypeTitle');
+  var archetypeBody = document.getElementById('archetypeBody');
+  var archetypeCta = document.getElementById('archetypeCta');
+
+  function openArchetypeModal() {
+    var lang = (document.documentElement.getAttribute('data-lang') === 'vi') ? 'vi' : 'en';
+    var topId = computeTopDiscipline();
+    var archetype = topId && ARCHETYPES[topId];
+    if (archetype) {
+      var copy = archetype[lang] || archetype.en;
+      archetypeIcon.textContent = archetype.icon;
+      archetypeTitle.textContent = copy.title;
+      archetypeBody.textContent = copy.desc;
+      archetypeCta.hidden = true;
+    } else {
+      archetypeIcon.textContent = '🔒';
+      archetypeTitle.textContent = (lang === 'vi') ? 'Chưa đủ dữ liệu' : 'Not Enough Data Yet';
+      archetypeBody.textContent = (lang === 'vi')
+        ? 'Trả lời thêm vài Assertion để khám phá Academic Archetype của bạn.'
+        : 'Answer a few more Assertions to discover your Academic Archetype.';
+      archetypeCta.hidden = false;
+      archetypeCta.textContent = (lang === 'vi') ? 'Bắt đầu trả lời' : 'Start Swiping';
+    }
+    archetypeModal.classList.add('open');
+  }
+
+  document.getElementById('archetypeFindOut').addEventListener('click', function (e) {
+    e.preventDefault();
+    openArchetypeModal();
+  });
+  document.getElementById('archetypeCloseBtn').addEventListener('click', function () {
+    archetypeModal.classList.remove('open');
+  });
+  archetypeModal.addEventListener('click', function (e) {
+    if (e.target === archetypeModal) archetypeModal.classList.remove('open');
+  });
+  archetypeCta.addEventListener('click', function () {
+    window.location.href = '../../quiz/quiz-card/';
+  });
+})();
+</script>
+<script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../_shell/desktop.js?v=12"></script>
 </body>
 </html>
