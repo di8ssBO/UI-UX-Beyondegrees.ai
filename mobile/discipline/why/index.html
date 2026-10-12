@@ -305,7 +305,10 @@ var t = function(k) { return window.BDi18n ? BDi18n.t(k) : k; };
 /* ═══════════════════════════════════════════════════════════
    ANSWER CONFIG
 ═══════════════════════════════════════════════════════════ */
-const RANK_MAP = { kt: 1, tn: 2, xh: 3, nv: 4, yt: 5, nn: 6 };
+/* Rank + match % mirror discipline/match (CARD_PCTS) so both screens agree.
+   Keep in sync until real scores come from the AI engine. */
+const RANK_MAP   = { kt: 1, tn: 2, yt: 3, nn: 4, xh: 5, nv: 6 };
+const MATCH_PCTS = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
 const ANSWER_CFG = {
   agree:    { label: () => t('quiz.swipe.agree'),    cls: 'badge-agree',    cardCls: 'answer-agree' },
   strong:   { label: () => t('quiz.swipe.strong'),   cls: 'badge-strong',   cardCls: 'answer-strong' },
@@ -320,12 +323,6 @@ function init() {
   const params = new URLSearchParams(window.location.search);
   const disc   = params.get('disc') || 'tn';
   const d      = DISC_DATA[disc] || DISC_DATA['tn'];
-
-  /* Read real DNA scores from sessionStorage, fall back to demo */
-  var rawDNA = null;
-  try { rawDNA = JSON.parse(sessionStorage.getItem('bd_dna') || 'null'); } catch(e) {}
-  var dnaTotal = rawDNA ? Object.keys(rawDNA).reduce(function(s,k){return s+(rawDNA[k]||0);},0)||1 : 1;
-  var computedPct = rawDNA ? Math.round(((rawDNA[disc] || 0) / dnaTotal) * 100) : null;
 
   /* Apply CSS tokens */
   const root = document.documentElement;
@@ -348,7 +345,7 @@ function init() {
   heroNameEl.setAttribute('data-i18n', 'disc.name.' + disc);
   const rankNum = RANK_MAP[disc] || 1;
   document.getElementById('heroRank').textContent = '#' + rankNum + ' ' + t('disc.rank_label') + ' ' + t('disc.match');
-  document.getElementById('heroPct').textContent = (computedPct !== null ? computedPct : parseInt(d.pct)) + '%';
+  document.getElementById('heroPct').textContent = (MATCH_PCTS[disc] != null ? MATCH_PCTS[disc] : parseInt(d.pct)) + '%';
   var insightEl = document.getElementById('heroInsight');
   insightEl.textContent = t('disc.why.insight.' + disc);
   insightEl.setAttribute('data-i18n', 'disc.why.insight.' + disc);
