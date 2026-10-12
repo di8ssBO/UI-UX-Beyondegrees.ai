@@ -360,7 +360,8 @@
 
   var NS = 'http://www.w3.org/2000/svg';
   var svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 320 370');
+  /* Extra 40-unit side margins so long vertex labels (e.g. "Medical & Health Sciences") are not clipped */
+  svg.setAttribute('viewBox', '-40 0 400 370');
   svg.setAttribute('width', '100%');
   svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
@@ -595,7 +596,11 @@
     30: _tc('disc.caption.30', 'Your complete Academic DNA — tap any vertex to explore 🌌'),
   };
   var cap = document.getElementById('cstCaption');
-  if (cap) cap.textContent = captions[capKey];
+  if (cap) {
+    cap.textContent = captions[capKey];
+    /* Keep i18n re-apply from resetting the caption to the stage-0 text */
+    cap.setAttribute('data-i18n', 'disc.caption.' + capKey);
+  }
 
   /* ══ Ẩn radar hoàn toàn khi chưa hoàn thành 10 câu ════════════ */
   if (progress < 10) {

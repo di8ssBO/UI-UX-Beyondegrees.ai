@@ -4611,7 +4611,11 @@
       /* Translate text content */
       var self = this;
       document.querySelectorAll('[data-i18n]').forEach(function (el) {
-        el.textContent = self.t(el.getAttribute('data-i18n'));
+        var txt = self.t(el.getAttribute('data-i18n'));
+        /* Optional {n} parameter, e.g. data-i18n-n="2" → "#2 Ranked Match" */
+        var n = el.getAttribute('data-i18n-n');
+        if (n !== null) txt = txt.replace(/\{n\}/g, n);
+        el.textContent = txt;
       });
 
       /* Translate placeholder attributes */
