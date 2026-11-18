@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 """
 generate-spec-data.py
-Đọc 2 CSV từ data/ và tạo ra spec-data.js dùng trong spec-detail/index.html
+Đọc 2 CSV trong tools/data/ và tạo tools/output/spec-csv-data.js
+(SPEC_CSV_DATA + lookupSpecData). Hiện chưa trang nào dùng tệp này;
+shared/scripts/data/spec-data.js đang dùng là bản trích tay, không do script này sinh ra.
 
-Chạy từ thư mục gốc project:
-  python features/major/spec-detail/generate-spec-data.py
+Chạy từ thư mục gốc repo:
+  python tools/generate-spec-data.py
 """
 import csv, json, os, re, sys
 
-BASE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-SPEC_CSV = os.path.join(BASE, 'data', 'Specialization-2026-05-09.csv')
-UNI_CSV  = os.path.join(BASE, 'data', 'UniversitySpecializationLevel-2026-05-12.csv')
-OUT_JS   = os.path.join(BASE, 'features', 'major', 'spec-detail', 'spec-data.js')
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # BeyonDegrees-UI root
+SPEC_CSV = os.path.join(BASE, 'shared', 'data', 'Specialization-2026-05-09.csv')   # mobile spec-detail cũng đọc tệp này lúc chạy
+UNI_CSV  = os.path.join(BASE, 'tools', 'data', 'UniversitySpecializationLevel-2026-05-12.csv')
+OUT_JS   = os.path.join(BASE, 'tools', 'output', 'spec-csv-data.js')
+os.makedirs(os.path.dirname(OUT_JS), exist_ok=True)
 
 def norm(s):
     return re.sub(r'\s+', ' ', s.strip().lower())

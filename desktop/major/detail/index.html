@@ -181,18 +181,39 @@
     /* Placeholder average salary per discipline (no real data in dataset) */
     var MOCK_SALARY = { kt:'$75K', tn:'$68K', yt:'$82K', nn:'$58K', xh:'$60K', nv:'$52K' };
 
-    var wanted = BD.param('major', 'Computer and information sciences');
+    var wanted = BD.param('major', '');
     var _MAJORS = (typeof MAJORS_DATA !== 'undefined') ? MAJORS_DATA : (window.MAJORS_DATA || []);
-    var major = _MAJORS.find(function (m) { return m.title === wanted; })
-             || _MAJORS.find(function (m) { return m.title === 'Computer and information sciences'; });
     var root = document.getElementById('root');
+
+    /* No ?major= → show a picker grouped by discipline (same as mobile),
+       instead of silently opening an arbitrary default major. */
+    if (!wanted) {
+      var groups = {};
+      _MAJORS.forEach(function (m) { (groups[m.discCode] = groups[m.discCode] || []).push(m); });
+      var order = ['tn', 'kt', 'yt', 'nn', 'xh', 'nv'];
+      root.innerHTML =
+        '<div class="card" style="margin-bottom:16px;"><h2 style="font-weight:900;">' + t('major.detail.picker_title') + '</h2>' +
+        '<p class="muted mt-2">' + _MAJORS.length + ' majors</p></div>' +
+        order.filter(function (d) { return groups[d]; }).map(function (d) {
+          return '<div class="card" style="margin-bottom:16px;"><div class="muted" style="font-weight:800;margin-bottom:10px;">' + DISC_LABEL[d] + '</div>' +
+            '<div class="grid-3" style="display:grid;gap:10px;">' +
+            groups[d].map(function (m) {
+              return '<a class="card hoverable" style="display:flex;gap:10px;align-items:center;padding:12px 14px;" href="?major=' + encodeURIComponent(m.title) + '">' +
+                '<span>' + (m.icon || '🎓') + '</span><span style="font-weight:700;">' + m.title + '</span></a>';
+            }).join('') + '</div></div>';
+        }).join('');
+    }
+
+    var major = wanted ? _MAJORS.find(function (m) { return m.title === wanted; }) : null;
 
     /* Back về trang trước đó (giống mobile history.back()), fallback majors.html */
     function goBack() { if (history.length > 1) history.back(); else location.href = '../../major/recommendations/'; }
     window.goBack = goBack;
     var backBtn = '<button class="btn btn-ghost md-back" onclick="goBack()">' + t('common.back') + '</button>';
 
-    if (!major) {
+    if (!wanted) {
+      /* picker already rendered above */
+    } else if (!major) {
       root.innerHTML = backBtn + '<div class="card lock-note"><div class="em">⏳</div>' +
         '<h2 class="mt-4" style="font-weight:900;">' + t('major.detail.loading') + '</h2>' +
         '<p class="muted mt-2">' + t('major.detail.unlock_note') + '</p>' +

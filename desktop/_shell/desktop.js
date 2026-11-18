@@ -415,7 +415,11 @@
     else if (h < 18) { g = 'Good afternoon'; em = '🔥'; }
     else             { g = 'Good evening';   em = '✨'; }
     var uname = '';
-    try { uname = localStorage.getItem('bd-username') || ''; } catch (e) {}
+    try {
+      /* First name from login/sign-up (bd-profile), old bd-username as fallback */
+      var prof = JSON.parse(localStorage.getItem('bd-profile') || '{}') || {};
+      uname = prof.firstName || prof.givenName || localStorage.getItem('bd-username') || '';
+    } catch (e) {}
     return uname
       ? g + ', <span class="greet-name">' + uname + '</span> ' + em
       : g + ' ' + em;
@@ -566,6 +570,7 @@
         localStorage.removeItem('quizMilestone');
         localStorage.removeItem('quizCounts');
         localStorage.removeItem('quizAnswerLog');
+        localStorage.removeItem('bd-quiz-set');
       } catch (e) {}
       window.location.href = '../../onboarding/home/';
     });

@@ -294,10 +294,12 @@
   function completeAuth(profile) {
     writeStorage("bd-authenticated", "demo");
     writeStorage("bd-demo-email", DEMO_EMAIL);
+    /* Same schema as shared/scripts/ui/bd-profile.js, so Profile, the tab-5
+       label and the desktop greeting all show what was typed at sign-up. */
     writeStorage("bd-profile", JSON.stringify({
       email: profile.email || DEMO_EMAIL,
-      givenName: profile.givenName || "Demo",
-      familyName: profile.familyName || "Student",
+      firstName: profile.givenName || "Demo",
+      lastName: profile.familyName || "Student",
       provider: profile.provider || "password"
     }));
 

@@ -74,7 +74,6 @@
     {
       label: 'Results',
       items: [
-        { id: 'match-reveal',    icon: '🧬', label: 'DNA Reveal',   path: '../../results/match-reveal/',    minMilestone: 10 },
         { id: 'match',           icon: '🎯', label: 'Disciplines',  path: '../../discipline/match/',        minMilestone: 10 },
         { id: 'recommendations', icon: '📚', label: 'Majors',       path: '../../major/recommendations/',   minMilestone: 20 },
         { id: 'matches',         icon: '🏛', label: 'Universities', path: '../../university/matches/',      minMilestone: 30 }

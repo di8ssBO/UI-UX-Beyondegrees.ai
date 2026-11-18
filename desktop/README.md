@@ -44,7 +44,6 @@ desktop/
 ├── index.html           # Home / About me — chọn disciplines, tiến độ quiz
 ├── quiz.html            # Quiz 2 cột: câu hỏi + progress
 ├── loading.html         # AI đang phân tích (auto chuyển trang)
-├── match-reveal.html    # Reveal kết quả + confetti
 ├── discipline-match.html# Ranking 6 nhóm ngành + radar Academic DNA
 ├── discipline-detail.html?d=kt|yt|tn|xh|nv|nn   # Chi tiết 6 ngành (1 file)
 ├── discipline-why.html  # Giải thích vì sao match

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic DNA — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
+<link rel="stylesheet" href="../../../shared/styles/dna-card.css">
+<style>
+  /* Desktop version of mobile/results/dna-card.html. The card always sits on
+     its own dark "story" stage so it looks the same in light and dark theme
+     (it is the image people share). */
+  .dna-layout { display: grid; grid-template-columns: minmax(0, 440px) 1fr; gap: 32px; align-items: start; max-width: 1020px; margin: 0 auto; }
+  .dna-stage { border-radius: 28px; padding: 28px; background: linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 55%, #0A0A1A 100%); box-shadow: 0 24px 60px rgba(10,10,26,0.35); }
+  .dna-side h1 { font-size: 28px; font-weight: 900; color: var(--text-primary); }
+  .dna-side p { margin-top: 10px; font-size: 14px; line-height: 1.7; color: var(--text-secondary); }
+  .dna-side .btn { margin-top: 20px; }
+  @media (max-width: 960px) { .dna-layout { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body class="app" data-page="disciplines" data-crumb="Academic DNA">
+  <div class="main">
+    <div class="content fade-in">
+      <div class="dna-layout">
+        <div class="dna-stage">
+          <div class="dna-card" id="dnaCard">
+      <div class="card-gradient-top"></div>
+      <div class="card-content">
+
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="card-label" data-i18n="dna.card_label">🧬 Academic DNA</div>
+          <div class="card-badge">✨</div>
+        </div>
+
+        <!-- Main Stat -->
+        <div class="main-stat">
+          <span class="main-pct" id="mainPct"></span>
+          <div class="main-disc" id="mainDisc"></div>
+          <div class="main-sub" id="mainSub" data-i18n="dna.main_sub">Your strongest academic match</div>
+        </div>
+
+        <!-- DNA Bars -->
+        <div class="dna-bars" id="dnaBars">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Tagline -->
+        <div class="tagline">
+          <div class="tagline-text" id="taglineText"></div>
+        </div>
+
+        <!-- Share -->
+        <div class="share-label" data-i18n="dna.share_label">Share your results</div>
+        <div class="share-row">
+          <button class="share-btn share-instagram" onclick="handleShare('instagram')">
+            <span>📸</span> <span data-i18n="dna.share_instagram">Instagram</span>
+          </button>
+          <button class="share-btn share-tiktok" onclick="handleShare('tiktok')">
+            <span>🎵</span> <span data-i18n="dna.share_tiktok">TikTok</span>
+          </button>
+          <button class="share-btn share-copy" onclick="handleShare('copy')">
+            <span>🔗</span> <span data-i18n="dna.share_copy">Copy</span>
+          </button>
+        </div>
+
+        <!-- CTA -->
+        <a href="../../onboarding/home/" class="cta-btn" data-i18n="dna.cta">
+          Discover yours →
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Controls -->
+        </div>
+        <div class="dna-side">
+          <h1 data-i18n="dna.page_title">Academic DNA · Shareable Card</h1>
+          <p data-i18n="dna.main_sub">Your strongest academic match</p>
+          <a class="btn btn-ghost" href="../../discipline/match/" data-i18n="dna.back">Back to Results</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bd-dna-toast" id="toast"></div>
+
+  <script src="../../../shared/scripts/ui/i18n.js?v=3"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
+  <script src="../../../shared/scripts/data/disc-config.js"></script>
+  <script src="../../../shared/scripts/ui/dna-card.js"></script>
+</body>
+</html>

@@ -7,6 +7,11 @@
    window.BD_DISC_EMOJIS  — emoji per discipline
    ───────────────────────────────────────────────────────────────── */
 
+/* Academic DNA % per discipline. Prototype sample values shared by the
+   Disciplines page (radar + cards) and the DNA share card, so both always
+   show the same numbers. Real scores come from bd-api in Phase 2. */
+window.BD_DNA_PCTS = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
+
 window.BD_DISC_EMOJIS = {
   kt: '💻', nv: '📖', yt: '🩺', xh: '🌐', nn: '🌾', tn: '🧬',
 };

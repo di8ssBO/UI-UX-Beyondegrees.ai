@@ -617,56 +617,8 @@ svg *, canvas, video, img { transition: none !important; }
         </div>
 
         <!-- Tab Bar -->
-        <nav class="float-tab-bar" id="floatTabBar">
-          <a href="../../onboarding/home/" class="tab-item" data-tab="about">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="8" r="3.5"/>
-                <path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/>
-                <path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.about_me">About me</span>
-          </a>
-          <a href="../../discipline/match/" id="quizTabLink" class="tab-item" data-tab="disciplines">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/>
-                <polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/>
-                <circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
-          </a>
-          <a href="../../major/recommendations/" class="tab-item" data-tab="majors">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.majors">Majors</span>
-          </a>
-          <a href="../../university/matches/" class="tab-item" data-tab="universities">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.universities">Universities</span>
-          </a>
-          <a href="../../profile/edit/" class="tab-item" data-tab="account">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="7.5" r="3.5"/>
-                <path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/>
-                <circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
-                <path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <span class="tab-label"></span>
-          </a>
-        </nav>
+        <nav class="float-tab-bar" id="floatTabBar" data-bd-tabbar data-active="t1"></nav>
+<script src="../../../shared/scripts/ui/tab-bar.js"></script>
 
       </div><!-- /mobile-screen -->
     </div><!-- /device-frame -->
@@ -1062,7 +1014,9 @@ window.PageTransition = PageTransition;
   'use strict';
 
   var routeStage = parseInt(new URLSearchParams(location.search).get('stage') || '1', 10);
-  if (routeStage !== 2 && routeStage !== 3) return;
+  /* All 3 stages use this screen now (stage 1 used to show the older DNA
+     screen; it now matches desktop). */
+  if (routeStage !== 1 && routeStage !== 2 && routeStage !== 3) routeStage = 1;
 
   var root = document.getElementById('bdMobileMatchRoot');
   var screen = document.getElementById('mobileScreen');
@@ -1091,7 +1045,9 @@ window.PageTransition = PageTransition;
   }
 
   function setActiveTab() {
-    var active = routeStage === 3 ? 'universities' : 'majors';
+    /* Loading belongs to the quiz journey: every stage highlights About me
+       (same as the CVT app and the desktop sidebar). */
+    var active = 't1';
     document.querySelectorAll('.tab-item[data-tab]').forEach(function (item) {
       item.classList.toggle('active', item.getAttribute('data-tab') === active);
     });
@@ -1103,7 +1059,7 @@ window.PageTransition = PageTransition;
     this.root = el;
     this.state = {
       theme: currentAppTheme(),
-      stage: stageNum === 3 ? 'university' : 'majors',
+      stage: stageNum === 3 ? 'university' : (stageNum === 1 ? 'discipline' : 'majors'),
       progress: 0,
       done: false,
       factIndex: 0
@@ -1117,6 +1073,36 @@ window.PageTransition = PageTransition;
     this._polys = null;
     this.canvasRef = document.getElementById('bdMobileMatchCanvas');
     this.DATA = {
+      discipline: {
+        title: 'Finding your disciplines',
+        subtitle: 'Scanning academic discipline areas and matching pathways to your profile.',
+        phases: [
+          { l: 'Matching', t: 'Aligning disciplines to you' },
+          { l: 'Scanning', t: 'Reading your academic signals' },
+          { l: 'Ranking', t: 'Scoring discipline fit' },
+          { l: 'Finalizing', t: 'Preparing your top fields' }
+        ],
+        pool: 6,
+        poolLabel: 'disciplines scanned',
+        listIcon: '\ud83e\udded',
+        listTitle: 'Disciplines matching you',
+        rows: [
+          { emoji: '\ud83d\udcbb', name: 'Engineering & Technology', sub: 'Systems \u00b7 Problem solving', target: 95 },
+          { emoji: '\ud83d\udd2c', name: 'Natural Sciences', sub: 'Research \u00b7 Discovery', target: 90 },
+          { emoji: '\ud83d\udcca', name: 'Social Sciences', sub: 'People \u00b7 Patterns', target: 86 },
+          { emoji: '\u2695\ufe0f', name: 'Health Sciences', sub: 'Care \u00b7 Applied science', target: 82 },
+          { emoji: '\ud83c\udf31', name: 'Agriculture & Environment', sub: 'Sustainability \u00b7 Field work', target: 78 }
+        ],
+        facts: [
+          'Strong discipline fit helps narrow thousands of majors into a focused shortlist.',
+          'Students choose majors more confidently when they first know their discipline cluster.',
+          'Interest, aptitude, and work style together make discipline matching more reliable.'
+        ],
+        doneEmoji: '\ud83e\udded',
+        doneTitle: 'Your discipline matches are ready!',
+        doneBtn: 'See disciplines',
+        href: '../../discipline/match/'
+      },
       majors: {
         title: 'Finding your majors',
         subtitle: 'Scanning 1,200+ majors worldwide and matching programs to your profile.',
@@ -1298,10 +1284,167 @@ window.PageTransition = PageTransition;
       var isLight = this.state.theme === 'light';
       ctx.clearRect(0, 0, this.SIZE, this.SIZE);
       if (this.state.stage === 'university') this.drawGlobe(ctx, time, isLight);
+      else if (this.state.stage === 'discipline') this.drawStageOneOriginal(ctx, time, isLight);
       else this.drawNeural(ctx, time, isLight);
     }
     var self = this;
     this._raf = requestAnimationFrame(function (t) { self.loop(t); });
+  };
+
+  /* Stage 1 (discipline) canvas: ported from desktop/onboarding/loading so
+     both platforms show the same "YOU" orbit animation. */
+  MobileMatchLoading.prototype.buildStageOneOriginal = function () {
+    var colors = ['#8b5cf6', '#06d6a0', '#60a5fa', '#fbbf24', '#c084fc', '#22d3ee'];
+    var tokens = colors.map(function (color) {
+      return {
+        color: color,
+        chaos0: Math.random() * Math.PI * 2,
+        cDist: 22 + Math.random() * 32,
+        cSpeed: (0.45 + Math.random() * 0.55) * (Math.random() < 0.5 ? 1 : -1)
+      };
+    });
+    this._stageOneOriginal = { tokens: tokens, t0: null };
+  };
+
+  MobileMatchLoading.prototype.stageOneWord = function () {
+    var lang = 'en';
+    try { lang = localStorage.getItem('bd-lang') || 'en'; } catch (e) {}
+    var words = { en: 'YOU', vi: 'B\u1ea0N', hi: '\u0906\u092a', fr: 'TOI', ar: '\u0623\u0646\u062a' };
+    return words[lang] || 'YOU';
+  };
+
+  MobileMatchLoading.prototype.drawStageOneOriginal = function (ctx, time, isLight) {
+    if (!this._stageOneOriginal) this.buildStageOneOriginal();
+    var S = this.SIZE;
+    var W = 160, H = 160, cx = W / 2, cy = H / 2, ORBIT_R = 46, CYCLE = 6000;
+    var scale = 1.65;
+    var t0 = this._stageOneOriginal.t0;
+    if (t0 == null) t0 = this._stageOneOriginal.t0 = time;
+    var abs = time - t0;
+    var cyc = (abs * 1000) % CYCLE;
+    var tokens = this._stageOneOriginal.tokens;
+    var colorsDark = ['#8b5cf6', '#06d6a0', '#60a5fa', '#fbbf24', '#c084fc', '#22d3ee'];
+    var colorsLight = ['#7c3aed', '#059669', '#2563eb', '#d97706', '#db2777', '#0891b2'];
+    var icons = ['\ud83d\udcbb', '\u2695\ufe0f', '\ud83d\udcd6', '\ud83c\udf31', '\ud83c\udf0d', '\ud83d\udd2c'];
+    var targets = colorsDark.map(function (_, i) { return (i * 60 - 90) * Math.PI / 180; });
+    var ez = function (p) { return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; };
+    var eo3 = function (p) { return 1 - Math.pow(1 - p, 3); };
+    var clp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+    var rng = function (t, a, b) { return clp((t - a) / (b - a), 0, 1); };
+    var mix = function (a, b, t) { return a + (b - a) * t; };
+
+    var settleP = ez(rng(cyc, CYCLE * 0.15, CYCLE * 0.42));
+    var convergeP = eo3(rng(cyc, CYCLE * 0.42, CYCLE * 0.57));
+    var youP = eo3(rng(cyc, CYCLE * 0.57, CYCLE * 0.76));
+    var youFadeP = rng(cyc, CYCLE * 0.76, CYCLE * 0.85);
+    var scatterP = eo3(rng(cyc, CYCLE * 0.83, CYCLE * 0.95));
+    var dimP = rng(cyc, CYCLE * 0.95, CYCLE);
+
+    ctx.save();
+    ctx.translate((S - W * scale) / 2, (S - H * scale) / 2);
+    ctx.scale(scale, scale);
+
+    tokens.forEach(function (tk, i) {
+      var chaosA = tk.chaos0 + tk.cSpeed * abs;
+      var settledA = targets[i];
+      var da = settledA - chaosA;
+      da = ((da + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+      var displayA = scatterP > 0 ? mix(settledA, chaosA, scatterP) : mix(chaosA, chaosA + da, settleP);
+      var displayDist = scatterP > 0
+        ? mix(0, tk.cDist, scatterP)
+        : mix(mix(tk.cDist, ORBIT_R, settleP), 0, convergeP);
+      var x = cx + displayDist * Math.cos(displayA);
+      var y = cy + displayDist * Math.sin(displayA);
+      var alpha = (scatterP > 0 ? scatterP : (1 - convergeP)) * (1 - dimP * 0.6);
+      var col = isLight ? colorsLight[i] : colorsDark[i];
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, alpha) * (isLight ? 0.15 : 0.22);
+      var glow = ctx.createRadialGradient(x, y, 5, x, y, 26);
+      glow.addColorStop(0, col);
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(x, y, 26, 0, Math.PI * 2); ctx.fill();
+
+      ctx.globalAlpha = Math.max(0, alpha) * (isLight ? 0.92 : 0.88);
+      ctx.fillStyle = isLight ? 'rgba(255,255,255,0.95)' : 'rgba(12,10,30,0.90)';
+      ctx.beginPath(); ctx.arc(x, y, 17, 0, Math.PI * 2); ctx.fill();
+
+      ctx.globalAlpha = Math.max(0, alpha) * (isLight ? 0.55 : 0.75);
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y, 17, 0, Math.PI * 2); ctx.stroke();
+
+      ctx.globalAlpha = Math.max(0, alpha);
+      ctx.font = '14px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(icons[i], x, y + 1);
+      ctx.restore();
+    });
+
+    if (settleP > 0.15 && convergeP < 0.8) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(167,139,250,' + (Math.min(settleP, 1 - convergeP) * 0.22) + ')';
+      ctx.lineWidth = 0.5;
+      ctx.setLineDash([3, 6]);
+      ctx.beginPath(); ctx.arc(cx, cy, ORBIT_R, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
+
+    var ya = eo3(youP) * Math.max(0, 1 - youFadeP);
+    if (ya > 0.01) {
+      var rr = eo3(youP);
+      var R = 38 * rr;
+      ctx.save();
+      ctx.globalAlpha = ya;
+
+      if (isLight) {
+        var haloL = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.6);
+        haloL.addColorStop(0, 'rgba(205,164,255,' + (0.19 * ya) + ')');
+        haloL.addColorStop(1, 'rgba(124,58,237,0)');
+        ctx.fillStyle = haloL;
+        ctx.beginPath(); ctx.arc(cx, cy, R * 1.6, 0, Math.PI * 2); ctx.fill();
+
+        var sphereL = ctx.createRadialGradient(cx - R * 0.28, cy - R * 0.28, 0, cx, cy, R);
+        sphereL.addColorStop(0, 'rgba(220,210,255,' + (0.97 * ya) + ')');
+        sphereL.addColorStop(0.38, 'rgba(205,164,255,' + (0.85 * ya) + ')');
+        sphereL.addColorStop(1, 'rgba(30,10,80,' + (0.70 * ya) + ')');
+        ctx.fillStyle = sphereL;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+      } else {
+        var haloD = ctx.createRadialGradient(cx, cy, R * 0.6, cx, cy, R * 1.7);
+        haloD.addColorStop(0, 'rgba(139,92,246,' + (0.26 * ya) + ')');
+        haloD.addColorStop(1, 'rgba(139,92,246,0)');
+        ctx.fillStyle = haloD;
+        ctx.beginPath(); ctx.arc(cx, cy, R * 1.7, 0, Math.PI * 2); ctx.fill();
+
+        var sphereD = ctx.createRadialGradient(cx - R * 0.28, cy - R * 0.28, 0, cx, cy, R);
+        sphereD.addColorStop(0, 'rgba(220,210,255,' + (0.97 * ya) + ')');
+        sphereD.addColorStop(0.38, 'rgba(124,58,237,' + (0.88 * ya) + ')');
+        sphereD.addColorStop(1, 'rgba(20,5,50,' + (0.75 * ya) + ')');
+        ctx.fillStyle = sphereD;
+        ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+      }
+
+      var spec = ctx.createRadialGradient(cx - R * 0.52, cy - R * 0.50, 0, cx - R * 0.35, cy - R * 0.35, R * 0.55);
+      spec.addColorStop(0, 'rgba(255,255,255,' + (0.42 * ya) + ')');
+      spec.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = spec;
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.fill();
+
+      ctx.shadowColor = 'rgba(0,0,0,0.85)';
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '800 ' + Math.round(15 * rr + 4) + "px 'Plus Jakarta Sans','Inter',sans-serif";
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(this.stageOneWord(), cx, cy);
+      ctx.restore();
+    }
+
+    ctx.restore();
+    ctx.globalCompositeOperation = 'source-over';
   };
 
   MobileMatchLoading.prototype.hexA = function (hex, a) {

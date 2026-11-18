@@ -457,49 +457,8 @@ svg *, canvas, video, img { transition: none !important; }
         </section>
 
         <!-- ░░ PRESS-GLOW FLOATING TAB BAR ░░ -->
-        <nav class="float-tab-bar" id="floatTabBar">
-
-          <a href="../../onboarding/home/" class="tab-item active" data-tab="t1">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.about_me">About me</span>
-          </a>
-          <a href="../../discipline/match/" class="tab-item" data-tab="t2">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
-          </a>
-          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.majors">Majors</span>
-          </a>
-          <a href="../../university/matches/" class="tab-item" data-tab="t4">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.universities">Universities</span>
-          </a>
-          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/><path d="M18 5l.7.7 1.3-1.4" stroke="var(--bg-base,#06060f)" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-              </svg>
-            </span>
-            <span class="tab-label"></span>
-          </a>
-        </nav>
+        <nav class="float-tab-bar" id="floatTabBar" data-bd-tabbar data-active="t1"></nav>
+<script src="../../../shared/scripts/ui/tab-bar.js"></script>
 
       </div>
     </div>
@@ -1124,30 +1083,51 @@ document.addEventListener('DOMContentLoaded', () => {
             sub:   t('home.state3.sub') },
     };
     const s = STATES[key];
-    if ($('heroEmoji'))   $('heroEmoji').textContent   = s.emoji;
-    if ($('heroTagline')) $('heroTagline').textContent = s.tagline;
-    if ($('heroTitle'))   $('heroTitle').textContent   = key === 30 ? s.title.replace(/\s*\u2728\s*$/, '') : s.title;
-    if ($('heroSub'))     $('heroSub').textContent     = s.sub;
+    /* Write the i18n KEY (not just the text) onto each element: BDi18n.apply()
+       runs after this and re-translates every [data-i18n] node, so a static
+       key in the HTML used to overwrite the progress state with state 0. */
+    const KEYS = {
+      0:  ['home.state0.tagline', 'home.state0.title', 'home.state0.sub'],
+      1:  ['home.state_started_tagline', 'home.state_started_title', 'home.state_started_sub'],
+      10: ['home.state1.tagline', 'home.state1.title', 'home.state1.sub'],
+      20: ['home.state2.tagline', 'home.state2.title', 'home.state2.sub'],
+      30: ['home.state3.tagline', 'home.state3.title', 'home.state3.sub'],
+    }[key];
+    const bindKey = (el, k, text) => {
+      if (!el) return;
+      if (k) el.setAttribute('data-i18n', k); else el.removeAttribute('data-i18n');
+      el.textContent = text;
+    };
+    if ($('heroEmoji')) $('heroEmoji').textContent = s.emoji;
+    bindKey($('heroTagline'), KEYS[0], s.tagline);
+    /* State 30 trims the trailing ✨ (the ring already shows it), so that one
+       title is set from JS only. */
+    bindKey($('heroTitle'), key === 30 ? null : KEYS[1], key === 30 ? s.title.replace(/\s*\u2728\s*$/, '') : s.title);
+    if ($('heroSub')) {
+      if (key === 1) $('heroSub').setAttribute('data-i18n-n', String(answered));
+      else $('heroSub').removeAttribute('data-i18n-n');
+    }
+    bindKey($('heroSub'), KEYS[2], s.sub);
 
     // Buttons
     const BTNS = {
-      0:  { b1: t('home.cta.start'),    u1: '../../quiz/quiz-card/', b2: null },
-      1:  { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`, b2: null },
-      10: { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`,
-            b2: { t: t('home.cta.view_disc'), u: '../../discipline/match/' } },
-      20: { b1: t('home.cta.continue'), u1: `../../quiz/quiz-card/?start=${p+1}`,
-            b2: { t: t('home.cta.view_major'), u: '../../major/recommendations/' } },
-      30: { b1: t('home.cta.view_match'), u1: '../../university/matches/',
-            b2: { t: t('home.cta.view_uni'), u: '../../university/matches/' } },
+      0:  { k1: 'home.cta.start',      u1: '../../quiz/quiz-card/', b2: null },
+      1:  { k1: 'home.cta.continue',   u1: `../../quiz/quiz-card/?start=${p+1}`, b2: null },
+      10: { k1: 'home.cta.continue',   u1: `../../quiz/quiz-card/?start=${p+1}`,
+            b2: { k: 'home.cta.view_disc',  u: '../../discipline/match/' } },
+      20: { k1: 'home.cta.continue',   u1: `../../quiz/quiz-card/?start=${p+1}`,
+            b2: { k: 'home.cta.view_major', u: '../../major/recommendations/' } },
+      30: { k1: 'home.cta.view_match', u1: '../../university/matches/',
+            b2: { k: 'home.cta.view_uni',   u: '../../university/matches/' } },
     };
     const b    = BTNS[key];
     const btn1 = $('ctaPrimary');
     const btn2 = $('ctaSecondary');
-    if (btn1) { btn1.textContent = b.b1; btn1.onclick = () => location.href = b.u1; }
+    if (btn1) { bindKey(btn1, b.k1, t(b.k1)); btn1.onclick = () => location.href = b.u1; }
     if (btn2) {
       if (b.b2) {
         btn2.style.display = 'block';
-        btn2.textContent   = b.b2.t;
+        bindKey(btn2, b.b2.k, t(b.b2.k));
         btn2.onclick       = () => location.href = b.b2.u;
       } else {
         btn2.style.display = 'none';
