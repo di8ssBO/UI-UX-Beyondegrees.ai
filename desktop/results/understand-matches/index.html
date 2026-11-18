@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- anti-fouc -->
+<script>document.documentElement.setAttribute("data-theme",(localStorage.getItem("bd-theme")||"light"));</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Understand Your Matches — BeyonDegrees.ai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../_shell/desktop.css?v=4">
+<style>
+  /* ════════════════════════════════════════════════════════════
+     Understand Your Matches — desktop port of the mobile page.
+     Venn logic (geometry, dot placement, blended colors, theme-
+     inverted "spotlight" card, glossy dots) is 1:1 with mobile.
+     Desktop adds a balanced two-column layout: the Venn overview on
+     the left, an "assertions" detail list on the right — so the wide
+     viewport reads overview → detail instead of a lonely centered
+     diagram. ════════════════════════════════════════════════════ */
+
+  /* ── One shared centered column for the whole page — header text,
+     tabs, the locked banner/teaser, and the unlocked two-column Venn
+     layout all live on this same axis/width, so nothing (like a full-
+     bleed header sitting flush-left inside a much wider .content)
+     reads as misaligned against an already-centered card below it. ── */
+  .um-page { max-width: 960px; margin: 0 auto; }
+  /* Page-scoped: pulls the header block up so title → tabs reads as one
+     tight unit instead of drifting down the viewport with a big gap
+     underneath the shell's default top padding. */
+  body[data-page="understand"] .content { padding-top: calc(var(--s10) - 22px); }
+
+  /* ── Header block (chip, title, subtitle, progress, tabs) — centered
+     on its own so it lines up with the centered lock-banner/teaser
+     below it instead of sitting flush-left against a much wider
+     column, which read as off-balance. Internal gaps are compressed
+     (chip→title→subtitle→progress→tabs) to close the dead air that
+     used to push everything toward the bottom of the fold. ── */
+  .um-head { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .um-head .ai-chip { align-self: center; }
+  .um-head .page-title { margin-top: 10px; }
+  .um-head .page-title, .um-head .page-sub { max-width: 560px; }
+  .um-head .page-sub { margin-top: 6px; }
+
+  /* ── Progress row under the subtitle ── */
+  .um-progress { display: flex; align-items: center; gap: 14px; margin-top: 12px; max-width: 440px; }
+  .um-progress .bar { flex: 1; }
+  .um-prog-txt { font-size: 13px; font-weight: 800; color: var(--text-secondary); white-space: nowrap; }
+
+  /* ── Tab bar ── */
+  .um-tabs { display: flex; justify-content: center; gap: 4px; margin: 14px 0 0; border-bottom: 1px solid var(--border-color); width: 100%; max-width: 640px; }
+  .um-tab {
+    position: relative; background: none; border: none; font-family: inherit; cursor: pointer;
+    padding: 13px 24px; font-size: 14px; font-weight: 800; letter-spacing: .03em;
+    color: var(--text-muted); transition: color .15s;
+  }
+  .um-tab::after {
+    content: ''; position: absolute; left: 16px; right: 16px; bottom: -1px; height: 2.5px;
+    border-radius: 3px; background: transparent; transition: background .2s;
+  }
+  .um-tab:hover { color: var(--text-secondary); }
+  .um-tab.active { color: var(--text-primary); }
+  .um-tab.active::after { background: var(--violet-500); }
+  :root[data-theme="light"] .um-tab.active { color: #a84e30; }
+  :root[data-theme="light"] .um-tab.active::after { background: #c96b55; }
+
+  /* ── Panels ── */
+  .um-panel { display: none; }
+  .um-panel.active { display: block; animation: fadeUp .4s var(--ease-out) both; }
+
+  /* ── Two-column layout (unlocked tabs) ──
+     Venn is the hero — it's the thing that actually explains the result;
+     the assertions list is reference detail, not a second headline. So
+     the column split is deliberately lopsided (not ~50/50) and the list
+     card is visually quieter (see .assert-card below) so a squint-test
+     lands on the diagram first. ── */
+  .um-layout { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(300px,.75fr); gap: 22px; align-items: start; margin-top: 18px; }
+  @media (max-width: 1100px) { .um-layout { grid-template-columns: 1fr; max-width: 640px; } }
+
+  /* ── Venn card — deliberately INVERTED from the page theme, like a
+     spotlight: light page → deep night-sky card; dark page → bright
+     fresh mint/sky card. (Identical intent to mobile.) ── */
+  .venn-card {
+    position: relative; border-radius: 22px; overflow: hidden; padding: 18px 18px 12px;
+    display: flex; flex-direction: column;
+    background:
+      radial-gradient(ellipse 120% 90% at 8% -10%, rgba(6,214,160,.26) 0%, transparent 60%),
+      radial-gradient(ellipse 110% 85% at 100% 105%, rgba(168,194,217,.40) 0%, transparent 60%),
+      linear-gradient(160deg, #FCFEFD 0%, #F1F9F6 55%, #EAF4F4 100%);
+    border: 1px solid rgba(6,214,160,.20);
+    box-shadow: 0 12px 32px rgba(6,214,160,.16), 0 4px 14px rgba(122,155,168,.14), 0 2px 10px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.85);
+  }
+  :root[data-theme="light"] .venn-card {
+    background: linear-gradient(160deg, #1c1533 0%, #0c0a18 100%);
+    border-color: rgba(255,255,255,.10);
+    box-shadow: 0 10px 32px rgba(0,0,0,.35), 0 2px 10px rgba(92,69,53,.12);
+  }
+  .venn-wrap { position: relative; }
+  /* Viewport controls (zoom + reset) — one cluster, top-right. */
+  .venn-controls { position: absolute; top: 12px; right: 12px; z-index: 5; display: flex; flex-direction: column; gap: 8px; }
+  .venn-btn {
+    width: 34px; height: 34px; border-radius: 10px; font-size: 16px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .15s, transform .1s;
+    background: rgba(42,27,12,.08); border: 1px solid rgba(42,27,12,.16); color: #2A1B0C;
+  }
+  .venn-btn:hover { background: rgba(42,27,12,.16); }
+  .venn-btn:active { transform: scale(.92); }
+  :root[data-theme="light"] .venn-btn { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.16); color: #e8e8f5; }
+  :root[data-theme="light"] .venn-btn:hover { background: rgba(255,255,255,.18); }
+
+  .venn-stage-wrap { width: 100%; overflow: hidden; border-radius: 16px; }
+  .venn-stage-wrap.pannable { touch-action: none; cursor: grab; }
+  .venn-stage-wrap.pannable:active { cursor: grabbing; }
+  /* Cap + centre the diagram so it reads as a deliberate object with
+     breathing room, not a poster stretched to the column edges. The
+     max-height guard keeps the taller "Other"-bucket layout from towering. */
+  .venn-stage { width: 100%; max-width: 560px; margin: 0 auto; transform-origin: top center; transition: transform .18s ease; }
+  .venn-stage svg { display: block; width: 100%; height: auto; max-height: 660px; }
+  .venn-dot { transform-box: fill-box; transform-origin: center; cursor: pointer; transition: transform .18s ease, filter .18s ease; }
+  .venn-dot.pulse { animation: vennPulse .7s ease; }
+  .venn-dot.hover-glow { transform: scale(1.2); filter: drop-shadow(0 0 7px rgba(255,255,255,.65)); }
+  @keyframes vennPulse { 0%,100% { transform: scale(1); } 34% { transform: scale(1.32); } }
+
+  /* ── Circles glow when their linked dot/assertion is hovered — this is
+     the "explainable AI" moment: hover an assertion → see exactly which
+     part of the diagram it feeds into. Circles are also clickable to
+     read that discipline's own story. ── */
+  .venn-circle { transition: fill-opacity .22s ease, stroke-opacity .22s ease, stroke-width .22s ease; cursor: pointer; }
+  .venn-circle.circle-glow { fill-opacity: .62; stroke-opacity: .95; stroke-width: 2.4px; }
+
+  /* ── Compact legend row — now lives INSIDE .venn-wrap, directly above
+     the stage (not a sibling above it), so it's part of the same visual
+     block as the diagram instead of a separate row the eye has to jump
+     to. This also means it rides along in fullscreen: when .venn-wrap
+     centers as a flex column, legend + stage stay tight together instead
+     of the legend getting stranded near the top of a much taller card.
+     Items are clickable → read the discipline-level story. ── */
+  .venn-legend-top { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 14px; padding: 0 6px 10px; flex: none; }
+  .venn-legend-top .venn-legend-item { font-size: 12px; cursor: pointer; border-radius: 999px; padding: 2px 8px; transition: background .15s; }
+  .venn-legend-top .venn-legend-item:hover { background: rgba(255,255,255,.10); }
+  :root[data-theme="light"] .venn-legend-top .venn-legend-item:hover { background: rgba(30,21,51,.06); }
+
+  /* ── Tooltip now floats next to the dot that triggered it (position set
+     per-hover in JS via left/top or left/bottom) instead of sitting
+     pinned to the bottom of the card — pinned-to-bottom used to land
+     right on top of the third circle's name/% label. It flips above vs.
+     below the dot depending on which side has room, and points a small
+     speech-bubble caret at the exact dot it's explaining — a much more
+     "it's tracking what I'm looking at" feel than a static panel. ── */
+  .venn-tooltip {
+    position: absolute; z-index: 8;
+    transform: translateX(-50%) translateY(6px) scale(.92);
+    width: min(88%, 340px); background: rgba(8,10,32,.97); border: 1px solid rgba(255,255,255,.14);
+    border-top: 2px solid var(--vt-accent, rgba(255,255,255,.3));
+    border-radius: 14px; padding: 13px 16px; font-size: 13px; line-height: 1.5; color: #e8e8f5;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s ease, transform .32s cubic-bezier(.34,1.56,.64,1), border-color .25s ease, box-shadow .25s ease, left .18s ease, top .18s ease, bottom .18s ease;
+    box-shadow: 0 10px 30px rgba(0,0,0,.45), 0 0 26px -8px var(--vt-accent, transparent);
+  }
+  /* Never intercept the pointer — the tooltip trails hover, so it must
+     not steal hover from dots sitting behind/under it. */
+  .venn-tooltip.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+  /* Speech-bubble caret pointing at the dot — flips edge depending on
+     whether the card sits above or below it. */
+  .venn-tooltip::after {
+    content: ''; position: absolute; width: 13px; height: 13px; left: var(--vt-arrow-x, 50%);
+    background: rgba(8,10,32,.97); transform: translateX(-50%) rotate(45deg); border-radius: 3px;
+  }
+  .venn-tooltip.place-above::after { bottom: -6px; border-right: 1px solid rgba(255,255,255,.14); border-bottom: 1px solid rgba(255,255,255,.14); }
+  .venn-tooltip.place-below::after { top: -6px; border-left: 1px solid rgba(255,255,255,.14); border-top: 1px solid rgba(255,255,255,.14); }
+  .venn-tooltip .vt-verdict { display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 12.5px; letter-spacing: .01em; color: #fff; margin-bottom: 5px; }
+  .venn-tooltip .vt-verdict .vt-spark { flex: none; }
+  .venn-tooltip .vt-story { font-size: 12.5px; line-height: 1.55; color: rgba(232,232,245,.92); min-height: 1.5em; }
+  /* Blinking caret while the AI "types" its explanation. */
+  .venn-tooltip .vt-story.typing::after { content: '▍'; margin-left: 1px; opacity: .7; animation: vtCaret .7s steps(1) infinite; color: rgba(232,232,245,.6); }
+  @keyframes vtCaret { 50% { opacity: 0; } }
+  .venn-tooltip .vt-a { font-size: 12px; color: rgba(232,232,245,.65); margin-top: 8px; padding-top: 7px; border-top: 1px solid rgba(255,255,255,.10); }
+  .venn-tooltip .vt-a b { font-weight: 800; }
+  @media (prefers-reduced-motion: reduce) { .venn-tooltip .vt-story.typing::after { display: none; } .venn-tooltip { transition: opacity .15s ease; transform: translateX(-50%) !important; } }
+
+  /* ── Legend + caption ── */
+  .venn-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; padding: 18px 4px 6px; }
+  .venn-legend-item { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+  .venn-legend-dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .venn-caption { font-size: 12.5px; color: var(--text-muted); line-height: 1.55; text-align: center; margin-top: 2px; }
+
+  /* ── Assertions detail panel (right column) ──
+     Deliberately quieter than .venn-card (no colored glow/gradient) so
+     the diagram reads as the hero and this reads as supporting detail. ── */
+  .assert-card { padding: 0; overflow: hidden; background: rgba(255,255,255,.03); box-shadow: 0 2px 12px rgba(0,0,0,.14); }
+  :root[data-theme="light"] .assert-card { background: rgba(253,248,242,.55); box-shadow: 0 2px 8px rgba(92,69,53,.05); }
+  .assert-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 16px 18px 12px; border-bottom: 1px solid var(--border-color); }
+  .assert-title { font-size: 14px; font-weight: 800; color: var(--text-primary); }
+  .assert-count { font-size: 11.5px; font-weight: 800; color: var(--violet-400); background: rgba(124,58,237,.12); border: 1px solid rgba(124,58,237,.24); padding: 2px 9px; border-radius: 999px; }
+  :root[data-theme="light"] .assert-count { color: #a84e30; background: rgba(201,107,85,.10); border-color: rgba(201,107,85,.26); }
+
+  /* ── "Why?" insight — the plain-language readout of the pattern behind
+     the diagram, so the user doesn't have to reverse-engineer it from
+     dots alone. ── */
+  .why-box { margin: 12px 14px 4px; padding: 12px 14px; border-radius: 13px; background: rgba(124,58,237,.09); border: 1px solid rgba(124,58,237,.22); }
+  :root[data-theme="light"] .why-box { background: rgba(201,107,85,.08); border-color: rgba(201,107,85,.22); }
+  .why-title { font-size: 12px; font-weight: 800; color: var(--violet-400); display: flex; align-items: center; gap: 6px; }
+  :root[data-theme="light"] .why-title { color: #a84e30; }
+  .why-body { margin-top: 5px; font-size: 12.5px; line-height: 1.55; color: var(--text-secondary); }
+  .why-body b { color: var(--text-primary); font-weight: 800; }
+
+  .assert-list { max-height: 500px; overflow-y: auto; padding: 8px; }
+  .assert-list::-webkit-scrollbar { width: 8px; }
+  .assert-list::-webkit-scrollbar-thumb { background: rgba(140,120,160,.30); border-radius: 8px; }
+  .assert-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 12px; border-radius: 13px; cursor: pointer; border: 1px solid transparent; transition: background .15s, border-color .15s; }
+  .assert-row:hover, .assert-row.row-hover { background: rgba(124,58,237,.08); }
+  .assert-row.active { background: rgba(124,58,237,.14); border-color: rgba(124,58,237,.30); }
+  :root[data-theme="light"] .assert-row:hover, :root[data-theme="light"] .assert-row.row-hover { background: rgba(201,107,85,.08); }
+  :root[data-theme="light"] .assert-row.active { background: rgba(201,107,85,.12); border-color: rgba(201,107,85,.30); }
+  .assert-num { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.20), inset 0 0 0 1.5px rgba(255,255,255,.35); transition: transform .18s ease; }
+  .assert-row:hover .assert-num, .assert-row.row-hover .assert-num { transform: scale(1.1); }
+  .assert-body { min-width: 0; flex: 1; }
+  .assert-txt { font-size: 13.5px; line-height: 1.5; color: var(--text-primary); }
+  .assert-ans { display: inline-block; margin-top: 6px; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; padding: 2px 10px; border-radius: 999px; background: rgba(124,58,237,.14); color: var(--violet-400); }
+  :root[data-theme="light"] .assert-ans { background: rgba(201,107,85,.12); color: #a84e30; }
+
+  /* ── Locked state (parity with desktop discipline/major lock banner) ──
+     A lone centered card reads as a sparse, off-balance island on a wide
+     desktop viewport (huge equal-but-idle margins either side). Sibling
+     pages (discipline/match, major/recommendations) solve this with a
+     blurred "preview" teaser beneath the banner — same fix applied here
+     so the locked view carries the same visual weight as the unlocked
+     two-column layout, regardless of how wide the screen is. ── */
+  .lock-wrap { display: flex; flex-direction: column; align-items: center; gap: 26px; padding: 26px 0 10px; }
+  .lock-banner {
+    max-width: 640px; width: 100%; padding: 44px 34px; border-radius: 24px; text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 15px;
+    background: rgba(124,58,237,.10); border: 1px solid rgba(124,58,237,.30);
+  }
+  :root[data-theme="light"] .lock-banner { background: rgba(201,107,85,.10); border-color: rgba(201,107,85,.32); }
+  .lock-emoji { font-size: 46px; }
+  .lock-title { font-size: 23px; font-weight: 800; color: var(--text-primary); line-height: 1.3; }
+  .lock-sub { font-size: 14.5px; color: var(--text-muted); line-height: 1.6; max-width: 430px; }
+  .lock-cta {
+    margin-top: 6px; padding: 14px 32px; border: none; border-radius: 999px; cursor: pointer;
+    background: var(--violet-600); color: #fff; font-size: 15px; font-weight: 800;
+    box-shadow: 0 4px 16px rgba(124,58,237,.4); transition: transform var(--tr-fast), background var(--tr-fast);
+  }
+  .lock-cta:hover { transform: translateY(-2px); background: var(--violet-500); }
+  :root[data-theme="light"] .lock-cta { background: #c96b55; box-shadow: 0 4px 16px rgba(201,107,85,.32); }
+  :root[data-theme="light"] .lock-cta:hover { background: #a84e30; }
+
+  .teaser-label { display: flex; align-items: center; gap: 7px; width: 100%; max-width: 720px; font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); }
+  .teaser-wrap { width: 100%; max-width: 720px; opacity: .55; filter: blur(1px); pointer-events: none; user-select: none; }
+  .teaser-list { display: flex; flex-direction: column; gap: 10px; }
+  .teaser-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: 14px; }
+  .teaser-card .tc-left { display: flex; align-items: center; gap: 12px; }
+  .teaser-card .tc-ico { width: 40px; height: 40px; border-radius: 12px; background: rgba(124,58,237,.14); display: flex; align-items: center; justify-content: center; font-size: 19px; flex: none; }
+  .teaser-card .tc-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .teaser-card .tc-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; }
+  .teaser-card .tc-pct { font-size: 17px; font-weight: 800; color: var(--mint-400); flex: none; }
+  :root[data-theme="light"] .teaser-card .tc-ico { background: rgba(201,107,85,.14); }
+  :root[data-theme="light"] .teaser-card .tc-pct { color: #2f6f53; }
+</style>
+</head>
+<body class="app" data-page="understand" data-crumb="Understand Matches">
+  <div class="main">
+    <div class="content fade-in">
+      <div class="um-page">
+      <div class="um-head">
+      <span class="ai-chip" data-i18n="disc.ai_chip">✦ AI-Powered Curation</span>
+      <h1 class="page-title mt-4" data-i18n="understand.title">Why These Are Your Matches</h1>
+      <p class="page-sub" data-i18n="understand.subtitle">Each dot is an answer that shaped this result — tap one to see why.</p>
+
+      <div class="um-progress">
+        <div class="bar mint"><span id="umProgressFill" style="width:0%"></span></div>
+        <span class="um-prog-txt" id="umProgressText">0 / 30</span>
+      </div>
+
+      <div class="um-tabs" role="tablist">
+        <button class="um-tab active" data-tab="disciplines" data-i18n="understand.tab.disciplines">DISCIPLINES</button>
+        <button class="um-tab" data-tab="majors" data-i18n="understand.tab.majors">MAJORS</button>
+        <button class="um-tab" data-tab="universities" data-i18n="understand.tab.universities">UNIVERSITIES</button>
+      </div>
+      </div>
+
+      <div class="um-panel active" data-panel="disciplines" id="panelDisciplines"></div>
+      <div class="um-panel" data-panel="majors" id="panelMajors"></div>
+      <div class="um-panel" data-panel="universities" id="panelUniversities"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../../shared/scripts/ui/i18n.js?v=4"></script>
+  <script src="../../../shared/scripts/data/disc-config.js"></script>
+  <script src="../../_shell/desktop.js?v=12"></script>
+  <script>
+  var t = function(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; };
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  /* Reads primary color from BD_DISC_COLORS (disc-config.js), safe fallback */
+  function discColor(code){
+    return (window.BD_DISC_COLORS && BD_DISC_COLORS[code]) ? BD_DISC_COLORS[code].primary : '#7c3aed';
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     MOCK DATA — functions (not static) so text re-reads the active
+     language at render time. (1:1 with mobile.)
+  ═══════════════════════════════════════════════════════════ */
+  function mockAssertions(){ return [
+    { text:t('understand.mock.disc.1'),  answer:t('understand.answer.absolutely'), discs:['social'] },
+    { text:t('understand.mock.disc.2'),  answer:t('understand.answer.agree'),      discs:['social','natural'] },
+    { text:t('understand.mock.disc.3'),  answer:t('understand.answer.agree'),      discs:['humanities','social'] },
+    { text:t('understand.mock.disc.4'),  answer:t('understand.answer.agree'),      discs:['social','natural'] },
+    { text:t('understand.mock.disc.5'),  answer:t('understand.answer.agree'),      discs:['humanities'] },
+    { text:t('understand.mock.disc.6'),  answer:t('understand.answer.absolutely'), discs:['social'] },
+    { text:t('understand.mock.disc.7'),  answer:t('understand.answer.agree'),      discs:['social','natural'] },
+    { text:t('understand.mock.disc.8'),  answer:t('understand.answer.agree'),      discs:['social','natural'] },
+    { text:t('understand.mock.disc.9'),  answer:t('understand.answer.unsure'),     discs:['natural'] },
+    { text:t('understand.mock.disc.10'), answer:t('understand.answer.agree'),      discs:['humanities','social','natural'] },
+  ];}
+  function mockDiscs(){ return [
+    { name:t('disc.name.xh'), match:95, color:discColor('xh'), id:'social' },
+    { name:t('disc.name.nv'), match:80, color:discColor('nv'), id:'humanities' },
+    { name:t('disc.name.tn'), match:60, color:discColor('tn'), id:'natural' },
+  ];}
+
+  function mockMajorAssertions(){ return [
+    { text:t('understand.mock.major.1'), answer:t('understand.answer.absolutely'), discs:['se'] },
+    { text:t('understand.mock.major.2'), answer:t('understand.answer.agree'),      discs:['psych'] },
+    { text:t('understand.mock.major.3'), answer:t('understand.answer.agree'),      discs:['envsci'] },
+    { text:t('understand.mock.major.4'), answer:t('understand.answer.agree'),      discs:['se','psych'] },
+    { text:t('understand.mock.major.5'), answer:t('understand.answer.agree'),      discs:['se','envsci'] },
+    { text:t('understand.mock.major.6'), answer:t('understand.answer.absolutely'), discs:['psych','envsci'] },
+    { text:t('understand.mock.major.7'), answer:t('understand.answer.agree'),      discs:['se','psych','envsci'] },
+    { text:t('understand.mock.major.8'), answer:t('understand.answer.absolutely'), discs:['se'] },
+    { text:t('understand.mock.major.9'), answer:t('understand.answer.agree'),      discs:['psych'] },
+  ];}
+  function mockMajors(){ return [
+    { name:t('understand.major.kt'), match:91, color:discColor('kt'), id:'se' },
+    { name:t('understand.major.xh'), match:76, color:discColor('xh'), id:'psych' },
+    { name:t('understand.major.nn'), match:58, color:discColor('nn'), id:'envsci' },
+  ];}
+
+  function mockUniAssertions(){ return [
+    { text:t('understand.mock.uni.1'), answer:t('understand.answer.agree'),      discs:['nus'] },
+    { text:t('understand.mock.uni.2'), answer:t('understand.answer.absolutely'), discs:['unimelb'] },
+    { text:t('understand.mock.uni.3'), answer:t('understand.answer.agree'),      discs:['uoft'] },
+    { text:t('understand.mock.uni.4'), answer:t('understand.answer.agree'),      discs:['nus','unimelb'] },
+    { text:t('understand.mock.uni.5'), answer:t('understand.answer.agree'),      discs:['nus','uoft'] },
+    { text:t('understand.mock.uni.6'), answer:t('understand.answer.agree'),      discs:['unimelb','uoft'] },
+  ];}
+  function mockUnis(){ return [
+    { name:t('understand.uni.kt'), match:88, color:discColor('kt'), id:'nus' },
+    { name:t('understand.uni.xh'), match:74, color:discColor('xh'), id:'unimelb' },
+    { name:t('understand.uni.nn'), match:61, color:discColor('nn'), id:'uoft' },
+  ];}
+
+  /* ══════════════════════════════════════════════════════════
+     REAL DATA — derived from the live quiz engine when present.
+     (1:1 with mobile.) The quiz stores one discipline code per
+     answered question; each code maps to a flagship major/uni so
+     real answers flow Disciplines → Majors → Universities using the
+     same id (placement/legend never needs to know the "lens").
+  ═══════════════════════════════════════════════════════════ */
+  function DISC_META(){ return {
+    kt:{ name:t('disc.name.kt'), color:discColor('kt') },
+    xh:{ name:t('disc.name.xh'), color:discColor('xh') },
+    tn:{ name:t('disc.name.tn'), color:discColor('tn') },
+    nv:{ name:t('disc.name.nv'), color:discColor('nv') },
+    yt:{ name:t('disc.name.yt'), color:discColor('yt') },
+    nn:{ name:t('disc.name.nn'), color:discColor('nn') },
+  };}
+  function MAJOR_META(){ return {
+    kt:{ name:t('understand.major.kt') }, xh:{ name:t('understand.major.xh') }, tn:{ name:t('understand.major.tn') },
+    nv:{ name:t('understand.major.nv') }, yt:{ name:t('understand.major.yt') }, nn:{ name:t('understand.major.nn') },
+  };}
+  function UNI_META(){ return {
+    kt:{ name:t('understand.uni.kt') }, xh:{ name:t('understand.uni.xh') }, tn:{ name:t('understand.uni.tn') },
+    nv:{ name:t('understand.uni.nv') }, yt:{ name:t('understand.uni.yt') }, nn:{ name:t('understand.uni.nn') },
+  };}
+
+  /* Question bank mirrored from quiz-card. `discs` adds each question's
+     genuine secondary/related discipline (content-based) purely for Venn
+     placement so real answers can land in intersections. */
+  var QUESTIONS_BY_IDX = [
+    {discs:['kt','tn'],text:'I enjoy solving problems through data analysis.',
+      vi:'Tôi thích giải quyết vấn đề thông qua phân tích dữ liệu.',
+      fr:"J'aime résoudre des problèmes par l'analyse de données.",
+      hi:'मुझे डेटा विश्लेषण के माध्यम से समस्याओं को हल करने में आनंद आता है।',
+      ar:'أستمتع بحل المشكلات من خلال تحليل البيانات.'},
+    {discs:['nv'],     text:'I am passionate about literature and creative writing.',
+      vi:'Tôi đam mê văn học và sáng tác.',
+      fr:'Je suis passionné par la littérature et l\'écriture créative.',
+      hi:'मैं साहित्य और रचनात्मक लेखन के प्रति जुनूनी हूं।',
+      ar:'أنا شغوف بالأدب والكتابة الإبداعية.'},
+    {discs:['yt','tn'],text:'I am interested in healthcare and medical research.',
+      vi:'Tôi quan tâm đến chăm sóc sức khỏe và nghiên cứu y học.',
+      fr:'Je m\'intéresse aux soins de santé et à la recherche médicale.',
+      hi:'मुझे स्वास्थ्य देखभाल और चिकित्सा अनुसंधान में रुचि है।',
+      ar:'أنا مهتم بالرعاية الصحية والبحث الطبي.'},
+    {discs:['kt'],     text:'I enjoy working with data and building software solutions.',
+      vi:'Tôi thích làm việc với dữ liệu và xây dựng các giải pháp phần mềm.',
+      fr:'J\'aime travailler avec des données et créer des solutions logicielles.',
+      hi:'मुझे डेटा के साथ काम करना और सॉफ्टवेयर समाधान बनाना पसंद है।',
+      ar:'أستمتع بالعمل مع البيانات وبناء الحلول البرمجية.'},
+    {discs:['xh','nv'],text:'I am curious about human behavior and social structures.',
+      vi:'Tôi tò mò về hành vi con người và cấu trúc xã hội.',
+      fr:'Je suis curieux du comportement humain et des structures sociales.',
+      hi:'मैं मानव व्यवहार और सामाजिक संरचनाओं के बारे में जिज्ञासु हूं।',
+      ar:'أنا فضولي بشأن السلوك البشري والهياكل الاجتماعية.'},
+    {discs:['nn','tn'],text:'Protecting the environment and promoting sustainable development is my priority.',
+      vi:'Bảo vệ môi trường và thúc đẩy phát triển bền vững là ưu tiên của tôi.',
+      fr:'Protéger l\'environnement et promouvoir le développement durable est ma priorité.',
+      hi:'पर्यावरण की रक्षा करना और सतत विकास को बढ़ावा देना मेरी प्राथमिकता है।',
+      ar:'حماية البيئة وتعزيز التنمية المستدامة هي أولويتي.'},
+    {discs:['tn'],     text:'I love conducting experiments and exploring natural laws.',
+      vi:'Tôi thích thực hiện thí nghiệm và khám phá các quy luật tự nhiên.',
+      fr:'J\'aime mener des expériences et explorer les lois naturelles.',
+      hi:'मुझे प्रयोग करना और प्राकृतिक नियमों की खोज करना पसंद है।',
+      ar:'أحب إجراء التجارب واستكشاف القوانين الطبيعية.'},
+    {discs:['nv','xh'],text:'Historical research helps me understand the current world better.',
+      vi:'Nghiên cứu lịch sử giúp tôi hiểu thế giới hiện tại tốt hơn.',
+      fr:'La recherche historique m\'aide à mieux comprendre le monde actuel.',
+      hi:'ऐतिहासिक शोध मुझे वर्तमान दुनिया को बेहतर ढंग से समझने में मदद करता है।',
+      ar:'يساعدني البحث التاريخي على فهم العالم الحالي بشكل أفضل.'},
+    {discs:['yt'],     text:'Caring for and helping patients is the most meaningful work for me.',
+      vi:'Chăm sóc và giúp đỡ bệnh nhân là công việc có ý nghĩa nhất với tôi.',
+      fr:'Soigner et aider les patients est le travail le plus significatif pour moi.',
+      hi:'रोगियों की देखभाल करना और उनकी मदद करना मेरे लिए सबसे अर्थपूर्ण काम है।',
+      ar:'رعاية المرضى ومساعدتهم هو أكثر عمل ذي معنى بالنسبة لي.'},
+    {discs:['kt'],     text:'I like designing systems and optimizing processes.',
+      vi:'Tôi thích thiết kế hệ thống và tối ưu hóa quy trình.',
+      fr:'J\'aime concevoir des systèmes et optimiser les processus.',
+      hi:'मुझे सिस्टम डिजाइन करना और प्रक्रियाओं को अनुकूलित करना पसंद है।',
+      ar:'أحب تصميم الأنظمة وتحسين العمليات.'},
+    {discs:['xh','nv'],text:'Working in teams and driving community development is my strength.',
+      vi:'Làm việc nhóm và thúc đẩy sự phát triển cộng đồng là thế mạnh của tôi.',
+      fr:'Travailler en équipe et stimuler le développement communautaire est mon point fort.',
+      hi:'टीमों में काम करना और सामुदायिक विकास को बढ़ावा देना मेरी ताकत है।',
+      ar:'العمل في فرق ودفع التنمية المجتمعية هي نقطة قوتي.'},
+    {discs:['nn','tn'],text:'Biotechnology in agriculture is very appealing to me.',
+      vi:'Công nghệ sinh học trong nông nghiệp rất hấp dẫn đối với tôi.',
+      fr:'La biotechnologie en agriculture m\'attire beaucoup.',
+      hi:'कृषि में जैव प्रौद्योगिकी मुझे बहुत आकर्षक लगती है।',
+      ar:'التكنولوجيا الحيوية في الزراعة جذابة جداً بالنسبة لي.'},
+    {discs:['tn','kt'],text:'Mathematics and physics are subjects I always find joy in.',
+      vi:'Toán học và vật lý là những môn tôi luôn tìm thấy niềm vui.',
+      fr:'Les mathématiques et la physique sont des matières qui me passionnent toujours.',
+      hi:'गणित और भौतिकी ऐसे विषय हैं जिनमें मुझे हमेशा आनंद मिलता है।',
+      ar:'الرياضيات والفيزياء مواد دائماً ما أجد فيها متعة.'},
+    {discs:['nv','xh'],text:'Teaching and sharing knowledge with others is my passion.',
+      vi:'Giảng dạy và chia sẻ kiến thức với người khác là đam mê của tôi.',
+      fr:'Enseigner et partager mes connaissances avec les autres est ma passion.',
+      hi:'दूसरों को पढ़ाना और ज्ञान साझा करना मेरा जुनून है।',
+      ar:'التدريس ومشاركة المعرفة مع الآخرين هو شغفي.'},
+    {discs:['kt','tn'],text:'I am interested in artificial intelligence and automation.',
+      vi:'Tôi quan tâm đến trí tuệ nhân tạo và tự động hóa.',
+      fr:'Je m\'intéresse à l\'intelligence artificielle et à l\'automatisation.',
+      hi:'मुझे कृत्रिम बुद्धिमत्ता और स्वचालन में रुचि है।',
+      ar:'أنا مهتم بالذكاء الاصطناعي والأتمتة.'},
+    {discs:['xh','nv'],text:'I want to participate in building public policies.',
+      vi:'Tôi muốn tham gia xây dựng các chính sách công.',
+      fr:'Je veux participer à l\'élaboration des politiques publiques.',
+      hi:'मैं सार्वजनिक नीतियों के निर्माण में भाग लेना चाहता हूं।',
+      ar:'أريد المشاركة في بناء السياسات العامة.'},
+    {discs:['yt','tn'],text:'Drug research and pharmaceutical formulation attract me.',
+      vi:'Nghiên cứu thuốc và bào chế dược phẩm thu hút tôi.',
+      fr:'La recherche sur les médicaments et la formulation pharmaceutique m\'attirent.',
+      hi:'दवा अनुसंधान और फार्मास्युटिकल फॉर्मूलेशन मुझे आकर्षित करते हैं।',
+      ar:'أبحاث الأدوية والتركيب الصيدلاني تجذبني.'},
+    {discs:['nn'],     text:'I prefer working outdoors and near nature over working in an office.',
+      vi:'Tôi thích làm việc ngoài trời và gần thiên nhiên hơn là làm việc trong văn phòng.',
+      fr:'Je préfère travailler en plein air et près de la nature plutôt que dans un bureau.',
+      hi:'मैं कार्यालय में काम करने के बजाय बाहर और प्रकृति के पास काम करना पसंद करता हूं।',
+      ar:'أفضل العمل في الهواء الطلق وقريباً من الطبيعة على العمل في مكتب.'},
+    {discs:['tn','yt'],text:'Chemistry and molecular biology are fields I want to explore deeply.',
+      vi:'Hóa học và sinh học phân tử là những lĩnh vực tôi muốn khám phá sâu.',
+      fr:'La chimie et la biologie moléculaire sont des domaines que je veux approfondir.',
+      hi:'रसायन विज्ञान और आणविक जीव विज्ञान ऐसे क्षेत्र हैं जिन्हें मैं गहराई से खोजना चाहता हूं।',
+      ar:'الكيمياء والأحياء الجزيئية مجالات أريد استكشافها بعمق.'},
+    {discs:['nv'],     text:'Creating, writing, and storytelling is how I express myself.',
+      vi:'Sáng tạo, viết lách và kể chuyện là cách tôi thể hiện bản thân.',
+      fr:'Créer, écrire et raconter des histoires est ma façon de m\'exprimer.',
+      hi:'बनाना, लिखना और कहानी सुनाना मेरी आत्म-अभिव्यक्ति का तरीका है।',
+      ar:'الإبداع والكتابة ورواية القصص هي طريقتي في التعبير عن نفسي.'},
+    {discs:['kt'],     text:'Information security and network protection are areas I want to specialize in.',
+      vi:'An toàn thông tin và bảo vệ mạng là lĩnh vực tôi muốn chuyên sâu.',
+      fr:'La sécurité de l\'information et la protection des réseaux sont des domaines dans lesquels je veux me spécialiser.',
+      hi:'सूचना सुरक्षा और नेटवर्क सुरक्षा ऐसे क्षेत्र हैं जिनमें मैं विशेषज्ञता प्राप्त करना चाहता हूं।',
+      ar:'أمن المعلومات وحماية الشبكات مجالات أريد التخصص فيها.'},
+    {discs:['xh','nn'],text:'Economics helps me understand why some countries prosper while others fail.',
+      vi:'Kinh tế học giúp tôi hiểu tại sao một số quốc gia phát triển trong khi những nước khác thất bại.',
+      fr:'L\'économie m\'aide à comprendre pourquoi certains pays prospèrent pendant que d\'autres échouent.',
+      hi:'अर्थशास्त्र मुझे यह समझने में मदद करता है कि कुछ देश समृद्ध क्यों होते हैं जबकि अन्य विफल होते हैं।',
+      ar:'الاقتصاد يساعدني على فهم سبب ازدهار بعض البلدان بينما يفشل البعض الآخر.'},
+    {discs:['nn','yt'],text:'I am concerned about how to produce safe food for millions of people.',
+      vi:'Tôi quan tâm đến việc sản xuất thực phẩm an toàn cho hàng triệu người.',
+      fr:'Je me préoccupe de la façon de produire des aliments sûrs pour des millions de personnes.',
+      hi:'मुझे लाखों लोगों के लिए सुरक्षित भोजन कैसे उत्पादित किया जाए इसकी चिंता है।',
+      ar:'أنا قلق بشأن كيفية إنتاج الغذاء الآمن لملايين الناس.'},
+    {discs:['yt','tn'],text:'Rehabilitation and sports medicine are fields I am drawn to.',
+      vi:'Phục hồi chức năng và y học thể thao là những lĩnh vực thu hút tôi.',
+      fr:'La rééducation et la médecine du sport sont des domaines qui m\'attirent.',
+      hi:'पुनर्वास और खेल चिकित्सा ऐसे क्षेत्र हैं जो मुझे आकर्षित करते हैं।',
+      ar:'إعادة التأهيل والطب الرياضي مجالات أنجذب إليها.'},
+    {discs:['tn','kt'],text:'I am interested in space exploration and astronomy.',
+      vi:'Tôi quan tâm đến khám phá không gian và thiên văn học.',
+      fr:'Je m\'intéresse à l\'exploration spatiale et à l\'astronomie.',
+      hi:'मुझे अंतरिक्ष अन्वेषण और खगोल विज्ञान में रुचि है।',
+      ar:'أنا مهتم باستكشاف الفضاء وعلم الفلك.'},
+    {discs:['nv','xh'],text:'I am passionate about law and protecting human rights.',
+      vi:'Tôi đam mê luật pháp và bảo vệ quyền con người.',
+      fr:'Je suis passionné par le droit et la protection des droits humains.',
+      hi:'मैं कानून और मानवाधिकारों की रक्षा के प्रति जुनूनी हूं।',
+      ar:'أنا شغوف بالقانون وحماية حقوق الإنسان.'},
+    {discs:['kt'],     text:'Electronics, microchips, and hardware are as fascinating to me as software.',
+      vi:'Điện tử, vi mạch và phần cứng cũng hấp dẫn tôi không kém phần mềm.',
+      fr:'L\'électronique, les micropuces et le matériel informatique me fascinent autant que les logiciels.',
+      hi:'इलेक्ट्रॉनिक्स, माइक्रोचिप्स और हार्डवेयर मुझे सॉफ्टवेयर जितना ही आकर्षक लगते हैं।',
+      ar:'الإلكترونيات والرقائق الدقيقة والأجهزة تبهرني بقدر ما يبهرني البرمجيات.'},
+    {discs:['xh','yt'],text:'Psychology and understanding human behavior are what I am passionate about.',
+      vi:'Tâm lý học và hiểu hành vi con người là điều tôi đam mê.',
+      fr:'La psychologie et la compréhension du comportement humain sont ce qui me passionne.',
+      hi:'मनोविज्ञान और मानव व्यवहार को समझना मेरे जुनून हैं।',
+      ar:'علم النفس وفهم السلوك البشري هو ما أنا شغوف به.'},
+    {discs:['nn','tn'],text:'Forests, oceans, and ecosystems need to be preserved — I want to be someone who works towards that.',
+      vi:'Rừng, đại dương và hệ sinh thái cần được bảo tồn — tôi muốn là người làm việc hướng tới điều đó.',
+      fr:'Les forêts, les océans et les écosystèmes doivent être préservés — je veux être quelqu\'un qui y contribue.',
+      hi:'जंगलों, महासागरों और पारिस्थितिक तंत्रों को संरक्षित करने की जरूरत है — मैं उस दिशा में काम करने वाला बनना चाहता हूं।',
+      ar:'الغابات والمحيطات والأنظمة البيئية تحتاج إلى الحفاظ عليها — أريد أن أكون شخصاً يعمل نحو ذلك.'},
+    {discs:['tn','kt'],text:'New materials and nanotechnology will change the way we live — I want to contribute to that.',
+      vi:'Vật liệu mới và công nghệ nano sẽ thay đổi cách chúng ta sống — tôi muốn đóng góp vào điều đó.',
+      fr:'Les nouveaux matériaux et les nanotechnologies changeront notre façon de vivre — je veux y contribuer.',
+      hi:'नई सामग्री और नैनोटेक्नोलॉजी जीने का तरीका बदल देगी — मैं उसमें योगदान देना चाहता हूं।',
+      ar:'المواد الجديدة وتقنية النانو ستغير طريقة حياتنا — أريد المساهمة في ذلك.'},
+  ];
+
+  function questionText(q){
+    var lang = document.documentElement.getAttribute('data-lang') || 'en';
+    return (lang !== 'en' && q[lang]) ? q[lang] : q.text;
+  }
+  function normalizeAnswer(answer, direction){
+    if (typeof answer === 'string' && /^(ABSOLUTELY|AGREE|UNSURE|DISAGREE|ANSWERED)$/i.test(answer)){
+      return t('understand.answer.' + answer.toLowerCase());
+    }
+    if (typeof answer === 'string' && /[a-zA-Z]/.test(answer)) return answer.toUpperCase();
+    if (direction === 'right') return t('understand.answer.agree');
+    if (direction === 'left')  return t('understand.answer.disagree');
+    return t('understand.answer.answered');
+  }
+
+  function loadRealTop3(meta){
+    try{
+      var dna = JSON.parse(sessionStorage.getItem('bd_dna') || 'null');
+      if (dna && Object.keys(dna).some(function(k){ return dna[k] > 0; })){
+        var total = Object.keys(dna).reduce(function(s,k){ return s + (dna[k]||0); }, 0) || 1;
+        var arr = Object.keys(dna).map(function(k){
+          var m = meta[k] || { name:k };
+          var color = (DISC_META()[k] || {}).color || OTHER_COLOR;
+          return { id:k, name:m.name, color:color, match:Math.round((dna[k]||0)/total*100) };
+        }).sort(function(a,b){ return b.match - a.match; });
+        if (arr.length >= 3) return arr.slice(0,3);
+      }
+    }catch(e){}
+    return null;
+  }
+  function loadRealAssertions(){
+    try{
+      var raw = localStorage.getItem('bd-quiz-progress');
+      if (raw){
+        var saved = JSON.parse(raw);
+        if (saved && saved.answers && saved.answers.length){
+          return saved.answers.map(function(a, i){
+            var q = QUESTIONS_BY_IDX[a.qIndex];
+            var discs = (q && q.discs) ? q.discs.slice() : [];
+            if (discs.indexOf(a.disc) === -1) discs.push(a.disc);
+            return { text: q ? questionText(q) : ('Assertion #' + (i + 1)), answer: normalizeAnswer(a.answer, a.direction), discs: discs };
+          });
+        }
+      }
+    }catch(e){}
+    return null;
+  }
+  function loadDisciplines(){
+    try{ var raw = localStorage.getItem('discResults'); if (raw){ var arr = JSON.parse(raw); if (Array.isArray(arr) && arr.length >= 3) return { top3:arr.slice(0,3), real:true }; } }catch(e){}
+    var d = loadRealTop3(DISC_META()); if (d) return { top3:d, real:true }; return { top3:mockDiscs(), real:false };
+  }
+  function loadMajors(){
+    try{ var raw = localStorage.getItem('majorResults'); if (raw){ var arr = JSON.parse(raw); if (Array.isArray(arr) && arr.length >= 3) return { top3:arr.slice(0,3), real:true }; } }catch(e){}
+    var d = loadRealTop3(MAJOR_META()); if (d) return { top3:d, real:true }; return { top3:mockMajors(), real:false };
+  }
+  function loadUniversities(){
+    try{ var raw = localStorage.getItem('uniResults'); if (raw){ var arr = JSON.parse(raw); if (Array.isArray(arr) && arr.length >= 3) return { top3:arr.slice(0,3), real:true }; } }catch(e){}
+    var d = loadRealTop3(UNI_META()); if (d) return { top3:d, real:true }; return { top3:mockUnis(), real:false };
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     VENN GEOMETRY — 1:1 with mobile
+  ═══════════════════════════════════════════════════════════ */
+  var CIRCLES = { 1:{cx:120,cy:150,r:88}, 2:{cx:200,cy:150,r:88}, 3:{cx:160,cy:230,r:88} };
+  var REGION_CENTROID = {
+    '1':{x:72,y:123}, '2':{x:248,y:123}, '4':{x:160,y:290},
+    '3':{x:160,y:127}, '5':{x:108,y:210}, '6':{x:212,y:210}, '7':{x:160,y:193}
+  };
+  var OTHER_BOX = { x1:40, y1:380, x2:280, y2:452 };
+  var OTHER_COLOR = '#8B93A6';
+
+  function hexToRgb(str){
+    if (str.charAt(0) === '#'){ var c = str.replace('#',''); return { r:parseInt(c.substring(0,2),16), g:parseInt(c.substring(2,4),16), b:parseInt(c.substring(4,6),16) }; }
+    var m = str.match(/rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)/);
+    return m ? { r:+m[1], g:+m[2], b:+m[3] } : { r:139, g:147, b:166 };
+  }
+  function blendColors(colors){
+    if (colors.length === 1) return colors[0];
+    var sum = colors.reduce(function(acc, str){ var c = hexToRgb(str); return { r:acc.r+c.r, g:acc.g+c.g, b:acc.b+c.b }; }, {r:0,g:0,b:0});
+    var n = colors.length;
+    return 'rgb(' + Math.round(sum.r/n) + ',' + Math.round(sum.g/n) + ',' + Math.round(sum.b/n) + ')';
+  }
+  function mixHex(hex, targetHex, amt){
+    var c = hexToRgb(hex), tg = hexToRgb(targetHex);
+    return 'rgb(' + Math.round(c.r+(tg.r-c.r)*amt) + ',' + Math.round(c.g+(tg.g-c.g)*amt) + ',' + Math.round(c.b+(tg.b-c.b)*amt) + ')';
+  }
+  function darkenHex(hex, amt){ var c = hexToRgb(hex); return 'rgb(' + Math.round(c.r*(1-amt)) + ',' + Math.round(c.g*(1-amt)) + ',' + Math.round(c.b*(1-amt)) + ')'; }
+
+  function wrapLabel(name, maxLen){
+    if (name.length <= maxLen) return [name];
+    var mid = Math.floor(name.length/2), splitIdx = -1, best = Infinity;
+    for (var i = 0; i < name.length; i++){ if (name[i] === ' '){ var d = Math.abs(i-mid); if (d < best){ best = d; splitIdx = i; } } }
+    return splitIdx === -1 ? [name] : [name.slice(0, splitIdx), name.slice(splitIdx + 1)];
+  }
+  function labelBlockSvg(x, yTop, name, matchPct, color, maxLen, pctColor, pctId){
+    pctColor = pctColor || 'rgba(255,255,255,.75)';
+    var lines = wrapLabel(name, maxLen);
+    var svg = lines.map(function(line, i){
+      return '<text x="' + x + '" y="' + (yTop + i*12) + '" text-anchor="middle" font-size="10" font-weight="800" fill="' + color + '" font-family="Plus Jakarta Sans, sans-serif">' + escapeHtml(line) + '</text>';
+    }).join('');
+    var pctY = yTop + lines.length*12 + 2;
+    svg += '<text' + (pctId ? ' id="' + pctId + '"' : '') + ' x="' + x + '" y="' + pctY + '" text-anchor="middle" font-size="9" font-weight="700" fill="' + pctColor + '" font-family="Plus Jakarta Sans, sans-serif">' + matchPct + '% match</text>';
+    return { svg: svg, bottomY: pctY };
+  }
+  /* Counts a percentage label up from 0 → target so it reads as the AI
+     actively computing the match, not a static number dropped on screen. */
+  function animatePercent(id, target){
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ el.textContent = target + '% match'; return; }
+    var start = null, dur = 700;
+    function tick(ts){
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + '% match';
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  function mulberry32(seed){
+    return function(){ seed |= 0; seed = (seed + 0x6D2B79F5) | 0; var x = Math.imul(seed ^ (seed >>> 15), 1 | seed); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
+  }
+  function dist(a,b){ return Math.hypot(a.x-b.cx, a.y-b.cy); }
+  var DOT_R = 15;
+  function placeDot(mask, seedIndex){
+    var centroid = REGION_CENTROID[String(mask)] || REGION_CENTROID['7'];
+    var rng = mulberry32(seedIndex * 9301 + 49297);
+    var need = { 1: !!(mask & 1), 2: !!(mask & 2), 3: !!(mask & 4) };
+    for (var i = 0; i < 60; i++){
+      var ang = rng() * Math.PI * 2, rad = rng() * 34;
+      var p = { x: centroid.x + Math.cos(ang) * rad, y: centroid.y + Math.sin(ang) * rad };
+      var ok = true;
+      [1,2,3].forEach(function(k){ var c = CIRCLES[k]; if (need[k]) { if (dist(p,c) > c.r - DOT_R) ok = false; } else { if (dist(p,c) < c.r + DOT_R - 6) ok = false; } });
+      if (ok) return p;
+    }
+    return centroid;
+  }
+  function placeOtherDot(seedIndex, placed){
+    var rng = mulberry32(seedIndex * 7919 + 104729);
+    var x0 = OTHER_BOX.x1 + DOT_R + 5, x1 = OTHER_BOX.x2 - DOT_R - 5;
+    var y0 = OTHER_BOX.y1 + 28, y1 = OTHER_BOX.y2 - DOT_R - 2;
+    var best = null, bestMinDist = -1;
+    for (var i = 0; i < 30; i++){
+      var p = { x: x0 + rng() * (x1 - x0), y: y0 + rng() * (y1 - y0) };
+      var minDist = placed.reduce(function(m, q){ return Math.min(m, Math.hypot(p.x - q.x, p.y - q.y)); }, Infinity);
+      if (minDist >= DOT_R * 2 + 6) return p;
+      if (minDist > bestMinDist){ bestMinDist = minDist; best = p; }
+    }
+    return best || { x:(x0 + x1) / 2, y:(y0 + y1) / 2 };
+  }
+  function discMaskFor(assertionDiscs, top3Ids){
+    var mask = 0;
+    if (assertionDiscs.indexOf(top3Ids[0]) !== -1) mask |= 1;
+    if (assertionDiscs.indexOf(top3Ids[1]) !== -1) mask |= 2;
+    if (assertionDiscs.indexOf(top3Ids[2]) !== -1) mask |= 4;
+    return mask;
+  }
+  function colorForMask(mask, top3){
+    if (mask === 0) return OTHER_COLOR;
+    var colors = [];
+    if (mask & 1) colors.push(top3[0].color);
+    if (mask & 2) colors.push(top3[1].color);
+    if (mask & 4) colors.push(top3[2].color);
+    return blendColors(colors);
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     NARRATIVE — the "storytelling" layer (template bank).
+     Each dot's mask + answer maps to a short, warm, second-person
+     explanation, filled with the actual discipline names. This is the
+     shippable stand-in for a future LLM: the interaction shell (2-tier
+     tooltip, type-in reveal) stays identical when the text source swaps
+     to real AI-generated copy cached per user.
+  ═══════════════════════════════════════════════════════════ */
+  function namesFromMask(mask, top3){
+    var out = [];
+    if (mask & 1) out.push(top3[0].name);
+    if (mask & 2) out.push(top3[1].name);
+    if (mask & 4) out.push(top3[2].name);
+    return out;
+  }
+  function strengthOf(answer){
+    if (answer === t('understand.answer.absolutely')) return 'strong';
+    if (answer === t('understand.answer.unsure'))     return 'weak';
+    if (answer === t('understand.answer.disagree'))   return 'against';
+    return 'agree';
+  }
+  function buildNarrative(mask, answer, top3){
+    var names = namesFromMask(mask, top3);
+    var verdict = t('understand.narr.verdict.' + strengthOf(answer));
+    var story;
+    if (mask === 0)            story = t('understand.narr.other');
+    else if (names.length === 1) story = t('understand.narr.single').replace('{a}', names[0]);
+    else if (names.length === 2) story = t('understand.narr.pair').replace('{a}', names[0]).replace('{b}', names[1]);
+    else                       story = t('understand.narr.triple').replace('{a}', names[0]).replace('{b}', names[1]).replace('{c}', names[2]);
+    return { verdict: verdict, story: story };
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     RENDER — one tab: Venn (left) + assertions list (right)
+  ═══════════════════════════════════════════════════════════ */
+  var ZOOM = {};
+  var PAN = {};
+  function renderVennTab(tabKey, top3, assertions){
+    var uid = tabKey;
+    var c1 = CIRCLES[1], c2 = CIRCLES[2], c3 = CIRCLES[3];
+    var top3Ids = [top3[0].id, top3[1].id, top3[2].id];
+    var hasOther = assertions.some(function(a){ return discMaskFor(a.discs, top3Ids) === 0; });
+    var otherPlaced = [];
+
+    var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    var cardIsLight = !isLight;   /* spotlight card is inverted from page */
+
+    var dotData = assertions.map(function(a, i){
+      var mask = discMaskFor(a.discs, top3Ids);
+      var p = (mask === 0) ? placeOtherDot(i + 1, otherPlaced) : placeDot(mask, i + 1);
+      if (mask === 0) otherPlaced.push(p);
+      var narr = buildNarrative(mask, a.answer, top3);
+      return { p:p, color: colorForMask(mask, top3), text:a.text, answer:a.answer, mask:mask, verdict:narr.verdict, story:narr.story };
+    });
+    var uniqueColors = [];
+    dotData.forEach(function(d){ if (uniqueColors.indexOf(d.color) === -1) uniqueColors.push(d.color); });
+
+    var gradDefs = uniqueColors.map(function(c, idx){
+      if (cardIsLight){
+        return '<linearGradient id="dotGrad-' + uid + '-' + idx + '" x1="25%" y1="0%" x2="75%" y2="100%">'
+          + '<stop offset="0%" stop-color="' + mixHex(c, '#F3EFFF', 0.50) + '"/>'
+          + '<stop offset="32%" stop-color="' + c + '"/>'
+          + '<stop offset="100%" stop-color="' + darkenHex(c, 0.30) + '"/></linearGradient>';
+      }
+      return '<radialGradient id="dotGrad-' + uid + '-' + idx + '" cx="32%" cy="28%" r="80%">'
+        + '<stop offset="0%" stop-color="' + mixHex(c, '#EAF2FF', 0.35) + '"/>'
+        + '<stop offset="26%" stop-color="' + c + '"/>'
+        + '<stop offset="100%" stop-color="' + darkenHex(c, 0.24) + '"/></radialGradient>';
+    }).join('');
+    var defsSvg = '<defs>' + gradDefs
+      + '<filter id="dotGlow-' + uid + '" x="-70%" y="-70%" width="240%" height="240%">'
+      + '<feGaussianBlur stdDeviation="' + (cardIsLight ? '1.6' : '2.4') + '" result="b"/>'
+      + '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
+
+    function gradIdFor(color){ var idx = uniqueColors.indexOf(color); return 'dotGrad-' + uid + '-' + (idx === -1 ? 0 : idx); }
+
+    var dotRing         = cardIsLight ? 'rgba(30,21,51,.75)'    : 'rgba(224,234,255,.85)';
+    var dotNumber       = cardIsLight ? '#1E1533'              : '#ffffff';
+    var dotNumberOutline = cardIsLight ? 'rgba(255,255,255,.60)' : 'rgba(10,10,20,.55)';
+
+    var dotsSvg = dotData.map(function(d, i){
+      var p = d.p, color = d.color;
+      var fleck = cardIsLight ? '<ellipse cx="' + (p.x - 4.2).toFixed(1) + '" cy="' + (p.y - 5.2).toFixed(1) + '" rx="3.8" ry="2.3" fill="rgba(255,255,255,.70)"></ellipse>' : '';
+      return '<g class="venn-dot" data-idx="' + i + '" data-tab="' + uid + '">'
+        + '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + (DOT_R + 2) + '" fill="rgba(0,0,0,.30)"></circle>'
+        + '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + DOT_R + '" fill="url(#' + gradIdFor(color) + ')" filter="url(#dotGlow-' + uid + ')"></circle>'
+        + '<circle cx="' + p.x.toFixed(1) + '" cy="' + p.y.toFixed(1) + '" r="' + DOT_R + '" fill="none" stroke="' + dotRing + '" stroke-width="1.8"></circle>'
+        + fleck
+        + '<text x="' + p.x.toFixed(1) + '" y="' + (p.y + 4.5).toFixed(1) + '" text-anchor="middle" font-size="12" font-weight="800" fill="' + dotNumber + '" stroke="' + dotNumberOutline + '" stroke-width="2.5" paint-order="stroke fill" font-family="Plus Jakarta Sans, sans-serif">' + (i + 1) + '</text>'
+        + '</g>';
+    }).join('');
+
+    var otherBoxFill   = cardIsLight ? 'rgba(30,21,51,0.05)' : 'rgba(255,255,255,0.03)';
+    var otherBoxStroke = cardIsLight ? 'rgba(30,21,51,0.28)' : 'rgba(255,255,255,0.18)';
+    var otherBoxLabel  = cardIsLight ? 'rgba(30,21,51,.60)'  : 'rgba(255,255,255,.45)';
+    var otherBoxSvg = !hasOther ? '' : ''
+      + '<rect x="' + OTHER_BOX.x1 + '" y="' + OTHER_BOX.y1 + '" width="' + (OTHER_BOX.x2 - OTHER_BOX.x1) + '" height="' + (OTHER_BOX.y2 - OTHER_BOX.y1) + '" rx="10" fill="' + otherBoxFill + '" stroke="' + otherBoxStroke + '" stroke-width="1" stroke-dasharray="4 3"></rect>'
+      + '<text x="160" y="' + (OTHER_BOX.y1 + 15) + '" text-anchor="middle" font-size="9" font-weight="800" letter-spacing="1" fill="' + otherBoxLabel + '" font-family="Plus Jakarta Sans, sans-serif">' + escapeHtml(t('understand.other_label').toUpperCase()) + '</text>';
+
+    var viewH = hasOther ? (OTHER_BOX.y2 + 14) : 378;
+
+    var TOP_LABEL_SHIFT = 20;
+    var pctColor = cardIsLight ? 'rgba(30,21,51,.72)' : 'rgba(255,255,255,.75)';
+    function labelTextColor(hex){ return cardIsLight ? darkenHex(hex, 0.38) : hex; }
+    var label1 = labelBlockSvg(c1.cx - TOP_LABEL_SHIFT, 16, top3[0].name, 0, labelTextColor(top3[0].color), 14, pctColor, 'pct-' + uid + '-0');
+    var label2 = labelBlockSvg(c2.cx + TOP_LABEL_SHIFT, 16, top3[1].name, 0, labelTextColor(top3[1].color), 14, pctColor, 'pct-' + uid + '-1');
+    var label3 = labelBlockSvg(c3.cx, c3.cy + c3.r + 20, top3[2].name, 0, labelTextColor(top3[2].color), 22, pctColor, 'pct-' + uid + '-2');
+
+    var circleFillOp   = cardIsLight ? '0.42' : '0.30';
+    var circleStrokeOp = cardIsLight ? '0.65' : '0.55';
+
+    var svg = '<svg viewBox="0 0 320 ' + viewH + '" xmlns="http://www.w3.org/2000/svg">'
+      + defsSvg
+      + '<circle class="venn-circle" id="vennCircle-' + uid + '-1" cx="' + c1.cx + '" cy="' + c1.cy + '" r="' + c1.r + '" fill="' + top3[0].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[0].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
+      + '<circle class="venn-circle" id="vennCircle-' + uid + '-2" cx="' + c2.cx + '" cy="' + c2.cy + '" r="' + c2.r + '" fill="' + top3[1].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[1].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
+      + '<circle class="venn-circle" id="vennCircle-' + uid + '-3" cx="' + c3.cx + '" cy="' + c3.cy + '" r="' + c3.r + '" fill="' + top3[2].color + '" fill-opacity="' + circleFillOp + '" stroke="' + top3[2].color + '" stroke-opacity="' + circleStrokeOp + '" stroke-width="1.5"></circle>'
+      + label1.svg + label2.svg + label3.svg + otherBoxSvg + dotsSvg
+      + '</svg>';
+
+    var legend = top3.map(function(d, i){
+      return '<div class="venn-legend-item" data-disc="' + i + '"><span class="venn-legend-dot" style="background:' + d.color + '"></span>' + escapeHtml(d.name) + '</div>';
+    }).join('');
+    if (hasOther){
+      legend += '<div class="venn-legend-item" style="cursor:default"><span class="venn-legend-dot" style="background:' + OTHER_COLOR + '"></span>' + escapeHtml(t('understand.other_label')) + '</div>';
+    }
+
+    /* "Why?" insight — plain-language readout of the pattern: how many
+       answers actually point at the #1 match, and which ones. */
+    var agreeWords = [t('understand.answer.agree'), t('understand.answer.absolutely')];
+    var tiedToTop1 = dotData.map(function(d, i){ return { d:d, i:i }; })
+      .filter(function(o){ return (o.d.mask & 1) && agreeWords.indexOf(o.d.answer) !== -1; });
+    var whyHtml = '';
+    if (tiedToTop1.length){
+      var examples = tiedToTop1.slice(0, 3).map(function(o){ return o.i + 1; }).join(', ');
+      var whyTitle = t('understand.why_title').replace('{name}', top3[0].name);
+      var whyBody = t('understand.why_body')
+        .replace('{n}', tiedToTop1.length).replace('{total}', dotData.length)
+        .replace('{name}', '<b>' + escapeHtml(top3[0].name) + '</b>').replace('{examples}', examples);
+      whyHtml = '<div class="why-box"><div class="why-title">&#10024; ' + escapeHtml(whyTitle) + '</div><div class="why-body">' + whyBody + '</div></div>';
+    }
+
+    /* Right column — assertions detail list */
+    var rows = dotData.map(function(d, i){
+      return '<div class="assert-row" data-idx="' + i + '" data-tab="' + uid + '">'
+        + '<span class="assert-num" style="background:' + d.color + '">' + (i + 1) + '</span>'
+        + '<div class="assert-body"><div class="assert-txt">' + escapeHtml(d.text) + '</div>'
+        + '<span class="assert-ans" style="color:' + d.color + '">' + escapeHtml(d.answer) + '</span></div></div>';
+    }).join('');
+    var listHtml = '<div class="card assert-card">'
+      + '<div class="assert-head"><span class="assert-title">' + escapeHtml(t('understand.assert_title')) + '</span><span class="assert-count">' + dotData.length + '</span></div>'
+      + whyHtml
+      + '<div class="assert-list">' + rows + '</div></div>';
+
+    var vennHtml = '<div>'
+      + '<div class="venn-card" id="vennCard-' + uid + '">'
+      +   '<div class="venn-controls">'
+      +     '<button class="venn-btn" data-act="zoom-in" data-tab="' + uid + '" aria-label="Zoom in">+</button>'
+      +     '<button class="venn-btn" data-act="zoom-out" data-tab="' + uid + '" aria-label="Zoom out">&minus;</button>'
+      +     '<button class="venn-btn" data-act="reset-zoom" data-tab="' + uid + '" aria-label="Reset zoom"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8V5a2 2 0 012-2h3"/><path d="M16 3h3a2 2 0 012 2v3"/><path d="M21 16v3a2 2 0 01-2 2h-3"/><path d="M8 21H5a2 2 0 01-2-2v-3"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg></button>'
+      +   '</div>'
+      +   '<div class="venn-wrap">'
+      +     '<div class="venn-legend-top">' + legend + '</div>'
+      +     '<div class="venn-stage-wrap"><div class="venn-stage" id="vennStage-' + uid + '">' + svg + '</div></div>'
+      +     '<div class="venn-tooltip" id="vennTooltip-' + uid + '"></div>'
+      +   '</div>'
+      + '</div>'
+      + '<p class="venn-caption">' + escapeHtml(t('understand.legend_caption')) + '</p>'
+      + '</div>';
+
+    var panel = document.getElementById('panel' + cap(uid));
+    panel.innerHTML = '<div class="um-layout">' + vennHtml + listHtml + '</div>';
+    wireVennTab(uid, dotData, top3);
+    animatePercent('pct-' + uid + '-0', top3[0].match);
+    animatePercent('pct-' + uid + '-1', top3[1].match);
+    animatePercent('pct-' + uid + '-2', top3[2].match);
+  }
+
+  function wireVennTab(uid, dotData, top3){
+    var card    = document.getElementById('vennCard-' + uid);
+    var stage   = document.getElementById('vennStage-' + uid);
+    var stageWrap = card.querySelector('.venn-stage-wrap');
+    var tooltip = document.getElementById('vennTooltip-' + uid);
+    var panel   = document.getElementById('panel' + cap(uid));
+    var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    ZOOM[uid] = ZOOM[uid] || 1;
+    PAN[uid] = PAN[uid] || { x: 0, y: 0 };
+
+    /* Once zoomed in, the stage is bigger than its clipping box — clamp
+       the pan offset so you can only drag up to the overflow amount on
+       each axis (never reveal empty space past the diagram's edge). */
+    function clampPan(){
+      var natW = stage.offsetWidth, natH = stage.offsetHeight;
+      var maxX = Math.max(0, (natW * ZOOM[uid] - stageWrap.clientWidth) / 2);
+      var maxY = Math.max(0, (natH * ZOOM[uid] - stageWrap.clientHeight) / 2);
+      PAN[uid].x = Math.max(-maxX, Math.min(maxX, PAN[uid].x));
+      PAN[uid].y = Math.max(-maxY, Math.min(maxY, PAN[uid].y));
+    }
+    function applyZoom(){
+      clampPan();
+      stage.style.transform = 'translate(' + PAN[uid].x + 'px,' + PAN[uid].y + 'px) scale(' + ZOOM[uid] + ')';
+      stageWrap.classList.toggle('pannable', ZOOM[uid] > 1);
+    }
+    applyZoom();
+
+    card.querySelectorAll('[data-act="zoom-in"]').forEach(function(btn){ btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.min(2.5, +(ZOOM[uid] + 0.15).toFixed(2)); applyZoom(); }); });
+    card.querySelectorAll('[data-act="zoom-out"]').forEach(function(btn){ btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = Math.max(0.7, +(ZOOM[uid] - 0.15).toFixed(2)); applyZoom(); }); });
+    /* ⟲ resets the stage back to its original (1x) size/position — the
+       only way to undo +/- zoom and any drag, since there's no
+       fullscreen mode to "exit" from. */
+    card.querySelectorAll('[data-act="reset-zoom"]').forEach(function(btn){
+      btn.addEventListener('click', function(e){ e.stopPropagation(); ZOOM[uid] = 1; PAN[uid] = { x: 0, y: 0 }; applyZoom(); });
+    });
+
+    /* Drag-to-pan once zoomed in — mouse-only here (desktop), same idea
+       as mobile's touch version. Pointer capture on the wrap keeps the
+       drag tracking even if the cursor passes over dots mid-drag, which
+       also stops their mouseenter/mouseleave hover-tooltips from firing
+       and fighting the pan. */
+    var drag = null, dragJustEnded = false;
+    stageWrap.addEventListener('pointerdown', function(e){
+      if (ZOOM[uid] <= 1) return;
+      drag = { startX: e.clientX, startY: e.clientY, panX: PAN[uid].x, panY: PAN[uid].y, moved: false, id: e.pointerId };
+      stageWrap.setPointerCapture(e.pointerId);
+    });
+    stageWrap.addEventListener('pointermove', function(e){
+      if (!drag || e.pointerId !== drag.id) return;
+      var dx = e.clientX - drag.startX, dy = e.clientY - drag.startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) drag.moved = true;
+      PAN[uid].x = drag.panX + dx;
+      PAN[uid].y = drag.panY + dy;
+      stage.style.transition = 'none';
+      clampPan();
+      stage.style.transform = 'translate(' + PAN[uid].x + 'px,' + PAN[uid].y + 'px) scale(' + ZOOM[uid] + ')';
+    });
+    function endDrag(e){
+      if (!drag || (e && e.pointerId !== drag.id)) return;
+      stage.style.transition = '';
+      if (drag.moved) { dragJustEnded = true; setTimeout(function(){ dragJustEnded = false; }, 0); }
+      drag = null;
+    }
+    stageWrap.addEventListener('pointerup', endDrag);
+    stageWrap.addEventListener('pointercancel', endDrag);
+
+    /* Types text into a node so the explanation reads as the AI "speaking"
+       it, not pasting it. Length-normalised so long strings don't crawl:
+       the whole line always finishes in ~450ms. */
+    var typeTimer = null;
+    function typeInto(el, text){
+      if (typeTimer){ clearInterval(typeTimer); typeTimer = null; }
+      el.classList.remove('typing');
+      if (reduceMotion){ el.textContent = text; return; }
+      el.textContent = '';
+      el.classList.add('typing');
+      var i = 0, n = text.length, per = Math.max(7, Math.min(22, Math.round(460 / Math.max(1, n))));
+      typeTimer = setInterval(function(){
+        i++; el.textContent = text.slice(0, i);
+        if (i >= n){ clearInterval(typeTimer); typeTimer = null; el.classList.remove('typing'); }
+      }, per);
+    }
+    /* Floats the tooltip next to whatever it's explaining (a dot, or a
+       whole circle for discipline-level stories) instead of pinning it to
+       a fixed spot on the card — a fixed bottom position used to land
+       right on top of the third circle's name/% label. Flips above vs.
+       below the anchor based on which side actually has room, and
+       reports where the anchor's centre sits (as --vt-arrow-x) so the
+       CSS speech-bubble caret points exactly at it. */
+    function positionTooltipNear(anchorEl){
+      if (!anchorEl) return;
+      var wrap = tooltip.parentNode;
+      var wrapRect = wrap.getBoundingClientRect();
+      var aRect = anchorEl.getBoundingClientRect();
+      var cx = aRect.left + aRect.width / 2 - wrapRect.left;
+      var topY = aRect.top - wrapRect.top;
+      var bottomY = aRect.bottom - wrapRect.top;
+      var GAP = 16, TH_ESTIMATE = 130;
+      var spaceBelow = wrapRect.height - bottomY;
+      var spaceAbove = topY;
+      var placeAbove = spaceAbove >= (TH_ESTIMATE + GAP) && spaceAbove >= spaceBelow;
+
+      var tw = tooltip.offsetWidth || 300;
+      var minLeft = tw / 2 + 8, maxLeft = Math.max(minLeft, wrapRect.width - tw / 2 - 8);
+      var left = Math.max(minLeft, Math.min(maxLeft, cx));
+
+      tooltip.style.left = left + 'px';
+      if (placeAbove){
+        tooltip.style.top = 'auto';
+        tooltip.style.bottom = (wrapRect.height - topY + GAP) + 'px';
+        tooltip.classList.add('place-above'); tooltip.classList.remove('place-below');
+      } else {
+        tooltip.style.bottom = 'auto';
+        tooltip.style.top = (bottomY + GAP) + 'px';
+        tooltip.classList.add('place-below'); tooltip.classList.remove('place-above');
+      }
+      tooltip.style.setProperty('--vt-arrow-x', (cx - left + tw / 2) + 'px');
+    }
+    /* Dot/assertion story — verdict headline + typed narrative + answer. */
+    function showTip(d, anchorEl){
+      tooltip.style.setProperty('--vt-accent', d.color);
+      tooltip.innerHTML = '<div class="vt-verdict"><span class="vt-spark">&#9889;</span>' + escapeHtml(d.verdict) + '</div>'
+        + '<div class="vt-story"></div>'
+        + '<div class="vt-a">' + escapeHtml(t('understand.tooltip.answered')) + ' <b style="color:' + d.color + '">' + escapeHtml(d.answer) + '</b></div>';
+      positionTooltipNear(anchorEl);
+      tooltip.classList.add('show');
+      typeInto(tooltip.querySelector('.vt-story'), d.story);
+    }
+    /* Discipline-level story — triggered from a legend chip or circle. */
+    function showDiscTip(i, anchorEl){
+      if (!top3 || !top3[i]) return;
+      var bit = i === 0 ? 1 : (i === 1 ? 2 : 4);
+      var tied = dotData.filter(function(d){ return d.mask & bit; }).length;
+      var story = t('understand.narr.disc')
+        .replace(/\{n\}/g, tied).replace('{total}', dotData.length)
+        .replace(/\{a\}/g, top3[i].name).replace('{rank}', i + 1);
+      tooltip.style.setProperty('--vt-accent', top3[i].color);
+      tooltip.innerHTML = '<div class="vt-verdict" style="color:' + top3[i].color + '"><span class="vt-spark">&#9889;</span>'
+        + escapeHtml(top3[i].name) + ' &middot; #' + (i + 1) + '</div><div class="vt-story"></div>';
+      positionTooltipNear(anchorEl || document.getElementById('vennCircle-' + uid + '-' + (i + 1)));
+      tooltip.classList.add('show');
+      typeInto(tooltip.querySelector('.vt-story'), story);
+      setCircleGlow(bit, true);
+      setTimeout(function(){ setCircleGlow(bit, false); }, 1500);
+    }
+    function setActiveRow(idx){
+      panel.querySelectorAll('.assert-row').forEach(function(r){ r.classList.toggle('active', +r.getAttribute('data-idx') === idx); });
+    }
+    function pulseDot(idx){
+      var g = stage.querySelector('.venn-dot[data-idx="' + idx + '"]');
+      if (!g) return;
+      g.classList.remove('pulse'); void g.getBBox(); g.classList.add('pulse');
+      setTimeout(function(){ g.classList.remove('pulse'); }, 750);
+    }
+    function setDotGlow(idx, on){
+      var g = stage.querySelector('.venn-dot[data-idx="' + idx + '"]');
+      if (g) g.classList.toggle('hover-glow', on);
+    }
+    function setRowHover(idx, on){
+      var row = panel.querySelector('.assert-row[data-idx="' + idx + '"]');
+      if (row) row.classList.toggle('row-hover', on);
+    }
+    function setCircleGlow(mask, on){
+      [1, 2, 3].forEach(function(k){
+        var bit = k === 1 ? 1 : (k === 2 ? 2 : 4);
+        var el = document.getElementById('vennCircle-' + uid + '-' + k);
+        if (el) el.classList.toggle('circle-glow', on && !!(mask & bit));
+      });
+    }
+
+    function hideTip(){ tooltip.classList.remove('show'); }
+
+    /* Dot ↔ assertion row: hovering either lights up the dot, its list
+       row, AND the circles it belongs to, and the AI narrates *why* this
+       answer matters — the "explainable AI" moment. Click pins the row. */
+    card.querySelectorAll('.venn-dot').forEach(function(dot){
+      var idx = +dot.getAttribute('data-idx');
+      dot.addEventListener('mouseenter', function(){ if (dragJustEnded) return; setRowHover(idx, true); setCircleGlow(dotData[idx].mask, true); showTip(dotData[idx], dot); });
+      dot.addEventListener('mouseleave', function(){ setRowHover(idx, false); setCircleGlow(dotData[idx].mask, false); hideTip(); });
+      dot.addEventListener('click', function(e){
+        e.stopPropagation();
+        if (dragJustEnded) return;
+        showTip(dotData[idx], dot); setActiveRow(idx); pulseDot(idx);
+      });
+    });
+    /* List row → the tooltip anchors to that row's actual dot on the
+       diagram (not the row itself), so hovering an assertion visibly
+       "points at" the exact spot on the Venn it explains. */
+    panel.querySelectorAll('.assert-row').forEach(function(row){
+      var idx = +row.getAttribute('data-idx');
+      row.addEventListener('mouseenter', function(){
+        var dot = stage.querySelector('.venn-dot[data-idx="' + idx + '"]');
+        setDotGlow(idx, true); setCircleGlow(dotData[idx].mask, true); showTip(dotData[idx], dot);
+      });
+      row.addEventListener('mouseleave', function(){ setDotGlow(idx, false); setCircleGlow(dotData[idx].mask, false); hideTip(); });
+      row.addEventListener('click', function(e){
+        e.stopPropagation();
+        var dot = stage.querySelector('.venn-dot[data-idx="' + idx + '"]');
+        showTip(dotData[idx], dot); setActiveRow(idx); pulseDot(idx);
+      });
+    });
+
+    /* Legend chip / circle → that discipline's own story. */
+    card.querySelectorAll('.venn-legend-item[data-disc]').forEach(function(chip){
+      var i = +chip.getAttribute('data-disc');
+      chip.addEventListener('mouseenter', function(){ setCircleGlow(i === 0 ? 1 : (i === 1 ? 2 : 4), true); });
+      chip.addEventListener('mouseleave', function(){ setCircleGlow(i === 0 ? 1 : (i === 1 ? 2 : 4), false); });
+      chip.addEventListener('click', function(e){ e.stopPropagation(); showDiscTip(i); });
+    });
+    [1, 2, 3].forEach(function(k){
+      var el = document.getElementById('vennCircle-' + uid + '-' + k);
+      if (el) el.addEventListener('click', function(e){ e.stopPropagation(); showDiscTip(k - 1); });
+    });
+
+    document.addEventListener('click', function(){ tooltip.classList.remove('show'); });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     LOCKED STATE — per tab (Disciplines <10, Majors <20, Universities <30)
+  ═══════════════════════════════════════════════════════════ */
+  var TEASER_ICONS = { kt:'&#9881;&#65039;', xh:'&#129504;', tn:'&#128300;', nv:'&#128214;', yt:'&#129658;', nn:'&#127806;' };
+  var TEASER_META  = { disciplines:DISC_META, majors:MAJOR_META, universities:UNI_META };
+  var TEASER_CODES = ['kt', 'tn', 'yt'];
+
+  function renderLockedTab(tabKey, progress, threshold){
+    var remaining  = threshold - progress;
+    var isContinue = progress > 0;
+    var label      = isContinue ? t('disc.cta.continue') : t('understand.lock.cta');
+    var tabName    = t('understand.tab.' + tabKey);
+    var title      = t('understand.lock.title').replace('{tab}', tabName);
+    var body       = t('understand.lock.body').replace('{n}', remaining);
+    var ctaId      = 'umLockCta-' + tabKey;
+
+    var meta = TEASER_META[tabKey]();
+    var teaserRows = TEASER_CODES.map(function(code, i){
+      return '<div class="teaser-card"><div class="tc-left"><div class="tc-ico">' + TEASER_ICONS[code] + '</div>'
+        + '<div><div class="tc-name">' + escapeHtml(meta[code].name) + '</div><div class="tc-sub">#' + (i + 1) + ' Ranked</div></div></div>'
+        + '<span class="tc-pct">??%</span></div>';
+    }).join('');
+
+    var html = '<div class="lock-wrap"><div class="lock-banner">'
+      + '<div class="lock-emoji">&#128274;</div>'
+      + '<div class="lock-title">' + escapeHtml(title) + '</div>'
+      + '<div class="lock-sub">' + escapeHtml(body) + '</div>'
+      + '<button class="lock-cta" id="' + ctaId + '">' + escapeHtml(label) + '</button>'
+      + '</div>'
+      + '<div class="teaser-label">' + escapeHtml(t('disc.preview')) + '</div>'
+      + '<div class="teaser-wrap"><div class="teaser-list">' + teaserRows + '</div></div>'
+      + '</div>';
+
+    var panel = document.getElementById('panel' + cap(tabKey));
+    panel.innerHTML = html;
+    document.getElementById(ctaId).addEventListener('click', function(){
+      var p = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+      window.location.href = p > 0 ? '../../quiz/quiz-card/?start=' + (p + 1) : '../../quiz/quiz-card/';
+    });
+  }
+
+  /* ══════════════════════════════════════════════════════════
+     TAB SWITCHING (listeners attached once)
+  ═══════════════════════════════════════════════════════════ */
+  document.querySelectorAll('.um-tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      document.querySelectorAll('.um-tab').forEach(function(el){ el.classList.remove('active'); });
+      document.querySelectorAll('.um-panel').forEach(function(el){ el.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById('panel' + cap(tab.getAttribute('data-tab'))).classList.add('active');
+    });
+  });
+
+  /* ══════════════════════════════════════════════════════════
+     RENDER ALL + INIT (re-runs on theme / language change)
+  ═══════════════════════════════════════════════════════════ */
+  var TAB_THRESHOLDS = { disciplines:10, majors:20, universities:30 };
+  function renderTabOrLock(tabKey, progress, dataObj, mockA, realA){
+    var threshold = TAB_THRESHOLDS[tabKey];
+    if (progress < threshold){ renderLockedTab(tabKey, progress, threshold); return; }
+    renderVennTab(tabKey, dataObj.top3, (dataObj.real && realA) ? realA : mockA);
+  }
+  function renderAll(){
+    var progress = parseInt(localStorage.getItem('quizProgress') || '0', 10);
+    document.getElementById('umProgressText').textContent = progress + ' / 30';
+    document.getElementById('umProgressFill').style.width = Math.min(100, (progress / 30) * 100) + '%';
+    var realA = loadRealAssertions();
+    renderTabOrLock('disciplines',  progress, loadDisciplines(),  mockAssertions(),      realA);
+    renderTabOrLock('majors',       progress, loadMajors(),       mockMajorAssertions(), realA);
+    renderTabOrLock('universities', progress, loadUniversities(), mockUniAssertions(),   realA);
+  }
+
+  if (window.BDi18n && BDi18n.init) BDi18n.init();
+  renderAll();
+
+  /* Re-render when the shell toggles theme, or the language changes —
+     the venn card inverts with the theme and all labels re-translate. */
+  var _rerenderT;
+  new MutationObserver(function(){
+    clearTimeout(_rerenderT);
+    _rerenderT = setTimeout(renderAll, 60);
+  }).observe(document.documentElement, { attributes:true, attributeFilter:['data-theme','data-lang'] });
+  </script>
+</body>
+</html>

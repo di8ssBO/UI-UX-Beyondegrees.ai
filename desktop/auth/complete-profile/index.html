@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" data-device="desktop" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Complete your profile — BeyonDegrees.ai</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="/shared/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      var theme = "dark";
+      try {
+        var q = new URL(location.href).searchParams.get("theme");
+        var saved = localStorage.getItem("bd-theme");
+        theme = q === "light" || q === "dark" ? q : (saved === "light" || saved === "dark" ? saved : "dark");
+      } catch (error) {}
+      document.documentElement.setAttribute("data-device", "desktop");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="/shared/auth/complete-profile.css">
+</head>
+<body class="cp-body" data-device="desktop" data-theme="dark">
+  <div id="cp-app" class="cp-root"></div>
+  <script src="/shared/auth/complete-profile.js" defer></script>
+</body>
+</html>

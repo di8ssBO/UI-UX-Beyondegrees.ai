@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why I Match — BeyonDegrees.ai</title>
+<!-- Mobile "Why I match" for a university (same route as desktop/university/why/).
+     The view itself lives in ../detail/ (renderWhyMatch), so this page only
+     forwards ?id= (or desktop-style ?u=) to ../detail/?id=...&view=why.
+     location.replace keeps Back returning to the university detail page. -->
+<script>
+(function () {
+  var p = new URLSearchParams(location.search);
+  var id = p.get('id') || p.get('u') || 'mit';
+  location.replace('../detail/?id=' + encodeURIComponent(id) + '&view=why');
+})();
+</script>
+</head>
+<body></body>
+</html>

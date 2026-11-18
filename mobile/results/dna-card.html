@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic DNA Card — BeyonDegrees.ai</title>
+  <script>(function(){var s="dark";try{s=localStorage.getItem("bd-theme")||"dark";}catch(e){}if(s==="system"){s=window.matchMedia("(prefers-color-scheme:light)").matches?"light":"dark";}document.documentElement.setAttribute("data-theme",s);})();</script>
+  <script>(function(){var l='en';try{l=localStorage.getItem('bd-lang')||'en';}catch(e){}document.documentElement.setAttribute('data-lang',l);document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');document.documentElement.setAttribute('lang',l);})();</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../shared/styles/dna-card.css">
+  <style>
+    /* ── RESET & BASE ─────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bd-blue:       #1863DC;
+      --bd-blue-2:     #0274BE;
+      --bd-mint:       #06D6A0;
+      --bd-orange:     #F97316;
+      --bd-navy:       #1A1A2E;
+      --bd-dark:       #0A0A1A;
+      --card-bg:       rgba(255,255,255,0.05);
+      --card-bg-hover: rgba(255,255,255,0.08);
+      --card-border:   rgba(255,255,255,0.08);
+      --card-border-h: rgba(24,99,220,0.45);
+      --text-1: #FFFFFF;
+      --text-2: rgba(255,255,255,0.65);
+      --text-3: rgba(255,255,255,0.35);
+      --text-blue: #6BA3FF;
+      --grad-blue:  linear-gradient(135deg, #1863DC, #0274BE);
+      --grad-bg:    linear-gradient(135deg, #0A0A1A 0%, #1A1A2E 55%, #0A0A1A 100%);
+      --glow-blue:  0 12px 40px rgba(24,99,220,0.35);
+      --glow-hover: 0 20px 50px rgba(24,99,220,0.4);
+      --glow-btn:   0 8px 24px rgba(24,99,220,0.45);
+      --r-sm: 8px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-full: 100px;
+      --font: 'Inter', -apple-system, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--grad-bg);
+      min-height: 100vh;
+      color: var(--text-1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 64px;
+      overflow-x: hidden;
+    }
+
+    /* ── AURORA BLOBS ─────────────────────────────── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: float 8s ease-in-out infinite;
+      filter: blur(60px);
+    }
+    .blob-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(24,99,220,0.18) 0%, transparent 70%); top: -200px; right: -200px; }
+    .blob-2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(6,214,160,0.12) 0%, transparent 70%); bottom: -100px; left: -100px; animation-delay: -3s; }
+    .blob-3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(24,99,220,0.10) 0%, transparent 70%); top: 40%; left: 20%; animation-delay: -5s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50%       { transform: translateY(-20px) scale(1.03); }
+    }
+
+    /* ── PAGE WRAPPER ──────────────────────────────── */
+    .page-wrapper { position: relative; z-index: 1; width: 100%; max-width: 520px; }
+
+    /* ── HEADER ───────────────────────────────────── */
+    .page-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .logo-row {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-bottom: 8px;
+    }
+    .logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--grad-blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 900;
+      box-shadow: var(--glow-blue);
+    }
+    .logo-text {
+      font-size: 18px; font-weight: 800;
+      background: linear-gradient(135deg, #fff, #6BA3FF);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-title {
+      font-size: 13px; font-weight: 600;
+      color: var(--text-3); letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    /* Card + toast styles: shared/styles/dna-card.css */
+
+    /* ── CONTROLS (below card) ───────────────────── */
+    .controls {
+      display: flex; gap: 10px; margin-top: 20px; justify-content: center; flex-wrap: wrap;
+    }
+    .ctrl-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 9px 18px; border-radius: 100px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: var(--text-2); font-family: var(--font);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .ctrl-btn:hover { background: rgba(24,99,220,0.15); border-color: rgba(24,99,220,0.4); color: #fff; transform: translateY(-1px); }
+    .ctrl-btn.active { background: rgba(24,99,220,0.2); border-color: rgba(24,99,220,0.5); color: #6BA3FF; }
+
+
+    /* ── BOTTOM NAV HINT ──────────────────────────── */
+    .bottom-hint {
+      margin-top: 28px; text-align: center;
+      font-size: 12px; color: var(--text-3);
+    }
+    .bottom-hint a { color: #6BA3FF; text-decoration: none; font-weight: 600; }
+    .bottom-hint a:hover { color: #fff; }
+  </style>
+</head>
+<body>
+
+  <!-- Aurora blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="page-wrapper">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="logo-row">
+        <div class="logo-icon">B</div>
+        <span class="logo-text">BeyonDegrees.ai</span>
+      </div>
+      <div class="page-title" data-i18n="dna.page_title">Academic DNA · Shareable Card</div>
+    </div>
+
+    <!-- DNA Card -->
+    <div class="dna-card" id="dnaCard">
+      <div class="card-gradient-top"></div>
+      <div class="card-content">
+
+        <!-- Card Header -->
+        <div class="card-header">
+          <div class="card-label" data-i18n="dna.card_label">🧬 Academic DNA</div>
+          <div class="card-badge">✨</div>
+        </div>
+
+        <!-- Main Stat -->
+        <div class="main-stat">
+          <span class="main-pct" id="mainPct"></span>
+          <div class="main-disc" id="mainDisc"></div>
+          <div class="main-sub" id="mainSub" data-i18n="dna.main_sub">Your strongest academic match</div>
+        </div>
+
+        <!-- DNA Bars -->
+        <div class="dna-bars" id="dnaBars">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- Tagline -->
+        <div class="tagline">
+          <div class="tagline-text" id="taglineText"></div>
+        </div>
+
+        <!-- Share -->
+        <div class="share-label" data-i18n="dna.share_label">Share your results</div>
+        <div class="share-row">
+          <button class="share-btn share-instagram" onclick="handleShare('instagram')">
+            <span>📸</span> <span data-i18n="dna.share_instagram">Instagram</span>
+          </button>
+          <button class="share-btn share-tiktok" onclick="handleShare('tiktok')">
+            <span>🎵</span> <span data-i18n="dna.share_tiktok">TikTok</span>
+          </button>
+          <button class="share-btn share-copy" onclick="handleShare('copy')">
+            <span>🔗</span> <span data-i18n="dna.share_copy">Copy</span>
+          </button>
+        </div>
+
+        <!-- CTA -->
+        <a href="../onboarding/home/" class="cta-btn" data-i18n="dna.cta">
+          Discover yours →
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <!-- Demo profile switcher (Tech/Arts/Science) hidden: the card now shows the user's own DNA -->
+    <div class="controls" style="display:none">
+      <button class="ctrl-btn active" id="btn0" onclick="loadProfile(0)">👤 <span data-i18n="dna.ctrl_tech">Tech Profile</span></button>
+      <button class="ctrl-btn" id="btn1" onclick="loadProfile(1)">🎨 <span data-i18n="dna.ctrl_arts">Arts Profile</span></button>
+      <button class="ctrl-btn" id="btn2" onclick="loadProfile(2)">🔬 <span data-i18n="dna.ctrl_science">Science Profile</span></button>
+    </div>
+
+    <div class="bottom-hint">
+      ← <a href="../discipline/match/" data-i18n="dna.back">Back to Results</a>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div class="bd-dna-toast" id="toast"></div>
+
+  <!-- Card logic: shared/scripts/ui/dna-card.js (loaded after i18n.js below) -->
+  <script src="../../shared/scripts/ui/i18n.js"></script>
+  <script src="../../shared/scripts/data/disc-config.js"></script>
+  <script src="../../shared/scripts/ui/dna-card.js"></script>
+</body>
+</html>

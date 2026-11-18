@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" data-device="desktop" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BeyonDegrees.ai Auth</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="/shared/icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    (function () {
+      var theme = "dark";
+      try {
+        var q = new URL(location.href).searchParams.get("theme");
+        var saved = localStorage.getItem("bd-theme");
+        theme = q === "light" || q === "dark" ? q : (saved === "light" || saved === "dark" ? saved : "dark");
+      } catch (error) {}
+      document.documentElement.setAttribute("data-device", "desktop");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <link rel="stylesheet" href="/shared/auth/auth.css">
+</head>
+<body class="auth-body auth-device-desktop" data-device="desktop" data-mode="login">
+  <button id="auth-theme-toggle" class="auth-theme-toggle" type="button" aria-label="Toggle theme">
+    <span class="auth-theme-icon" aria-hidden="true"></span>
+    <span class="auth-theme-text">Light mode</span>
+  </button>
+  <main class="auth-desktop-shell" aria-label="BeyonDegrees authentication">
+    <section class="auth-desktop-left" aria-label="BeyonDegrees">
+      <div class="auth-desktop-left-overlay"></div>
+      <div class="auth-desktop-brand">
+        <img src="/shared/beyondegrees-logo-mark.png" alt="">
+        <span>BeyonDegrees<span>.ai</span></span>
+      </div>
+      <div class="auth-desktop-copy">
+        <h2 id="auth-left-title">Discover your academic identity.</h2>
+        <p id="auth-left-body">AI-powered guidance that matches you to the right discipline, major and university.</p>
+      </div>
+      <div class="auth-desktop-age">For students aged 14&ndash;18</div>
+    </section>
+    <section class="auth-desktop-right" aria-label="Account">
+      <div class="auth-desktop-form">
+        <div class="auth-desktop-form-head">
+          <h3 id="auth-form-title">Welcome back</h3>
+          <p id="auth-form-body">Log in to continue your journey.</p>
+        </div>
+        <div id="auth-card" class="auth-card-root"></div>
+      </div>
+    </section>
+  </main>
+  <script src="/shared/auth/auth.js" defer></script>
+</body>
+</html>
