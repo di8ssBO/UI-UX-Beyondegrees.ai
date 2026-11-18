@@ -5,7 +5,7 @@
      localStorage 'bd-avatar'  = base64 dataURL | null
    Usage:
      BDProfile.get()              → { firstName, lastName }
-     BDProfile.getDisplayName()   → "Hoang Phuc"  (fallback: null)
+     BDProfile.getDisplayName()   → "Jane Doe"  (fallback: null)
      BDProfile.save(fn, ln)       → writes name to localStorage
      BDProfile.saveAvatar(url)    → writes avatar dataURL to localStorage
      BDProfile.getAvatar()        → dataURL or null
@@ -18,17 +18,28 @@
   var KEY = 'bd-profile';
 
   var BDProfile = {
-    get: function () {
+    /* One schema for every page: { email, firstName, lastName, provider }.
+       auth.js (login/sign-up) writes it; Profile Edit updates the names.
+       Older data written as givenName/familyName is still read. */
+    _raw: function () {
       try {
         var raw = localStorage.getItem(KEY);
-        if (raw) {
-          var p = JSON.parse(raw);
-          if (p && (p.firstName || p.lastName)) return p;
-        }
-      } catch (e) {}
-      /* Default seed — replaced when user saves from Profile Edit */
-      return { firstName: 'Your', lastName: 'Name' };
+        var p = raw ? JSON.parse(raw) : null;
+        return (p && typeof p === 'object') ? p : {};
+      } catch (e) { return {}; }
     },
+
+    get: function () {
+      var p = this._raw();
+      return {
+        email:     p.email || '',
+        firstName: p.firstName || p.givenName || '',
+        lastName:  p.lastName || p.familyName || '',
+        provider:  p.provider || ''
+      };
+    },
+
+    getEmail: function () { return this.get().email; },
 
     getDisplayName: function () {
       var p = this.get();
@@ -41,10 +52,13 @@
     },
 
     save: function (firstName, lastName) {
+      var cur = this.get();                 /* keep email + provider */
       try {
         localStorage.setItem(KEY, JSON.stringify({
+          email:     cur.email,
           firstName: (firstName || '').trim(),
-          lastName:  (lastName  || '').trim()
+          lastName:  (lastName  || '').trim(),
+          provider:  cur.provider
         }));
       } catch (e) {}
     },

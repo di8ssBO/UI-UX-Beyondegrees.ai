@@ -340,7 +340,8 @@
 
     var root = document.getElementById('bdMatchRoot');
     if (!root) return;
-    document.body.setAttribute('data-page', initialStage === 'university' ? 'universities' : (initialStage === 'discipline' ? 'disciplines' : 'majors'));
+    /* All 3 loading stages highlight About me, same as mobile. */
+    document.body.setAttribute('data-page', 'home');
     document.body.setAttribute('data-crumb', initialStage === 'university' ? 'University Matching' : (initialStage === 'discipline' ? 'Discipline Matching' : 'Major Matching'));
     document.body.classList.add('match-loading-active');
     root.removeAttribute('hidden');
@@ -1199,7 +1200,7 @@
       <h2 id="doneTitle">Results are ready!</h2>
       <p id="doneSub">AI has analyzed <b id="doneCount">30</b> of your answers</p>
       <div class="row">
-        <a class="btn btn-primary" id="doneBtn" href="../../results/match-reveal/">See my results →</a>
+        <a class="btn btn-primary" id="doneBtn" href="../../university/matches/">See my results →</a>
         <button class="btn btn-ghost" onclick="location.reload()" data-i18n="loading.replay_demo">↺ Replay demo</button>
       </div>
     </div>
@@ -1221,7 +1222,7 @@
     var STAGE_INFO = {
       1: { emoji: '🔥', title: tr('loading.stage1_title'), btn: tr('loading.continue_quiz'), href: '../../quiz/quiz-card/' },
       2: { emoji: '🚀', title: tr('loading.stage2_title'), btn: tr('loading.continue_quiz'), href: '../../quiz/quiz-card/' },
-      3: { emoji: '🎉', title: tr('loading.ready'), btn: tr('quiz.see_result'), href: '../../results/match-reveal/' }
+      3: { emoji: '🎉', title: tr('loading.ready'), btn: tr('quiz.see_result'), href: '../../university/matches/' }
     }[STAGE];
     (function applyStage() {
       var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };

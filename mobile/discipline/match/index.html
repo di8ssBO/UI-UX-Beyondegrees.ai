@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="../../../shared/styles/app-menu.css">
   <script src="../../../shared/scripts/ui/i18n.js"></script>
+<script src="../../../shared/scripts/data/disc-config.js"></script>
 <script src="../../../shared/scripts/ui/bd-profile.js"></script>
 <style>
 /* ══ Constellation Sky ══════════════════════════════════════════════ */
@@ -103,6 +104,11 @@
     inset 0 1px 0 rgba(255,255,255,0.60),
     0 4px 16px rgba(92,69,53,0.12);
 }
+.cst-share { display:block; width:max-content; margin:10px auto 0; padding:9px 18px; border-radius:999px; font-size:13px; font-weight:700; text-decoration:none; color:#fff; background:linear-gradient(135deg,#7c3aed,#06d6a0); box-shadow:0 6px 18px rgba(124,58,237,.35); }
+.cst-share[hidden] { display:none; }
+[data-theme="light"] .cst-share { background:linear-gradient(135deg,#c96b55,#a84e30); box-shadow:0 6px 18px rgba(201,107,85,.30); }
+/* Radar before 10 answers: empty hexagon, dimmed, no interaction */
+.cst-section.cst-locked #cstContainer { opacity: .6; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -167,6 +173,7 @@
             <div id="cstContainer"></div>
           </div>
           <p class="cst-caption" id="cstCaption" data-i18n="disc.caption">Complete the quiz to reveal your Academic DNA ✨</p>
+          <a class="cst-share" id="cstShare" href="../../results/dna-card.html" hidden>🧬 <span data-i18n="dna.share_label">Share your results</span> →</a>
         </div>
         <div class="ds-hl"><span data-i18n="disc.headline">Your Perfect</span><br><span class="ac" data-i18n="disc.headline_em">Disciplines</span></div>
         <p class="ds-sub" data-i18n="disc.subtext">Based on your answers, these fields align best with your cognitive strengths and professional interests.</p>
@@ -185,7 +192,7 @@
           <div style="text-align:right"><div class="dc-pct">94%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:94%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.kt">You possess strong analytical reasoning and a natural inclination toward systematic problem-solving and science innovation.</p>
-          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+          <div class="dc-foot"><button type="button" class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</button><button type="button" class="btn-pw" data-i18n="disc.career_paths">Career Paths</button></div>
         </div>
         <!-- Card 2 -->
         <div class="dc dc-tn"><div class="dc-bar"></div>
@@ -193,7 +200,7 @@
           <div style="text-align:right"><div class="dc-pct">89%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:89%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.tn">Your curiosity about the physical world and mathematical approach to observation align with life and physical science paths.</p>
-          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+          <div class="dc-foot"><button type="button" class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</button><button type="button" class="btn-pw" data-i18n="disc.career_paths">Career Paths</button></div>
         </div>
         <!-- Card 3 -->
         <div class="dc dc-yt"><div class="dc-bar"></div>
@@ -201,7 +208,7 @@
           <div style="text-align:right"><div class="dc-pct">64%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:64%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.yt">Your empathy and precision-oriented mindset suit healthcare and biomedical paths focused on improving human well-being.</p>
-          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+          <div class="dc-foot"><button type="button" class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</button><button type="button" class="btn-pw" data-i18n="disc.career_paths">Career Paths</button></div>
         </div>
         <!-- Card 4 -->
         <div class="dc dc-nn"><div class="dc-bar"></div>
@@ -209,7 +216,7 @@
           <div style="text-align:right"><div class="dc-pct">62%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:62%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.nn">A grounded approach to sustainability and life sciences positions you well for agronomy, food science, and environmental stewardship.</p>
-          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+          <div class="dc-foot"><button type="button" class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</button><button type="button" class="btn-pw" data-i18n="disc.career_paths">Career Paths</button></div>
         </div>
         <!-- Card 5 -->
         <div class="dc dc-xh"><div class="dc-bar"></div>
@@ -217,7 +224,7 @@
           <div style="text-align:right"><div class="dc-pct">34%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:34%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.xh">A deep interest in human behavior, societal structures, and interpersonal dynamics makes this a moderate-fit field for your profile.</p>
-          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+          <div class="dc-foot"><button type="button" class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</button><button type="button" class="btn-pw" data-i18n="disc.career_paths">Career Paths</button></div>
         </div>
         <!-- Card 6 -->
         <div class="dc dc-nv"><div class="dc-bar"></div>
@@ -225,53 +232,13 @@
           <div style="text-align:right"><div class="dc-pct">32%</div><div class="dc-plbl" data-i18n="disc.match">Match</div></div></div>
           <div class="dc-prog"><div class="dc-pfill" style="width:32%"></div></div>
           <p class="dc-desc" data-i18n="disc.desc.nv">Your appreciation for language, culture, and critical thinking gives you a foundation in literature, philosophy, and history paths.</p>
-          <div class="dc-foot"><div class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</div><div class="btn-pw" data-i18n="disc.career_paths">Career Paths</div></div>
+          <div class="dc-foot"><button type="button" class="btn-ex" data-i18n="disc.why_match">Why I match? 🔍</button><button type="button" class="btn-pw" data-i18n="disc.career_paths">Career Paths</button></div>
         </div>
         </div><!-- /discCardsWrap -->
       </div>
         <!-- ░░ FLOATING TAB BAR ░░ -->
-        <nav class="float-tab-bar" id="floatTabBar">
-          <a href="../../onboarding/home/" class="tab-item" data-tab="t1">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="11" cy="8" r="3.5"/><path d="M4 21c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 2l.45 1.35L20.8 3.8l-1.35.45L19 5.6l-.45-1.35L17.2 3.8l1.35-.45z" fill="currentColor" stroke="none"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.about_me">About me</span>
-          </a>
-          <a href="../../discipline/match/" class="tab-item active" data-tab="t2">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="9"/><polygon points="16.24,7.76 14.12,14.12 7.76,16.24 9.88,9.88" stroke="none" fill="currentColor" opacity="0.6"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.disciplines">Disciplines</span>
-          </a>
-          <a href="../../major/recommendations/" class="tab-item" data-tab="t3">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.majors">Majors</span>
-          </a>
-          <a href="../../university/matches/" class="tab-item" data-tab="t4">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/>
-              </svg>
-            </span>
-            <span class="tab-label" data-i18n="nav.universities">Universities</span>
-          </a>
-          <a href="../../profile/edit/" class="tab-item" data-tab="t5">
-            <span class="tab-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 20.5c0-3.5 3.4-6.5 7.5-6.5s7.5 3 7.5 6.5"/><circle cx="19" cy="5" r="2.5" fill="currentColor" stroke="none" opacity="0.9"/>
-              </svg>
-            </span>
-            <span class="tab-label">Account</span>
-          </a>
-        </nav>
+        <nav class="float-tab-bar" id="floatTabBar" data-bd-tabbar data-active="t2"></nav>
+<script src="../../../shared/scripts/ui/tab-bar.js"></script>
       </div>
     </div>
   </div>
@@ -284,7 +251,7 @@
   var CX = 160, CY = 190, MAX_R = 120;
 
   /* ── Hardcoded to match the visible discipline cards below ── */
-  var CARD_PCTS = { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
+  var CARD_PCTS = window.BD_DNA_PCTS || { kt: 94, tn: 89, yt: 64, nn: 62, xh: 34, nv: 32 };
   function dnaPct(key) { return CARD_PCTS[key] || 70; }
 
   /* ── Vertex colors — theme-aware.
@@ -360,7 +327,8 @@
 
   var NS = 'http://www.w3.org/2000/svg';
   var svg = document.createElementNS(NS, 'svg');
-  svg.setAttribute('viewBox', '0 0 320 370');
+  /* Extra 40-unit side margins so long vertex labels (e.g. "Medical & Health Sciences") are not clipped */
+  svg.setAttribute('viewBox', '-40 0 400 370');
   svg.setAttribute('width', '100%');
   svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
 
@@ -595,12 +563,25 @@
     30: _tc('disc.caption.30', 'Your complete Academic DNA — tap any vertex to explore 🌌'),
   };
   var cap = document.getElementById('cstCaption');
-  if (cap) cap.textContent = captions[capKey];
+  if (cap) {
+    cap.textContent = captions[capKey];
+    /* Keep i18n re-apply from resetting the caption to the stage-0 text */
+    cap.setAttribute('data-i18n', 'disc.caption.' + capKey);
+  }
 
   /* ══ Ẩn radar hoàn toàn khi chưa hoàn thành 10 câu ════════════ */
+  /* DNA share card becomes available once the DNA is complete (30 answers) */
+  if (Math.max(progress, milestone) >= 30) {
+    var shareEl = document.getElementById('cstShare');
+    if (shareEl) shareEl.hidden = false;
+  }
+
   if (progress < 10) {
+    /* Below 10 answers: keep the radar visible as an empty hexagon (grid +
+       6 discipline names + lock caption) instead of hiding it. The data
+       polygon, dots and % labels stay hidden until the first milestone. */
     var cstSection = document.querySelector('.cst-section');
-    if (cstSection) cstSection.style.display = 'none';
+    if (cstSection) cstSection.classList.add('cst-locked');
     return;
   }
 
@@ -748,4 +729,6 @@
 })();
 </script>
 <script src="../../../shared/scripts/ui/app-menu.js"></script>
-<script src="../../../shared/scripts/ui/
+<script src="../../../shared/scripts/ui/pwa-install.js?v=4" defer></script>
+</body>
+</html>

@@ -204,7 +204,7 @@
 
     document.getElementById('appMenuResetConfirm').addEventListener('click', function () {
       /* Clear all quiz & profile data */
-      var keys = ['quizProgress','quizMilestone','bd-quiz-progress'];
+      var keys = ['quizProgress','quizMilestone','bd-quiz-progress','bd-quiz-set'];
       keys.forEach(function(k) { try { localStorage.removeItem(k); } catch(e) {} });
       ['bd_dna','bd_answers','bd_scores','bd_nextStart'].forEach(function(k) {
         try { sessionStorage.removeItem(k); } catch(e) {}
@@ -248,12 +248,9 @@
           window.open('https://www.trustpilot.com', '_blank');
 
         } else if (action === 'share') {
-          var shareText = 'Check out my Academic Archetype on BeyonDegrees.ai!';
-          if (navigator.share) {
-            navigator.share({ title: 'BeyonDegrees', text: shareText, url: window.location.href });
-          } else if (navigator.clipboard) {
-            navigator.clipboard.writeText(window.location.href);
-          }
+          /* Share Archetype → the Academic DNA share card (Instagram / TikTok /
+             Copy live there), instead of sharing whatever page is open. */
+          window.location.href = mobileHref('results/dna-card.html');
 
         } else if (action === 'contact') {
           window.location.href = 'mailto:support@beyondegrees.ai';

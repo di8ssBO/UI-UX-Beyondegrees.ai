@@ -6,3 +6,8 @@ backend/
 .env
 firebase-cert.json
 client-secret.json
+
+# Tệp sinh ra từ tools/
+tools/output/
+# Cấu hình editor cá nhân
+.vscode/

@@ -11,20 +11,20 @@ Features:
   • Progress bar per language
 
 Usage:
-    python scripts/generate-assertions-i18n.py
+    python tools/generate-assertions-i18n.py      (chạy từ thư mục gốc repo)
 
 Output:
-    features/quiz/assertions-i18n.js
+    shared/scripts/data/assertions-i18n.js
 """
 
 import re, json, time, sys, os
 from pathlib import Path
 
 # ── Config ──────────────────────────────────────────────────────────────────
-BASE      = Path(__file__).parent.parent          # BeyonDegrees-UI root
-SRC       = BASE / "features/quiz/assertions.js"
-OUT       = BASE / "features/quiz/assertions-i18n.js"
-CACHE     = BASE / "scripts/assertions-i18n-cache.json"
+BASE      = Path(__file__).resolve().parent.parent   # BeyonDegrees-UI root
+SRC       = BASE / "shared/scripts/data/assertions.js"
+OUT       = BASE / "shared/scripts/data/assertions-i18n.js"
+CACHE     = BASE / "tools/assertions-i18n-cache.json"
 LANGS     = {"fr": "French", "hi": "Hindi", "ar": "Arabic"}
 DELAY     = 0.35   # seconds between requests
 MAX_RETRY = 3

@@ -56,6 +56,10 @@
     letter-spacing: 0.03em; background: linear-gradient(to bottom, #020510, #0a0a1a);
   }
   #cstContainer { display: block; line-height: 0; }
+  /* DNA share card link, shown once the DNA is complete (30 answers) — same as mobile */
+  .cst-share { display:block; width:max-content; margin:0 auto 14px; padding:9px 18px; border-radius:999px; font-size:13px; font-weight:700; text-decoration:none; color:#fff; background:linear-gradient(135deg,#7c3aed,#06d6a0); box-shadow:0 6px 18px rgba(124,58,237,.35); }
+  .cst-share[hidden] { display:none; }
+  :root[data-theme="light"] .cst-share { background:linear-gradient(135deg,#c96b55,#a84e30); box-shadow:0 6px 18px rgba(201,107,85,.30); }
   #cstContainer svg { display: block; width: 100%; }
   #cst-tooltip {
     position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
@@ -157,6 +161,7 @@
               <div class="cst-sky-wrap">
                 <div id="cstContainer"></div>
                 <p class="cst-caption" id="cstCaption" data-i18n="disc.caption">Complete the quiz to reveal your Academic DNA ✨</p>
+                <a class="cst-share" id="cstShare" href="../../results/dna-card/" hidden>🧬 <span data-i18n="dna.share_label">Share your results</span> →</a>
               </div>
             </div>
           </div>
@@ -195,6 +200,7 @@
     var rawProgress  = parseInt(localStorage.getItem('quizProgress')  || '0', 10);
     var rawMilestone = parseInt(localStorage.getItem('quizMilestone') || '0', 10);
     var answered = rawMilestone >= 30 ? 30 : Math.max(rawProgress, rawMilestone);
+    if (answered >= 30 && $('cstShare')) $('cstShare').hidden = false;
 
     function buildDisciplines() {
       var list = document.getElementById('rankList');

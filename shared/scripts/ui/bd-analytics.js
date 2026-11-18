@@ -50,7 +50,7 @@ const BDAnalytics = (() => {
   const JOURNEY_STEPS = [
     'quiz_start',        // User entered quiz screen
     'quiz_complete',     // User answered Q30
-    'results_viewed',    // DNA card / match-reveal opened
+    'results_viewed',    // DNA card opened
     'university_viewed', // University matches opened
     'save_action',       // Any save or share action
   ];

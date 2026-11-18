@@ -379,6 +379,139 @@
   :root[data-theme="light"] .ms-po-hint { color: rgba(30,27,75,.5) !important; }
   :root[data-theme="light"] .ms-po-progress-track { background: rgba(30,27,75,.12) !important; }
   :root[data-theme="light"] .ms-pp-kt { background: rgba(251,191,36,.95) !important; box-shadow: 0 0 12px rgba(251,191,36,.95), 0 0 28px rgba(251,191,36,.55) !important; }
+
+  /* ── How to Answer overlay (ported from mobile quiz) ── */
+.swipe-tutorial-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(6, 6, 15, 0.88);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 32px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.swipe-tutorial-overlay.visible {
+  opacity: 1;
+  pointer-events: none; /* visual only — events pass through to dragOverlay below */
+}
+/* Only the dismiss button captures clicks */
+.swipe-tutorial-overlay.visible .stt-dismiss-btn {
+  pointer-events: auto;
+}
+.stt-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-primary);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.stt-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: -20px;
+}
+.stt-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  width: 100%;
+}
+.stt-item {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+.stt-arrow {
+  font-size: 22px;
+  line-height: 1;
+}
+.stt-item-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+.stt-item-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.stt-item.agree   { border-color: rgba(6,214,160,0.3);  }
+.stt-item.disagree{ border-color: rgba(255,71,87,0.3);   }
+.stt-item.strong  { border-color: rgba(24,99,220,0.35);  }
+.stt-item.skip    { border-color: rgba(107,107,154,0.25);}
+.stt-item.agree   .stt-arrow { color: var(--mint-500);   }
+.stt-item.disagree .stt-arrow{ color: var(--red-400);    }
+.stt-item.strong  .stt-arrow { color: var(--violet-400); }
+.stt-item.skip    .stt-arrow { color: var(--text-muted); }
+.stt-hold-tip {
+  background: rgba(24,99,220,0.1);
+  border: 1px solid rgba(24,99,220,0.25);
+  border-radius: 10px;
+  padding: 10px 14px;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  color: var(--violet-400);
+  line-height: 1.5;
+}
+.stt-hold-tip strong { font-weight: 700; }
+.stt-dismiss-btn {
+  background: linear-gradient(135deg, #1863DC, #0274BE);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 40px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(24,99,220,0.4);
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: 0.3px;
+}
+.stt-dismiss-btn:active { transform: scale(0.96); box-shadow: 0 3px 10px rgba(24,99,220,0.3); }
+
+</style>
+<style>
+/* ════════════════════════════════════════════════════════════
+   APP MODE — flatten the simulated phone frame for the real app.
+   Hides the dev breadcrumb, device bezel / notch and the fake
+   status bar so each screen fills the real device viewport.
+   (Added for the installable PWA / Capacitor build.)
+   ════════════════════════════════════════════════════════════ */
+.breadcrumb { display: none !important; }
+
+/* quiz-card uses its own wrapper classes instead of .desktop-container */
+.breadcrumb-bar { display: none !important; }
+.page-layout,
+.page-layout--centered {
+  display: block !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+}
+/* Desktop: overlay covers the quiz area beside the sidebar; key hints */
+.swipe-tutorial-overlay { left: 76px; z-index: 300; }
+.swipe-tutorial-overlay .stt-grid { max-width: 420px; width: 100%; }
+.stt-key { display:inline-block; margin-top:4px; font-size:10px; font-weight:700; padding:1px 6px; border-radius:6px; border:1px solid rgba(255,255,255,.18); color: var(--text-muted); }
+:root[data-theme="light"] .swipe-tutorial-overlay { background: rgba(253,248,242,0.92); }
+:root[data-theme="light"] .stt-key { border-color: rgba(92,69,53,.2); }
+@media (max-width:760px){ .swipe-tutorial-overlay { left: 0; } }
 </style>
 </head>
 <body class="app" data-page="quiz" data-crumb="Quiz">
@@ -680,6 +813,9 @@
   <script src="../../_shell/desktop.js?v=12"></script>
   <script src="../../../shared/scripts/data/disc-config.js"></script>
   <script src="../../../shared/scripts/data/questions-static.js"></script>
+  <script src="../../../shared/scripts/data/assertions.js"></script>
+  <script src="../../../shared/scripts/data/assertions-i18n.js"></script>
+  <script src="../../../shared/scripts/data/quiz-builder.js"></script>
   <script>
     /* i18n helper */
     function t(k){ return (window.BDi18n && BDi18n.t) ? BDi18n.t(k) : k; }
@@ -687,7 +823,10 @@
     /* aliases — keep existing code working without changes */
     var DISC_COLORS = window.BD_DISC_COLORS;
     var DISC_NAMES  = window.BD_DISC_NAMES;
-    var QUESTIONS   = window.BD_QUESTIONS_STATIC;
+    /* Same assertion bank and builder as mobile (quiz-builder.js). The old
+       30-question static bank stays only as a fallback if the bank fails to load. */
+    var _bdSet     = window.BD_buildQuizSet ? window.BD_buildQuizSet() : [];
+    var QUESTIONS   = _bdSet.length ? _bdSet : window.BD_QUESTIONS_STATIC;
 
 
     /* Resume từ tiến độ đã lưu (chuyển tab sidebar rồi quay lại không bị reset) */
@@ -747,9 +886,13 @@
       var q = QUESTIONS[idx];
       if (!q) return finish();
       $('qCur').textContent = idx + 1;
-      var qKey = 'quiz.q.' + q.id;
-      var qTr = t(qKey);
-      $('qText').textContent = (qTr && qTr !== qKey) ? qTr : q.text;
+      if (window.BD_quizText && q.stage) {
+        $('qText').textContent = window.BD_quizText(q);
+      } else {
+        var qKey = 'quiz.q.' + q.id;
+        var qTr = t(qKey);
+        $('qText').textContent = (qTr && qTr !== qKey) ? qTr : q.text;
+      }
       styleCard($('activeCard'), q.disc);
       if (QUESTIONS[idx + 1]) styleCard($('backCard1'), QUESTIONS[idx + 1].disc);
       if (QUESTIONS[idx + 2]) styleCard($('backCard2'), QUESTIONS[idx + 2].disc);
@@ -1106,6 +1249,42 @@
     render();
     /* kick off the guide shortly after first paint (skipped if resuming) */
     setTimeout(swipeGuide, 750);
+  </script>
+  <!-- How to Answer: same tutorial as mobile, shown once (bd-quiz-tutorial-seen) -->
+  <div class="swipe-tutorial-overlay" id="swipeTutorialOverlay" role="dialog" aria-modal="true" aria-labelledby="sttTitle">
+    <div class="stt-title" id="sttTitle">How to Answer ✦</div>
+    <p class="stt-subtitle">Drag the card in 4 directions, or use the arrow keys</p>
+    <div class="stt-grid">
+      <div class="stt-item agree"><span class="stt-arrow">→</span><div class="stt-item-label">AGREE</div><div class="stt-item-desc">Drag right</div><span class="stt-key">→</span></div>
+      <div class="stt-item disagree"><span class="stt-arrow">←</span><div class="stt-item-label">DISAGREE</div><div class="stt-item-desc">Drag left</div><span class="stt-key">←</span></div>
+      <div class="stt-item strong"><span class="stt-arrow">↑</span><div class="stt-item-label">STRONGLY AGREE</div><div class="stt-item-desc">Drag up</div><span class="stt-key">↑</span></div>
+      <div class="stt-item skip"><span class="stt-arrow">↓</span><div class="stt-item-label">SKIP / NEUTRAL</div><div class="stt-item-desc">Drag down</div><span class="stt-key">↓</span></div>
+    </div>
+    <button class="stt-dismiss-btn" id="sttDismissBtn" data-i18n="quiz.tutorial.dismiss">Got it — Let's go! 🚀</button>
+  </div>
+  <script>
+  (function () {
+    var KEY = 'bd-quiz-tutorial-seen';
+    var ov = document.getElementById('swipeTutorialOverlay');
+    if (!ov) return;
+    function dismiss() {
+      ov.classList.remove('visible');
+      try { localStorage.setItem(KEY, '1'); } catch (e) {}
+      document.removeEventListener('keydown', onKey, true);
+    }
+    function onKey(e) { if (/^Arrow|Escape|Enter/.test(e.key)) dismiss(); }
+    var seen = false;
+    try { seen = !!localStorage.getItem(KEY); } catch (e) {}
+    if (!seen) {
+      setTimeout(function () { ov.classList.add('visible'); }, 400);
+      document.addEventListener('keydown', onKey, true);
+      document.addEventListener('pointerdown', function first(e) {
+        if (e.target.closest && e.target.closest('#sttDismissBtn')) return;
+        dismiss(); document.removeEventListener('pointerdown', first);
+      });
+    }
+    document.getElementById('sttDismissBtn').addEventListener('click', dismiss);
+  })();
   </script>
 </body>
 </html>

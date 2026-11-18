@@ -43,39 +43,31 @@ Repository này chứa toàn bộ **bản mẫu giao diện (UI Prototype)** đ�
 ```
 BeyonDegrees-UI/
 │
-├── design-system/              # Hệ thống design tokens và styles dùng chung
-│   ├── tokens.css              # Màu sắc, spacing, typography variables
-│   ├── base.css                # Reset + global styles
-│   ├── layout.css              # Device frame, desktop container
-│   ├── animations.css          # Keyframe animations dùng chung
-│   └── components/             # Style cho các component tái sử dụng
+├── index.html                  # Định tuyến: phát hiện thiết bị, chuyển sang mobile/ hoặc desktop/
+├── dashboard.html              # Trang tổng hợp màn hình cho đội UI/UX (không nằm trong luồng người dùng)
+├── sw.js                       # Service worker (PWA); tăng CACHE_VERSION mỗi lần đổi tệp được cache
+├── netlify.toml                # Cấu hình Netlify: publish cả thư mục, không có bước build
 │
-├── features/                   # Tất cả màn hình sản phẩm
-│   ├── onboarding/
-│   │   ├── home/               # Màn hình About Me / tab chủ
-│   │   └── loading/            # Màn hình chờ kết quả quiz
-│   ├── quiz/
-│   │   └── quiz-card/          # Giao diện 30 câu hỏi
-│   ├── discipline/
-│   │   ├── match/              # Kết quả ngành + Academic DNA radar
-│   │   ├── detail/             # Trang chi tiết từng ngành (kt, nn, nv, tn, xh, yt)
-│   │   └── why/                # Giải thích lý do match
-│   ├── major/
-│   │   ├── recommendations/    # Danh sách chuyên ngành gợi ý
-│   │   └── detail/             # Chi tiết chuyên ngành
-│   ├── university/
-│   │   └── matches/            # Kết quả trường đại học
-│   ├── results/
-│   │   └── match-reveal/       # Màn hình reveal kết quả có animation
-│   └── profile/
-│       ├── overview/           # Hồ sơ học sinh
-│       ├── edit/               # Chỉnh sửa hồ sơ
-│       └── settings/           # Cài đặt ứng dụng
-│
+├── design-system/              # Token, base, layout, animation, component CSS; docs/ là trang tài liệu
 ├── shared/
-│   └── scripts/                # JavaScript utilities dùng chung
+│   ├── auth/                   # Đăng nhập, đăng ký, complete profile (dùng chung 2 bản)
+│   ├── scripts/data/           # Dữ liệu mẫu: assertions.js (en+vi), assertions-i18n.js (fr/hi/ar),
+│   │                           #   quiz-builder.js (rút 30 câu cho cả 2 bản), majors/spec/uni data
+│   ├── scripts/ui/             # i18n.js, tab-bar.js (thanh tab mobile), app-menu.js, bd-profile.js,
+│   │                           #   dna-card.js, pwa-install.js, tab-lock.js ...
+│   ├── data/                   # Specialization CSV, trang mobile spec-detail đọc lúc chạy
+│   ├── styles/  icons/  assets/
 │
-└── data/                       # File dữ liệu CSV (ngành, chuyên ngành)
+├── mobile/                     # Bản mobile: auth, onboarding (home, loading), quiz, discipline,
+│                               #   major (recommendations, detail, spec-detail, why), university
+│                               #   (matches, detail, why), understand-matches, profile, results (dna-card)
+├── desktop/                    # Bản desktop cùng màn hình; _shell/ là sidebar + topbar dùng chung
+│
+└── tools/                      # Không nằm trong ứng dụng
+    ├── data/                   # CSV xuất từ database, nguồn sinh dữ liệu mẫu (không nạp lúc chạy)
+    ├── generate-assertions-i18n.py
+    ├── generate-spec-data.py
+    └── README.md               # Cách chạy các công cụ
 ```
 
 ---
@@ -93,6 +85,8 @@ Mở bất kỳ file index.html nào bằng trình duyệt
 ```bash
 # Đứng ở thư mục gốc project
 npx serve .
+# hoặc: python -m http.server 3000
+# hoặc: VS Code Live Server (cổng 5500)
 
 # Truy cập: http://localhost:3000
 ```

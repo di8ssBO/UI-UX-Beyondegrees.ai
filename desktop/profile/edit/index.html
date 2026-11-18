@@ -296,7 +296,7 @@
             <div class="pe-field-label" data-i18n="edit.email">Email</div>
             <div class="pe-field-input-wrap">
               <svg class="pe-field-prefix-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <input class="pe-field-input" type="email" value="hoangphuc140904@gmail.com" readonly>
+              <input class="pe-field-input" id="editEmail" type="email" placeholder="you@example.com" readonly>
             </div>
             <div class="pe-field-hint" data-i18n="edit.email_hint">Contact support to change the email.</div>
           </div>
@@ -308,7 +308,7 @@
             <div class="pe-field-label" data-i18n="edit.location">Location</div>
             <div class="pe-field-input-wrap">
               <svg class="pe-field-prefix-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <input class="pe-field-input" type="text" value="Ho Chi Minh City, Vietnam" placeholder="Your location">
+              <input class="pe-field-input" id="editLocation" type="text" placeholder="Your location">
             </div>
           </div>
         </div>
@@ -582,6 +582,22 @@ function updateProfileTitle() {
     var p = BDProfile.get();
     var fnEl = document.getElementById('editFirstName');
     var lnEl = document.getElementById('editLastName');
+    /* Email comes from login/sign-up; location, study place and degree
+       from the Complete Profile step (bd-onboarding). */
+    var emEl = document.getElementById('editEmail');
+    if (emEl) emEl.value = p.email || '';
+    var ob = {};
+    try { ob = JSON.parse(localStorage.getItem('bd-onboarding') || '{}') || {}; } catch (e) {}
+    var locEl = document.getElementById('editLocation');
+    if (locEl && ob.location) locEl.value = ob.location;
+    var sels = document.querySelectorAll('select');
+    var STUDY = { abroad: 'abroad', home: 'in-country', country: 'in-country', 'in-country': 'in-country', either: 'either' };
+    if (sels[0] && ob.studyWhere && STUDY[ob.studyWhere]) sels[0].value = STUDY[ob.studyWhere];
+    if (sels[1] && ob.degree) {
+      var d = String(ob.degree).toLowerCase();
+      var DEG = d.indexOf('master') > -1 ? 'master' : d.indexOf('phd') > -1 || d.indexOf('doctor') > -1 ? 'phd' : d.indexOf('assoc') > -1 ? 'associate' : d.indexOf('bach') > -1 ? 'bachelor' : '';
+      if (DEG) sels[1].value = DEG;
+    }
     if (fnEl && p.firstName) fnEl.value = p.firstName;
     if (lnEl && p.lastName)  lnEl.value = p.lastName;
     BDProfile.applyAvatar();
@@ -631,6 +647,7 @@ function clearQuizProgress() {
     localStorage.removeItem('quizProgress');
     localStorage.removeItem('quizMilestone');
     localStorage.removeItem('bd-quiz-progress');
+    localStorage.removeItem('bd-quiz-set');
   } catch(e) {}
   try {
     sessionStorage.removeItem('bd_dna');

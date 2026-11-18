@@ -5,7 +5,7 @@
  *   - Other same-origin assets: stale-while-revalidate.
  * Bump CACHE_VERSION whenever you ship new assets to force an update.
  */
-const CACHE_VERSION = 'v15';
+const CACHE_VERSION = 'v17';
 const CACHE_NAME = `beyondegrees-${CACHE_VERSION}`;
 // The device router at '/' decides desktop vs mobile, so it's the offline entry.
 const OFFLINE_FALLBACK = '/';
